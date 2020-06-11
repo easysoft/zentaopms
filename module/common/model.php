@@ -1569,14 +1569,20 @@ EOD;
     public static function hasPriv($module, $method, $object = null)
     {
         global $app, $lang;
+        $module = strtolower($module);
+        $method = strtolower($method);
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
+
+        /* If is the program admin, have all program related privs. */
+        $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
+        if(strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false && $inProgram) return true; 
+        if($inProgram) self::resetProgramPriv($module, $method);
+
         /* If not super admin, check the rights. */
-        $rights  = $app->user->rights['rights'];
-        $acls    = $app->user->rights['acls'];
-        $module  = strtolower($module);
-        $method  = strtolower($method);
+        $rights = $app->user->rights['rights'];
+        $acls   = $app->user->rights['acls'];
 
         if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
@@ -1598,6 +1604,34 @@ EOD;
         }
 
         return false;
+    }
+
+    /**
+     * Reset program priv.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function resetProgramPriv($module, $method)
+    {
+        global $app, $lang, $dbh;
+        /* Get user program priv. */
+        if(!$app->session->program) return;
+        $program       = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        $programRights = $dbh->query("SELECT t3.module, t3.method FROM " . TABLE_GROUP . " AS t1 LEFT JOIN " . TABLE_USERGROUP . " AS t2 ON t1.id = t2.group LEFT JOIN " . TABLE_GROUPPRIV . " AS t3 ON t2.group=t3.group WHERE t1.program = " . "'{$app->session->program}'" . ' AND t2.account = ' . "'{$app->user->account}'")->fetchAll();
+
+        /* Group priv by module. */
+        $programRightGroup = array();
+        foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
+
+        /* Reset priv by program privway. */
+        $rights = $app->user->rights['rights'];
+        $acls   = $app->user->rights['acls'];
+        if($program->privway == 'extend') $app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->privway == 'reset')  $app->user->rights['rights'] = $programRightGroup;
     }
 
     /**

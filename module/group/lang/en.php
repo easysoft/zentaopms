@@ -48,6 +48,7 @@ $lang->group->priv     = 'Privilege Group';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';
+$lang->group->limited  = 'Limited Users';
 $lang->group->other    = 'Others';
 $lang->group->all      = 'All Privileges';
 

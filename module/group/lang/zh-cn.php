@@ -48,6 +48,7 @@ $lang->group->priv     = '权限';
 $lang->group->option   = '选项';
 $lang->group->inside   = '组内用户';
 $lang->group->outside  = '组外用户';
+$lang->group->limited  = '受限用户组';
 $lang->group->other    = '其他模块';
 $lang->group->all      = '所有权限';
 

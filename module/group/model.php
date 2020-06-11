@@ -22,6 +22,11 @@ class groupModel extends model
     public function create()
     {
         $group = fixer::input('post')->get();
+        if(isset($group->limited)) 
+        {
+            unset($group->limited);
+            $group->role = 'limited';
+        }
         return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
     }
 

@@ -246,17 +246,13 @@ class program extends control
         $group = $this->group->getById($groupID);
         if($group->acl) $group->acl = json_decode($group->acl, true);
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
+        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;
         $this->view->position[] = $this->lang->group->manageView;
         
         $this->view->group      = $group;
         $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->program)->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('program')->eq($group->program)->orderBy('order_desc')->fetchPairs('id', 'name');
-
-        $menugroup = array();
-        foreach($this->lang->menugroup as $moduleName => $groupName) $menugroup[$groupName][$moduleName] = $moduleName;
-        $this->view->menugroup = $menugroup;
 
         $this->display();
     }

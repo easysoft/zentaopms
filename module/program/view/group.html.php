@@ -42,12 +42,13 @@
         <td title='<?php echo $users;?>'><?php echo $users;?></td>
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('program', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+          <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
+          <?php common::printIcon('program', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
           <?php common::printIcon('program', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('program', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
           <?php common::printIcon('program', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('program', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
