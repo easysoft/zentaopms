@@ -763,80 +763,6 @@ class commonModel extends model
         echo $isMobile ? '' : "</ul>\n";
     }
 
-    //public static function printModuleMenu($moduleName)
-    //{
-    //    global $app, $lang;
-    //    $methodName = $app->rawMethod;
-
-    //    $menus = isset($lang->moduleMenu->$moduleName) ? $lang->moduleMenu->$moduleName : '';
-    //    $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
-    //    if($group == 'program') 
-    //    {
-    //        if(in_array($moduleName, array('project', 'doc', 'task', 'product', 'productplan', 'release', 'tree')))
-    //        {
-    //            self::printMainMenu($moduleName, 'moduleMenu');
-    //            return;
-    //        }
-    //        $menus = self::getProgramModuleMenu($moduleName);
-    //    }
-
-    //    if(empty($menus))
-    //    {
-    //        echo "<ul></ul>";
-    //        return;
-    //    }
-    //    $menus = self::processMenus($menus, $group);
-
-    //    $menuHtml = "<ul class='nav nav-default'>\n";
-    //    foreach($menus as $menu)                                                                                                            
-    //    {                                                                                                                                   
-    //        $submenuHtml = '';
-    //        $active = $parentActive = false;
-    //        if(!empty($menu->subMenu))
-    //        {
-    //            $submenuHtml = "<ul class='dropdown-menu'>";
-    //            foreach($menu->subMenu as $submenu)
-    //            {
-    //                /* Check this submenu is actived. */
-    //                $active = strtolower("$moduleName.$methodName") == strtolower("{$submenu->module}.{$submenu->method}");
-    //                $class  = $active ? 'active' : '';
-    //                if($active) $parentActive = true;
-    //                if($moduleName == $submenu->module) $class .= 'CURRENTMODULEMARK';
-
-    //                $submenuHtml .= "<li $class data-id='{$submenu->name}'>";
-    //                $submenuHtml .= "<a href='{$submenu->link}'>{$submenu->title}</a>";
-    //                $submenuHtml .= '</li>';
-    //            }
-    //            $submenuHtml .= "</ul>";
-    //        }
-
-    //        /* Check this menu is actived. */
-    //        if($parentActive) $active = true;
-    //        if($moduleName == $menu->module && $methodName == $menu->method) $active = true;
-    //        if(strtolower("$moduleName.$methodName") == strtolower("{$menu->module}.{$menu->method}")) $active = true;
-
-    //        if(strpos($menu->alias, ",$methodName,") !== false) $active = true;
-    //        if(strpos($menu->subModule, ",$moduleName,") !== false) $active = true;
-
-    //        $class = $active ? 'active' : '';
-    //        if($moduleName == $menu->module) $class .= 'CURRENTMODULEMARK';
-
-    //        //if(isset($lang->$group->dividerMenu) and strpos($lang->$group->dividerMenu, ",{$menu->name},") !== false) $menuHtml .= "<li class='divider'></li>";
-
-    //        $dropdown = $submenuHtml ? 'dropdown dropdown-hover' : '';
-    //        $menuHtml .= "<li class='{$class} {$dropdown}' data-id='{$menu->name}'>";
-    //        $menuHtml .= "<a href='{$menu->link}'>{$menu->title}";
-    //        if($submenuHtml) $menuHtml .= "<span class='caret'></span>";
-    //        $menuHtml .= '</a>';
-    //        if($submenuHtml) $menuHtml .= $submenuHtml;
-    //        $menuHtml .= "</li>\n";
-    //    }
-    //    $menuHtml .= "</ul>\n";
-
-    //    $menuHtml = (strpos($menuHtml, "class='active") === false) ? str_replace('CURRENTMODULEMARK', ' active ', $menuHtml) : str_replace('CURRENTMODULEMARK', ' ', $menuHtml); 
-    //    echo $menuHtml;
-    //}
-
     /**
      * Print the bread menu.
      *
@@ -2168,7 +2094,11 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'cmmi') $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        if($program->template == 'cmmi') 
+        {
+            $lang->product->menu = $lang->cmmiproduct->menu;
+            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        }
     }
 
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)

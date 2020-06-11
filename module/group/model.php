@@ -101,9 +101,9 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getList()
+    public function getList($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchAll();
     }
 
     /**

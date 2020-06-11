@@ -29,12 +29,19 @@ $lang->program->realStarted     = '实际开始日期';
 $lang->program->bygrid          = '看板';
 $lang->program->bylist          = '列表';
 $lang->program->mine            = '我参与的';
+$lang->program->group           = '分组列表';
+$lang->program->createGroup     = '创建分组';
+$lang->program->editGroup       = '编辑分组';
+$lang->program->copyGroup       = '复制分组';
+$lang->program->manageView      = '维护视图';
+$lang->program->managePriv      = '维护权限';
 $lang->program->manageMembers   = '维护团队';
 $lang->program->transfer        = '进入项目';
 $lang->program->setPlanduration = '设置工期';
 $lang->program->export          = '导出';
 
-$lang->program->durationEstimation  = '工作量估算';
+$lang->program->manageGroupMember  = '维护分组用户';
+$lang->program->durationEstimation = '工作量估算';
 $lang->program->noProgram = '暂时没有项目';
 
 $lang->program->unitList[''] = '';

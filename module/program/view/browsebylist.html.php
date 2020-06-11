@@ -47,6 +47,7 @@
         <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
         <td><?php echo zget($users, $project->PM);?></td>
         <td class='text-center c-actions'>
+          <?php common::printIcon('program', 'group', "projectID=$project->id", $project, 'list', 'group');?>
           <?php common::printIcon('program', 'manageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
           <?php common::printIcon('program', 'start', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'activate', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>

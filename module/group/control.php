@@ -33,12 +33,10 @@ class group extends control
      */
     public function browse($companyID = 0)
     {
-        if($companyID == 0) $companyID = $this->app->company->id;
-
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
-        $groups = $this->group->getList($companyID);
+        $groups = $this->group->getList();
         $groupUsers = array();
         foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
