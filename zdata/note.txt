@@ -1,4 +1,4 @@
-暂无设置ZDATA:
+No set yet ZDATA:
     zt_asset.yaml
     zt_attendstat.yaml
     zt_attend.yaml
@@ -84,7 +84,7 @@
     zt_workflow.yaml
 
 ====================================================
-已设置DATA数据:
+set ZDATA:
     zt_action.yaml
     zt_asset.yaml
     zt_budget.yaml
@@ -142,8 +142,3 @@
     zt_userquery.yaml
     zt_userview.yaml
     zt_user.yaml
-
-1.zt_file.yaml文件字段objectType,有很多类型需要确认,类型为stepResult时extra字段会有值.
-2.zt_history.yaml文件字段field,可以是各个表的字段.旧值、新值、不同的字段,数据不固定.
-3.zt_job.yaml文件中svnDir、lastTag字段需要根据实际路径填,lastStatus字段待确认.
-4.zt_module.yaml文件中type字段需要根据实际对象而填.
