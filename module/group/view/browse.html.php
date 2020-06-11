@@ -42,9 +42,9 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>'><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php if($group->role != 'prgadmin'):?>
+          <?php if($group->role != 'pgmadmin'):?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'iframe', true);?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>

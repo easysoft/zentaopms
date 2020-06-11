@@ -104,6 +104,7 @@ class program extends control
         $team         = '';
         $whitelist    = '';
         $acl          = 'open';
+        $privway      = 'extend';
         if($copyProgramID)
         {
             $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
@@ -111,6 +112,7 @@ class program extends control
             $code        = $copyProgram->code;
             $team        = $copyProgram->team;
             $acl         = $copyProgram->acl;
+            $privway     = $copyProgram->privway;
             $whitelist   = $copyProgram->whitelist;
         }
 
@@ -124,6 +126,7 @@ class program extends control
         $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->acl           = $acl;
+        $this->view->privway       = $privway;
         $this->view->whitelist     = $whitelist;
         $this->view->copyProgramID = $copyProgramID;
         $this->display();

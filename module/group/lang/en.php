@@ -27,10 +27,12 @@ $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
 $lang->group->program            = 'Manage Programs';
 $lang->group->viewList           = 'Access Sight';
+$lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
+$lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneProject        = "No {$lang->projectCommon}";
 

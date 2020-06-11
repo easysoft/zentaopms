@@ -131,7 +131,7 @@ class group extends control
             $this->group->updateView($groupID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $group = $this->group->getById($groupID);
@@ -142,6 +142,7 @@ class group extends control
         $this->view->position[] = $this->lang->group->manageView;
         
         $this->view->group      = $group;
+        $this->view->programs   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('program')->eq(0)->andWhere('template')->ne('')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
