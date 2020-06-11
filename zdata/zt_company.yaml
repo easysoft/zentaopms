@@ -12,14 +12,15 @@ fields:
     format: ""
   - field: name
     note: "公司名称"
-    range: "渠成自动化数据"
-    prefix: ""
+    range: "1"
+    prefix: "这是公司名称"
     postfix: ""
     loop: 0
     format: ""
   - field: phone
     note: "联系电话"
-    range: "18888888888"
+    from: common.phone.v1.yaml
+    use: phone
     prefix: ""
     postfix: ""
     loop: 0
@@ -33,8 +34,8 @@ fields:
     format: ""
   - field: address
     note: "通讯地址"
-    range: "这是一个通讯地址"
-    prefix: ""
+    range: "1-10000"
+    prefix: "这是一个通讯地址"
     postfix: ""
     loop: 0
     format: ""
@@ -47,16 +48,16 @@ fields:
     format: ""
   - field: website
     note: "官网"
-    range: "//"
-    prefix: "https:"
-    postfix: "www.zentao.net/"
+    range: "zentao"
+    prefix: "https://"
+    postfix: ".net"
     loop: 0
     format: ""
   - field: backyard
     note: "内网"
-    range: "//"
-    prefix: "https:"
-    postfix: "www.zentao.net"
+    range: "zentao"
+    prefix: "https://"
+    postfix: ".net"
     loop: 0
     format: ""
   - field: guest
@@ -68,7 +69,8 @@ fields:
     format: ""
   - field: admins
     note: "超级管理员"
-    range: ",admin,"
+    from: common.user.v1.yaml
+    use: userC
     prefix: ""
     postfix: ""
     loop: 0

@@ -1,0 +1,31 @@
+title: phone
+desc: 手机号
+author: 
+version: 1.0
+
+field: phone
+instances:
+  - instance: phone
+    note: 手机号
+    prefix: 1
+    postfix: ""
+    loop: 0
+    fields:
+     - field: part1
+       range: 30-99:R
+     - field: part2
+       range: 0-9:R
+     - field: part3
+       range: 0-9:R
+     - field: part4
+       range: 0-9:R
+     - field: part5
+       range: 0-9:R
+     - field: part6
+       range: 0-9:R
+     - field: part7
+       range: 0-9:R
+     - field: part8
+       range: 0-9:R
+     - field: part9
+       range: 0-9:R

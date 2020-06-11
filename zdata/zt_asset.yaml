@@ -5,7 +5,7 @@ version: "1.0"
 fields:
   - field: id
     note: ""
-    range: "1-1000"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0
@@ -13,7 +13,7 @@ fields:
     format: ""
   - field: name
     note: ""
-    range: "1-1000"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0

@@ -86,7 +86,6 @@ No set yet ZDATA:
 ====================================================
 set ZDATA:
     zt_action.yaml
-    zt_asset.yaml
     zt_budget.yaml
     zt_bug.yaml
     zt_build.yaml
@@ -98,7 +97,6 @@ set ZDATA:
     zt_file.yaml
     zt_group.yaml
     zt_history.yaml
-    zt_host.yaml
     zt_jenkins.yaml
     zt_job.yaml
     zt_lang.yaml

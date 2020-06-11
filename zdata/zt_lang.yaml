@@ -21,7 +21,7 @@ fields:
     format: ""
   - field: module
     note: "模块"
-    range: process,stage
+    range: process,stage,bug,task
     prefix: ""
     postfix: ""
     loop: 0

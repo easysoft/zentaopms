@@ -235,7 +235,8 @@ fields:
     format: ""
   - field: openedVersion
     note: "创建版本"
-    range: 12.0.1,12.0.2,12.0.3
+    from: common.version.v1.yaml
+    use: version
     prefix: ""
     postfix: ""
     loop: 0
