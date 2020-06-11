@@ -1,0 +1,10 @@
+title: user
+desc: 创建一些默认用户
+author: ly
+version: 1.0
+instances:
+  - instance: user
+    note: 默认用户列表
+    fields:
+     - field: user
+       range: admin,dev1,dev2,dev3,test1,test2,test3
