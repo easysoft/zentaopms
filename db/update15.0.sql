@@ -12,3 +12,5 @@ ALTER TABLE `zt_group` ADD `program` mediumint(8) NOT NULL AFTER `id`;
 INSERT INTO `zt_group` (`name`, `role`, `desc`, `acl`, `developer`) VALUES ('项目管理员', 'prgadmin', '项目管理员可以维护项目的权限', NULL, '1');
 
 ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
+
+ALTER TABLE `zt_userview` ADD `programs` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;

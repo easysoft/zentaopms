@@ -14,6 +14,8 @@
           <li class='dropdown'>
             <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
             <ul class='dropdown-menu pull-right'>
+              <li><?php common::printIcon('program', 'group', "projectID=$project->id", $project, 'button', 'group');?></li>
+              <li><?php common::printIcon('program', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
               <li><?php common::printicon('program', 'activate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
               <li><?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
               <li><?php common::printIcon('program', 'start',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>

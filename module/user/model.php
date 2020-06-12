@@ -757,52 +757,67 @@ class userModel extends model
         }
         else
         {
-            $groups = $this->dao->select('t1.acl')->from(TABLE_GROUP)->alias('t1')
+            $groups = $this->dao->select('t1.acl, t1.program')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.program')->eq(0)
-                ->andWhere('role')->ne('limited')
+                ->andWhere('t1.role')->ne('pgmadmin')
+                ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
             $acls = array();
             $viewAllow    = false;
             $programAllow = false;
-            $productAllow = false;
-            $projectAllow = false;
             $actionAllow  = false;
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
-                if(empty($group->acl))
+                if($group->program)
                 {
-                    $programAllow = true;
-                    $productAllow = true;
-                    $projectAllow = true;
-                    $viewAllow    = true;
-                    $actionAllow  = true;
-                    break;
-                }
+                    if(empty($group->acl))
+                    {
+                        $projectAllow = true;
+                        $productAllow = true;
+                        $viewAllow    = true;
+                        $actionAllow  = true;
+                        break;
+                    }
 
-                if(empty($acl['programs'])) $programAllow = true;
-                if(empty($acl['products'])) $productAllow = true;
-                if(empty($acl['projects'])) $projectAllow = true;
-                if(empty($acl['views']))    $viewAllow    = true;
-                if(!isset($acl['actions'])) $actionAllow  = true;
-                if(empty($acls) and !empty($acl))
+                    if(empty($acl['projects'])) $projectAllow = true;
+                    if(empty($acl['products'])) $productAllow = true;
+                    if(empty($acl['views']))    $viewAllow    = true;
+                    if(!isset($acl['actions'])) $actionAllow  = true;
+                    if(empty($acls) and !empty($acl))
+                    {
+                        $acls = $acl;
+                        continue;
+                    }
+
+                    if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+                    if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
+                    if(!empty($acl['views']))    $acls['views']    = array_merge($acls['views'], $acl['views']);
+                    if(!empty($acl['actions']))  $acls['actions']  = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
+                }
+                else
                 {
-                    $acls = $acl;
-                    continue;
-                }
+                    if(empty($group->acl))
+                    {
+                        $programAllow = true;
+                        break;
+                    }
 
-                if(!empty($acl['views'])) $acls['views'] = array_merge($acls['views'], $acl['views']);
-                if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
-                if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
-                if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
-                if(!empty($acl['actions'])) $acls['actions'] = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
+                    if(empty($acl['programs'])) $programAllow = true;
+                    if(empty($acls) and !empty($acl))
+                    {
+                        $acls = $acl;
+                        continue;
+                    }
+
+                    if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
+                }
             }
 
             if($programAllow) $acls['programs'] = array();
-            if($productAllow) $acls['products'] = array();
             if($projectAllow) $acls['projects'] = array();
+            if($productAllow) $acls['products'] = array();
             if($viewAllow)    $acls['views']    = array();
             if($actionAllow)  unset($acls['actions']);
 
@@ -1285,17 +1300,8 @@ class userModel extends model
             $groups  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs('group', 'group');
             $groups  = ',' . join(',', $groups) . ',';
 
-            static $allProducts, $allProjects, $projectProducts, $teams;
-            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->fetchAll('id');
-            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->fetchAll('id');
-            if($projectProducts === null)
-            {
-                $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
-                while($projectProduct = $stmt->fetch())
-                {
-                    $projectProducts[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
-                }
-            }
+            static $allProducts, $allPrograms, $allProjects, $projectProducts, $teams;
+            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('template')->ne('')->andWhere('program')->eq(0)->fetchAll('id');
             if($teams === null)
             {
                 $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->query();
@@ -1304,6 +1310,33 @@ class userModel extends model
 
             $userView = new stdclass();
             $userView->account  = $account;
+            $userView->programs = array();
+            if($isAdmin)
+            {
+                $userView->programs = join(',', array_keys($allPrograms));
+            }
+            else
+            {
+                $programs = array();
+                foreach($allPrograms as $id => $program)
+                {
+                    $programTeams = isset($teams[$id]) ? $teams[$id] : array();
+                    if($this->checkProjectPriv($program, $account, $groups, $programTeams)) $programs[$id] = $id;
+                }
+                $userView->programs = join(',', $programs);
+            }
+
+            $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
+            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('program')->eq($programs)->fetchAll('id');
+            if($projectProducts === null)
+            {
+                $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
+                while($projectProduct = $stmt->fetch())
+                {
+                    $projectProducts[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+                }
+            }
+
             $userView->products = array();
             $userView->projects = array();
             if($isAdmin)
@@ -1319,7 +1352,6 @@ class userModel extends model
                     if($this->checkProductPriv($product, $account, $groups, zget($projectProducts, $id, array()), $teams)) $products[$id] = $id;
                 }
                 $userView->products = join(',', $products);
-
                 $projects = array();
                 foreach($allProjects as $id => $project)
                 {
@@ -1328,6 +1360,7 @@ class userModel extends model
                 }
                 $userView->projects = join(',', $projects);
             }
+
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
 
@@ -1342,17 +1375,46 @@ class userModel extends model
      * @access public
      * @return object
      */
-    public function grantUserView($account = '', $acls = array())
+    public function grantUserView($account = '', $acls = array(), $programs = '')
     {
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return array();
-        if(empty($acls) and !empty($this->session->user->rights['acls'])) $acls = $this->session->user->rights['acls'];
+        if(empty($acls) and !empty($this->session->user->rights['acls']))  $acls     = $this->session->user->rights['acls'];
+        if(!$programs and isset($this->session->user->rights['programs'])) $programs = $this->session->user->rights['programs'];
 
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(empty($userView)) $userView = $this->computeUserView($account);
 
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->fetchAll('id');
+        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('acl')->eq('open')
+            ->andWhere('program')->eq(0)
+            ->andWhere('template')->ne('')
+            ->fetchAll('id');
+
+        $openedPrograms     = join(',', array_keys($openedPrograms));
+        $userView->programs = rtrim($userView->programs, ',') . ',' . $openedPrograms;
+        if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
+        if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
+
+        if(!empty($acls['programs']) and !$isAdmin)
+        {
+            $grantPrograms = '';
+            /* If is program admin, set programID to userview. */
+            if($programs) $acls['programs'] = array_merge($acls['programs'], explode(',', $programs));
+            foreach($acls['programs'] as $programID)
+            {
+                if(strpos(",{$userView->programs},", ",{$programID},") !== false) $grantPrograms .= ",{$programID}";
+            }
+            $userView->programs = $grantPrograms;
+        }
+        $programIds = explode(',', $userView->programs);
+
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->andWhere('program')->in($programIds)->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('acl')->eq('open')
+            ->andWhere('program')->in($programIds)
+            ->andWhere('template')->eq('')
+            ->fetchAll('id');
 
         $openedProducts = join(',', array_keys($openedProducts));
         $openedProjects = join(',', array_keys($openedProjects));
@@ -1360,8 +1422,6 @@ class userModel extends model
         $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
         $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
 
-        if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
-        if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
         if(!empty($acls['products']) and !$isAdmin)
         {
             $grantProducts = '';
@@ -1382,6 +1442,7 @@ class userModel extends model
         }
 
         $userView->products = trim($userView->products, ',');
+        $userView->programs = trim($userView->programs, ',');
         $userView->projects = trim($userView->projects, ',');
 
         return $userView;
@@ -1400,7 +1461,7 @@ class userModel extends model
     {
         $table = '';
         if($objectType == 'product') $table = TABLE_PRODUCT;
-        if($objectType == 'project') $table = TABLE_PROJECT;
+        if($objectType == 'project' || $objectType == 'program') $table = TABLE_PROJECT;
         if(empty($table)) return false;
 
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
@@ -1432,7 +1493,7 @@ class userModel extends model
             ->query();
         while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
 
-        $field = $objectType == 'product' ? 'products' : 'projects';
+        $field = $objectType . 's';
         $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
             ->beginIF($users)->where('account')->in($users)->fi()
             ->query();
@@ -1454,6 +1515,13 @@ class userModel extends model
                 if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
                 $userObjects[$account]['projects'] = $userView->projects;
+            }
+            elseif($objectType == 'program')
+            {
+                $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
+                if($hasPriv and strpos(",{$userView->programs},", ",{$objectID},") === false) $userView->programs .= ",{$objectID}";
+                if(!$hasPriv and strpos(",{$userView->programs},", ",{$objectID},") !== false) $userView->programs = trim(str_replace(",{$objectID},", ',', ",{$userView->programs},"), ',');
+                $userObjects[$account]['programs'] = $userView->programs;
             }
         }
 

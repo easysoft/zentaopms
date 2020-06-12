@@ -7,7 +7,7 @@ class programModel extends model
             ->where('iscat')->eq(0)
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF($this->cookie->mine)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
@@ -25,7 +25,7 @@ class programModel extends model
             ->where('iscat')->eq(0)
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
     }
 
@@ -36,7 +36,7 @@ class programModel extends model
             ->andWhere('template')->eq($template)
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
     }
 

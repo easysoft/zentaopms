@@ -919,10 +919,10 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null, $programID = 0)
+    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         if(!commonModel::hasPriv($module, $method, $object)) return false;
-        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody, $programID), $label, $target, $misc, $newline);
+        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
 
@@ -1548,6 +1548,13 @@ EOD;
             if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
 
+            $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'program';
+            if(!defined('IN_UPGRADE') and $inProgram) 
+            {
+                $this->resetProgramPriv($module, $method);
+                //$this->resetProgramAcl($module, $method);
+            }
+
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
         else
@@ -1575,10 +1582,9 @@ EOD;
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
-        /* If is the program admin, have all program related privs. */
+        /* If is the program admin, have all program privs. */
         $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
         if(strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false && $inProgram) return true; 
-        if($inProgram) self::resetProgramPriv($module, $method);
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1615,23 +1621,107 @@ EOD;
      * @access public
      * @return void
      */
-    public static function resetProgramPriv($module, $method)
+    public function resetProgramPriv($module, $method)
     {
-        global $app, $lang, $dbh;
         /* Get user program priv. */
-        if(!$app->session->program) return;
-        $program       = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
-        $programRights = $dbh->query("SELECT t3.module, t3.method FROM " . TABLE_GROUP . " AS t1 LEFT JOIN " . TABLE_USERGROUP . " AS t2 ON t1.id = t2.group LEFT JOIN " . TABLE_GROUPPRIV . " AS t3 ON t2.group=t3.group WHERE t1.program = " . "'{$app->session->program}'" . ' AND t2.account = ' . "'{$app->user->account}'")->fetchAll();
+        if(!$this->app->session->program) return;
+        $program       = $this->dao->findByID($app->session->program)->from(TABLE_PROJECT)->fetch();
+        $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
+            ->where('t1.program')->eq($program->id)
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->fetchAll();
 
-        /* Group priv by module. */
+        /* Group priv by module the same as rights. */
         $programRightGroup = array();
         foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
 
         /* Reset priv by program privway. */
-        $rights = $app->user->rights['rights'];
-        $acls   = $app->user->rights['acls'];
-        if($program->privway == 'extend') $app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-        if($program->privway == 'reset')  $app->user->rights['rights'] = $programRightGroup;
+        $rights = $this->app->user->rights['rights'];
+        if($program->privway == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->privway == 'reset')  
+        {
+            /* If priv way is reset, unset common program priv, and cover by program priv. */
+            foreach($rights as $moduleKey => $methods) 
+            {
+                if(in_array($moduleKey, $this->config->programPriv->cmmi)) unset($rights[$moduleKey]);
+            }
+            
+            $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
+        }
+    }
+
+    /**
+     * Reset program acl.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function resetProgramAcl($module, $method)
+    {
+        global $app, $lang, $config, $dbh;
+        /* Get user program acl. */
+        if(!$app->session->program) return;
+        $groups = $dbh->query('SELECT t1.acl FROM ' . TABLE_GROUP . ' AS t1 LEFT JOIN ' . TABLE_USERGROUP . ' AS t2 on t1.id = t2.group WHERE t2.account = ' . "'{$app->user->account}'" . ' AND t1.program = ' . "'{$app->session->program}'" . ' AND t1.role != "limited"')->fetchAll();
+
+        $productAllow = false;
+        $projectAllow = false;
+
+        if(empty($groups)) return;
+        foreach($groups as $group)
+        {
+            $acl = json_decode($group->acl, true);
+            if(empty($group->acl))
+            {
+                $productAllew = true;
+                $projectAllow = true;
+                break;
+            }
+
+            if(empty($acl['products'])) $productAllow = true;
+            if(empty($acl['projects'])) $projectAllow = true;
+            if(empty($acls) and !empty($acl))
+            {
+                $acls = $acl;
+                continue;
+            }
+
+            if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
+            if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+
+            if($productAllow) $acls['products'] = array();
+            if($projectAllow) $acls['projects'] = array();
+        }
+
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('acl')->eq('open')
+            ->andWhere('program')->ne(0)
+            ->andWhere('template')->eq('')
+            ->fetchAll('id');
+
+        $openedProducts = join(',', array_keys($openedProducts));
+        $openedProjects = join(',', array_keys($openedProjects));
+
+        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
+
+        if(!empty($acls['products']) and !$isAdmin)
+        {
+            $grantProducts = '';
+            foreach($acls['products'] as $productID)
+            {
+                if(strpos(",{$userView->products},", ",{$productID},") !== false) $grantProducts .= ",{$productID}";
+            }
+            $userView->products = $grantProducts;
+        }
+
     }
 
     /**

@@ -290,7 +290,7 @@ class program extends control
             $this->group->sortResource();
             $groupPrivs = $this->group->getPrivs($groupID);
 
-            $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[] = $group->name;
             $this->view->position[] = $this->lang->group->managePriv;
 
@@ -312,7 +312,7 @@ class program extends control
             /* Unset not program privs. */
             foreach($this->lang->resource as $method => $label) 
             {
-                if(!in_array($method, $this->config->program->priv->{$program->template})) unset($this->lang->resource->$method);
+                if(!in_array($method, $this->config->programPriv->{$program->template})) unset($this->lang->resource->$method);
             }
         }
 
@@ -340,7 +340,7 @@ class program extends control
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
-        $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
         $position[] = $this->lang->group->manageMember;
 
@@ -398,12 +398,6 @@ class program extends control
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
-        //$members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
-        //$teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
-        //$teams2Import   = array('' => '') + $teams2Import;
-
-        /* Set menu. */
-        //$this->project->setMenu($this->projects, $project->id);
 
         $title      = $this->lang->program->manageMembers . $this->lang->colon . $project->name;
         $position[] = $this->lang->program->manageMembers;
@@ -417,9 +411,6 @@ class program extends control
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
         $this->view->currentMembers = $currentMembers;
-        //$this->view->members2Import = $members2Import;
-        //$this->view->teams2Import   = $teams2Import;
-        //$this->view->team2Import    = $team2Import;
         $this->display();
     }
 
