@@ -1,40 +1,40 @@
 title: table zt_branch
-desc: ""
+desc: "平台/分支"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: product
-    note: ""
+    note: "所属产品"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: name
-    note: ""
-    prefix: ""
+    note: "名称"
+    range: 1-10000
+    prefix: "这是一个分支名称"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: order
-    note: ""
+    note: "排序"
+    range: 10-100:10
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

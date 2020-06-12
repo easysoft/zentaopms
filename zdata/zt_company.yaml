@@ -5,7 +5,7 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: "1"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0
@@ -41,7 +41,7 @@ fields:
     format: ""
   - field: zipcode
     note: "邮政编码"
-    range: "425605"
+    range: "100000-999999:R"
     prefix: ""
     postfix: ""
     loop: 0

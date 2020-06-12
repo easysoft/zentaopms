@@ -593,17 +593,6 @@ CREATE TABLE `zt_derivemeas`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for zt_designspec
--- ----------------------------
-DROP TABLE IF EXISTS `zt_designspec`;
-CREATE TABLE `zt_designspec`  (
-  `design` mediumint(8) NOT NULL,
-  `version` smallint(6) NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `desc` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for zt_doc
 -- ----------------------------
 DROP TABLE IF EXISTS `zt_doc`;

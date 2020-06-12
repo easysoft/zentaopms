@@ -1,103 +1,109 @@
 title: table zt_entry
-desc: ""
+desc: "应用"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: name
-    note: ""
-    prefix: ""
+    note: "名称"
+    range: 1-10000
+    prefix: "这是应用名称"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: account
-    note: ""
-    prefix: ""
+    note: "账号"
+    range: 1-10000
+    prefix: "account"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: code
-    note: ""
-    prefix: ""
+    note: "代号"
+    range: 1-10000
+    prefix: "code"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: key
-    note: ""
-    prefix: ""
+    note: "密钥"
+    range: 1-10000
+    prefix: "key"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: freePasswd
-    note: ""
+    note: "免密登录"
+    range: 1,0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: ip
-    note: ""
+    note: "IP"
+    from: common.ip.v1.yaml
+    use: ipA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: desc
-    note: ""
-    prefix: ""
+    note: "描述"
+    range: 1-10000
+    prefix: "这是应用描述"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
+    note: "创建者"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
+    note: "创建日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: calledTime
-    note: ""
+    note: "调用时间戳"
+    from: common.date.v1.yaml
+    use: dateC
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
-    note: ""
+    note: "编辑者"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

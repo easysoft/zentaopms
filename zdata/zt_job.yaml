@@ -82,7 +82,8 @@ fields:
     format: ""
   - field: comment
     note: "匹配关键字"
-    prefix: "a-z"
+    range: a-z
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""
