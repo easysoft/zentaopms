@@ -21,14 +21,18 @@ $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
 $lang->group->manageMember       = '成员维护';
+$lang->group->managePgmAdmin     = '维护项目管理员';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
+$lang->group->program            = '可管理项目';
 $lang->group->viewList           = '可访问视图';
+$lang->group->programList        = '可访问项目';
 $lang->group->productList        = '可访问' . $lang->productCommon;
 $lang->group->projectList        = '可访问' . $lang->projectCommon;
 $lang->group->dynamic            = '可查看动态';
 $lang->group->noticeVisit        = '空代表没有访问限制';
+$lang->group->noneProgram        = "暂时没有项目";
 $lang->group->noneProduct        = "暂时没有{$lang->productCommon}";
 $lang->group->noneProject        = "暂时没有{$lang->projectCommon}";
 
@@ -44,6 +48,7 @@ $lang->group->priv     = '权限';
 $lang->group->option   = '选项';
 $lang->group->inside   = '组内用户';
 $lang->group->outside  = '组外用户';
+$lang->group->limited  = '受限用户组';
 $lang->group->other    = '其他模块';
 $lang->group->all      = '所有权限';
 

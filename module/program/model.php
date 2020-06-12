@@ -120,7 +120,7 @@ class programModel extends model
             $currentProgram     = $this->project->getById($programID);
             $currentProgramName = $currentProgram->name;
         }    
-        if($currentModule == 'program' && $currentMethod != 'managemembers') $currentProgramName = $this->lang->program->all;
+        if($currentModule == 'program' && $currentMethod == 'index') $currentProgramName = $this->lang->program->all;
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod&extra=$extra");
         $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";

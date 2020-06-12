@@ -18,8 +18,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('group', 'managePriv')) echo html::a($this->createLink('group', 'managePriv', 'type=byModule', '', true), $lang->group->managePrivByModule, '', 'class="btn btn-link iframe"');?>
-    <?php if(common::hasPriv('group', 'create')) echo html::a($this->createLink('group', 'create', '', '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
+    <?php if(common::hasPriv('program', 'createGroup')) echo html::a($this->createLink('program', 'createGroup', "program=$programID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
@@ -42,30 +41,25 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>'><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php if($group->role != 'pgmadmin'):?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'iframe', true);?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
+          <?php common::printIcon('program', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('program', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('program', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
-          if(common::hasPriv('group', 'delete'))
+          if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
               $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
               echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
           }
+          else
+          {
+              echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+          }
           ?>
-          <?php else:?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'disabled');?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
-          <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('group', 'managePgmAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
-          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
-          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
-          <?php echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";?>
-          <?php endif;?>
         </td>
       </tr>
       <?php endforeach;?>

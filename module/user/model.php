@@ -760,10 +760,12 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
+                ->andWhere('t1.program')->eq(0)
                 ->andWhere('role')->ne('limited')
                 ->fetchAll();
             $acls = array();
             $viewAllow    = false;
+            $programAllow = false;
             $productAllow = false;
             $projectAllow = false;
             $actionAllow  = false;
@@ -772,6 +774,7 @@ class userModel extends model
                 $acl = json_decode($group->acl, true);
                 if(empty($group->acl))
                 {
+                    $programAllow = true;
                     $productAllow = true;
                     $projectAllow = true;
                     $viewAllow    = true;
@@ -779,6 +782,7 @@ class userModel extends model
                     break;
                 }
 
+                if(empty($acl['programs'])) $programAllow = true;
                 if(empty($acl['products'])) $productAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['views']))    $viewAllow    = true;
@@ -790,19 +794,23 @@ class userModel extends model
                 }
 
                 if(!empty($acl['views'])) $acls['views'] = array_merge($acls['views'], $acl['views']);
+                if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
                 if(!empty($acl['actions'])) $acls['actions'] = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
             }
 
+            if($programAllow) $acls['programs'] = array();
             if($productAllow) $acls['products'] = array();
             if($projectAllow) $acls['projects'] = array();
             if($viewAllow)    $acls['views']    = array();
             if($actionAllow)  unset($acls['actions']);
 
-            $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
-                ->on('t1.group = t2.group')
-                ->where('t1.account')->eq($account);
+            $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
+                ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group = t3.group')
+                ->where('t2.account')->eq($account)
+                ->andWhere('t1.program')->eq(0);
         }
 
         $stmt = $sql->query();
@@ -811,7 +819,11 @@ class userModel extends model
         {
             $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
-        return array('rights' => $rights, 'acls' => $acls);
+
+        /* Get can manage programs by user. */
+        $pgmAdminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+        $canManagePrograms = $this->dao->select('program')->from(TABLE_USERGROUP)->where('`group`')->eq($pgmAdminGroupID)->andWhere('account')->eq($account)->fetch('program');
+        return array('rights' => $rights, 'acls' => $acls, 'programs' => $canManagePrograms);
     }
 
     /**

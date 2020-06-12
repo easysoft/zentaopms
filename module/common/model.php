@@ -763,80 +763,6 @@ class commonModel extends model
         echo $isMobile ? '' : "</ul>\n";
     }
 
-    //public static function printModuleMenu($moduleName)
-    //{
-    //    global $app, $lang;
-    //    $methodName = $app->rawMethod;
-
-    //    $menus = isset($lang->moduleMenu->$moduleName) ? $lang->moduleMenu->$moduleName : '';
-    //    $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
-    //    if($group == 'program') 
-    //    {
-    //        if(in_array($moduleName, array('project', 'doc', 'task', 'product', 'productplan', 'release', 'tree')))
-    //        {
-    //            self::printMainMenu($moduleName, 'moduleMenu');
-    //            return;
-    //        }
-    //        $menus = self::getProgramModuleMenu($moduleName);
-    //    }
-
-    //    if(empty($menus))
-    //    {
-    //        echo "<ul></ul>";
-    //        return;
-    //    }
-    //    $menus = self::processMenus($menus, $group);
-
-    //    $menuHtml = "<ul class='nav nav-default'>\n";
-    //    foreach($menus as $menu)                                                                                                            
-    //    {                                                                                                                                   
-    //        $submenuHtml = '';
-    //        $active = $parentActive = false;
-    //        if(!empty($menu->subMenu))
-    //        {
-    //            $submenuHtml = "<ul class='dropdown-menu'>";
-    //            foreach($menu->subMenu as $submenu)
-    //            {
-    //                /* Check this submenu is actived. */
-    //                $active = strtolower("$moduleName.$methodName") == strtolower("{$submenu->module}.{$submenu->method}");
-    //                $class  = $active ? 'active' : '';
-    //                if($active) $parentActive = true;
-    //                if($moduleName == $submenu->module) $class .= 'CURRENTMODULEMARK';
-
-    //                $submenuHtml .= "<li $class data-id='{$submenu->name}'>";
-    //                $submenuHtml .= "<a href='{$submenu->link}'>{$submenu->title}</a>";
-    //                $submenuHtml .= '</li>';
-    //            }
-    //            $submenuHtml .= "</ul>";
-    //        }
-
-    //        /* Check this menu is actived. */
-    //        if($parentActive) $active = true;
-    //        if($moduleName == $menu->module && $methodName == $menu->method) $active = true;
-    //        if(strtolower("$moduleName.$methodName") == strtolower("{$menu->module}.{$menu->method}")) $active = true;
-
-    //        if(strpos($menu->alias, ",$methodName,") !== false) $active = true;
-    //        if(strpos($menu->subModule, ",$moduleName,") !== false) $active = true;
-
-    //        $class = $active ? 'active' : '';
-    //        if($moduleName == $menu->module) $class .= 'CURRENTMODULEMARK';
-
-    //        //if(isset($lang->$group->dividerMenu) and strpos($lang->$group->dividerMenu, ",{$menu->name},") !== false) $menuHtml .= "<li class='divider'></li>";
-
-    //        $dropdown = $submenuHtml ? 'dropdown dropdown-hover' : '';
-    //        $menuHtml .= "<li class='{$class} {$dropdown}' data-id='{$menu->name}'>";
-    //        $menuHtml .= "<a href='{$menu->link}'>{$menu->title}";
-    //        if($submenuHtml) $menuHtml .= "<span class='caret'></span>";
-    //        $menuHtml .= '</a>';
-    //        if($submenuHtml) $menuHtml .= $submenuHtml;
-    //        $menuHtml .= "</li>\n";
-    //    }
-    //    $menuHtml .= "</ul>\n";
-
-    //    $menuHtml = (strpos($menuHtml, "class='active") === false) ? str_replace('CURRENTMODULEMARK', ' active ', $menuHtml) : str_replace('CURRENTMODULEMARK', ' ', $menuHtml); 
-    //    echo $menuHtml;
-    //}
-
     /**
      * Print the bread menu.
      *
@@ -1643,14 +1569,20 @@ EOD;
     public static function hasPriv($module, $method, $object = null)
     {
         global $app, $lang;
+        $module = strtolower($module);
+        $method = strtolower($method);
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
+
+        /* If is the program admin, have all program related privs. */
+        $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
+        if(strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false && $inProgram) return true; 
+        if($inProgram) self::resetProgramPriv($module, $method);
+
         /* If not super admin, check the rights. */
-        $rights  = $app->user->rights['rights'];
-        $acls    = $app->user->rights['acls'];
-        $module  = strtolower($module);
-        $method  = strtolower($method);
+        $rights = $app->user->rights['rights'];
+        $acls   = $app->user->rights['acls'];
 
         if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
@@ -1672,6 +1604,34 @@ EOD;
         }
 
         return false;
+    }
+
+    /**
+     * Reset program priv.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function resetProgramPriv($module, $method)
+    {
+        global $app, $lang, $dbh;
+        /* Get user program priv. */
+        if(!$app->session->program) return;
+        $program       = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        $programRights = $dbh->query("SELECT t3.module, t3.method FROM " . TABLE_GROUP . " AS t1 LEFT JOIN " . TABLE_USERGROUP . " AS t2 ON t1.id = t2.group LEFT JOIN " . TABLE_GROUPPRIV . " AS t3 ON t2.group=t3.group WHERE t1.program = " . "'{$app->session->program}'" . ' AND t2.account = ' . "'{$app->user->account}'")->fetchAll();
+
+        /* Group priv by module. */
+        $programRightGroup = array();
+        foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
+
+        /* Reset priv by program privway. */
+        $rights = $app->user->rights['rights'];
+        $acls   = $app->user->rights['acls'];
+        if($program->privway == 'extend') $app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->privway == 'reset')  $app->user->rights['rights'] = $programRightGroup;
     }
 
     /**
@@ -2168,7 +2128,11 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'cmmi') $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        if($program->template == 'cmmi') 
+        {
+            $lang->product->menu = $lang->cmmiproduct->menu;
+            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        }
     }
 
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)

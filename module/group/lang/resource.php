@@ -15,6 +15,7 @@ $lang->moduleOrder[0]   = 'index';
 $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
 
+$lang->moduleOrder[11]  = 'program';
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
@@ -138,6 +139,37 @@ $lang->todo->methodOrder[60] = 'assignTo';
 $lang->todo->methodOrder[65] = 'activate';
 $lang->todo->methodOrder[70] = 'close';
 $lang->todo->methodOrder[75] = 'batchClose';
+
+/* Program. */
+$lang->resource->program = new stdclass();
+$lang->resource->program->index           = 'index';
+$lang->resource->program->transfer        = 'transfer';
+//$lang->resource->program->createGuide     = 'createGuide';
+$lang->resource->program->setPlanduration = 'setPlanduration';
+$lang->resource->program->manageMembers   = 'manageMembers';
+$lang->resource->program->export          = 'export';
+$lang->resource->program->create          = 'create';
+$lang->resource->program->edit            = 'edit';
+$lang->resource->program->start           = 'start';
+$lang->resource->program->finish          = 'finish';
+$lang->resource->program->delete          = 'delete';
+$lang->resource->program->suspend         = 'suspend';
+$lang->resource->program->activate        = 'activate';
+$lang->resource->program->close           = 'close';
+
+$lang->program->methodOrder[5]  = 'index';
+$lang->program->methodOrder[10] = 'transfer';
+$lang->program->methodOrder[15] = 'setPlanduration';
+$lang->program->methodOrder[20] = 'manageMembers';
+$lang->program->methodOrder[25] = 'export';
+$lang->program->methodOrder[30] = 'create';
+$lang->program->methodOrder[35] = 'edit';
+$lang->program->methodOrder[40] = 'start';
+$lang->program->methodOrder[45] = 'finish';
+$lang->program->methodOrder[50] = 'delete';
+$lang->program->methodOrder[55] = 'suspend';
+$lang->program->methodOrder[60] = 'activate';
+$lang->program->methodOrder[65] = 'close';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -891,14 +923,15 @@ $lang->dept->methodOrder[25] = 'delete';
 
 /* Group. */
 $lang->resource->group = new stdclass();
-$lang->resource->group->browse       = 'browse';
-$lang->resource->group->create       = 'create';
-$lang->resource->group->edit         = 'edit';
-$lang->resource->group->copy         = 'copy';
-$lang->resource->group->delete       = 'delete';
-$lang->resource->group->manageView   = 'manageView';
-$lang->resource->group->managePriv   = 'managePriv';
-$lang->resource->group->manageMember = 'manageMember';
+$lang->resource->group->browse         = 'browse';
+$lang->resource->group->create         = 'create';
+$lang->resource->group->edit           = 'edit';
+$lang->resource->group->copy           = 'copy';
+$lang->resource->group->delete         = 'delete';
+$lang->resource->group->manageView     = 'manageView';
+$lang->resource->group->managePriv     = 'managePriv';
+$lang->resource->group->manageMember   = 'manageMember';
+$lang->resource->group->managePgmAdmin = 'managePgmAdmin';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';
@@ -907,6 +940,7 @@ $lang->group->methodOrder[20] = 'copy';
 $lang->group->methodOrder[25] = 'delete';
 $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
+$lang->group->methodOrder[40] = 'managePgmAdmin';
 
 /* User. */
 $lang->resource->user = new stdclass();

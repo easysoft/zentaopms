@@ -1120,13 +1120,13 @@ $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'sub
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
 
+$lang->cmmiproduct    = new stdclass();
 $lang->workestimation = new stdclass();
 $lang->budget         = new stdclass();
 $lang->programplan    = new stdclass();
 $lang->review         = new stdclass();
 $lang->weekly         = new stdclass();
 $lang->milestone      = new stdclass();
-$lang->product        = new stdclass();
 $lang->design         = new stdclass();
 $lang->auditplan      = new stdclass();
 $lang->cm             = new stdclass();
@@ -1142,7 +1142,7 @@ $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();
 $lang->weekly->menu         = new stdclass();
 $lang->milestone->menu      = new stdclass();
-$lang->product->menu        = new stdclass();
+$lang->cmmiproduct->menu    = new stdclass();
 $lang->design->menu         = new stdclass();
 $lang->auditplan->menu      = new stdclass();
 $lang->cm->menu             = new stdclass();
@@ -1170,14 +1170,14 @@ $lang->reviewissue->menu = $lang->review->menu;
 $lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
 $lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
-$lang->product->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
-$lang->product->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
-$lang->product->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+$lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
+$lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
 $lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit');
 $lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
 
-$lang->story->menu         = $lang->product->menu;
+$lang->story->menu         = $lang->cmmiproduct->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
 

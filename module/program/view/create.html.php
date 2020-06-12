@@ -114,6 +114,10 @@
           </td>
         </tr>
         <tr>
+          <th><?php echo $lang->program->privway;?></th>
+          <td colspan='3'><?php echo html::radio('privway', $lang->program->privwayList, $privway, '', 'block');?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>

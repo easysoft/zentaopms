@@ -26,6 +26,10 @@
         <td><?php echo html::textarea('desc', '', "rows=5 class=form-control");?></td>
       </tr>  
       <tr>
+        <th><?php echo $lang->group->limited;?></th>
+        <td><?php echo html::checkbox('limited', '');?></td>
+      </tr>  
+      <tr>
         <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>
     </table>
