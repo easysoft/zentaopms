@@ -534,7 +534,7 @@ class treeModel extends model
         {
             $extra['tip'] = false;
             $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task', $startModule = 0));
-            if(empty($projects) and isset($this->config->project->task->allModule)) $this->config->project->task->allModule = 1;
+            if(empty($products)) $this->config->project->task->allModule = 1;
             return $this->getDataStructure($stmt, 'task');
         }
 
