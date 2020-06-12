@@ -22,7 +22,7 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'", '', '', '', $this->session->program);?>
+    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'", '');?>
   </div>
 </div>
 <?php endif;?>
@@ -32,7 +32,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span>
       <?php if(common::hasPriv('testsuite', 'create')):?>
-      <?php echo html::a($this->createLink('testsuite', 'create', "product=$productID", '', '', $this->session->program), "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('testsuite', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -52,23 +52,23 @@
     <tbody>
     <?php foreach($suites as $suite):?>
     <tr class='text-left'>
-      <td><?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id", '', '', $this->session->program), sprintf('%03d', $suite->id));?></td>
+      <td><?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id"), sprintf('%03d', $suite->id));?></td>
       <td class='text-left' title="<?php echo $suite->name?>">
         <?php if($suite->type == 'public') echo "<span class='label label-success label-badge'>{$lang->testsuite->authorList['public']}</span> ";?>
         <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
-        <?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id", '', '', $this->session->program), $suite->name);?>
+        <?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id"), $suite->name);?>
       </td>
       <td><?php echo $suite->desc;?></td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
       <td><?php echo $suite->addedDate;?></td>
       <td class='c-actions'>
         <?php
-        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link', '', '', '', '', '', $this->session->program);
-        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list', '', '', '', '', '', '', $this->session->program);
+        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
+        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
 
         if(common::hasPriv('testsuite', 'delete', $suite))
         {
-            $deleteURL = $this->createLink('testsuite', 'delete', "suiteID=$suite->id&confirm=yes", '', '', $this->session->program);
+            $deleteURL = $this->createLink('testsuite', 'delete', "suiteID=$suite->id&confirm=yes");
             echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"suiteList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testsuite->delete}' class='btn'");
         }
         ?>

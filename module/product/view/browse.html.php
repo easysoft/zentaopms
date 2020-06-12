@@ -31,7 +31,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}", '', '', $this->session->program) : 'javascript:removeCookieByKey("storyModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -62,50 +62,50 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                 foreach($lang->product->moreSelects as $key => $value)
                 {
                     $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType", '', '', $this->session->program), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    echo '<li>' . html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
             }
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType", '', '', $this->session->program);
+            $searchBrowseLink = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
             $isBySearch       = $this->session->storyBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
         else
         {
-            echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType", '', '', $this->session->program), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
+            echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
         }
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID&chartType=pie&storyType=$storyType", '', 'button', 'bar-chart muted', '', '', '', '', '', $this->session->program); ?>
+    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID&chartType=pie&storyType=$storyType", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
-        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType", '', '', $this->session->program) : '#';
+        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php if(!common::checkNotCN()):?>
-    <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID", '', '', $this->session->program), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
+    <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-        $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams", '', '', $this->session->program);
+        $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
         echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary create-story-btn'");
     }
     else
     {
-        $link = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", '', '', $this->session->program);
+        $link = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID");
         if(common::hasPriv('story', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
     }
     ?>
@@ -115,12 +115,12 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       if(commonModel::isTutorialMode())
       {
           $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-          $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams", '', '', $this->session->program);
+          $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
           echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create} </span><span class='caret'>", '', "class='btn btn-primary create-story-btn'");
       }
       else
       {
-          $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID", '', '', $this->session->program);
+          $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID");
           $disabled = '';
           if(!common::hasPriv('story', 'create'))
           {
@@ -134,7 +134,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
         <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $disabled?>>
         <?php
-          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID", '', '', $this->session->program);
+          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
           echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->story->batchCreate) . "</li>";
         ?>
         </li>
@@ -156,7 +156,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'", '', '', '', $this->session->program);?>
+        <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -168,7 +168,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
         <?php if(common::hasPriv('story', 'create')):?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}", '', '', $this->session->program), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
@@ -230,7 +230,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch", '', '', $this->session->program);
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch");
             ?>
             <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -238,7 +238,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
               <?php
               $class = "class='disabled'";
               $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
-              $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0", '', '', $this->session->program);
+              $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : $class;
               echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
@@ -251,7 +251,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                   unset($lang->story->reviewResultList['revert']);
                   foreach($lang->story->reviewResultList as $key => $result)
                   {
-                      $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $this->session->program);
+                      $actionLink = $this->createLink('story', 'batchReview', "result=$key");
                       if($key == 'reject')
                       {
                           echo "<li class='dropdown-submenu'>";
@@ -263,7 +263,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
 
                           foreach($lang->story->reasonList as $key => $reason)
                           {
-                              $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $this->session->program);
+                              $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
                               echo "<li>";
                               echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                               echo "</li>";
@@ -291,7 +291,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                   echo "<ul class='dropdown-list'>";
                   foreach($branches as $branchID => $branchName)
                   {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID", '', '', $this->session->program);
+                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
                       echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                   }
                   echo '</ul>';
@@ -308,7 +308,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                   {
                       if(empty($key)) continue;
                       if(strpos('tested|verified|released|closed', $key) === false) continue;
-                      $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key", '', '', $this->session->program);
+                      $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                       echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                   }
                   echo '</ul></li>';
@@ -340,7 +340,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                 foreach($modules as $moduleId => $module)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
-                    $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId", '', '', $this->session->program);
+                    $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
                     echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
@@ -370,7 +370,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
                 foreach($plans as $planID => $plan)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
-                    $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID", '', '', $this->session->program);
+                    $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
                     echo html::a('#', $plan, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
@@ -384,7 +384,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($users) > 10;
-            $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID", '', '', $this->session->program);
+            $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
             echo html::select('assignedTo', $users, '', 'class="hidden"');
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">

@@ -37,7 +37,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text and common::hasPriv($tabValue, 'create')) echo html::a($this->createLink($tabValue, 'create', '', '', '', $this->session->program), $text, '', "class='text-ellipsis'");
+            if($text and common::hasPriv($tabValue, 'create')) echo html::a($this->createLink($tabValue, 'create', ''), $text, '', "class='text-ellipsis'");
             ?>
             </li>
             <?php else:?>
@@ -60,9 +60,9 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             ?>
             <li <?php echo "class='$activeClass'";?>>
               <?php if($customLibCount > 0):?>
-              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenu->id", '', '', $this->session->program), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenu->id"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
               <?php else:?>
-              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID", '', '', $this->session->program), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
               <?php endif;?>
               <?php if(isset($sideSubLibs[$tabValue][$tabMenu->id])):?>
               <ul>
@@ -70,19 +70,19 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                 <?php
                 if($subLibID == 'project')
                 {
-                    $subLibLink  = $this->createLink('doc', 'allLibs', "type=project&product=$tabMenu->id", '', '', $this->session->program);
+                    $subLibLink  = $this->createLink('doc', 'allLibs', "type=project&product=$tabMenu->id");
                     $activeClass = ($this->methodName == 'alllibs' && $type == 'project' && $$tabValue == $tabMenu->id) ? "class='active'" : '';
                     $icon        = 'icon-stack';
                 }
                 elseif($subLibID == 'files')
                 {
-                    $subLibLink  = $this->createLink('doc', 'showFiles', "type=$tabValue&objectID=$tabMenu->id", '', '', $this->session->program);
+                    $subLibLink  = $this->createLink('doc', 'showFiles', "type=$tabValue&objectID=$tabMenu->id");
                     $activeClass = ($this->methodName == 'showfiles' && $type == $tabValue && $object->id == $tabMenu->id) ? "class='active'" : '';
                     $icon        = 'icon-paper-clip';
                 }
                 else
                 {
-                    $subLibLink  = $this->createLink('doc', 'browse', "libID=$subLibID", '', '', $this->session->program);
+                    $subLibLink  = $this->createLink('doc', 'browse', "libID=$subLibID");
                     $activeClass = ($this->methodName == 'browse' && $browseType != 'bymodule' && $subLibID == $libID) ? "class='active'" : '';
                     $icon        = 'icon-folder-outline';
                 }
@@ -126,7 +126,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text and common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}", '', '', $this->session->program), $text, '', "class='iframe' data-width='70%'");
+            if($text and common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe' data-width='70%'");
             ?>
             </li>
             <?php else:?>
@@ -139,13 +139,13 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
               $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
               ?>
               <li <?php echo "class='$activeClass'";?>>
-                <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID", '', '', $this->session->program), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
+                <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
                 <?php if(isset($allModules[$sideLibID])):?>
                 <ul>
                   <?php foreach($allModules[$sideLibID] as $module):?>
                   <?php if($module->parent != 0) continue;?>
                   <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
-                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID&browseType=byModule&param={$module->id}", '', '', $this->session->program), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
+                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
                     <?php $this->doc->printChildModule($module, $sideLibID, $this->methodName, $browseType, $moduleID);?>
                   </li>
                   <?php endforeach;?>
@@ -185,7 +185,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           <strong><?php echo $lang->doc->customShowLibs;?></strong>
         </div>
         <div class='modal-body'>
-          <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc', '', '', '', $this->session->program);?>' target='hiddenwin' method='post'>
+          <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc', '');?>' target='hiddenwin' method='post'>
             <table class='table table-form'>
               <tr>
                 <td><?php echo html::checkbox('showLibs', $lang->doc->customShowLibsList, $config->doc->custom->showLibs);?></td>

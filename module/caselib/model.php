@@ -85,7 +85,7 @@ class caselibModel extends model
                 $pageActions .= "<div class='btn-group'>";
                 if(common::hasPriv('caselib', 'exportTemplet'))
                 {
-                    $link = helper::createLink('caselib', 'exportTemplet', "libID=$libID", '', '', $this->session->program);
+                    $link = helper::createLink('caselib', 'exportTemplet', "libID=$libID");
                     $pageActions .= html::a($link, "<i class='icon icon-export muted'> </i>" . $this->lang->caselib->exportTemplet, '', "class='btn btn-link export'");
                 }
                 if(common::hasPriv('caselib', 'import'))

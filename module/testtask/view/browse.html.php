@@ -30,13 +30,13 @@ $status = $this->session->testTaskVersionStatus;
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status", '', '', $this->session->program), $lang->testtask->all) . "</li>";
-          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status", '', '', $this->session->program), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
+          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
+          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
         ?>
       </ul>
     </div>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
-    <?php echo html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=$scope,$key", '', '', $this->session->program), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
+    <?php echo html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-300px input-group-sm'>
@@ -47,7 +47,7 @@ $status = $this->session->testTaskVersionStatus;
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'", '', '', '', $this->session->program);?>
+    <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>
@@ -57,7 +57,7 @@ $status = $this->session->testTaskVersionStatus;
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
       <?php if(common::hasPriv('testtask', 'create')):?>
-      <?php echo html::a($this->createLink('testtask', 'create', "product=$productID"), '', '', $this->session->program, "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -83,13 +83,13 @@ $status = $this->session->testTaskVersionStatus;
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='text-left'>
-      <td><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id", '', '', $this->session->program), sprintf('%03d', $task->id));?></td>
-      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id", '', '', $this->session->program), $task->name);?></td>
+      <td><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <?php if($config->global->flow != 'onlyTest'):?>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <?php endif;?>
-      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build", '', true, $this->session->program), $task->buildName);?></td>
+      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build", '', true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
@@ -102,15 +102,15 @@ $status = $this->session->testTaskVersionStatus;
       <td class='c-actions'>
         <?php
         echo '<div id="action-divider">';
-        common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $this->session->program);
-        common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', '', '', '', $this->session->program);
-        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag', '', '', '', '', '', $this->session->program);
+        common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+        common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         echo '</div>';
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, '', '', $this->session->program);
-        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true, '', '', $this->session->program);
+        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true);
+        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
         if(common::hasPriv('testtask', 'delete', $task))
         {
-            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes", '', '', $this->session->program);
+            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
             echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
         }
         ?>

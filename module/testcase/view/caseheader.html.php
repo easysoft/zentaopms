@@ -8,7 +8,7 @@
       echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
       if(!empty($moduleID))
       {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}", '', '', $this->session->program) : 'javascript:removeCookieByKey("caseModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -28,13 +28,13 @@
     if($config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
     if($hasBrowsePriv and $menuType == 'QUERY')
     {
-        $searchBrowseLink = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s", '', '', $this->session->program);
+        $searchBrowseLink = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
         $isBySearch       = $browseType == 'bysearch';
         include '../../common/view/querymenu.html.php';
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
-        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType", '', '', $this->session->program), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
+        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
     }
     elseif($hasBrowsePriv and $menuType == 'suite')
     {
@@ -49,7 +49,7 @@
         if(empty($suiteList))
         {
             echo '<li>';
-            echo html::a($this->createLink('testsuite', 'create', "productID=$productID", '', '', $this->session->program), "<i class='icon-plus'></i>" . $lang->testsuite->create);
+            echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
             echo '</li>';
         }
 
@@ -57,7 +57,7 @@
         {
             $suiteName = $suite->name;
             echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
-            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID", '', '', $this->session->program), $suiteName);
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
             echo "</li>";
         }
 
@@ -69,12 +69,12 @@
         $active   = !empty($groupBy) ? 'btn-active-text' : '';
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story", '', '', $this->session->program), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active'");
+        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active'");
         echo '</div>';
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID", '', '', $this->session->program), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
+        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
     }
     ?>
     <?php endforeach;?>
@@ -92,12 +92,12 @@
       <?php
       $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType", '', '', $this->session->program) : '#';
+      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
 
       $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID", '', '', $this->session->program) : '#';
+      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
       ?>
       </ul>
@@ -108,12 +108,12 @@
       <?php
       $class = common::hasPriv('testcase', 'import') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch", '', '', $this->session->program) : '#';
+      $link  = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
 
       $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
-      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch", '', '', $this->session->program) : '#';
+      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
       ?>
       </ul>
@@ -123,20 +123,20 @@
     <?php
     if(common::hasPriv('testcase', 'batchCreate'))
     {
-        $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule", '', '', $this->session->program);
+        $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
         echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");
     }
 
     if(common::hasPriv('testcase', 'create'))
     {
-        $link = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule", '', '', $this->session->program);
+        $link = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
         echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
     }
     ?>
     <?php else:?>
     <div class='btn-group dropdown-hover'>
       <?php
-      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule", '', '', $this->session->program) : '###';
+      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
       $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
       echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
       ?>
@@ -144,7 +144,7 @@
         <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $disabled?>>
         <?php
-        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule", '', '', $this->session->program);
+        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->testcase->batchCreate) . "</li>";
         ?>
         </li>

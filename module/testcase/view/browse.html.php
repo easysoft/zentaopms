@@ -35,7 +35,7 @@ js::set('suiteID',        $suiteID);
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class='text-center'>
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage, '', "class='btn btn-info btn-wide'", '', '', '', $this->session->program);?>
+        <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -49,7 +49,7 @@ js::set('suiteID',        $suiteID);
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
         <?php if(common::hasPriv('testcase', 'create')):?>
         <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule", '', '', $this->session->program), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>

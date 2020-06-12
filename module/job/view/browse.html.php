@@ -13,11 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('job', 'browse', '', '', '', $this->session->program), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <?php echo html::a($this->createLink('compile', 'browse', '', '', '', $this->session->program), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link'");?>
+    <?php echo html::a($this->createLink('job', 'browse', ''), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a($this->createLink('compile', 'browse', ''), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('job', 'create')) common::printLink('job', 'create', "", "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-primary'", '', '', '', $this->session->program);?>
+    <?php if(common::hasPriv('job', 'create')) common::printLink('job', 'create', "", "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>
@@ -41,7 +41,7 @@
         <?php foreach($jobList as $id => $job):?>
         <tr>
           <td class='text-center'><?php echo $id; ?></td>
-          <td title='<?php echo $job->name; ?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true, $this->session->program), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
+          <td title='<?php echo $job->name; ?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
           <?php $jenkins = urldecode($job->jkJob) . '@' . $job->jenkinsName;?>
@@ -55,7 +55,7 @@
             common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
             common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', 'hiddenwin');
-            if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id", '', '', $this->session->program), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");
+            if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");
             ?>
           </td>
         </tr>
