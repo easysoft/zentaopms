@@ -3751,6 +3751,101 @@ class upgradeModel extends model
         fwrite($fh, $log);
     }
 
+    public function createProgram($programName, $productIdList = array(), $projectIdList = array())
+    {
+        $program = new stdclass();
+        $program->name       = $programName;
+        $program->template   = 'scrum';
+        $program->category   = count($productIdList) > 1 ? 'multiple' : 'single';
+        $program->status     = 'wait';
+        $program->openedBy   = $this->app->user->account;
+        $program->openedDate = helper::now();
+        $program->acl        = 'open';
+
+        $begin = helper::today();
+        $end   = helper::today();
+        if($productIdList)
+        {
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+            foreach($products as $product)
+            {
+                if(empty($begin)) $begin = $product->createdDate;
+                if($product->createdDate < $begin) $begin = $product->createdDate;
+            }
+        }
+
+        if($projectIdList)
+        {
+            $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+            foreach($projects as $project)
+            {
+                if($begin > $project->begin) $begin = $project->begin;
+                if($end < $project->end)     $end   = $project->end;
+            }
+        }
+        if(empty($projectIdList)) $end = date('Y-m-d', '+1 year');
+
+        $program->begin = $begin;
+        $program->end   = $end;
+        $this->dao->insert(TABLE_PROJECT)->data($program)->exec();
+
+        $programID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROJECT)->set('code')->eq('pgm' . $programID)->where('id')->eq($programID)->exec();
+
+        return $programID;
+    }
+
+    public function createProduct4Program($programID)
+    {
+        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+
+        $product = new stdclass();
+        $product->name           = $program->name;
+        $product->code           = $program->code;
+        $product->program        = $program->id;
+        $product->type           = 'normal';
+        $product->status         = 'normal';
+        $product->acl            = $program->acl;
+        $product->whitelist      = $program->whitelist;
+        $product->createdBy      = $program->createdBy;
+        $product->createdDate    = $program->createdDate;
+        $product->createdVersion = $this->config->version;
+
+        $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+        $productID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->product = $productID;
+        $lib->name    = $this->lang->doclib->main['product'];
+        $lib->type    = 'product';
+        $lib->main    = '1'; 
+        $lib->acl     = 'default';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+    }
+
+    public function setProductProgram($programID, $productIdList = array())
+    {
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->in($productIdList)->exec();
+        $this->dao->update(TABLE_STORY)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_RELEASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_CASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUILD)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
+    }
+
+    public function setProjectProgram($programID, $projectIdList = array())
+    {
+        $this->dao->update(TABLE_PROJECT)->set('program')->eq($programID)->where('id')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('program')->eq($programID)->where('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($projectIdList) . ')')->exec();
+    }
+
     /**
      * Append execute for pro and biz.
      * 

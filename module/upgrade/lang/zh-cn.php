@@ -74,11 +74,14 @@ $lang->upgrade->to15Desc      = <<<EOD
 </div>
 EOD;
 
-$lang->upgrade->line    = '产品线';
-$lang->upgrade->program = '项目名称';
-$lang->upgrade->product = $lang->productCommon;
-$lang->upgrade->project = $lang->projectCommon;
+$lang->upgrade->line         = '产品线';
+$lang->upgrade->program      = '项目名称';
+$lang->upgrade->programAdmin = '项目管理员';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = $lang->projectCommon;
 
+$lang->upgrade->newProgram         = '新建';
+$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。经系统计算，我们推荐您的迁移方案如下，您也可以根据自己的情况进行调整：";
 $lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个大项目中。";
 $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个大项目中，也可以选择某一个产品将其下面所属的迭代归并到大项目中。";
 $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个大项目中，也可以独立归并。";
