@@ -3760,7 +3760,7 @@ class upgradeModel extends model
      * @access public
      * @return int
      */
-    public function createProgram($programName, $productIdList = array(), $projectIdList = array())
+    public function createProgram($programName, $productIdList = array(), $projectIdList = array(), $pgmAdmin = '')
     {
         $program = new stdclass();
         $program->name       = $programName;
@@ -3770,6 +3770,7 @@ class upgradeModel extends model
         $program->openedBy   = $this->app->user->account;
         $program->openedDate = helper::now();
         $program->acl        = 'open';
+        $program->privway    = 'extend';
 
         $begin = helper::today();
         $end   = helper::today();
@@ -3800,6 +3801,27 @@ class upgradeModel extends model
 
         $programID = $this->dao->lastInsertId();
         $this->dao->update(TABLE_PROJECT)->set('code')->eq('pgm' . $programID)->where('id')->eq($programID)->exec();
+
+        if($pgmAdmin)
+        {
+            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('prgadmin')->fetch('id');
+            if($groupID)
+            {
+                $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
+                if(empty($userGroup))
+                {
+                    $userGroup = new stdclass();
+                    $userGroup->account = $pgmAdmin;
+                    $userGroup->group   = $groupID;
+                    $userGroup->program = '';
+                }
+
+                $userGroup->program .= ',' . $programID;
+                $userGroup->program  = trim($userGroup->program, ',');
+
+                $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
+            }
+        }
 
         return $programID;
     }
@@ -3881,6 +3903,57 @@ class upgradeModel extends model
         $this->dao->update(TABLE_PROJECT)->set('program')->eq($programID)->where('id')->in($projectIdList)->exec();
         $this->dao->update(TABLE_TASK)->set('program')->eq($programID)->where('project')->in($projectIdList)->exec();
         $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($projectIdList) . ')')->exec();
+    }
+
+    /**
+     * Set program team.
+     * 
+     * @param  int    $programID 
+     * @param  array  $productIdList 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgramTeam($programID, $productIdList = array(), $projectIdList = array())
+    {
+        $teams    = array();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        foreach($products as $product)
+        {
+            $teams[$product->PO] = $product->PO;
+            $teams[$product->QD] = $product->QD;
+            $teams[$product->RD] = $product->RD;
+            if(isset($product->feedback)) $teams[$product->feedback] = $product->feedback;
+        }
+
+        foreach($projects as $project)
+        {
+            $teams[$project->PO] = $project->PO;
+            $teams[$project->PM] = $project->PM;
+            $teams[$project->QD] = $project->QD;
+            $teams[$project->RD] = $project->RD;
+            if(isset($project->feedback)) $teams[$project->feedback] = $project->feedback;
+        }
+
+        foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
+        $teams += $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($projectIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
+        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIdList)->fetchPairs('account', 'account');
+
+        $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
+        $today = helper::today();
+        foreach($teams as $account)
+        {
+            if(empty($account)) continue;
+            if(!isset($users[$account])) continue;
+
+            $team = new stdclass();
+            $team->root    = $programID;
+            $team->type    = 'project';
+            $team->account = $account;
+            $team->join    = $today;
+            $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+        }
     }
 
     /**

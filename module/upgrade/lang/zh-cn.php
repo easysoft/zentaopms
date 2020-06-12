@@ -74,11 +74,11 @@ $lang->upgrade->to15Desc      = <<<EOD
 </div>
 EOD;
 
-$lang->upgrade->line         = '产品线';
-$lang->upgrade->program      = '项目名称';
-$lang->upgrade->programAdmin = '项目管理员';
-$lang->upgrade->product      = $lang->productCommon;
-$lang->upgrade->project      = $lang->projectCommon;
+$lang->upgrade->line     = '产品线';
+$lang->upgrade->program  = '项目名称';
+$lang->upgrade->pgmAdmin = '项目管理员';
+$lang->upgrade->product  = $lang->productCommon;
+$lang->upgrade->project  = $lang->projectCommon;
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。经系统计算，我们推荐您的迁移方案如下，您也可以根据自己的情况进行调整：";

@@ -1,11 +1,27 @@
 $(function()
 {
+    $('[name^=lines]').change(function()
+    {
+        value = $(this).val();
+        if($(this).prop('checked'))
+        {
+            $('[data-line=' + value + ']').prop('checked', true)
+        }
+        else
+        {
+            $('[data-line=' + value + ']').prop('checked', false)
+        }
+    })
+
     $('[name^=products]').change(function()
     {
         value = $(this).val();
         if($(this).prop('checked'))
         {
             $('[data-product=' + value + ']').prop('checked', true)
+
+            var lineID = $(this).attr('data-line');
+            if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
         }
         else
         {
@@ -17,8 +33,11 @@ $(function()
     {
         if($(this).prop('checked'))
         {
+            var lineID = $(this).attr('data-line');
+            if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
+
             var productID = $(this).attr('data-product');
-            if($('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
+            if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
         }
     })
 

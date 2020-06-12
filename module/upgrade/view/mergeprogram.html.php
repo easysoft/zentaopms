@@ -37,15 +37,15 @@
         <table class='table table-form'>
           <thead>
             <tr>
-              <th><?php echo $lang->upgrade->program;?></th>
               <th><?php echo $lang->upgrade->project;?></th>
+              <th><?php echo $lang->upgrade->program;?></th>
             </tr>
           </thead>
           <tbody>
           <?php foreach($noMergedProjects as $projectID => $project):?>
           <tr>
-            <td><?php echo html::select("programs[]", $project->programs, '', "class='form-control chosen'");?></td>
             <td><?php echo "{$lang->projectCommon} #{$project->id} {$project->name}" . html::hidden("projects[]", $project->id);?></td>
+            <td><?php echo html::select("programs[]", $project->programs, '', "class='form-control chosen'");?></td>
           </tr>
           <?php endforeach;?>
           </tbody>

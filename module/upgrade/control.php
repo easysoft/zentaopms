@@ -154,69 +154,47 @@ class upgrade extends control
     {
         if($_POST)
         {
-            $now = helper::now();
             if($type == 'productline')
             {
-                foreach($this->post->newPrograms as $lineID => $programName)
+                $linkedProducts = array();
+                $linkedProjects = array();
+                $unlinkProducts = array();
+                $unlinkProjects = array();
+                foreach($this->post->lines as $lineID)
                 {
-                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
-                }
-
-                foreach($this->post->newPrograms as $lineID => $programName)
-                {
-                    if(empty($_POST['products'][$lineID])) continue;
-
-                    $linkedProducts = $this->post->products[$lineID];
-                    $linkedProjects = zget($this->post->projects, $lineID, array());
-
-                    /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects);
-
-                    /* Change program field for product and project. */
-                    $this->upgrade->setProgram4Product($programID, $linkedProducts);
-                    if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
-
-                    /* Set program team. */
-
-                    /* Process unlinked product. */
-                    foreach($linkedProducts as $productID)
+                    if(isset($_POST['products'][$lineID]))
                     {
-                        unset($_POST['productIdList'][$lineID][$productID]);
-                        foreach($linkedProjects as $projectID) unset($_POST['projectIdList'][$lineID][$productID][$projectID]);
-                    }
-                    if($_POST['productIdList'][$lineID])
-                    {
-                        foreach($_POST['productIdList'][$lineID] as $productID) unset($_POST['projectIdList'][$lineID][$productID]);
-                    }
-                    if($_POST['productIdList'][$lineID]) $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('id')->in($_POST['productIdList'][$lineID])->exec();
-                    if($_POST['projectIdList'][$lineID])
-                    {
-                        $projectIdList = array();
-                        foreach($_POST['projectIdList'][$lineID] as $productID => $projects)
+                        foreach($_POST['products'][$lineID] as $productID)
                         {
-                            if(empty($projects)) continue;
-                            foreach($projects as $projectID) $projectIdList[$projectID] = $projectID;
+                            $linkedProducts[$productID] = $productID;
+                            unset($_POST['productIdList'][$lineID][$productID]);
+
+                            if(isset($_POST['projects'][$lineID][$productID]))
+                            {
+                                foreach($_POST['projects'][$lineID][$productID] as $projectID)
+                                {
+                                    $linkedProjects[$projectID] = $projectID;
+                                    unset($_POST['projectIdList'][$lineID][$productID][$projectID]);
+                                }
+                                $unlinkProjects += $this->post->projectIdList[$lineID][$productID];
+                            }
                         }
-                        if($projectIdList) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($projectIdList)->exec();
+                        $unlinkProducts += $this->post->productIdList[$lineID];
                     }
                 }
-            }
-            elseif($type == 'product')
-            {
-                $linkedProducts = $this->post->products;
-                $linkedProjects = $this->post->projects;
 
-                if(isset($_POST['newProgram']))
+                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
                     $programName = $this->post->programName;
                     if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
+                    if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects);
+                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects, $this->post->pgmAdmin);
                 }
                 else
                 {
-                    $programID = $this->post->programs[$i];
+                    $programID = $this->post->programs;
                     $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
                 }
 
@@ -225,42 +203,72 @@ class upgrade extends control
                 if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
 
                 /* Set program team. */
+                $this->upgrade->setProgramTeam($programID, $linkedProducts, $linkedProjects);
 
                 /* Process unlinked product. */
-                foreach($linkedProducts as $productID)
+                if($unlinkProducts) $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('id')->in($unlinkProducts)->exec();
+                if($unlinkProjects) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkProjects)->exec();
+            }
+            elseif($type == 'product')
+            {
+                $linkedProducts = array();
+                $linkedProjects = array();
+                $unlinkProjects = array();
+                foreach($_POST['products'] as $productID)
                 {
-                    unset($_POST['productIdList'][$productID]);
-                    foreach($linkedProjects as $projectID) unset($_POST['projectIdList'][$productID][$projectID]);
-                }
-                if($_POST['productIdList'])
-                {
-                    foreach($_POST['productIdList'] as $productID) unset($_POST['projectIdList'][$productID]);
-                }
-                if($_POST['projectIdList'])
-                {
-                    $projectIdList = array();
-                    foreach($_POST['projectIdList'] as $productID => $projects)
+                    $linkedProducts[$productID] = $productID;
+
+                    if(isset($_POST['projects'][$productID]))
                     {
-                        if(empty($projects)) continue;
-                        foreach($projects as $projectID) $projectIdList[$projectID] = $projectID;
+                        foreach($_POST['projects'][$productID] as $projectID)
+                        {
+                            $linkedProjects[$projectID] = $projectID;
+                            unset($_POST['projectIdList'][$productID][$projectID]);
+                        }
+                        $unlinkProjects += $this->post->projectIdList[$productID];
                     }
-                    if($projectIdList) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($projectIdList)->exec();
                 }
+
+                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
+                {
+                    $programName = $this->post->programName;
+                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
+                    if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
+
+                    /* Create Program. */
+                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects, $this->post->pgmAdmin);
+                }
+                else
+                {
+                    $programID = $this->post->programs;
+                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
+                }
+
+                /* Change program field for product and project. */
+                $this->upgrade->setProgram4Product($programID, $linkedProducts);
+                if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
+
+                /* Set program team. */
+                $this->upgrade->setProgramTeam($programID, $linkedProducts, $linkedProjects);
+
+                /* Process unlinked product. */
+                if($unlinkProjects) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkProjects)->exec();
             }
             elseif($type == 'project')
             {
                 $linkedProjects = $this->post->projects;
-                if(isset($_POST['newProgram']))
+                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
                     $programName = $this->post->programName;
                     if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
+                    if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, array(), $linkedProjects);
+                    $programID = $this->upgrade->createProgram($programName, array(), $linkedProjects, $this->post->pgmAdmin);
                 }
                 else
                 {
-                    $programID = $this->post->programs[$i];
+                    $programID = $this->post->programs;
                     $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
                 }
 
@@ -270,6 +278,7 @@ class upgrade extends control
                 $this->upgrade->setProgram4Project($programID, $linkedProjects);
 
                 /* Set program team. */
+                $this->upgrade->setProgramTeam($programID, array(), $linkedProjects);
 
                 /* Link product. */
                 foreach($linkedProjects as $projectID) $this->dao->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($projectID)->set('product')->eq($productID)->exec();
@@ -284,6 +293,7 @@ class upgrade extends control
                     $this->upgrade->setProgram4Project($programID, array($projectID));
 
                     /* Set program team. */
+                    $this->upgrade->setProgramTeam($programID, array(), array($projectID));
                 }
             }
 
@@ -409,7 +419,7 @@ class upgrade extends control
         $this->view->title = $this->lang->upgrade->mergeProgram;
 
         $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->andWhere('template')->eq('scrum')->fetchPairs('id', 'name');
-        $this->view->users    = $this->loadModel('user')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
 

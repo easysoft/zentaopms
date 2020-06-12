@@ -1,9 +1,9 @@
 <table class='table table-form'>
   <thead>
     <tr>
-      <th><?php echo $lang->upgrade->program;?></th>
-      <th><?php echo $lang->upgrade->programAdmin;?></th>
       <th><?php echo $lang->upgrade->project;?></th>
+      <th><?php echo $lang->upgrade->program;?></th>
+      <th class='w-150px'><?php echo $lang->upgrade->pgmAdmin;?></th>
     </tr>
   </thead>
   <tbody>
@@ -25,7 +25,7 @@
         <?php endif;?>
       </div>
     </td>
-    <td class='text-top' rowspan='<?php echo count($noMergedProjects);?>'><?php echo html::select("account", $users, '', "class='form-control chosen'");?></td>
+    <td class='text-top' rowspan='<?php echo count($noMergedProjects);?>'><?php echo html::select("pgmAdmin", $users, '', "class='form-control chosen'");?></td>
     <?php endif;?>
     <td><?php echo html::checkBox("projects", array($project->id => "{$lang->projectCommon} #{$project->id} {$project->name}"), $project->id);?></td>
   </tr>
