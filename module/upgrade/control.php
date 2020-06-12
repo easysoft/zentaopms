@@ -159,6 +159,11 @@ class upgrade extends control
             {
                 foreach($this->post->newPrograms as $lineID => $programName)
                 {
+                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
+                }
+
+                foreach($this->post->newPrograms as $lineID => $programName)
+                {
                     if(empty($_POST['products'][$lineID])) continue;
 
                     $linkedProducts = $this->post->products[$lineID];
@@ -168,8 +173,8 @@ class upgrade extends control
                     $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects);
 
                     /* Change program field for product and project. */
-                    $this->upgrade->setProductProgram($programID, $linkedProducts);
-                    if($linkedProjects) $this->upgrade->setProjectProgram($programID, $linkedProjects);
+                    $this->upgrade->setProgram4Product($programID, $linkedProducts);
+                    if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
 
                     /* Set program team. */
 
@@ -212,11 +217,12 @@ class upgrade extends control
                 else
                 {
                     $programID = $this->post->programs[$i];
+                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
                 }
 
                 /* Change program field for product and project. */
-                $this->upgrade->setProductProgram($programID, $linkedProducts);
-                if($linkedProjects) $this->upgrade->setProjectProgram($programID, $linkedProjects);
+                $this->upgrade->setProgram4Product($programID, $linkedProducts);
+                if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
 
                 /* Set program team. */
 
@@ -255,14 +261,18 @@ class upgrade extends control
                 else
                 {
                     $programID = $this->post->programs[$i];
+                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
                 }
 
-                $this->upgrade->createProduct4Program($programID);
+                $productID = $this->upgrade->createProduct4Program($programID);
 
                 /* Change program field for product and project. */
-                $this->upgrade->setProjectProgram($programID, $linkedProjects);
+                $this->upgrade->setProgram4Project($programID, $linkedProjects);
 
                 /* Set program team. */
+
+                /* Link product. */
+                foreach($linkedProjects as $projectID) $this->dao->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($projectID)->set('product')->eq($productID)->exec();
             }
             elseif($type == 'moreLink')
             {
@@ -271,7 +281,7 @@ class upgrade extends control
                     $projectID = $this->post->projects[$i];
 
                     /* Change program field for product and project. */
-                    $this->upgrade->setProjectProgram($programID, array($projectID));
+                    $this->upgrade->setProgram4Project($programID, array($projectID));
 
                     /* Set program team. */
                 }

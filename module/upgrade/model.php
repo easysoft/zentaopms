@@ -3751,6 +3751,15 @@ class upgradeModel extends model
         fwrite($fh, $log);
     }
 
+    /**
+     * Create program.
+     * 
+     * @param  string $programName 
+     * @param  array  $productIdList 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return int
+     */
     public function createProgram($programName, $productIdList = array(), $projectIdList = array())
     {
         $program = new stdclass();
@@ -3795,9 +3804,19 @@ class upgradeModel extends model
         return $programID;
     }
 
+    /**
+     * Create product for program.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return void
+     */
     public function createProduct4Program($programID)
     {
         $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+
+        $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('code')->eq($program->code)->fetch();
+        if($product) return $product->id;
 
         $product = new stdclass();
         $product->name           = $program->name;
@@ -3824,9 +3843,19 @@ class upgradeModel extends model
         $lib->acl     = 'default';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+        return $productID;
     }
 
-    public function setProductProgram($programID, $productIdList = array())
+    /**
+     * Set program for product
+     * 
+     * @param  int    $programID 
+     * @param  array  $productIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgram4Product($programID, $productIdList = array())
     {
         $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->in($productIdList)->exec();
         $this->dao->update(TABLE_STORY)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
@@ -3839,7 +3868,15 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
     }
 
-    public function setProjectProgram($programID, $projectIdList = array())
+    /**
+     * Set program for project
+     * 
+     * @param  int    $programID 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgram4Project($programID, $projectIdList = array())
     {
         $this->dao->update(TABLE_PROJECT)->set('program')->eq($programID)->where('id')->in($projectIdList)->exec();
         $this->dao->update(TABLE_TASK)->set('program')->eq($programID)->where('project')->in($projectIdList)->exec();

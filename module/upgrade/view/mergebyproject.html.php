@@ -13,14 +13,16 @@
     <?php if($i == 0):?>
     <td class='text-top' rowspan='<?php echo count($noMergedProjects);?>'>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, '', "class='form-control chosen'");?>
+        <?php if($programs) echo html::select("programs", $programs, '', "class='form-control chosen'");?>
         <?php echo html::input("programName", '', "class='form-control'");?>
+        <?php if($programs):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
             <label for="newProgram0"><?php echo $lang->upgrade->newProgram;?></label>
           </div>
         </span>
+        <?php endif;?>
       </div>
     </td>
     <td class='text-top' rowspan='<?php echo count($noMergedProjects);?>'><?php echo html::select("account", $users, '', "class='form-control chosen'");?></td>
