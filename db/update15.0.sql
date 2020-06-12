@@ -9,7 +9,7 @@ ADD `realStarted` date NOT NULL AFTER `end`,
 ADD `realFinished` date NOT NULL AFTER `realStarted`;
 
 ALTER TABLE `zt_group` ADD `program` mediumint(8) NOT NULL AFTER `id`;
-INSERT INTO `zt_group` (`name`, `role`, `desc`, `acl`, `developer`) VALUES ('项目管理员', 'prgadmin', '项目管理员可以维护项目的权限', NULL, '1');
+INSERT INTO `zt_group` (`name`, `role`, `desc`, `acl`, `developer`) VALUES ('项目管理员', 'prgadmin', '项目管理员可以维护项目的权限', '', '1');
 
 ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
 
