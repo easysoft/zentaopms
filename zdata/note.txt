@@ -16,9 +16,6 @@ No set yet ZDATA:
     zt_dept.yaml
     zt_derivemeas.yaml
     zt_designspec.yaml
-    zt_doccontent.yaml
-    zt_doclib.yaml
-    zt_doc.yaml
     zt_durationestimation.yaml
     zt_entry.yaml
     zt_extension.yaml
@@ -93,6 +90,9 @@ set ZDATA:
     zt_casestep.yaml
     zt_case.yaml
     zt_company.yaml
+    zt_doccontent.yaml
+    zt_doclib.yaml
+    zt_doc.yaml
     zt_effort.yaml
     zt_file.yaml
     zt_group.yaml

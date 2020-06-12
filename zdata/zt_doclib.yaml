@@ -1,89 +1,91 @@
 title: table zt_doclib
-desc: ""
+desc: "文档库"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "文档类型"
+    range: product,project,custom,book
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: product
-    note: ""
+    note: "产品库"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: project
-    note: ""
+    note: "项目库"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: name
-    note: ""
-    prefix: ""
+    note: "文档库名称"
+    range: 1-10000
+    prefix: "这是文档库名称"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: acl
-    note: ""
+    note: "权限"
+    range: open,custom,private
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: groups
-    note: ""
+    note: "权限分组"
+    from: common.groups.v1.yaml
+    use: groups
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: users
-    note: ""
+    note: "用户"
+    from: common.user.v1.yaml
+    use: userC
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: main
-    note: ""
+    note: "文档主库"
+    range: 0,1:R
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: collector
-    note: ""
+    note: "是否收藏"
+    range: 0,1:R
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: order
-    note: ""
+    note: "排序"
+    range: 10-100:10
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
