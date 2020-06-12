@@ -60,7 +60,7 @@ fields:
     loop: 0
     format: ""
   - field: linkedBy
-    note: "链接者"
+    note: "裁剪者"
     from: common.user.v1.yaml
     use: user
     prefix: ""

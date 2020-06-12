@@ -1,82 +1,83 @@
 title: table zt_block
-desc: ""
+desc: "区块"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "Id"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: account
-    note: ""
+    note: "所属用户"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: module
-    note: ""
+    note: "所属模块"
+    range: product,project,qa,my
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
-    note: ""
-    prefix: ""
+    note: "区块名称"
+    range: 1-10000
+    prefix: "这是区块名称"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: source
-    note: ""
+    range: 0,todo,project,qa,product
+    note: "来源模块"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: block
-    note: ""
+    note: "来源区块"
+    range: product,project,qa,todo,assigntome,dynamic,flowchart,welcome,html,statistic,overview,list,story,plan,release,task,build,bug,case,testtask
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: params
-    note: ""
-    prefix: ""
+    note: "设置参数"
+    range: 1-10000
+    prefix: "这是json格式参数"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: order
-    note: ""
+    note: "排序"
+    range: 1-100
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: grid
-    note: ""
+    note: "位置"
+    range: 8,4
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: height
-    note: ""
+    note: "高度"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: hidden
-    note: ""
+    note: "隐藏"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

@@ -35,3 +35,8 @@ instances:
        postfix: "-"
      - field: day
        range: 20-27
+
+  - instance: dateC
+    fields:
+      - field: time
+        range: 1262275200-1893427200:R

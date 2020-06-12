@@ -69,7 +69,7 @@ fields:
   - field: data
     note: "数据"
     range: 1-10000
-    prefix: "这是对象的数据,json格式"
+    prefix: "这是对象的json数据"
     postfix: ""
     loop: 0
     format: ""

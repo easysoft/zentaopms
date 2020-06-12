@@ -4,24 +4,14 @@ No set yet ZDATA:
     zt_attend.yaml
     zt_baseline.yaml
     zt_basicmeas.yaml
-    zt_block.yaml
-    zt_branch.yaml
     zt_compile.yaml
     zt_config.yaml
-    zt_cron.yaml
     zt_deployproduct.yaml
     zt_deployscope.yaml
     zt_deploystep.yaml
     zt_deploy.yaml
-    zt_dept.yaml
     zt_derivemeas.yaml
-    zt_designspec.yaml
-    zt_doccontent.yaml
-    zt_doclib.yaml
-    zt_doc.yaml
     zt_durationestimation.yaml
-    zt_entry.yaml
-    zt_extension.yaml
     zt_faq.yaml
     zt_feedbackview.yaml
     zt_feedback.yaml
@@ -40,7 +30,6 @@ No set yet ZDATA:
     zt_flow_risk.yaml
     zt_flow_stage.yaml
     zt_flow_workloadbudget.yaml
-    zt_grouppriv.yaml
     zt_host.yaml
     zt_im_chatuser.yaml
     zt_im_chat.yaml
@@ -86,7 +75,8 @@ No set yet ZDATA:
 ====================================================
 set ZDATA:
     zt_action.yaml
-    zt_asset.yaml
+    zt_branch.yaml
+    zt_block.yaml
     zt_budget.yaml
     zt_bug.yaml
     zt_build.yaml
@@ -94,11 +84,18 @@ set ZDATA:
     zt_casestep.yaml
     zt_case.yaml
     zt_company.yaml
+    zt_cron.yaml
+    zt_dept.yaml
+    zt_doccontent.yaml
+    zt_doclib.yaml
+    zt_doc.yaml
     zt_effort.yaml
+    zt_entry.yaml
+    zt_extension.yaml
     zt_file.yaml
+    zt_grouppriv.yaml
     zt_group.yaml
     zt_history.yaml
-    zt_host.yaml
     zt_jenkins.yaml
     zt_job.yaml
     zt_lang.yaml

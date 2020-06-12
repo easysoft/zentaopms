@@ -21,7 +21,7 @@ fields:
     format: ""
   - field: module
     note: "模块"
-    range: process,stage
+    range: process,stage,bug,task
     prefix: ""
     postfix: ""
     loop: 0
@@ -29,31 +29,31 @@ fields:
     format: ""
   - field: section
     note: "选项"
-    range: A-Z
-    prefix: ""
+    range: 1-10000
+    prefix: "section"
     postfix: ""
-    loop: 6
+    loop: 0
     loopfix: ""
     format: ""
   - field: key
     note: "键"
-    range: A-Z:R
-    prefix: ""
+    range: 1-10000
+    prefix: "key"
     postfix: ""
-    loop: 8
+    loop: 0
     loopfix: ""
     format: ""
   - field: value
     note: "值"
-    range: a-z:R
-    prefix: ""
+    range: 1-10000
+    prefix: "value"
     postfix: ""
-    loop: 8
+    loop: 0
     loopfix: ""
     format: ""
   - field: system
     note: "系统预设"
-    range: 1
+    range: 0,1
     prefix: ""
     postfix: ""
     loop: 0

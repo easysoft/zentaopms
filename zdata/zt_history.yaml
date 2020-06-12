@@ -12,7 +12,7 @@ fields:
     format: ""
   - field: action
     note: "关联日志"
-    range: 1-10000{10}
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0

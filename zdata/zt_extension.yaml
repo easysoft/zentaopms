@@ -1,110 +1,111 @@
 title: table zt_extension
-desc: ""
+desc: "插件"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: name
-    note: ""
-    prefix: ""
+    note: "插件名称"
+    range: 1-10000
+    prefix: "这是插件名称"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: code
-    note: ""
-    prefix: ""
+    note: "代号"
+    range: 1-10000
+    prefix: "code"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: version
-    note: ""
-    prefix: ""
+    note: "版本号"
+    range: 1-10000
+    prefix: "version"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: author
-    note: ""
-    prefix: ""
+    note: "作者"
+    range: 1-10000
+    prefix: "author"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: desc
-    note: ""
-    prefix: ""
+    note: "描述"
+    range: 1-10000
+    prefix: "这是插件描述"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: license
-    note: ""
+    note: "授权"
+    range: LGPL
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "类型"
+    range: extension
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: site
-    note: ""
-    prefix: ""
-    postfix: ""
+    note: "官网"
+    range: zentao
+    prefix: "http://"
+    postfix: ".net"
     loop: 0
-    loopfix: ""
     format: ""
   - field: zentaoCompatible
-    note: ""
+    note: "适用版本"
+    range: all
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: installedTime
-    note: ""
+    note: "安装时间"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: depends
-    note: ""
+    note: "依赖"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: dirs
-    note: ""
+    note: "安装目录"
+    range: []
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: files
-    note: ""
-    prefix: ""
+    note: "安装文件"
+    range: 1-10000
+    prefix: "json格式文件内容"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
-    note: ""
+    note: "安装状态"
+    range: installed
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

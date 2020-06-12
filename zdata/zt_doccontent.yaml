@@ -4,58 +4,58 @@ author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: doc
-    note: ""
+    note: "文档ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
-    note: ""
-    prefix: ""
+    note: "文档标题"
+    range: 1-10000
+    prefix: "这是文档标题"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: digest
-    note: ""
-    prefix: ""
+    note: "文档摘要"
+    range: 1-10000
+    prefix: "这是文档摘要"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: content
-    note: ""
-    prefix: ""
+    note: "文档正文"
+    range: 1-10000
+    prefix: "这是文档正文"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: files
-    note: ""
+    note: "附件ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "文档类型"
+    range: book,url,markdown,html
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: version
-    note: ""
+    note: "版本号"
+    range: 1-10000:R
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

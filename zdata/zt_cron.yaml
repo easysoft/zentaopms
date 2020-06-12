@@ -1,89 +1,90 @@
 title: table zt_cron
-desc: ""
+desc: "定时任务"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: m
-    note: ""
+    note: "分"
+    range: "*,0-59:R,*/5"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: h
-    note: ""
+    note: "小时"
+    range: "*,0-23:R,*/5"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: dom
-    note: ""
+    note: "天"
+    range: "*"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: mon
-    note: ""
+    note: "月"
+    range: "*"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: dow
-    note: ""
+    note: "周"
+    range: "*"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: command
-    note: ""
-    prefix: ""
+    note: "命令"
+    range: 1-10000
+    prefix: "这是执行的命令"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: remark
-    note: ""
-    prefix: ""
+    note: "备注"
+    range: 1-10000
+    prefix: "这是备注"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "任务类型"
+    range: zentao,system
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: buildin
-    note: ""
+    note: "内置"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
-    note: ""
+    note: "状态"
+    range: normal,stop
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: lastTime
-    note: ""
+    note: "最后执行时间"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

@@ -1,194 +1,200 @@
 title: table zt_doc
-desc: ""
+desc: "文档"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "文档编号"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: program
-    note: ""
+    note: "所属项目"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: product
-    note: ""
+    note: "所属产品"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: project
-    note: ""
+    note: "所属项目"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: lib
-    note: ""
+    note: "所属文档库"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: template
-    note: ""
+    note: "模板"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: templateType
-    note: ""
+    note: "模板类型"
+    range: URS,SRS,HLDS,DDS,DBDS,ADS
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: chapterType
-    note: ""
+    note: "章节类型"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: module
-    note: ""
+    note: "模块"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
-    note: ""
-    prefix: ""
+    note: "文档标题"
+    range: 1-10000
+    prefix: "这是文档标题"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: keywords
-    note: ""
-    prefix: ""
+    note: "关键词"
+    range: 1-10000
+    prefix: "这是关键词"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "文档类型"
+    range: book,url,markdown,html
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: parent
-    note: ""
+    note: "父级ID"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: path
     note: ""
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: grade
     note: ""
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: order
-    note: ""
+    note: "排序"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: views
     note: ""
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: collector
-    note: ""
+    note: "是否收藏"
+    range: 0,1:R
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: addedBy
-    note: ""
+    note: "添加者"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: addedDate
-    note: ""
+    note: "添加日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
-    note: ""
+    note: "编辑者"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: acl
-    note: ""
+    note: "权限"
+    range: open,custom,private
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: groups
-    note: ""
+    note: "分组"
+    from: common.groups.v1.yaml
+    use: groups
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: users
-    note: ""
+    note: "用户"
+    from: common.user.v1.yaml
+    use: userC
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: version
-    note: ""
+    note: "版本号"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

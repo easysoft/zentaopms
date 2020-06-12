@@ -5,14 +5,14 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: "1-1000"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: product
     note: "产品ID"
-    range: "1-10"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0
@@ -33,7 +33,7 @@ fields:
     format: ""
   - field: module
     note: "所属模块"
-    range: "1-100"
+    range: "1-10000"
     prefix: ""
     postfix: ""
     loop: 0
@@ -131,7 +131,8 @@ fields:
     format: ""
   - field: scriptedDate
     note: ""
-    range: "0000-00-00"
+    from: common.date.v1.yaml
+    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
