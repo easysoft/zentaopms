@@ -1,208 +1,222 @@
 title: table zt_flow_issue
-desc: ""
+desc: "项目问题"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: resolvedBy
-    note: ""
+    note: "解决者"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: program
-    note: ""
+    note: "所属项目"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
-    note: ""
-    prefix: ""
+    note: "标题"
+    range: 1-10000
+    prefix: "问题标题"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: desc
-    note: ""
-    prefix: ""
+    note: "描述"
+    range: 1-10000
+    prefix: "问题描述"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: pri
-    note: ""
+    note: "优先级"
+    range: 1-4
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: severity
-    note: ""
+    note: "严重程度"
+    range: 1-4
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: type
-    note: ""
+    note: "类别"
+    range: design,code,performance,version,storyadd,storychanged,storyremoved
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: effectedArea
-    note: ""
-    prefix: ""
+    note: "受影响的活动"
+    range: 1-10000
+    prefix: "受影响活动"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deadline
-    note: ""
+    note: "计划解决日期"
+    from: common.date.v1.yaml
+    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: resolution
-    note: ""
+    note: "解决方式"
+    range: resolved,totask,tobug,tostory,torisk
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: resolutionComment
-    note: ""
-    prefix: ""
+    note: "解决方案"
+    range: 1-10000
+    prefix: "解决方案"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: objectID
-    note: ""
+    note: "转化对象"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: resolvedDate
-    note: ""
+    note: "实际解决日期"
+    from: common.date.v1.yaml
+    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
-    note: ""
+    note: "结果"
+    range: unconfirmed,confirmed,unresolved,resolved,canceled,closed
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: parent
-    note: ""
+    note: "父流程ID"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: subStatus
-    note: ""
+    note: "子状态"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
+    note: "由谁创建"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
+    note: "创建日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
-    note: ""
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: activateBy
-    note: ""
+    note: "由谁激活"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: activateDate
-    note: ""
+    note: "激活日期"
+    from: common.date.v1.yaml
+    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: closeBy
-    note: ""
+    note: "由谁关闭"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: closedDate
-    note: ""
+    note: "关闭日期"
+    from: common.date.v1.yaml
+    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedTo
-    note: ""
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedBy
-    note: ""
+    note: "由谁指派"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedDate
-    note: ""
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

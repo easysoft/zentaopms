@@ -1,0 +1,306 @@
+title: table zt_flow_risk
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: project
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: name
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: source
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: category
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: strategy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: status
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: impact
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: probability
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: riskindex
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: pri
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: identifiedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: prevention
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: remedy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: plannedClosedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: actualClosedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: addedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: resolution
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: resolvedBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: lastCheckedBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: lastCheckedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: parent
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: subStatus
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: createdBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: createdDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: editedBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: editedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: checkedBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: checkedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: cancelBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: cancelDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: cancelReason
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: hangupBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: hangupDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: activateBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: activateDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: closeBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: closedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: assignedTo
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: assignedBy
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: assignedDate
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: deleted
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: program
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""

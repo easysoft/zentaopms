@@ -8,103 +8,88 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: object
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: category
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: parent
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedTo
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: subStatus
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdBy
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdDate
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedBy
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedDate
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""

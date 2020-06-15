@@ -1,124 +1,108 @@
 title: table zt_flow_workloadbudget
-desc: ""
+desc: "工期预算"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: stage
-    note: ""
+    note: "阶段"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: workload
-    note: ""
+    note: "工作流占比"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: worktimeRate
-    note: ""
+    note: "全时率"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: people
-    note: ""
+    note: "投入人数"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: duration
-    note: ""
+    note: "工期"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: parent
-    note: ""
+    note: "父流程ID"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedTo
-    note: ""
+    note: "指派给"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
-    note: ""
+    note: "状态"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: subStatus
-    note: ""
+    note: "子状态"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
+    note: "由谁创建"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
+    note: "创建日期"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
-    note: ""
+    note: "由谁编辑"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
+    note: "编辑日期"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedBy
-    note: ""
+    note: "由谁指派"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedDate
-    note: ""
+    note: "指派日期"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
