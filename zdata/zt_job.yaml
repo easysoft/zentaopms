@@ -148,3 +148,10 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: program
+    note: "所属项目"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

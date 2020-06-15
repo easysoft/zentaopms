@@ -1,117 +1,124 @@
 title: table zt_flow_reviewcl
-desc: ""
+desc: "评审检查清单"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: title
-    note: ""
-    prefix: ""
+    note: "检查清单标题"
+    range: 1-10000
+    prefix: "检查清单标题"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: object
-    note: ""
+    note: "检查清单标题"
+    range: PP,QAP,CMP,ITP,URS,SRS,HLDS,DDS,Code,ITTC,STP,STTC,UM
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: category
-    note: ""
+    note: "分类"
+    range: project,engineering,support
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: parent
-    note: ""
+    note: "父流程ID"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedTo
-    note: ""
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: order
-    note: ""
+    note: "排序"
+    range: 10-100:R
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: status
-    note: ""
+    note: "状态"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: subStatus
-    note: ""
+    note: "子状态"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
+    note: "由谁创建"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
+    note: "创建日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedBy
-    note: ""
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedBy
-    note: ""
+    note: "由谁指派"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: assignedDate
-    note: ""
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
