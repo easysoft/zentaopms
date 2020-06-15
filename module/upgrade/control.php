@@ -302,7 +302,11 @@ class upgrade extends control
 
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetch('count');
         $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
-        if(empty($noMergedProductCount) and empty($noMergedProjectCount)) die(js::locate($this->createLink('upgrade', 'programPriv')));
+        if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
+        {
+            $this->upgrade->initUserView();
+            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=yes")));
+        }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
         $this->view->noMergedProjectCount = $noMergedProjectCount;
