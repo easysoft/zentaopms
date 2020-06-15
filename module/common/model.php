@@ -1549,11 +1549,7 @@ EOD;
             $this->app->user = $this->session->user;
 
             $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'program';
-            if(!defined('IN_UPGRADE') and $inProgram) 
-            {
-                $this->resetProgramPriv($module, $method);
-                //$this->resetProgramAcl($module, $method);
-            }
+            if(!defined('IN_UPGRADE') and $inProgram) $this->resetProgramPriv($module, $method);
 
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
@@ -1584,7 +1580,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
-        if(strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false && $inProgram) return true; 
+        if($inProgram && strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false) return true; 
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
