@@ -749,7 +749,7 @@ class projectModel extends model
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('program')->eq($this->session->program)
-                ->andWhere('t2.template')->eq('')
+                ->andWhere('template')->eq('')
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
