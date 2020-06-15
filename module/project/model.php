@@ -118,8 +118,7 @@ class projectModel extends model
             }
 
             $projectIndex .= '</ul></div></div>';
-
-            $this->lang->programSwapper = $selectHtml;
+            $projectIndex .= $selectHtml;
         }
 
         $this->lang->modulePageNav = $projectIndex;
@@ -169,23 +168,18 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $buildID, $currentModule, $currentMethod, $extra = '')
     {
+        if(!$projectID) return;
+
         $isMobile = $this->app->viewType == 'mhtml';
 
-        $currentProjectName = '';
-        if($projectID)
-        {
-            setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            $currentProject = $this->getById($projectID);
-            $currentProjectName = $currentProject->name;
-        }
-        else if($isMobile) return;
-        else $currentProjectName = $this->lang->project->allProjects;
+        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        $currentProject = $this->getById($projectID);
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProject->name}'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+        $output .= "</div></div></div>";
+        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
         return $output;
     }
@@ -682,6 +676,7 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
+            ->andWhere('program')->eq($this->session->program)
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -736,6 +731,8 @@ class projectModel extends model
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
+                ->andWhere('t2.program')->eq($this->session->program)
+                ->andWhere('t2.template')->eq('')
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
@@ -751,6 +748,8 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('program')->eq($this->session->program)
+                ->andWhere('t2.template')->eq('')
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
