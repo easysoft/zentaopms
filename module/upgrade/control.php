@@ -185,12 +185,11 @@ class upgrade extends control
 
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    $programName = $this->post->programName;
-                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
                     if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects, $this->post->pgmAdmin);
+                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->pgmAdmin);
+                    if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else
                 {
@@ -231,12 +230,11 @@ class upgrade extends control
 
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    $programName = $this->post->programName;
-                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
                     if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, $linkedProducts, $linkedProjects, $this->post->pgmAdmin);
+                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->pgmAdmin);
+                    if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else
                 {
@@ -259,12 +257,11 @@ class upgrade extends control
                 $linkedProjects = $this->post->projects;
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    $programName = $this->post->programName;
-                    if(empty($programName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->program)));
                     if(empty($_POST['pgmAdmin'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($programName, array(), $linkedProjects, $this->post->pgmAdmin);
+                    $programID = $this->upgrade->createProgram(array(), $linkedProjects, $this->post->pgmAdmin);
+                    if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else
                 {
@@ -307,6 +304,8 @@ class upgrade extends control
         $this->view->noMergedProductCount = $noMergedProductCount;
         $this->view->noMergedProjectCount = $noMergedProjectCount;
 
+        $this->app->loadLang('program');
+        $this->loadModel('project');
         $this->view->type = $type;
         if($type == 'productline')
         {
@@ -420,6 +419,7 @@ class upgrade extends control
 
         $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->andWhere('template')->eq('scrum')->fetchPairs('id', 'name');
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
