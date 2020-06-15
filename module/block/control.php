@@ -983,6 +983,43 @@ class block extends control
     }
 
     /**
+     * Print program statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProgramStatisticBlock()
+    {
+        $this->loadModel('program');
+        /* Get projects. */
+        $projects = $this->loadModel('project')->getList('all', 0, 0, 0, 'program');
+        $sprints  = $this->project->getList();
+        $total    = count($sprints);
+        foreach($projects as $project)
+        {
+            $project->sprints = 0;
+            foreach($this->lang->project->statusList as $key => $status) 
+            {
+                $project->$key = new stdclass();
+                $project->$key->count = 0;
+            }
+
+            foreach($sprints as $sprint)
+            {
+                if($sprint->program == $project->id)
+                {
+                    $project->sprints ++;
+                    $project->{$sprint->status}->count ++;
+                }
+            }
+
+            foreach($this->lang->project->statusList as $key => $status) $project->$key->percent = $total ? round($project->$key->count / $total, 2) * 100 . '%' : '0%';
+        }
+
+        $this->view->projects = $projects;
+    }
+
+    /**
      * Print qa statistic block.
      *
      * @access public
