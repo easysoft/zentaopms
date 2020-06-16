@@ -792,7 +792,7 @@ class user extends control
                         die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
-                    $response['locate']  = $this->config->default->module;
+                    $response['locate']  = $this->config->webRoot;
                     $response['result']  = 'success';
                     $this->send($response);
                 }
