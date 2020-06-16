@@ -109,9 +109,9 @@ $(function()
             {
               echo html::submitButton($submitText);
               if($dataInsert !== '') echo html::hidden('insert', $dataInsert);
-              echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
-              echo html::hidden('pagerID', $pagerID);
             }
+            echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
+            echo html::hidden('pagerID', $pagerID);
             echo ' &nbsp; ' . html::backButton();
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>

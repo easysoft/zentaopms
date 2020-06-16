@@ -455,7 +455,6 @@ class caselibModel extends model
             {
                 $caseID      = $data->id[$key];
                 $stepChanged = false;
-                $steps       = array();
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
                 $oldCase     = $oldCases[$caseID];
 
@@ -469,8 +468,8 @@ class caselibModel extends model
                         if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
-                        $step->desc   = $desc;
-                        $step->expect = trim($data->expect[$key][$id]);
+                        $step->desc   = htmlspecialchars($desc);
+                        $step->expect = htmlspecialchars(trim($data->expect[$key][$id]));
 
                         $steps[] = $step;
                     }
@@ -552,8 +551,8 @@ class caselibModel extends model
                         $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
-                        $stepData->desc    = $desc;
-                        $stepData->expect  = $data->expect[$key][$id];
+                        $stepData->desc    = htmlspecialchars($desc);
+                        $stepData->expect  = htmlspecialchars(trim($data->expect[$key][$id]));
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;

@@ -1145,7 +1145,6 @@ class testcaseModel extends model
             if($caseID)
             {
                 $stepChanged = false;
-                $steps       = array();
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
                 $oldCase     = $oldCases[$caseID];
 
@@ -1159,8 +1158,8 @@ class testcaseModel extends model
                         if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
-                        $step->desc    = htmlspecialchars($desc);
-                        $step->expect  = htmlspecialchars(trim($this->post->expect[$key][$id]));
+                        $step->desc   = htmlspecialchars($desc);
+                        $step->expect = htmlspecialchars(trim($this->post->expect[$key][$id]));
 
                         $steps[] = $step;
                     }
@@ -1208,8 +1207,8 @@ class testcaseModel extends model
                             $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
-                            $stepData->desc    = htmlspecialchars($step['desc']);
-                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $stepData->desc    = $step['desc'];
+                            $stepData->expect  = $step['expect'];
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
