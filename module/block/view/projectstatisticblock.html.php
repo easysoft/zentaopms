@@ -96,7 +96,7 @@ $(function()
         <?php $selected = !isset($projects[$selected]) ? key($projects) : $selected;?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab" title='<?php echo $project->name;?>'><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
         </li>
         <?php endforeach;?>
