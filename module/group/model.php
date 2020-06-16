@@ -117,9 +117,9 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs($programID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchPairs();
     }
 
     /**

@@ -1619,6 +1619,7 @@ EOD;
      */
     public function resetProgramPriv($module, $method)
     {
+        global $app;
         /* Get user program priv. */
         if(!$this->app->session->program) return;
         $program       = $this->dao->findByID($this->app->session->program)->from(TABLE_PROJECT)->fetch();
@@ -1646,78 +1647,6 @@ EOD;
             
             $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
         }
-    }
-
-    /**
-     * Reset program acl.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function resetProgramAcl($module, $method)
-    {
-        global $app, $lang, $config, $dbh;
-        /* Get user program acl. */
-        if(!$app->session->program) return;
-        $groups = $dbh->query('SELECT t1.acl FROM ' . TABLE_GROUP . ' AS t1 LEFT JOIN ' . TABLE_USERGROUP . ' AS t2 on t1.id = t2.group WHERE t2.account = ' . "'{$app->user->account}'" . ' AND t1.program = ' . "'{$app->session->program}'" . ' AND t1.role != "limited"')->fetchAll();
-
-        $productAllow = false;
-        $projectAllow = false;
-
-        if(empty($groups)) return;
-        foreach($groups as $group)
-        {
-            $acl = json_decode($group->acl, true);
-            if(empty($group->acl))
-            {
-                $productAllew = true;
-                $projectAllow = true;
-                break;
-            }
-
-            if(empty($acl['products'])) $productAllow = true;
-            if(empty($acl['projects'])) $projectAllow = true;
-            if(empty($acls) and !empty($acl))
-            {
-                $acls = $acl;
-                continue;
-            }
-
-            if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
-            if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
-
-            if($productAllow) $acls['products'] = array();
-            if($projectAllow) $acls['projects'] = array();
-        }
-
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('acl')->eq('open')
-            ->andWhere('program')->ne(0)
-            ->andWhere('template')->eq('')
-            ->fetchAll('id');
-
-        $openedProducts = join(',', array_keys($openedProducts));
-        $openedProjects = join(',', array_keys($openedProjects));
-
-        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
-        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
-
-        if(!empty($acls['products']) and !$isAdmin)
-        {
-            $grantProducts = '';
-            foreach($acls['products'] as $productID)
-            {
-                if(strpos(",{$userView->products},", ",{$productID},") !== false) $grantProducts .= ",{$productID}";
-            }
-            $userView->products = $grantProducts;
-        }
-
     }
 
     /**

@@ -62,7 +62,7 @@
               <?php echo html::select('program[0][]', $programs, '', "class='form-control chosen' multiple");?>
             </div>
           </td>
-          <td class='pv-10px'>
+          <td class='w-100px'>
             <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
             <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
           </td>
