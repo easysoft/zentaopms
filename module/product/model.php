@@ -270,6 +270,7 @@ class productModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('program')->eq($this->session->program)
             ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
@@ -402,6 +403,7 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setDefault('program', $this->session->program)
             ->setDefault('status', 'normal')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())

@@ -1135,7 +1135,6 @@ class project extends control
         }
 
         $projectID = key($this->projects);
-        if($this->session->project) $projectID = $this->session->project;
         $this->project->setMenu($this->projects, $projectID);
 
         $this->view->title         = $this->lang->project->create;
