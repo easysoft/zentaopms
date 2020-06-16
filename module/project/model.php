@@ -420,7 +420,11 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) 
+            {
+                $objectType = $oldProject->template ? 'program' : 'project'; 
+                $this->loadModel('user')->updateUserView($projectID, $objectType);
+            }
             return common::createChanges($oldProject, $project);
         }
     }

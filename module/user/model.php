@@ -1489,7 +1489,7 @@ class userModel extends model
             ->where('team.type')->eq('project')
             ->andWhere('project.deleted')->eq(0)
             ->beginIF($objectType == 'product')->andWhere('root')->in($linkedProjects)->fi()
-            ->beginIF($objectType == 'project')->andWhere('root')->eq($objectID)->fi()
+            ->beginIF($objectType == 'project' || $objectType == 'program')->andWhere('root')->eq($objectID)->fi()
             ->query();
         while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
 

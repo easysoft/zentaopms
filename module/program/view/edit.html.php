@@ -89,7 +89,7 @@
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
-        <tr id='whitelistBox' class='hidden'>
+        <tr id='whitelistBox' <?php if($project->acl != 'custom') echo "class='hidden'";?>>
           <th><?php echo $lang->project->whitelist;?></th>
           <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $project->whitelist, '', '', 'inline');?></td>
         </tr>
