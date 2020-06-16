@@ -119,21 +119,106 @@ $lang->common->common = 'Common Module';
 
 /* Main menu. */
 $lang->mainNav = new stdclass();
-$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> Dashboard|my|index|';
-$lang->mainNav->program = '<i class="icon icon-menu-project"></i> Project|program|index|';
-$lang->mainNav->doc     = '<i class="icon icon-menu-doc"></i> Doc|doc|index|';
-$lang->mainNav->report  = '<i class="icon icon-menu-report"></i> Report|report|index|';
-$lang->mainNav->company = '<i class="icon icon-menu-users"></i> Company|company|index|';
-$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
-$lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> Recent|recent|index|';
+$lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
+$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|index|';
+//$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> Report|report|index|';
+//$lang->mainNav->attend    = '<i class="icon icon-file"></i> Attend|attend|personal|';
+$lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
+$lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+//$lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> Recent|recent|index|';
 
+$lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
 
+/* Scrum menu. */
 $lang->menu = new stdclass();
-$lang->menu->program = 'Home|program|index';
+//$lang->menu->program = 'Home|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = 'QA|qa|index';
+$lang->menu->project = 'Iteration|project|index|locate=no';
+$lang->menu->doc     = 'Doc|doc|index|';
+$lang->menu->qa      = 'Qa|qa|index';
+$lang->menu->company = new stdclass();
+
+$lang->program = new stdclass();
+
+/* System menu. */
+$lang->system = new stdclass();
+$lang->system->menu = new stdclass();
+$lang->system->subMenu = new stdclass();
+$lang->system->subMenu->setmodel = new stdclass();
+//$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
+$lang->system->menu->estimate    = array('link' => 'Estimate|custom|estimate|');
+$lang->system->menu->stage       = array('link' => 'Stage|stage|browse|', 'subModule' => 'stage');
+$lang->system->menu->measurement = array('link' => 'Measurement|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
+$lang->system->menu->auditcl     = array('link' => 'QA|auditcl|browse|', 'subModule' => 'auditcl');
+$lang->system->menu->cmcl        = array('link' => 'Cmcl|cmcl|browse|', 'subModule' => ',cmcl,baseline,');
+$lang->system->menu->process     = array('link' => 'Process|process|browse|', 'subModule' => ',activity,output,classify,');
+$lang->system->menu->reviewcl    = array('link' => 'Reviewcl|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
+$lang->system->menu->subject     = array('link' => 'Subject|subject|browse|');
+$lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
+$lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
+$lang->system->dividerMenu = ',auditcl,subject,';
+
+//if($this->cookie->systemModel == 'scrum')
+//{
+//    $lang->system->menu = new stdclass();
+//    $lang->system->subMenu->setmodel = new stdclass();
+//    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
+//    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+//    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
+//    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
+//    
+//    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+//    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
+//    unset($lang->system->dividerMenu);
+//}
+
+$lang->stage = new stdclass();
+$lang->stage->menu = new stdclass();
+$lang->stage->menu->browse  = array('link' => 'Stage List|stage|browse|', 'alias' => 'create,edit,batchcreate');
+$lang->stage->menu->settype = 'Stage Type|stage|settype|';
+
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
+$lang->measurement->menu->settips  = 'Set Tips|measurement|settips|';
+$lang->measurement->menu->define   = array('link' => 'Measurement|measurement|browse|type=basic', 'alias' => 'createbasic');
+$lang->measurement->menu->data     = array('link' => 'Sqlbuilder|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
+$lang->measurement->menu->template = array('link' => 'Measurement|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate');
+
+$lang->sqlbuilder = new stdclass();
+$lang->sqlbuilder->menu = $lang->measurement->menu;
+
+$lang->cmcl = new stdclass();
+$lang->cmcl->menu = new stdclass();
+$lang->cmcl->menu->browse   = array('link' => 'Cmcl|cmcl|browse|', 'subModule' => 'cmcl');
+$lang->cmcl->menu->catalog  = 'Catalog|baseline|catalog|';
+$lang->cmcl->menu->template = array('link' => 'Template|baseline|template|', 'alias' => 'createtemplate,edittemplate,view,editbook,managebook');
+
+$lang->baseline = new stdclass();
+$lang->baseline->menu = $lang->cmcl->menu;
+
+$lang->process = new stdclass();
+$lang->process->menu = new stdclass();
+$lang->process->menu->browse   = array('link' => 'Process|process|browse|', 'subModule' => 'process');
+$lang->process->menu->activity = array('link' => 'Activity|activity|browse|', 'subModule' => 'activity');
+$lang->process->menu->output   = array('link' => 'Output|output|browse|', 'subModule' => 'output');
+$lang->process->menu->classify = array('link' => 'Classify|classify|browse|', 'subModule' => 'classify');
+
+$lang->activity = new stdclass();
+$lang->output   = new stdclass();
+$lang->classify = new stdclass();
+$lang->activity->menu = $lang->process->menu;
+$lang->output->menu   = $lang->process->menu;
+$lang->classify->menu = $lang->process->menu;
+
+$lang->reviewcl = new stdclass();
+$lang->reviewcl->menu = new stdclass();
+$lang->reviewcl->menu->browse   = array('link' => 'Reviewcl|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
+$lang->reviewcl->menu->version  = array('link' => 'Review Version|reviewsetting|version|');
+$lang->reviewcl->menu->reviewer = array('link' => 'Reviewer|reviewsetting|reviewer|');
+
+$lang->reviewsetting = new stdclass();
+$lang->reviewsetting->menu = $lang->reviewcl->menu;
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
@@ -190,19 +275,22 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index          = 'Home|my|index';
-$lang->my->menu->calendar       = array('link' => 'Schedule|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+//$lang->my->menu->todo         = 'Todo|my|todo|';
+$lang->my->menu->effort         = 'Effort|my|effort|';
+//$lang->my->menu->calendar     = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->program        = array('link' => 'Program|my|program|');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Request|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamics|my|dynamic|';
-$lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = 'Password|my|changepassword';
-$lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = array('link' => 'Points|my|score', 'subModule' => 'score');
+//$lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
+//$lang->my->menu->changePassword = 'Password|my|changepassword';
+//$lang->my->menu->manageContacts = 'Contact|my|managecontacts';
+//$lang->my->menu->score          = array('link' => 'Points|my|score', 'subModule' => 'score');
 
-$lang->my->dividerMenu = ',task,myProject,profile,';
+$lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -227,10 +315,10 @@ $lang->product->menu->view     = array('link' => 'Overview|product|view|productI
 
 $lang->product->dividerMenu = ',plan,project,doc,';
 
-$lang->story       = new stdclass();
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
+$lang->story       = new stdclass();
 
 $lang->branch->menu      = $lang->product->menu;
 $lang->story->menu       = $lang->product->menu;
@@ -367,7 +455,6 @@ $lang->job->menu     = $lang->ci->menu;
 /* Doc menu settings. */
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Library|doc|createLib', 'float' => 'right');
 
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
@@ -387,34 +474,40 @@ $lang->report->notice->help = 'Note: The report is generated on the results of b
 
 /* Company menu settings. */
 $lang->company = new stdclass();
+$lang->dept    = new stdclass();
+$lang->group   = new stdclass();
+$lang->user    = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => 'Privilege|group|browse', 'subModule' => 'group');
-$lang->company->menu->dynamic     = 'Dynamics|company|dynamic|';
+$lang->dept->menu    = new stdclass();
+$lang->group->menu   = new stdclass();
+$lang->user->menu    = new stdclass();
+
+$lang->company = new stdclass();
+$lang->company->menu = new stdclass();
+$lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => ',user,');
+$lang->company->menu->dept        = array('link' => 'Dept|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subModule' => 'group');
+$lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
 $lang->company->menu->view        = array('link' => 'Company|company|view');
-
-$lang->dept  = new stdclass();
-$lang->group = new stdclass();
-$lang->user  = new stdclass();
-
-$lang->dept->menu  = $lang->company->menu;
-$lang->group->menu = $lang->company->menu;
-$lang->user->menu  = $lang->company->menu;
 
 /* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => 'Company|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
-
-$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-$lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
+//$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
+//$lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
+//$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+//$lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
+
+$lang->company->menu = $lang->company->menu;
+$lang->dept->menu    = $lang->company->menu;
+$lang->group->menu   = $lang->company->menu;
+$lang->user->menu    = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -454,19 +547,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->backup->menu    = $lang->admin->menu;
-$lang->cron->menu      = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->custom->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->dev->menu       = $lang->admin->menu;
-$lang->entry->menu     = $lang->admin->menu;
-$lang->webhook->menu   = $lang->admin->menu;
-$lang->message->menu   = $lang->admin->menu;
-
 /* Menu group. */
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
@@ -486,8 +566,8 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->doclib      = 'doc';
-$lang->menugroup->people      = 'company';
+$lang->menugroup->report      = 'reporting';
+$lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->score       = 'my';
@@ -507,24 +587,91 @@ $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
 
-$lang->navGroup = array();
-$lang->navGroup['product']     = 'program';
-$lang->navGroup['story']       = 'program';
-$lang->navGroup['productplan'] = 'program';
-$lang->navGroup['release']     = 'program';
-$lang->navGroup['tree']        = 'program';
-$lang->navGroup['project']     = 'program';
-$lang->navGroup['task']        = 'program';
-$lang->navGroup['qa']          = 'program';
-$lang->navGroup['bug']         = 'program';
-$lang->navGroup['testcase']    = 'program';
-$lang->navGroup['testtask']    = 'program';
-$lang->navGroup['testreport']  = 'program';
-$lang->navGroup['testsuite']   = 'program';
-$lang->navGroup['caselib']     = 'program';
-$lang->navGroup['feedback']    = 'program';
+/* Nav group.*/
+$lang->navGroup = new stdclass();
+$lang->navGroup->my     = 'my';
+$lang->navGroup->todo   = 'my';
+$lang->navGroup->effort = 'my';
 
-$lang->navGroup['group'] = 'company';
+$lang->navGroup->product     = 'program';
+$lang->navGroup->story       = 'program';
+$lang->navGroup->branch      = 'program';
+$lang->navGroup->productplan = 'program';
+$lang->navGroup->release     = 'program';
+$lang->navGroup->tree        = 'program';
+$lang->navGroup->project     = 'program';
+$lang->navGroup->task        = 'program';
+$lang->navGroup->qa          = 'program';
+$lang->navGroup->bug         = 'program';
+$lang->navGroup->doc         = 'program';
+$lang->navGroup->testcase    = 'program';
+$lang->navGroup->testtask    = 'program';
+$lang->navGroup->testreport  = 'program';
+$lang->navGroup->testsuite   = 'program';
+$lang->navGroup->caselib     = 'program';
+$lang->navGroup->feedback    = 'program';
+$lang->navGroup->deploy      = 'program';
+
+$lang->navGroup->programplan    = 'program';
+$lang->navGroup->workestimation = 'program';
+$lang->navGroup->budget         = 'program';
+$lang->navGroup->review         = 'program';
+$lang->navGroup->reviewissue    = 'program';
+$lang->navGroup->weekly         = 'program';
+$lang->navGroup->milestone      = 'program';
+$lang->navGroup->pssp           = 'program';
+$lang->navGroup->design         = 'program';
+$lang->navGroup->repo           = 'program';
+$lang->navGroup->issue          = 'program';
+$lang->navGroup->risk           = 'program';
+$lang->navGroup->auditplan      = 'program';
+$lang->navGroup->cm             = 'program';
+$lang->navGroup->nc             = 'program';
+$lang->navGroup->job            = 'program';
+$lang->navGroup->jenkins        = 'program';
+$lang->navGroup->compile        = 'program';
+
+$lang->navGroup->durationestimation = 'program';
+
+$lang->navGroup->stage         = 'system';
+$lang->navGroup->measurement   = 'system';
+$lang->navGroup->report        = 'system';
+$lang->navGroup->sqlbuilder    = 'system';
+$lang->navGroup->auditcl       = 'system';
+$lang->navGroup->cmcl          = 'system';
+$lang->navGroup->process       = 'system';
+$lang->navGroup->activity      = 'system';
+$lang->navGroup->output        = 'system';
+$lang->navGroup->classify      = 'system';
+$lang->navGroup->subject       = 'system';
+$lang->navGroup->baseline      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->reviewsetting = 'system';
+$lang->navGroup->holiday       = 'system';
+
+$lang->navGroup->attend   = 'attend';
+$lang->navGroup->leave    = 'attend';
+$lang->navGroup->makeup   = 'attend';
+$lang->navGroup->overtime = 'attend';
+$lang->navGroup->lieu     = 'attend';
+
+$lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->webhook   = 'admin';
+$lang->navGroup->sms       = 'admin';
+$lang->navGroup->message   = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->custom    = 'admin';
+$lang->navGroup->cron      = 'admin';
+$lang->navGroup->backup    = 'admin';
+$lang->navGroup->mail      = 'admin';
+$lang->navGroup->dev       = 'admin';
+$lang->navGroup->extension = 'admin';
+$lang->navGroup->action    = 'admin';
+$lang->navGroup->search    = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();
@@ -951,3 +1098,90 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
 }
+
+/* Cmmi menu. */
+$lang->menu->cmmi = new stdclass();
+$lang->menu->cmmi->workestimation = array('link' => 'Estimation|workestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation,budget');
+$lang->menu->cmmi->programplan    = array('link' => 'Programplan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->cmmi->review         = array('link' => 'Review|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
+$lang->menu->cmmi->weekly         = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->cmmi->doc            = array('link' => 'Doc|doc|index|program={PROGRAM}');
+$lang->menu->cmmi->product        = array('link' => 'Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
+$lang->menu->cmmi->design         = 'Design|design|browse|product={PRODUCT}';
+$lang->menu->cmmi->ci             = 'Ci|repo|browse|';
+$lang->menu->cmmi->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->cmmi->release        = array('link' => 'Release|release|browse|product={PRODUCT}', 'subModule' => 'release');
+$lang->menu->cmmi->issue          = 'Issue|issue|browse|';
+$lang->menu->cmmi->risk           = 'Risk|risk|browse|';
+$lang->menu->cmmi->report         = array('link' => 'Measurement|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
+$lang->menu->cmmi->auditplan      = array('link' => 'Audit|auditplan|browse|', 'subModule' => 'nc');
+$lang->menu->cmmi->cm             = array('link' => 'CM|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
+$lang->menu->cmmi->pssp           = 'Process|pssp|browse|program={PROGRAM}';
+
+$lang->cmmiproduct    = new stdclass();
+$lang->workestimation = new stdclass();
+$lang->budget         = new stdclass();
+$lang->programplan    = new stdclass();
+$lang->review         = new stdclass();
+$lang->weekly         = new stdclass();
+$lang->milestone      = new stdclass();
+$lang->design         = new stdclass();
+$lang->auditplan      = new stdclass();
+$lang->cm             = new stdclass();
+$lang->nc             = new stdclass();
+$lang->pssp           = new stdclass();
+$lang->issue          = new stdclass();
+$lang->risk           = new stdclass();
+$lang->durationestimation = new stdclass();
+
+$lang->workestimation->menu = new stdclass();
+$lang->budget->menu         = new stdclass();
+$lang->programplan->menu    = new stdclass();
+$lang->review->menu         = new stdclass();
+$lang->weekly->menu         = new stdclass();
+$lang->milestone->menu      = new stdclass();
+$lang->cmmiproduct->menu    = new stdclass();
+$lang->design->menu         = new stdclass();
+$lang->auditplan->menu      = new stdclass();
+$lang->cm->menu             = new stdclass();
+$lang->pssp->menu           = new stdclass();
+$lang->issue->menu          = new stdclass();
+$lang->risk->menu           = new stdclass();
+$lang->durationestimation->menu = new stdclass();
+
+$lang->workestimation->menu->index    = 'Workestimation|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => 'Durationestimation|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget   = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
+
+$lang->durationestimation->menu = $lang->workestimation->menu;
+$lang->budget->menu = $lang->workestimation->menu;
+
+$lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
+$lang->programplan->menu->lists = 'Stage|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
+
+$lang->review->menu->review = array('link' => 'Reivew|review|browse|program={PROGRAM}', 'subModule' => 'review');
+$lang->review->menu->issue  = array('link' => 'Reviewissue|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');
+
+$lang->reviewissue = new stdclass();
+$lang->reviewissue->menu = $lang->review->menu;
+
+$lang->weekly->menu->browse = 'Weekly|weekly|index|program={PROGRAM}';
+$lang->weekly->menu->issue  = 'Milestone|milestone|index|program={PROGRAM}';
+
+$lang->cmmiproduct->menu->requirement = 'User Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
+$lang->cmmiproduct->menu->story       = 'Software Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->cmmiproduct->menu->track       = 'Track|story|track|product={PRODUCT}';
+
+$lang->auditplan->menu->browse = array('link' => 'Auditplan|auditplan|browse|', 'alias' => 'create,edit');
+$lang->auditplan->menu->nc     = array('link' => 'NC|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
+
+$lang->story->menu         = $lang->cmmiproduct->menu;
+$lang->milestone->menu     = $lang->weekly->menu;
+$lang->nc->menu            = $lang->auditplan->menu;
+
+$lang->cm->menu->browse = array('link' => 'Baseline|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
+$lang->cm->menu->report = 'Report|cm|report|program={PROGRAM}';
+
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->haveMenuMethod   = array('custom');

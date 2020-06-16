@@ -498,7 +498,6 @@ $lang->admin->menu->company   = array('link' => '组织|company|browse|', 'subMo
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 //$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
 //$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
-//$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 //$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 //$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
 $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');

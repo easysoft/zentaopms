@@ -766,6 +766,8 @@ class userModel extends model
             $acls = array();
             $viewAllow    = false;
             $programAllow = false;
+            $projectAllow = false;
+            $productAllow = false;
             $actionAllow  = false;
             foreach($groups as $group)
             {
