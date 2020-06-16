@@ -82,6 +82,10 @@
           </td>
         </tr>
         <tr>
+          <th><?php echo $lang->program->privway;?></th>
+          <td colspan='3'><?php echo html::radio('privway', $lang->program->privwayList, $project->privway, '', 'block');?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
