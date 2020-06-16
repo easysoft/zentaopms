@@ -1806,7 +1806,8 @@ class projectModel extends model
      */
     public function manageMembers($projectID)
     {
-        $data = (array)fixer::input('post')->get();
+        $project = $this->getByID($projectID);
+        $data    = (array)fixer::input('post')->get();
         extract($data);
 
         $accounts = array_unique($accounts);
@@ -1837,7 +1838,8 @@ class projectModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+        $objectType = $project->template ? 'program' : 'project';
+        $this->loadModel('user')->updateUserView($projectID, $objectType, $changedAccounts);
 
         $products = $this->getProducts($projectID, false);
         foreach($products as $productID => $productName)
