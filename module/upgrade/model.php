@@ -3956,22 +3956,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Process user view for program.
-     * 
-     * @param  string $fromVersion 
-     * @access public
-     * @return void
-     */
-    public function initUserView()
-    {
-        $this->loadModel('user');
-        $users = $this->dao->select('id, account')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
-        foreach($users as $id => $account) $this->user->computeUserView($account);
-
-        return true;
-    }
-
-    /**
      * Append execute for pro and biz.
      * 
      * @param  string $fromVersion 

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
@@ -113,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `lib` mediumint(8) unsigned NOT NULL default '0',
@@ -290,6 +293,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `lib` varchar(30) NOT NULL,
@@ -403,6 +407,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) NOT NULL DEFAULT '0',
   `name` char(30) NOT NULL,
   `role` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
@@ -515,6 +520,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
   `line` mediumint(8) NOT NULL,
@@ -558,17 +564,33 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `isCat` enum('1','0') NOT NULL default '0',
   `catID` mediumint(8) unsigned NOT NULL,
   `type` varchar(20) NOT NULL default 'sprint',
+  `template` char(30) NOT NULL,
+  `category` char(30) NOT NULL,
+  `program` mediumint(8) NOT NULL DEFAULT '0',
+  `budget` varchar(30) NOT NULL DEFAULT '0',
+  `budgetUnit` char(30) NOT NULL  DEFAULT 'yuan',
+  `percent` float unsigned NOT NULL DEFAULT '0',
+  `milestone` enum('0','1') NOT NULL default '0',
+  `output` text NOT NULL,
+  `attribute` varchar(30) NOT NULL DEFAULT '',
   `parent` mediumint(8) unsigned NOT NULL default '0',
+  `privway` char(30) NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
   `begin` date NOT NULL,
   `end` date NOT NULL,
+  `realStarted` date NOT NULL,
+  `realFinished` date NOT NULL,
   `days` smallint(5) unsigned NOT NULL,
   `status` varchar(10) NOT NULL,
   `subStatus` varchar(30) NOT NULL default '',
   `statge` enum('1','2','3','4','5') NOT NULL default '1',
   `pri` enum('1','2','3','4') NOT NULL default '1',
   `desc` text NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `parentVersion` smallint(6) NOT NULL,
+  `planDuration` int(11) NOT NULL,
+  `realDuration` int(11) NOT NULL,
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
   `openedVersion` varchar(20) NOT NULL,
@@ -613,6 +635,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `build` mediumint(8) unsigned NOT NULL,
@@ -690,6 +713,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(9) NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
@@ -760,6 +784,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
@@ -833,6 +858,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `tasks` varchar(255) NOT NULL,
@@ -889,6 +915,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
 -- DROP TABLE IF EXISTS `zt_testsuite`;
 CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `desc` text NOT NULL,
@@ -1005,6 +1032,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
+  `program` text NOT NULL,
   UNIQUE KEY `account` (`account`,`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userquery`;
@@ -1034,6 +1062,7 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
+  `programs` mediumtext NOT NULL,
   `products` mediumtext NOT NULL,
   `projects` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
@@ -1130,6 +1159,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
   `prefix` varchar(100) NOT NULL,
@@ -1211,7 +1241,8 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (9, 'TOP', 'top', 'for top manager.'),
 (10, 'OTHERS', 'others', 'for others.'),
 (11, 'guest', 'guest', 'For guest'),
-(12, 'LIMITED', 'limited', 'For limited user');
+(12, 'LIMITED', 'limited', 'For limited user'),
+(13, '项目管理员', 'pgmadmin', '项目管理员可以维护项目的权限');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'action', 'editComment'),
