@@ -3754,72 +3754,71 @@ class upgradeModel extends model
     /**
      * Create program.
      * 
-     * @param  string $programName 
      * @param  array  $productIdList 
      * @param  array  $projectIdList 
      * @access public
      * @return int
      */
-    public function createProgram($programName, $productIdList = array(), $projectIdList = array(), $pgmAdmin = '')
+    public function createProgram($productIdList = array(), $projectIdList = array(), $pgmAdmins = '')
     {
+        $data    = fixer::input('post')->get();
         $program = new stdclass();
-        $program->name       = $programName;
-        $program->template   = 'scrum';
-        $program->category   = count($productIdList) > 1 ? 'multiple' : 'single';
-        $program->status     = 'wait';
-        $program->openedBy   = $this->app->user->account;
-        $program->openedDate = helper::now();
-        $program->acl        = 'open';
-        $program->privway    = 'extend';
+        $program->name          = $data->name;
+        $program->code          = $data->code;
+        $program->template      = 'scrum';
+        $program->category      = count($productIdList) > 1 ? 'multiple' : 'single';
+        $program->status        = 'wait';
+        $program->begin         = $data->begin;
+        $program->end           = $data->end;
+        $program->days          = $data->days;
+        $program->budget        = $data->budget;
+        $program->budgetUnit    = $data->budgetUnit;
+        $program->PM            = $data->PM;
+        $program->privway       = 'extend';
+        $program->team          = substr($data->name, 0, 30);
+        $program->openedBy      = $this->app->user->account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = $data->acl;
+        if(!empty($data->whitelist)) $program->whitelist = join(',', $data->whitelist);
 
-        $begin = helper::today();
-        $end   = helper::today();
-        if($productIdList)
-        {
-            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
-            foreach($products as $product)
-            {
-                if(empty($begin)) $begin = $product->createdDate;
-                if($product->createdDate < $begin) $begin = $product->createdDate;
-            }
-        }
+        $this->app->loadLang('project');
+        $this->lang->upgrade->name  = $this->lang->project->name;
+        $this->lang->upgrade->code  = $this->lang->project->code;
+        $this->lang->upgrade->begin = $this->lang->project->begin;
+        $this->lang->upgrade->end   = $this->lang->project->end;
 
-        if($projectIdList)
-        {
-            $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-            foreach($projects as $project)
-            {
-                if($begin > $project->begin) $begin = $project->begin;
-                if($end < $project->end)     $end   = $project->end;
-            }
-        }
-        if(empty($projectIdList)) $end = date('Y-m-d', '+1 year');
-
-        $program->begin = $begin;
-        $program->end   = $end;
-        $this->dao->insert(TABLE_PROJECT)->data($program)->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($program)
+            ->batchcheck('name,code,begin,end', 'notempty')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+            ->check('name', 'unique', "deleted='0'")
+            ->check('code', 'unique', "deleted='0'")
+            ->exec();
+        if(dao::isError()) return false;
 
         $programID = $this->dao->lastInsertId();
-        $this->dao->update(TABLE_PROJECT)->set('code')->eq('pgm' . $programID)->where('id')->eq($programID)->exec();
 
-        if($pgmAdmin)
+        if($pgmAdmins)
         {
             $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('prgadmin')->fetch('id');
             if($groupID)
             {
-                $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
-                if(empty($userGroup))
+                foreach($pgmAdmins as $pgmAdmin)
                 {
-                    $userGroup = new stdclass();
-                    $userGroup->account = $pgmAdmin;
-                    $userGroup->group   = $groupID;
-                    $userGroup->program = '';
+                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
+                    if(empty($userGroup))
+                    {
+                        $userGroup = new stdclass();
+                        $userGroup->account = $pgmAdmin;
+                        $userGroup->group   = $groupID;
+                        $userGroup->program = '';
+                    }
+
+                    $userGroup->program .= ',' . $programID;
+                    $userGroup->program  = trim($userGroup->program, ',');
+
+                    $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
                 }
-
-                $userGroup->program .= ',' . $programID;
-                $userGroup->program  = trim($userGroup->program, ',');
-
-                $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
             }
         }
 
