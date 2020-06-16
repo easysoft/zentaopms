@@ -3759,7 +3759,7 @@ class upgradeModel extends model
      * @access public
      * @return int
      */
-    public function createProgram($productIdList = array(), $projectIdList = array(), $pgmAdmin = '')
+    public function createProgram($productIdList = array(), $projectIdList = array(), $pgmAdmins = '')
     {
         $data    = fixer::input('post')->get();
         $program = new stdclass();
@@ -3775,6 +3775,7 @@ class upgradeModel extends model
         $program->budgetUnit    = $data->budgetUnit;
         $program->PM            = $data->PM;
         $program->privway       = 'extend';
+        $program->team          = substr($data->name, 0, 30);
         $program->openedBy      = $this->app->user->account;
         $program->openedDate    = helper::now();
         $program->openedVersion = $this->config->version;
@@ -3797,24 +3798,27 @@ class upgradeModel extends model
 
         $programID = $this->dao->lastInsertId();
 
-        if($pgmAdmin)
+        if($pgmAdmins)
         {
             $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('prgadmin')->fetch('id');
             if($groupID)
             {
-                $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
-                if(empty($userGroup))
+                foreach($pgmAdmins as $pgmAdmin)
                 {
-                    $userGroup = new stdclass();
-                    $userGroup->account = $pgmAdmin;
-                    $userGroup->group   = $groupID;
-                    $userGroup->program = '';
+                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
+                    if(empty($userGroup))
+                    {
+                        $userGroup = new stdclass();
+                        $userGroup->account = $pgmAdmin;
+                        $userGroup->group   = $groupID;
+                        $userGroup->program = '';
+                    }
+
+                    $userGroup->program .= ',' . $programID;
+                    $userGroup->program  = trim($userGroup->program, ',');
+
+                    $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
                 }
-
-                $userGroup->program .= ',' . $programID;
-                $userGroup->program  = trim($userGroup->program, ',');
-
-                $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
             }
         }
 

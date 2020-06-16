@@ -19,15 +19,6 @@
         <strong><?php echo $lang->upgrade->mergeProgram;?></strong>
       </div>
       <div class='modal-body'>
-        <div class='alert alert-info'>
-          <?php
-          printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedProjectCount);
-          if($type == 'productline') echo '<br />' . $lang->upgrade->mergeByProductLine;
-          if($type == 'product')     echo '<br />' . $lang->upgrade->mergeByProduct;
-          if($type == 'project')     echo '<br />' . $lang->upgrade->mergeByProject;
-          if($type == 'moreLink')    echo '<br />' . $lang->upgrade->mergeByMoreLink;
-          ?>
-        </div>
         <?php if($type == 'productline'):?>
         <?php include './mergebyline.html.php';?>
         <?php elseif($type == 'product'):?>
@@ -35,17 +26,25 @@
         <?php elseif($type == 'project'):?>
         <?php include './mergebyproject.html.php';?>
         <?php elseif($type == 'moreLink'):?>
-        <table class='table table-form'>
+        <div class='alert alert-info'>
+          <?php
+          printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedProjectCount);
+          echo '<br />' . $lang->upgrade->mergeByMoreLink;
+          ?>
+        </div>
+        <table class='table table-hover table-form'>
           <thead>
             <tr>
               <th><?php echo $lang->upgrade->project;?></th>
-              <th><?php echo $lang->upgrade->program;?></th>
+              <th class='divider'></th>
+              <th class='gray w-p50'><?php echo $lang->upgrade->program;?></th>
             </tr>
           </thead>
           <tbody>
           <?php foreach($noMergedProjects as $projectID => $project):?>
           <tr>
             <td><?php echo "{$lang->projectCommon} #{$project->id} {$project->name}" . html::hidden("projects[]", $project->id);?></td>
+            <td class='divider'><i class='icon icon-angle-double-right'></i></td>
             <td><?php echo html::select("programs[]", $project->programs, '', "class='form-control chosen'");?></td>
           </tr>
           <?php endforeach;?>
