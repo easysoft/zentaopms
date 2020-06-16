@@ -15,20 +15,7 @@ No set yet ZDATA:
     zt_faq.yaml
     zt_feedbackview.yaml
     zt_feedback.yaml
-    zt_flow_audit.yaml
-    zt_flow_auditcl.yaml
-    zt_flow_auditplan.yaml
-    zt_flow_auditresult.yaml
-    zt_flow_cmcl.yaml
-    zt_flow_design.yaml
-    zt_flow_designspec.yaml
-    zt_flow_issue.yaml
-    zt_flow_output.yaml
-    zt_flow_process.yaml
-    zt_flow_reviewcl.yaml
     zt_flow_reviewlist.yaml
-    zt_flow_risk.yaml
-    zt_flow_stage.yaml
     zt_flow_workloadbudget.yaml
     zt_host.yaml
     zt_im_chatuser.yaml
@@ -93,6 +80,19 @@ set ZDATA:
     zt_entry.yaml
     zt_extension.yaml
     zt_file.yaml
+    zt_flow_audit.yaml
+    zt_flow_auditcl.yaml
+    zt_flow_auditplan.yaml
+    zt_flow_auditresult.yaml
+    zt_flow_cmcl.yaml
+    zt_flow_design.yaml
+    zt_flow_designspec.yaml
+    zt_flow_issue.yaml
+    zt_flow_output.yaml
+    zt_flow_process.yaml
+    zt_flow_reviewcl.yaml
+    zt_flow_risk.yaml
+    zt_flow_stage.yaml
     zt_grouppriv.yaml
     zt_group.yaml
     zt_history.yaml

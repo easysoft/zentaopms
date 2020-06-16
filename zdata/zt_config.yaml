@@ -1,47 +1,47 @@
 title: table zt_config
-desc: ""
+desc: "系统配置"
 author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: owner
-    note: ""
+    note: "所有者"
+    range: system,user
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: module
-    note: ""
+    note: "模块"
+    range: story,task,bug
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: section
-    note: ""
-    prefix: ""
+    note: "附加部分"
+    range: 1-10000
+    prefix: "section"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: key
-    note: ""
-    prefix: ""
+    note: "键"
+    range: 1-10000
+    prefix: "key"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
   - field: value
-    note: ""
-    prefix: ""
+    note: "值"
+    range: 1-10000
+    prefix: "value"
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
