@@ -1329,7 +1329,7 @@ class userModel extends model
             }
 
             $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
-            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('program')->eq($programs)->fetchAll('id');
+            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('program')->in($programs)->fetchAll('id');
             if($projectProducts === null)
             {
                 $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
@@ -1469,7 +1469,8 @@ class userModel extends model
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         if($object->acl == 'open') return true;
 
-        $allGroups  = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
+        $allGroups      = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
+        $managePrograms = $this->dao->select('account, program')->from(TABLE_USERGROUP)->where('program')->ne('')->fetchPairs();
         $userGroups = array();
         foreach($allGroups as $group)
         {
@@ -1520,9 +1521,17 @@ class userModel extends model
             }
             elseif($objectType == 'program')
             {
+                $manageProgram = zget($managePrograms, $account, '');
                 $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
                 if($hasPriv and strpos(",{$userView->programs},", ",{$objectID},") === false) $userView->programs .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->programs},", ",{$objectID},") !== false) $userView->programs = trim(str_replace(",{$objectID},", ',', ",{$userView->programs},"), ',');
+                if($manageProgram)
+                {
+                    foreach(explode(',', $manageProgram) as $program)
+                    {
+                        if(strpos(",{$userView->programs},", ",{$program},") === false) $userView->programs .= ",{$program}";
+                    }
+                }
                 $userObjects[$account]['programs'] = $userView->programs;
             }
         }

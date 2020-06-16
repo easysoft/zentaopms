@@ -141,6 +141,7 @@ class program extends control
      */
     public function group($programID = 0)
     {
+        $this->session->set('program', $programID);
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 

@@ -387,6 +387,7 @@ class groupModel extends model
      */
     public function updatePgmAdmin($groupID)
     {
+        $this->loadModel('user');
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
 
         $members  = $this->post->members ? $this->post->members : array();
@@ -400,6 +401,11 @@ class groupModel extends model
             $data->program = implode($programs[$account], ',');
 
             $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+            foreach($programs[$account] as $programID) 
+            {
+                if(!$programID) continue;
+                $this->user->updateUserView($programID, 'program');
+            }
         }
 
         if(!dao::isError()) return true;
