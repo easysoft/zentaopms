@@ -378,6 +378,7 @@ function loadProjectBuilds(projectID)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
+            $('#openedBuild').val(oldOpenedBuild);
             $('#openedBuild_chosen').remove();
             $("#openedBuild").chosen();
             notice();
@@ -386,11 +387,11 @@ function loadProjectBuilds(projectID)
     else
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
         
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
 }
 

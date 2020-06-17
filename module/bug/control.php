@@ -350,6 +350,11 @@ class bug extends control
 
         if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
+        if($testtask)
+        {
+            $testtask = $this->loadModel('testtask')->getById($testtask);
+            $buildID  = $testtask->build;
+        }
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID))
