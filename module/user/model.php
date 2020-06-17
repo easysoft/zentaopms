@@ -418,9 +418,9 @@ class userModel extends model
             }
         }
 
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
         if(isset($_POST['groups']))
         {
-            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
             foreach($this->post->groups as $groupID)
             {
                 $data          = new stdclass();
@@ -428,8 +428,9 @@ class userModel extends model
                 $data->group   = $groupID;
                 $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
             }
-            $this->computeUserView($this->post->account, true);
         }
+        $this->computeUserView($this->post->account, true);
+
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
         if(!dao::isError())
         {
@@ -1278,8 +1279,8 @@ class userModel extends model
             $groups  = ',' . join(',', $groups) . ',';
 
             static $allProducts, $allProjects, $projectProducts, $teams;
-            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->fetchAll('id');
-            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->fetchAll('id');
+            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('acl')->ne('open')->fetchAll('id');
             if($projectProducts === null)
             {
                 $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
