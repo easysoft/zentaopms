@@ -1641,6 +1641,7 @@ EOD;
         foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
 
         /* Reset priv by program privway. */
+        $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
         if($program->privway == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->privway == 'reset')  

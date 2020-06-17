@@ -74,6 +74,27 @@ class programModel extends model
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
 
+            /* Add program admin.*/
+            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
+                ->where('t1.account')->eq($this->app->user->account)
+                ->andWhere('t2.role')->eq('pgmadmin')
+                ->fetch();
+            if(!empty($groupPriv))
+            {
+                $newProgram = $groupPriv->program . ",$programID";
+                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+            }
+            else
+            {
+                $pgmAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+                $groupPriv  = new stdclass(); 
+                $groupPriv->account = $this->app->user->account;
+                $groupPriv->group   = $pgmAdminID;
+                $groupPriv->program = $programID;
+                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+            }
+
             if($project->template == 'cmmi')
             {
                 $product = new stdclass();
