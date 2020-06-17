@@ -114,7 +114,7 @@ class projectModel extends model
             }
             else
             {
-                if(common::hasPriv('program', 'createguide')) $projectIndex .= '<li>' . html::a(helper::createLink('program', 'createguide'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create, '', " data-toggle='modal' data-type='ajax'") . '</li>';
+                if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create, '') . '</li>';
             }
 
             $projectIndex .= '</ul></div></div>';
