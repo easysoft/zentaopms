@@ -302,6 +302,7 @@ class upgrade extends control
         if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
         {
             $this->upgrade->initUserView();
+            $this->upgrade->setDefaultPriv();
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=yes")));
         }
 

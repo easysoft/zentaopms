@@ -183,15 +183,18 @@ class commonModel extends model
      * @access public
      * @return mixed
      */
-    public function deny($module, $method)
+    public function deny($module, $method, $reload = true)
     {
-        /* Get authorize again. */
-        $user = $this->app->user;
-        $user->rights = $this->loadModel('user')->authorize($user->account);
-        $user->groups = $this->user->getGroups($user->account);
-        $this->session->set('user', $user);
-        $this->app->user = $this->session->user;
-        if(commonModel::hasPriv($module, $method)) return true;
+        if($reload)
+        {
+            /* Get authorize again. */
+            $user = $this->app->user;
+            $user->rights = $this->loadModel('user')->authorize($user->account);
+            $user->groups = $this->user->getGroups($user->account);
+            $this->session->set('user', $user);
+            $this->app->user = $this->session->user;
+            if(commonModel::hasPriv($module, $method)) return true;
+        }
 
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
@@ -1549,7 +1552,11 @@ EOD;
             $this->app->user = $this->session->user;
 
             $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'program';
-            if(!defined('IN_UPGRADE') and $inProgram) $this->resetProgramPriv($module, $method);
+            if(!defined('IN_UPGRADE') and $inProgram)
+            {
+                $this->resetProgramPriv($module, $method);
+                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
+            }
 
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
@@ -1619,7 +1626,6 @@ EOD;
      */
     public function resetProgramPriv($module, $method)
     {
-        global $app;
         /* Get user program priv. */
         if(!$this->app->session->program) return;
         $program       = $this->dao->findByID($this->app->session->program)->from(TABLE_PROJECT)->fetch();

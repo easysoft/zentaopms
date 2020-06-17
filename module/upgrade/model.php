@@ -3956,6 +3956,39 @@ class upgradeModel extends model
     }
 
     /**
+     * Set program default priv.
+     * 
+     * @param  string $fromVersion 
+     * @access public
+     * @return void
+     */
+    public function setDefaultPriv()
+    {
+        $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('role')->ne('pgmadmin')->fetchPairs();
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'program';
+            $data->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'transfer';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $pgmAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+        foreach($this->lang->resource->program as $method => $methodLang)
+        {
+            $data = new stdclass();
+            $data->group  = $pgmAdminGroupID;
+            $data->module = 'program';
+            $data->method = $method;
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+    }
+
+    /**
      * Append execute for pro and biz.
      * 
      * @param  string $fromVersion 
