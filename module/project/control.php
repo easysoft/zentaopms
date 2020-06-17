@@ -1818,7 +1818,7 @@ class project extends control
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action')->create('project', $projectID, 'Managed', '', $_POST['products'] ? join(',', $_POST['products']) : '');
+            $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
             die(js::locate($browseProjectLink));
         }
 
