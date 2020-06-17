@@ -1731,12 +1731,15 @@ EOD;
         if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
+        $user->last   = time();
         $user->rights = $this->user->authorize($user->account);
         $user->groups = $this->user->getGroups($user->account);
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
         $this->app->user = $user;
+
+        $this->dao->update(TABLE_USER)->set('last')->eq($user->last)->where('account')->eq($user->account)->exec();
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
