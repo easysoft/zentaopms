@@ -570,6 +570,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `budget` varchar(30) NOT NULL DEFAULT '0',
   `budgetUnit` char(30) NOT NULL  DEFAULT 'yuan',
   `percent` float unsigned NOT NULL DEFAULT '0',
+  `privway` char(30) NOT NULL,
   `milestone` enum('0','1') NOT NULL default '0',
   `output` text NOT NULL,
   `attribute` varchar(30) NOT NULL DEFAULT '',
