@@ -21,7 +21,6 @@ $(function()
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
         oldProductID = $('#product').val();
-        $("#story, #task, #mailto").chosen();
     }
 
     if(window.flow != 'full')
@@ -48,7 +47,7 @@ function loadAll(productID)
         setAssignedTo();
     }
 
-    if(!changeProductConfirmed)
+    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
         firstChoice = confirm(confirmChangeProduct);
         changeProductConfirmed = true;    // Only notice the user one time.

@@ -1817,10 +1817,11 @@ class storyModel extends model
      * @param  string $projectID
      * @param  int    $branch
      * @param  string $type requirement|story
+     * @param  string $excludeStories 
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story')
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story', $excludeStories = '')
     {
         if($projectID != '')
         {
@@ -1849,6 +1850,7 @@ class storyModel extends model
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
+        if($excludeStories) $storyQuery = $storyQuery . ' AND `product` NOT ' . helper::dbIN($excludeStories);
         if($projectID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
@@ -1927,10 +1929,12 @@ class storyModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  object $pager
+     * @param  string $storyType 
+     * @param  string $excludeStories 
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null)
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null, $storyType = 'story', $excludeStories = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
@@ -1966,6 +1970,8 @@ class storyModel extends model
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$projectID)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq($storyType)
+                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
                 ->fetchAll('id');
@@ -1986,6 +1992,8 @@ class storyModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
                 ->where('t1.project')->eq((int)$projectID)
+                ->andWhere('t2.type')->eq($storyType)
+                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()

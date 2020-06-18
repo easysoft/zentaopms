@@ -77,6 +77,7 @@
         <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
 </div>

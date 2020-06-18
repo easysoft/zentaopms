@@ -766,7 +766,7 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set product menu. */

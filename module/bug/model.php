@@ -1428,10 +1428,11 @@ class bugModel extends model
      * @param  int    $param
      * @param  string $orderBy
      * @param  object $pager
+     * @param  array  $excludeBugs 
      * @access public
      * @return array
      */
-    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $pager = null, $excludeBugs = array())
     {
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -1461,6 +1462,7 @@ class bugModel extends model
                 ->where($bugQuery)
                 ->andWhere('project')->eq((int)$projectID)
                 ->andWhere('deleted')->eq(0)
+                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1471,7 +1473,9 @@ class bugModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
+                ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
@@ -1485,10 +1489,13 @@ class bugModel extends model
      *
      * @param  int    $build
      * @param  int    $productID
+     * @param  int    $branch 
+     * @param  string $linkedBugs 
+     * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getProductLeftBugs($build, $productID, $branch = 0)
+    public function getProductLeftBugs($build, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
         $build = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($build)->fetch();
         if(empty($build->project)) return array();
@@ -1510,7 +1517,9 @@ class bugModel extends model
             ->andWhere('openedDate')->le($project->end)
             ->andWhere("(status = 'active' OR resolvedDate > '{$project->end}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
+            ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+            ->page($pager)
             ->fetchAll();
 
         return $bugs;
@@ -1547,7 +1556,7 @@ class bugModel extends model
      * @access public
      * @return object
      */
-    public function getReleaseBugs($buildID, $productID, $branch = 0)
+    public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
         $project = $this->dao->select('t1.id,t1.begin')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.project')
@@ -1557,10 +1566,12 @@ class bugModel extends model
             ->where('resolvedDate')->ge($project->begin)
             ->andWhere('resolution')->ne('postponed')
             ->andWhere('product')->eq($productID)
+            ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->andWhere("(project != '$project->id' OR (project = '$project->id' and openedDate < '$project->begin'))")
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
+            ->page($pager)
             ->fetchAll();
         return $bugs;
     }
@@ -2303,10 +2314,12 @@ class bugModel extends model
      * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
+     * @param  int    $branch
+     * @param  array  $excludeBugs
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0, $excludeBugs = '')
     {
         if($queryID)
         {
@@ -2345,6 +2358,7 @@ class bugModel extends model
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

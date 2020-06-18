@@ -157,8 +157,8 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countStories):?>
           <div class='table-footer'>
+            <?php if($countStories):?>
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
@@ -166,8 +166,13 @@ tbody tr td:first-child input{display:none;}
             </div>
             <?php endif;?>
             <div class='table-statistic'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'story';
+            $storyPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
@@ -231,8 +236,8 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countBugs):?>
           <div class='table-footer'>
+            <?php if($countBugs):?>
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
@@ -240,12 +245,17 @@ tbody tr td:first-child input{display:none;}
             </div>
             <?php endif;?>
             <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'bug';
+            $bugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'newbug') echo 'active'?>' id='newBugs'>
-        <div class='main-table'>
+        <div class='main-table' data-ride='table'>
           <table class='table has-sort-head'>
             <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
             <thead>
@@ -297,11 +307,16 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countNewBugs):?>
           <div class='table-footer'>
+            <?php if($countNewBugs):?>
             <div class='text'><?php echo sprintf($lang->build->createdBugs, $countNewBugs);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'newbug';
+            $newBugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </div>
       </div>
       <div class='tab-pane <?php if($type == 'buildInfo') echo 'active'?>' id='buildInfo'>
