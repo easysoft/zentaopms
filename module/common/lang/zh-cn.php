@@ -1180,7 +1180,7 @@ $lang->story->menu         = $lang->cmmiproduct->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
 
-$lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
+$lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit,view');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
