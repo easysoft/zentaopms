@@ -57,5 +57,13 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 </header>
 
 <?php endif;?>
+
+<?php if(isset($this->config->qcVersion)):?>
+    <script>
+    $("#userMenu").append('<button class="btn btn-mini" type="button" id="showSearchGo" style="padding: 2px 3px;"><i class="icon icon-sm icon-search"></i></button>');
+    $("#searchbox").hide();
+    $("#showSearchGo").on("click", function(){$("#searchbox").show(); $("#showSearchGo").hide();});
+    </script>
+<?php endif;?>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>
