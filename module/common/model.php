@@ -865,6 +865,13 @@ class commonModel extends model
     </div>
   </div>
 </div>
+<script>
+$(function()
+{
+    \$body = $('body', window.parent.document);
+    if(\$body.hasClass('hide-modal-close')) \$body.removeClass('hide-modal-close');
+});
+</script>
 EOD;
     }
 
