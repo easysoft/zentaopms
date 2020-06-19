@@ -93,7 +93,7 @@ class task extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
-            if($this->post->project) $projectID = $this->post->project;
+            if($this->post->project) $projectID = (int)$this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {

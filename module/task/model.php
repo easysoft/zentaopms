@@ -49,11 +49,13 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
+            ->cleanINT('project,story')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
             ->get();
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
+        if($task->project == 0) $task->project = '';
 
         foreach($this->post->assignedTo as $assignedTo)
         {
