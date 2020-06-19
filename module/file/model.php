@@ -205,7 +205,7 @@ class fileModel extends model
         $file['title']     = $purifier->purify($file['title']);
         $file['size']      = $_POST['size'];
         $file['tmpname']   = $tmp_name;
-        $file['uuid']      = $_POST['uuid'];
+        $file['uuid']      = str_replace(array('.', DS), '', $_POST['uuid']);
         $file['pathname']  = $this->setPathName(0, $file['extension']);
         $file['chunkpath'] = 'chunks' . DS .'f_' . $file['uuid'] . '.' . $file['extension'] . '.part';
         $file['chunks']    = isset($_POST['chunks']) ? intval($_POST['chunks']) : 0;
