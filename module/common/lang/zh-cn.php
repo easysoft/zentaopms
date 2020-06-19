@@ -1174,7 +1174,7 @@ $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PR
 $lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-$lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit');
+$lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit,batchcreate,view');
 $lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
 
 $lang->story->menu         = $lang->cmmiproduct->menu;
