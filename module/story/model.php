@@ -2726,7 +2726,7 @@ class storyModel extends model
                 else
                 {
                     $parent = $parents[$story->parent];
-                    $story->parentName = $story->title;
+                    $story->parentName = $parent->title;
                 }
             }
 
