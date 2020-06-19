@@ -96,7 +96,7 @@ class program extends control
                 $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             }
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', array('status' => 'wait', 'orderBy' => 'order_desc'))));
         }
 
         $name         = '';
