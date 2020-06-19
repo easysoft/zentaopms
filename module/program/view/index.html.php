@@ -34,7 +34,7 @@
       <?php echo html::a('javascript:setProgramType("bylist")', "<i class='icon icon-bars'></i>", '', "title={$lang->program->bylist} class='btn btn-icon " . ($programType == 'bylist' ? 'text-primary' : '') . "'");?>
     </div>
     <?php common::printLink('program', 'export', "status=$status&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php echo $lang->pageActions;?>
+    <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
