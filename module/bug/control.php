@@ -1539,11 +1539,9 @@ class bug extends control
             {
                 if($this->post->fileType == 'csv')
                 {
-                    $bug->steps = htmlspecialchars_decode($bug->steps);
                     $bug->steps = str_replace("<br />", "\n", $bug->steps);
                     $bug->steps = str_replace('"', '""', $bug->steps);
                     $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
-                    $bug->steps = strip_tags($bug->steps);
                 }
 
                 /* fill some field with useful value. */
