@@ -192,7 +192,7 @@ $lang->cmcl = new stdclass();
 $lang->cmcl->menu = new stdclass();
 $lang->cmcl->menu->browse   = array('link' => '审计清单|cmcl|browse|', 'subModule' => 'cmcl');
 $lang->cmcl->menu->catalog  = '文档目录|baseline|catalog|';
-$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'alias' => 'createtemplate,edittemplate,view,editbook,managebook');
+$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'subModule' => 'baseline');
 
 $lang->baseline = new stdclass();
 $lang->baseline->menu = $lang->cmcl->menu;
