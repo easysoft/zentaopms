@@ -1,6 +1,6 @@
 <?php
 $config->caselib = new stdclass();
-$config->caselib->create  = new stdclass();
+$config->caselib->create = new stdclass();
 $config->caselib->createcase = new stdclass();
 $config->caselib->create->requiredFields     = 'name';
 $config->caselib->createcase->requiredFields = 'title,type';

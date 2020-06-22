@@ -1,6 +1,7 @@
 <?php
 $config->task = new stdclass();
-$config->task->batchCreate = 10;
+$config->task->batchCreate  = 10;
+$config->task->selectFields = 'story,pri,assignedTo';
 
 $config->task->create   = new stdclass();
 $config->task->edit     = new stdclass();

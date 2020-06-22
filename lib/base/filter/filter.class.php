@@ -324,12 +324,14 @@ class baseValidater
      * Not empty checking.
      * 
      * @param  mixed $var 
+     * @param  string $fieldName 
      * @static
      * @access public
      * @return bool
      */
-    public static function checkNotEmpty($var)
+    public static function checkNotEmpty($var, $fieldName = '')
     {
+        if($fieldName) return !empty($var);
         return strlen(trim($var)) != 0;
     }
 
