@@ -976,6 +976,7 @@ class actionModel extends model
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['product']));
                 die(js::locate(helper::createLink('product', 'edit', "productID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
             }
+            if($product->acl != 'open') $this->loadModel('user')->updateUserView($product->id, 'product');
         }
         elseif($action->objectType == 'project')
         {
@@ -986,6 +987,7 @@ class actionModel extends model
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
                 die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
             }
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, 'project');
         }
         elseif($action->objectType == 'module')
         {
