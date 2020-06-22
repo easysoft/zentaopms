@@ -11,21 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="mainMenu" class="clearfix">
+<div id="mainMenu" class="clearfix hide">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProject;?></span></span>
-  </div>
-  <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('program', 'createguide')) echo html::a(helper::createLink('program', 'createguide'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'") ?>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProgram;?></span></span>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
-  <?php if(empty($projects)):?>
+  <?php if(empty($programs)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->project->noProject;?></span>
-      <?php if(common::hasPriv('program', 'createguide')):?>
-      <?php echo html::a($this->createLink('program', 'createguide'), "<i class='icon icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-info' data-toggle='modal' data-type='ajax'");?>
+      <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
+      <?php if(common::hasPriv('program', 'create')):?>
+      <?php echo html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -34,19 +31,16 @@
     <thead>
       <tr class='text-center'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th class='w-160px text-left'><?php echo $lang->project->code;?></th>
-        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
-        <th class='c-date'><?php echo $lang->project->begin;?></th>
-        <th class='c-date'><?php echo $lang->project->end;?></th>
+        <th class='w-160px text-left'><?php echo $lang->program->code;?></th>
+        <th class='c-name text-left'><?php echo $lang->program->name;?></th>
+        <th class='c-date'><?php echo $lang->program->begin;?></th>
+        <th class='c-date'><?php echo $lang->program->end;?></th>
         <th class='c-status'><?php echo $lang->statusAB;?></th>
-        <th class='c-user'><?php echo $lang->team->role;?></th>
-        <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='w-110px'><?php echo $lang->team->hours;?></th>
       </tr>
     </thead>
     <tbody>
-      <?php foreach($projects as $project):?>
-      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id", '', '', $project->program);?>
+      <?php foreach($programs as $project):?>
+      <?php $projectLink = $this->createLink('program', 'transfer', "program=$project->id");?>
       <tr class='text-center'>
         <td><?php echo html::a($projectLink, $project->id);?></td>
         <td class='text-left'><?php echo $project->code;?></td>
@@ -61,9 +55,6 @@
           <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'> <?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td><?php echo $project->role;?></td>
-        <td><?php echo $project->join;?></td>
-        <td><?php echo $project->hours;?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

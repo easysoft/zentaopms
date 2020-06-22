@@ -57,7 +57,7 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->program);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>

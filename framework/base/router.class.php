@@ -1788,6 +1788,7 @@ class baseRouter
         global $filter;
 
         /* Remove these two params. */
+        unset($passedParams['pgmID']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 

@@ -50,7 +50,7 @@
       <?php foreach($tasks as $task):?>
       <tr>
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
-        <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
+        <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', '', $task->program), $task->name);?></td>
         <td class='nobr'><?php echo $task->projectName?></td>
         <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
         <td><?php echo $task->begin?></td>

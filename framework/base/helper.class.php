@@ -60,10 +60,11 @@ class baseHelper
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $programID = 0)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
+        $programID = $programID ? $programID : $app->session->program;
         if(strpos($moduleName, '.') !== false) 
         {
             list($appName, $moduleName) = explode('.', $moduleName);
@@ -93,7 +94,9 @@ class baseHelper
             $link .= "?{$config->moduleVar}=$moduleName&{$config->methodVar}=$methodName";
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
             foreach($vars as $key => $value) $link .= "&$key=$value";
-            return self::processOnlyBodyParam($link, $onlyBody);
+
+            $link = self::processOnlyBodyParam($link, $onlyBody);
+            return self::processProgramParam($link, $programID, $onlyBody);
         }
 
         /**
@@ -108,7 +111,8 @@ class baseHelper
             foreach($vars as $value) $link .= "{$config->requestFix}$value";
             $link .= '.' . $viewType;
 
-            return self::processOnlyBodyParam($link, $onlyBody);
+            $link = self::processOnlyBodyParam($link, $onlyBody);
+            return self::processProgramParam($link, $programID, $onlyBody);
         }
 
         /**
@@ -119,7 +123,8 @@ class baseHelper
         if($moduleName == $config->default->module)
         {
             $link .= $config->default->method . '.' . $viewType; 
-            return self::processOnlyBodyParam($link, $onlyBody);
+            $link  = self::processOnlyBodyParam($link, $onlyBody);
+            return self::processProgramParam($link, $programID, $onlyBody);
         }
 
         /**
@@ -130,7 +135,8 @@ class baseHelper
         if($viewType == $app->getViewType())
         {
             $link .= $moduleName . '/';
-            return self::processOnlyBodyParam($link, $onlyBody);
+            $link  = self::processOnlyBodyParam($link, $onlyBody);
+            return self::processProgramParam($link, $programID, $onlyBody);
         }
 
         /**
@@ -139,7 +145,38 @@ class baseHelper
          *
          */
         $link .= $moduleName . '.' . $viewType;
-        return self::processOnlyBodyParam($link, $onlyBody);
+        $link  = self::processOnlyBodyParam($link, $onlyBody);
+        return self::processProgramParam($link, $programID, $onlyBody);
+    }
+
+    /**
+     *  处理program 参数。
+     *  Process the programID param in url.
+     * 
+     *  如果传参的时候设定了$programID，在生成链接的时候继续追加。
+     *  If $progrmID in the url, append it to the link.
+     *  
+     *  @param  string  $link 
+     *  @param  int     $programID
+     *  @param  bool    $onlybody
+     *  @static
+     *  @access public
+     *  @return string
+     */
+    public static function processProgramParam($link, $programID = '', $onlybody = false)
+    {
+        global $config;
+        if(!$programID) return $link;
+        if($onlybody)
+        {
+            $link .= $config->requestType != 'GET' ? "&pgmID=$programID" : "&pgmID=$programID";
+        }
+        else
+        {
+            $link .= $config->requestType != 'GET' ? "?pgmID=$programID" : "&pgmID=$programID";
+        }
+
+        return $link;
     }
 
     /**

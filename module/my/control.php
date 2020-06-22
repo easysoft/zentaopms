@@ -394,6 +394,30 @@ class my extends control
     }
 
     /**
+     * My programs.
+     *
+     * @param  int     $recTotal 
+     * @param  varchar $date
+     * @param  varchar $direction
+     * @access public
+     * @return void
+     */
+    public function program($recTotal = 0, $date = '', $direction = 'next')
+    {   
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1); 
+
+        $this->view->position[] = $this->lang->my->myProgram;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
+        $this->view->programs   = $this->loadModel('program')->getList($status = 'all', $orderBy = 'id_desc', $pager);
+        $this->display();
+    }
+
+    /**
      * Edit profile
      *
      * @access public
