@@ -346,10 +346,12 @@
 js::set('fullscreen', $lang->fullscreen);
 js::set('retrack', $lang->retrack);
 ?>
+<?php if(!$isLibCase):?>
 <script>
 $(function()
 {
     $('#subNavbar [data-id=testcase]').addClass('active');
 })
 </script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
