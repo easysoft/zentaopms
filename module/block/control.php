@@ -895,24 +895,40 @@ class block extends control
 
         $projectIdList = array_keys($projects);
 
-
         /* Get tasks. Fix bug #2918.*/
-        $yesterday = date('Y-m-d', strtotime('-1 day'));
-        $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+        $yesterday  = date('Y-m-d', strtotime('-1 day'));
+        $taskGroups = $this->dao->select("id,parent,project,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
-        foreach($tasks as $projectID => $task)
+            ->fetchGroup('project', 'id');
+
+        $tasks = array();
+        foreach($taskGroups as $projectID => $taskGroup)
         {
-            $task->totalEstimate = round($task->totalEstimate, 2);
-            $task->totalConsumed = round($task->totalConsumed, 2);
-            $task->totalLeft     = round($task->totalLeft, 2);
-            foreach($task as $key => $value)
+            $undoneTasks       = 0;
+            $yesterdayFinished = 0;
+            $totalEstimate     = 0;
+            $totalConsumed     = 0;
+            $totalLeft         = 0;
+
+            foreach($taskGroup as $taskID => $task)
             {
-                if($key == 'project') continue;
-                $projects[$projectID]->$key = $value;
+                if(strpos('wait|doing|pause', $task->status) !== false) $undoneTasks ++;
+                if(strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
+
+                if($task->parent == '-1') continue;
+
+                $totalConsumed += $task->consumed;
+                if($task->status != 'cancel') $totalEstimate += $task->estimate;
+                if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
             }
+
+            $projects[$projectID]->totalTasks        = count($taskGroup);
+            $projects[$projectID]->undoneTasks       = $undoneTasks;
+            $projects[$projectID]->yesterdayFinished = $yesterdayFinished;
+            $projects[$projectID]->totalEstimate     = $totalEstimate;
+            $projects[$projectID]->totalConsumed     = $totalConsumed;
+            $projects[$projectID]->totalLeft         = $totalLeft;
         }
 
         /* Get stories. */
