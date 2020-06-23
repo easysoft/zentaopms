@@ -1067,9 +1067,11 @@ class baseDAO
         {
             $table = strtolower($this->table);
         }
-        $fieldLabel   = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
-        $selectFields = isset($config->$table->selectFields)   ? $config->$table->selectFields   : '';
-        $value        = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
+        $fieldLabel = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
+        $value      = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
+
+        $moduleName   = $table == 'case' ? 'testcase' : $table;
+        $selectFields = isset($config->$moduleName->selectFields) ? $config->$moduleName->selectFields : '';
 
         /* 
          * 检查唯一性。

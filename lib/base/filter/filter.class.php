@@ -331,8 +331,9 @@ class baseValidater
      */
     public static function checkNotEmpty($var, $fieldName = '')
     {
+        $var = trim($var);
         if($fieldName) return !empty($var);
-        return strlen(trim($var)) != 0;
+        return strlen($var) != 0;
     }
 
     /**
