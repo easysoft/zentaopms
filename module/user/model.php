@@ -1422,11 +1422,8 @@ class userModel extends model
         }
 
         $teamGroups = array();
-        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)->alias('team')
-            ->leftJoin(TABLE_PROJECT)->alias('project')
-            ->on('team.root=project.id')
-            ->where('team.type')->eq('project')
-            ->andWhere('project.deleted')->eq(0)
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
             ->beginIF($objectType == 'product')->andWhere('root')->in(array_keys($linkedProjectProducts))->fi()
             ->beginIF($objectType == 'project')->andWhere('root')->in($objectIdList)->fi()
             ->query();
