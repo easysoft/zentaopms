@@ -12,7 +12,7 @@
         </th>
         <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
-        <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
+        <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('category', $orderBy, $vars, $lang->program->category);?></th>
         <th class='w-80px'><?php common::printOrderLink('template', $orderBy, $vars, $lang->program->template);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
