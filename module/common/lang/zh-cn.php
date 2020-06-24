@@ -191,8 +191,8 @@ $lang->sqlbuilder->menu = $lang->measurement->menu;
 $lang->cmcl = new stdclass();
 $lang->cmcl->menu = new stdclass();
 $lang->cmcl->menu->browse   = array('link' => '审计清单|cmcl|browse|', 'subModule' => 'cmcl');
-$lang->cmcl->menu->catalog  = '文档目录|baseline|catalog|';
-$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'subModule' => 'baseline');
+$lang->cmcl->menu->catalog  = array('link' => '文档目录|baseline|catalog|', 'alias' => 'catalog');
+$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'alias' => 'template,createtemplate,edittemplate,view');
 
 $lang->baseline = new stdclass();
 $lang->baseline->menu = $lang->cmcl->menu;
@@ -1159,7 +1159,7 @@ $lang->durationestimation->menu = $lang->workestimation->menu;
 $lang->budget->menu = $lang->workestimation->menu;
 
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
-$lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
+$lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
 $lang->review->menu->review = array('link' => '基线评审列表|review|browse|program={PROGRAM}', 'subModule' => 'review');
 $lang->review->menu->issue  = array('link' => '问题列表|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');

@@ -10,4 +10,4 @@ $config->program->editor->finish   = array('id' => 'comment', 'tools' => 'simple
 $config->program->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->program->list = new stdclass();
-$config->program->list->exportFields = 'id,name,code,type,category,status,begin,end,budget,PM,end,desc';
+$config->program->list->exportFields = 'id,name,code,template,category,status,begin,end,budget,PM,end,desc';

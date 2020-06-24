@@ -616,7 +616,7 @@ class program extends control
             {
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
-                $program->type     = zget($programLang->typeList, $program->type);
+                $program->template = zget($programLang->templateList, $program->template);
                 $program->category = zget($programLang->categoryList, $program->category);
                 $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
 
