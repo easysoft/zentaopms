@@ -1094,6 +1094,15 @@ class productModel extends model
         {
             $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
         }
+        elseif($module == 'programplan')
+        {   
+            $extra = $extra ? $extra : 'gantt';
+            return helper::createLink('programplan', 'browse', "programID=%s&productID=%s&type=$extra");
+        }   
+        elseif($module == 'design')
+        {   
+            return helper::createLink('design', 'browse', "productID=%s");
+        }
 
         return $link;
     }
