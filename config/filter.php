@@ -3,7 +3,7 @@ $filter = new stdclass();
 $filter->rules = new stdclass();
 $filter->rules->md5        = '/^[a-z0-9]{32}$/';
 $filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=]+$/';
-$filter->rules->checked    = '/^[0-9,]+$/';
+$filter->rules->checked    = '/^[0-9,\-]+$/';
 $filter->rules->idList     = '/^[0-9\|]+$/';
 $filter->rules->lang       = '/^[a-zA-Z_\-]+$/';
 $filter->rules->any        = '/./';
@@ -47,6 +47,7 @@ $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
 $filter->repo       = new stdclass();
+$filter->webhook    = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -93,6 +94,7 @@ $filter->testtask->default       = new stdclass();
 $filter->todo->export            = new stdclass();
 $filter->upgrade->license        = new stdclass();
 $filter->user->login             = new stdclass();
+$filter->webhook->bind           = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
@@ -239,3 +241,5 @@ $filter->repo->diff->cookie['arrange']       = 'reg::word';
 $filter->repo->diff->cookie['repoPairs']     = 'array';
 $filter->repo->view->cookie['repoPairs']     = 'array';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
+
+$filter->webhook->bind->get['whiteListDept'] = 'reg::checked';

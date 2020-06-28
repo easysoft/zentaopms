@@ -179,7 +179,7 @@ class webhook extends control
         {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getAllUsers();
+            $response = $dingapi->getAllUsers($this->get->whiteListDept);
         }
         elseif($webhook->type == 'wechatuser')
         {
@@ -190,6 +190,12 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
+            if($response['message'] == 'moreRequest')
+            {
+                echo js::error($this->webhook->error->moreDept);
+                die(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
+            }
+
             echo js::error($response['message']);
             die(js::locate($this->createLink('webhook', 'browse')));
         }
@@ -222,6 +228,44 @@ class webhook extends control
         $this->view->users       = $users;
         $this->view->pager       = $pager;
         $this->view->bindedUsers = $bindedPairs;
+        $this->display();
+    }
+
+    /**
+     * choose dept.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function chooseDept($id)
+    {
+        $webhook = $this->webhook->getById($id);
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser')
+        {
+            echo js::alert($this->lang->webhook->note->bind);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+        $webhook->secret = json_decode($webhook->secret);
+
+        if($webhook->type == 'dinguser')
+        {
+            $this->app->loadClass('dingapi', true);
+            $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response = $dingapi->getTopDepts();
+        }
+
+        if($response['result'] == 'fail')
+        {
+            echo js::error($response['message']);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+
+        $this->view->title      = $this->lang->webhook->chooseDept;
+        $this->view->position[] = $this->lang->webhook->chooseDept;
+
+        $this->view->topDepts  = $response['data'];
+        $this->view->webhookID = $id;
         $this->display();
     }
 
