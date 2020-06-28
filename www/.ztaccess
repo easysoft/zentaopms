@@ -9,12 +9,22 @@ Options +FollowSymLinks +SymLinksIfOwnerMatch
 </IfModule>
 
 # php settings.
+<IfModule mod_php5.c>
 php_value post_max_size 50M 
 php_flag  file_uploads On
 php_value upload_max_filesize 50M
 php_value display_errors 1
 # for post vars limit.
 php_value max_input_vars 100000
+</IfModule>
+<IfModule mod_php7.c>
+php_value post_max_size 50M 
+php_flag  file_uploads On
+php_value upload_max_filesize 50M
+php_value display_errors 1
+# for post vars limit.
+php_value max_input_vars 100000
+</IfModule>
 
 # yslow settings.
 <IfModule mod_expires.c>
