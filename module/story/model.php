@@ -192,6 +192,7 @@ class storyModel extends model
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
+        if($story->type == 'requirement') $this->config->story->create->requiredFields = str_replace('plan,', '', $this->config->story->create->requiredFields);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
