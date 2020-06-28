@@ -9,10 +9,11 @@ $lang->webhook->chooseDept = '选择同步部门';
 $lang->webhook->assigned   = '指派给';
 $lang->webhook->setting    = '设置';
 
-$lang->webhook->browse = '浏览Webhook';
-$lang->webhook->create = '添加Webhook';
-$lang->webhook->edit   = '编辑Webhook';
-$lang->webhook->delete = '删除Webhook';
+$lang->webhook->browse       = '浏览Webhook';
+$lang->webhook->create       = '添加Webhook';
+$lang->webhook->edit         = '编辑Webhook';
+$lang->webhook->delete       = '删除Webhook';
+$lang->webhook->rechooseDept = '重选部门';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = '类型';

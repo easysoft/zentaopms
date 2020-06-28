@@ -40,6 +40,9 @@ class webhook extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Unset whiteListDept cookie. */
+        setcookie('whiteListDept', '', 0, $this->config->webRoot, '', false, true);
+
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
@@ -175,11 +178,19 @@ class webhook extends control
         }
         $webhook->secret = json_decode($webhook->secret);
 
+        /* Get whiteList dept. */
+        if($this->get->whiteListDept)
+        {
+            setcookie('whiteListDept', $this->get->whiteListDept, 0, $this->config->webRoot, '', false, true);
+            $_COOKIE['whiteListDept'] = $this->get->whiteListDept;
+        }
+        $whiteListDept = $this->cookie->whiteListDept ? $this->cookie->whiteListDept : '';
+
         if($webhook->type == 'dinguser')
         {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getAllUsers($this->get->whiteListDept);
+            $response = $dingapi->getAllUsers($whiteListDept);
         }
         elseif($webhook->type == 'wechatuser')
         {
@@ -222,12 +233,13 @@ class webhook extends control
         $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->bind;
 
-        $this->view->webhook     = $webhook;
-        $this->view->dingUsers   = $dingUsers;
-        $this->view->useridPairs = $useridPairs;
-        $this->view->users       = $users;
-        $this->view->pager       = $pager;
-        $this->view->bindedUsers = $bindedPairs;
+        $this->view->webhook       = $webhook;
+        $this->view->dingUsers     = $dingUsers;
+        $this->view->useridPairs   = $useridPairs;
+        $this->view->users         = $users;
+        $this->view->pager         = $pager;
+        $this->view->bindedUsers   = $bindedPairs;
+        $this->view->whiteListDept = $whiteListDept;
         $this->display();
     }
 
