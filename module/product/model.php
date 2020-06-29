@@ -184,7 +184,7 @@ class productModel extends model
         if(!isset($products[$this->session->product]))
         {
             $this->session->set('product', key($products));
-            if($productID) $this->accessDenied();
+            //if($productID) $this->accessDenied();
         }
         if($this->cookie->preProductID != $productID)
         {
