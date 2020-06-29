@@ -181,9 +181,9 @@ $lang->stage->menu->settype = '阶段类型|stage|settype|';
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 $lang->measurement->menu->settips  = '区间提示|measurement|settips|';
-$lang->measurement->menu->define   = array('link' => '度量定义|measurement|browse|type=basic', 'alias' => 'createbasic');
+$lang->measurement->menu->define   = array('link' => '度量定义|measurement|browse|type=basic', 'alias' => 'createbasic,design,editbasic,setsql');
 $lang->measurement->menu->data     = array('link' => '度量数据|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
-$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate');
+$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate,edittemplate');
 
 $lang->sqlbuilder = new stdclass();
 $lang->sqlbuilder->menu = $lang->measurement->menu;
