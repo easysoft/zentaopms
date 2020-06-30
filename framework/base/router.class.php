@@ -372,6 +372,7 @@ class baseRouter
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
+        $this->setProgram2Session();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -838,6 +839,18 @@ class baseRouter
             define('SESSION_STARTED', true);
         }
     }
+
+    /**
+     * 从Get里取progarm id 设置到session中
+     * Set program id into session.
+     *
+     * @access public
+     * @return void
+     */
+    public function setProgram2Session()
+    {    
+        if(isset($_GET['pgmID'])) $this->session->set('program', $_GET['pgmID']); //Set program into session.
+    } 
 
     /**
      * 根据用户浏览器的语言设置和服务器配置，选择显示的语言。
