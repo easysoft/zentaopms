@@ -575,7 +575,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `output` text NOT NULL,
   `attribute` varchar(30) NOT NULL DEFAULT '',
   `parent` mediumint(8) unsigned NOT NULL default '0',
-  `privway` char(30) NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
   `begin` date NOT NULL,
