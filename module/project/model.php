@@ -258,7 +258,7 @@ class projectModel extends model
         if(!isset($projects[$this->session->project]))
         {
             $this->session->set('project', key($projects));
-            //if($projectID) $this->accessDenied();
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
         }
         return $this->session->project;
     }

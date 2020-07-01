@@ -1554,6 +1554,8 @@ EOD;
             $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'program';
             if(!defined('IN_UPGRADE') and $inProgram)
             {
+                /* Check program priv. */
+                if(strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }

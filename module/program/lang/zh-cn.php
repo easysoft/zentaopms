@@ -43,7 +43,8 @@ $lang->program->privway         = '权限控制';
 
 $lang->program->manageGroupMember  = '维护分组用户';
 $lang->program->durationEstimation = '工作量估算';
-$lang->program->noProgram = '暂时没有项目';
+$lang->program->noProgram          = '暂时没有项目';
+$lang->program->accessDenied       = '您无权访问该项目！';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
