@@ -1110,7 +1110,7 @@ $lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program
 $lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
 $lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
 $lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
-$lang->menu->cmmi->ci             = '集成|repo|browse|';
+$lang->menu->cmmi->ci             = '代码|repo|browse|';
 $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
 $lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
