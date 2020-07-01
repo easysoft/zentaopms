@@ -1502,9 +1502,9 @@ class task extends control
                 $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
 
                 /* Set related files. */
+                $task->files = '';
                 if(isset($relatedFiles[$task->id]))
                 {
-                    $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
                         $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");

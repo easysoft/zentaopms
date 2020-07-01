@@ -208,7 +208,6 @@ class buildModel extends model
             ->get();
 
         if($this->config->global->flow == 'onlyTest') $build->project = 0;
-        if(empty($build->product)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->build->product);
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)

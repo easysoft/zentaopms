@@ -1106,7 +1106,13 @@ class baseDAO
             {
                 ${"arg$i"} = isset($funcArgs[$i + 2]) ? $funcArgs[$i + 2] : null;
             }
-            if(strtolower($funcName) == 'notempty' and !empty($selectFields) and strpos(",{$selectFields},", ",{$fieldName},") !== false) $arg0 = $fieldName;
+
+            /* When check not empty and field is select, then use empty function to check. */
+            if(strtolower($funcName) == 'notempty')
+            {
+                $arg0 = false;
+                if(!empty($selectFields) and strpos(",{$selectFields},", ",{$fieldName},") !== false) $arg0 = true;
+            }
 
             $checkFunc = 'check' . $funcName;
             if(validater::$checkFunc($value, $arg0, $arg1, $arg2) === false)

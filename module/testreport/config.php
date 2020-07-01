@@ -8,3 +8,5 @@ $config->testreport->edit->requiredFields = 'title,owner';
 $config->testreport->editor = new stdclass();
 $config->testreport->editor->create = array('id' => 'report', 'tools' => 'simpleTools');
 $config->testreport->editor->edit   = array('id' => 'report', 'tools' => 'simpleTools');
+
+$config->testreport->selectFields = 'owner';

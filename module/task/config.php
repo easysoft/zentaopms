@@ -1,7 +1,7 @@
 <?php
 $config->task = new stdclass();
 $config->task->batchCreate  = 10;
-$config->task->selectFields = 'story,pri,assignedTo';
+$config->task->selectFields = 'project,type,story,module,pri,assignedTo';
 
 $config->task->create   = new stdclass();
 $config->task->edit     = new stdclass();
@@ -9,7 +9,7 @@ $config->task->start    = new stdclass();
 $config->task->finish   = new stdclass();
 $config->task->activate = new stdclass();
 
-$config->task->create->requiredFields      = 'name,type';
+$config->task->create->requiredFields      = 'project,name,type';
 $config->task->edit->requiredFields        = $config->task->create->requiredFields;
 $config->task->finish->requiredFields      = 'currentConsumed';
 $config->task->activate->requiredFields    = 'left';

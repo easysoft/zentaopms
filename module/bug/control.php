@@ -1605,6 +1605,7 @@ class bug extends control
                 }
 
                 /* Set related files. */
+                $bug->files = '';
                 if(isset($relatedFiles[$bug->id]))
                 {
                     foreach($relatedFiles[$bug->id] as $file)

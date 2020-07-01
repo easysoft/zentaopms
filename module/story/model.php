@@ -914,10 +914,10 @@ class storyModel extends model
         $now      = helper::now();
         $date     = helper::today();
         $story = fixer::input('post')
-            ->remove('result,preVersion,comment')
             ->setDefault('reviewedDate', $date)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('reviewedBy', '')
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
             ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
@@ -932,6 +932,7 @@ class storyModel extends model
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
             ->join('reviewedBy', ',')
+            ->remove('result,preVersion,comment')
             ->get();
 
         /* fix bug #671. */
