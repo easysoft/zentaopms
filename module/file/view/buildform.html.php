@@ -39,7 +39,7 @@ function checkExtension(obj)
     if(index >= 0)
     {
         extension = fileName.substr(index + 1);
-        if(dangerExtensions.lastIndexOf(',' + extension + ','))
+        if(dangerExtensions.lastIndexOf(',' + extension + ',') >= 0)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
             $(obj).val('');
