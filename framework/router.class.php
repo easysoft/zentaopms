@@ -483,7 +483,7 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
-        if(isset($_GET['pgmID'])) $this->session->set('program', $_GET['pgmID']);
+        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']);
         /* If the isFlow is true, reset the passed params. */
         if($this->isFlow)
         {

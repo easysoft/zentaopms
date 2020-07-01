@@ -372,6 +372,7 @@ class baseRouter
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
+        $this->setProgram();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -837,6 +838,18 @@ class baseRouter
 
             define('SESSION_STARTED', true);
         }
+    }
+
+    /**  
+     * 从Get里取progarm id 设置到session中
+     * Set program id into session.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setProgram()
+    {    
+        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']); //Set program into session.
     }
 
     /**
@@ -1788,7 +1801,7 @@ class baseRouter
         global $filter;
 
         /* Remove these two params. */
-        unset($passedParams['pgmID']);
+        unset($passedParams['pgm']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
