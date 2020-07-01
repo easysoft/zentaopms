@@ -27,6 +27,11 @@ class taskModel extends model
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
+        elseif($this->post->estimate === '0')
+        {
+            dao::$errors[] = $this->lang->task->error->recordZero;
+            return false;
+        }
         $projectID  = (int)$projectID;
         $taskIdList = array();
         $taskFiles  = array();
