@@ -446,7 +446,6 @@ class build extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -563,7 +562,6 @@ class build extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;

@@ -844,7 +844,7 @@ class actionModel extends model
             }
 
             /* If action type is login or logout, needn't link. */
-            if($actionType == 'svncommited')
+            if($actionType == 'svncommited' or $actionType == 'gitcommited')
             {
                 $action->actor = isset($commiters[$action->actor]) ? $commiters[$action->actor] : $action->actor;
             }

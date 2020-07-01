@@ -50,6 +50,7 @@ class dingapi
     /**
      * Get all users.
      * 
+     * @param  string $whiteListDept 
      * @access public
      * @return array
      */
@@ -79,6 +80,7 @@ class dingapi
     /**
      * Get all depts.
      * 
+     * @param  string $whiteList 
      * @access public
      * @return array
      */
@@ -87,6 +89,7 @@ class dingapi
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
         if($this->isError()) return false;
 
+        /* Get parent and white list parent dept id list. */
         if($whiteList)
         {
             $parentIdList    = array();
@@ -110,6 +113,7 @@ class dingapi
                     continue;
                 }
 
+                /* Check this dept belong to white list. */
                 $isWhiteList = false;
                 $parentID    = $dept->parentid;
                 while(isset($parentIdList[$parentID]))

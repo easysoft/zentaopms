@@ -8,3 +8,5 @@ $config->build->edit->requiredFields   = 'product,project,name,builder,date';
 $config->build->editor = new stdclass();
 $config->build->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->build->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
+$config->build->selectFields = 'product,project,builder';

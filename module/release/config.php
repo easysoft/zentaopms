@@ -8,3 +8,5 @@ $config->release->edit->requiredFields   = 'name,date,build';
 $config->release->editor = new stdclass();
 $config->release->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->release->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
+$config->release->selectFields = 'build';

@@ -28,11 +28,11 @@
         <button type="button" class="btn btn-link file-input-delete"><?php echo $lang->delete;?></button>
       </div>
     </div>
-    <input type="file" name="<?php echo $filesName;?>[]" onchange="checkExtension(this)" />
+    <input type="file" name="<?php echo $filesName;?>[]" onchange="checkDangerExtension(this)" />
   </div>
 </div>
 <script>
-function checkExtension(obj)
+function checkDangerExtension(obj)
 {
     var fileName = $(obj).val();
     var index    = fileName.lastIndexOf(".");
