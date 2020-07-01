@@ -169,11 +169,11 @@ class baseHelper
         if(!$programID) return $link;
         if($onlybody)
         {
-            $link .= $config->requestType != 'GET' ? "&pgmID=$programID" : "&pgmID=$programID";
+            $link .= $config->requestType != 'GET' ? "&pgm=$programID" : "&pgm=$programID";
         }
         else
         {
-            $link .= $config->requestType != 'GET' ? "?pgmID=$programID" : "&pgmID=$programID";
+            $link .= $config->requestType != 'GET' ? "?pgm=$programID" : "&pgm=$programID";
         }
 
         return $link;
