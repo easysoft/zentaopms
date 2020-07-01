@@ -141,7 +141,11 @@ class repoModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->andWhere("CONCAT(',', program, ',')")->like("%,{$this->session->program},%")
+            ->orderBy($orderBy)
+            ->page($pager)->fetchAll('id');
 
         foreach($repos as $i => $repo)
         {
@@ -268,7 +272,11 @@ class repoModel extends model
      */
     public function getRepoPairs()
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(',', program, ',')")->like("%,{$this->session->program},%")
+            ->fetchAll();
+
         $repoPairs = array();
         foreach($repos as $repo)
         {
