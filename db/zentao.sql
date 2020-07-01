@@ -656,6 +656,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `program` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
   `prefix` varchar(100) NOT NULL,

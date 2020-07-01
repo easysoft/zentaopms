@@ -189,7 +189,7 @@ class repoModel extends model
         $this->checkConnection();
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
-            ->add('program', $this->session->program)
+            ->join('program', ',')
             ->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);

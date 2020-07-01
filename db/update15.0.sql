@@ -20,7 +20,7 @@ ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`
 ALTER TABLE `zt_task` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doc` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_story` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_repo` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_repo` ADD `program` varchar(255) NOT NULL AFTER `id`;
 ALTER TABLE `zt_bug` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_case` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testtask` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
