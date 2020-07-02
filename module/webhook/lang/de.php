@@ -1,17 +1,19 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Hook Liste';
-$lang->webhook->api      = 'API';
-$lang->webhook->entry    = 'Eintrag';
-$lang->webhook->log      = 'Log';
-$lang->webhook->bind     = 'Bind User';
-$lang->webhook->assigned = 'Augeordnet an';
-$lang->webhook->setting  = 'Einstellungen';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Hook Liste';
+$lang->webhook->api        = 'API';
+$lang->webhook->entry      = 'Eintrag';
+$lang->webhook->log        = 'Log';
+$lang->webhook->bind       = 'Bind User';
+$lang->webhook->chooseDept = 'Choose department';
+$lang->webhook->assigned   = 'Augeordnet an';
+$lang->webhook->setting    = 'Einstellungen';
 
-$lang->webhook->browse = 'Durchsuchen';
-$lang->webhook->create = 'Erstellen';
-$lang->webhook->edit   = 'Bearbeiten';
-$lang->webhook->delete = 'Löschen';
+$lang->webhook->browse       = 'Durchsuchen';
+$lang->webhook->create       = 'Erstellen';
+$lang->webhook->edit         = 'Bearbeiten';
+$lang->webhook->delete       = 'Löschen';
+$lang->webhook->rechooseDept = 'Rechoose department';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Typ';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat an
 $lang->webhook->note->typeList['default']   = 'Webhookadresse on anderen erhalten.';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->curl     = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';

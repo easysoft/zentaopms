@@ -165,6 +165,7 @@ $lang->doc->accessDenied       = "您沒有權限訪問！";
 $lang->doc->versionNotFount    = '該版本文檔不存在';
 $lang->doc->noDoc              = '暫時沒有文檔。';
 $lang->doc->cannotCreateOffice = '<p>對不起，企業版才能創建%s文檔。<p><p>試用企業版，請聯繫我們：4006-8899-23 &nbsp; 0532-86893032。</p>';
+$lang->doc->notSetOffice       = "<p>創建%s文檔，需要配置<a href='%s' target='_parent'>Office轉換設置</a>。<p>";
 $lang->doc->noSearchedDoc      = '沒有搜索到任何文檔。';
 $lang->doc->noEditedDoc        = '您還沒有編輯任何文檔。';
 $lang->doc->noOpenedDoc        = '您還沒有創建任何文檔。';
