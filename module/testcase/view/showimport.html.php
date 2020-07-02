@@ -1,11 +1,26 @@
 <?php include '../../common/view/header.html.php';?>
-<style>
-.affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
-</style>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
+<div id="mainContent" class="main-content">
+  <div class="main-header">
+    <h2><?php echo $lang->testcase->import;?></h2>
+  </div>
+  <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
+  <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
+</div>
+<script>
+$(function()
+{
+    $('#maxImport').keyup(function()
+    {
+        if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
+    });
+    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
+});
+</script>
 <?php else:?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
@@ -110,16 +125,18 @@
         <tr>
           <td colspan='10' class='text-center form-actions'>
             <?php
-            if(!$insert)
+            $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
+            if(!$insert and $dataInsert === '')
             {
-                echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+                echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
             }
             else
             {
-                echo html::submitButton($isEndPage ? $this->lang->save : $this->lang->file->saveAndNext);
-                echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
-                echo html::hidden('pagerID', $pagerID);
+                echo html::submitButton($submitText);
+                if($dataInsert !== '') echo html::hidden('insert', $dataInsert);
             }
+            echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
+            echo html::hidden('pagerID', $pagerID);
             echo ' &nbsp; ' . html::backButton();
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
@@ -127,7 +144,7 @@
         </tr>
       </tfoot>
     </table>
-    <?php if(!$insert) include '../../common/view/noticeimport.html.php';?>
+    <?php if(!$insert and $dataInsert === '') include '../../common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php endif;?>
