@@ -124,11 +124,12 @@ class repo extends control
         $this->repo->setMenu($this->repos, $repo->id, false);
         $this->app->loadLang('action');
 
-        $repo->repoType     = $repo->id . '-' . $repo->SCM;
-        $this->view->repo   = $repo;
-        $this->view->repoID = $repoID;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $repo->repoType       = $repo->id . '-' . $repo->SCM;
+        $this->view->repo     = $repo;
+        $this->view->repoID   = $repoID;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->programs = $this->loadModel('program')->getPairs();
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
