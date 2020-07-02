@@ -27,18 +27,15 @@ class group extends control
     /**
      * Browse groups.
      * 
-     * @param  int    $companyID 
      * @access public
      * @return void
      */
-    public function browse($companyID = 0)
+    public function browse()
     {
-        if($companyID == 0) $companyID = $this->app->company->id;
-
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
-        $groups = $this->group->getList($companyID);
+        $groups = $this->group->getList();
         $groupUsers = array();
         foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 

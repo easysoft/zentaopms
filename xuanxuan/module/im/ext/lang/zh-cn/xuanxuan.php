@@ -1,15 +1,17 @@
 <?php
-$lang->im->common          = '客户端';
-$lang->im->turnon          = '是否打开';
-$lang->im->help            = '使用说明';
-$lang->im->settings        = '服务器设置';
-$lang->im->xxdServer       = '禅道服务器';
-$lang->im->downloadXXD     = '下载喧喧服务端';
-$lang->im->zentaoIntegrate = '禅道集成';
-$lang->im->zentaoClient    = '新增禅道客户端！';
-$lang->im->getChatUsers    = '获取用户';
-$lang->im->getChatGroups   = '获取讨论组';
-$lang->im->notifyMSG       = '消息通知';
+$lang->im->common           = '客户端';
+$lang->im->turnon           = '是否打开';
+$lang->im->help             = '使用说明';
+$lang->im->settings         = '服务器设置';
+$lang->im->xxdServer        = '禅道服务器';
+$lang->im->downloadXXD      = '下载喧喧服务端';
+$lang->im->zentaoIntegrate  = '禅道集成';
+$lang->im->zentaoClient     = '新增禅道客户端！';
+$lang->im->getChatUsers     = '获取用户';
+$lang->im->getChatGroups    = '获取讨论组';
+$lang->im->notifyMSG        = '消息通知';
+$lang->im->sendNotification = '向通知中心推送通知消息';
+$lang->im->sendChatMessage  = '向指定的讨论组推送通知消息';
 
 $lang->im->createBug   = '创建 Bug';
 $lang->im->createDoc   = '创建文档';

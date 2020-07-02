@@ -93,7 +93,7 @@ class task extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
-            if($this->post->project) $projectID = $this->post->project;
+            if($this->post->project) $projectID = (int)$this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
@@ -1502,9 +1502,9 @@ class task extends control
                 $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
 
                 /* Set related files. */
+                $task->files = '';
                 if(isset($relatedFiles[$task->id]))
                 {
-                    $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
                         $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");

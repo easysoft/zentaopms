@@ -592,6 +592,10 @@ class upgradeModel extends model
         case '12_3_1':
             $this->saveLogs('Execute 12_3_1');
             $this->appendExec('12_3_1');
+        case '12_3_2':
+            $this->saveLogs('Execute 12_3_2');
+            $this->execSQL($this->getUpgradeFile('12.3.2'));
+            $this->appendExec('12_3_2');
         }
 
         $this->deletePatch();
@@ -765,6 +769,7 @@ class upgradeModel extends model
             case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
             case '12_3':
             case '12_3_1':
+            case '12_3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2586,7 +2591,7 @@ class upgradeModel extends model
     {
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!file_exists($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
     }
 
     /**

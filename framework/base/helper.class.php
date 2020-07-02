@@ -220,7 +220,7 @@ class baseHelper
             return "IN ('" . join("','", $idList) . "')";
         }
 
-        if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc()) $idList = addslashes($idList);
+        if((!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc()) and is_string($idList)) $idList = addslashes($idList);
         return "IN ('" . str_replace(',', "','", str_replace(' ', '', $idList)) . "')";
     }
 

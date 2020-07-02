@@ -136,10 +136,13 @@ class release extends control
      * @param  string $link 
      * @param  string $param 
      * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc')
+    public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
@@ -147,24 +150,34 @@ class release extends control
         $this->loadModel('story');
         $this->loadModel('bug');
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+
         $release = $this->release->getById((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
         
+        $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
                 ->beginIF($type == 'story')->orderBy($orderBy)->fi()
+                ->page($storyPager)
                 ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
+        $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)
             ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+            ->page($bugPager)
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
+        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
         $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
             ->beginIF($type == 'leftBug')->orderBy($orderBy)->fi()
+            ->page($leftBugPager)
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
@@ -186,6 +199,9 @@ class release extends control
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;
         $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
+        $this->view->storyPager    = $storyPager;
+        $this->view->bugPager      = $bugPager;
+        $this->view->leftBugPager  = $leftBugPager;
         $this->display();
     }
  
@@ -349,10 +365,13 @@ class release extends control
      * @param  int    $releaseID 
      * @param  string $browseType 
      * @param  int    $param 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function linkStory($releaseID = 0, $browseType = '', $param = 0)
+    public function linkStory($releaseID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -367,6 +386,10 @@ class release extends control
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -394,11 +417,11 @@ class release extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $queryID, 'id', null, $build->project ? $build->project : '', $release->branch);
+            $allStories = $this->story->getBySearch($release->product, $queryID, 'id', $pager, $build->project ? $build->project : '', $release->branch, 'story', $release->stories);
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project);
+            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byModule', 0, $pager, 'story', $release->stories);
         }
 
         $this->view->allStories     = $allStories;
@@ -407,6 +430,7 @@ class release extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
+        $this->view->pager          = $pager;
         $this->display();
     }
 
@@ -459,10 +483,14 @@ class release extends control
      * @param  int    $releaseID 
      * @param  string $browseType 
      * @param  int    $param 
+     * @param  string $type 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function linkBug($releaseID = 0, $browseType = '', $param = 0, $type = 'bug')
+    public function linkBug($releaseID = 0, $browseType = '', $param = 0, $type = 'bug', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
@@ -475,6 +503,10 @@ class release extends control
         $release = $this->release->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build); 
         $this->commonAction($release->product);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
         $this->loadModel('bug');
@@ -502,24 +534,24 @@ class release extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
-        $allBugs = array();
+        $allBugs     = array();
+        $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc', null, $release->branch);
+            $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc', $pager, $release->branch, $releaseBugs);
         }
         elseif($build->project)
         {
             if($type == 'bug')
             {
-                $allBugs = $this->bug->getReleaseBugs($build->id, $release->product, $release->branch);
+                $allBugs = $this->bug->getReleaseBugs($build->id, $release->product, $release->branch, $releaseBugs, $pager);
             }
             elseif($type == 'leftBug')
             {
-                $allBugs = $this->bug->getProductLeftBugs($build->id, $release->product, $release->branch);
+                $allBugs = $this->bug->getProductLeftBugs($build->id, $release->product, $release->branch, $releaseBugs, $pager);
             }
         }
 
-        $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
         $this->view->allBugs     = $allBugs;
         $this->view->releaseBugs = empty($releaseBugs) ? array() : $this->bug->getByList($releaseBugs);
         $this->view->release     = $release;
@@ -527,6 +559,7 @@ class release extends control
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->type        = $type;
+        $this->view->pager       = $pager;
         $this->display();
     }
 

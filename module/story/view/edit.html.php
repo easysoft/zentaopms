@@ -101,7 +101,6 @@
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
               </tr>
-              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->plan;?></th>
                 <td>
@@ -119,6 +118,7 @@
                   </div>
                 </td>
               </tr>
+              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->source;?></th>
                 <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen'");?></td>
@@ -171,7 +171,7 @@
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control chosen' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>

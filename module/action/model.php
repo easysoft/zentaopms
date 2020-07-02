@@ -678,6 +678,8 @@ class actionModel extends model
     public function getActionCondition()
     {
         $actionCondition = '';
+        if(!empty($this->app->user->admin)) return $actionCondition;
+
         if(isset($this->app->user->rights['acls']['actions']))
         {
             if(empty($this->app->user->rights['acls']['actions'])) return array();
@@ -842,7 +844,7 @@ class actionModel extends model
             }
 
             /* If action type is login or logout, needn't link. */
-            if($actionType == 'svncommited')
+            if($actionType == 'svncommited' or $actionType == 'gitcommited')
             {
                 $action->actor = isset($commiters[$action->actor]) ? $commiters[$action->actor] : $action->actor;
             }
@@ -967,23 +969,25 @@ class actionModel extends model
         if($action->action != 'deleted') return;
         if($action->objectType == 'product')
         {
-            $product = $this->dao->select('name,code')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
+            $product = $this->dao->select('id,name,code,acl')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
             $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere("(`name`='{$product->name}' OR `code`='{$product->code}')")->fetch('count');
             if($count > 0)
             {
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['product']));
                 die(js::locate(helper::createLink('product', 'edit', "productID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
             }
+            if($product->acl != 'open') $this->loadModel('user')->updateUserView($product->id, 'product');
         }
         elseif($action->objectType == 'project')
         {
-            $project = $this->dao->select('name,code')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $project = $this->dao->select('id,name,code,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
             $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere("(`name`='{$project->name}' OR `code`='{$project->code}')")->fetch('count');
             if($count > 0)
             {
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
                 die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
             }
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, 'project');
         }
         elseif($action->objectType == 'module')
         {

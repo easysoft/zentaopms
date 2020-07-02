@@ -423,7 +423,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -1050,18 +1050,19 @@ class projectModel extends model
         }
 
         $total = $this->dao->select('
-            SUM(estimate) AS totalEstimate,
-            SUM(consumed) AS totalConsumed,
-            SUM(`left`) AS totalLeft')
+            ROUND(SUM(estimate), 1) AS totalEstimate,
+            ROUND(SUM(consumed), 1) AS totalConsumed,
+            ROUND(SUM(`left`), 1) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
-        $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
+        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 1) AS totalLeft')->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
+            ->andWhere('status')->in('closed,cancel')
             ->fetch('totalLeft');
 
         $project->days          = $project->days ? $project->days : '';

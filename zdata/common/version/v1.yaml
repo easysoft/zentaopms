@@ -1,0 +1,15 @@
+title: version
+desc: 版本记录
+author: 
+version: 1.0
+
+field: version
+instances:
+  - instance: version
+    note: 版本列表
+    prefix: ""
+    postfix: ""
+    loop: 0
+    fields:
+     - field: v1
+       range: 10.0.alpha,10.0.bate,10.0,10.3.1,10.4,10.5.1,11.1,11.2,11.3,11.4.1,11.4,11.5.2,11.5,11.6.4,11.6.5,11.6,11.7,12.0.1,12.1,12.2

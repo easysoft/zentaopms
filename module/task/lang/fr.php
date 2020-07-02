@@ -202,6 +202,7 @@ $lang->task->error->totalNumber      = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber   = '"Coût" doit être numérique.';
 $lang->task->error->estimateNumber   = '"Estimé" doit être numérique.';
 $lang->task->error->recordMinus      = 'Work hours should not be negative number.';
+$lang->task->error->recordZero       = 'Work hours should not be zero.';
 $lang->task->error->consumedSmall    = '"Coût Total" doit être > au dernier chiffre.';
 $lang->task->error->consumedThisTime = 'Entrez le "Coût en Heures"';
 $lang->task->error->left             = 'Entrez les "Heures Restantes"';

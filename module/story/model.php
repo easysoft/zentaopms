@@ -192,6 +192,7 @@ class storyModel extends model
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
+        if($story->type == 'requirement') $this->config->story->create->requiredFields = str_replace('plan,', '', $this->config->story->create->requiredFields);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
@@ -481,7 +482,7 @@ class storyModel extends model
                 $data->title   = $story->title;
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
-                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                $this->dao->replace(TABLE_STORYSPEC)->data($data)->exec();
             }
             else
             {
@@ -913,10 +914,10 @@ class storyModel extends model
         $now      = helper::now();
         $date     = helper::today();
         $story = fixer::input('post')
-            ->remove('result,preVersion,comment')
             ->setDefault('reviewedDate', $date)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('reviewedBy', '')
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
             ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
@@ -931,6 +932,7 @@ class storyModel extends model
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
             ->join('reviewedBy', ',')
+            ->remove('result,preVersion,comment')
             ->get();
 
         /* fix bug #671. */
@@ -1817,10 +1819,11 @@ class storyModel extends model
      * @param  string $projectID
      * @param  int    $branch
      * @param  string $type requirement|story
+     * @param  string $excludeStories 
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story')
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story', $excludeStories = '')
     {
         if($projectID != '')
         {
@@ -1849,6 +1852,7 @@ class storyModel extends model
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
+        if($excludeStories) $storyQuery = $storyQuery . ' AND `product` NOT ' . helper::dbIN($excludeStories);
         if($projectID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
@@ -1927,10 +1931,12 @@ class storyModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  object $pager
+     * @param  string $storyType 
+     * @param  string $excludeStories 
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null)
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null, $storyType = 'story', $excludeStories = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
@@ -1966,6 +1972,8 @@ class storyModel extends model
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$projectID)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq($storyType)
+                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
                 ->fetchAll('id');
@@ -1986,6 +1994,8 @@ class storyModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
                 ->where('t1.project')->eq((int)$projectID)
+                ->andWhere('t2.type')->eq($storyType)
+                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
@@ -2718,7 +2728,7 @@ class storyModel extends model
                 else
                 {
                     $parent = $parents[$story->parent];
-                    $story->parentName = $story->title;
+                    $story->parentName = $parent->title;
                 }
             }
 

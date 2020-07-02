@@ -617,7 +617,7 @@ class testcase extends control
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->testsuite->menu;
+            $this->lang->testcase->menu = $this->lang->caselib->menu;
             if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testcase = 'caselib';
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
@@ -711,7 +711,7 @@ class testcase extends control
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
                 $this->caselib->setLibMenu($libraries, $libID);
-                $this->lang->testcase->menu = $this->lang->testsuite->menu;
+                $this->lang->testcase->menu = $this->lang->caselib->menu;
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);

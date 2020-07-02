@@ -1,17 +1,19 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Hook danh sách';
-$lang->webhook->api      = 'API';
-$lang->webhook->entry    = 'Entry';
-$lang->webhook->log      = 'Nhật ký';
-$lang->webhook->bind     = 'Bind người dùng';
-$lang->webhook->assigned = 'Giao cho';
-$lang->webhook->setting  = 'Thiết lập';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Hook danh sách';
+$lang->webhook->api        = 'API';
+$lang->webhook->entry      = 'Entry';
+$lang->webhook->log        = 'Nhật ký';
+$lang->webhook->bind       = 'Bind người dùng';
+$lang->webhook->chooseDept = 'Choose department';
+$lang->webhook->assigned   = 'Giao cho';
+$lang->webhook->setting    = 'Thiết lập';
 
-$lang->webhook->browse = 'Browse';
-$lang->webhook->create = 'Tạo';
-$lang->webhook->edit   = 'Sửa';
-$lang->webhook->delete = 'Xóa';
+$lang->webhook->browse       = 'Browse';
+$lang->webhook->create       = 'Tạo';
+$lang->webhook->edit         = 'Sửa';
+$lang->webhook->delete       = 'Xóa';
+$lang->webhook->rechooseDept = 'Rechoose department';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Loại';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Thêm a customized bot in WeChat 
 $lang->webhook->note->typeList['default']   = 'Nhận a webhook url from others';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = 'Load php-curl in php.ini.';
+$lang->webhook->error->curl     = 'Load php-curl in php.ini.';
+$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';

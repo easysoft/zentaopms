@@ -1,17 +1,19 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Webhook列表';
-$lang->webhook->api      = '介面';
-$lang->webhook->entry    = '應用';
-$lang->webhook->log      = '日誌';
-$lang->webhook->bind     = '綁定用戶';
-$lang->webhook->assigned = '指派給';
-$lang->webhook->setting  = '設置';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Webhook列表';
+$lang->webhook->api        = '介面';
+$lang->webhook->entry      = '應用';
+$lang->webhook->log        = '日誌';
+$lang->webhook->bind       = '綁定用戶';
+$lang->webhook->chooseDept = '選擇同步部門';
+$lang->webhook->assigned   = '指派給';
+$lang->webhook->setting    = '設置';
 
-$lang->webhook->browse = '瀏覽Webhook';
-$lang->webhook->create = '添加Webhook';
-$lang->webhook->edit   = '編輯Webhook';
-$lang->webhook->delete = '刪除Webhook';
+$lang->webhook->browse       = '瀏覽Webhook';
+$lang->webhook->create       = '添加Webhook';
+$lang->webhook->edit         = '編輯Webhook';
+$lang->webhook->delete       = '刪除Webhook';
+$lang->webhook->rechooseDept = '重選部門';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = '類型';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = '請在企業微信中添加一個
 $lang->webhook->note->typeList['default']   = '從第三方系統獲取webhook並填寫到此處。';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = '需要加載php-curl擴展。';
+$lang->webhook->error->curl     = '需要加載php-curl擴展。';
+$lang->webhook->error->moreDept = '部門太多，獲取用戶可能會超時，請先選擇同步部門。';

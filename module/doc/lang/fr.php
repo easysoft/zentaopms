@@ -165,6 +165,7 @@ $lang->doc->accessDenied       = "Access is denied !";
 $lang->doc->versionNotFount    = "N'existe pas dans ce build.";
 $lang->doc->noDoc              = 'Aucun documents. ';
 $lang->doc->cannotCreateOffice = 'Désolé, %s peut seulement être créé dans ZenTao Enterprise. Contactez Zentao à renee@easysoft.ltd pour essayer ZenTao Enterprise.';
+$lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc      = 'Aucun documents trouvé.';
 $lang->doc->noEditedDoc        = "Vous n'avez pas mis à jour de documents.";
 $lang->doc->noOpenedDoc        = "Vous n'avez pas ajouté de documents.";

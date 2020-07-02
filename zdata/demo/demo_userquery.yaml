@@ -1,0 +1,55 @@
+title: table zt_userquery
+desc: "用户查询"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户名"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: module
+    note: "模块"
+    range: task,story,bug
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "名称"
+    range: 1-10000
+    prefix: "这是搜索条件名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: form
+    note: "表单字段"
+    range: 1-10000
+    prefix: "json格式的表单数据"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: sql
+    note: "SQL条件"
+    range: 1-10000
+    prefix: "SQL查询条件"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: shortcut
+    note: "显示在菜单栏"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

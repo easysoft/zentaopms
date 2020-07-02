@@ -784,6 +784,7 @@ class baseControl
         $actionExtPath     = $this->app->getModuleExtPath($appName, $moduleName, 'control');
         $file2Included     = $moduleControlFile;
 
+        $realClassName = $moduleName;
         if(!empty($actionExtPath))
         {
             /**
@@ -802,6 +803,10 @@ class baseControl
                 $siteActionExtFile = $actionExtPath['site'] . strtolower($methodName) . '.php';
                 $file2Included     = file_exists($siteActionExtFile) ? $siteActionExtFile : $file2Included;
             }
+
+            /* Get real class name to include extended file. */
+            if(strpos($file2Included, DS . 'ext' . DS) !== false) $realClassName = stripos(file_get_contents($file2Included), "class my{$moduleName} extends $moduleName") === false ? $moduleName : "my{$moduleName}";
+
         }
 
         /**
@@ -809,7 +814,7 @@ class baseControl
          * Load the control file. 
          */
         if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
-        if(!class_exists($moduleName))
+        if(!class_exists($realClassName))
         {
             chdir(dirname($file2Included));
             helper::import($file2Included);

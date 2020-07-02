@@ -1,6 +1,7 @@
 <?php
 $config->product = new stdclass();
-$config->product->orderBy = 'isClosed,order_desc';
+$config->product->orderBy      = 'isClosed,order_desc';
+$config->product->selectFields = 'line,PO,QD,RD,type';
 
 $config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,desc';
 

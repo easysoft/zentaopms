@@ -3,6 +3,7 @@
 .file-input .file-editbox{max-width:40%;}
 .file-input-list .input-group-btn{float:left}
 </style>
+<?php js::set('dangerExtensions', ',' . $this->config->file->dangers . ',');?>
 <div class="file-input-list" data-provide="fileInputList" data-each-file-max-size="<?php echo $maxUploadSize;?>" data-file-size-error="<?php echo sprintf($lang->file->errorFileSize, $maxUploadSize);?>">
   <div class="file-input">
     <div class="file-input-empty">
@@ -27,6 +28,22 @@
         <button type="button" class="btn btn-link file-input-delete"><?php echo $lang->delete;?></button>
       </div>
     </div>
-    <input type="file" name="<?php echo $filesName;?>[]">
+    <input type="file" name="<?php echo $filesName;?>[]" onchange="checkDangerExtension(this)" />
   </div>
 </div>
+<script>
+function checkDangerExtension(obj)
+{
+    var fileName = $(obj).val();
+    var index    = fileName.lastIndexOf(".");
+    if(index >= 0)
+    {
+        extension = fileName.substr(index + 1);
+        if(dangerExtensions.lastIndexOf(',' + extension + ',') >= 0)
+        {
+            alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
+            $(obj).val('');
+        }
+    }
+}
+</script>

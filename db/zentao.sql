@@ -403,6 +403,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `program` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` char(30) NOT NULL,
   `role` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
@@ -433,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `zt_jenkins` (
   `name` varchar(50) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `account` varchar(30) DEFAULT NULL,
-  `password` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,

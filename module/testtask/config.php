@@ -5,6 +5,8 @@ $config->testtask->edit   = new stdclass();
 $config->testtask->create->requiredFields = 'project,build,begin,end,name';
 $config->testtask->edit->requiredFields   = 'project,build,begin,end,name';
 
+$config->testtask->selectFields = 'project,build,owner';
+
 $config->testtask->importunitresult = new stdclass();
 $config->testtask->importunitresult->requiredFields = 'project,build,begin,end,name,resultFile';
 

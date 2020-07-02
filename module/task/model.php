@@ -27,6 +27,11 @@ class taskModel extends model
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
+        elseif($this->post->estimate === '0')
+        {
+            dao::$errors[] = $this->lang->task->error->recordZero;
+            return false;
+        }
         $projectID  = (int)$projectID;
         $taskIdList = array();
         $taskFiles  = array();
@@ -49,6 +54,7 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
+            ->cleanINT('project,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
@@ -117,19 +123,21 @@ class taskModel extends model
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
                     }
-                    $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
+                    $testStories = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
                     foreach($this->post->testStory as $i => $storyID)
                     {
                         if(!isset($testStories[$storyID])) continue;
 
-                        $task->parent     = $taskID;
-                        $task->story      = $storyID;
-                        $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
-                        $task->pri        = $this->post->testPri[$i];
-                        $task->estStarted = $this->post->testEstStarted[$i];
-                        $task->deadline   = $this->post->testDeadline[$i];
-                        $task->assignedTo = $this->post->testAssignedTo[$i];
-                        $task->estimate   = $this->post->testEstimate[$i];
+                        $task->parent       = $taskID;
+                        $task->story        = $storyID;
+                        $task->storyVersion = $testStories[$storyID]->version;
+                        $task->name         = $this->lang->task->lblTestStory . " #{$storyID} " . $testStories[$storyID]->title;
+                        $task->pri          = $this->post->testPri[$i];
+                        $task->estStarted   = $this->post->testEstStarted[$i];
+                        $task->deadline     = $this->post->testDeadline[$i];
+                        $task->assignedTo   = $this->post->testAssignedTo[$i];
+                        $task->estimate     = $this->post->testEstimate[$i];
+                        $task->left         = $this->post->testEstimate[$i];
                         $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
                         $childTaskID = $this->dao->lastInsertID();
@@ -751,6 +759,7 @@ class taskModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
+            ->cleanINT('project,story,module')
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
             ->get();

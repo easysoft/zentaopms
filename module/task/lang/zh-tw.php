@@ -202,6 +202,7 @@ $lang->task->error->totalNumber      = '"總計消耗"必須為數字';
 $lang->task->error->consumedNumber   = '"本次消耗"必須為數字';
 $lang->task->error->estimateNumber   = '"預計剩餘"必須為數字';
 $lang->task->error->recordMinus      = '工時不能為負數';
+$lang->task->error->recordZero       = '工時不能為零';
 $lang->task->error->consumedSmall    = '"總計消耗"必須大於之前消耗';
 $lang->task->error->consumedThisTime = '請填寫"工時"';
 $lang->task->error->left             = '請填寫"剩餘"';

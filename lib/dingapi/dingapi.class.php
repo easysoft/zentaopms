@@ -7,6 +7,7 @@ class dingapi
     private $token;
     private $expires;
     private $errors = array();
+    public  $maxRequest = 100;
 
     /**
      * Construct 
@@ -49,13 +50,15 @@ class dingapi
     /**
      * Get all users.
      * 
+     * @param  string $whiteListDept 
      * @access public
      * @return array
      */
-    public function getAllUsers()
+    public function getAllUsers($whiteListDept = '')
     {
-        $depts = $this->getAllDepts();
+        $depts = $this->getAllDepts($whiteListDept);
         if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
+        if(empty($whiteListDept) and count($depts) > $this->maxRequest) return array('result' => 'fail', 'message' => 'moreRequest');
 
         set_time_limit(0);
         $users = array();
@@ -77,15 +80,16 @@ class dingapi
     /**
      * Get all depts.
      * 
+     * @param  string $whiteList 
      * @access public
      * @return array
      */
-    public function getAllDepts()
+    public function getAllDepts($whiteList = '')
     {
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
         if($this->isError()) return false;
 
-        $whiteList = array();
+        /* Get parent and white list parent dept id list. */
         if($whiteList)
         {
             $parentIdList    = array();
@@ -93,7 +97,7 @@ class dingapi
             foreach($response->department as $dept)
             {
                 if(!empty($dept->parentid)) $parentIdList[$dept->id] = $dept->parentid;
-                if(in_array($dept->name, $whiteList)) $whiteListParent[$dept->id] = $dept->id;
+                if(strpos(",{$whiteList},", ",{$dept->id},") !== false) $whiteListParent[$dept->id] = $dept->id;
             }
         }
 
@@ -109,6 +113,7 @@ class dingapi
                     continue;
                 }
 
+                /* Check this dept belong to white list. */
                 $isWhiteList = false;
                 $parentID    = $dept->parentid;
                 while(isset($parentIdList[$parentID]))
@@ -127,6 +132,26 @@ class dingapi
             $deptPairs[$dept->id] = $dept->name;
         }
         return $deptPairs;
+    }
+
+    /**
+     * Get top depts.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getTopDepts()
+    {
+        $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
+        if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
+
+        $topDepts = array();
+        foreach($response->department as $dept)
+        {
+            if(isset($dept->parentid) and $dept->parentid == '1') $topDepts[$dept->id] = $dept->name;
+        }
+
+        return array('result' => 'success', 'data' => $topDepts);
     }
 
     /**

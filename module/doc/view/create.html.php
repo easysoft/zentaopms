@@ -17,7 +17,11 @@
     <div class='main-header'>
       <h2><?php echo $lang->doc->create;?></h2>
     </div>
+    <?php if(isset($this->config->bizVersion)):?>
+    <div class='alert alert-warning strong'><?php printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###');?></div>
+    <?php else:?>
     <div class='alert alert-warning strong'><?php printf($lang->doc->cannotCreateOffice, zget($lang->doc->typeList, $docType));?></div>
+    <?php endif;?>
   </div>
 </div>
 </body>

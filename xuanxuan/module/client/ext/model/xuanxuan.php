@@ -6,3 +6,11 @@ public function getCurrentVersion()
     if(dao::isError()) return false;
     return $currentVersion ?: json_decode('{"version": "' . $this->config->xuanxuan->version . '"}');
 }
+
+public function downloadZipPackage($version, $link)
+{
+    $decodeLink = helper::safe64Decode($link);
+    if(preg_match('/^https?\:\/\//', $decodeLink)) return false;
+
+    return parent::downloadZipPackage($version, $link);
+}

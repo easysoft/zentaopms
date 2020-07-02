@@ -21,7 +21,6 @@ $(function()
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
         oldProductID = $('#product').val();
-        $("#story, #task, #mailto").chosen();
     }
 
     if(window.flow != 'full')
@@ -48,7 +47,7 @@ function loadAll(productID)
         setAssignedTo();
     }
 
-    if(!changeProductConfirmed)
+    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
         firstChoice = confirm(confirmChangeProduct);
         changeProductConfirmed = true;    // Only notice the user one time.
@@ -246,10 +245,16 @@ function loadProductStories(productID)
  */
 function loadProductProjects(productID)
 {
-    branch = $('#branch').val();
+    required = $('#project_chosen').hasClass('required');
+    branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID + '&branch=' + branch);
-    $('#projectIdBox').load(link, function(){$(this).find('select').chosen()});
+    $('#projectIdBox').load(link, function()
+    {
+        $(this).find('select').chosen();
+        if(required) $('#project_chosen').addClass('required');
+    });
 }
 
 /**
@@ -378,6 +383,7 @@ function loadProjectBuilds(projectID)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
+            $('#openedBuild').val(oldOpenedBuild);
             $('#openedBuild_chosen').remove();
             $("#openedBuild").chosen();
             notice();
@@ -386,11 +392,11 @@ function loadProjectBuilds(projectID)
     else
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
         
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
 }
 

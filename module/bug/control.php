@@ -350,6 +350,11 @@ class bug extends control
 
         if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
+        if($testtask)
+        {
+            $testtask = $this->loadModel('testtask')->getById($testtask);
+            $buildID  = $testtask->build;
+        }
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID))
@@ -761,7 +766,7 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set product menu. */
@@ -1534,11 +1539,9 @@ class bug extends control
             {
                 if($this->post->fileType == 'csv')
                 {
-                    $bug->steps = htmlspecialchars_decode($bug->steps);
                     $bug->steps = str_replace("<br />", "\n", $bug->steps);
                     $bug->steps = str_replace('"', '""', $bug->steps);
                     $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
-                    $bug->steps = strip_tags($bug->steps);
                 }
 
                 /* fill some field with useful value. */
@@ -1602,6 +1605,7 @@ class bug extends control
                 }
 
                 /* Set related files. */
+                $bug->files = '';
                 if(isset($relatedFiles[$bug->id]))
                 {
                     foreach($relatedFiles[$bug->id] as $file)

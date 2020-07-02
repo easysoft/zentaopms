@@ -130,8 +130,8 @@
                   <?php endforeach;?>
                 </tbody>
               </table>
-              <?php if($countStories and $canBatchUnlink):?>
               <div class='table-footer'>
+                <?php if($countStories and $canBatchUnlink):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php
@@ -149,8 +149,13 @@
                   ?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+                <?php endif;?>
+                <?php
+                $this->app->rawParams['type'] = 'story';
+                $storyPager->show('right', 'pagerjs');
+                $this->app->rawParams['type'] = $type;
+                ?>
               </div>
-              <?php endif;?>
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
@@ -215,15 +220,20 @@
                   <?php endforeach;?>
                 </tbody>
               </table>
-              <?php if($countBugs and $canBatchUnlink):?>
               <div class='table-footer'>
+                <?php if($countBugs and $canBatchUnlink):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
+                <?php endif;?>
+                <?php
+                $this->app->rawParams['type'] = 'bug';
+                $bugPager->show('right', 'pagerjs');
+                $this->app->rawParams['type'] = $type;
+                ?>
               </div>
-              <?php endif;?>
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
@@ -301,15 +311,20 @@
                   <?php endforeach;?>
                 </tbody>
               </table>
-              <?php if($countLeftBugs and $canBatchUnlink):?>
               <div class='table-footer'>
+                <?php if($countLeftBugs and $canBatchUnlink):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
+                <?php endif;?>
+                <?php
+                $this->app->rawParams['type'] = 'leftBug';
+                $leftBugPager->show('right', 'pagerjs');
+                $this->app->rawParams['type'] = $type;
+                ?>
               </div>
-              <?php endif;?>
             </form>
           </div>
 
