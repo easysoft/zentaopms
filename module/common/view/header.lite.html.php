@@ -46,7 +46,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
-  if(!defined('IN_INSTALL') and commonModel::isTutorialMode())
+  if(defined('IN_USE') and commonModel::isTutorialMode())
   {
       $wizardModule    = defined('WIZARD_MODULE') ? WIZARD_MODULE : $this->moduleName;
       $wizardMethod    = defined('WIZARD_METHOD') ? WIZARD_METHOD : $this->methodName;

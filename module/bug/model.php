@@ -2845,6 +2845,13 @@ class bugModel extends model
         return array($toList, $ccList);
     }
 
+    /**
+     * Summary 
+     * 
+     * @param  array    $bugs 
+     * @access public
+     * @return string
+     */
     public function summary($bugs)
     {
         $unresolved = 0;
