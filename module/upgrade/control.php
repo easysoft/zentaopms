@@ -141,7 +141,7 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(version_compare(str_replace('_', '.', $fromVersion), '15', '<')) $this->locate(inlink('mergeProgram'));
+            if(version_compare(str_replace('_', '.', $fromVersion), '15', '<') && !isset($this->config->qcVersion)) $this->locate(inlink('mergeProgram'));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
