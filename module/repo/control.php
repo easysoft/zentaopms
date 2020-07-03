@@ -716,19 +716,21 @@ class repo extends control
                 /* Init branchID. */
                 if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
                 if(!isset($branches[$branchID])) $branchID = '';
-                if(empty($branchID)) $branchID = reset($branches);
+                if(empty($branchID)) $branchID = 'master';
 
                 /* Get unsynced branches. */
-                foreach($branches as $branch)
+                unset($branches['master']);
+                if($branchID != 'master')
                 {
-                    unset($branches[$branch]);
-                    if($branch == $branchID)
+                    foreach($branches as $branch)
                     {
-                        $this->repo->setRepoBranch($branchID);
-                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
-                        break;
+                        unset($branches[$branch]);
+                        if($branch == $branchID) break;
                     }
                 }
+
+                $this->repo->setRepoBranch($branchID);
+                setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
             }
         }
 
@@ -753,7 +755,7 @@ class repo extends control
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        if(empty($commitCount) or ($type == 'batch' and $commitCount < $this->config->repo->batchNum))
+        if(empty($commitCount))
         {
             if(!$repo->synced)
             {
@@ -813,7 +815,7 @@ class repo extends control
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
-        if(empty($commitCount) or $commitCount < $this->config->repo->batchNum)
+        if(empty($commitCount))
         {
             if($branch) $this->repo->saveExistCommits4Branch($repo->id, $branch);
 
