@@ -835,7 +835,7 @@ class storyModel extends model
                 $story->version        = $story->title == $oldStory->title ? $oldStory->version : $oldStory->version + 1;
                 if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
-                if($story->title        != $oldStory->title)                         $story->status     = 'changed';
+                if($story->title != $oldStory->title and $story->status != draft)    $story->status     = 'changed';
                 if($story->plan         !== false and $story->plan == '')            $story->plan       = 0;
                 if($story->closedBy     != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
