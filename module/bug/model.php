@@ -417,8 +417,8 @@ class bugModel extends model
 
     /**
      * Check bug project priv.
-     * 
-     * @param  object    $bug 
+     *
+     * @param  object    $bug
      * @access public
      * @return void
      */
@@ -1428,7 +1428,7 @@ class bugModel extends model
      * @param  int    $param
      * @param  string $orderBy
      * @param  object $pager
-     * @param  array  $excludeBugs 
+     * @param  array  $excludeBugs
      * @access public
      * @return array
      */
@@ -1489,9 +1489,9 @@ class bugModel extends model
      *
      * @param  int    $build
      * @param  int    $productID
-     * @param  int    $branch 
-     * @param  string $linkedBugs 
-     * @param  object $pager 
+     * @param  int    $branch
+     * @param  string $linkedBugs
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -2490,7 +2490,7 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
+    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $toTasks = array(), $mode = 'datatable')
     {
         $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
         $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
@@ -2607,6 +2607,13 @@ class bugModel extends model
                 if(isset($tasks[$bug->task]))
                 {
                     $task = $tasks[$bug->task];
+                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                }
+                break;
+            case 'toTask':
+                if(isset($toTasks[$bug->toTask]))
+                {
+                    $task = $toTasks[$bug->toTask];
                     echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
                 }
                 break;
@@ -2846,9 +2853,9 @@ class bugModel extends model
     }
 
     /**
-     * Summary 
-     * 
-     * @param  array    $bugs 
+     * Summary
+     *
+     * @param  array    $bugs
      * @access public
      * @return string
      */

@@ -123,14 +123,16 @@ class bug extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
 
         /* Get story and task id list. */
-        $storyIdList = $taskIdList = array();
+        $storyIdList = $taskIdList = $toTaskIdList = tarray();
         foreach($bugs as $bug)
         {
             if($bug->story) $storyIdList[$bug->story] = $bug->story;
             if($bug->task)  $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask)  $taskIdList[$bug->toTask]   = $bug->toTask;
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+        $toTaskList  = $toTaskIdList  ? $this->loadModel('task')->getByList($toTaskIdList)   : array();
 
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
@@ -166,6 +168,7 @@ class bug extends control
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories       = $storyList;
         $this->view->tasks         = $taskList;
+        $this->view->toTasks       = $toTaskList;
         $this->view->setModule     = true;
 
         $this->display();
@@ -414,7 +417,7 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        $productList = $this->product->getOrderedProducts('all'); 
+        $productList = $this->product->getOrderedProducts('all');
         foreach($productList as $product) $products[$product->id] = $product->name;
 
         /* Set custom. */
@@ -1534,7 +1537,7 @@ class bug extends control
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getAllModulePairs('bug');
-            
+
             foreach($bugs as $bug)
             {
                 if($this->post->fileType == 'csv')
@@ -1555,7 +1558,7 @@ class bug extends control
                 if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
                 if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
                 if(isset($relatedBranch[$bug->branch]))        $bug->branch        = $relatedBranch[$bug->branch] . "(#$bug->branch)";
-                
+
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
                 if(isset($bugLang->severityList[$bug->severity]))     $bug->severity   = $bugLang->severityList[$bug->severity];
@@ -1576,8 +1579,8 @@ class bug extends control
                 $bug->closedDate     = substr($bug->closedDate,     0, 10);
                 $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
                 $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
-                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
-     
+                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);
+
                 if($bug->linkBug)
                 {
                     $tmpLinkBugs = array();
@@ -1666,9 +1669,9 @@ class bug extends control
 
     /**
      * Ajax get bug filed options for auto test.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */

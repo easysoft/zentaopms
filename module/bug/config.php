@@ -12,28 +12,28 @@ $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->list = new stdclass();
-$config->bug->list->allFields = 'id, module, project, story, task, 
+$config->bug->list->allFields = 'id, module, project, story, task,
     title, keywords, severity, pri, type, os, browser, hardware,
     found, steps, status, deadline, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
+    openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
+    closedBy, closedDate,
+    duplicateBug, linkBug,
     case,
     lastEditedBy,
     lastEditedDate';
 
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
-$config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
+$config->bug->list->exportFields = 'id, product, branch, module, project, story, task,
     title, keywords, severity, pri, type, os, browser,
     steps, status, deadline, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
+    openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
+    closedBy, closedDate,
+    duplicateBug, linkBug,
     case,
     lastEditedBy,
     lastEditedDate, files';
@@ -237,6 +237,11 @@ $config->bug->datatable->fieldList['task']['title']    = 'task';
 $config->bug->datatable->fieldList['task']['fixed']    = 'no';
 $config->bug->datatable->fieldList['task']['width']    = '120';
 $config->bug->datatable->fieldList['task']['required'] = 'no';
+
+$config->bug->datatable->fieldList['toTask']['title']    = 'toTask';
+$config->bug->datatable->fieldList['toTask']['fixed']    = 'no';
+$config->bug->datatable->fieldList['toTask']['width']    = '120';
+$config->bug->datatable->fieldList['toTask']['required'] = 'no';
 
 $config->bug->datatable->fieldList['keywords']['title']    = 'keywords';
 $config->bug->datatable->fieldList['keywords']['fixed']    = 'no';
