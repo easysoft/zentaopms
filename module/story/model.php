@@ -497,7 +497,7 @@ class storyModel extends model
                 $data->title   = $story->title;
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
-                $this->dao->replace(TABLE_STORYSPEC)->data($data)->exec();
+                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
             }
             else
             {
@@ -963,7 +963,12 @@ class storyModel extends model
         {
             $preTitle = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($this->post->preVersion)->fetch('title');
             $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->where('id')->eq($storyID)->exec();
-            $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
+
+            /* Delete versions that is after this version. */
+            $deleteVersion = array();
+            for($version = $oldStory->version; $version > $story->version; $version --) $deleteVersion[] = $version;
+            if($deleteVersion) $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->in($deleteVersion)->exec();
+
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
