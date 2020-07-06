@@ -2666,11 +2666,12 @@ class storyModel extends model
 
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
 
-        if($action == 'change')   return $story->status != 'closed';
-        if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
-        if($action == 'close')    return $story->status != 'closed';
-        if($action == 'activate') return $story->status == 'closed';
-        if($action == 'assignto') return $story->status != 'closed';
+        if($action == 'change')     return $story->status != 'closed';
+        if($action == 'review')     return $story->status == 'draft' or $story->status == 'changed';
+        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'activate')   return $story->status == 'closed';
+        if($action == 'assignto')   return $story->status != 'closed';
+        if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement') return $story->status != 'draft';
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;
