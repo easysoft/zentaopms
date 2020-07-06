@@ -48,7 +48,7 @@
         <div class='text'>
           <?php echo html::submitButton($lang->save, '', 'btn btn-primary');?>
           <?php echo html::a($this->createLink('webhook', 'browse'), $lang->goback, '', "class='btn'");?>
-          <?php if($selectedDepts) echo html::a($this->createLink('webhook', 'chooseDept', "id={$webhook->id}"), $lang->webhook->rechooseDept, '', "class='btn'");?>
+          <?php if($selectedDepts) echo html::a($this->createLink('webhook', 'chooseDept', "id={$webhook->id}"), $lang->webhook->chooseDeptAgain, '', "class='btn'");?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

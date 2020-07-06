@@ -9,11 +9,10 @@ $lang->webhook->chooseDept = '选择同步部门';
 $lang->webhook->assigned   = '指派给';
 $lang->webhook->setting    = '设置';
 
-$lang->webhook->browse       = '浏览Webhook';
-$lang->webhook->create       = '添加Webhook';
-$lang->webhook->edit         = '编辑Webhook';
-$lang->webhook->delete       = '删除Webhook';
-$lang->webhook->rechooseDept = '重选部门';
+$lang->webhook->browse = '浏览Webhook';
+$lang->webhook->create = '添加Webhook';
+$lang->webhook->edit   = '编辑Webhook';
+$lang->webhook->delete = '删除Webhook';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = '类型';
@@ -46,11 +45,12 @@ $lang->webhook->typeList['default']     = '其他';
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '异步';
 
-$lang->webhook->dingAgentId    = '钉钉AgentId';
-$lang->webhook->dingAppKey     = '钉钉AppKey';
-$lang->webhook->dingAppSecret  = '钉钉AppSecret';
-$lang->webhook->dingUserid     = '钉钉用户';
-$lang->webhook->dingBindStatus = '钉钉绑定状态';
+$lang->webhook->dingAgentId     = '钉钉AgentId';
+$lang->webhook->dingAppKey      = '钉钉AppKey';
+$lang->webhook->dingAppSecret   = '钉钉AppSecret';
+$lang->webhook->dingUserid      = '钉钉用户';
+$lang->webhook->dingBindStatus  = '钉钉绑定状态';
+$lang->webhook->chooseDeptAgain = '重选部门';
 
 $lang->webhook->wechatCorpId     = '企业ID';
 $lang->webhook->wechatCorpSecret = '应用的凭证密钥';

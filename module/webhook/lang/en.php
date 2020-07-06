@@ -9,11 +9,10 @@ $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'AssignedTo';
 $lang->webhook->setting    = 'Settings';
 
-$lang->webhook->browse       = 'Browse';
-$lang->webhook->create       = 'Create';
-$lang->webhook->edit         = 'Edit';
-$lang->webhook->delete       = 'Delete';
-$lang->webhook->rechooseDept = 'Rechoose department';
+$lang->webhook->browse = 'Browse';
+$lang->webhook->create = 'Create';
+$lang->webhook->edit   = 'Edit';
+$lang->webhook->delete = 'Delete';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Type';
@@ -46,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Others';
 $lang->webhook->sendTypeList['sync']  = 'Synchronous';
 $lang->webhook->sendTypeList['async'] = 'Asynchronous';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding UserID';
-$lang->webhook->dingBindStatus = 'Bind Status';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding UserID';
+$lang->webhook->dingBindStatus  = 'Bind Status';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
