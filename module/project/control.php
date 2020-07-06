@@ -695,7 +695,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
+        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
 
@@ -812,7 +812,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, $pager);
+        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -2004,7 +2004,7 @@ class project extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', $queryID, 'id', null, $projectID);
+            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $projectID);
         }
         else
         {

@@ -417,11 +417,11 @@ class release extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $queryID, 'id', $pager, $build->project ? $build->project : '', $release->branch, 'story', $release->stories);
+            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $build->project ? $build->project : '', 'story', $release->stories, $pager);
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byModule', 0, $pager, 'story', $release->stories);
+            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byModule', 0, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;
@@ -538,7 +538,7 @@ class release extends control
         $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc', $pager, $release->branch, $releaseBugs);
+            $allBugs = $this->bug->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $releaseBugs, $pager);
         }
         elseif($build->project)
         {

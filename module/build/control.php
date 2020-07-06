@@ -250,7 +250,7 @@ class build extends control
             $this->view->storyPager    = $storyPager;
 
             $newBugPager = new pager($type == 'newbug' ? $recTotal : 0, $recPerPage, $type == 'newbug' ? $pageID : 1);
-            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'newbug' ? $orderBy : 'status_desc,id_desc', $newBugPager);
+            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'newbug' ? $orderBy : 'status_desc,id_desc', '', $newBugPager);
             $this->view->newBugPager   = $newBugPager;
         }
 
@@ -474,11 +474,11 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', $pager, $build->project, $build->branch, 'story', $build->stories);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $build->project, 'story', $build->stories, $pager);
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byModule', 0, $pager, 'story', $build->stories);
+            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byModule', 0, 'story', $build->stories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -595,11 +595,11 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $queryID, 'id_desc', $pager, $build->branch, $build->bugs);
+            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->bugs, $pager);
         }
         else
         {
-            $allBugs = $this->bug->getProjectBugs($build->project, 0, 'noclosed', 0, 'status_desc,id_desc', $pager, $build->bugs);
+            $allBugs = $this->bug->getProjectBugs($build->project, 0, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;

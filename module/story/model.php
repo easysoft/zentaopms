@@ -1586,7 +1586,7 @@ class storyModel extends model
         if($browseType == 'bySearch')
         {
             $story        = $this->getById($storyID);
-            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id');
             foreach($stories2Link as $key => $story2Link)
             {
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
@@ -1828,17 +1828,17 @@ class storyModel extends model
      *
      * @access public
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
      * @param  string $projectID
-     * @param  int    $branch
      * @param  string $type requirement|story
      * @param  string $excludeStories 
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story', $excludeStories = '')
+    public function getBySearch($productID, $branch = 0, $queryID, $orderBy, $projectID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
         if($projectID != '')
         {
@@ -1945,13 +1945,13 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  string $type
      * @param  int    $param
-     * @param  object $pager
      * @param  string $storyType 
      * @param  string $excludeStories 
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null, $storyType = 'story', $excludeStories = '')
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 

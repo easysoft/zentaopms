@@ -368,7 +368,7 @@ class bugModel extends model
         elseif($browseType == 'longlifebugs')  $bugs = $this->getByLonglifebugs($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productID, $branch, $modules, $projects, $sort, $pager);
-        elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
+        elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $branch, $queryID, $sort, '', $pager);
         elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productID, $branch, $modules, $projects, $sort, $pager);
 
         return $this->checkDelayBugs($bugs);
@@ -1245,7 +1245,7 @@ class bugModel extends model
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugs2Link = $this->getBySearch($bug->product, $queryID, 'id', null, $bug->branch);
+            $bugs2Link = $this->getBySearch($bug->product, $bug->branch, $queryID, 'id');
             foreach($bugs2Link as $key => $bug2Link)
             {
                 if($bug2Link->id == $bugID) unset($bugs2Link[$key]);
@@ -1427,12 +1427,12 @@ class bugModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  string $orderBy
+     * @param  string $excludeBugs 
      * @param  object $pager
-     * @param  array  $excludeBugs 
      * @access public
      * @return array
      */
-    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $pager = null, $excludeBugs = array())
+    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -2311,15 +2311,15 @@ class bugModel extends model
      * Get bugs by search.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $queryID
      * @param  string $orderBy
+     * @param  string $excludeBugs
      * @param  object $pager
-     * @param  int    $branch
-     * @param  array  $excludeBugs
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0, $excludeBugs = '')
+    public function getBySearch($productID, $branch = 0, $queryID, $orderBy, $excludeBugs = '', $pager = null)
     {
         if($queryID)
         {
