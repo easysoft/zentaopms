@@ -15,10 +15,11 @@ class build extends control
      * Create a build.
      * 
      * @param  int    $projectID 
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create($projectID, $productID = 0)
     {
         if(!empty($_POST))
         {
@@ -65,7 +66,7 @@ class build extends control
             $project = $this->loadModel('project')->getById($projectID);
 
             $productGroups = $this->project->getProducts($projectID);
-            $productID     = key($productGroups);
+            $productID     = $productID ? $productID : key($productGroups);
             $products      = array();
             foreach($productGroups as $product) $products[$product->id] = $product->name;
 
@@ -396,7 +397,7 @@ class build extends control
             {
                 if(empty($builds))
                 {
-                    echo html::a($this->createLink('build', 'create', "projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                     echo '&nbsp; ';
                     echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
                 }
