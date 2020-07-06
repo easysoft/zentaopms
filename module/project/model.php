@@ -1050,15 +1050,15 @@ class projectModel extends model
         }
 
         $total = $this->dao->select('
-            ROUND(SUM(estimate), 1) AS totalEstimate,
-            ROUND(SUM(consumed), 1) AS totalConsumed,
-            ROUND(SUM(`left`), 1) AS totalLeft')
+            ROUND(SUM(estimate), 2) AS totalEstimate,
+            ROUND(SUM(consumed), 2) AS totalConsumed,
+            ROUND(SUM(`left`), 2) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 1) AS totalLeft')->from(TABLE_TASK)
+        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
