@@ -90,7 +90,7 @@
           <td><?php echo zget($users, $task->owner);?></td>
           <td><?php echo $task->begin?></td>
           <td><?php echo $task->end?></td>
-          <?php $status = $this->processStatus('task', $task);?>
+          <?php $status = $this->processStatus('testtask', $task);?>
           <td title='<?php echo $status;?>'>
             <span class='status-testtask status-<?php echo $task->status?>'><?php echo $status;?></span>
           </td>
