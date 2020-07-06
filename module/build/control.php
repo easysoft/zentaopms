@@ -250,9 +250,9 @@ class build extends control
             $this->view->stories       = $stories;
             $this->view->storyPager    = $storyPager;
 
-            $newBugPager = new pager($type == 'newbug' ? $recTotal : 0, $recPerPage, $type == 'newbug' ? $pageID : 1);
-            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'newbug' ? $orderBy : 'status_desc,id_desc', '', $newBugPager);
-            $this->view->newBugPager   = $newBugPager;
+            $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
+            $this->view->generatedBugs     = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
+            $this->view->generatedBugPager = $generatedBugPager;
         }
 
         $this->executeHooks($buildID);

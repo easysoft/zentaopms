@@ -202,14 +202,14 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $allNewBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
-        $foundBugs   = array();
-        $legacyBugs  = array();
-        $byCaseNum   = 0;
-        $buildIdList = array_keys($builds);
-        $taskIdList  = array_keys($tasks);
+        $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $foundBugs     = array();
+        $legacyBugs    = array();
+        $byCaseNum     = 0;
+        $buildIdList   = array_keys($builds);
+        $taskIdList    = array_keys($tasks);
 
-        foreach($allNewBugs as $bug)
+        foreach($generatedBugs as $bug)
         {
             if(!array_diff(explode(',', $bug->openedBuild), $buildIdList))
             {
