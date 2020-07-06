@@ -205,12 +205,14 @@ class fileModel extends model
         $file['title']     = $purifier->purify($file['title']);
         $file['size']      = $_POST['size'];
         $file['tmpname']   = $tmp_name;
-        /* Fix for build uuid like '../../'. */
-        $file['uuid']      = str_replace(array('.', '/', '\\'), '', $_POST['uuid']);
+        $file['uuid']      = $_POST['uuid'];
         $file['pathname']  = $this->setPathName(0, $file['extension']);
         $file['chunkpath'] = 'chunks' . DS .'f_' . $file['uuid'] . '.' . $file['extension'] . '.part';
         $file['chunks']    = isset($_POST['chunks']) ? intval($_POST['chunks']) : 0;
         $file['chunk']     = isset($_POST['chunk'])  ? intval($_POST['chunk'])  : 0;
+
+        /* Fix for build uuid like '../../'. */
+        if(!preg_match('/[a-z0-9_]/i', $file['uuid'])) return false;
 
         if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
         {
