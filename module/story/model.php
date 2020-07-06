@@ -347,6 +347,7 @@ class storyModel extends model
             {
                 $field = trim($field);
                 if(empty($field)) continue;
+                if($type == 'requirement' and $field == 'plan') continue;
 
                 if(!empty($story->$field)) continue;
                 if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
