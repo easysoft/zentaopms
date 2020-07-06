@@ -81,6 +81,7 @@ $lang->mail->noticeResend   = 'The Email has been re-sent!';
 $lang->mail->inputFromEmail = 'Sender Email';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Email settings are saved.';
+$lang->mail->setForUser     = 'Could not test mail configure because the users are without mail in system. Please set mail for user first.';
 $lang->mail->testSubject    = 'Testing Email';
 $lang->mail->testContent    = 'Email settings are done!';
 $lang->mail->successSended  = 'Sent!';
