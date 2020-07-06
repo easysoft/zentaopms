@@ -807,7 +807,7 @@ class testcase extends control
             $changes = $this->testcase->review($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if($changes)
+            if($changes or $this->post->comment != '')
             {
                 $result = $this->post->result;
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
