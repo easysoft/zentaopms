@@ -11,45 +11,51 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/ztree.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block mw-800px'>
     <div class='main-header'>
       <h2><?php echo $lang->webhook->chooseDept?></h2>
     </div>
-    <table id='deptList' class='table table-fixed table-bordered active-disabled table-hover'>
-      <tbody>
-      <?php foreach($topDepts as $deptID => $deptName):?>
-      <tr>
-        <td><?php echo html::checkbox('deptID', array($deptID => $deptName));?></td>
-      </tr>
-      <?php endforeach;?>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>
-            <?php echo html::selectAll();?>
-            <?php echo html::selectReverse();?>
-            <?php echo html::commonButton($lang->save, '', 'btn btn-primary save');?>
-            <?php echo html::a($this->createLink('webhook', 'browse'), $lang->goback, '', "class='btn'");?>
-          </td>
-      </tfoot>
-    </table>
+    <ul id='deptList' class="ztree"></ul>
+    <div class='actions'>
+      <?php echo html::commonButton($lang->save, '', 'btn btn-primary save');?>
+      <?php echo html::a($this->createLink('webhook', 'browse'), $lang->goback, '', "class='btn'");?>
+    </div>
   </div>
 </div>
+<?php js::set('deptTree', $deptTree);?>
 <script>
 $(function()
 {
-    $('#deptList tfoot .save').click(function()
+    var ztreeSettings = 
     {
-        var whiteListDept = '';
-        $('#deptList tbody tr td :checkbox[id^=deptID]:checked').each(function()
+        check: 
         {
-            whiteListDept += ',' + $(this).val();
-        });
-        if(whiteListDept) whiteListDept = whiteListDept.substr(1);
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: {"Y":"s", "N":"s"}
+        },
+        data:
+        {
+            simpleData: {enable: true}
+        }
+    };
+    ztreeObj = $.fn.zTree.init($("#deptList"), ztreeSettings, deptTree);
+
+    $('.actions .save').click(function()
+    {
+        var nodes = ztreeObj.getCheckedNodes(true);
+        var selectedDepts = '';
+        for(i in nodes)
+        {
+            node = nodes[i];
+            selectedDepts += ',' + node.id;
+        }
+        if(selectedDepts) selectedDepts = selectedDepts.substr(1);
 
         var sign = config.requestType == 'PATH_INFO' ? '?' : '&';
-        var link = createLink('webhook', 'bind', "id=<?php echo $webhookID;?>") + sign + "whiteListDept=" + whiteListDept;
+        var link = createLink('webhook', 'bind', "id=<?php echo $webhookID;?>") + sign + "selectedDepts=" + selectedDepts;
         location.href = link;
 
         return false;

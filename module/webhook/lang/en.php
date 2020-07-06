@@ -92,5 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat an
 $lang->webhook->note->typeList['default']   = 'Get a webhook url from others';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl     = 'Load php-curl in php.ini.';
-$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';
+$lang->webhook->error->curl   = 'Load php-curl in php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

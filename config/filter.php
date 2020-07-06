@@ -242,5 +242,5 @@ $filter->repo->diff->cookie['repoPairs']     = 'array';
 $filter->repo->view->cookie['repoPairs']     = 'array';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
 
-$filter->webhook->bind->get['whiteListDept']    = 'reg::checked';
-$filter->webhook->bind->cookie['whiteListDept'] = 'reg::checked';
+$filter->webhook->bind->get['selectedDepts']    = 'reg::checked';
+$filter->webhook->bind->cookie['selectedDepts'] = 'reg::checked';

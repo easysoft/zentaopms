@@ -40,8 +40,8 @@ class webhook extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Unset whiteListDept cookie. */
-        setcookie('whiteListDept', '', 0, $this->config->webRoot, '', false, true);
+        /* Unset selectedDepts cookie. */
+        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', false, true);
 
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
@@ -178,19 +178,19 @@ class webhook extends control
         }
         $webhook->secret = json_decode($webhook->secret);
 
-        /* Get whiteList dept. */
-        if($this->get->whiteListDept)
+        /* Get selected depts. */
+        if($this->get->selectedDepts)
         {
-            setcookie('whiteListDept', $this->get->whiteListDept, 0, $this->config->webRoot, '', false, true);
-            $_COOKIE['whiteListDept'] = $this->get->whiteListDept;
+            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', false, true);
+            $_COOKIE['selectedDepts'] = $this->get->selectedDepts;
         }
-        $whiteListDept = $this->cookie->whiteListDept ? $this->cookie->whiteListDept : '';
+        $selectedDepts = $this->cookie->selectedDepts ? $this->cookie->selectedDepts : '';
 
         if($webhook->type == 'dinguser')
         {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getAllUsers($whiteListDept);
+            $response = $dingapi->getUsers($selectedDepts);
         }
         elseif($webhook->type == 'wechatuser')
         {
@@ -201,9 +201,9 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
-            if($response['message'] == 'moreRequest')
+            if($response['message'] == 'nodept')
             {
-                echo js::error($this->webhook->error->moreDept);
+                echo js::error($this->lang->webhook->error->noDept);
                 die(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
             }
 
@@ -239,7 +239,7 @@ class webhook extends control
         $this->view->users         = $users;
         $this->view->pager         = $pager;
         $this->view->bindedUsers   = $bindedPairs;
-        $this->view->whiteListDept = $whiteListDept;
+        $this->view->selectedDepts = $selectedDepts;
         $this->display();
     }
 
@@ -264,7 +264,7 @@ class webhook extends control
         {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getTopDepts();
+            $response = $dingapi->getDeptTree();
         }
 
         if($response['result'] == 'fail')
@@ -276,7 +276,7 @@ class webhook extends control
         $this->view->title      = $this->lang->webhook->chooseDept;
         $this->view->position[] = $this->lang->webhook->chooseDept;
 
-        $this->view->topDepts  = $response['data'];
+        $this->view->deptTree  = $response['data'];
         $this->view->webhookID = $id;
         $this->display();
     }

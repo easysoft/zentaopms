@@ -7,7 +7,6 @@ class dingapi
     private $token;
     private $expires;
     private $errors = array();
-    public  $maxRequest = 100;
 
     /**
      * Construct 
@@ -48,22 +47,23 @@ class dingapi
     }
 
     /**
-     * Get all users.
+     * Get users.
      * 
-     * @param  string $whiteListDept 
+     * @param  string $selectedDepts
      * @access public
      * @return array
      */
-    public function getAllUsers($whiteListDept = '')
+    public function getUsers($selectedDepts = '')
     {
-        $depts = $this->getAllDepts($whiteListDept);
-        if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
-        if(empty($whiteListDept) and count($depts) > $this->maxRequest) return array('result' => 'fail', 'message' => 'moreRequest');
+        $depts = trim($selectedDepts);
+        if(empty($depts)) return array('result' => 'fail', 'message' => 'nodept');
 
         set_time_limit(0);
         $users = array();
-        foreach($depts as $deptID => $deptName)
+        foreach(explode(',', $depts) as $deptID)
         {
+            if(empty($deptID)) continue;
+
             $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}");
             if($this->isError())
             {
@@ -78,80 +78,39 @@ class dingapi
     }
 
     /**
-     * Get all depts.
-     * 
-     * @param  string $whiteList 
-     * @access public
-     * @return array
-     */
-    public function getAllDepts($whiteList = '')
-    {
-        $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
-        if($this->isError()) return false;
-
-        /* Get parent and white list parent dept id list. */
-        if($whiteList)
-        {
-            $parentIdList    = array();
-            $whiteListParent = array();
-            foreach($response->department as $dept)
-            {
-                if(!empty($dept->parentid)) $parentIdList[$dept->id] = $dept->parentid;
-                if(strpos(",{$whiteList},", ",{$dept->id},") !== false) $whiteListParent[$dept->id] = $dept->id;
-            }
-        }
-
-        $deptPairs = array();
-        foreach($response->department as $dept)
-        {
-            if($whiteList)
-            {
-                if(empty($dept->parentid)) continue;
-                if(isset($whiteListParent[$dept->id]))
-                {
-                    $deptPairs[$dept->id] = $dept->name;
-                    continue;
-                }
-
-                /* Check this dept belong to white list. */
-                $isWhiteList = false;
-                $parentID    = $dept->parentid;
-                while(isset($parentIdList[$parentID]))
-                {
-                    if(isset($whiteListParent[$parentID]))
-                    {
-                        $isWhiteList = true;
-                        break;
-                    }
-
-                    $parentID = $parentIdList[$parentID];
-                }
-                if(!$isWhiteList) continue;
-            }
-
-            $deptPairs[$dept->id] = $dept->name;
-        }
-        return $deptPairs;
-    }
-
-    /**
-     * Get top depts.
+     * Get dept tree.
      * 
      * @access public
      * @return array
      */
-    public function getTopDepts()
+    public function getDeptTree()
     {
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
         if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
 
-        $topDepts = array();
+        $parentDepts = array();
         foreach($response->department as $dept)
         {
-            if(isset($dept->parentid) and $dept->parentid == '1') $topDepts[$dept->id] = $dept->name;
+            $parentID = isset($dept->parentid) ? $dept->parentid : 0;
+            $parentDepts[$parentID][$dept->id] = $dept->name;
         }
 
-        return array('result' => 'success', 'data' => $topDepts);
+        $tree = array();
+        foreach($parentDepts as $parentID => $depts)
+        {
+            foreach($depts as $deptID => $deptName)
+            {
+                $node = array();
+                $node['id']   = $deptID;
+                $node['pId']  = $parentID;
+                $node['name'] = $deptName;
+                if($parentID == 0) $node['open'] = true;
+
+                $tree[] = $node;
+            }
+        }
+
+        return array('result' => 'success', 'data' => $tree);
     }
 
     /**

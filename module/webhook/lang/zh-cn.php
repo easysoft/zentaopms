@@ -92,5 +92,5 @@ $lang->webhook->note->typeList['weixin']    = '请在企业微信中添加一个
 $lang->webhook->note->typeList['default']   = '从第三方系统获取webhook并填写到此处。';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl     = '需要加载php-curl扩展。';
-$lang->webhook->error->moreDept = '部门太多，获取用户可能会超时，请先选择同步部门。';
+$lang->webhook->error->curl   = '需要加载php-curl扩展。';
+$lang->webhook->error->noDept = '没有选择部门，请先选择同步部门。';
