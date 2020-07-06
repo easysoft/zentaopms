@@ -145,7 +145,7 @@ class bugModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(strpos($this->config->bug->create->requiredFields, 'project') !== false, 'project', $this->post->project)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product, module, severity')
+            ->cleanInt('product,project,module,severity')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->remove('files, labels,uid,oldTaskID,contactListMenu')
@@ -230,10 +230,10 @@ class bugModel extends model
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
-            $bug->product     = $productID;
-            $bug->branch      = $data->branches[$i];
-            $bug->module      = $data->modules[$i];
-            $bug->project     = $data->projects[$i];
+            $bug->product     = (int)$productID;
+            $bug->branch      = (int)$data->branches[$i];
+            $bug->module      = (int)$data->modules[$i];
+            $bug->project     = (int)$data->projects[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->color       = $data->color[$i];
             $bug->title       = $data->title[$i];
@@ -637,9 +637,9 @@ class bugModel extends model
 
         $now = helper::now();
         $bug = fixer::input('post')
-            ->cleanInt('product,module,severity,project,story,task')
+            ->cleanInt('product,module,severity,project,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('project,module,project,story,task,duplicateBug,branch', 0)
+            ->setDefault('product,module,project,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')

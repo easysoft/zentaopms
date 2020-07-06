@@ -98,6 +98,13 @@ class taskModel extends model
                 $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
                 $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
             }
+
+            if(strpos($requiredFields, ',estimate,') !== false)
+            {
+                if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
+                $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+            }
+
             $requiredFields = trim($requiredFields, ',');
 
             /* Fix Bug #2466 */
@@ -301,10 +308,10 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
-        $requiredFields = explode(',', $this->config->task->create->requiredFields);
-        if($projectType == 'ops') unset($requiredFields[array_search('story', $requiredFields)]);
-        $requiredFields = implode(',', $requiredFields);
+        $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($projectType == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $requiredFields = trim($requiredFields, ',');
 
         /* check data. */
         foreach($data as $i => $task)
@@ -314,19 +321,23 @@ class taskModel extends model
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
                 return false;
             }
+
             if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
             }
+
             foreach(explode(',', $requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($task->$field))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                    return false;
-                }
+                if(empty($field)) continue;
+
+                if(!empty($task->$field)) continue;
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
             }
             if($task->estimate) $task->estimate = (float)$task->estimate;
         }
@@ -337,7 +348,6 @@ class taskModel extends model
         {
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
 
@@ -815,9 +825,25 @@ class taskModel extends model
             }
         }
 
+        $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('type');
+        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
+        if($projectType == 'ops')
+        {
+            $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            $task->story = 0;
+        }
+
+        if($task->status != 'cancel' and strpos($requiredFields, ',estimate,') !== false)
+        {
+            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
+            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+        }
+
+        $requiredFields = trim($requiredFields, ',');
+
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
+            ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF($task->deadline != '0000-00-00', 'deadline', 'ge', $task->estStarted)
 
             ->checkIF($task->estimate != false, 'estimate', 'float')
@@ -930,6 +956,7 @@ class taskModel extends model
         /* Initialize tasks from the post data.*/
         $extendFields = $this->getFlowExtendFields();
         $oldTasks     = $taskIDList ? $this->getByList($taskIDList) : array();
+        $tasks        = array();
         foreach($taskIDList as $taskID)
         {
             $oldTask = $oldTasks[$taskID];
@@ -1028,9 +1055,30 @@ class taskModel extends model
             }
             if($task->assignedTo) $task->assignedDate = $now;
 
+            $tasks[$taskID] = $task;
+        }
+
+        /* Check field not empty. */
+        foreach($tasks as $task)
+        {
+            if($task->status == 'cancel') continue;
+            foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if(empty($field)) continue;
+
+                if(!empty($task->$field)) continue;
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
+            }
+        }
+
+        foreach($tasks as $task)
+        {
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
 
                 ->checkIF($task->estimate != false, 'estimate', 'float')
                 ->checkIF($task->consumed != false, 'consumed', 'float')

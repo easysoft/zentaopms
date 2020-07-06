@@ -4,7 +4,6 @@ $config->story = new stdclass();
 $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 $config->story->needReview       = 1;
-$config->story->selectFields     = 'module,plan,source,pri,closedReason,assignedTo,reviewedBy';
 
 $config->story->batchClose = new stdclass();
 $config->story->batchClose->columns = 10;

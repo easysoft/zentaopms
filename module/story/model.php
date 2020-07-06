@@ -192,8 +192,19 @@ class storyModel extends model
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
-        if($story->type == 'requirement') $this->config->story->create->requiredFields = str_replace('plan,', '', $this->config->story->create->requiredFields);
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
+
+        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
+
+        if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
+        if(strpos($requiredFields, ',estimate,') !== false)
+        {
+            if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
+            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+        }
+
+        $requiredFields = trim($requiredFields, ',');
+
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -335,7 +346,13 @@ class storyModel extends model
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($story->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->$field)));
+                if(empty($field)) continue;
+
+                if(!empty($story->$field)) continue;
+                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
+                return false;
             }
 
             $data[$i] = $story;
@@ -343,9 +360,7 @@ class storyModel extends model
 
         foreach($data as $i => $story)
         {
-            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()
-                ->batchCheck($this->config->story->create->requiredFields, 'notempty')
-                ->exec();
+            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->exec();
             if(dao::isError())
             {
                 echo js::error(dao::getError());

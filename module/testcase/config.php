@@ -3,7 +3,6 @@ $config->testcase = new stdclass();
 $config->testcase->defaultSteps = 3;
 $config->testcase->batchCreate  = 10;
 $config->testcase->needReview   = 0;
-$config->testcase->selectFields = 'lib,stage,type,story,pri,status';
 
 $config->testcase->create = new stdclass();
 $config->testcase->edit   = new stdclass();
