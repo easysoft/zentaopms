@@ -152,6 +152,7 @@ $lang->task->statusList['closed'] = '已关闭';
 $lang->task->typeList['']        = '';
 $lang->task->typeList['design']  = '设计';
 $lang->task->typeList['devel']   = '开发';
+$lang->task->typeList['story']   = '需求';
 $lang->task->typeList['test']    = '测试';
 $lang->task->typeList['study']   = '研究';
 $lang->task->typeList['discuss'] = '讨论';
