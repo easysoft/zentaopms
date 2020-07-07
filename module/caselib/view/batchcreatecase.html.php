@@ -75,7 +75,7 @@
 </div>
 <table class='template' id='trTemp'>
   <tbody>
-    <tr class='text-center'>
+    <tr>
       <td>%s</td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
@@ -91,8 +91,8 @@
         </div>
       </td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
-      <td><?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control chosen");?></td>
-      <td><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
+      <td><?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
+      <td><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control autosize'")?></td>
       <td><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
     </tr>
