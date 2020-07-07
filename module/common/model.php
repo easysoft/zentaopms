@@ -2140,7 +2140,6 @@ EOD;
         {
             unset($lang->menuOrder);
             $lang->release->menu        = new stdclass();
-            $lang->report->menu         = new stdclass();
             $lang->menugroup->release   = '';
             $lang->program->dividerMenu = ',product,issue,';
             return self::processMenuVars($lang->menu->cmmi);
