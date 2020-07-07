@@ -337,13 +337,17 @@ $lang->testreport->menu->caselib   = array('link' => 'Thư viện tình huống|
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
-$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => 'Tình huống|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Báo cáo|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => 'Thư viện tình huống|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+$lang->caselib->subMenu = new stdclass();
+$lang->caselib->subMenu->testcase = new stdclass();
+$lang->caselib->subMenu->testcase->feature = array('link' => 'Functional Test|testcase|browse', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => 'Unit Test|testtask|browseUnits');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();

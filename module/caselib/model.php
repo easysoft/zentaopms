@@ -581,15 +581,14 @@ class caselibModel extends model
         $this->loadModel('testcase');
         $this->loadModel('action');
 
-        $now      = helper::now();
-        $libID    = (int)$libID;
-        $cases    = fixer::input('post')->get();
-        $batchNum = count(reset($cases));
+        $now   = helper::now();
+        $libID = (int)$libID;
+        $cases = fixer::input('post')->get();
 
         $result = $this->loadModel('common')->removeDuplicate('case', $cases, "lib={$libID}");
         $cases  = $result['data'];
 
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
             if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
@@ -597,18 +596,18 @@ class caselibModel extends model
         $module = 0;
         $type   = '';
         $pri    = 3;
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
-            $pri    = $cases->pri[$i] == 'ditto'    ?  $pri   : $cases->pri[$i];
+            $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
             $cases->type[$i]   = $type;
             $cases->pri[$i]    = $pri;
         }
 
         $forceNotReview = $this->testcase->forceNotReview();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
             {
