@@ -17,7 +17,7 @@
     <h2><?php echo $lang->webhook->setting;?></h2>
   </div>
   <div class='center-block mw-700px'>
-    <form id='logForm' method='post' class='ajaxForm'>
+    <form id='logForm' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <th class='w-100px'><?php echo $lang->admin->days;?></th>
