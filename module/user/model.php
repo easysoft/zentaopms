@@ -377,7 +377,7 @@ class userModel extends model
         $oldUser = $this->getById($userID, 'id');
 
         $userID = $oldUser->id;
-        $user = fixer::input('post')
+        $user   = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
@@ -418,18 +418,32 @@ class userModel extends model
             }
         }
 
-        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
-        if(isset($_POST['groups']))
+        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
+        $newGroups = zget($_POST, 'groups', array());
+        sort($oldGroups);
+        sort($newGroups);
+
+        /* If change group then reset usergroup. */
+        if(join(',', $oldGroups) != join(',', $newGroups))
         {
-            foreach($this->post->groups as $groupID)
+            /* Reset usergroup for account. */
+            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
+
+            /* Set usergroup for account. */
+            if(isset($_POST['groups']))
             {
-                $data          = new stdclass();
-                $data->account = $this->post->account;
-                $data->group   = $groupID;
-                $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+                foreach($this->post->groups as $groupID)
+                {
+                    $data          = new stdclass();
+                    $data->account = $this->post->account;
+                    $data->group   = $groupID;
+                    $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+                }
             }
+
+            /* Compute user view. */
+            $this->computeUserView($this->post->account, true);
         }
-        $this->computeUserView($this->post->account, true);
 
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
         if(!dao::isError())

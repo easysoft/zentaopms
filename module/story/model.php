@@ -192,8 +192,19 @@ class storyModel extends model
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
-        if($story->type == 'requirement') $this->config->story->create->requiredFields = str_replace('plan,', '', $this->config->story->create->requiredFields);
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
+
+        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
+
+        if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
+        if(strpos($requiredFields, ',estimate,') !== false)
+        {
+            if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
+            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+        }
+
+        $requiredFields = trim($requiredFields, ',');
+
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -335,7 +346,14 @@ class storyModel extends model
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($story->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->$field)));
+                if(empty($field)) continue;
+                if($type == 'requirement' and $field == 'plan') continue;
+
+                if(!empty($story->$field)) continue;
+                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
+                return false;
             }
 
             $data[$i] = $story;
@@ -343,9 +361,7 @@ class storyModel extends model
 
         foreach($data as $i => $story)
         {
-            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()
-                ->batchCheck($this->config->story->create->requiredFields, 'notempty')
-                ->exec();
+            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->exec();
             if(dao::isError())
             {
                 echo js::error(dao::getError());
@@ -482,7 +498,7 @@ class storyModel extends model
                 $data->title   = $story->title;
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
-                $this->dao->replace(TABLE_STORYSPEC)->data($data)->exec();
+                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
             }
             else
             {
@@ -948,7 +964,12 @@ class storyModel extends model
         {
             $preTitle = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($this->post->preVersion)->fetch('title');
             $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->where('id')->eq($storyID)->exec();
-            $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
+
+            /* Delete versions that is after this version. */
+            $deleteVersion = array();
+            for($version = $oldStory->version; $version > $story->version; $version --) $deleteVersion[] = $version;
+            if($deleteVersion) $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->in($deleteVersion)->exec();
+
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
@@ -1514,7 +1535,7 @@ class storyModel extends model
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
             if($statusList['test']['doing'] > 0) $stage = 'testing';
             if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
-            if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
+            if($statusList['devel']['done'] == $develTasks and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
 
             $stages[$branch] = $stage;
         }
@@ -1571,7 +1592,7 @@ class storyModel extends model
         if($browseType == 'bySearch')
         {
             $story        = $this->getById($storyID);
-            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id');
             foreach($stories2Link as $key => $story2Link)
             {
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
@@ -1813,17 +1834,17 @@ class storyModel extends model
      *
      * @access public
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
      * @param  string $projectID
-     * @param  int    $branch
      * @param  string $type requirement|story
      * @param  string $excludeStories 
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story', $excludeStories = '')
+    public function getBySearch($productID, $branch = 0, $queryID, $orderBy, $projectID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
         if($projectID != '')
         {
@@ -1930,13 +1951,13 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  string $type
      * @param  int    $param
-     * @param  object $pager
      * @param  string $storyType 
      * @param  string $excludeStories 
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $pager = null, $storyType = 'story', $excludeStories = '')
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
@@ -2651,11 +2672,12 @@ class storyModel extends model
 
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
 
-        if($action == 'change')   return $story->status != 'closed';
-        if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
-        if($action == 'close')    return $story->status != 'closed';
-        if($action == 'activate') return $story->status == 'closed';
-        if($action == 'assignto') return $story->status != 'closed';
+        if($action == 'change')     return $story->status != 'closed';
+        if($action == 'review')     return $story->status == 'draft' or $story->status == 'changed';
+        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'activate')   return $story->status == 'closed';
+        if($action == 'assignto')   return $story->status != 'closed';
+        if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement') return $story->status != 'draft';
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;

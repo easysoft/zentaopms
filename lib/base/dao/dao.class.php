@@ -1070,9 +1070,6 @@ class baseDAO
         $fieldLabel = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
         $value      = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
 
-        $moduleName   = $table == 'case' ? 'testcase' : $table;
-        $selectFields = isset($config->$moduleName->selectFields) ? $config->$moduleName->selectFields : '';
-
         /* 
          * 检查唯一性。
          * Check unique.
@@ -1105,13 +1102,6 @@ class baseDAO
             for($i = 0; $i < VALIDATER::MAX_ARGS; $i ++)
             {
                 ${"arg$i"} = isset($funcArgs[$i + 2]) ? $funcArgs[$i + 2] : null;
-            }
-
-            /* When check not empty and field is select, then use empty function to check. */
-            if(strtolower($funcName) == 'notempty')
-            {
-                $arg0 = false;
-                if(!empty($selectFields) and strpos(",{$selectFields},", ",{$fieldName},") !== false) $arg0 = true;
             }
 
             $checkFunc = 'check' . $funcName;

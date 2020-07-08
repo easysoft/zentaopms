@@ -81,6 +81,7 @@ $lang->mail->noticeResend   = 'Le mail a été renvoyé !';
 $lang->mail->inputFromEmail = 'Expéditeur Email';
 $lang->mail->nextStep       = 'Suivant';
 $lang->mail->successSaved   = 'Paramétrage Email sauvegardés.';
+$lang->mail->setForUser     = 'Could not test mail configure because the users are without mail in system. Please set mail for user first.';
 $lang->mail->testSubject    = 'mail de test';
 $lang->mail->testContent    = 'Les Paramétrages Email sont ok !';
 $lang->mail->successSended  = 'Envoyé !';

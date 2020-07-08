@@ -9,11 +9,10 @@ $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'Augeordnet an';
 $lang->webhook->setting    = 'Einstellungen';
 
-$lang->webhook->browse       = 'Durchsuchen';
-$lang->webhook->create       = 'Erstellen';
-$lang->webhook->edit         = 'Bearbeiten';
-$lang->webhook->delete       = 'Löschen';
-$lang->webhook->rechooseDept = 'Rechoose department';
+$lang->webhook->browse = 'Durchsuchen';
+$lang->webhook->create = 'Erstellen';
+$lang->webhook->edit   = 'Bearbeiten';
+$lang->webhook->delete = 'Löschen';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Typ';
@@ -46,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Others';
 $lang->webhook->sendTypeList['sync']  = 'Synchron';
 $lang->webhook->sendTypeList['async'] = 'Asynchron';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding Userid';
-$lang->webhook->dingBindStatus = 'Bind Status';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding Userid';
+$lang->webhook->dingBindStatus  = 'Bind Status';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -92,5 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat an
 $lang->webhook->note->typeList['default']   = 'Webhookadresse on anderen erhalten.';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl     = 'Laden Sie php-curl in der php.ini.';
-$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';
+$lang->webhook->error->curl   = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

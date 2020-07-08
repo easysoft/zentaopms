@@ -9,11 +9,10 @@ $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'Assign';
 $lang->webhook->setting    = 'Paramétrages';
 
-$lang->webhook->browse       = 'Consulter';
-$lang->webhook->create       = 'Créer';
-$lang->webhook->edit         = 'Modifier';
-$lang->webhook->delete       = 'Supprimer';
-$lang->webhook->rechooseDept = 'Rechoose department';
+$lang->webhook->browse = 'Consulter';
+$lang->webhook->create = 'Créer';
+$lang->webhook->edit   = 'Modifier';
+$lang->webhook->delete = 'Supprimer';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Type';
@@ -46,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Others';
 $lang->webhook->sendTypeList['sync']  = 'Synchrone';
 $lang->webhook->sendTypeList['async'] = 'Asynchrone';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding Userid';
-$lang->webhook->dingBindStatus = 'Bind Status';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding Userid';
+$lang->webhook->dingBindStatus  = 'Bind Status';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -92,5 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat an
 $lang->webhook->note->typeList['default']   = "Obtenir les url d'autres flux webhook.";
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl     = 'Chargez php-curl dans php.ini.';
-$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';
+$lang->webhook->error->curl   = 'Chargez php-curl dans php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

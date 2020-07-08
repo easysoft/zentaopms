@@ -81,6 +81,7 @@ $lang->mail->noticeResend   = 'Email này đã được gửi lại!';
 $lang->mail->inputFromEmail = 'Email người gửi';
 $lang->mail->nextStep       = 'Tiếp';
 $lang->mail->successSaved   = 'Thiết lập Email đã được lưu.';
+$lang->mail->setForUser     = 'Could not test mail configure because the users are without mail in system. Please set mail for user first.';
 $lang->mail->testSubject    = 'Testing Email';
 $lang->mail->testContent    = 'Thiết lập Email đã hoàn thành!';
 $lang->mail->successSended  = 'Đã gửi!';

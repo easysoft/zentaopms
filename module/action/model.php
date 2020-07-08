@@ -677,9 +677,9 @@ class actionModel extends model
      */
     public function getActionCondition()
     {
-        $actionCondition = '';
-        if(!empty($this->app->user->admin)) return $actionCondition;
+        if($this->app->user->admin) return '';
 
+        $actionCondition = '';
         if(isset($this->app->user->rights['acls']['actions']))
         {
             if(empty($this->app->user->rights['acls']['actions'])) return array();

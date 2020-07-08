@@ -423,7 +423,7 @@ class webhookModel extends model
             unset($_GET['onlybody']);
         }
         if($objectType == 'case') $objectType = 'testcase';
-        $viewLink = helper::createLink($objectType, 'view', "id=$objectID");
+        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html');
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
         return $viewLink;

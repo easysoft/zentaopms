@@ -1,7 +1,6 @@
 <?php
 $config->task = new stdclass();
-$config->task->batchCreate  = 10;
-$config->task->selectFields = 'project,type,story,module,pri,assignedTo';
+$config->task->batchCreate = 10;
 
 $config->task->create   = new stdclass();
 $config->task->edit     = new stdclass();

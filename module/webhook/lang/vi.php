@@ -13,7 +13,6 @@ $lang->webhook->browse       = 'Browse';
 $lang->webhook->create       = 'Tạo';
 $lang->webhook->edit         = 'Sửa';
 $lang->webhook->delete       = 'Xóa';
-$lang->webhook->rechooseDept = 'Rechoose department';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Loại';
@@ -46,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Khác';
 $lang->webhook->sendTypeList['sync']  = 'Synchronous';
 $lang->webhook->sendTypeList['async'] = 'Asynchronous';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding UserID';
-$lang->webhook->dingBindStatus = 'Bind tình trạng';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding UserID';
+$lang->webhook->dingBindStatus  = 'Bind tình trạng';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -92,5 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Thêm a customized bot in WeChat 
 $lang->webhook->note->typeList['default']   = 'Nhận a webhook url from others';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl     = 'Load php-curl in php.ini.';
-$lang->webhook->error->moreDept = 'There are too many departments. Getting users may time out. Please choose department first.';
+$lang->webhook->error->curl   = 'Load php-curl in php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

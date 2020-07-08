@@ -239,7 +239,7 @@ class buildModel extends model
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product', $oldBuild->product)
             ->setDefault('branch', $oldBuild->branch)
-            ->cleanInt('product,branch')
+            ->cleanInt('product,branch,project')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
 
