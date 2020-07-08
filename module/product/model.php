@@ -1054,7 +1054,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build', $module) !== false)
+        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -1071,6 +1071,10 @@ class productModel extends model
             elseif($module == 'product' && ($method == 'browse' or $method == 'index' or $method == 'all'))
             {
                 $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));
+            }
+            elseif($module == 'programplan')
+            {
+                $link = helper::createLink($module, 'browse', "programID=%s&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
             else
             {
