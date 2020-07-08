@@ -236,11 +236,11 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class = "class='disabled'";
               $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
+              $class         = $canBatchClose ? '' : "class='disabled'";
               $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-              $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-              echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+              $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
+              echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
               if(common::hasPriv('story', 'batchReview'))
               {
@@ -279,7 +279,8 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
               }
               else
               {
-                  echo '<li>' . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
+                  $class= "class='disabled'";
+                  echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
               if(common::hasPriv('story', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
@@ -315,7 +316,8 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
               }
               else
               {
-                  echo '<li>' . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
+                  $class= "class='disabled'";
+                  echo "<li $class>" . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
               }
               ?>
             </ul>
