@@ -99,6 +99,8 @@ class todoModel extends model
     public function batchCreate()
     {
         $todos = fixer::input('post')->get();
+
+        $validTodos = array();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
@@ -126,17 +128,9 @@ class todoModel extends model
                 if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
                 if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
 
-                if($todo->end <= $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
-                $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
-                if(dao::isError())
-                {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
-                }
-                $todoID = $this->dao->lastInsertID();
-                $this->loadModel('score')->create('todo', 'create', $todoID);
-                $this->loadModel('action')->create('todo', $todoID, 'opened');
+                $validTodos[] = $todo;
             }
             else
             {
@@ -147,6 +141,19 @@ class todoModel extends model
                 unset($todos->begins[$i]);
                 unset($todos->ends[$i]);
             }
+        }
+
+        foreach($validTodos as $todo)
+        {
+            $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+            $todoID = $this->dao->lastInsertID();
+            $this->loadModel('score')->create('todo', 'create', $todoID);
+            $this->loadModel('action')->create('todo', $todoID, 'opened');
         }
     }
 
@@ -173,7 +180,7 @@ class todoModel extends model
             ->remove('uid')
             ->get();
 
-        if($todo->end <= $todo->begin)
+        if($todo->end < $todo->begin)
         {
             dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
@@ -247,7 +254,7 @@ class todoModel extends model
                 if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
                 if($todo->type == 'story')$todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
 
-                if($todo->end <= $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
             }
