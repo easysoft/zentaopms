@@ -103,10 +103,8 @@ js::set('suiteID',        $suiteID);
         <div class='table-actions btn-toolbar'>
           <div class='btn-group dropup'>
             <?php
-            $class = "class='disabled'";
-
             $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-            $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+            $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
@@ -130,9 +128,12 @@ js::set('suiteID',        $suiteID);
                   echo '</ul></li>';
               }
 
-              $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
-              $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
-              if(common::hasPriv('testcase', 'batchDelete')) echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+              if(common::hasPriv('testcase', 'batchDelete'))
+              {
+                  $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
+                  $misc       = "onclick=\"confirmBatchDelete('$actionLink')\"";
+                  echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+              }
 
               if(common::hasPriv('testcase', 'batchCaseTypeChange'))
               {
@@ -151,7 +152,7 @@ js::set('suiteID',        $suiteID);
               if(common::hasPriv('testcase', 'batchConfirmStoryChange'))
               {
                   $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
-                  $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                  $misc       = "onclick=\"setFormAction('$actionLink')\"";
                   echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
               }
               ?>

@@ -248,18 +248,20 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class = "class='disabled'";
+              $class      = common::hasPriv('bug', 'batchConfirm') ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchConfirm');
-              $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
+              $misc       = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
+              $class      = common::hasPriv('bug', 'batchClose') ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchClose');
-              $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
+              $misc       = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
+              $class      = common::hasPriv('bug', 'batchActivate') ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
-              $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
+              $misc       = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
               $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : '';
               if($misc)
