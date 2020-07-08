@@ -276,6 +276,7 @@ $lang->project->fixFirstWithLeft      = '修改剩余工时';
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+$lang->project->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
 $lang->project->action->extra   = '相关产品为 %s。';
 
 /* 统计。*/

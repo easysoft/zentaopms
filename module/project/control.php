@@ -1173,7 +1173,8 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
-            $changes = $this->project->update($projectID);
+            $oldProducts = $this->project->getProducts($projectID);
+            $changes     = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->project->updateProducts($projectID);
@@ -1185,9 +1186,15 @@ class project extends control
                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
                 $this->action->create('project', $projectID, 'undeleted');
             }
-            if($changes)
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            $products     = $diffProducts ? join(',', $newProducts) : '';
+
+            if($changes or $diffProducts)
             {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1813,12 +1820,19 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
+            $oldProducts = $this->project->getProducts($projectID);
+
             if($from == 'buildCreate' && $this->session->buildCreate) $browseProjectLink = $this->session->buildCreate;
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+
             die(js::locate($browseProjectLink));
         }
 

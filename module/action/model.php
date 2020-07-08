@@ -370,7 +370,7 @@ class actionModel extends model
                     }
                 }
             }
-            elseif(($actionName == 'opened' or $actionName == 'managed') and $objectType == 'project')
+            elseif(($actionName == 'opened' or $actionName == 'managed' or $actionName == 'edited') and $objectType == 'project')
             {
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
