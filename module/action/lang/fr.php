@@ -233,7 +233,6 @@ $lang->action->dynamicAction->todo['erased']               = 'Détruire Todo';
 $lang->action->dynamicAction->todo['finished']             = 'Finir Todo';
 $lang->action->dynamicAction->todo['activated']            = 'Activer Todo';
 $lang->action->dynamicAction->todo['closed']               = 'Fermer Todo';
-$lang->action->dynamicAction->todo['deleted']              = 'Suppr Todo';
 $lang->action->dynamicAction->todo['assigned']             = 'Assigner Todo';
 $lang->action->dynamicAction->todo['undeleted']            = 'Restaurer Todo';
 $lang->action->dynamicAction->todo['hidden']               = 'Masquer Todo';
