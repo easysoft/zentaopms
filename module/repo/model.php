@@ -1278,6 +1278,7 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndProjects[$taskID]['product'];
                 $action->project    = $productsAndProjects[$taskID]['project'];
+                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $action->comment;
                 foreach($taskActions as $taskAction => $params)
                 {
                     $_POST = array();
@@ -1298,13 +1299,16 @@ class repoModel extends model
                     }
                     elseif($taskAction == 'effort')
                     {
+                        unset($_POST['consumed']);
+                        unset($_POST['left']);
+
                         $_POST['id'][1]         = 1;
                         $_POST['dates'][1]      = date('Y-m-d');
                         $_POST['consumed'][1]   = $params['consumed'];
                         $_POST['left'][1]       = $params['left'];
                         $_POST['objectType'][1] = 'task';
                         $_POST['objectID'][1]   = $taskID;
-                        $_POST['work'][1]       = $action->comment;
+                        $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
                         if(is_dir($this->app->getModuleRoot() . 'effort'))
                         {
                             $this->loadModel('effort')->batchCreate();
@@ -1438,6 +1442,9 @@ class repoModel extends model
      */
     public function saveRecord($action, $changes)
     {
+        /* Remove sql error. */
+        dao::getError();
+
         $record = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($action->objectType)
             ->andWhere('objectID')->eq($action->objectID)
