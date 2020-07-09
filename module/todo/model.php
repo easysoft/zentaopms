@@ -289,6 +289,20 @@ class todoModel extends model
     }
 
     /**
+     * Start one todo.
+     *
+     * @param  string $todoID
+     * @access public
+     * @return void
+     */
+    public function start($todoID)
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq((int)$todoID)->exec();
+        $this->loadModel('action')->create('todo', $todoID, 'started');
+    }
+
+
+    /**
      * Change the status of a todo.
      *
      * @param  string $todoID
@@ -476,6 +490,12 @@ class todoModel extends model
         {
             if(!empty($todo->cycle)) return false;
             return $todo->status != 'done';
+        }
+
+        if($action == 'start')
+        {
+            if(!empty($todo->cycle)) return false;
+            return $todo->status == 'wait';
         }
 
         return true;

@@ -16,6 +16,7 @@ $lang->todo->createCycle  = "Thêm việc lặp lại";
 $lang->todo->assignTo     = "Giao cho";
 $lang->todo->assignedDate = "Ngày giao";
 $lang->todo->assignAction = "Giao việc";
+$lang->todo->start        = "Start Todo";
 $lang->todo->activate     = "Kích hoạt việc";
 $lang->todo->batchCreate  = "Thêm hàng loạt";
 $lang->todo->edit         = "Sửa việc";

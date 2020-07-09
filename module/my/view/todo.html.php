@@ -72,7 +72,7 @@
           <th class="c-begin"> <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
           <th class="c-end">   <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
           <th class="c-status"><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
-          <th class="c-actions"><?php echo $lang->actions;?></th>
+          <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -96,6 +96,7 @@
           <td class="c-status"><span class="status-todo status-<?php echo $todo->status;?>"><?php echo $lang->todo->statusList[$todo->status];?></span></td>
           <td class="c-actions">
             <?php
+            common::printIcon('todo', 'start',  "id=$todo->id", $todo, 'list', 'play', 'hiddenwin');
             if($todo->status == 'done' or $todo->status == 'closed')
             {
                 common::printIcon('todo', 'activate', "id=$todo->id", $todo, 'list', 'magic', 'hiddenwin');
