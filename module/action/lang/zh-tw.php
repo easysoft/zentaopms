@@ -233,7 +233,6 @@ $lang->action->dynamicAction->todo['erased']               = '刪除待辦';
 $lang->action->dynamicAction->todo['finished']             = '完成待辦';
 $lang->action->dynamicAction->todo['activated']            = '激活待辦';
 $lang->action->dynamicAction->todo['closed']               = '關閉待辦';
-$lang->action->dynamicAction->todo['deleted']              = '刪除待辦';
 $lang->action->dynamicAction->todo['assigned']             = '指派待辦';
 $lang->action->dynamicAction->todo['undeleted']            = '還原待辦';
 $lang->action->dynamicAction->todo['hidden']               = '隱藏待辦';

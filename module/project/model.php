@@ -2498,8 +2498,15 @@ class projectModel extends model
             $status   = $task->status;
             if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
-                if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
-                $kanbanGroup[$groupKey]->tasks[$status][] = $task;
+                if($type == 'assignedTo' and $groupKey == 'closed')
+                {
+                    $closedTasks[$groupKey][] = $task;
+                }
+                else
+                {
+                    if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
+                    $kanbanGroup[$groupKey]->tasks[$status][] = $task;
+                }
             }
             else
             {
@@ -2515,14 +2522,25 @@ class projectModel extends model
             $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
             if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
-                if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
-                $kanbanGroup[$groupKey]->bugs[$status][] = $bug;
+                if($type == 'assignedTo' and $groupKey == 'closed')
+                {
+                    $closedBugs[$groupKey][] = $bug;
+                }
+                else
+                {
+                    if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
+                    $kanbanGroup[$groupKey]->bugs[$status][] = $bug;
+                }
             }
             else
             {
                 $noKeyBugs[$status][] = $bug;
             }
         }
+
+        $kanbanGroup['closed'] = new stdclass();
+        if(isset($closedTasks)) $kanbanGroup['closed']->tasks = $closedTasks;
+        if(isset($closedBugs))  $kanbanGroup['closed']->bugs  = $closedBugs;
 
         $kanbanGroup['nokey'] = new stdclass();
         if(isset($noKeyTasks)) $kanbanGroup['nokey']->tasks = $noKeyTasks;

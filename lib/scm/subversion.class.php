@@ -8,6 +8,7 @@ class Subversion
     public $ssh;
     public $remote;
     public $encoding;
+    public $svnVersion;
 
     /**
      * Construct 
@@ -31,6 +32,8 @@ class Subversion
         $this->remote   = !(stripos($this->root, 'file') === 0);
         $this->client   = $this->remote ? $client . " --username @account@ --password @password@" : $client;
         if($this->encoding == 'utf-8') $this->encoding = 'gbk';
+
+        $this->svnVersion = $this->getSVNVersion($client);
     }
 
     /**
@@ -552,6 +555,7 @@ class Subversion
         if(stripos($this->root, 'https') === 0 or stripos($this->root, 'svn') === 0)
         {
             $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache --xml $path");
+            if($this->svnVersion and version_compare($this->svnVersion, '1.9', '<')) $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --non-interactive --trust-server-cert --no-auth-cache --xml $path");
         }
         else
         {
@@ -619,6 +623,7 @@ class Subversion
         if($this->ssh)
         {
             $cmd = str_replace("\\", "/", "$this->client $action $param --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache $path");
+            if($this->svnVersion and version_compare($this->svnVersion, '1.9', '<')) $cmd = str_replace("\\", "/", "$this->client $action $param --non-interactive --trust-server-cert --no-auth-cache $path");
         }
         else
         {
@@ -626,5 +631,21 @@ class Subversion
         }
 
         return $cmd;
+    }
+
+    /**
+     * Get SVN version.
+     * 
+     * @param  string $client 
+     * @access public
+     * @return string
+     */
+    public function getSVNVersion($client)
+    {
+        $versionCommand = "$client --version --quiet 2>&1";
+        exec($versionCommand, $versionOutput, $versionResult);
+        if($versionResult) return false;
+
+        return end($versionOutput);
     }
 }

@@ -266,13 +266,15 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu'>";
 
+            $class      = $canBatchClose ? '' : "class=disabled";
             $actionLink = $this->createLink('task', 'batchClose');
-            $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : "class='disabled'";
-            echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+            $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : '';
+            echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
+            $class      = $canBatchCancel ? '' : "class=disabled";
             $actionLink = $this->createLink('task', 'batchCancel');
-            $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : "class='disabled'";
-            echo "<li>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
+            $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : '';
+            echo "<li $class>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
             echo "</ul>";
             ?>
           </div>

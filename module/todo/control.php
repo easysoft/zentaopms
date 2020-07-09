@@ -246,6 +246,28 @@ class todo extends control
     }
 
     /**
+     * Start a todo.
+     *
+     * @param  int    $todoID
+     * @access public
+     * @return void
+     */
+    public function start($todoID)
+    {
+        $todo = $this->todo->getById($todoID);
+        if($todo->status == 'wait') $this->todo->start($todoID);
+        if(in_array($todo->type, array('bug', 'task', 'story')))
+        {
+            $confirmNote = 'confirm' . ucfirst($todo->type);
+            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $cancelURL   = $this->server->HTTP_REFERER;
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
+        }
+        if(isonlybody())die(js::reload('parent.parent'));
+        die(js::reload('parent'));
+    }
+
+    /**
      * Activated todo.
      *
      * @param  $todoID

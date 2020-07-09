@@ -488,8 +488,8 @@ class reportModel extends model
             ->from(TABLE_TODO)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.account = t2.account')
-            ->where('t1.status')->eq('wait')
-            ->orWhere('t1.status')->eq('doing')
+            ->where('t1.cycle')->eq(0)
+            ->andWhere('t1.status')->in('wait,doing')
             ->query();
 
         $todos = array();
