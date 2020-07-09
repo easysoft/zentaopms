@@ -87,8 +87,8 @@
             ?>
             <span class="input-group-addon">
               <div class='checkbox-primary dateSwitcher'>
-                <input type='checkbox' name="switchDate[<?php echo $todo->id;?>]" id="switchDate<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchDateList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
-                <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
+                <input type='checkbox' name="switchTime[<?php echo $todo->id;?>]" id="switchTime<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchTimeList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
+                <label for='switchTime'><?php echo $lang->todo->periods['future'];?></label>
               </div>
             </span>
           </div>

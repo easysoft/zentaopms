@@ -16,6 +16,7 @@ $lang->todo->createCycle  = "Wiederkehrenden Todo hinzufügen";
 $lang->todo->assignTo     = "Zuordnen";
 $lang->todo->assignedDate = "Assigned Date";
 $lang->todo->assignAction = "Assign Todo";
+$lang->todo->start        = "Start Todo";
 $lang->todo->activate     = "Aktivieren";
 $lang->todo->batchCreate  = "Mehrere hinzufügen";
 $lang->todo->edit         = "Bearbeiten";

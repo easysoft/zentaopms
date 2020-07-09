@@ -16,6 +16,7 @@ $lang->todo->createCycle  = "Ajout Tâche récurrente";
 $lang->todo->assignTo     = "Affecter à";
 $lang->todo->assignedDate = "Date Affectation";
 $lang->todo->assignAction = "Affacter Action";
+$lang->todo->start        = "Start Todo";
 $lang->todo->activate     = "Activer Entrée";
 $lang->todo->batchCreate  = "Ajout par lot ";
 $lang->todo->edit         = "Editer Agenda";

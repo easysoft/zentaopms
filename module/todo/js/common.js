@@ -97,9 +97,9 @@ function setBeginsAndEnds(i, beginOrEnd)
     }
 }
 
-function switchDateList(number)
+function switchTimeList(number)
 {
-    if($('#switchDate' + number).prop('checked'))
+    if($('#switchTime' + number).prop('checked'))
     {
         $('#begins' + number).attr('disabled', 'disabled').trigger('chosen:updated');
         $('#ends' + number).attr('disabled', 'disabled').trigger('chosen:updated');

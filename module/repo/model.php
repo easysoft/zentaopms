@@ -1274,6 +1274,7 @@ class repoModel extends model
             $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
             foreach($actions['task'] as $taskID => $taskActions)
             {
+                $task = $this->task->getById($taskID);
                 $action->objectType = 'task';
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndProjects[$taskID]['product'];
@@ -1284,9 +1285,8 @@ class repoModel extends model
                     $_POST = array();
                     foreach($params as $field => $param) $this->post->set($field, $param);
 
-                    if($taskAction == 'start')
+                    if($taskAction == 'start' and $task->status == 'wait')
                     {
-                        $task = $this->task->getById($taskID);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $this->post->set('realStarted', date('Y-m-d'));
                         $changes = $this->task->start($taskID);
@@ -1297,7 +1297,7 @@ class repoModel extends model
                             $this->saveRecord($action, $changes);
                         }
                     }
-                    elseif($taskAction == 'effort')
+                    elseif($taskAction == 'effort' and in_array($task->status, array('wait', 'pause', 'doing')))
                     {
                         unset($_POST['consumed']);
                         unset($_POST['left']);
@@ -1327,9 +1327,8 @@ class repoModel extends model
                         $changes = $this->createActionChanges($log, $repoRoot, $scm);
                         $this->saveRecord($action, $changes);
                     }
-                    elseif($taskAction == 'finish')
+                    elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
                     {
-                        $task = $this->task->getById($taskID);
                         $this->post->set('finishedDate', date('Y-m-d'));
                         $this->post->set('currentConsumed', $this->post->consumed);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
@@ -1351,6 +1350,8 @@ class repoModel extends model
             $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
             foreach($actions['bug'] as $bugID => $bugActions)
             {
+                $bug = $this->bug->getByID($bugID);
+
                 $action->objectType = 'bug';
                 $action->objectID   = $bugID;
                 $action->product    = $productsAndProjects[$bugID]->product;
@@ -1358,7 +1359,7 @@ class repoModel extends model
                 foreach($bugActions as $bugAction => $params)
                 {
                     $_POST = array();
-                    if($bugAction == 'resolve')
+                    if($bugAction == 'resolve' and $bug->status == 'active')
                     {
                         $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
@@ -1367,6 +1368,7 @@ class repoModel extends model
                         if($changes)
                         {
                             $action->action = 'resolved';
+                            $action->extra  = 'fixed';
                             $this->saveRecord($action, $changes);
                         }
                     }

@@ -233,7 +233,6 @@ $lang->action->dynamicAction->todo['erased']      = 'Xóa việc làm';
 $lang->action->dynamicAction->todo['finished']    = 'Kết thúc việc làm';
 $lang->action->dynamicAction->todo['activated']   = 'Kích hoạt việc làm';
 $lang->action->dynamicAction->todo['closed']      = 'Đóng việc làm';
-$lang->action->dynamicAction->todo['deleted']     = 'Xóa việc làm';
 $lang->action->dynamicAction->todo['assigned']    = 'Bàn giao việc làm';
 $lang->action->dynamicAction->todo['undeleted']   = 'Khôi phục việc làm';
 $lang->action->dynamicAction->todo['hidden']      = 'Ẩn việc làm';

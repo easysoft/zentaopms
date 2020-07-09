@@ -274,8 +274,9 @@ $lang->project->interval              = 'Intervals ';
 $lang->project->fixFirstWithLeft      = 'Cập nhật cả giờ còn lại';
 
 $lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, được tạo bởi <strong>$actor</strong> .' . "\n";
-$lang->project->action->managed = '$date, quản lý bởi <strong>$actor</strong> .' . "\n";
+$lang->project->action->opened  = '$date, được tạo bởi <strong>$actor</strong>  $extra.' . "\n";
+$lang->project->action->managed = '$date, quản lý bởi <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
 $lang->project->action->extra   = "{$lang->productCommon} liên kết này là %s.";
 
 /* Statistics. */
