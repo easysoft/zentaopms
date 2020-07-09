@@ -253,7 +253,12 @@ class treeModel extends model
         $treeMenu   = array();
         $lastMenu[] = '/';
         $projectModules   = $this->getTaskTreeModules($rootID, true);
-        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task' and parent = 0")->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
+        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)
+                    ->where("root = '" . (int)$rootID . "' and type = 'task' and parent = 0")
+                    ->andWhere('deleted')
+                    ->eq(0)
+                    ->orderBy('grade desc, branch, `order`, type')
+                    ->fetchPairs('id', 'name');
 
         /* Fix for not in product modules. */
         $productNum = count($products);
