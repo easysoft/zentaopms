@@ -41,6 +41,7 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php
+        if($todo->status == 'wait') common::printLink('todo', 'start', "todoID=$todo->id", "<i class='icon icon-play'></i>", 'hiddenwin', "title='{$lang->todo->start}' class='btn showinonlybody'");
         if($todo->status == 'done' || $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
         if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
         common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
