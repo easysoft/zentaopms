@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('weekend', $config->project->weekend);?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg'>
     <?php include 'blockreportlist.html.php';?>

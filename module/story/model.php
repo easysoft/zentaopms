@@ -662,6 +662,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
+            $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -2828,6 +2829,13 @@ class storyModel extends model
             else if($id == 'stage')
             {
                 $style .= 'overflow: visible;';
+                if(isset($storyStages[$story->id]))
+                {
+                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                    {    
+                        if(isset($branches[$storyBranch])) $title .= $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . "\n";
+                    }
+                }
             }
 
             echo "<td class='" . $class . "' title='$title' style='$style'>";

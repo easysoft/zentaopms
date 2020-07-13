@@ -51,12 +51,12 @@ function diffDate(date1, date2)
 {
     date1 = convertStringToDate(date1);
     date2 = convertStringToDate(date2);
-    delta = (date2 - date1) / (1000 * 60 * 60 * 24);
+    delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
 
     weekEnds = 0;
-    for(i = 0; i < delta + 1; i++)
+    for(i = 0; i < delta; i++)
     {
-        if(date1.getDay() == 0 || date1.getDay() == 6) weekEnds ++;
+        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekEnds ++;
         date1 = date1.valueOf();
         date1 += 1000 * 60 * 60 * 24;
         date1 = new Date(date1);

@@ -123,6 +123,9 @@ $lang->story->released       = 'Released Stories';
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';
 
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
+
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
 
