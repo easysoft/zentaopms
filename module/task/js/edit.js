@@ -96,10 +96,14 @@ $(document).ready(function()
         if(checked)
         {
             $('#teamTr').removeClass('hidden');
+            $('#parent').val('');
+            $('#parent').trigger('chosen:updated');
+            $('#parent').closest('tr').addClass('hidden');
         }
         else
         {
             $('#teamTr').addClass('hidden');
+            $('#parent').closest('tr').removeClass('hidden');
         }
     });
 
