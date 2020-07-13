@@ -233,7 +233,8 @@
                   <td>
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
-                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class='iframe' data-width='80%'", true, true)) echo $task->storyTitle;
+                    $class = isonlybody() ? 'showinonlybody' : 'iframe';
+                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
