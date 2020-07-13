@@ -478,10 +478,13 @@ class story extends control
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
         $product = $this->loadModel('product')->getById($story->product);
+        $stories = $this->story->getParentStoryPairs($story->product, $story->parent); 
+        if(isset($stories[$storyID])) unset($stories[$storyID]);
+
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
-        $this->view->stories    = $this->story->getParentStoryPairs($story->product, $story->parent);
+        $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
