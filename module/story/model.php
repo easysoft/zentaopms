@@ -662,6 +662,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
+            $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
         }
     }
