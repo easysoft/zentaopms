@@ -62,5 +62,12 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 <!--[if lt IE 10]>
 <?php js::import($jsRoot . 'jquery/placeholder/min.js'); ?>
 <![endif]-->
+<?php
+/* Load hook files for current page. */
+$extPath      = $this->app->getModuleRoot() . '/common/ext/view/';
+$extHookRule  = $extPath . 'header.*.hook.php';
+$extHookFiles = glob($extHookRule);
+if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+?>
 </head>
 <body>

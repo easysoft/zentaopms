@@ -686,9 +686,10 @@ class commonModel extends model
             echo '</ul>';
             return;
         }
-        foreach($position as $key => $link)
+
+        if(is_array($position))
         {
-            echo "<li class='active'>" . $link . '</li>';
+            foreach($position as $key => $link) echo "<li class='active'>" . $link . '</li>';
         }
         echo '</ul>';
     }
