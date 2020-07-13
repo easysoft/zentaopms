@@ -21,11 +21,11 @@
   <form method='post' target='hiddenwin' action="<?php echo inLink('batchClose', "from=storyBatchClose")?>">
     <table class='table table-fixed table-form with-border'>
     <thead>
-      <tr>
+      <tr class='text-center'>
         <th class='w-50px'> <?php echo $lang->idAB;?></th> 
-        <th>                <?php echo $lang->story->title;?></th>
+        <th class='text-left'><?php echo $lang->story->title;?></th>
         <th class='w-80px'> <?php echo $lang->story->status;?></th>
-        <th class='w-120px'><?php echo $lang->story->closedReason;?></th>
+        <th class='w-150px'><?php echo $lang->story->closedReason;?></th>
         <th class='w-p40 '> <?php echo $lang->story->comment;?></th>
       </tr>
     </thead>
@@ -39,7 +39,7 @@
           <table class='w-p100'>
             <tr>
               <td class='pd-0'>
-                <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
+                <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
               <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
               <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>

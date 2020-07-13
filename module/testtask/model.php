@@ -1446,7 +1446,7 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
-                echo $canView ? html::a($caseLink, $run->title) : $run->title;
+                echo $canView ? html::a($caseLink, $run->title, null, "style='color: $run->color'") : $run->title;
                 break;
             case 'branch':
                 echo $branches[$run->branch];
