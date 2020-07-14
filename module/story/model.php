@@ -349,6 +349,7 @@ class storyModel extends model
                 if(empty($field)) continue;
                 if($type == 'requirement' and $field == 'plan') continue;
 
+                if(!isset($story->$field)) continue;
                 if(!empty($story->$field)) continue;
                 if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
 
@@ -564,9 +565,9 @@ class storyModel extends model
             foreach($this->post->stages as $branch => $stage)
             {
                 $newStage = new stdclass();
-                $newStage->story    = $storyID;
-                $newStage->branch   = $branch;
-                $newStage->stage    = $stage;
+                $newStage->story  = $storyID;
+                $newStage->branch = $branch;
+                $newStage->stage  = $stage;
                 if(isset($oldStages[$branch]))
                 {
                     $oldStage = $oldStages[$branch];
@@ -661,6 +662,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
+            $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -2827,6 +2829,13 @@ class storyModel extends model
             else if($id == 'stage')
             {
                 $style .= 'overflow: visible;';
+                if(isset($storyStages[$story->id]))
+                {
+                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                    {    
+                        if(isset($branches[$storyBranch])) $title .= $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . "\n";
+                    }
+                }
             }
 
             echo "<td class='" . $class . "' title='$title' style='$style'>";

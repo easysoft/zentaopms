@@ -274,8 +274,9 @@ $lang->project->interval              = 'Intervals';
 $lang->project->fixFirstWithLeft      = 'Mettre à jour les heures également';
 
 $lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, créée par <strong>$actor</strong> .' . "\n";
-$lang->project->action->managed = '$date, gérée par <strong>$actor</strong> .' . "\n";
+$lang->project->action->opened  = '$date, créée par <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->managed = '$date, gérée par <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
 $lang->project->action->extra   = "Les {$lang->productCommon}s associés sont %s.";
 
 /* 统计。*/

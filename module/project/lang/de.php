@@ -274,8 +274,9 @@ $lang->project->interval              = 'Intervale ';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
 
 $lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
-$lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
+$lang->project->action->opened  = '$date, created by <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
 $lang->project->action->extra   = "The linked {$lang->productCommon}s are %s.";
 
 /* 统计。*/

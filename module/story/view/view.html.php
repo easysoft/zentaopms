@@ -350,7 +350,8 @@
                   {
                       if(!isset($projects[$task->project])) continue;
                       $projectName = $projects[$task->project];
-                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "[T]$task->id $task->name", '', "class='iframe' data-width='80%'");
+                      $class = isonlybody() ? 'showinonlybody' : 'iframe';
+                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "[T]$task->id $task->name", '', "class=$class data-width='80%'");
                       echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
                   }
               }

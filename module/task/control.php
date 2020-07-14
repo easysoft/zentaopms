@@ -390,6 +390,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
+            if(dao::isError()) die(js::error(dao::getError()));
 
             if(!empty($allChanges))
             {

@@ -123,6 +123,9 @@ $lang->story->released       = "已发布{$lang->storyCommon}数";
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->storyCommon}与上一{$lang->storyCommon}不属于同一产品！";
 
+$lang->story->needNotReviewList[0] = '需要评审';
+$lang->story->needNotReviewList[1] = '不需要评审';
+
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 

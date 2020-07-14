@@ -405,7 +405,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
                 ->where('t1.id')->eq((int)$taskID)
-                ->andWhere('t5.product = t1.product')
+                ->andWhere('((t1.project !=0 AND t5.product = t1.product) OR t1.project = 0)')
                 ->fetch();
         }
 
@@ -1446,7 +1446,7 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
-                echo $canView ? html::a($caseLink, $run->title) : $run->title;
+                echo $canView ? html::a($caseLink, $run->title, null, "style='color: $run->color'") : $run->title;
                 break;
             case 'branch':
                 echo $branches[$run->branch];

@@ -329,6 +329,7 @@ class taskModel extends model
                 $field = trim($field);
                 if(empty($field)) continue;
 
+                if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
                 if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
@@ -1063,6 +1064,7 @@ class taskModel extends model
                 $field = trim($field);
                 if(empty($field)) continue;
 
+                if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
                 if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
@@ -1071,8 +1073,9 @@ class taskModel extends model
             }
         }
 
-        foreach($tasks as $task)
+        foreach($tasks as $taskID => $task)
         {
+            $oldTask = $oldTasks[$taskID];
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
 
@@ -1417,6 +1420,7 @@ class taskModel extends model
     {
         $oldTask = $this->getById($taskID);
         $now     = helper::now();
+        $today   = helper::today();
 
         if(strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
         {
@@ -1426,6 +1430,7 @@ class taskModel extends model
 
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF($oldTask->realStarted == '0000-00-00', 'realStarted', $today)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)

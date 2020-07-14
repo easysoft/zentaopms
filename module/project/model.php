@@ -460,6 +460,7 @@ class projectModel extends model
             $projects[$projectID]->order  = $data->orders[$projectID];
         }
 
+        $this->loadModel('user');
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -492,9 +493,12 @@ class projectModel extends model
                         $member->days    = 0;
                         $member->hours   = $this->config->project->defaultWorkhours;
                         $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+                        $changedAccounts[] = $value;
                     }
                 }
             }
+            $this->user->updateUserView($projectID, 'project', $changedAccounts);
 
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);

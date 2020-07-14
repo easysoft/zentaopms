@@ -60,7 +60,7 @@ $lang->project->createStory   = "添加{$lang->storyCommon}";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
 $lang->project->unclosed      = '未关闭';
-$lang->project->typeDesc      = "运维{$lang->projectCommon}没有{$lang->storyCommon}、bug、版本、测试功能，同时禁用燃尽图。";
+$lang->project->typeDesc      = "运维{$lang->projectCommon}没有{$lang->storyCommon}、bug、版本、测试功能。";
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
@@ -276,6 +276,7 @@ $lang->project->fixFirstWithLeft      = '修改剩余工时';
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+$lang->project->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
 $lang->project->action->extra   = '相关产品为 %s。';
 
 /* 统计。*/

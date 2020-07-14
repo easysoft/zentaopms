@@ -346,8 +346,8 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 
 $lang->caselib->subMenu = new stdclass();
 $lang->caselib->subMenu->testcase = new stdclass();
-$lang->caselib->subMenu->testcase->feature = array('link' => '功能测试|testcase|browse', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
-$lang->caselib->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits');
+$lang->caselib->subMenu->testcase->feature = array('link' => '功能测试|testcase|browse|', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits|');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -528,7 +528,7 @@ $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->datetime        = "『%s』应当为合法的日期。";
 $lang->error->code            = "『%s』应当为字母或数字的组合。";
 $lang->error->account         = "『%s』只能是字母和数字的组合三位以上。";
-$lang->error->passwordsame    = "两次密码应当相等。";
+$lang->error->passwordsame    = "密码输入不一致。";
 $lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
 $lang->error->accessDenied    = '您没有访问权限';
 $lang->error->pasteImg        = '您的浏览器不支持粘贴图片！';

@@ -36,6 +36,8 @@ function checkDangerExtension(obj)
 {
     var fileName = $(obj).val();
     var index    = fileName.lastIndexOf(".");
+    var fileSize = $(obj)[0].files[0].size;
+
     if(index >= 0)
     {
         extension = fileName.substr(index + 1);
@@ -43,6 +45,14 @@ function checkDangerExtension(obj)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
             $(obj).val('');
+            return false;
+        }
+
+        if(fileSize == 0)
+        {
+            alert(<?php echo json_encode($this->lang->file->fileContentEmpty);?>);
+            $(obj).val('');
+            return false;
         }
     }
 }

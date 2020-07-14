@@ -346,8 +346,8 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|caselib|browse|l
 
 $lang->caselib->subMenu = new stdclass();
 $lang->caselib->subMenu->testcase = new stdclass();
-$lang->caselib->subMenu->testcase->feature = array('link' => 'Functional Test|testcase|browse', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
-$lang->caselib->subMenu->testcase->unit    = array('link' => 'Unit Test|testtask|browseUnits');
+$lang->caselib->subMenu->testcase->feature = array('link' => 'Functional Test|testcase|browse|', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => 'Unit Test|testtask|browseUnits|');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -528,7 +528,7 @@ $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be >= 3 letters or numbers.";
-$lang->error->passwordsame    = "Passwords should be consistent.";
+$lang->error->passwordsame    = "The password input is inconsistent.";
 $lang->error->passwordrule    = "Password should conform to rules. It should be >= 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
 $lang->error->pasteImg        = 'Images are not allowed to be pasted in your browser!';
