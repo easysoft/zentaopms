@@ -1337,6 +1337,11 @@ class treeModel extends model
         $childs         = $data->modules;
         $parentModuleID = $data->parentModuleID;
 
+        foreach($childs as $moduleID => $moduleName)
+        {
+            if(preg_match('/(^\s+$)/', $moduleName)) die(js::alert($this->lang->tree->shouldNotBlank));
+        }
+
         $module         = new stdClass();
         $module->root   = $rootID;
         $module->type   = $type;

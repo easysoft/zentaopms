@@ -43,6 +43,7 @@ $lang->tree->confirmRoot4Doc    = "Mọi sự thay đổi tới thư viện này
 $lang->tree->successSave        = 'Đã lưu.';
 $lang->tree->successFixed       = 'Đã sửa';
 $lang->tree->repeatName         = 'Tên "%s" đã tồn tại!';
+$lang->tree->shouldNotBlank     = 'Module name should not be blank!';
 
 $lang->tree->module     = 'Module';
 $lang->tree->name       = 'Tên';
