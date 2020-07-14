@@ -1878,16 +1878,18 @@ class taskModel extends model
      * Get project parent tasks pairs.
      *
      * @param  int    $projectID
+     * @param  string $append
      * @access public
      * @return array
      */
-    public function getParentTaskPairs($projectID)
+    public function getParentTaskPairs($projectID, $append = '')
     {
         $tasks = $this->dao->select('id, name')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('status')->notin('cancel,closed')
             ->andWhere('project')->eq($projectID)
+            ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
 
         foreach($tasks as $id => $name)
