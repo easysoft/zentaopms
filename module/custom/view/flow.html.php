@@ -32,7 +32,7 @@
     <div class='modal-body'>
       <div class="form-group">
         <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
-        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?> </div>
+        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', empty($this->config->isINT) ? '0_0' : '0_1'))?> </div>
       </div>
       <?php if(!common::checkNotCN()):?>
       <div class="form-group">
