@@ -287,7 +287,7 @@ class testcaseModel extends model
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];
             $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
-            $data[$i]->story        = $storyID ? $storyID : $cases->story[$i];
+            $data[$i]->story        = $cases->story[$i];
             $data[$i]->color        = $cases->color[$i];
             $data[$i]->title        = $cases->title[$i];
             $data[$i]->precondition = $cases->precondition[$i];
