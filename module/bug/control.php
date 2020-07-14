@@ -400,10 +400,14 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
+
+        $moduleID    = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
+        $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
+
         /* Set team members of the latest project as assignedTo list. */
         $latestProject  = $this->product->getLatestProject($productID);
         $projectMembers = array();
-        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
+        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $moduleOwner);
         if(empty($projectMembers)) $projectMembers = $this->view->users;
         if($assignedTo and !isset($projectMembers[$assignedTo]))
         {
@@ -1397,7 +1401,7 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
     {
-        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
+        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID, '', $selectedUser);
 
         die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
     }
@@ -1416,7 +1420,7 @@ class bug extends control
         $latestProject = $this->product->getLatestProject($productID);
         if(!empty($latestProject))
         {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $selectedUser);
         }
         else
         {
