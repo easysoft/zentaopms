@@ -43,6 +43,7 @@ $lang->tree->confirmRoot4Doc    = "修改所属文档库，会同时修改该分
 $lang->tree->successSave        = '成功保存';
 $lang->tree->successFixed       = '成功修正数据！';
 $lang->tree->repeatName         = '模块名“%s”已经存在！';
+$lang->tree->shouldNotBlank     = '模块名不能为空格！';
 
 $lang->tree->module     = '模块';
 $lang->tree->name       = '模块名称';

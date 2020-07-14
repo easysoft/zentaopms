@@ -26,10 +26,16 @@ function loadAllUsers()
   * @access public
   * @return void
   */
-function loadProjectTeamMembers(productID)
+function loadProjectTeamMembers(productID, selectedUser = '')
 {
-    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
+    selectedUser = selectedUser ? selectedUser : $('#assignedTo').val();
+    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + selectedUser);
+    $.get(link, function(data)
+    {
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo').chosen();
+    });
 }
 
 /**
@@ -56,9 +62,19 @@ function setAssignedTo(moduleID, productID)
 {
     if(typeof(productID) == 'undefined') productID = $('#product').val();
     if(typeof(moduleID) == 'undefined')  moduleID  = $('#module').val();
+
     var link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
+        var projectID = $('#project').val();
+        if(!projectID)
+        {
+            loadProjectTeamMembers(productID, owner);
+        }
+        else
+        {
+            loadAssignedTo(projectID, owner);
+        }
         $('#assignedTo').val(owner);
         $("#assignedTo").trigger("chosen:updated");
     });

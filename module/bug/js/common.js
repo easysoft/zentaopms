@@ -455,16 +455,17 @@ var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
  * @access public
  * @return void
  */
-function loadAssignedTo(projectID)
+function loadAssignedTo(projectID, selectedUser = '')
 {
-    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
+    selectedUser = selectedUser ? selectedUser : $('#assignedTo').val();
+    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + selectedUser);
     $.get(link, function(data)
     {
         var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
         $('#assignedTo_chosen').remove();
         $('#assignedTo').replaceWith(data);
         var defaultAssignedTo = $('#assignedTo').val();
-        if(defaultAssignedTo !== oldAssignedTo) $('#assignedTo').append(defaultOption);
+        if(defaultAssignedTo !== oldAssignedTo && selectedUser == '') $('#assignedTo').append(defaultOption);
         $('#assignedTo').chosen();
     });
 }

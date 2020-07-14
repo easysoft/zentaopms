@@ -1726,10 +1726,11 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @param  string $params
+     * @param  string $usersToAppended
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($projectID, $params = '')
+    public function getTeamMemberPairs($projectID, $params = '', $usersToAppended = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
         $this->app->loadConfig('user');
@@ -1741,7 +1742,11 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchPairs();
+
+        if($usersToAppended) $users += $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchPairs();
+
         if(!$users) return array('' => '');
+
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';

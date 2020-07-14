@@ -319,6 +319,7 @@ class control extends baseControl
             foreach($fieldRules as $ruleID)
             {
                 if(!isset($rules[$ruleID])) continue;
+                if(!is_string($_POST[$field->field])) continue;
 
                 $rule = $rules[$ruleID];
                 if($rule->type == 'system' and $rule->rule == 'notempty')

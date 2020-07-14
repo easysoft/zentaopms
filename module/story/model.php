@@ -565,9 +565,9 @@ class storyModel extends model
             foreach($this->post->stages as $branch => $stage)
             {
                 $newStage = new stdclass();
-                $newStage->story    = $storyID;
-                $newStage->branch   = $branch;
-                $newStage->stage    = $stage;
+                $newStage->story  = $storyID;
+                $newStage->branch = $branch;
+                $newStage->stage  = $stage;
                 if(isset($oldStages[$branch]))
                 {
                     $oldStage = $oldStages[$branch];
