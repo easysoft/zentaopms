@@ -1208,6 +1208,7 @@ class taskModel extends model
     public function start($taskID)
     {
         $oldTask = $this->getById($taskID);
+        if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         if(!empty($oldTask->team))
         {
             if($this->post->consumed < $oldTask->team[$this->app->user->account]->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
