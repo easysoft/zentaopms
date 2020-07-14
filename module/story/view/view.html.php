@@ -161,7 +161,7 @@
 
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
-        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', true, "data-width='1050'");
+        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
         common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
