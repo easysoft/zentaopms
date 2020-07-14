@@ -66,12 +66,12 @@
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <td class='c-actions'>
           <?php
-          $vars = "story={$story->id}";
+          $vars = "storyID={$story->id}";
           common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
           common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
           common::printIcon('story', 'close',      $vars, $story, 'list', 'off');
           common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
-          common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+          common::printIcon('story', 'createCase', "productID=$story->product&branch=0&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
           ?>
         </td>
       </tr>
