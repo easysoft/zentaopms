@@ -14,6 +14,7 @@
 <?php include '../../common/view/treetable.html.php';?>
 <?php include './caseheader.html.php';?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <div class="main-table" data-ride="table" data-checkable="false" data-group="true">
   <table class='table table-grouped text-center' id='treetable'>
     <thead>
@@ -77,7 +78,13 @@
         <td class='c-actions'>
           <?php common::printIcon('testtask', 'runCase', "runID=$run->id&caseID=$run->case&version=$run->caseVersion", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");?>
           <?php common::printIcon('testcase', 'edit', "caseID=$run->case", '', 'list');?>
-          <?php common::printIcon('testcase', 'delete', "caseID=$run->case", '', 'list', '', 'hiddenwin');?>
+          <?php
+                if(common::hasPriv('testtask', 'unlinkCase', $run))
+                {
+                    $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
+                }
+          ?>
         </td>
       </tr>
       <?php $i++;?>
