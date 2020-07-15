@@ -721,7 +721,13 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunner($taskID)
     {
-        $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select("t1.lastRunner AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
