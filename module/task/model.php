@@ -1603,6 +1603,7 @@ class taskModel extends model
             ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1') 
         {
