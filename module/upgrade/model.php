@@ -3800,7 +3800,7 @@ class upgradeModel extends model
 
         if($pgmAdmins)
         {
-            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('prgadmin')->fetch('id');
+            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
             if($groupID)
             {
                 foreach($pgmAdmins as $pgmAdmin)
