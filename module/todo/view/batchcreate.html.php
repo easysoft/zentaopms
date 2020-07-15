@@ -17,7 +17,6 @@
   <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
   <?php include '../../common/view/customfield.html.php';?>
   <div class="divider"></div>
-  <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
 </div>
 <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
   <div id="mainContent">
