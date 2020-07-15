@@ -989,7 +989,11 @@ class baseFixer
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
-            if(empty($this->stripedFields) or !isset($this->stripedFields[$fieldName])) $this->data->$fieldName = $this->specialArray($this->data->$fieldName);
+            if(empty($this->stripedFields) or !isset($this->stripedFields[$fieldName]))
+            {
+                $this->data->$fieldName = $this->specialArray($this->data->$fieldName);
+                $this->stripedFields[$fieldName] = $fieldName;
+            }
         }
         return $this;
     }

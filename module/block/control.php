@@ -808,6 +808,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
         foreach($projects as $product => $productProjects)
         {
