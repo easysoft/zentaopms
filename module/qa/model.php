@@ -17,13 +17,14 @@ class qaModel extends model
      * @param  array  $products
      * @param  int    $productID
      * @param  int    $branch
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0)
+    public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'qa', 'index', '', $branch);
+        $selectHtml = $this->product->select($products, $productID, 'qa', 'index', $extra, $branch);
 
         $productIndex  = '';
         $isMobile      = $this->app->viewType == 'mhtml';
