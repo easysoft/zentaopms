@@ -41,7 +41,7 @@
                   <span class='input-group-addon'> ~ </span>
                   <?php echo html::input('end', $end, "class='form-control form-date'")?>
                   <?php
-                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);
+                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', isset($project->id) ? $project->id : 0) : '') . html::hidden('tasks', $tasks);
                   echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
                   ?>
                 </div>
@@ -67,7 +67,7 @@
             <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th><?php echo $lang->testreport->goal?></th>
-              <td colspan='2'><?php echo $project->desc?></td>
+              <td colspan='2'><?php echo isset($project->desc) ? $project->desc : '';?></td>
               <td></td>
             </tr>
             <?php endif;?>

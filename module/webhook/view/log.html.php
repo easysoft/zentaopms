@@ -45,7 +45,7 @@
         <td><?php echo $log->date;?></td>
         <td title='<?php echo $log->url;?>'><?php echo $log->url;?></td>
         <?php $iframe = $log->dialog == 1 ? 'data-toggle="modal" data-type="iframe"' : '';?>
-        <?php if($log->dialog == 1) $log->actionURL = $this->createLink($log->module, 'view', "id=$log->objectID", '' , true)?>
+        <?php if($log->dialog == 1) $log->actionURL = $this->createLink($log->module, 'view', "id=$log->moduleID", '' , true)?>
         <td title='<?php echo $log->action;?>'><?php echo html::a($log->actionURL, $log->action, '', $iframe);?></td>
         <td title='<?php echo $log->contentType;?>'><?php echo $log->contentType;?></td>
         <td title='<?php echo $log->result;?>'><?php echo $log->result;?></td>

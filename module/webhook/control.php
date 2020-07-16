@@ -147,6 +147,7 @@ class webhook extends control
         $this->session->set('bugList',         $uri);
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
+        $this->session->set('todoList',        $uri);
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

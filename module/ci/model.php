@@ -57,16 +57,14 @@ class ciModel extends model
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
+        $userPwd         = "$jenkinsUser:$jenkinsPassword";
+        $queueUrl        = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
 
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $queueUrl      = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
-
-        $response = common::http($queueUrl);
+        $response = common::http($queueUrl, '', false, $userPwd);
         if(strripos($response, "404") > -1)
         {
             $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
-            $response = common::http($infoUrl);
+            $response = common::http($infoUrl, '', false, $userPwd);
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
@@ -77,7 +75,7 @@ class ciModel extends model
                 $this->updateBuildStatus($compile, $result);
 
                 $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
-                $response = common::http($logUrl);
+                $response = common::http($logUrl, '', false, $userPwd);
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
             }
         }
@@ -89,7 +87,7 @@ class ciModel extends model
                 $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
                 $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
 
-                $response  = common::http($buildUrl);
+                $response  = common::http($buildUrl, '', false, $userPwd);
                 $buildInfo = json_decode($response);
 
                 if($buildInfo->building)
@@ -103,7 +101,7 @@ class ciModel extends model
 
                     $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
                     $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
-                    $response = common::http($logUrl);
+                    $response = common::http($logUrl, '', false, $userPwd);
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
             }
@@ -127,16 +125,17 @@ class ciModel extends model
     /**
      * Send request.
      * 
-     * @param  string $url 
-     * @param  object $data 
+     * @param  string $url
+     * @param  object $data
+     * @param  string $userPwd
      * @access public
      * @return int
      */
-    public function sendRequest($url, $data)
+    public function sendRequest($url, $data, $userPwd = '')
     {
         if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
 
-        $response = common::http($url, $data, true);
+        $response = common::http($url, $data, true, $userPwd);
         if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
         return 0;
     }

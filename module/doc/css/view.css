@@ -1,7 +1,6 @@
 .versions .dropdown-menu{max-height:260px; overflow-y:auto;}
 .table-data > tbody > tr > th.w-80px {width:80px;}
-.article-content{overflow: visible}
-.detail-content .file-image{position: relative; padding: 0 10px;}
+.detail-content .file-image{position: relative; padding: 0 10px; margin-right: 10px;}
 .detail-content .file-image > span.right-icon{position: absolute; right: -10px; top: 0;}
 #urlIframe{border:0px;}
 
