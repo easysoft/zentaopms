@@ -23,7 +23,7 @@
           <table class='table table-form'>
             <tr>
               <th class='w-110px'><?php echo $lang->doc->libType?></th>
-              <td><?php echo html::radio('type', $libTypeList, $type ? $type : 'product')?></td>
+              <td><?php echo html::radio('type', $libTypeList, $type ? $type : key($libTypeList))?></td>
             </tr>
             <tr class='product'>
               <th><?php echo $lang->doc->product?></th>
