@@ -36,7 +36,9 @@ class myModel extends model
             }
             elseif($role == 'po')
             {
+                unset($this->lang->my->menuOrder[29]);
                 $this->lang->my->menuOrder[15] = 'story';
+                $this->lang->my->menuOrder[16] = 'requirement';
                 $this->lang->my->menuOrder[30] = 'task';
                 $this->lang->my->dividerMenu = str_replace(',task,', ',story,', $this->lang->my->dividerMenu);
             }

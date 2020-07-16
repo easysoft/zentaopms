@@ -354,6 +354,7 @@ class router extends baseRouter
         /* Check if the requested module is defined in workflow. */
         $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
         if(!$flow) return parent::setControlFile($exitIfNone);
+        if($flow->status != 'normal') die("<html><head><meta charset='utf-8'></head><body>{$this->lang->flowNotRelease}</body></html>");
 
         /**
          * 工作流中配置的标签应该请求browse方法，而某些内置流程本身包含browse方法。在这里处理请求的时候会无法区分是内置的browse方法还是工作
