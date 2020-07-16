@@ -2491,6 +2491,7 @@ class taskModel extends model
     {
         $tasks = $this->dao->select('id,deadline')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
+            ->orderBy('deadline asc')
             ->fetchAll('id');
         if(!$tasks) return array();
 
@@ -2662,7 +2663,7 @@ class taskModel extends model
             if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
             $fields[$task->$field] ++;
         }
-        asort($fields);
+        if($field != 'date' and $field != 'deadline') asort($fields);
         foreach($fields as $field => $count)
         {
             $data = new stdclass();
