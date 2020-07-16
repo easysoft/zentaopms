@@ -524,7 +524,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
         $this->view->task       = $task;
-        $this->view->members    = $members;
+        $this->view->members    = $members + array('closed' => 'Closed');
         $this->view->users      = $this->loadModel('user')->getPairs();
         $this->display();
     }
