@@ -72,9 +72,9 @@ class compileModel extends model
     /**
      * Get build url.
      * 
-     * @param  object $jenkins 
+     * @param  object $jenkins
      * @access public
-     * @return string
+     * @return object
      */
     public function getBuildUrl($jenkins)
     {
@@ -82,10 +82,10 @@ class compileModel extends model
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
-        return $buildUrl;
+        $build = new stdclass();
+        $build->userPwd = "$jenkinsUser:$jenkinsPassword";
+        $build->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
+        return $build;
     }
 
     /**
@@ -134,7 +134,7 @@ class compileModel extends model
 
         $buildUrl = $this->getBuildUrl($job);
         $build    = new stdclass();
-        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl->url, $data, $buildUrl->userPwd);
         $build->status     = $build->queue ? 'created' : 'create_fail';
         $build->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
