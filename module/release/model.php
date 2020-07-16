@@ -111,13 +111,13 @@ class releaseModel extends model
     {
         $productID = (int)$productID;
         $branch    = (int)$branch;
-        $buildID   = 0;
+        $buildID   = strpos($this->config->release->create->requiredFields, 'build') === false ? 0 : '';
 
         /* Check date must be not more than today. */
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
         /* Auto create build when release is not link build. */
-        if($this->post->build == false && $this->post->name)
+        if($this->post->build == false and $this->post->name and strpos($this->config->release->create->requiredFields, 'build') === false)
         {
             $build = $this->dao->select('*')->from(TABLE_BUILD)
                 ->where('deleted')->eq('0')
@@ -161,7 +161,7 @@ class releaseModel extends model
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
             ->get();
-
+        
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
