@@ -221,7 +221,7 @@ class jobModel extends model
             ->fetch();
         if(!$job) return false;
 
-		$buildUrl = $this->loadModel('compile')->getBuildUrl($job);
+        $buildUrl = $this->loadModel('compile')->getBuildUrl($job);
         $build    = new stdclass();
         $build->job  = $job->id;
         $build->name = $job->name;
@@ -273,7 +273,7 @@ class jobModel extends model
 
         $data->ZENTAO_DATA = "compile={$compileID}";
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl->url, $data, $buildUrl->userPwd);
         $compile->status = $compile->queue ? 'created' : 'create_fail';
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
