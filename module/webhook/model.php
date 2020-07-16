@@ -104,6 +104,7 @@ class webhookModel extends model
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
             $log->module    = $action->objectType;
+            $log->moduleID  = $action->objectID;
             $log->dialog    = $action->objectType == 'todo' ? 1 : 0;
         }
         return $logs;
