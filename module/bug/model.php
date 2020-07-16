@@ -2664,10 +2664,6 @@ class bugModel extends model
                     {
                         echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'");
                     }
-                    else
-                    {
-                        echo $build;
-                    }
                 }
                 break;
             case 'assignedTo':
