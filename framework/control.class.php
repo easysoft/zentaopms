@@ -38,7 +38,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
-        if($this->dbh or defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api'))
+        if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
             $this->checkRequireFlowField();
 
@@ -319,7 +319,7 @@ class control extends baseControl
             foreach($fieldRules as $ruleID)
             {
                 if(!isset($rules[$ruleID])) continue;
-                if(!is_string($_POST[$field->field])) continue;
+                if(!empty($_POST[$field->field]) and !is_string($_POST[$field->field])) continue;
 
                 $rule = $rules[$ruleID];
                 if($rule->type == 'system' and $rule->rule == 'notempty')
