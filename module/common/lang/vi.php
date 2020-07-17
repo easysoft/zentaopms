@@ -86,7 +86,6 @@ $lang->homepage        = 'Trang thiết lập';
 $lang->noviceTutorial  = 'Hướng dẫn ZenTao';
 $lang->changeLog       = 'Thay đổi nhật ký';
 $lang->manual          = 'Hướng dẫn người dùng';
-$lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
 $lang->customMenu      = 'Tùy biến Menu';
 $lang->customField     = 'Tùy biến trường';
 $lang->lineNumber      = 'Số dòng';
