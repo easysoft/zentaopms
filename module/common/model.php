@@ -1836,11 +1836,13 @@ EOD;
      *
      * @param  string       $url
      * @param  string|array $data
+     * @param  bool         $optHeader
+     * @param  string       $userPwd
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $optHeader = false)
+    public static function http($url, $data = null, $optHeader = false, $userPwd = '')
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
@@ -1867,6 +1869,8 @@ EOD;
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
+
+        if(!empty($userPwd)) curl_setopt($curl, CURLOPT_USERPWD, $userPwd);
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);

@@ -861,7 +861,21 @@ class testtask extends control
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID]);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
+        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=myQueryID");
+        $this->config->testcase->search['queryID']   = $param;
+        if($param)
+        {
+            $query = $this->loadModel('search')->getQuery($param);
+            if($query)
+            {
+                $this->session->set('testcaseQuery', $query->sql);
+                $this->session->set('testcaseForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+        }
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

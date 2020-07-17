@@ -66,6 +66,7 @@ class webhookModel extends model
 
         $this->loadModel('action');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+
         $users   = $this->loadModel('user')->getPairs('noletter');
         foreach($logs as $log)
         {
@@ -80,7 +81,7 @@ class webhookModel extends model
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
 
-            if(!is_object($object)) 
+            if(!is_object($object))
             {
                 $object = new stdclass;
                 $object->$field = '';
@@ -102,6 +103,9 @@ class webhookModel extends model
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
+            $log->module    = $action->objectType;
+            $log->moduleID  = $action->objectID;
+            $log->dialog    = $action->objectType == 'todo' ? 1 : 0;
         }
         return $logs;
     }
