@@ -84,9 +84,7 @@ class ciModel extends model
             $queueInfo = json_decode($response);
             if(!empty($queueInfo->executable))
             {
-                $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
-                $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
-
+                $buildUrl  = $queueInfo->executable->url . 'api/json?pretty=true';
                 $response  = common::http($buildUrl, '', false, $userPwd);
                 $buildInfo = json_decode($response);
 
@@ -100,7 +98,6 @@ class ciModel extends model
                     $this->updateBuildStatus($compile, $result);
 
                     $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
-                    $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
                     $response = common::http($logUrl, '', false, $userPwd);
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
