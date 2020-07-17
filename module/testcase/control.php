@@ -590,7 +590,7 @@ class testcase extends control
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $this->loadModel('action');
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);

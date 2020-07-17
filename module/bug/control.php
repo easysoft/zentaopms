@@ -638,7 +638,7 @@ class bug extends control
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);

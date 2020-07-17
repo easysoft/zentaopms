@@ -86,7 +86,6 @@ $lang->homepage        = 'Set Home';
 $lang->noviceTutorial  = 'Tutoriel ZenTao';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'User Manual';
-$lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
 $lang->customMenu      = 'Personnalisation Menu';
 $lang->customField     = 'Personnalisation Champ';
 $lang->lineNumber      = 'Ligne No.';

@@ -32,7 +32,7 @@ class myModel extends model
             {
                 unset($this->lang->my->menuOrder[15]);
                 $this->lang->my->menuOrder[32] = 'task';
-                $this->lang->my->dividerMenu = str_replace(',task,', ',' , $this->lang->my->menuOrder[20] . ',', $this->lang->my->dividerMenu);
+                $this->lang->my->dividerMenu = str_replace(',task,', ',' . $this->lang->my->menuOrder[20] . ',', $this->lang->my->dividerMenu);
             }
             elseif($role == 'po')
             {

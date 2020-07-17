@@ -172,6 +172,7 @@ class jobModel extends model
      */
     public function initJob($id, $job, $repoType)
     {
+        if(empty($id)) return false;
         if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false)
         {
             $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();

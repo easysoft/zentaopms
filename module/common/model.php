@@ -325,7 +325,10 @@ class commonModel extends model
         echo "<a data-toggle='dropdown'>" . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
         if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
-        echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
+
+        $manualUrl = (isset($config->isINT) and $config->isINT) ? $config->manualUrl['int'] : $config->manualUrl['home'];
+        echo '<li>' . html::a($manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
+
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
         echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';

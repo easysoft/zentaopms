@@ -113,6 +113,9 @@ $config->hourPointCommonList['vi'][0] = 'giờ';
 $config->hourPointCommonList['vi'][1] = 'điểm';
 $config->hourPointCommonList['vi'][2] = 'function point';
 
+$config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+$config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
+
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
 $config->charsets['zh-cn']['gbk']   = 'GBK';

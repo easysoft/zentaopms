@@ -86,7 +86,6 @@ $lang->homepage        = 'Als Startseite setzen';
 $lang->noviceTutorial  = 'Anleitung';
 $lang->changeLog       = 'Änderungsprotokoll';
 $lang->manual          = 'Handbuch';
-$lang->manualUrl       = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = 'Benutzer Menü';
 $lang->customField     = 'Individualfeld';
 $lang->lineNumber      = 'Zeile Nr.';
