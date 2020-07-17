@@ -655,7 +655,8 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
-        if($this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
+        $forceNotReview = $this->testcase->forceNotReview();
+        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -666,6 +667,7 @@ class testcase extends control
         $this->view->case            = $case;
         $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
         $this->view->isLibCase       = $isLibCase;
+        $this->view->forceNotReview  = $forceNotReview;
 
         $this->display();
     }

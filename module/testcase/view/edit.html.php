@@ -213,7 +213,11 @@
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->status;?></th>
+                <?php if(!$forceNotReview and $case->status == 'wait'):?>
+                <td><?php echo $lang->testcase->statusList[$case->status];?>
+                <?php else: ?>
                 <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, "class='form-control chosen'");?></td>
+                <?php endif; ?>
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->keywords;?></th>
