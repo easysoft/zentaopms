@@ -59,7 +59,7 @@
             <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
             <td align='center' class='c-actions'>
               <?php
-              if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
+              if(($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing') and ($this->app->user->admin or $this->app->user->account == $estimate->account))
               {
                   common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
                   common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody');
