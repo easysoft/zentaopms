@@ -23,7 +23,7 @@ $config->checkVersion = true;              // Auto check for new version or not.
 /* Set the wide window size and timeout(ms) and duplicate interval time(s). */
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
-$config->duplicateTime = 60;
+$config->duplicateTime = 30;
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
