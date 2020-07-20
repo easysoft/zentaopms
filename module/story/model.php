@@ -1430,7 +1430,7 @@ class storyModel extends model
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
 
-        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->set('stagedBy')->eq($account)->where('id')->eq($storyID)->exec();
+        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         if(!empty($story->stagedBy)) return false;
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
