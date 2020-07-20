@@ -66,6 +66,10 @@
           <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
         </tr>
         <tr>
+          <th><?php echo $lang->task->realStarted;?></th>
+          <td><div class='datepicker-wrapper'><?php echo html::input('realStarted', $task->realStarted != '0000-00-00' ? $task->realStarted : helper::today(), "class='form-control form-date'");?></div></td><td></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->task->finishedDate;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-date'");?></div></td><td></td>
         </tr>

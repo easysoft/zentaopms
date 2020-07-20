@@ -10,7 +10,7 @@ $config->task->activate = new stdclass();
 
 $config->task->create->requiredFields      = 'name,type';
 $config->task->edit->requiredFields        = $config->task->create->requiredFields;
-$config->task->finish->requiredFields      = 'currentConsumed';
+$config->task->finish->requiredFields      = 'realStarted,finishedDate,currentConsumed';
 $config->task->activate->requiredFields    = 'left';
 
 $config->task->editor = new stdclass();
