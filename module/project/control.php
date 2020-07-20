@@ -116,6 +116,8 @@ class project extends control
         $this->loadModel('task');
         $this->loadModel('datatable');
 
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
+
         $this->project->getLimitedProject();
 
         /* Set browse type. */
