@@ -129,7 +129,7 @@
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
         if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', 'showinonlybody');
+        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
         ?>
         <?php endif;?>
       </div>

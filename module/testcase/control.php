@@ -783,14 +783,15 @@ class testcase extends control
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
         /* Assign. */
-        $this->view->position[]    = $this->lang->testcase->common;
-        $this->view->position[]    = $this->lang->testcase->batchEdit;
-        $this->view->caseIDList    = $caseIDList;
-        $this->view->productID     = $productID;
-        $this->view->branchProduct = $branchProduct;
-        $this->view->priList       = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
-        $this->view->typeList      = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
-        $this->view->cases         = $cases;
+        $this->view->position[]     = $this->lang->testcase->common;
+        $this->view->position[]     = $this->lang->testcase->batchEdit;
+        $this->view->caseIDList     = $caseIDList;
+        $this->view->productID      = $productID;
+        $this->view->branchProduct  = $branchProduct;
+        $this->view->priList        = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
+        $this->view->typeList       = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
+        $this->view->cases          = $cases;
+        $this->view->forceNotReview = $this->testcase->forceNotReview();
 
         $this->display();
     }
