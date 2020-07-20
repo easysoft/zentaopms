@@ -681,51 +681,58 @@ class productModel extends model
         $roadmap  = array();
         $total    = 0;
 
-        $parents = array();
+        $parents      = array();
+        $orderedPlans = array();
         foreach($plans as $planID => $plan)
         {
             if($plan->parent == '-1')
             {
                 $parents[$planID] = $plan->title;
                 unset($plans[$planID]);
+                continue;
             }
-
-            if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
-        }
-
-        foreach($plans as $plan)
-        {
             if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
-            $year = substr($plan->end, 0, 4);
-            $roadmap[$year][$plan->branch][$plan->end] = $plan;
-
-            $total++;
+            $orderedPlans[$plan->end][] = $plan;
         }
 
-        if($count > 0 and $total >= $count)
+        krsort($orderedPlans);
+        foreach($orderedPlans as $plans)
         {
-            krsort($roadmap);
-            return $this->sliceRoadmap($roadmap, $count);
+            foreach($plans as $plan)
+            {
+                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+
+                $year = substr($plan->end, 0, 4);
+                $roadmap[$year][$plan->branch][] = $plan;
+                $total++;
+
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+            }
         }
 
-        foreach($releases as $release)
+        $orderedReleases = array();
+        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+
+        krsort($orderedReleases);
+        foreach($orderedReleases as $releases)
         {
-            $year = substr($release->date, 0, 4);
-            $roadmap[$year][$release->branch][$release->date] = $release;
+            foreach($releases as $release)
+            {
+                $year = substr($release->date, 0, 4);
+                $roadmap[$year][$release->branch][] = $release;
+                $total++;
 
-            $total++;
-            if($count > 0 and $total >= $count) break;
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+            }
         }
 
-        krsort($roadmap);
-        if($count > 0) return $this->sliceRoadmap($roadmap, $count);
+        if($count > 0) return $this->processRoadmap($roadmap);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
         {
             foreach($branchRoadmaps as $branch => $roadmaps)
             {
-                krsort($roadmaps);
                 $totalData = count($roadmaps);
                 $rows      = ceil($totalData / 8);
                 $maxPerRow = ceil($totalData / $rows);
@@ -757,30 +764,23 @@ class productModel extends model
     }
 
     /**
-     * Slice roadmap.
+     * Process roadmap.
      *
-     * @param  string $roadmap
-     * @param  int    $count
+     * @param  array  $roadmap
      * @access public
      * @return array
      */
-    public function sliceRoadmap($roadmap, $count)
+    public function processRoadmap($roadmapGroups)
     {
-        $i = 0;
         $newRoadmap = array();
-        foreach($roadmap as $year => $branches)
+        foreach($roadmapGroups as $year => $branchRoadmaps)
         {
-            foreach($branches as $branch => $plans)
+            foreach($branchRoadmaps as $branch => $roadmaps)
             {
-                krsort($plans);
-                foreach($plans as $plan)
-                {
-                    $newRoadmap[$year][$branch][] = $plan;
-                    $i++;
-                    if($i >= $count) break;
-                }
+                foreach($roadmaps as $roadmap) $newRoadmap[] = $roadmap;
             }
         }
+        krsort($newRoadmap);
         return $newRoadmap;
     }
 
