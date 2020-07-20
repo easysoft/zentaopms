@@ -63,6 +63,7 @@ $lang->story->common         = $lang->storyCommon;
 $lang->story->id             = '编号';
 $lang->story->parent         = '父需求';
 $lang->story->product        = "所属{$lang->productCommon}";
+$lang->story->program        = "所属项目";
 $lang->story->branch         = "分支/平台";
 $lang->story->module         = '所属模块';
 $lang->story->moduleAB       = '模块';

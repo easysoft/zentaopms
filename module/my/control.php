@@ -149,6 +149,7 @@ class my extends control
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
+        $this->view->programs   = $this->loadModel('program')->getPairs();
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -186,6 +187,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->programs   = $this->loadModel('program')->getPairs();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;

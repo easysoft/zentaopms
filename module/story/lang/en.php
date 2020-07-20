@@ -63,6 +63,7 @@ $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Parent';
 $lang->story->product        = $lang->productCommon;
+$lang->story->program        = 'Program';
 $lang->story->branch         = "Branch/Platform";
 $lang->story->module         = 'Module';
 $lang->story->moduleAB       = 'Module';
