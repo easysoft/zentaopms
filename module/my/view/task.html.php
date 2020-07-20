@@ -45,6 +45,7 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'> <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-project'>    <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
           <th class='c-project'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-name'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
@@ -70,6 +71,7 @@
             <?php printf('%03d', $task->id);?>
           </td>
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
+          <td class='c-project'><?php echo zget($programs, $task->program, '');?></td>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID", '', '', $task->program), $task->projectName);?></td>
           <td class='c-name' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>

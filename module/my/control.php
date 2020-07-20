@@ -238,6 +238,7 @@ class my extends control
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
+        $this->view->programs   = $this->loadModel('program')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
 
