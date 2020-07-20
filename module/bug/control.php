@@ -88,8 +88,8 @@ class bug extends control
         if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
         if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
 
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID, $branch, $moduleID, $browseType, $orderBy);

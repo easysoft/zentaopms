@@ -977,13 +977,14 @@ class repoModel extends model
         }
         elseif($scm == 'Git')
         {
+            if(!is_dir($path))
+            {
+                dao::$errors['path'] = sprintf($this->lang->repo->error->noFile, $path);
+                return false;
+            }
+
             if(!chdir($path))
             {
-                if(!is_dir($path))
-                {
-                    dao::$errors['path'] = sprintf($this->lang->repo->error->noFile, $path);
-                    return false;
-                }
                 if(!is_executable($path))
                 {
                     dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
