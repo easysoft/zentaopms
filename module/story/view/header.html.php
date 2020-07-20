@@ -3,6 +3,8 @@
 <script>
 function loadProduct(productID)
 {
+    if(parentStory) alert(moveChildrenTips);
+
     loadProductBranches(productID)
     loadProductModules(productID);
     loadProductPlans(productID);

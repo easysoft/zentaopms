@@ -597,16 +597,11 @@ class storyModel extends model
         {
             if($story->product != $oldStory->product)
             {
-                $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
-                $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
-                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
-                $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
-                foreach($unlinkedProjects as $projectID)
+                $this->updateStoryProduct($storyID, $story->product);
+                if($oldStory->parent == '-1')
                 {
-                    $data = new stdclass();
-                    $data->project = $projectID;
-                    $data->product = $story->product;
-                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
+                    foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
                 }
             }
 
@@ -664,6 +659,30 @@ class storyModel extends model
             unset($story->parent);
             $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
+        }
+    }
+
+    /**
+     * Update story product.
+     *
+     * @param  int    $storyID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function updateStoryProduct($storyID, $productID)
+    {
+        $this->dao->update(TABLE_STORY)->set('product')->eq($productID)->where('id')->eq($storyID)->exec();
+        $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($productID)->where('story')->eq($storyID)->exec();
+        $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
+        $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($productID)->orderBy('project')->fetchPairs('project','project');
+        $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
+        foreach($unlinkedProjects as $projectID)
+        {
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $productID;
+            $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
     }
 
@@ -1403,12 +1422,15 @@ class storyModel extends model
     public function setStage($storyID)
     {
         $storyID = (int)$storyID;
+        $account = $this->app->user->account;
 
         /* Get projects which status is doing. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+
+        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         if(!empty($story->stagedBy)) return false;
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();

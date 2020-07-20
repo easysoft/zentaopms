@@ -409,22 +409,6 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
 
-        /* Sort roadmaps. */
-        $roadmapGroups = $this->product->getRoadmap($productID, 0, 6);
-        $roadmaps      = array();
-        foreach($roadmapGroups as $year => $mapBranches)
-        {
-            foreach($mapBranches as $branchID => $plans)
-            {
-                foreach($plans as $plan)
-                {
-                    $date = isset($plan->begin) ? $plan->begin : $plan->date;
-                    $roadmaps[$date . $branchID] = $plan;
-                }
-            }
-        }
-        krsort($roadmaps);
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
@@ -441,7 +425,7 @@ class product extends control
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->roadmaps   = $roadmaps;
+        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }
