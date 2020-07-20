@@ -698,6 +698,7 @@ class productModel extends model
         krsort($orderedPlans);
         foreach($orderedPlans as $plans)
         {
+            krsort($plans);
             foreach($plans as $plan)
             {
                 if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
@@ -716,6 +717,7 @@ class productModel extends model
         krsort($orderedReleases);
         foreach($orderedReleases as $releases)
         {
+            krsort($releases);
             foreach($releases as $release)
             {
                 $year = substr($release->date, 0, 4);
