@@ -1403,12 +1403,15 @@ class storyModel extends model
     public function setStage($storyID)
     {
         $storyID = (int)$storyID;
+        $account = $this->app->user->account;
 
         /* Get projects which status is doing. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+
+        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->set('stagedBy')->eq($account)->where('id')->eq($storyID)->exec();
         if(!empty($story->stagedBy)) return false;
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
