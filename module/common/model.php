@@ -560,8 +560,11 @@ class commonModel extends model
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule  = $app->getModuleName();
         $currentMethod  = $app->getMethodName();
-        $menu           = customModel::getModuleMenu($moduleName);
         $isMobile       = $app->viewType === 'mhtml';
+
+        /* When use workflow then set rawModule to moduleName. */
+        if($moduleName == 'flow') $moduleName = $app->rawModule;
+        $menu = customModel::getModuleMenu($moduleName);
 
         /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
         if(!$app->isFlow)
@@ -569,6 +572,7 @@ class commonModel extends model
             $currentModule  = $app->rawModule;
             $currentMethod  = $app->rawMethod;
         }
+
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
