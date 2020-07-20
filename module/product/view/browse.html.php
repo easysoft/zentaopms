@@ -39,6 +39,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    if($this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'allstory');
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;

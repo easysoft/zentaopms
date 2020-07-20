@@ -131,7 +131,6 @@ class ciModel extends model
     public function sendRequest($url, $data, $userPwd = '')
     {
         if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
-
         $response = common::http($url, $data, true, $userPwd);
         if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
         return 0;

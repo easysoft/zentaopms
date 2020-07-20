@@ -129,7 +129,7 @@ class compileModel extends model
         if(!$job) return false;
 
         $data = new stdclass();
-        $data->PARAM_TAG = $compile->tag;
+        $data->PARAM_TAG   = $compile->tag;
         $data->ZENTAO_DATA = "compile={$compile->id}";
 
         $buildUrl = $this->getBuildUrl($job);
