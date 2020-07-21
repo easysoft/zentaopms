@@ -1520,8 +1520,8 @@ class storyModel extends model
         $branchStatusList = array();
         $branchDevelTasks = array();
         $branchTestTasks  = array();
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0);
+        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
+        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
         foreach($tasks as $type => $typeTasks)
         {
             foreach($typeTasks as $task)
@@ -1565,7 +1565,7 @@ class storyModel extends model
             if($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
-            if($statusList['test']['doing'] > 0) $stage = 'testing';
+            if($statusList['test']['doing'] > 0 or $statusList['test']['pause'] > 0) $stage = 'testing';
             if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
             if($statusList['devel']['done'] == $develTasks and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
 
