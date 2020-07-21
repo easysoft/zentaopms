@@ -345,7 +345,7 @@ class testreport extends control
             $productIdList[$report->product] = $report->product;
 
             $builds  = $this->build->getByList($report->builds);
-            $stories = $this->story->getProjectStories($project->id);
+            $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
             $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $report->begin, $report->end, 'project');
         }
 

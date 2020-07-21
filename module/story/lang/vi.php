@@ -222,6 +222,7 @@ $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển t
 $lang->story->noStory              = 'Không có câu chuyện nào';
 $lang->story->ignoreChangeStage    = 'Câu chuyện %s là bản nháp. Vui lòng xét duyệt nó..';
 $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->storyCommon} mẹ";
+$lang->story->moveChildrenTips     = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';
