@@ -187,8 +187,9 @@
         </div>
         <?php else:?>
         <div class='input-group'>
-          <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
+          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProgramByProject(this.value);");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
+          <?php echo html::hidden('projectProgram', 0);?>
         </div>
         <?php endif;?>
       </div>
@@ -212,9 +213,10 @@
         </div>
         <?php else:?>
         <div class='input-group'>
-          <?php echo html::select('product', $products, '', "class='form-control chosen'");?>
+          <?php echo html::select('product', $products, '', "class='form-control chosen' onchange=getProgramByProduct(this.value);");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'", 'btn btn-primary');?></span>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
+          <?php echo html::hidden('productProgram', 0);?>
         </div>
         <?php endif;?>
       </div>
