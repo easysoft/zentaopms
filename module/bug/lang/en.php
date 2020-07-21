@@ -262,8 +262,8 @@ $lang->bug->confirmedList[1] = 'Yes';
 $lang->bug->confirmedList[0] = 'No';
 
 $lang->bug->resolutionList['']           = '';
-$lang->bug->resolutionList['bydesign']   = 'As Design';
-$lang->bug->resolutionList['duplicate']  = 'Duplicated';
+$lang->bug->resolutionList['bydesign']   = 'As Designed';
+$lang->bug->resolutionList['duplicate']  = 'Duplicate';
 $lang->bug->resolutionList['external']   = 'External';
 $lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
