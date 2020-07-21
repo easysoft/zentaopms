@@ -270,7 +270,7 @@ class productModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($this->session->program)
+            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
             ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
@@ -301,7 +301,7 @@ class productModel extends model
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($this->session->program)
+            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy($orderBy)
