@@ -1134,10 +1134,12 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIdList = $data->storyIdList ? $data->storyIdList : array();
 
-        $oldStories = $this->getByList($storyIdList);
+        $oldStories   = $this->getByList($storyIdList);
+        $parentIdList = array();
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->parent == -1) $parentIdList[] = $oldStory->id;
             if($oldStory->status == 'closed') continue;
 
             $story = new stdclass();
@@ -1158,6 +1160,12 @@ class storyModel extends model
 
             $stories[$storyID] = $story;
             unset($story);
+        }
+
+        if(count($parentIdList))
+        {
+            $noticeParentID = implode(',', $parentIdList);
+            die(js::alert(sprintf($this->lang->story->parentClose, $noticeParentID)));
         }
 
         foreach($stories as $storyID => $story)
