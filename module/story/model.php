@@ -1438,8 +1438,8 @@ class storyModel extends model
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
 
-        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         if(!empty($story->stagedBy)) return false;
+        if($story->status == 'closed') $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $projects = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
