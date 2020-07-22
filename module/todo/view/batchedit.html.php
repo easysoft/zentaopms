@@ -36,7 +36,7 @@
         <tr class='text-center'>
           <th class='w-40px'>   <?php echo $lang->idAB;?></th>
           <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-          <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
+          <th class='w-110px'>  <?php echo $lang->todo->type;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
           <th><?php echo $lang->todo->name;?></th>
           <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
@@ -50,12 +50,11 @@
         <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
         <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
         <td class='text-center'>
-          <?php echo zget($lang->todo->typeList, $todo->type);?>
-          <?php echo html::hidden("types[$todo->id]", $todo->type);?>
+          <?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, " . $todo->id . ")' class='form-control'");?>
         </td>
         <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
         <td style='overflow:visible'>
-          <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin'"); ?></div>
+          <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><?php echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control hiddenwin'"); ?></div>
           <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
           <?php
           if($todo->type == 'custom' or $todo->type == 'cycle')
