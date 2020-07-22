@@ -11041,6 +11041,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colinsertleft: function () {
                 this.colinsert(0);
@@ -11088,6 +11089,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             rowinsertabove: function () {
                 this.rowinsert(0);
@@ -11120,6 +11122,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colmerge: function () {
                 var table = self.plugin.getSelectedTable()[0],
@@ -11142,6 +11145,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             mergeCells: function () {
                 var tableSelectionRange = self.tableSelectionRange;
@@ -11173,6 +11177,7 @@ KindEditor.plugin('table', function (K) {
                     self.cmd.range.selectNodeContents($firstCell[0]).collapse(true);
                     // self.cmd.select();
                     self.addBookmark();
+                    self.focus();
                 }
             },
             rowsplit: function () {
@@ -11201,6 +11206,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colsplit: function () {
                 var table = self.plugin.getSelectedTable()[0],
@@ -11222,6 +11228,7 @@ KindEditor.plugin('table', function (K) {
                 self.cmd.range.selectNodeContents(cell).collapse(true);
                 // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             coldelete: function () {
                 var table = self.plugin.getSelectedTable()[0];
@@ -11260,6 +11267,7 @@ KindEditor.plugin('table', function (K) {
                     self.cmd.selection(true);
                 }
                 self.addBookmark();
+                self.focus();
             },
             rowdelete: function () {
                 var table = self.plugin.getSelectedTable()[0];
@@ -11282,6 +11290,7 @@ KindEditor.plugin('table', function (K) {
                     self.cmd.selection(true);
                 }
                 self.addBookmark();
+                self.focus();
             }
         };
 
