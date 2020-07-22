@@ -45,7 +45,7 @@ $(function()
         parent.location.href = link;
     })
 
-    $('#project, $product').change();
+    $('#project, #product').change();
 });
 
 function createProduct()
