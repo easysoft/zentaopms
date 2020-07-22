@@ -150,11 +150,11 @@ $lang->story->stageList['closed']     = 'Closed';
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = 'Already Done';
 $lang->story->reasonList['subdivided'] = 'Decomposed';
-$lang->story->reasonList['duplicate']  = 'Duplicated';
+$lang->story->reasonList['duplicate']  = 'Duplicate';
 $lang->story->reasonList['postponed']  = 'Postponed';
 $lang->story->reasonList['willnotdo']  = "Won't Do";
 $lang->story->reasonList['cancel']     = 'Cancelled';
-$lang->story->reasonList['bydesign']   = 'As Design';
+$lang->story->reasonList['bydesign']   = 'As Designed';
 //$lang->story->reasonList['isbug']      = 'Bug!';
 
 $lang->story->reviewResultList['']        = '';

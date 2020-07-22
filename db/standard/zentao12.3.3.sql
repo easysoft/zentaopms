@@ -388,7 +388,6 @@ CREATE TABLE `zt_file` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` char(30) NOT NULL,
   `role` char(30) NOT NULL DEFAULT '',
   `desc` char(255) NOT NULL DEFAULT '',

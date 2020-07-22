@@ -1134,10 +1134,12 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIdList = $data->storyIdList ? $data->storyIdList : array();
 
-        $oldStories = $this->getByList($storyIdList);
+        $oldStories   = $this->getByList($storyIdList);
+        $parentIdList = array();
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->parent == -1) $parentIdList[] = $oldStory->id;
             if($oldStory->status == 'closed') continue;
 
             $story = new stdclass();
@@ -1158,6 +1160,12 @@ class storyModel extends model
 
             $stories[$storyID] = $story;
             unset($story);
+        }
+
+        if(count($parentIdList))
+        {
+            $noticeParentID = implode(',', $parentIdList);
+            die(js::alert(sprintf($this->lang->story->parentClose, $noticeParentID)));
         }
 
         foreach($stories as $storyID => $story)
@@ -1430,8 +1438,8 @@ class storyModel extends model
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
 
-        if($story->status == 'closed') return $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         if(!empty($story->stagedBy)) return false;
+        if($story->status == 'closed') $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $projects = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1512,8 +1520,8 @@ class storyModel extends model
         $branchStatusList = array();
         $branchDevelTasks = array();
         $branchTestTasks  = array();
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0);
+        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
+        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
         foreach($tasks as $type => $typeTasks)
         {
             foreach($typeTasks as $task)
@@ -1557,7 +1565,7 @@ class storyModel extends model
             if($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
-            if($statusList['test']['doing'] > 0) $stage = 'testing';
+            if($statusList['test']['doing'] > 0 or $statusList['test']['pause'] > 0) $stage = 'testing';
             if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
             if($statusList['devel']['done'] == $develTasks and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
 
