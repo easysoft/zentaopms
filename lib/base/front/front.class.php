@@ -800,6 +800,10 @@ class baseJS
      */
     static public function alert($message = '', $full = true)
     {
+        global $app;
+
+        if($app->viewType == 'json') return json_encode(array('message' => $message));
+
         return self::start($full) . "alert('" . $message . "')" . self::end() . self::resetForm();
     }
 
@@ -828,6 +832,10 @@ class baseJS
      */
     static public function error($message, $full = true)
     {
+        global $app;
+
+        if($app->viewType == 'json') return json_encode(array('message' => $message));
+
         $alertMessage = '';
         if(is_array($message))
         {
@@ -871,6 +879,18 @@ class baseJS
      */
     static public function confirm($message = '', $okURL = '', $cancleURL = '', $okTarget = "self", $cancleTarget = "self")
     {
+        global $app;
+        if($app->viewType == 'json')
+        {
+            $output['message']      = $message;
+            $output['okURL']        = common::getSysURL() . $okURL;
+            $output['cancleURL']    = common::getSysURL() . $cancleURL;
+            $output['okTarget']     = $okTarget;
+            $output['cancleTarget'] = $cancleTarget;
+
+            return json_encode($output);
+        }
+
         $js = self::start();
 
         $confirmAction = '';
@@ -919,12 +939,16 @@ EOT;
      */
     static public function locate($url, $target = "self")
     {
+        global $app;
+
         /* If the url if empty, goto the home page. */
         if(!$url)
         {
             global $config;
             $url = $config->webRoot;
         }
+
+        if($app->viewType == 'json') return json_encode(array('locate' => common::getSysURL() . $url));
 
         $js  = self::start();
         if(strtolower($url) == "back")

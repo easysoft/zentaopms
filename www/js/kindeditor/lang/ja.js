@@ -122,11 +122,13 @@ KindEditor.lang({
 	'flash.upload' : 'アップロード',
 	'flash.viewServer' : 'ファイルスペース',
 	'media.url' : 'URL',
+	'media.urlTip': '複数のURLはコンマで区切られます',
 	'media.width' : '幅',
 	'media.height' : '高さ',
 	'media.autostart' : '自動放送',
 	'media.upload' : 'アップロード',
 	'media.viewServer' : 'ファイルスペース',
+	'media.controls': '再生コントロール',
 	'image.remoteImage' : 'オンライン画像',
 	'image.localImage' : 'ローカルアップロード',
 	'image.remoteUrl' : '画像アドレス',
@@ -266,10 +268,6 @@ if (window.$ && $.zui && $.zui.lang) {
             placeholder: 'エディターを使用して画像を貼り付けます。',
             failMsg: '画像を貼り付けませんでした、後でやり直してください。',
             uploadingHint: '画像をアップロード中、しばらくお待ちください...',
-		},
-		'zui.table': {
-			selectedItems: '<strong>{0}</strong> 選択',
-			attrTotal: '{0} 合計 <strong>{1}</strong>'
 		}
 	});
 }

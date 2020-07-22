@@ -1296,7 +1296,7 @@ class taskModel extends model
         foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
         foreach($record->left     as $id => $item) $record->left[$id]     = trim($item);
         foreach($record->consumed as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
-        foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->estimateNumber;
+        foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
         if(dao::isError()) return false;
 
         $estimates    = array();
@@ -1647,7 +1647,7 @@ class taskModel extends model
 
         if(!is_numeric($task->left))
         {
-            dao::$errors[] = $this->lang->task->error->estimateNumber;
+            dao::$errors[] = $this->lang->task->error->leftNumber;
             return false;
         }
 

@@ -1114,7 +1114,7 @@ class storyModel extends model
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-
+        $this->setStage($storyID);
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
@@ -1183,7 +1183,7 @@ class storyModel extends model
             {
                 /* Update parent story status. */
                 if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-
+                $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }
             else
@@ -1437,9 +1437,7 @@ class storyModel extends model
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-
         if(!empty($story->stagedBy)) return false;
-        if($story->status == 'closed') $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
 
         $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $projects = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1455,6 +1453,15 @@ class storyModel extends model
         {
             $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('branch', 'branch');
             foreach($plans as $branch) $stages[$branch] = 'planned';
+        }
+
+        /* When the status is closed, phase = is also changed to closed. */
+        if($story->status == 'closed')
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
+            foreach($stages as $branch => $stage) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+            foreach($projects as $project => $branch) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+            return false;
         }
 
         /* If no projects, in plan, stage is planned. No plan, wait. */
