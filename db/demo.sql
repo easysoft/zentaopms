@@ -218,8 +218,8 @@ INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order
 INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(13, 1, '合作洽谈', 0, ',13,', 1, 60, 'bug', '');
 INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(14, 1, '关于我们', 0, ',14,', 1, 70, 'bug', '');
 
-INSERT INTO `zt_product` (`id`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `deleted`) VALUES(1, '公司企业网站建设', 'companyWebsite', 'normal', '建立公司企业网站，可以更好对外展示。<br />', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 09:57:07', '5', '0');
-INSERT INTO `zt_product` (`id`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `createdVersion`, `deleted`) VALUES(2, '企业内部工时管理系统', 'workhourManage', 'normal', '', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 11:15:20', '10', '5.2.1', '0');
+INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `deleted`) VALUES(1, 1, '公司企业网站建设', 'companyWebsite', 'normal', '建立公司企业网站，可以更好对外展示。<br />', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 09:57:07', '5', '0');
+INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `createdVersion`, `deleted`) VALUES(2, 2, '企业内部工时管理系统', 'workhourManage', 'normal', '', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 11:15:20', '10', '5.2.1', '0');
 
 INSERT INTO `zt_productplan` (`id`, `product`, `title`, `desc`, `begin`, `end`, `deleted`) VALUES(1, 1, '1.0版本', '开发出企业网站1.0版本。<br />', '2000-01-01', '2015-01-01', '0');
 
