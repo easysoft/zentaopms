@@ -201,6 +201,7 @@ $lang->task->error = new stdclass();
 $lang->task->error->totalNumber      = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber   = '"Estimates" must be numbers.';
+$lang->task->error->leftNumber       = '"Left" must be numbers.';
 $lang->task->error->recordMinus      = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall    = '"Total Cost" must be > the last number.';
 $lang->task->error->consumedThisTime = 'Please enter "Hours Cost"';

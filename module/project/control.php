@@ -482,6 +482,8 @@ class project extends control
      */
     public function importBug($projectID = 0, $browseType = 'all', $param = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
+        $this->app->loadConfig('task');
+
         if(!empty($_POST))
         {
             $mails = $this->project->importBug($projectID);
@@ -605,17 +607,18 @@ class project extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->pager      = $pager;
-        $this->view->bugs       = $bugs;
-        $this->view->recTotal   = $pager->recTotal;
-        $this->view->recPerPage = $pager->recPerPage;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $param;
-        $this->view->users      = $users;
-        $this->view->project    = $this->project->getByID($projectID);
-        $this->view->projectID  = $projectID;
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->pager          = $pager;
+        $this->view->bugs           = $bugs;
+        $this->view->recTotal       = $pager->recTotal;
+        $this->view->recPerPage     = $pager->recPerPage;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->users          = $users;
+        $this->view->project        = $this->project->getByID($projectID);
+        $this->view->projectID      = $projectID;
+        $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
     }
 

@@ -201,6 +201,7 @@ $lang->task->error = new stdclass();
 $lang->task->error->totalNumber      = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber   = '"Verbraucht" muss eine Zahl sein.';
 $lang->task->error->estimateNumber   = '"Stunden" müss eine Zahl sein.';
+$lang->task->error->leftNumber       = '"Left" must be numbers.';
 $lang->task->error->recordMinus      = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall    = '"Genutzt" muss larger than before.';
 $lang->task->error->consumedThisTime = 'Bitte geben Sie die Stunden an';
