@@ -362,7 +362,7 @@ $(function()
             var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
             var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
-            var $rows = checkedTotal ? $checkedRows : $table.find('tbody>tr');
+            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
 
             var checkedWait     = 0;
             var checkedDoing    = 0;
