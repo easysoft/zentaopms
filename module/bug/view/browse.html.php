@@ -52,7 +52,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";
         if($this->session->bugBrowseType == 'bysearch') $browseType = 'all';
-        if($this->session->bugBrowseType != 'bysearch' && $browseType == 'bymodule') $browseType = $this->session->bugBrowseType;
+        if($this->session->bugBrowseType != 'bysearch' && ($browseType == 'bymodule' or $browseType == 'bybranch')) $browseType = $this->session->bugBrowseType;
         $label .= $menuBrowseType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
         $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
 
@@ -401,6 +401,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 </div>
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
+var branchID = $.cookie('bugBranch');
+$('#branch' + branchID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>

@@ -354,6 +354,7 @@ class bugModel extends model
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->bugBrowseType and $this->session->bugBrowseType != 'bysearch') ? $this->session->bugBrowseType : $browseType;
+        $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
 
         /* Get bugs by browse type. */
         $bugs = array();

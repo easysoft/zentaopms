@@ -421,7 +421,9 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
 </div>
 <script>
 var moduleID = <?php echo $moduleID?>;
+var branchID = $.cookie('storyBranch');
 $('#module<?php echo $moduleID;?>').closest('li').addClass('active');
+$('#branch' + branchID).closest('li').addClass('active');
 
 $(function()
 {

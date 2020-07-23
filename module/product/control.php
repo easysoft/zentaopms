@@ -101,7 +101,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -116,18 +116,26 @@ class product extends control
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+        $branchID  = $browseType == '' ? $branch : ($browseType == 'bybranch' ? (int)$param : ($this->cookie->storyBranch ? $this->cookie->storyBranch : $branch));
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
             setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bymodule') setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', false, false);
-        if($browseType != 'bymodule') $this->session->set('storyBrowseType', $browseType);
+        if($browseType == 'bymodule' or $browseType == '')
+        {
+            setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', false, false);
+            $_COOKIE['storyBranch'] = 0;
+            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', false, false);
+            if($browseType == '') $browseType = 'unclosed';
+        }
+        if($browseType == 'bybranch') setcookie('storyBranch', (int)$param, 0, $this->config->webRoot, '', false, false);
+        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
 
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. */
@@ -146,7 +154,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories. */
-        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');

@@ -1,5 +1,8 @@
 <div class='panel-body scrollbar-hover'>
 <?php foreach ($lang->block->flowchart as $rowIndex => $flow):?>
+<?php if($this->config->global->flow == 'onlyStory' and in_array($rowIndex, ['project', 'dev', 'tester'])) continue; ?>
+<?php if($this->config->global->flow == 'onlyTask'  and in_array($rowIndex, ['product', 'dev', 'tester'])) continue; ?>
+<?php if($this->config->global->flow == 'onlyTest'  and in_array($rowIndex, ['project', 'product'])) continue; ?>
 <?php $idx = 0; ?>
   <div class='row row-<?php echo $rowIndex?>'>
   <?php foreach ($flow as $flowItem):?>
