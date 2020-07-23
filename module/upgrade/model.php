@@ -819,61 +819,71 @@ class upgradeModel extends model
         $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
-        $tableExists = true;
-        $handle      = fopen($standardSQL, 'r');
-        if($handle)
+        $lines = file($standardSQL);
+        if(!isset($this->config->isINT) or !($this->config->isINT))
         {
-            while(!feof($handle))
+            $xVersion = $version;
+            $version  = str_replace('.', '_', $version);
+            if(strpos($version, 'pro') !== false and isset($this->config->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->proVersion[$version]);
+            if(strpos($version, 'biz') !== false and isset($this->config->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->bizVersion[$version]);
+
+            $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
+            if(!file_exists($xStandardSQL))
             {
-                $line = trim(fgets($handle));
-                if(strpos($line, 'DROP TABLE ') !== false) continue;
-                if(strpos($line, 'CREATE TABLE ') !== false)
+                $xLines = file($xstandardSQL);
+                $lines  = array_merge($lines, $xLines);
+            }
+        }
+
+        $tableExists = true;
+        foreach($lines as $line)
+        {
+            if(strpos($line, 'DROP TABLE ') !== false) continue;
+            if(strpos($line, 'CREATE TABLE ') !== false)
+            {
+                preg_match_all('/`([^`]*)`/', $line, $out);
+                if(isset($out[1][0]))
                 {
-                    preg_match_all('/`([^`]*)`/', $line, $out);
-                    if(isset($out[1][0]))
+                    $fields = array();
+                    $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+                    try
                     {
-                        $fields = array();
-                        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+                        $tableExists = true;
+                        $stmt        = $this->dbh->query("show fields from `{$table}`");
+                        while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                    }
+                    catch(PDOException $e)
+                    {
+                        $errorInfo = $e->errorInfo;
+                        $errorCode = $errorInfo[1];
+                        $line      = str_replace('zt_', $this->config->db->prefix, $line);
+                        if($errorCode == '1146') $tableExists = false;
+                    }
+                }
+            }
+            if(!$tableExists) $alterSQL .= $line . "\n";
+
+            if(!empty($fields))
+            {
+                if(preg_match('/^`([^`]*)` /', $line))
+                {
+                    list($field) = explode(' ', $line);
+                    $field = trim($field, '`');
+                    if(!isset($fields[$field]))
+                    {
+                        $line = rtrim($line, ',');
+                        if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
                         try
                         {
-                            $tableExists = true;
-                            $stmt        = $this->dbh->query("show fields from `{$table}`");
-                            while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                            $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
                         }
                         catch(PDOException $e)
                         {
-                            $errorInfo = $e->errorInfo;
-                            $errorCode = $errorInfo[1];
-                            $line      = str_replace('zt_', $this->config->db->prefix, $line);
-                            if($errorCode == '1146') $tableExists = false;
-                        }
-                    }
-                }
-                if(!$tableExists) $alterSQL .= $line . "\n";
-
-                if(!empty($fields))
-                {
-                    if(preg_match('/^`([^`]*)` /', $line))
-                    {
-                        list($field) = explode(' ', $line);
-                        $field = trim($field, '`');
-                        if(!isset($fields[$field]))
-                        {
-                            $line = rtrim($line, ',');
-                            if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
-                            try
-                            {
-                                $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
-                            }
-                            catch(PDOException $e)
-                            {
-                                $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
-                            }
+                            $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
                         }
                     }
                 }
             }
-            fclose($handle);
         }
 
         return $alterSQL;
