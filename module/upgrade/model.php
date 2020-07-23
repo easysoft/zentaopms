@@ -828,9 +828,9 @@ class upgradeModel extends model
             if(strpos($version, 'biz') !== false and isset($this->config->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->bizVersion[$version]);
 
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
-            if(!file_exists($xStandardSQL))
+            if(file_exists($xStandardSQL))
             {
-                $xLines = file($xstandardSQL);
+                $xLines = file($xStandardSQL);
                 $lines  = array_merge($lines, $xLines);
             }
         }
@@ -838,6 +838,7 @@ class upgradeModel extends model
         $tableExists = true;
         foreach($lines as $line)
         {
+            $line = trim($line);
             if(strpos($line, 'DROP TABLE ') !== false) continue;
             if(strpos($line, 'CREATE TABLE ') !== false)
             {
