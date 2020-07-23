@@ -223,7 +223,6 @@ $lang->story->noStory               = "Aucune story pour l'instant. ";
 $lang->story->ignoreChangeStage     = "Story %s est à l'état brouillon et nécessite d'être complétée et validée...";
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
-$lang->story->moveSRTips            = "Move {$lang->srCommon} to selected product when modified product property of {$lang->urCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Périmètre';
