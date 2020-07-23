@@ -227,6 +227,7 @@ $lang->story->noStory               = "暂时没有{$lang->storyCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 为草稿状态，没有修改其阶段。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->storyCommon}的所属产品会将其下的子{$lang->storyCommon}也移动到所选产品下。";
+$lang->story->moveSRTips            = "修改{$lang->urCommon}的所属产品会将其下的{$lang->srCommon}也移动到所选产品下。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->storyCommon}所属范围";

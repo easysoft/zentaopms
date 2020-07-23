@@ -935,7 +935,7 @@ class repoModel extends model
             }
             $svnVersion = end($versionOutput);
 
-            $path = '"' . str_replace(array('%3A', '%2F'), array(':', '/'), urlencode($path)) . '"';
+            $path = '"' . str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode($path)) . '"';
             if(stripos($path, 'https://') === 1 or stripos($path, 'svn://') === 1)
             {
                 if(version_compare($svnVersion, '1.6', '<'))

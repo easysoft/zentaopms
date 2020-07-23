@@ -149,6 +149,7 @@ class todo extends control
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
 
+        unset($this->lang->todo->typeList['cycle']);
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
         $this->view->position[] = $this->lang->todo->common;
@@ -206,6 +207,8 @@ class todo extends control
             $countInputVars  = count($editedTodos) * $columns;
             $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
+
+            unset($this->lang->todo->typeList['cycle']);
             /* Set Custom*/
             foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
             $this->view->customFields = $customFields;

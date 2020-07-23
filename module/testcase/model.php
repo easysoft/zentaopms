@@ -1123,7 +1123,8 @@ class testcaseModel extends model
                 foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
                 {
                     if(empty($appendField)) continue;
-                    $caseData->$appendField = $_POST[$appendField][$key];
+                    $caseData->$appendField = zget($_POST[$appendField], $key, '');
+                    if(is_array($caseData->$appendField)) $caseData->$appendField = join(',', $caseData->$appendField);
                 }
             }
 

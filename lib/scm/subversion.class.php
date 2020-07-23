@@ -24,7 +24,7 @@ class Subversion
     public function __construct($client, $root, $account, $password, $encoding = 'UTF-8')
     {
         putenv('LC_CTYPE=en_US.UTF-8');
-        $this->root     = str_replace(array('%3A', '%2F'), array(':', '/'), urlencode(rtrim($root, '/')));
+        $this->root     = str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode(rtrim($root, '/')));
         $this->account  = $account;
         $this->password = $password;
         $this->encoding = $encoding;
@@ -47,7 +47,7 @@ class Subversion
     public function ls($path, $revision = 'HEAD')
     {
         $resourcePath = $path;
-        $path = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($path)) . '"';
+        $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
         $list = execCmd($cmd, 'string', $result);
         if($result)
@@ -145,7 +145,7 @@ class Subversion
     public function getLastLog($path, $count = 10)
     {
         $resourcePath = $path;
-        $path = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($path)) . '"';
+        $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'log', "--limit $count --xml")));
         $comments = execCmd($cmd, 'string', $result);
         if($result)
@@ -198,7 +198,7 @@ class Subversion
         $resourcePath = $path;
         $count = $count == 0 ? '' : "--limit $count";
         $param = $quiet ? '-q' : '-v';
-        $path  = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($path)) . '"';
+        $path  = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd   = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'log', "$count $param -r $fromRevision:$toRevision --xml")));
         $comments = execCmd($cmd, 'string', $result);
         if($result)
@@ -259,7 +259,7 @@ class Subversion
     public function blame($path, $revision)
     {
         $resourcePath = $path;
-        $path   = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($path)) . '"';
+        $path   = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $file   = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'cat', "-r $revision")));
         $blame  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'blame', "-r $revision --xml")));
         $output = execCmd($blame, 'string', $result);
@@ -329,7 +329,7 @@ class Subversion
     {
         $resourcePath = $path;
         if($fromRevision == '^') $fromRevision = $toRevision - 1;
-        $path = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($path)) . '"';
+        $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'diff', "-r $fromRevision:$toRevision")));
         $lines = execCmd($cmd, 'array', $result);
         if($result)
@@ -352,7 +352,7 @@ class Subversion
     public function cat($entry, $revision = 'HEAD')
     {
         $resourcePath = $entry;
-        $entry = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($entry)) . '"';
+        $entry = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($entry)) . '"';
         $cmd   = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'cat', "-r $revision")));
         $content = execCmd($cmd, 'string', $result);
         if($result)
@@ -375,7 +375,7 @@ class Subversion
     public function info($entry, $revision = 'HEAD')
     {
         $resourcePath = $entry;
-        $entry   = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($entry)) . '"';
+        $entry   = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($entry)) . '"';
         $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
 
         $svninfo = execCmd($svnInfo, 'string', $result);

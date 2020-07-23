@@ -48,11 +48,11 @@ $uid = uniqid('');
         bodyClass: 'article-content',
         urlType: 'absolute',
         uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
-        allowFileManager: true,
         langType: '<?php echo $editorLang?>',
         cssData: 'html,body {background: none}.article-content{overflow:visible}.article-content, .article-content table td, .article-content table th {line-height: 1.3846153846; font-size: 13px;}.article-content .table-auto {width: auto!important; max-width: 100%;}',
+        placeholder: <?php echo json_encode($lang->noticePasteImg);?>,
         placeholderStyle: {fontSize: '13px', color: '#888'},
-        pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid), placeholder: <?php echo json_encode($lang->noticePasteImg);?>},
+        pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid)},
         syncAfterBlur: true,
         spellcheck: false
     };

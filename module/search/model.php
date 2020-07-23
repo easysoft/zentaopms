@@ -34,6 +34,8 @@ class searchModel extends model
 
             foreach($fields as $field)
             {
+                if($field->canSearch == 0) continue;
+
                 /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
                 if($field->field == 'subStatus')
                 {

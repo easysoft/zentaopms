@@ -87,12 +87,12 @@
 
     function _addUnit(val, unit) {
         unit = unit || 'px';
-        return val && /^\d+$/.test(val) ? val + unit : val;
+        return val && /^[\d\.]+$/.test(val) ? val + unit : val;
     }
 
     function _removeUnit(val) {
         var match;
-        return val && (match = /(\d+)/.exec(val)) ? parseInt(match[1], 10) : 0;
+        return val && (match = /([\d\.]+)/.exec(val)) ? parseInt(match[1], 10) : 0;
     }
 
     function _escape(val) {
@@ -320,6 +320,9 @@
             ],
             a: ['id', 'class', 'href', 'target', 'name'],
             embed: ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+            audio: ['id', 'class', 'width', 'src', 'height', 'loop', 'preload', 'autoplay', 'controls', 'crossorigin', 'currentTime', 'duration', 'muted'],
+            video: ['id', 'class', 'width', 'src', 'height', 'loop', 'preload', 'autoplay', 'controls', 'crossorigin', 'currentTime', 'duration', 'muted', 'buffered', 'playsinline', 'played', 'poster'],
+            source: ['src', 'type'],
             img: ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
             'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6': [
                 'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -656,13 +659,14 @@
         return list;
     }
 
-    function _getAttrList(tag) {
+    function _getAttrList(tag, emptyValue) {
         var list = {},
             reg = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([^\s"'<>]+))|(?:([\w\-:"]+)="([^"]*)")|(?:([\w\-:"]+)='([^']*)'))(?=(?:\s|\/|>)+)/g,
             match;
+        if (emptyValue === undefined) emptyValue = '';
         while((match = reg.exec(tag))) {
             var key = (match[1] || match[2] || match[4] || match[6]).toLowerCase(),
-                val = (match[2] ? match[3] : (match[4] ? match[5] : match[7])) || '';
+                val = (match[2] ? match[3] : (match[4] ? match[5] : match[7])) || emptyValue;
             list[key] = val;
         }
         return list;
@@ -877,11 +881,12 @@
                 prevTagIsBlockEnd = null;
             }
             if(attr !== '') {
-                var attrMap = _getAttrList(full);
+                var attrMap = _getAttrList(full, true);
                 if(tagName === 'font') {
                     var fontStyleMap = {},
                         fontStyle = '';
                     _each(attrMap, function(key, val) {
+                        if(val === true) val = '';
                         if(key === 'color') {
                             fontStyleMap.color = val;
                             delete attrMap[key];
@@ -913,6 +918,7 @@
                     attrMap.style = fontStyle;
                 }
                 _each(attrMap, function(key, val) {
+                    if(val === true) val = '';
                     if(_FILL_ATTR_MAP[key]) {
                         attrMap[key] = key;
                     }
@@ -940,7 +946,11 @@
                 });
                 attr = '';
                 _each(attrMap, function(key, val) {
-                    if(key === 'style' && val === '') {
+                    if(val === false || (key === 'style' && val === '')) {
+                        return;
+                    }
+                    if (val === true) {
+                        attr += ' ' + key;
                         return;
                     }
                     val = val.replace(/"/g, '&quot;');
@@ -975,43 +985,101 @@
     }
 
     function _mediaType(src) {
-        if(/\.(rm|rmvb)(\?|$)/i.test(src)) {
-            return 'audio/x-pn-realaudio-plugin';
+        if(/\.(mp4)(\?|$)/i.test(src)) {
+            return 'video/mp4';
         }
-        if(/\.(swf|flv)(\?|$)/i.test(src)) {
-            return 'application/x-shockwave-flash';
+        if(/\.(webm)(\?|$)/i.test(src)) {
+            return 'video/webm';
         }
-        return 'video/x-ms-asf-plugin';
+        if(/\.(ogg)(\?|$)/i.test(src)) {
+            return 'video/ogg';
+        }
+        if(/\.(mov)(\?|$)/i.test(src)) {
+            return 'video/quicktime';
+        }
+        if(/\.(mp3)(\?|$)/i.test(src)) {
+            return 'audio/mp3';
+        }
+        if(/\.(wav)(\?|$)/i.test(src)) {
+            return 'audio/wav';
+        }
+        if(/\.(flac)(\?|$)/i.test(src)) {
+            return 'audio/flac';
+        }
+        return 'video/application';
     }
 
     function _mediaClass(type) {
-        if(/realaudio/i.test(type)) {
-            return 'ke-rm';
+        if(/audio/i.test(type)) {
+            return 'ke-audio';
         }
-        if(/flash/i.test(type)) {
-            return 'ke-flash';
+        if(/video/i.test(type)) {
+            return 'ke-video';
         }
         return 'ke-media';
     }
 
     function _mediaAttrs(srcTag) {
-        return _getAttrList(unescape(srcTag));
+        var srcs = [];
+        srcTag = unescape(srcTag).replace(/<source [^>]*>/ig, function(sourceTag) {
+            var $source = $(sourceTag);
+            var src = $source.attr('src');
+            var type = $source.attr('type');
+            if(type) src += '#' + type;
+            srcs.push(src);
+            return '';
+        });
+        var attrs = _getAttrList(srcTag);
+        if(srcs.length) attrs.src = srcs.join(',');
+        return attrs;
     }
 
-    function _mediaEmbed(attrs) {
-        var html = '<embed ';
-        _each(attrs, function(key, val) {
-            html += key + '="' + val + '" ';
-        });
-        html += '/>';
-        return html;
+    function _mediaEmbed(attrs, mediaType) {
+        var htmls;
+        if(mediaType === 'media' || mediaType === 'video' || mediaType === 'audio') {
+            mediaType = mediaType === 'video' || (attrs.type && attrs.type.indexOf('video') === 0) ? 'video' : 'audio';
+            htmls = [
+                '<', mediaType, ' '
+            ];
+            var srcs = (attrs.src || '').split(',');
+            _each(attrs, function(key, val) {
+                if (key === 'src' || val === false) {
+                    return;
+                }
+                if (val === true || /^(controls|autoplay|loop|muted)$/i.test(key)) {
+                    if (val !== 'false') {
+                        htmls.push(key + ' ');
+                    }
+                } else {
+                    htmls.push(key, '="', val, '" ');
+                }
+            });
+            if (srcs.length > 1) {
+                htmls.push('>');
+                _each(srcs, function(_, val) {
+                    var srcType = val.split('#');
+                    htmls.push('<source src="', srcType[0], '"', srcType.length > 1 ? (' type="' + srcType[1] + '"') : '', ' />');
+                });
+                htmls.push('</', mediaType, '>');
+            } else {
+                if(srcs.length) htmls.push('src="', srcs[0], '" ');
+                htmls.push('/>');
+            }
+        } else {
+            htmls = ['<embed '];
+            _each(attrs, function(key, val) {
+                htmls.push(key, '="', val, '" ');
+            });
+            htmls.push('/>');
+        }
+        return htmls.join('');
     }
 
     function _mediaImg(blankPath, attrs) {
         var width = attrs.width,
             height = attrs.height,
             type = attrs.type || _mediaType(attrs.src),
-            srcTag = _mediaEmbed(attrs),
+            srcTag = _mediaEmbed(attrs, type),
             style = '';
         if(/\D/.test(width)) {
             style += 'width:' + width + ';';
@@ -3730,14 +3798,14 @@
             var self = this;
             updateProp = _undef(updateProp, true);
             if(x !== null) {
-                x = x < 0 ? 0 : _addUnit(x);
+                x = x < 0 ? 0 : _addUnit(Math.floor(x));
                 self.div.css('left', x);
                 if(updateProp) {
                     self.x = x;
                 }
             }
             if(y !== null) {
-                y = y < 0 ? 0 : _addUnit(y);
+                y = y < 0 ? 0 : _addUnit(Math.floor(y));
                 self.div.css('top', y);
                 if(updateProp) {
                     self.y = y;
@@ -3834,30 +3902,17 @@
             'img {border:0;}',
             'noscript {display:none;}',
             'table.ke-zeroborder td {border:1px dotted #AAA;}',
-            'img.ke-flash {',
+            'img.ke-media, img.ke-audio, img.ke-video {',
             ' border:1px solid #AAA;',
-            ' background-image:url(' + themesPath + 'common/flash.gif);',
+            ' background-image:url(' + themesPath + 'common/media.png);',
             ' background-position:center center;',
             ' background-repeat:no-repeat;',
+            ' background-color:#f1f1f1;',
             ' width:100px;',
             ' height:100px;',
             '}',
-            'img.ke-rm {',
-            ' border:1px solid #AAA;',
-            ' background-image:url(' + themesPath + 'common/rm.gif);',
-            ' background-position:center center;',
-            ' background-repeat:no-repeat;',
-            ' width:100px;',
-            ' height:100px;',
-            '}',
-            'img.ke-media {',
-            ' border:1px solid #AAA;',
-            ' background-image:url(' + themesPath + 'common/media.gif);',
-            ' background-position:center center;',
-            ' background-repeat:no-repeat;',
-            ' width:100px;',
-            ' height:100px;',
-            '}',
+            'img.ke-audio {background-image:url(' + themesPath + 'common/audio.png); height: 54px!important}',
+            'img.ke-video {background-image:url(' + themesPath + 'common/video.png)}',
             'img.ke-anchor {',
             ' border:1px dashed #666;',
             ' width:16px;',
@@ -6088,7 +6143,7 @@
         };
         self.plugin.getSelectedMedia = function() {
             return _getImageFromRange(self.edit.cmd.range, function(img) {
-                return img[0].className == 'ke-media' || img[0].className == 'ke-rm';
+                return img[0].className == 'ke-media' || img[0].className == 'ke-video' || img[0].className == 'ke-audio';
             });
         };
         self.plugin.getSelectedAnchor = function() {
@@ -6246,7 +6301,7 @@
             return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
                     return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
                 })
-                .replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
+                .replace(/<img[^>]*class="?ke-(media|video|audio)"?[^>]*>/ig, function(full, $1) {
                     var imgAttrs = _getAttrList(full);
                     var styles = _getCssList(imgAttrs.style || '');
                     var attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
@@ -6260,7 +6315,8 @@
                     }
                     attrs.width = _undef(imgAttrs.width, width);
                     attrs.height = _undef(imgAttrs.height, height);
-                    return _mediaEmbed(attrs);
+
+                    return _mediaEmbed(attrs, $1);
                 })
                 .replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {
                     var imgAttrs = _getAttrList(full);
@@ -6299,6 +6355,26 @@
                     attrs.src = _undef(attrs.src, '');
                     attrs.width = _undef(attrs.width, 0);
                     attrs.height = _undef(attrs.height, 0);
+                    return _mediaImg(self.themesPath + 'common/blank.gif', attrs);
+                })
+                .replace(/<(video|audio)[^>]*>((\s*<source [^>]*>\s*)*)(?:<\/(video|audio)>)?/ig, function(full, $1, $2) {
+                    var attrs = _getAttrList($2 ? full.replace($2, '') : full);
+                    if($2) {
+                        var srcs = [];
+                        $($2).filter('source').each(function() {
+                            var $source = $(this);
+                            var src = $source.attr('src');
+                            var type = $source.attr('type');
+                            if(type) src += '#' + type;
+                            srcs.push(src);
+                        });
+                        attrs.src = srcs.join(',');
+                    } else {
+                        attrs.src = _undef(attrs.src, '');
+                    }
+                    attrs.width = _undef(attrs.width, 0);
+                    attrs.height = _undef(attrs.height, 0);
+                    attrs.type = $1;
                     return _mediaImg(self.themesPath + 'common/blank.gif', attrs);
                 })
                 .replace(/<a[^>]*name="([^"]+)"[^>]*>(?:<\/a>)?/ig, function(full) {
@@ -6458,11 +6534,13 @@ KindEditor.lang({
     'flash.upload': '上传',
     'flash.viewServer': '文件空间',
     'media.url': 'URL',
+    'media.urlTip': '多个 URL 使用英文逗号分隔',
     'media.width': '宽度',
     'media.height': '高度',
     'media.autostart': '自动播放',
     'media.upload': '上传',
     'media.viewServer': '文件空间',
+    'media.controls': '播放控件',
     'image.remoteImage': '网络图片',
     'image.localImage': '本地上传',
     'image.remoteUrl': '图片地址',
@@ -6699,6 +6777,7 @@ KindEditor.plugin('baidumap', function(K) {
     var self = this,
         name = 'baidumap',
         lang = self.lang(name + '.');
+    var ak = self.options.baidumapAk || 'plddmxBud2dRsVAXHS7WLqqzQQTocDkO';
     var mapWidth = K.undef(self.mapWidth, 558);
     var mapHeight = K.undef(self.mapHeight, 360);
     self.clickToolbar(name, function() {
@@ -6712,8 +6791,8 @@ KindEditor.plugin('baidumap', function(K) {
             '</span>',
             '</div>',
             // right start
-            '<div class="ke-right">',
-            '<input type="checkbox" id="keInsertDynamicMap" name="insertDynamicMap" value="1" /> <label for="keInsertDynamicMap">' + lang.insertDynamicMap + '</label>',
+            '<div class="ke-right" style="margin-top: 2px">',
+            '<input type="checkbox" id="keInsertDynamicMap" name="insertDynamicMap" value="1" style="margin-top: 2px" /> <label for="keInsertDynamicMap">' + lang.insertDynamicMap + '</label>',
             '</div>',
             '<div class="ke-clearfix"></div>',
             '</div>',
@@ -6732,8 +6811,8 @@ KindEditor.plugin('baidumap', function(K) {
                     var centerObj = map.getCenter();
                     var center = centerObj.lng + ',' + centerObj.lat;
                     var zoom = map.getZoom();
-                    var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/index.html' : 'http://api.map.baidu.com/staticimage',
-                        '?center=' + encodeURIComponent(center),
+                    var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/index.html?ak=' + ak : 'http://api.map.baidu.com/staticimage/v2?ak=' + ak,
+                        '&center=' + encodeURIComponent(center),
                         '&zoom=' + encodeURIComponent(zoom),
                         '&width=' + mapWidth,
                         '&height=' + mapHeight,
@@ -6761,7 +6840,7 @@ KindEditor.plugin('baidumap', function(K) {
             searchBtn = K('[name="searchBtn"]', div),
             checkbox = K('[name="insertDynamicMap"]', dialog.div),
             win, doc;
-        var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></iframe>');
+        var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html?ak=' + ak + '" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></iframe>');
 
         function ready() {
             win = iframe[0].contentWindow;
@@ -8133,7 +8212,7 @@ KindEditor.plugin('media', function(K) {
                 //url
                 '<div class="ke-dialog-row">',
                 '<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
-                '<input class="ke-input-text" type="text" id="keUrl" name="url" value="" style="width:160px;" /> &nbsp;',
+                '<input class="ke-input-text" type="text" id="keUrl" name="url" value="" placeholder="' + lang.urlTip + '" style="width:160px;" /> &nbsp;',
                 '<input type="button" class="ke-upload-button" value="' + lang.upload + '" /> &nbsp;',
                 '<span class="ke-button-common ke-button-outer">',
                 '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
@@ -8149,6 +8228,11 @@ KindEditor.plugin('media', function(K) {
                 '<label for="keHeight" style="width:60px;">' + lang.height + '</label>',
                 '<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="400" maxlength="4" />',
                 '</div>',
+                //controls
+                '<div class="ke-dialog-row">',
+                '<label for="keControls">' + lang.controls + '</label>',
+                '<input type="checkbox" id="keControls" checked name="controls" value="true" /> ',
+                '</div>',
                 //autostart
                 '<div class="ke-dialog-row">',
                 '<label for="keAutostart">' + lang.autostart + '</label>',
@@ -8159,7 +8243,7 @@ KindEditor.plugin('media', function(K) {
             var dialog = self.createDialog({
                     name: name,
                     width: 450,
-                    height: 230,
+                    height: 270,
                     title: self.lang(name),
                     body: html,
                     yesBtn: {
@@ -8188,8 +8272,8 @@ KindEditor.plugin('media', function(K) {
                                 type: K.mediaType(url),
                                 width: width,
                                 height: height,
-                                autostart: autostartBox[0].checked ? 'true' : 'false',
-                                loop: 'true'
+                                autoplay: !!autostartBox[0].checked,
+                                controls: !!controlsBox[0].checked,
                             });
                             self.insertHtml(html).hideDialog().focus();
                         }
@@ -8201,6 +8285,7 @@ KindEditor.plugin('media', function(K) {
                 widthBox = K('[name="width"]', div),
                 heightBox = K('[name="height"]', div),
                 autostartBox = K('[name="autostart"]', div);
+                controlsBox = K('[name="controls"]', div);
             urlBox.val('http://');
 
             if(allowMediaUpload) {
@@ -8266,7 +8351,8 @@ KindEditor.plugin('media', function(K) {
                 urlBox.val(attrs.src);
                 widthBox.val(K.removeUnit(img.css('width')) || attrs.width || 0);
                 heightBox.val(K.removeUnit(img.css('height')) || attrs.height || 0);
-                autostartBox[0].checked = (attrs.autostart === 'true');
+                autostartBox[0].checked = (attrs.autoplay !== undefined && attrs.autoplay !== 'false');
+                controlsBox[0].checked = (attrs.controls !== undefined && attrs.controls !== 'false');
             }
             urlBox[0].focus();
             urlBox[0].select();
@@ -9994,7 +10080,7 @@ KindEditor.plugin('wordpaste', function(K) {
  * ZUI: Kindeditor plugin - zui
  * http://openzui.com
  * ========================================================================
- * Copyright (c) 2019-2019 cnezsoft.com; Licensed MIT
+ * Copyright (c) 2019-2020 cnezsoft.com; Licensed MIT
  * ======================================================================== */
 
  $.each(['afterBlur', 'afterFocus', 'afterChange', 'afterTab'], function(_index, name) {
@@ -10059,7 +10145,7 @@ KindEditor.plugin('zui', function(K) {
  * ZUI: Kindeditor plugin - placeholder
  * http://openzui.com
  * ========================================================================
- * Copyright (c) 2019-2019 cnezsoft.com; Licensed MIT
+ * Copyright (c) 2019-2020 cnezsoft.com; Licensed MIT
  * ======================================================================== */
 
 KindEditor.EditorClass.prototype.setPlaceholder = function(placeholder, asHtml) {
@@ -10948,12 +11034,14 @@ KindEditor.plugin('table', function (K) {
                         newCell = newRow.insertCell(index),
                         isThead = newRow.parentNode.tagName === 'THEAD';
                     newCell.outerHTML = '<' + (isThead ? 'th' : 'td') + (newCell.rowSpan > 1 ? ' rowspan="' + newCell.rowSpan + '"' : '') + (newCell.colSpan > 1 ? ' colspan="' + newCell.colSpan + '"' : '') + ' style="' + (isThead ? 'background-color: #f1f1f1;' : '') + 'border: 1px solid ' + ((self.tableSetting && self.tableSetting.borderColor) || defaultTableBorderColor) + '">' + (K.IE ? '&nbsp;' : '<br />') + '</' + (isThead ? 'th' : 'td') + '>';
+                    newCell = newRow.cells[index];
                     // 调整下一行的单元格index
                     index = _getCellIndex(table, newRow, newCell);
                 }
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colinsertleft: function () {
                 this.colinsert(0);
@@ -10964,26 +11052,27 @@ KindEditor.plugin('table', function (K) {
             rowinsert: function (offset) {
                 var table = self.plugin.getSelectedTable()[0],
                     row = self.plugin.getSelectedRow()[0],
-                    cell = self.plugin.getSelectedCell()[0];
+                    cell = self.plugin.getSelectedCell()[0],
+                    firstRow = table.rows[0];
                 var rowIndex = row.rowIndex;
                 if (offset === 1) {
                     rowIndex = row.rowIndex + (cell.rowSpan - 1) + offset;
                 }
                 var newRow = table.insertRow(rowIndex);
                 var isThead = newRow.parentNode.tagName === 'THEAD';
-
-                for (var i = 0, len = row.cells.length; i < len; i++) {
+                // debugger;
+                for (var i = 0, len = firstRow.cells.length; i < len; i++) {
                     // 调整cell个数
-                    if (row.cells[i].rowSpan > 1) {
-                        len -= row.cells[i].rowSpan - 1;
+                    var currentCell = firstRow.cells[i];
+                    if (currentCell && currentCell.rowSpan > 1) {
+                        len += currentCell.rowSpan - 1;
                     }
                     var newCell = newRow.insertCell(i);
                     // copy colspan
-                    if (offset === 1 && row.cells[i].colSpan > 1) {
-                        newCell.colSpan = row.cells[i].colSpan;
-                    }
+                    // if (offset === 1 && currentCell.colSpan > 1) {
+                    //     newCell.colSpan = currentCell.colSpan;
+                    // }
                     newCell.outerHTML = '<' + (isThead ? 'th' : 'td') + (newCell.rowSpan > 1 ? ' rowspan="' + newCell.rowSpan + '"' : '') + (newCell.colSpan > 1 ? ' colspan="' + newCell.colSpan + '"' : '') + ' style="' + (isThead ? 'background-color: #f1f1f1;' : '') + 'border: 1px solid ' + ((self.tableSetting && self.tableSetting.borderColor) || defaultTableBorderColor) + '">' + (K.IE ? '&nbsp;' : '<br />') + '</' + (isThead ? 'th' : 'td') + '>';
-
                 }
                 // 调整rowspan
                 for (var j = rowIndex; j >= 0; j--) {
@@ -10998,8 +11087,9 @@ KindEditor.plugin('table', function (K) {
                     }
                 }
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             rowinsertabove: function () {
                 this.rowinsert(0);
@@ -11030,8 +11120,9 @@ KindEditor.plugin('table', function (K) {
                 cell.rowSpan += nextCell.rowSpan;
                 nextRow.deleteCell(cellIndex);
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colmerge: function () {
                 var table = self.plugin.getSelectedTable()[0],
@@ -11052,8 +11143,9 @@ KindEditor.plugin('table', function (K) {
                 cell.colSpan += nextCell.colSpan;
                 row.deleteCell(nextCellIndex);
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             mergeCells: function () {
                 var tableSelectionRange = self.tableSelectionRange;
@@ -11083,8 +11175,9 @@ KindEditor.plugin('table', function (K) {
                     });
                     $table.find('.ke-cell-removed').remove();
                     self.cmd.range.selectNodeContents($firstCell[0]).collapse(true);
-                    self.cmd.select();
+                    // self.cmd.select();
                     self.addBookmark();
+                    self.focus();
                 }
             },
             rowsplit: function () {
@@ -11111,8 +11204,9 @@ KindEditor.plugin('table', function (K) {
                 }
                 K(cell).removeAttr('rowSpan');
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             colsplit: function () {
                 var table = self.plugin.getSelectedTable()[0],
@@ -11132,8 +11226,9 @@ KindEditor.plugin('table', function (K) {
                 }
                 K(cell).removeAttr('colSpan');
                 self.cmd.range.selectNodeContents(cell).collapse(true);
-                self.cmd.select();
+                // self.cmd.select();
                 self.addBookmark();
+                self.focus();
             },
             coldelete: function () {
                 var table = self.plugin.getSelectedTable()[0];
@@ -11147,6 +11242,7 @@ KindEditor.plugin('table', function (K) {
                     for (var i = 0, len = table.rows.length; i < len; i++) {
                         var newRow = table.rows[i],
                             newCell = newRow.cells[index];
+                        if (!newCell) continue;
                         if (newCell.colSpan > 1) {
                             newCell.colSpan -= 1;
                             if (newCell.colSpan === 1) {
@@ -11162,7 +11258,7 @@ KindEditor.plugin('table', function (K) {
                     }
                     if (row.cells.length === 0) {
                         self.cmd.range.setStartBefore(table).collapse(true);
-                        self.cmd.select();
+                        // self.cmd.select();
                         K(table).remove();
                         break;
                     }
@@ -11171,6 +11267,7 @@ KindEditor.plugin('table', function (K) {
                     self.cmd.selection(true);
                 }
                 self.addBookmark();
+                self.focus();
             },
             rowdelete: function () {
                 var table = self.plugin.getSelectedTable()[0];
@@ -11187,12 +11284,13 @@ KindEditor.plugin('table', function (K) {
                 }
                 if (table.rows.length === 0) {
                     self.cmd.range.setStartBefore(table).collapse(true);
-                    self.cmd.select();
+                    // self.cmd.select();
                     K(table).remove();
                 } else {
                     self.cmd.selection(true);
                 }
                 self.addBookmark();
+                self.focus();
             }
         };
 

@@ -1468,12 +1468,20 @@ class projectModel extends model
         $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
+        $project        = $this->getByID($projectID);
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($project->type == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $requiredFields = trim($requiredFields, ',');
+
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
         foreach($bugToTasks->import as $key => $value)
         {
-            $bug  = $bugs[$key];
+            $bug = zget($bugs, $key, '');
+            if(empty($bug)) continue;
+
             $task = new stdClass();
+            $task->bug          = $bug;
             $task->project      = $projectID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
@@ -1483,22 +1491,50 @@ class projectModel extends model
             $task->type         = 'devel';
             $task->pri          = $bugToTasks->pri[$key];
             $task->deadline     = $bugToTasks->deadline[$key];
+            $task->estimate     = $bugToTasks->estimate[$key];
             $task->consumed     = 0;
+            $task->assignedTo   = '';
             $task->status       = 'wait';
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
-            if(!empty($bugToTasks->estimate[$key]))
-            {
-                $task->estimate     = $bugToTasks->estimate[$key];
-                $task->left         = $task->estimate;
-            }
+
+            if($task->estimate !== '') $task->left = $task->estimate;
+            if(strpos($requiredFields, 'deadline') !== false and $task->deadline == '0000-00-00') $task->deadline = '';
             if(!empty($bugToTasks->assignedTo[$key]))
             {
                 $task->assignedTo   = $bugToTasks->assignedTo[$key];
                 $task->assignedDate = $now;
             }
+
+            /* Check task required fields. */
+            foreach(explode(',', $requiredFields) as $field)
+            {
+                if(empty($field))         continue;
+                if(!isset($task->$field)) continue;
+                if(!empty($task->$field)) continue;
+
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
+            }
+
+            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            $tasks[$key] = $task;
+        }
+
+        foreach($tasks as $key => $task)
+        {
+            $bug = $task->bug;
+            unset($task->bug);
+
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
-            $this->dao->insert(TABLE_TASK)->data($task)->checkIF($bugToTasks->estimate[$key] != '', 'estimate', 'float')->exec();
+            $this->dao->insert(TABLE_TASK)->data($task)->checkIF($task->estimate != '', 'estimate', 'float')->exec();
 
             if(dao::isError())
             {

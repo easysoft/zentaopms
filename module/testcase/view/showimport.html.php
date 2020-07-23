@@ -93,7 +93,7 @@ $(function()
           <?php if(!empty($appendFields)):?>
           <?php $this->loadModel('flow');?>
           <?php foreach($appendFields as $appendField):?>
-          <td><?php echo $this->flow->buildControl($appendField, $case->{$appendField->field}, "{$appendField->field}[$key]");?></td>
+          <td><?php echo $this->flow->buildControl($appendField, zget($case, $appendField->field, ''), "{$appendField->field}[$key]");?></td>
           <?php endforeach;?>
           <?php endif;?>
           <td>

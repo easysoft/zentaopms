@@ -85,9 +85,8 @@
       <?php endif;?>
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
-        <div class="col-sm-10 todoType">
-          <input type='hidden' name='type' value='<?php echo $todo->type;?>' />
-          <?php echo $lang->todo->typeList[$todo->type];?>
+        <div class="col-sm-2">
+          <?php echo html::select('type', $lang->todo->typeList, $todo->type, 'onchange="loadList(this.value);" class="form-control"');?>
         </div>
       </div>
       <div class="row form-group">
@@ -99,12 +98,8 @@
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
         <div class="col-sm-10">
-          <div id='nameBox' class='required'>
-            <?php
-            $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
-            echo html::input('name', $todo->name, "$readType class='form-control'");
-            ?>
-          </div>
+          <div id='nameBox' class='hidden'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
+          <div class='nameBox required'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
         </div>
       </div>
       <div class="row form-group">
