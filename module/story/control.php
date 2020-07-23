@@ -311,18 +311,19 @@ class story extends control
             if($project) $this->loadModel('project')->linkStory($project, $stories);
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
-            if($storyID)
+            if($storyID and !empty($mails))
             {
-                if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
                 $this->story->subdivide($storyID, $stories);
-
                 if(dao::isError()) die(js::error(dao::getError()));
-
-                if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
 
-            if($project)
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+
+            if($storyID)
+            {
+                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            }
+            elseif($project)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
                 die(js::locate($this->createLink('project', 'story', "projectID=$project&orderBy=id_desc&browseType=unclosed"), 'parent'));
