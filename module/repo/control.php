@@ -407,7 +407,16 @@ class repo extends control
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
         {
-            $oldRevision = $this->dao->select('revision')->from(TABLE_REPOHISTORY)->where('commit')->eq($history->commit - 1)->andWhere('repo')->eq($repoID)->fetch('revision');
+            $prevHistories = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('commit')->eq($history->commit - 1)->andWhere('repo')->eq($repoID)->orderBy('time_desc')->fetchAll();
+            foreach($prevHistories as $prevHistory)
+            {
+                if($history->time > $prevHistory->time)
+                {
+                    $oldRevision = $prevHistory->revision;
+                    break;
+                }
+            }
+
             $log[0]->commit = $history->commit;
         }
         if(empty($oldRevision)) $oldRevision = '^';
