@@ -46,11 +46,6 @@
       <thead>
         <tr>
           <th class='w-100px'>
-            <?php if($canBatchEdit or $canBatchRun):?>
-            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-              <label></label>
-            </div>
-            <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='w-50px'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
@@ -72,16 +67,10 @@
         ?>
         <tr>
           <td class="c-id">
-            <?php if($canBatchEdit or $canBatchRun):?>
-            <div class="checkbox-primary">
-              <input type='checkbox' name='caseIDList[]' value='<?php echo $case->id;?>' />
-              <label></label>
-            </div>
-            <?php endif;?>
             <?php printf('%03d', $case->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title, null, "style='color: $case->color'");?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', '', $case->program), $case->title, null, "style='color: $case->color'");?></td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
@@ -90,11 +79,11 @@
           <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-            common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
-            common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
-            common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit');
+            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', '', '', $case->program);
+            common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->program);
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'", '', $case->program);
+            common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'", '', $case->program);
+            common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->program);
             ?>
           </td>
         </tr>
@@ -102,23 +91,6 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchEdit or $canBatchRun):?>
-      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <?php endif;?>
-      <div class="table-actions btn-toolbar">
-      <?php
-      if($canBatchEdit)
-      {
-          $actionLink = $this->createLink('testcase', 'batchEdit');
-          echo html::commonButton($lang->edit, "onclick=setFormAction('$actionLink')");
-      }
-      if($canBatchRun and $type != 'assigntome')
-      {
-          $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy&from=testcase");
-          echo html::commonButton($lang->testtask->runCase,  "onclick=setFormAction('$actionLink')");
-      }
-      ?>
-      </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

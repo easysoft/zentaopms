@@ -76,7 +76,7 @@
           <td class='c-name' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
+            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->program), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
@@ -93,18 +93,18 @@
             if($task->needConfirm)
             {
                 $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide', '', '', '', $task->program);
             }
             else
             {
-                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
+                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
+                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
+                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
 
-                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children);
+                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->program);
+                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', '', '', $task->program);
+                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children, $task->program);
             }
             ?>
           </td>
@@ -113,20 +113,14 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchEdit or $canBatchClose):?>
+      <?php if($canBatchClose):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
-      if($canBatchEdit)
-      {
-          $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");
-          echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-
-      }
       if($canBatchClose)
       {
-          $actionLink = $this->createLink('task', 'batchClose');
+          $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->program);
           echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
       ?>

@@ -29,7 +29,7 @@
   </div>
   <?php else:?>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-    <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
+    <?php $canBatchEdit  = common::hasPriv('bug', 'batchClose');?>
     <table class="table has-sort-head table-fixed" id='bugList'>
       <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
@@ -93,11 +93,11 @@
           <td class='c-actions'>
             <?php
             $params = "bugID=$bug->id";
-            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-            common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-            common::printIcon('bug', 'edit',       $params, $bug, 'list');
-            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true, '', '', $bug->program);
+            common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->program);
+            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true, '', '', $bug->program);
+            common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '', '', '', $bug->program);
+            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->program);
             ?>
           </td>
         </tr>
@@ -110,20 +110,15 @@
       <?php endif;?>
       <div class="table-actions btn-toolbar">
         <?php
-        $actionLink = $this->createLink('bug', 'batchEdit');
-        $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-        echo html::commonButton($lang->edit, $misc);
-        ?>
-        <?php
         if(common::hasPriv('bug', 'batchConfirm'))
         {
-          $actionLink = $this->createLink('bug', 'batchConfirm');
+          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->program);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->confirmBug, $misc);
         }
         if(common::hasPriv('bug', 'batchClose'))
         {
-          $actionLink = $this->createLink('bug', 'batchClose');
+          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->program);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->close, $misc);
         }
@@ -135,7 +130,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($memberPairs) > 10;
-          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my");
+          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->program);
           echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
           if($withSearch)
           {

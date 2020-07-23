@@ -52,20 +52,20 @@
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', '', $task->program), $task->name);?></td>
         <td class='nobr'><?php echo $task->projectName?></td>
-        <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+        <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', '', $task->program), $task->buildName));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
         <td class='status-testtask status-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
         <td class='c-actions'>
           <?php
-          common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-          common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px');
-          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-          common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
+          common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $task->program);
+          common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px', '', $task->program);
+          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', '', '', '', $task->program);
+          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag', '', '', '', '', '', $task->program);
+          common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true, '', '', $task->program);
           if(common::hasPriv('testtask', 'delete', $task))
           {
-              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes", '', '', $task->program);
               echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
           }
           ?>

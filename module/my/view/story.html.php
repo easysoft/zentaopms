@@ -82,11 +82,11 @@
           <td class='c-actions'>
             <?php
             $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-            common::printIcon('story', 'edit',       $vars, $story, 'list');
-            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $story->program);
+            common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $story->program);
+            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $story->program);
             ?>
           </td>
         </tr>
@@ -98,14 +98,6 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
-        <?php
-        if($canBatchEdit)
-        {
-            $actionLink = $this->createLink('story', 'batchEdit');
-            $misc       = "data-form-action='$actionLink'";
-            echo html::commonButton($lang->edit, $misc);
-        }
-        ?>
         <?php if(common::hasPriv('story', 'batchReview')):?>
         <div class="btn-group dropup">
           <button type='button' class='btn' data-toggle='dropdown'><?php echo $lang->story->review;?> <span class='caret'></span></button>
@@ -115,7 +107,7 @@
             unset($lang->story->reviewResultList['revert']);
             foreach($lang->story->reviewResultList as $key => $result)
             {
-                $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $story->program);
                 if($key == 'reject')
                 {
                     echo "<li class='dropdown-submenu'>";
@@ -127,7 +119,7 @@
 
                     foreach($lang->story->reasonList as $key => $reason)
                     {
-                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $story->program);
                         echo "<li>";
                         echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                         echo "</li>";
@@ -148,7 +140,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($users) > 10;
-          $actionLink = $this->createLink('story', 'batchAssignTo');
+          $actionLink = $this->createLink('story', 'batchAssignTo', '', '', '', $story->program);
           echo html::select('assignedTo', $users, '', 'class="hidden"');
           if($withSearch)
           {
@@ -175,13 +167,6 @@
           echo "</div>";
           ?>
         </div>
-        <?php endif;?>
-        <?php if($canBatchClose and $type != 'closedBy'):?>
-        <?php
-        $actionLink = $this->createLink('story', 'batchClose');
-        $misc = "data-form-action=\"$actionLink\"";
-        echo html::commonButton($lang->close, $misc);
-        ?>
         <?php endif;?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
