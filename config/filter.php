@@ -98,6 +98,7 @@ $filter->webhook->bind           = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
+$filter->bug->browse->cookie['bugBranch']      = 'int';
 $filter->bug->browse->cookie['preBranch']      = 'int';
 $filter->bug->browse->cookie['qaBugOrder']     = 'reg::orderBy';
 $filter->bug->browse->cookie['windowWidth']    = 'int';
@@ -125,6 +126,7 @@ $filter->product->browse->cookie['preBranch']         = 'int';
 $filter->product->browse->cookie['preProductID']      = 'int';
 $filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
 $filter->product->browse->cookie['storyModule']       = 'int';
+$filter->product->browse->cookie['storyBranch']       = 'int';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';

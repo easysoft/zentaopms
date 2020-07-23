@@ -404,7 +404,7 @@ class treeModel extends model
             {
                 $linkHtml = ($type == 'case' and !empty($extra)) ? '<a>' . $branch . '</a>' : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
-                if($type == 'story' || $type == 'bug') $linkHtml = '<a>' . $branch . '</a>';
+                if($type == 'story' or $type == 'bug')   $linkHtml = html::a(inlink('browse', "productID=$rootID&branch=&browseType=bybranch&param=$branchID"), $branch, "", "id=branch" . $branchID);
                 if($firstBranch and $product->type != 'normal')
                 {
                     $linkHtml = '<a>' . $this->lang->product->branchName[$product->type] . '</a><ul><li>' . $linkHtml;

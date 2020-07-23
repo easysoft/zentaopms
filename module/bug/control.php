@@ -67,7 +67,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('datatable');
 
@@ -77,18 +77,26 @@ class bug extends control
         /* Set productID, moduleID, queryID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
+        $branchID  = $browseType == '' ? $branch : ($browseType == 'bybranch' ? (int)$param : ($this->cookie->bugBranch ? $this->cookie->bugBranch : $branch));
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['bugModule'] = 0;
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
-        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+        if($browseType == 'bymodule' or $browseType == '')
+        {
+            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
+            $_COOKIE['bugBranch'] = 0;
+            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', false, false);
+            if($browseType == '') $browseType = 'unclosed';
+        }
+        if($browseType == 'bybranch') setcookie('bugBranch', (int)$param, 0, $this->config->webRoot, '', false, false);
+        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
@@ -111,7 +119,7 @@ class bug extends control
         $projects = $this->loadModel('project')->getPairs('empty|withdelete');
 
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
+        $bugs = $this->bug->getBugs($productID, $projects, $branchID, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
