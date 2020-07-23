@@ -4,6 +4,7 @@
 function loadProduct(productID)
 {
     if(parentStory) alert(moveChildrenTips);
+    if(typeof hasSR != 'undefined' && hasSR) alert(moveSRTips);//Set hasSR variable in pro and biz.
 
     loadProductBranches(productID)
     loadProductModules(productID);
