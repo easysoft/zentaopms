@@ -409,39 +409,14 @@ class repo extends control
         {
             if($repo->SCM == 'Git')
             {
-                $branch = $this->dao->select('*')->from(TABLE_REPOBRANCH)->where('revision')->eq($history->id)->fetch('branch');
-                $prevHistories = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-                    ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-                    ->where('t1.id')->le($history->id)
-                    ->andWhere('t1.repo')->eq($repoID)
-                    ->andWhere('t2.branch')->eq($branch)
-                    ->orderBy('t1.time_desc')
-                    ->limit(2)
-                    ->fetchAll();
-                $currentHistory = array_shift($prevHistories);
-                if($history->id != $currentHistory->id)
-                {
-                    $prevHistories = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-                        ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-                        ->where('t1.id')->ge($history->id)
-                        ->andWhere('t1.repo')->eq($repoID)
-                        ->andWhere('t2.branch')->eq($branch)
-                        ->orderBy('t1.time_desc')
-                        ->limit(2)
-                        ->fetchAll();
-                    array_shift($prevHistories);
-                }
-                $prevHistory = array_pop($prevHistories);
-                if($prevHistory) $oldRevision = $prevHistory->revision;
+                $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$history->revision} --");
+
+                array_shift($thisAndPrevRevisions);
+                if($thisAndPrevRevisions) $oldRevision = array_shift($thisAndPrevRevisions);
             }
             else
             {
-                $oldRevision = $this->dao->select('*')->from(TABLE_REPOHISTORY)
-                    ->where('revision')->lt($history->revision)
-                    ->andWhere('repo')->eq($repoID)
-                    ->orderBy('revision_desc')
-                    ->limit(1)
-                    ->fetch('revision');
+                $oldRevision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->lt($history->revision)->andWhere('repo')->eq($repoID)->orderBy('revision_desc')->limit(1)->fetch('revision');
             }
 
             $log[0]->commit = $history->commit;

@@ -404,6 +404,19 @@ class Subversion
     }
 
     /**
+     * Exec svn cmd.
+     * 
+     * @param  string $cmd 
+     * @access public
+     * @return array
+     */
+    public function exec($cmd)
+    {
+        $cmd = $this->replaceAuth(escapeCmd($this->buildCMD('', $cmd, '')));
+        return execCmd($cmd, 'array');
+    }
+
+    /**
      * Parse diff.
      * 
      * @param  array  $lines 
