@@ -1074,7 +1074,8 @@ class productModel extends model
             }
             elseif($module == 'programplan')
             {
-                $link = helper::createLink($module, 'browse', "programID=%s&productID=%s" . ($branch ? "&branch=%s" : ''));
+                $extra = $extra ? $extra : 'gantt';
+                $link  = helper::createLink($module, 'browse', "programID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
             }
             else
             {
