@@ -29,7 +29,6 @@ ALTER TABLE `zt_testsuite` ADD `program` mediumint(8) unsigned NOT NULL AFTER `i
 ALTER TABLE `zt_build` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_release` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 
-ALTER TABLE `zt_group` ADD `program` mediumint(8) NOT NULL DEFAULT '0' AFTER `id`;
 INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'pgmadmin', '项目管理员可以维护项目的权限');
 
 ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
