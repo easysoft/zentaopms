@@ -274,7 +274,7 @@ class jobModel extends model
 
         $data->ZENTAO_DATA = "compile={$compileID}";
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl->url, $data, $buildUrl->userPwd);
+        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl->url, $data, $buildUrl->userPWD);
         $compile->status = $compile->queue ? 'created' : 'create_fail';
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
