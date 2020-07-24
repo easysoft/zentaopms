@@ -545,6 +545,7 @@ class storyModel extends model
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
+            ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
