@@ -158,7 +158,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       <?php
         $batchLink = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";
-      ?>  
+      ?>
       </li>
     </ul>
     <?php echo "</div>";?>
@@ -353,14 +353,16 @@ $(function()
 {
     // Update table summary text
     var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
+    var pageSummary    = '<?php echo $lang->project->pageSummary?>';
     $('#projectTaskForm').table(
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $table = table.getTable();
+            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
             var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
-            if(!checkedTotal) return;
+            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
 
             var checkedWait     = 0;
             var checkedDoing    = 0;
@@ -368,7 +370,7 @@ $(function()
             var checkedConsumed = 0;
             var checkedLeft     = 0;
             var taskIdList      = [];
-            $checkedRows.each(function()
+            $rows.each(function()
             {
                 var $row = $(this);
                 if ($originTable)
@@ -402,15 +404,12 @@ $(function()
 
                 if(canStatistics)
                 {
-                    if(status !== 'cancel')
-                    {
-                        checkedEstimate += Number(data.estimate);
-                        checkedConsumed += Number(data.consumed);
-                    }
+                    checkedEstimate += Number(data.estimate);
+                    checkedConsumed += Number(data.consumed);
                     if(status != 'cancel' && status != 'closed') checkedLeft += Number(data.left);
                 }
             });
-            return checkedSummary.replace('%total%', checkedTotal).replace('%wait%', checkedWait)
+            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait)
               .replace('%doing%', checkedDoing)
               .replace('%estimate%', checkedEstimate.toFixed(1))
               .replace('%consumed%', checkedConsumed.toFixed(1))

@@ -15,7 +15,7 @@
 <?php include './caseheader.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
-<div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+<div class="main-table" data-ride="table" data-checkable="false" data-group="true" data-replace-id="treetable">
   <table class='table table-grouped text-center' id='treetable'>
     <thead>
       <tr class="divider">
@@ -56,8 +56,8 @@
           <div class='group-header'><?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?></div>
         </td>
         <?php endif;?>
-        <?php 
-        if(!isset($run->case)) 
+        <?php
+        if(!isset($run->case))
         {
             echo "<td colspan='13'></td></tr>";
             break;
