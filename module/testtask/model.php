@@ -398,15 +398,29 @@ class testtaskModel extends model
         }
         else
         {
-            $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
-                ->where('t1.id')->eq((int)$taskID)
-                ->andWhere('((t1.project !=0 AND t5.product = t1.product) OR t1.project = 0)')
-                ->fetch();
+            $task = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
+            if($task)
+            {
+                $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
+                $task->productName = $product->name;
+                $task->productType = $product->type;
+                $task->branch      = 0;
+                $task->projectName = '';
+                $task->buildName   = '';
+
+                if($task->project)
+                {
+                    $task->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('name');
+                    $task->branch      = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->project)->andWhere('product')->eq($task->product)->fetch('branch');
+                }
+
+                $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+                if($build)
+                {
+                    $task->buildName = $build->name;
+                    $task->branch    = $build->branch;
+                }
+            }
         }
 
         if(!$task) return false;
