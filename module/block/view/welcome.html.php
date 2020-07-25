@@ -46,7 +46,7 @@
     <div class="col col-right">
     <h4><small class="text-muted"><?php echo date(DT_DATE3)?></small> <?php echo $lang->block->leftToday?></h4>
       <div class="row tiles">
-        <?php if($this->config->global->flow != 'onlyTest' and $this->config->global->flow != 'onlyStory'):?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyTask'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myTask?></div>
           <div class="tile-amount"><?php echo empty($tasks) ? 0 : html::a($this->createLink('my', 'task', 'type=assignedTo'), (int)$tasks);?></div>
@@ -57,7 +57,7 @@
           <?php endif;?>
         </div>
         <?php endif;?>
-        <?php if($this->config->global->flow != 'onlyTask' and $this->config->global->flow != 'onlyStory'):?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyTest'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myBug?></div>
           <div class="tile-amount"><?php echo empty($bugs) ? 0 : html::a($this->createLink('my', 'bug', 'type=assignedTo'), (int)$bugs);?></div>
@@ -68,13 +68,13 @@
           <?php endif;?>
         </div>
         <?php endif;?>
-        <?php if($this->config->global->flow != 'onlyTask' and $this->config->global->flow != 'onlyTest'):?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyStory'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myStory?></div>
           <div class="tile-amount"><?php echo empty($stories) ? 0 : html::a($this->createLink('my', 'story', 'type=assignedTo'), (int)$stories);?></div>
         </div>
         <?php endif;?>
-        <?php if($this->config->global->flow != 'onlyStory' and $this->config->global->flow != 'onlyTest'):?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyTask'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myProject?></div>
           <div class="tile-amount"><?php echo empty($projects) ? 0 : html::a($this->createLink('project', 'all', 'type=undone'), (int)$projects);?></div>
@@ -85,7 +85,7 @@
           <?php endif;?>
         </div>
         <?php endif;?>
-        <?php if($this->config->global->flow != 'onlyTask' and $this->config->global->flow != 'onlyTest'):?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myProduct?></div>
           <div class="tile-amount"><?php echo empty($products) ? 0 : html::a($this->createLink('product', 'all', 'product=0&line=0&status=noclosed'), (int)$products);?></div>

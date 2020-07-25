@@ -860,6 +860,7 @@ class testcaseModel extends model
             $case->pri            = $data->pris[$caseID];
             $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
+            $case->status         = $data->statuses[$caseID];
             $case->story          = $data->stories[$caseID];
             $case->color          = $data->color[$caseID];
             $case->title          = $data->title[$caseID];
@@ -867,7 +868,6 @@ class testcaseModel extends model
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
-            if(isset($data->statuses[$caseID])) $case->status = $data->statuses[$caseID];
 
             foreach($extendFields as $extendField)
             {

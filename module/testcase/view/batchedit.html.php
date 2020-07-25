@@ -86,16 +86,17 @@
             <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
             <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'>
-                <?php
-                if(!$forceNotReview and $cases[$caseID]->status == 'wait')
-                {
-                    echo $lang->testcase->statusList['wait'];
-                }
-                else
-                {
-                    echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');
-                }
-                ?>
+              <?php
+              if(!$forceNotReview and $cases[$caseID]->status == 'wait')
+              {
+                echo $lang->testcase->statusList['wait'];
+                echo html::hidden("statuses[$caseID]",'wait');
+              }
+              else
+              {
+                echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');
+              }
+              ?>
             </td>
             <?php if($branchProduct):?>
             <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
