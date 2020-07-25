@@ -111,7 +111,7 @@ class releaseModel extends model
     {
         $productID = (int)$productID;
         $branch    = (int)$branch;
-        $buildID   = strpos($this->config->release->create->requiredFields, 'build') === false ? 0 : '';
+        $buildID   = 0;
 
         /* Check date must be not more than today. */
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
