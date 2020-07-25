@@ -178,6 +178,13 @@ class router extends baseRouter
             }
         }
 
+        /* When module is custom then reset storyCommon. */
+        if($moduleName == 'custom')
+        {
+            global $config;
+            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon]     : $this->config->storyCommonList['en'][(int)$config->storyCommon];
+        }
+
         parent::loadLang($moduleName, $appName);
 
         /* Merge from the db lang. */

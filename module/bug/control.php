@@ -1418,7 +1418,6 @@ class bug extends control
      * AJAX: get team members of the latest project of a product as assignedTo list.
      *
      * @param  int    $productID
-     * x
      * @param  string $selectedUser
      * @access public
      * @return string

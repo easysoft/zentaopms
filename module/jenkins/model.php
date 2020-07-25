@@ -71,8 +71,8 @@ class jenkinsModel extends model
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
 
-        $userPwd  = "$jenkinsUser:$jenkinsPassword";
-        $response = common::http($jenkinsServer . '/api/json/items/list', '', false, $userPwd);
+        $userPWD  = "$jenkinsUser:$jenkinsPassword";
+        $response = common::http($jenkinsServer . '/api/json/items/list', '', false, $userPWD);
         $response = json_decode($response);
 
         $tasks = array();

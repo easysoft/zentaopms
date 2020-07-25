@@ -82,10 +82,11 @@ class compileModel extends model
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
-        $build = new stdclass();
-        $build->userPwd = "$jenkinsUser:$jenkinsPassword";
-        $build->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
-        return $build;
+        $url = new stdclass();
+        $url->userPWD = "$jenkinsUser:$jenkinsPassword";
+        $url->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
+
+        return $url;
     }
 
     /**
@@ -132,9 +133,9 @@ class compileModel extends model
         $data->PARAM_TAG   = $compile->tag;
         $data->ZENTAO_DATA = "compile={$compile->id}";
 
-        $buildUrl = $this->getBuildUrl($job);
-        $build    = new stdclass();
-        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl->url, $data, $buildUrl->userPwd);
+        $url   = $this->getBuildUrl($job);
+        $build = new stdclass();
+        $build->queue      = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
         $build->status     = $build->queue ? 'created' : 'create_fail';
         $build->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();

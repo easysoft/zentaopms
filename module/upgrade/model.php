@@ -459,7 +459,7 @@ class upgradeModel extends model
         case '11_1':
             $this->saveLogs('Execute 11_1');
             $this->execSQL($this->getUpgradeFile('11.1'));
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -488,7 +488,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_4_1');
             $this->execSQL($this->getUpgradeFile('11.4.1'));
             $this->addPriv11_5();
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -540,7 +540,7 @@ class upgradeModel extends model
             $this->rmEditorAndTranslateDir();
             $this->setConceptSetted();
 
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -572,7 +572,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_1');
             $this->execSQL($this->getUpgradeFile('12.1'));
 
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -720,7 +720,7 @@ class upgradeModel extends model
             case '11_0':
             case '11_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -730,7 +730,7 @@ class upgradeModel extends model
             case '11_4': $confirmContent .= file_get_contents($this->getUpgradeFile('11.4'));
             case '11_4_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.4.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -747,7 +747,7 @@ class upgradeModel extends model
             case '11_6_4' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.4'));
             case '11_6_5' :
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.5'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -761,7 +761,7 @@ class upgradeModel extends model
             case '12_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.0.1'));
             case '12_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('12.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -820,7 +820,7 @@ class upgradeModel extends model
         if(!file_exists($standardSQL)) return $alterSQL;
 
         $lines = file($standardSQL);
-        if(!isset($this->config->isINT) or !($this->config->isINT))
+        if(empty($this->config->isINT))
         {
             $xVersion = $version;
             $version  = str_replace('.', '_', $version);

@@ -25,6 +25,7 @@ $config->dev->group['casestep']       = 'qa';
 $config->dev->group['testtask']       = 'qa';
 $config->dev->group['testreport']     = 'qa';
 $config->dev->group['testsuite']      = 'qa';
+$config->dev->group['caselib']        = 'qa';
 $config->dev->group['testresult']     = 'qa';
 $config->dev->group['testrun']        = 'qa';
 $config->dev->group['suitecase']      = 'qa';
@@ -78,7 +79,6 @@ $config->dev->group['repo']           = 'repo';
 $config->dev->group['repofiles']      = 'repo';
 $config->dev->group['repohistory']    = 'repo';
 $config->dev->group['repobranch']     = 'repo';
-
 
 $config->dev->tableMap['storyspec']      = 'story';
 $config->dev->tableMap['storystage']     = 'story';
