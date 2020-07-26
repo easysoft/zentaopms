@@ -79,11 +79,11 @@
           <?php common::printIcon('testtask', 'runCase', "runID=$run->id&caseID=$run->case&version=$run->caseVersion", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");?>
           <?php common::printIcon('testcase', 'edit', "caseID=$run->case", '', 'list');?>
           <?php
-                if(common::hasPriv('testtask', 'unlinkCase', $run))
-                {
-                    $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
-                }
+          if(common::hasPriv('testtask', 'unlinkCase', $run))
+          {
+              $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
+          }
           ?>
         </td>
       </tr>
