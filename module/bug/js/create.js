@@ -62,21 +62,37 @@ function setAssignedTo(moduleID, productID)
 {
     if(typeof(productID) == 'undefined') productID = $('#product').val();
     if(typeof(moduleID) == 'undefined')  moduleID  = $('#module').val();
-
     var link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
-        var projectID = $('#project').val();
-        if(!projectID)
+        var isExist = false;
+        var count = $('#assignedTo').find('option').length;
+        for(var i=0;i<count;i++)
         {
-            loadProjectTeamMembers(productID, owner);
+            if($('#assignedTo').get(0).options[i].value == owner)
+            {
+                isExist = true;
+                break;
+            }
+        }
+        if(!isExist)
+        {
+            var titleLink = createLink('bug', 'ajaxGetModuleAssignedTitle', 'owner=' + owner);
+            $.get(titleLink, function(title)
+            {
+                option = "<option title='" + title + "' value='" + owner + "'>" + title + "</option>";
+                console.log(option,111);
+                $("#assignedTo").append(option);
+                $('#assignedTo').val(owner);
+                $("#assignedTo").trigger("chosen:updated");
+            });
         }
         else
         {
-            loadAssignedTo(projectID, owner);
+            $('#assignedTo').val(owner);
+            $("#assignedTo").trigger("chosen:updated");
+
         }
-        $('#assignedTo').val(owner);
-        $("#assignedTo").trigger("chosen:updated");
     });
 }
 

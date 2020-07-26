@@ -1704,4 +1704,22 @@ class bug extends control
 
         die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
     }
+
+    /**
+     * AJAX: Get bug assigned title of a module.
+     *
+     * @param  string    $owner
+     * @access public
+     * @return string
+     */
+    public function ajaxGetModuleAssignedTitle($owner)
+    {
+        $user        = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($owner)->fetch();
+        $firstLetter = ucfirst(substr($owner, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $title = $firstLetter . ($user->realname ? $user->realname : $owner);
+        die($title);
+    }
+
+
 }
