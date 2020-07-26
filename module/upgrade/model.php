@@ -596,6 +596,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_3_2');
             $this->execSQL($this->getUpgradeFile('12.3.2'));
             $this->appendExec('12_3_2');
+        case '12.3.3':
+            $this->saveLogs('Execute 12_3_3');
+            $this->execSQL($this->getUpgradeFile('12.3.3'));
+            $this->addPriv12_3_3();
+
         }
 
         $this->deletePatch();
@@ -1556,6 +1561,34 @@ class upgradeModel extends model
             $this->dao->replace($privTable)
                 ->set('module')->eq('testcase')
                 ->set('method')->eq('unlinkCase')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        return true;
+    }
+
+    /**
+     * Add priv for version 12.3.3
+     *
+     * @access public
+     * @return bool
+     */
+    public function addPriv12_3_3()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $privTable = $this->config->db->prefix . 'grouppriv';
+
+        $oldPriv = $this->dao->select('*')->from($privTable)
+            ->where('module')->eq('todo')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($oldPriv as $item)
+        {
+            $this->dao->replace($privTable)
+                ->set('module')->eq('todo')
+                ->set('method')->eq('start')
                 ->set('`group`')->eq($item->group)
                 ->exec();
             $this->saveLogs($this->dao->get());
