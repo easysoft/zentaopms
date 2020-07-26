@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php js::set('oldProductID', $story->product);?>
 <?php js::set('parentStory', !empty($story->children));?>
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
 <div class='main-content' id='mainContent'>

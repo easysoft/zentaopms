@@ -436,6 +436,8 @@ class projectModel extends model
      */
     public function batchUpdate()
     {
+        $this->loadModel('user');
+
         $projects    = array();
         $allChanges  = array();
         $data        = fixer::input('post')->get();
@@ -460,7 +462,6 @@ class projectModel extends model
             $projects[$projectID]->order  = $data->orders[$projectID];
         }
 
-        $this->loadModel('user');
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];

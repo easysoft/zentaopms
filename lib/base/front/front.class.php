@@ -802,7 +802,14 @@ class baseJS
     {
         global $app;
 
-        if($app->viewType == 'json') return json_encode(array('message' => $message));
+        if($app->viewType == 'json')
+        {
+            $output = array();
+            $output['data'] = json_encode(array('message' => $message));
+            $output['md5']  = md5(json_encode(array('message' => $message)));
+
+            return json_encode($output);
+        }
 
         return self::start($full) . "alert('" . $message . "')" . self::end() . self::resetForm();
     }
@@ -834,7 +841,15 @@ class baseJS
     {
         global $app;
 
-        if($app->viewType == 'json') return json_encode(array('message' => $message));
+        if($app->viewType == 'json')
+        {
+            $output = array();
+            $output['status'] = 'fail';
+            $output['data']   = json_encode(array('message' => $message));
+            $output['md5']    = md5(json_encode(array('message' => $message)));
+
+            return json_encode($output);
+        }
 
         $alertMessage = '';
         if(is_array($message))
@@ -882,11 +897,16 @@ class baseJS
         global $app;
         if($app->viewType == 'json')
         {
-            $output['message']      = $message;
-            $output['okURL']        = common::getSysURL() . $okURL;
-            $output['cancleURL']    = common::getSysURL() . $cancleURL;
-            $output['okTarget']     = $okTarget;
-            $output['cancleTarget'] = $cancleTarget;
+            $data = array();
+            $data['message']      = $message;
+            $data['okURL']        = common::getSysURL() . $okURL;
+            $data['cancleURL']    = common::getSysURL() . $cancleURL;
+            $data['okTarget']     = $okTarget;
+            $data['cancleTarget'] = $cancleTarget;
+
+            $output = array();
+            $output['data'] = json_encode($data);
+            $output['md5']  = md5(json_encode($data));
 
             return json_encode($output);
         }
@@ -948,7 +968,16 @@ EOT;
             $url = $config->webRoot;
         }
 
-        if($app->viewType == 'json') return json_encode(array('locate' => common::getSysURL() . $url));
+        if($app->viewType == 'json')
+        {
+            $data = strtolower($url) == 'back' ? array('locate' => 'back') : array('locate' => common::getSysURL() . $url);
+
+            $output = array();
+            $output['data'] = json_encode($data);
+            $output['md5']  = md5(json_encode($data));
+
+            return json_encode($output);
+        }
 
         $js  = self::start();
         if(strtolower($url) == "back")
