@@ -10,3 +10,8 @@ $(function()
     };
     resizeChartTable();
 });
+
+function changeDate()
+{
+    $("#refresh").removeAttr("style");
+}

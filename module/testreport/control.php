@@ -117,10 +117,12 @@ class testreport extends control
      * @param  int    $objectID
      * @param  string $objectType
      * @param  string $extra
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return void
      */
-    public function create($objectID = 0, $objectType = 'testtask', $extra = '')
+    public function create($objectID = 0, $objectType = 'testtask', $extra = '', $begin = '', $end = '')
     {
         if($_POST)
         {
@@ -165,8 +167,8 @@ class testreport extends control
             if($productID != $task->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
             $productIdList[$productID] = $productID;
 
-            $begin   = $task->begin;
-            $end     = $task->end;
+            $begin   = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
+            $end     = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
             $project = $this->project->getById($task->project);
             $builds  = array();
             if($task->build == 'trunk')
@@ -225,8 +227,8 @@ class testreport extends control
             $builds  = $this->build->getByList($buildIdList);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
 
-            $begin = $project->begin;
-            $end   = $project->end;
+            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $project->begin;
+            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $project->end;
             $owner = current($owners);
             $bugs  = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'project');
 
@@ -267,6 +269,7 @@ class testreport extends control
 
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
+        $this->view->extra      = $extra;
         $this->display();
     }
 
@@ -278,7 +281,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function edit($reportID, $from = 'product')
+    public function edit($reportID, $from = 'product', $begin = '', $end ='')
     {
         if($_POST)
         {
@@ -295,6 +298,8 @@ class testreport extends control
 
         $report  = $this->testreport->getById($reportID);
         $project = $this->project->getById($report->project);
+        $begin   = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
+        $end     = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
         if($from == 'product' and is_numeric($report->product))
         {
             $product   = $this->product->getById($report->product);
@@ -333,7 +338,7 @@ class testreport extends control
                 $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
                 if(!empty($build->id)) $builds[$build->id] = $build;
-                $bugs = $this->testreport->getBugs4Test($builds, $report->product, $report->begin, $report->end);
+                $bugs = $this->testreport->getBugs4Test($builds, $report->product, $begin, $end);
             }
             $tasks = array($task->id => $task);
 
@@ -346,15 +351,18 @@ class testreport extends control
 
             $builds  = $this->build->getByList($report->builds);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
-            $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $report->begin, $report->end, 'project');
+            $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'project');
         }
 
-        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
-        $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $report->begin, $report->end, $builds);
+        $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
+        $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
 
         $this->view->title = $report->title . $this->lang->testreport->edit;
 
         $this->view->report        = $report;
+        $this->view->from          = $from;
+        $this->view->begin         = $begin;
+        $this->view->end           = $end;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;
         $this->view->project       = $project;
@@ -366,10 +374,10 @@ class testreport extends control
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
-        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
+        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
         
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
