@@ -28,9 +28,12 @@
             <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
             <td class='w-p50'>
               <div class='input-group'>
-                <?php echo html::input('begin', $report->begin, "class='form-control form-date'")?>
+                <?php echo html::input('begin', $begin, "class='form-control form-date' onchange=changeDate()")?>
                 <span class='input-group-addon'> ~ </span>
-                <?php echo html::input('end', $report->end, "class='form-control form-date'")?>
+                <?php echo html::input('end', $end, "class='form-control form-date' onchange=changeDate()")?>
+                <?php echo "<div class='input-group-btn' id='refresh' style='display: none'>"?>
+                     <a onclick=refreshPage() class='btn btn-icon' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
+                <?php echo "</div>"?>
                 <?php echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);?>
               </div>
             </td>
@@ -113,4 +116,26 @@
     </form>
   </div>
 </div>
+<script>
+    function refreshPage()
+    {
+        var begin    = $("#begin").val();
+        var end      = $("#end").val();
+        var reportID = <?php echo $report->id;?>;
+        var from     = <?php echo "'" . $from . "'";?>;
+        if(begin.indexOf('-') != -1)
+        {
+            var beginarray = begin.split("-");
+            var begin = '';
+            for(i = 0; i < beginarray.length; i++) begin = begin + beginarray[i];
+        }
+        if(end.indexOf('-') != -1)
+        {
+            var endarray = end.split("-");
+            var end = '';
+            for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
+        }
+        location.href = createLink('testreport', 'edit', "reportID=" + reportID + "&from=" + from + "&begin=" + begin + "&end=" + end);
+    }
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -95,17 +95,12 @@ class testreportModel extends model
             ->add('createdDate', helper::now())
             ->join('stories', ',')
             ->join('builds', ',')
+            ->join('bugs', ',')
             ->join('cases', ',')
             ->join('members', ',')
             ->remove('files,labels,uid')
             ->get();
         $data->members = trim($data->members, ',');
-
-        $builds = array();
-        $build   = $this->loadModel('build')->getById($data->builds);
-        if(!empty($build->id)) $builds[$build->id] = $build;
-        $bugs = $this->getBugs4Test($builds, $data->product, $data->begin, $data->end);
-        if(!empty($bugs)) $data->bugs = implode(",", array_keys($bugs));
 
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTREPORT)->data($data)->autocheck()
@@ -134,17 +129,12 @@ class testreportModel extends model
             ->stripTags($this->config->testreport->editor->edit['id'], $this->config->allowedTags)
             ->join('stories', ',')
             ->join('builds', ',')
+            ->join('bugs', ',')
             ->join('cases', ',')
             ->join('members', ',')
             ->remove('files,labels,uid')
             ->get();
         $data->members = trim($data->members, ',');
-
-        $builds = array();
-        $build   = $this->loadModel('build')->getById($data->builds);
-        if(!empty($build->id)) $builds[$build->id] = $build;
-        $bugs = $this->getBugs4Test($builds, $data->product, $data->begin, $data->end);
-        $data->bugs = !empty($bugs) ? implode(",", array_keys($bugs)) : '';
 
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
