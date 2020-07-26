@@ -116,7 +116,6 @@ class product extends control
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        $branchID  = $browseType == '' ? $branch : ($browseType == 'bybranch' ? (int)$param : ($this->cookie->storyBranch ? $this->cookie->storyBranch : $branch));
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
@@ -125,14 +124,15 @@ class product extends control
             $_COOKIE['storyModule'] = 0;
             setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
         }
+
         if($browseType == 'bymodule' or $browseType == '')
         {
             setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', false, false);
             $_COOKIE['storyBranch'] = 0;
             setcookie('storyBranch', 0, 0, $this->config->webRoot, '', false, false);
-            if($browseType == '') $browseType = 'unclosed';
+            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bybranch') setcookie('storyBranch', (int)$param, 0, $this->config->webRoot, '', false, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
@@ -140,6 +140,19 @@ class product extends control
 
         /* Set menu. */
         $this->product->setMenu($this->products, $productID, $branch);
+
+        /* Set moduleTree. */
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        if($browseType == '')
+        {
+            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            $browseType = 'unclosed';
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch);
+        }
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
@@ -154,7 +167,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories. */
-        $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
@@ -188,8 +201,6 @@ class product extends control
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
-        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
-
         /* Assign. */
         $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[]    = $this->products[$productID];
@@ -201,7 +212,7 @@ class product extends control
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
         $this->view->summary       = $this->product->summary($stories, $storyType);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
+        $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter|pofirst|nodeleted');

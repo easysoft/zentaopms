@@ -77,7 +77,6 @@ class bug extends control
         /* Set productID, moduleID, queryID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
-        $branchID  = $browseType == '' ? $branch : ($browseType == 'bybranch' ? (int)$param : ($this->cookie->bugBranch ? $this->cookie->bugBranch : $branch));
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
@@ -91,9 +90,9 @@ class bug extends control
             setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
             $_COOKIE['bugBranch'] = 0;
             setcookie('bugBranch', 0, 0, $this->config->webRoot, '', false, false);
-            if($browseType == '') $browseType = 'unclosed';
+            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bybranch') setcookie('bugBranch', (int)$param, 0, $this->config->webRoot, '', false, false);
+        if($browseType == 'bybranch') setcookie('bugBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -102,6 +101,18 @@ class bug extends control
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID, $branch, $moduleID, $browseType, $orderBy);
         $this->session->set('bugList', $this->app->getURI(true));
+
+        /* Set moduleTree. */
+        if($browseType == '')
+        {
+            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            $browseType = 'unclosed';
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', (int)$this->cookie->treeBranch);
+        }
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
@@ -119,7 +130,7 @@ class bug extends control
         $projects = $this->loadModel('project')->getPairs('empty|withdelete');
 
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productID, $projects, $branchID, $browseType, $moduleID, $queryID, $sort, $pager);
+        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
@@ -157,7 +168,7 @@ class bug extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->moduleTree    = $moduleTree;
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->summary       = $this->bug->summary($bugs);
         $this->view->browseType    = $browseType;
