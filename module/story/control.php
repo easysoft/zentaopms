@@ -945,6 +945,7 @@ class story extends control
     {
         if($this->post->comments)
         {
+            $data       = fixer::input('post')->get();
             $allChanges = $this->story->batchClose();
 
             if($allChanges)
@@ -955,6 +956,13 @@ class story extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
+
+            foreach($data->storyParentList as $storyID => $parent)
+            {
+                if($parent == -1) $skipStory[$storyID] = $data->storyIdList[$storyID];
+            }
+            if(isset($skipStory)) echo js::alert(sprintf($this->lang->story->parentSkip, join(',', $skipStory)));
+
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->storyList, 'parent'));
         }
