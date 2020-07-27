@@ -495,7 +495,7 @@ class testtaskModel extends model
         if($type == 'bystory') $cases = $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bybug')   $cases = $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $task, $query, $param, $linkedCases, $pager);
-        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $pager);
+        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $query, $pager);
 
         return $cases;
     }
@@ -624,11 +624,11 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
+    public function getLinkableCasesByTestTask($testTask, $linkedCases, $query, $pager)
     {
         $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
 
-        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
+        return $this->dao->select("*")->from(TABLE_CASE)->where($query)->andWhere('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
     }
 
     /**
