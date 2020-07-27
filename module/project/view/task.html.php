@@ -69,8 +69,8 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
         elseif($menuType != 'status' and $menuType != 'QUERY')
         {
             $label   = "<span class='text'>{$menuItem->text}</span>";
-            $label  .= $menuType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-            $active  = $menuType == $browseType ? 'btn-active-text' : '';
+            $label  .= $menuType == $this->session->taskBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+            $active  = $menuType == $this->session->taskBrowseType ? 'btn-active-text' : '';
             $title   = $menuType == 'needconfirm' ? "title='{$lang->task->storyChange}'" : '';
             echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
         }
