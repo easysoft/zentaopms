@@ -522,6 +522,9 @@ class task extends control
             $members = $this->task->getMemberPairs($task);
         }
 
+        if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
+        if($members['closed']) $members['closed'] = 'Closed';
+
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
         $this->view->task       = $task;
