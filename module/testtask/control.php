@@ -866,15 +866,7 @@ class testtask extends control
         if($param)
         {
             $query = $this->loadModel('search')->getQuery($param);
-            if($query)
-            {
-                $this->session->set('testcaseQuery', $query->sql);
-                $this->session->set('testcaseForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('testcaseQuery', ' 1 = 1');
-            }
+            if($query) $this->session->set('testcaseForm', $query->form);
         }
         if($this->session->currentProductType == 'normal')
         {
