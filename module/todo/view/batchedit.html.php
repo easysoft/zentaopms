@@ -50,7 +50,17 @@
         <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
         <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
         <td class='text-center'>
-          <?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, " . $todo->id . ")' class='form-control'");?>
+          <?php
+          if($todo->type == 'cycle')
+          {
+              echo html::hidden("types[$todo->id]", $todo->type); 
+              echo $lang->todo->cycle;
+          }
+          else
+          {
+              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, " . $todo->id . ")' class='form-control'");
+          }
+          ?>
         </td>
         <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
         <td style='overflow:visible'>

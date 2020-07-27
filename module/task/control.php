@@ -367,7 +367,8 @@ class task extends control
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
-        if($this->view->task->status == 'closed' && !isset($this->view->members['closed'])) $this->view->members += array('closed' => 'closed');
+        if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -521,6 +522,9 @@ class task extends control
             $task->nextUser = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
             $members = $this->task->getMemberPairs($task);
         }
+
+        if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
+        if(isset($members['closed']) or $task->status == 'closed') $members['closed'] = 'Closed';
 
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;

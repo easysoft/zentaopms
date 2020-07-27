@@ -212,6 +212,7 @@ $lang->task->error->consumed         = 'Nhiệm vụ: %s giờ phải là < 0. B
 $lang->task->error->assignedTo       = 'Nhiệm vụ nhiều người dùng trong tình trạng hiện tại không thể giao cho một thành viên người không trong Nhóm nhiệm vụ.';
 $lang->task->error->consumedEmpty    = '"Giờ làm" không nên trống.';
 $lang->task->error->deadlineSmall    = '"Hạn chót" phải lớn hơn "Ngày bắt đầu".';
+$lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 
 /* Report. */
 $lang->task->report = new stdclass();

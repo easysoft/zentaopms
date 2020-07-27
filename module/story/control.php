@@ -957,12 +957,6 @@ class story extends control
                 }
             }
 
-            foreach($data->storyParentList as $storyID => $parent)
-            {
-                if($parent == -1) $skipStory[$storyID] = $data->storyIdList[$storyID];
-            }
-            if(isset($skipStory)) echo js::alert(sprintf($this->lang->story->parentSkip, join(',', $skipStory)));
-
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->storyList, 'parent'));
         }
@@ -974,9 +968,16 @@ class story extends control
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
         foreach($stories as $story)
         {
+            if($story->parent == -1)
+            {
+                $skipStory[] = $story->id;
+                unset($stories[$story->id]);
+            }
             if($story->status == 'closed') unset($stories[$story->id]);
         }
+
         if(empty($stories)) die(js::alert($this->lang->story->notice->closed) . js::locate($this->session->storyList, 'parent'));
+        if(isset($skipStory)) echo js::alert(sprintf($this->lang->story->skipStory, join(',', $skipStory)));
 
         /* The stories of a product. */
         if($productID)

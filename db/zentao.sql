@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `doc` mediumint(8) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `digest` varchar(255) NOT NULL,
-  `content` text NOT NULL,
+  `content` longtext NOT NULL,
   `files` text NOT NULL,
   `type` varchar(10) NOT NULL,
   `version` smallint(5) unsigned NOT NULL,

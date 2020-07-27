@@ -58,6 +58,7 @@ $lang->story->batchChangeStage  = "Changer Phases par lot";
 $lang->story->batchAssignTo     = "Affecter par lot";
 $lang->story->batchChangeModule = "Changer Modules par lot";
 $lang->story->viewAll           = "Voir Tout";
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -122,6 +123,9 @@ $lang->story->released       = 'Stories Versionnées';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
+
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
 
 $lang->story->useList[0] = 'Oui';
 $lang->story->useList[1] = 'Non';
@@ -222,7 +226,7 @@ $lang->story->mustChoosePreVersion  = 'Sélect une version pour revenir en arri�
 $lang->story->noStory               = "Aucune story pour l'instant. ";
 $lang->story->ignoreChangeStage     = "Story %s est à l'état brouillon et nécessite d'être complétée et validée...";
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
-$lang->story->moveChildrenTips      = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Périmètre';

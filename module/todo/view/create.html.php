@@ -116,7 +116,7 @@
           </td>
           <td>
             <div class='checkbox-primary'>
-              <input type='checkbox' name='switchTime' id='switchTime' onclick='switchDateFeature(this);' />
+              <input type='checkbox' id='switchTime' onclick='switchDateFeature(this);' />
               <label for='switchTime'><?php echo $lang->todo->lblDisableDate;?></label>
             </div>
           </td>

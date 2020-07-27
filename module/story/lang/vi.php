@@ -58,6 +58,7 @@ $lang->story->batchChangeStage  = "Thay đổi giai đoạn hàng loạt";
 $lang->story->batchAssignTo     = "Bàn giao hàng loạt";
 $lang->story->batchChangeModule = "Thay đổi Module hàng loạt";
 $lang->story->viewAll           = "Xem tất cả";
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
@@ -122,6 +123,9 @@ $lang->story->released       = 'Đã phát hành';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';
+
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
 
 $lang->story->useList[0] = 'Có';
 $lang->story->useList[1] = 'Không';
@@ -222,7 +226,7 @@ $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển t
 $lang->story->noStory              = 'Không có câu chuyện nào';
 $lang->story->ignoreChangeStage    = 'Câu chuyện %s là bản nháp. Vui lòng xét duyệt nó..';
 $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->storyCommon} mẹ";
-$lang->story->moveChildrenTips     = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';

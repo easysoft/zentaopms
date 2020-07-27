@@ -40,9 +40,10 @@
                   <?php echo html::input('begin', $begin, "class='form-control form-date' onchange=changeDate()")?>
                   <span class='input-group-addon'> ~ </span>
                   <?php echo html::input('end', $end, "class='form-control form-date' onchange=changeDate()")?>
-                  <?php echo "<div class='input-group-btn' id='refresh' style='display: none'>"?>
-                  <a onclick=refreshPage() class='btn btn-icon' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
-                  <?php echo "</div>";
+                  <div class='input-group-btn hidden' id='refresh'>
+                    <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
+                  </div>
+                  <?php
                   echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', isset($project->id) ? $project->id : 0) : '') . html::hidden('tasks', $tasks);
                   echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
                   ?>
@@ -139,26 +140,9 @@
   </div>
 </div>
 <script>
-    function refreshPage()
-    {
-        var begin      = $("#begin").val();
-        var end        = $("#end").val();
-        var objectID   = $("#objectID").val();
-        var objectType = $("#objectType").val();
-        var extra      = <?php echo $extra;?>;
-        if(begin.indexOf('-') != -1)
-        {
-            var beginarray = begin.split("-");
-            var begin = '';
-            for(i = 0; i < beginarray.length; i++) begin = begin + beginarray[i];
-        }
-        if(end.indexOf('-') != -1)
-        {
-            var endarray = end.split("-");
-            var end = '';
-            for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
-        }
-        location.href = createLink('testreport', 'create', "project=" + objectID + "&objectType=" + objectType + "&extra=" + extra + "&begin=" + begin + "&end=" + end);
-    }
+objectID   = $("#objectID").val();
+objectType = $("#objectType").val();
+extra      = '<?php echo $extra;?>';
+method     = 'create';
 </script>
 <?php include '../../common/view/footer.html.php';?>
