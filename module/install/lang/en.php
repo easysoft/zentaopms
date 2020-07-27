@@ -136,7 +136,7 @@ $lang->install->groupList['ADMIN']['name']   = 'Admin';
 $lang->install->groupList['ADMIN']['desc']   = 'System Admin';
 $lang->install->groupList['DEV']['name']     = 'Dev';
 $lang->install->groupList['DEV']['desc']     = 'Developer';
-$lang->install->groupList['QA']['name']      = 'QA';
+$lang->install->groupList['QA']['name']      = 'Test';
 $lang->install->groupList['QA']['desc']      = 'Tester';
 $lang->install->groupList['PM']['name']      = 'PM';
 $lang->install->groupList['PM']['desc']      = 'Project Manager';
@@ -147,7 +147,7 @@ $lang->install->groupList['TD']['desc']      = 'Development Manager';
 $lang->install->groupList['PD']['name']      = 'PD';
 $lang->install->groupList['PD']['desc']      = 'Product Director';
 $lang->install->groupList['QD']['name']      = 'QD';
-$lang->install->groupList['QD']['desc']      = 'QA Director';
+$lang->install->groupList['QD']['desc']      = 'Test Director';
 $lang->install->groupList['TOP']['name']     = 'Senior';
 $lang->install->groupList['TOP']['desc']     = 'Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Others';
@@ -177,7 +177,7 @@ $lang->install->joinZentao = <<<EOT
 <p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php</strong>.</p><p>Note: In order to get the latest news of ZenTao, please sign up on ZenTao Community(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'ranzhi', 'ydisk', 'meshiot');
+$lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
 $lang->install->promotion      = "Products also from EasyCorp:";
 $lang->install->chanzhi        = new stdclass();
@@ -193,11 +193,11 @@ $lang->install->chanzhi->desc  = <<<EOD
 </ul>
 EOD;
 
-$lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name  = 'ZDOO';
-$lang->install->ranzhi->logo  = 'images/main/zdoo.ico';
-$lang->install->ranzhi->url   = 'http://www.zdoo.org';
-$lang->install->ranzhi->desc  = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name  = 'ZDOO';
+$lang->install->zdoo->logo  = 'images/main/zdoo.ico';
+$lang->install->zdoo->url   = 'http://www.zdoo.com';
+$lang->install->zdoo->desc  = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and more </li>
