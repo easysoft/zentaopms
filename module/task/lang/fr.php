@@ -212,6 +212,7 @@ $lang->task->error->consumed         = 'Tâche: %s heures doivent être < 0. Ign
 $lang->task->error->assignedTo       = "Tâche Multi-user dans le statut courant ne peut pas être assignée à un membre qui ne fait pas partie de l'équipe.";
 $lang->task->error->consumedEmpty    = '"Coût Actuel" ne devrait pas être vide.';
 $lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
+$lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 
 /* Report. */
 $lang->task->report = new stdclass();

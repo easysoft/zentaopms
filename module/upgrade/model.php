@@ -600,7 +600,8 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_3_3');
             $this->execSQL($this->getUpgradeFile('12.3.3'));
             $this->addPriv12_3_3();
-            $this->processImport2TaskBugs();//Code for task #7552
+            $this->processImport2TaskBugs();  //Code for task #7552
+            $this->appendExec('12_3_3');
         }
 
         $this->deletePatch();

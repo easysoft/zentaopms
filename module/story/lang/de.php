@@ -58,6 +58,7 @@ $lang->story->batchChangeStage  = "Mehere Phasen ändern";
 $lang->story->batchAssignTo     = "Mehere zuordnen";
 $lang->story->batchChangeModule = "Mehere Module ändern";
 $lang->story->viewAll           = "Alle";
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -122,6 +123,9 @@ $lang->story->released       = 'Released Linked Stories';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';
+
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
 
 $lang->story->useList[0] = 'Ja';
 $lang->story->useList[1] = 'Nein';

@@ -212,6 +212,7 @@ $lang->task->error->consumed         = 'Aufgabe: %s Hour must be more than 0. Ig
 $lang->task->error->assignedTo       = 'Mehere Tasks können nicht zugewisen werden, da die Benutzer nicht teil des Teams sind.';
 $lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
 $lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
+$lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 
 /* Report. */
 $lang->task->report = new stdclass();

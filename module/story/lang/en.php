@@ -58,7 +58,7 @@ $lang->story->batchChangeStage  = "Batch Change Phases";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Modules";
 $lang->story->viewAll           = "See All";
-$lang->story->parentSkip        = '%s is a parent story. It cannot be closed.';
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
