@@ -527,7 +527,7 @@ $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』nên là chữ hoặc số.";
 $lang->error->account         = "『%s』should be >= 3 letters or numbers.";
-$lang->error->passwordsame    = "The password input is inconsistent.";
+$lang->error->passwordsame    = "The two passwords should be the same.";
 $lang->error->passwordrule    = "Password should conform to rules. It should be >= 6 characters.";
 $lang->error->accessDenied    = 'Truy cập bị từ chối.';
 $lang->error->pasteImg        = 'Images are not allowed to be pasted in your browser!';

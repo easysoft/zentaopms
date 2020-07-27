@@ -83,12 +83,14 @@
         </div>
       </div>
       <?php endif;?>
+      <?php if($todo->type != 'cycle'):?>
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
         <div class="col-sm-2">
           <?php echo html::select('type', $lang->todo->typeList, $todo->type, 'onchange="loadList(this.value);" class="form-control"');?>
         </div>
       </div>
+      <?php endif;?>
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->pri;?></label>
         <div class="col-sm-2">
