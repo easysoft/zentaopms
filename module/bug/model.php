@@ -13,8 +13,6 @@
 <?php
 class bugModel extends model
 {
-    public $steps = array();
-
     /**
      * Set menu.
      *
@@ -1681,16 +1679,14 @@ class bugModel extends model
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                list($i, $order) = $this->buildStepOrder($step, $steps, $i);
-
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
-                $bugStep   .= $order . '. ' . $step->desc . "<br />";
-                $bugResult .= $order . '. ' . $stepResult . "<br />";
-                $bugExpect .= $order . '. ' . $step->expect . "<br />";
+                $bugStep   .= $i . '. ' . $step->desc . "<br />";
+                $bugResult .= $i . '. ' . $stepResult . "<br />";
+                $bugExpect .= $i . '. ' . $step->expect . "<br />";
 
                 $i++;
             }
-            $bugSteps .= $bugStep ? str_replace('<br/>', '', $this->lang->bug->tplStep) . $bugStep : $this->lang->bug->tplStep;
+            $bugSteps .= $bugStep   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
             $bugSteps .= $bugResult ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
             $bugSteps .= $bugExpect ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
         }
@@ -2848,25 +2844,5 @@ class bugModel extends model
         }
 
         return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
-    }
-
-    /**
-     * Build step order.
-     *
-     * @param  object $step
-     * @param  array  $caseSteps
-     * @param  int    $i
-     * @access public
-     * @return array
-     */
-    public function buildStepOrder($step, $caseSteps, $i)
-    {
-        if($step->parent == 0 or !in_array($step->parent, $caseSteps)) return array($i, $i);
-
-        $i --;
-        $j = isset($this->steps[$step->parent]) ? (count($this->steps[$step->parent]) + 1) : 1;
-        $this->steps[$step->parent][] = $step->id;
-
-        return array($i, "$i.$j");
     }
 }
