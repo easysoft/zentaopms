@@ -89,12 +89,12 @@
               <?php
               if(!$forceNotReview and $cases[$caseID]->status == 'wait')
               {
-                echo $lang->testcase->statusList['wait'];
-                echo html::hidden("statuses[$caseID]",'wait');
+                  echo $lang->testcase->statusList['wait'];
+                  echo html::hidden("statuses[$caseID]", 'wait');
               }
               else
               {
-                echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');
+                  echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');
               }
               ?>
             </td>
