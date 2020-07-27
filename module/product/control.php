@@ -154,7 +154,7 @@ class product extends control
         }
 
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
-        if($browseType == 'bymodule' or $browseType == 'bybranch') $this->session->set('storyBrowseType', 'unclosed');
+        if(($browseType == 'bymodule' or $browseType == 'bybranch') and $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';

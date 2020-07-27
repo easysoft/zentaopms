@@ -149,7 +149,7 @@ class project extends control
             $this->session->set('taskBrowseType', $browseType);
         }
 
-        if($browseType == 'bymodule') $this->session->set('taskBrowseType', 'unclosed');
+        if($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') $this->session->set('taskBrowseType', 'unclosed');
 
         /* Set queryID, moduleID and productID. */
         $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
