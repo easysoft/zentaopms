@@ -113,11 +113,14 @@ class releaseModel extends model
         $branch    = (int)$branch;
         $buildID   = 0;
 
+        /* Check build if build is required. */
+        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
         /* Check date must be not more than today. */
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
         /* Auto create build when release is not link build. */
-        if($this->post->build == false and $this->post->name and strpos($this->config->release->create->requiredFields, 'build') === false)
+        if($this->post->build == false and $this->post->name)
         {
             $build = $this->dao->select('*')->from(TABLE_BUILD)
                 ->where('deleted')->eq('0')

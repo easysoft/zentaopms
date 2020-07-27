@@ -26,16 +26,10 @@ function loadAllUsers()
   * @access public
   * @return void
   */
-function loadProjectTeamMembers(productID, selectedUser = '')
+function loadProjectTeamMembers(productID)
 {
-    selectedUser = selectedUser ? selectedUser : $('#assignedTo').val();
-    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + selectedUser);
-    $.get(link, function(data)
-    {
-        $('#assignedTo_chosen').remove();
-        $('#assignedTo').replaceWith(data);
-        $('#assignedTo').chosen();
-    });
+    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
 }
 
 /**
@@ -65,34 +59,27 @@ function setAssignedTo(moduleID, productID)
     var link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
-        var isExist = false;
-        var count = $('#assignedTo').find('option').length;
+        owner        = JSON.parse(owner);
+        var account  = owner[0];
+        var realName = owner[1];
+        var isExist  = false;
+        var count    = $('#assignedTo').find('option').length;
         for(var i=0;i<count;i++)
         {
-            if($('#assignedTo').get(0).options[i].value == owner)
+            if($('#assignedTo').get(0).options[i].value == account)
             {
                 isExist = true;
                 break;
             }
         }
-        if(!isExist)
+        if(!isExist && account)
         {
-            var titleLink = createLink('bug', 'ajaxGetModuleAssignedTitle', 'owner=' + owner);
-            $.get(titleLink, function(title)
-            {
-                option = "<option title='" + title + "' value='" + owner + "'>" + title + "</option>";
-                console.log(option,111);
-                $("#assignedTo").append(option);
-                $('#assignedTo').val(owner);
-                $("#assignedTo").trigger("chosen:updated");
-            });
+            option = "<option title='" + realName + "' value='" + account + "'>" + realName + "</option>";
+            $("#assignedTo").append(option);
         }
-        else
-        {
-            $('#assignedTo').val(owner);
-            $("#assignedTo").trigger("chosen:updated");
+        $('#assignedTo').val(account);
+        $("#assignedTo").trigger("chosen:updated");
 
-        }
     });
 }
 
