@@ -1742,7 +1742,7 @@ EOD;
         $isFreepasswd = ($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd);
         if($isFreepasswd) $entry->account = $_GET['account'];
 
-        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($entry->account)->andWhere('deleted')->eq(0)->fetch();
+        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
         if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
