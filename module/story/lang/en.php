@@ -58,6 +58,7 @@ $lang->story->batchChangeStage  = "Batch Change Phases";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Modules";
 $lang->story->viewAll           = "See All";
+$lang->story->parentSkip        = '%s is a parent story. It cannot be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -225,7 +226,7 @@ $lang->story->mustChoosePreVersion  = 'Select a version to revert to.';
 $lang->story->noStory               = 'No stories yet. ';
 $lang->story->ignoreChangeStage     = 'Story %s is a draft. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
-$lang->story->moveChildrenTips      = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Scope';

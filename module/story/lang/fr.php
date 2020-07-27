@@ -222,7 +222,7 @@ $lang->story->mustChoosePreVersion  = 'Sélect une version pour revenir en arri�
 $lang->story->noStory               = "Aucune story pour l'instant. ";
 $lang->story->ignoreChangeStage     = "Story %s est à l'état brouillon et nécessite d'être complétée et validée...";
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
-$lang->story->moveChildrenTips      = "Move child {$lang->storyCommon} to selected product when modified product property of parent {$lang->storyCommon}.";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Périmètre';
