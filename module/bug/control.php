@@ -1406,8 +1406,16 @@ class bug extends control
      */
     public function ajaxGetModuleOwner($moduleID, $productID = 0)
     {
-        $owner = $this->bug->getModuleOwner($moduleID, $productID);
-        die($owner);
+        $account  = $this->bug->getModuleOwner($moduleID, $productID);
+        $realName = '';
+        if(!empty($account))
+        {
+            $user        = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $realName = $firstLetter . ($user->realname ? $user->realname : $account);
+        }
+        die(json_encode(array($account, $realName)));
     }
 
     /**
@@ -1704,22 +1712,4 @@ class bug extends control
 
         die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
     }
-
-    /**
-     * AJAX: Get bug assigned title of a module.
-     *
-     * @param  string    $owner
-     * @access public
-     * @return string
-     */
-    public function ajaxGetModuleAssignedTitle($owner)
-    {
-        $user        = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($owner)->fetch();
-        $firstLetter = ucfirst(substr($owner, 0, 1)) . ':';
-        if(!empty($this->config->isINT)) $firstLetter = '';
-        $title = $firstLetter . ($user->realname ? $user->realname : $owner);
-        die($title);
-    }
-
-
 }
