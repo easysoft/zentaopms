@@ -113,7 +113,9 @@ class bug extends control
         {
             $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', (int)$this->cookie->treeBranch);
         }
-        if($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
+
+        if(($browseType != 'bymodule' && $browseType != 'bybranch')) $this->session->set('bugBrowseType', $browseType);
+        if(($browseType == 'bymodule' || $browseType == 'bybranch') and $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
