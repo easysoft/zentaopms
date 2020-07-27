@@ -1115,7 +1115,7 @@ $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={
 $lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
-$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
+$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,measrecord,');
 $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
@@ -1184,5 +1184,5 @@ $lang->nc->menu            = $lang->auditplan->menu;
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit,view');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
-$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
