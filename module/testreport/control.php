@@ -349,6 +349,8 @@ class testreport extends control
             $tasks = $this->testtask->getByList($report->tasks);
             $productIdList[$report->product] = $report->product;
 
+            foreach($tasks as $task) $this->setChartDatas($task->id);
+
             $builds  = $this->build->getByList($report->builds);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
             $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'project');
