@@ -805,8 +805,9 @@ class baseJS
         if($app->viewType == 'json')
         {
             $output = array();
-            $output['data'] = json_encode(array('message' => $message));
-            $output['md5']  = md5(json_encode(array('message' => $message)));
+            $output['status'] = 'success';
+            $output['data']   = json_encode(array('message' => $message));
+            $output['md5']    = md5($output['data']);
 
             return json_encode($output);
         }
@@ -844,9 +845,9 @@ class baseJS
         if($app->viewType == 'json')
         {
             $output = array();
-            $output['status'] = 'fail';
-            $output['data']   = json_encode(array('message' => $message));
-            $output['md5']    = md5(json_encode(array('message' => $message)));
+            $output['status'] = 'success';
+            $output['data']   = json_encode(array('result' => 'fail', 'message' => $message));
+            $output['md5']    = md5($output['data']);
 
             return json_encode($output);
         }
@@ -905,8 +906,9 @@ class baseJS
             $data['cancleTarget'] = $cancleTarget;
 
             $output = array();
-            $output['data'] = json_encode($data);
-            $output['md5']  = md5(json_encode($data));
+            $output['status'] = 'success';
+            $output['data']   = json_encode($data);
+            $output['md5']    = md5($output['data']);
 
             return json_encode($output);
         }
@@ -973,8 +975,9 @@ EOT;
             $data = strtolower($url) == 'back' ? array('locate' => 'back') : array('locate' => common::getSysURL() . $url);
 
             $output = array();
-            $output['data'] = json_encode($data);
-            $output['md5']  = md5(json_encode($data));
+            $output['status'] = 'success';
+            $output['data']   = json_encode($data);
+            $output['md5']    = md5($output['data']);
 
             return json_encode($output);
         }
