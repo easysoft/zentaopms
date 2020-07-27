@@ -135,6 +135,7 @@ class testreportModel extends model
             ->remove('files,labels,uid')
             ->get();
         $data->members = trim($data->members, ',');
+        if(empty($data->bugs)) $data->bugs = '';
 
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
