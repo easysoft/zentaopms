@@ -58,6 +58,8 @@ $lang->story->batchChangeStage  = "批量修改階段";
 $lang->story->batchAssignTo     = "批量指派";
 $lang->story->batchChangeModule = "批量修改模組";
 $lang->story->viewAll           = '查看全部';
+$lang->story->skipStory         = '需求：%s 為父需求，將不會被關閉。';
+$lang->story->closedStory       = '需求：%s 已關閉，將不會被關閉。';
 
 $lang->story->common         = $lang->storyCommon;
 $lang->story->id             = '編號';

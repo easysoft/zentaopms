@@ -973,11 +973,17 @@ class story extends control
                 $skipStory[] = $story->id;
                 unset($stories[$story->id]);
             }
-            if($story->status == 'closed') unset($stories[$story->id]);
+            if($story->status == 'closed')
+            {
+                $closedStory[] = $story->id;
+                unset($stories[$story->id]);
+            }
         }
 
-        if(empty($stories)) die(js::alert($this->lang->story->notice->closed) . js::locate($this->session->storyList, 'parent'));
-        if(isset($skipStory)) echo js::alert(sprintf($this->lang->story->skipStory, join(',', $skipStory)));
+        $errorTips = '';
+        if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, join(',', $closedStory));
+        if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, join(',', $skipStory));
+        if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
         /* The stories of a product. */
         if($productID)
