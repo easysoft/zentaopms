@@ -110,6 +110,10 @@ $lang->dev->tableList['repo']             = '代码';
 $lang->dev->tableList['repohistory']      = '版本历史';
 $lang->dev->tableList['repofiles']        = '代码文件';
 $lang->dev->tableList['repobranch']       = '代码分支';
+$lang->dev->tableList['ci']               = '持续集成';
+$lang->dev->tableList['compile']          = '构建';
+$lang->dev->tableList['jenkins']          = 'Jenkins';
+$lang->dev->tableList['job']              = '构建任务';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;
@@ -118,7 +122,7 @@ $lang->dev->groupList['qa']      = '测试';
 $lang->dev->groupList['doc']     = '文档';
 $lang->dev->groupList['report']  = '统计';
 $lang->dev->groupList['company'] = '组织';
-$lang->dev->groupList['repo']    = '代码';
+$lang->dev->groupList['repo']    = '持续集成';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = '消息';
 

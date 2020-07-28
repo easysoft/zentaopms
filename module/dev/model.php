@@ -241,6 +241,8 @@ class devModel extends model
         $modules = array();
         foreach($moduleList as $module)
         {
+            if(!file_exists($module . DS . 'control.php')) continue;
+
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
             $group  = zget($this->config->dev->group, $module, 'other');

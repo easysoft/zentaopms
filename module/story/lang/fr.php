@@ -59,6 +59,7 @@ $lang->story->batchAssignTo     = "Affecter par lot";
 $lang->story->batchChangeModule = "Changer Modules par lot";
 $lang->story->viewAll           = "Voir Tout";
 $lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
