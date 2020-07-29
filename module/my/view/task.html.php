@@ -45,9 +45,9 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'> <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-project'>    <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
-          <th class='c-project'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
-          <th class='c-name'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-project w-100px'>    <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
+          <th class='c-project w-80px'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-name w-140px'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <th class='c-user w-100px'><?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
