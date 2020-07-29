@@ -64,7 +64,7 @@ function setAssignedTo(moduleID, productID)
         var realName = owner[1];
         var isExist  = false;
         var count    = $('#assignedTo').find('option').length;
-        for(var i=0;i<count;i++)
+        for(var i=0; i < count; i++)
         {
             if($('#assignedTo').get(0).options[i].value == account)
             {
@@ -79,7 +79,6 @@ function setAssignedTo(moduleID, productID)
         }
         $('#assignedTo').val(account);
         $("#assignedTo").trigger("chosen:updated");
-
     });
 }
 

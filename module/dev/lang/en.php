@@ -110,6 +110,10 @@ $lang->dev->tableList['repo']             = 'Code';
 $lang->dev->tableList['repohistory']      = 'Repo History';
 $lang->dev->tableList['repofiles']        = 'Repo Files';
 $lang->dev->tableList['repobranch']       = 'Repo Branch';
+$lang->dev->tableList['ci']               = 'CI';
+$lang->dev->tableList['compile']          = 'Compile';
+$lang->dev->tableList['jenkins']          = 'Jenkins';
+$lang->dev->tableList['job']              = 'Job';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
@@ -118,7 +122,7 @@ $lang->dev->groupList['qa']      = 'Test';
 $lang->dev->groupList['doc']     = 'Doc';
 $lang->dev->groupList['report']  = 'Report';
 $lang->dev->groupList['company'] = 'Company';
-$lang->dev->groupList['repo']    = 'Code';
+$lang->dev->groupList['repo']    = 'CI';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = 'Message';
 

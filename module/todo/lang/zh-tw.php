@@ -16,6 +16,7 @@ $lang->todo->createCycle  = "創建周期待辦";
 $lang->todo->assignTo     = "指派給";
 $lang->todo->assignedDate = "指派日期";
 $lang->todo->assignAction = "指派待辦";
+$lang->todo->start        = "開始待辦";
 $lang->todo->activate     = "激活待辦";
 $lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "編輯待辦";

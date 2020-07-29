@@ -48,12 +48,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     foreach($menus as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
-
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";
-        if($this->session->bugBrowseType != 'bysearch' && ($browseType == 'bymodule' or $browseType == 'bybranch')) $browseType = $this->session->bugBrowseType;
-        $label .= $menuBrowseType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-        $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+        $label .= $menuBrowseType == $this->session->bugBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $active = $menuBrowseType == $this->session->bugBrowseType ? 'btn-active-text' : '';
 
         if($menuItem->name == 'my')
         {

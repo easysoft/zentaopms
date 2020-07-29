@@ -59,6 +59,7 @@ $lang->story->batchAssignTo     = "Bàn giao hàng loạt";
 $lang->story->batchChangeModule = "Thay đổi Module hàng loạt";
 $lang->story->viewAll           = "Xem tất cả";
 $lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';

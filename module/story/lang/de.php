@@ -59,6 +59,7 @@ $lang->story->batchAssignTo     = "Mehere zuordnen";
 $lang->story->batchChangeModule = "Mehere Module ändern";
 $lang->story->viewAll           = "Alle";
 $lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';

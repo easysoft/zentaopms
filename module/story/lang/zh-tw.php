@@ -125,6 +125,9 @@ $lang->story->released       = "已發佈{$lang->storyCommon}數";
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "該{$lang->storyCommon}與上一{$lang->storyCommon}不屬於同一產品！";
 
+$lang->story->needNotReviewList[0] = '需要評審';
+$lang->story->needNotReviewList[1] = '不需要評審';
+
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
@@ -224,6 +227,7 @@ $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->noStory               = "暫時沒有{$lang->storyCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 為草稿狀態，沒有修改其階段。";
 $lang->story->cannotDeleteParent    = "不能刪除父{$lang->storyCommon}";
+$lang->story->moveChildrenTips      = "修改父{$lang->storyCommon}的所屬產品會將其下的子{$lang->storyCommon}也移動到所選產品下。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "該{$lang->storyCommon}所屬範圍";

@@ -596,7 +596,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_3_2');
             $this->execSQL($this->getUpgradeFile('12.3.2'));
             $this->appendExec('12_3_2');
-        case '12.3.3':
+        case '12_3_3':
             $this->saveLogs('Execute 12_3_3');
             $this->execSQL($this->getUpgradeFile('12.3.3'));
             $this->addPriv12_3_3();

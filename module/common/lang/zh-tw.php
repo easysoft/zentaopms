@@ -336,13 +336,17 @@ $lang->testreport->menu->caselib   = array('link' => '用例庫|caselib|browse')
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
-$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => '測試單|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '報告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+$lang->caselib->subMenu = new stdclass();
+$lang->caselib->subMenu->testcase = new stdclass();
+$lang->caselib->subMenu->testcase->feature = array('link' => '功能測試|testcase|browse|', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => '單元測試|testtask|browseUnits|');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -523,7 +527,7 @@ $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
 $lang->error->account         = "『%s』只能是字母和數字的組合三位以上。";
-$lang->error->passwordsame    = "兩次密碼應當相等。";
+$lang->error->passwordsame    = "兩次密碼應該相同。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
 $lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
