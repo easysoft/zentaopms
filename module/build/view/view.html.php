@@ -133,7 +133,7 @@ tbody tr td:first-child input{display:none;}
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-                  echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");
+                  echo html::a($storyLink,$story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -213,7 +213,9 @@ tbody tr td:first-child input{display:none;}
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'>
+                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
+                </td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>
@@ -293,7 +295,9 @@ tbody tr td:first-child input{display:none;}
                   <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
                   <?php endif;?>
                 </td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'>
+                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
+                </td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>
