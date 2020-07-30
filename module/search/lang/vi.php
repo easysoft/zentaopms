@@ -48,3 +48,6 @@ $lang->search->andor['and'] = 'Và';
 $lang->search->andor['or']  = 'Hoặc';
 
 $lang->search->null = 'Null';
+
+$lang->userquery        = new stdclass();
+$lang->userquery->title = 'Title';
