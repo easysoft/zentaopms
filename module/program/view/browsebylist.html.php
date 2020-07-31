@@ -27,8 +27,8 @@
           <?php printf('%03d', $project->id);?>
         </td>
         <td class='text-left'><?php echo $project->code;?></td>
-        <td class='text-left' title='<?php echo $project->name?>'>
-          <?php echo html::a($this->createLink('program', 'transfer', 'projectID=' . $project->id), $project->name);?>
+        <td class='text-left pgm-title' title='<?php echo $project->name?>'>
+          <?php echo html::a('javascript:void(0)', $project->name, '', "data-id=$project->id class=transfer");?>
         </td>
         <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
         <td class='text-center'><?php echo $project->begin;?></td>

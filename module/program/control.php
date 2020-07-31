@@ -9,41 +9,6 @@ class program extends control
         $this->programs = $this->program->getPairs();
     }
 
-    public function transfer($programID = 0)
-    {   
-        $this->session->set('program', $programID);
-        $program         = $this->project->getByID($programID); 
-        $programProjects = $this->project->getPairs();
-        $programProject  = key($programProjects);
-
-        if($program->template == 'cmmi')
-        {   
-            $link = $this->createLink('programplan', 'browse', 'programID=' . $programID);
-        }   
-        if($program->template == 'scrum')
-        {   
-            $link = $programProject ? $this->createLink('project', 'task', 'projectID=' . $programProject) : $this->createLink('project', 'create', '', '', '', $programID); 
-        }   
-
-        die(js::locate($link, 'parent'));
-    }
-
-    /**
-     * Common actions.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return object current object
-     */
-    public function commonAction($projectID = 0, $extra = '')
-    {
-        /* Set menu. */
-        //$this->projects = $this->project->getPairs('nocode');
-        //$projectID  = $this->project->saveState($projectID, $this->projects);
-        //$selectHtml = $this->project->select('', $projectID, 0, 'project', 'task', $extra);
-        //$this->lang->programSwapper = $selectHtml;
-    }
-
     public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->commonAction();
@@ -660,5 +625,31 @@ class program extends control
         foreach($programs as $program) $programPairs[$program->id] = $program->name;
         $this->view->programs = $programs;
         $this->display();
+    }
+
+    /**
+     * Ajax get program enter link.
+     * 
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetEnterLink($programID = 0)
+    {   
+        $this->session->set('program', $programID);
+        $program         = $this->project->getByID($programID); 
+        $programProjects = $this->project->getPairs();
+        $programProject  = key($programProjects);
+
+        if($program->template == 'cmmi')
+        {   
+            $link = $this->createLink('programplan', 'browse', 'programID=' . $programID);
+        }   
+        if($program->template == 'scrum')
+        {   
+            $link = $programProject ? $this->createLink('project', 'task', 'projectID=' . $programProject) : $this->createLink('project', 'create', '', '', '', $programID); 
+        }   
+
+        die($link);
     }
 }
