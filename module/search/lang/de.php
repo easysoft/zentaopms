@@ -48,3 +48,6 @@ $lang->search->andor['and']         = 'Und';
 $lang->search->andor['or']          = 'Oder';
 
 $lang->search->null = 'Null';
+
+$lang->userquery        = new stdclass();
+$lang->userquery->title = 'Title';

@@ -142,7 +142,12 @@
           </div>
           <?php endforeach;?>
         </div>
+        <?php if(!empty($files)):?>
         <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+        <?php else:?>
+        <div class='table-empty-tip text-muted'><?php echo $lang->pager->noRecord;?></div>
+        <?php endif?>
+        </div>
       </div>
       <?php endif?>
     </div>

@@ -105,6 +105,7 @@ class searchModel extends model
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
 
             /* Skip empty values. */
             if($this->post->$valueName == false) continue;

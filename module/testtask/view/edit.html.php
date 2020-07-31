@@ -28,7 +28,10 @@
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->project;?></th>
           <td class='w-p35-f'>
-            <?php echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?>
+          <?php
+          echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");
+          echo html::hidden('product', $task->product);
+          ?>
           </td>
           <td></td>
         </tr>
