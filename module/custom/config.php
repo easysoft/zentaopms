@@ -27,7 +27,7 @@ $config->custom->requiredModules[65] = 'testreport';
 $config->custom->requiredModules[70] = 'caselib';
 $config->custom->requiredModules[75] = 'testtask';
 
-$config->custom->requiredModules[75] = 'doc';
+$config->custom->requiredModules[80] = 'doc';
 
 $config->custom->requiredModules[85] = 'user';
 
