@@ -391,7 +391,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
         $this->view->position[] = $this->lang->my->myProject;
         $this->view->tabID      = 'project';
-        $this->view->projects   = @array_reverse($this->user->getProjects($this->app->user->account));
+        $this->view->projects   = $this->user->getProjects($this->app->user->account);
 
         $this->display();
     }
