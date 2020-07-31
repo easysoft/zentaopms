@@ -375,10 +375,14 @@ class my extends control
         $this->app->loadConfig('user');
         $this->app->loadLang('user');
 
+        $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->position[] = $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->userGroups = implode(',', array_keys($userGroups));
+        $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
 
         $this->display();
     }
