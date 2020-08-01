@@ -1313,13 +1313,13 @@ class userModel extends model
             $userView = new stdclass();
             $userView->account  = $account;
             $userView->programs = array();
+            $programs = array();
             if($isAdmin)
             {
                 $userView->programs = join(',', array_keys($allPrograms));
             }
             else
             {
-                $programs = array();
                 foreach($allPrograms as $id => $program)
                 {
                     $programTeams = isset($teams[$id]) ? $teams[$id] : array();
