@@ -49,8 +49,6 @@ class program extends control
 
     public function create($template = 'cmmi', $copyProgramID = '')
     {
-        $this->commonAction();
-
         if($_POST)
         {
             $projectID = $this->program->create();
@@ -320,8 +318,6 @@ class program extends control
 
     public function edit($projectID = 0)
     {
-        $this->commonAction();
-
         $project = $this->project->getByID($projectID);
 
         if($_POST)
