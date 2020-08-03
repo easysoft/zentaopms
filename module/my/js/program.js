@@ -8,5 +8,5 @@ $(function()
         {   
             location.href = pgmLink;
         })  
-    }
+    })
 })
