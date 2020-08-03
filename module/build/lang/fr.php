@@ -29,13 +29,13 @@ $lang->build->basicInfo = 'Infos de Base';
 
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
-$lang->build->branch        = 'Platforme/Branche';
+$lang->build->branch        = 'Plateforme/Branche';
 $lang->build->project       = $lang->projectCommon;
 $lang->build->name          = 'Nom';
 $lang->build->date          = 'Date';
 $lang->build->builder       = 'Builder';
-$lang->build->scmPath       = 'SCM Path';
-$lang->build->filePath      = 'File Path';
+$lang->build->scmPath       = 'Chemin SCM';
+$lang->build->filePath      = 'Chemin Fichier';
 $lang->build->desc          = 'Description';
 $lang->build->files         = 'Fichiers';
 $lang->build->last          = 'Dernier Build';
@@ -49,14 +49,14 @@ $lang->build->noProduct     = " <span style='color:red'>Ce {$lang->projectCommon
 $lang->build->noBuild       = 'Aucun builds.';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "The {$lang->storyCommon} or Bug has been associated, and its product cannot be modified";
+$lang->build->notice->changeProduct = "La {$lang->storyCommon} ou le Bug a été associé et son product ne peut pas être modifié";
 
 $lang->build->finishStories = "  {$lang->storyCommon} Terminées %s";
 $lang->build->resolvedBugs  = '  Bugs Résolus %s';
 $lang->build->createdBugs   = '  Bugs Signalés %s';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Source code repository, ex: Subversion/Git Library path';
+$lang->build->placeholder->scmPath  = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
 $lang->build->placeholder->filePath = ' Chemin de téléchargement pour ce Build.';
 
 $lang->build->action = new stdclass();

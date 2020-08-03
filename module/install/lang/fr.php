@@ -25,91 +25,91 @@ $lang->install->seeLatestRelease = 'Voir dernière version';
 $lang->install->welcome          = "Merci d'avoir choisi ZenTao !";
 $lang->install->license          = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao ALM is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
+ZenTao ALM est un logiciel Open Source publié sous <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. Il intègre la gestion de produits, la gestion de projets, la gestion de l'assurance qualité, la gestion de documents, la gestion des agendas, la gestion de sociétés, etc. ZenTao est le meilleur choix pour la gestion de projets logiciels..
 
-ZenTao ALM is built on PHP + MySQL and based on ZentaoPHP framework, an independent framework developed by our team. Third-party developers/organizations can develop extensions or customize for their requirements.
+ZenTao ALM est développé en PHP + MySQL et basé sur le framework ZentaoPHP, un framework independant développé par notre équipe. Les développeurs / organisations tiers peuvent développer des extensions ou personnaliser selon leurs besoins.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
-Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
-Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
+ZenTao ALM est développé par <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+Site Officiel : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
+Support Technique: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a> 
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
-You are installing ZenTao <strong class='text-danger'>%s</strong>.
+Vous installez ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
-$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
-$lang->install->or         = 'Or';
+$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Le site officiel a la dernière version <strong class='text-danger'>%s</strong>, sortie le %s.";
+$lang->install->or         = 'Ou';
 $lang->install->checking   = 'System Checkup';
 $lang->install->ok         = 'Passed(√)';
 $lang->install->fail       = 'Failed(×)';
 $lang->install->loaded     = 'Loaded';
 $lang->install->unloaded   = 'Not Loaded';
-$lang->install->exists     = 'Found ';
-$lang->install->notExists  = 'Not found ';
-$lang->install->writable   = 'Writable ';
-$lang->install->notWritable= 'Not Writable ';
+$lang->install->exists     = 'Trouvé ';
+$lang->install->notExists  = 'Non trouvé ';
+$lang->install->writable   = 'Inscriptible ';
+$lang->install->notWritable= 'Non inscriptible ';
 $lang->install->phpINI     = 'PHP ini File';
 $lang->install->checkItem  = 'Item';
-$lang->install->current    = 'Current Setting';
-$lang->install->result     = 'Result';
+$lang->install->current    = 'Param. courants';
+$lang->install->result     = 'Résultat';
 $lang->install->action     = 'Action';
 
 $lang->install->phpVersion = 'PHP Version';
-$lang->install->phpFail    = 'PHP Version should be 5.2.0+';
+$lang->install->phpFail    = 'PHP Version devrait être 5.2.0 ou plus';
 
 $lang->install->pdo          = 'PDO';
-$lang->install->pdoFail      = 'Edit php.ini to load PDO extension.';
+$lang->install->pdoFail      = 'Editez php.ini pour charger PDO extension.';
 $lang->install->pdoMySQL     = 'PDO_MySQL';
-$lang->install->pdoMySQLFail = 'Edit php.ini to load PDO_MySQL extension.';
+$lang->install->pdoMySQLFail = 'Editez php.ini pour charger PDO_MySQL extension.';
 $lang->install->json         = 'JSON Extension';
-$lang->install->jsonFail     = 'Edit php.ini to load JSON extension.';
+$lang->install->jsonFail     = 'Editez php.ini pour charger JSON extension.';
 $lang->install->openssl      = 'OpenSSL Extension';
-$lang->install->opensslFail  = 'Edit php.ini to load openssl extension.';
+$lang->install->opensslFail  = 'Editez php.ini pour charger openssl extension.';
 $lang->install->mbstring     = 'Mbstring Extension';
-$lang->install->mbstringFail = 'Edit php.ini to load mbstring extension.';
+$lang->install->mbstringFail = 'Editez php.ini pour charger mbstring extension.';
 $lang->install->zlib         = 'Zlib Extension';
-$lang->install->zlibFail     = 'Edit php.ini to load zlib extension.';
+$lang->install->zlibFail     = 'Editez php.ini pour charger zlib extension.';
 $lang->install->curl         = 'Curl Extension';
-$lang->install->curlFail     = 'Edit php.ini to load curl extension.';
+$lang->install->curlFail     = 'Editez php.ini pour charger curl extension.';
 $lang->install->filter       = 'Filter Extension';
-$lang->install->filterFail   = 'Edit the php.ini file to load filter extension.';
+$lang->install->filterFail   = 'Editez le fichier php.ini pour charger filter extension.';
 $lang->install->gd           = 'GD Extension';
-$lang->install->gdFail       = 'Edit the php.ini file to load gd extension.';
+$lang->install->gdFail       = 'Editez le fichier php.ini pour charger gd extension.';
 $lang->install->iconv        = 'Iconv Extension';
-$lang->install->iconvFail    = 'Edit the php.ini file to load iconv extension.';
-$lang->install->tmpRoot      = 'Temp Directory';
-$lang->install->dataRoot     = 'Uploaded File Directory';
-$lang->install->session      = 'Session Save Path';
-$lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path.';
-$lang->install->mkdirWin     = '<p>%s directory has to be created.<br /> Run <code>mkdir %s</code> to create it.</p>';
+$lang->install->iconvFail    = 'Editez le fichier php.ini pour charger iconv extension.';
+$lang->install->tmpRoot      = 'Répertoire Temporaire';
+$lang->install->dataRoot     = "Répertoire d'Upload";
+$lang->install->session      = "Chemin d'enregistrement des sessions";
+$lang->install->sessionFail  = 'Editez le fichier php.ini pour définier session.save_path.';
+$lang->install->mkdirWin     = '<p>Le répertoire %s doit être créé.<br /> Exécutez <code>mkdir %s</code> pour le créer.</p>';
 $lang->install->chmodWin     = ' "%s" privilege has to be changed.';
-$lang->install->mkdirLinux   = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
-$lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <code>chmod o=rwx -R %s</code> to change it.';
+$lang->install->mkdirLinux   = '<p>Le répertoire %s doit être créé.<br /> Exécutez <code>mkdir -p %s</code> pour le créer.</p>';
+$lang->install->chmodLinux   = 'Les permission de "%s" doivent être modifiées.<br /> Exécutez <code>chmod o=rwx -R %s</code> pour les changer.';
 
 $lang->install->timezone       = 'Set Timezone';
-$lang->install->defaultLang    = 'Default Language';
-$lang->install->dbHost         = 'Database Host';
-$lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
-$lang->install->dbPort         = 'Host Port';
+$lang->install->defaultLang    = 'Langue par défaut';
+$lang->install->dbHost         = 'Database Serveur';
+$lang->install->dbHostNote     = "If 127.0.0.1 n'est pas accessible, essayez localhost.";
+$lang->install->dbPort         = 'Port Serveur';
 $lang->install->dbEncoding     = 'Database Charset';
 $lang->install->dbUser         = 'Database Username';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';
 $lang->install->dbPrefix       = 'Table Prefix';
-$lang->install->clearDB        = 'Clean up existing data';
-$lang->install->importDemoData = 'Import Demo Data';
+$lang->install->clearDB        = 'Nettoyer les données existantes';
+$lang->install->importDemoData = 'Importer données de Démo';
 $lang->install->working        = 'Operation Mode';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Application Lifecycle Management';
-$lang->install->workingList['onlyTest']  = 'Only Test Management';
-$lang->install->workingList['onlyStory'] = 'Only Story Management';
-$lang->install->workingList['onlyTask']  = 'Only Task Management';
+$lang->install->workingList['onlyTest']  = 'Seulement Test Management';
+$lang->install->workingList['onlyStory'] = 'Seulement Story Management';
+$lang->install->workingList['onlyTask']  = 'Seulement Task Management';
 
 $lang->install->errorConnectDB      = 'Echec de connexion à la base. ';
 $lang->install->errorDBName         = 'Le nom de la base ne doit pas contenir de “.” ';
@@ -122,9 +122,9 @@ $lang->install->setConfig  = 'Créer fichier de configuration';
 $lang->install->key        = 'Objet';
 $lang->install->value      = 'Valeur';
 $lang->install->saveConfig = 'Sauver config';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
-$lang->install->saved2File = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
-$lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
+$lang->install->save2File  = '<div class="alert alert-warning">Copiez le contenu dans la zone de texte ci-dessus et enregistrez-le dans "<strong> %s </strong>". Vous pourrez modifier ce fichier de configuration ultérieurement.</div>';
+$lang->install->saved2File = 'Le fichier de configuration a été enregistré dans " <strong>%s</strong> ". Vous pouvez modifier ce fichier ultérieurement.';
+$lang->install->errorNotSaveConfig = "Le fichier de configuration n'est pas enregistré.";
 
 $lang->install->getPriv  = 'Paramétrage Admin';
 $lang->install->company  = 'Nom Entreprise';
@@ -165,9 +165,9 @@ $lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Désy
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']     = 'Désynchroniser envoi Webhooks';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Suppression Logs échus';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Créer tâches récurrentes';
-$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring jenkins';
-$lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
-$lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Créer des Jenkins récurrents';
+$lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchroniser le statut Jenkins';
+$lang->install->cronList['moduleName=ci&methodName=exec']               = 'Executer Jenkins';
 
 $lang->install->success  = "Installé !";
 $lang->install->login    = 'Login ZenTao';
@@ -179,17 +179,17 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');
 
-$lang->install->promotion     = "Products also from Nature Easy Soft team:";
+$lang->install->promotion     = "Autres produits de l'équipe Nature Easy Soft :";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
 $lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
-  <li>Article, Blog, Manual, Member, Shop, Forum, Feedback……</li>
-  <li>Customize page freely by theme, effect, widget, css, js and layout</li>
-  <li>Support desktop and mobile in one system</li>
-  <li>Deeply optimized for search engine</li>
+  <li>Article, Blog, Manuel, Membre, Boutique, Forum, Commentaires……</li>
+  <li>Personnalisez la page librement par thème, effet, widget, css, js et mise en page</li>
+  <li>Prise en charge ordinateurs de bureau et mobile dans un seul système</li>
+  <li>Entièrement optimisé pour les moteurs de recherche</li>
 </ul>
 EOD;
 
@@ -199,9 +199,9 @@ $lang->install->zdoo->logo = 'images/main/zdoo.ico';
 $lang->install->zdoo->url  = 'http://www.zdoo.com';
 $lang->install->zdoo->desc = <<<EOD
 <ul>
-  <li>CRM: Customer Management and Order Tracking</li>
-  <li>OA: Approve, Announce, Trip, Leave and so on. </li>
-  <li>Project，Task and Document management </li>
-  <li>Money: Income, Expense, Transfer, Invest and Debt</li>
+  <li>CRM: gestion des clients et suivi des commandes</li>
+  <li>OA: approuver, annoncer, voyager, partir, etc.. </li>
+  <li>Projet management Gestion des tâches et des documents</li>
+  <li>Argent: revenu, dépenses, transfert, investissement et dette</li>
 </ul>
 EOD;

@@ -12,30 +12,30 @@
 $lang->caselib->common = 'Case Library';
 $lang->caselib->all    = 'All Case Libraries';
 
-$lang->caselib->index            = "Library Home";
-$lang->caselib->create           = "Create Case Library";
-$lang->caselib->edit             = 'Edit Case Library';
-$lang->caselib->browse           = 'View Cases in Library';
-$lang->caselib->view             = 'Library Detail';
-$lang->caselib->createCase       = 'Create Case';
-$lang->caselib->delete           = "Delete Suite";
+$lang->caselib->index            = "Accueil Library";
+$lang->caselib->create           = "Créer une Library";
+$lang->caselib->edit             = 'Editer Library';
+$lang->caselib->browse           = 'Voir CasTests dans Library';
+$lang->caselib->view             = 'Détail Library';
+$lang->caselib->createCase       = 'Créer CasTest';
+$lang->caselib->delete           = "Supprimer Suite";
 $lang->caselib->linkVersion      = "Version";
-$lang->caselib->deleted          = 'Deleted';
-$lang->caselib->exportTemplet    = 'Export Template';
-$lang->caselib->batchCreateCase  = 'Batch Create';
-$lang->caselib->import           = 'Import';
-$lang->caselib->importAction     = 'Import Case';
-$lang->caselib->showImport       = 'Imported Data';
+$lang->caselib->deleted          = 'Supprimé';
+$lang->caselib->exportTemplet    = 'Exporter Modèle';
+$lang->caselib->batchCreateCase  = 'Créer par lot';
+$lang->caselib->import           = 'Importer';
+$lang->caselib->importAction     = 'Importer CasTest';
+$lang->caselib->showImport       = 'Données Importées';
 
 $lang->caselib->id             = 'ID';
-$lang->caselib->name           = 'Name';
+$lang->caselib->name           = 'Nom';
 $lang->caselib->desc           = 'Description';
-$lang->caselib->addedBy        = 'CreatedBy';
-$lang->caselib->addedDate      = 'CreatedDate';
-$lang->caselib->lastEditedBy   = 'LastEditedBy';
-$lang->caselib->lastEditedDate = 'LastEditedDate';
+$lang->caselib->addedBy        = 'Créé Par';
+$lang->caselib->addedDate      = 'Date Création';
+$lang->caselib->lastEditedBy   = 'Edité par';
+$lang->caselib->lastEditedDate = 'Date Modif';
 
 $lang->caselib->legendDesc = 'Description';
 
-$lang->caselib->libraryDelete = 'Do you want to delete this library？';
-$lang->caselib->noModule      = '<div>You have no modules.</div><div>Manage it now.</div>';
+$lang->caselib->libraryDelete = 'Voulez vous supprimer cette library ？';
+$lang->caselib->noModule      = "<div>Vous n'avez aucun modules.</div><div>Gérer les modules maintenant.</div>";

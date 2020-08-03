@@ -21,7 +21,7 @@ $lang->misc->zentao->labels['about']   = 'A Propos';
 $lang->misc->zentao->labels['support'] = 'Support Technique';
 $lang->misc->zentao->labels['cowin']   = 'Aider ZenTao';
 $lang->misc->zentao->labels['service'] = 'Services';
-$lang->misc->zentao->labels['others']  = 'Other Products';
+$lang->misc->zentao->labels['others']  = 'Autres Produits';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -44,7 +44,7 @@ $lang->misc->zentao->support['manual']     = "English User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Signaler un Bug";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-$lang->misc->zentao->cowin['translate']    = "Translate";
+$lang->misc->zentao->cowin['translate']    = "Traduire";
 $lang->misc->zentao->cowin['recommend']    = "Plus...";
 
 $lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
@@ -70,9 +70,9 @@ $lang->misc->connectFail = "Echec de connexion à la Base de données. Erreur: %
 $lang->misc->tableName   = "Nom de la Table";
 $lang->misc->tableStatus = "Statut";
 $lang->misc->novice      = "Nouveau dans ZenTao ? Voulez-vous commencer le Tutoriel ?";
-$lang->misc->showAnnual  = 'Add annual summary';
-$lang->misc->annualDesc  = 'After version 12.0, the new annual report function can be viewed on the 『Report->Annual Summary』 page. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">See now</a>.';
-$lang->misc->remind      = 'New feature reminders';
+$lang->misc->showAnnual  = 'Ajouter un résumé annuel';
+$lang->misc->annualDesc  = 'A partir de la version 12.0, la nouvelle fonction de rapport annuel peut être consultée sur la page 『Report->Annual Summary』. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">Consulter Maintenant</a>.';
+$lang->misc->remind      = 'Rappels des nouvelles fonctionnalités';
 
 $lang->misc->noticeRepair = "<h5>Si vous n'êtes pas l'administrateur, contactez votre administrateur ZenTao pour réparer les tables.</h5>
     <h5>Si vous êtes l'administrateur, connectez-vous à votre serveur ZenTao et créez un fichier vide dont le nom est <span>%s</span>.</h5>

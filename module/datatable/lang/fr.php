@@ -13,16 +13,16 @@ $lang->datatable->switchToDatatable  = 'Basculer vers le Tableau Avancé';
 $lang->datatable->required           = 'Obligatoire';
 $lang->datatable->confirmReset       = 'Voulez-vous restaurer les paramétres par défaut ?';
 $lang->datatable->setGlobal          = 'Paramétrage Global';
-$lang->datatable->resetGlobal        = 'Globale Réinit.';
+$lang->datatable->resetGlobal        = 'Réinitialisation Globale';
 
 $lang->datatable->branch   = 'Branche';
 $lang->datatable->platform = 'Plateforme';
 
-$lang->datatable->moduleSetting          = 'Set Module';
+$lang->datatable->moduleSetting          = 'Choisir Module';
 $lang->datatable->showModule             = 'Montrer les noms des modules dans la page de listes';
-$lang->datatable->showAllModule          = 'Show product modules';
+$lang->datatable->showAllModule          = 'Afficher les modules de produits';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Base Node';
 $lang->datatable->showModuleList['end']  = 'End Node';
-$lang->datatable->showAllModuleList[0]   = 'Hide';
-$lang->datatable->showAllModuleList[1]   = 'Show';
+$lang->datatable->showAllModuleList[0]   = 'Cacher';
+$lang->datatable->showAllModuleList[1]   = 'Montrer';

@@ -8,8 +8,8 @@ $lang->cron->edit         = 'Editer Cron';
 $lang->cron->delete       = 'Supprimer Cron';
 $lang->cron->toggle       = 'Activer/Désactiver';
 $lang->cron->turnon       = 'On/Off';
-$lang->cron->openProcess  = 'Restart';
-$lang->cron->restart      = 'Restart Cron';
+$lang->cron->openProcess  = 'Redémarrer';
+$lang->cron->restart      = 'Redémarrer Cron';
 
 $lang->cron->m        = 'Minute';
 $lang->cron->h        = 'Heure';
@@ -46,10 +46,10 @@ $lang->cron->confirmOpen = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m    = 'Range:0-59，"*" means the numbers within the range, "/" means "per", "-" means the range.';
+$lang->cron->notice->m    = 'Range:0-59，"*" signifie les nombres dans la plage, "/" signifie "par", "-" indique la plage.';
 $lang->cron->notice->h    = 'Range:0-23';
 $lang->cron->notice->dom  = 'Range:1-31';
 $lang->cron->notice->mon  = 'Range:1-12';
 $lang->cron->notice->dow  = 'Range:0-6';
-$lang->cron->notice->help = 'Note：If the server is restarted, or the Cron is not working, it means the Cron has stopped. You can restart it by clicking 【Restart】 or refresh this page. If the last execution time is changed, it means the Cron is running.';
+$lang->cron->notice->help = "Note ： Si le serveur est redémarré ou que le Cron ne fonctionne pas, cela signifie que le Cron s'est arrêté. Vous pouvez le redémarrer en cliquant sur 【Restart】 ou en rafraichissant cette page. Si la dernière heure d'exécution est modifiée, cela signifie que le Cron est en cours d'exécution.";
 $lang->cron->notice->errorRule = '"%s" invalide';

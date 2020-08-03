@@ -42,11 +42,11 @@ $lang->productplan->confirmDelete      = "Voulez-vous supprimer ce plan ?";
 $lang->productplan->confirmUnlinkStory = "Voulez-vous détacher cette Story du Plan ?";
 $lang->productplan->confirmUnlinkBug   = "Voulez-vous retirer ce bug du plan ?";
 $lang->productplan->noPlan             = "Aucun plan pour l'instant. ";
-$lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
+$lang->productplan->cannotDeleteParent = 'Impossible de supprimer le plan parent';
 
 $lang->productplan->id         = 'ID';
 $lang->productplan->product    = $lang->productCommon;
-$lang->productplan->branch     = 'Platforme/Branche';
+$lang->productplan->branch     = 'Plateforme/Branche';
 $lang->productplan->title      = 'Titre';
 $lang->productplan->desc       = 'Description';
 $lang->productplan->begin      = 'Début';

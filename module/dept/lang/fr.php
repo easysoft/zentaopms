@@ -20,8 +20,8 @@ $lang->dept->browse      = "Consulter Compartiment";
 $lang->dept->manage      = "Gérer Compartiment";
 $lang->dept->updateOrder = "Rang Compartiment";
 $lang->dept->add         = "Ajout Compartiment";
-$lang->dept->grade       = "Department Grade";
-$lang->dept->order       = "Department Order";
+$lang->dept->grade       = "Grade du Compartiment";
+$lang->dept->order       = "Ordre du Compartiment";
 $lang->dept->dragAndSort = "Déplacez pour classer";
 
 $lang->dept->confirmDelete = " Confirmez que vous voulez bien supprimer ce Compartiment ?";

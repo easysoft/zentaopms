@@ -29,7 +29,7 @@ $lang->testreport->cases       = 'CasTest';
 $lang->testreport->bugInfo     = 'Distribution Bugs';
 $lang->testreport->report      = 'Résumé';
 $lang->testreport->legacyBugs  = 'Bugs Restants';
-$lang->testreport->createdBy   = 'CreatedBy';
+$lang->testreport->createdBy   = 'Créé par';
 $lang->testreport->createdDate = 'Créé le';
 $lang->testreport->objectID    = 'Objet';
 $lang->testreport->objectType  = 'Object Type';
@@ -63,7 +63,7 @@ $lang->testreport->bugCreateByCaseRate = 'Taux Bug Signalés par CasTest (Bugs s
 $lang->testreport->caseSummary    = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
 $lang->testreport->buildSummary   = 'Testé <strong>%s</strong> builds.';
 $lang->testreport->confirmDelete  = 'Voulez-vous supprimer ce rapport ?';
-$lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
+$lang->testreport->moreNotice     = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à renee@easysoft.ltd pour la personnalisation.";
 $lang->testreport->exportNotice   = "Exporté par <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "Aucun rapport n'a été généré. Vérifiez plus tard.";
 $lang->testreport->foundBugTip    = "Bugs trouvés dans cette période de build et les build affectés sont dans la période de test.";
