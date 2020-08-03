@@ -935,7 +935,6 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `program` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `name` char(90) NOT NULL,
-  `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL default '0',
   `build` char(30) NOT NULL,
   `owner` varchar(30) NOT NULL,
