@@ -40,11 +40,10 @@
     </thead>
     <tbody>
       <?php foreach($programs as $project):?>
-      <?php $projectLink = $this->createLink('program', 'transfer', "program=$project->id");?>
       <tr class='text-center'>
-        <td><?php echo html::a($projectLink, $project->id);?></td>
+        <td><?php echo $project->id;?></td>
         <td class='text-left'><?php echo $project->code;?></td>
-        <td class='text-left'><?php echo html::a($projectLink, $project->name);?></td>
+        <td class='text-left'><?php echo html::a("javascript:void(0)", $project->name, '', "class='transfer' data-id={$project->id}");?></td>
         <td><?php echo $project->begin;?></td>
         <td><?php echo $project->end;?></td>
         <td class="c-status">

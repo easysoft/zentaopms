@@ -170,11 +170,6 @@ class programModel extends model
         return $output;
     }
 
-    public function getProgramLink($module, $method, $extra)
-    {
-        return helper::createLink('program', 'transfer', "programID=%s");
-    }
-
     public static function isClickable($project, $action)
     {
         $action = strtolower($action);

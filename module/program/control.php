@@ -609,7 +609,7 @@ class program extends control
     public function ajaxGetDropMenu($programID, $module, $method, $extra)
     {    
         $this->loadModel('project');
-        $this->view->link      = $this->program->getProgramLink($module, $method, $extra);
+        $this->view->link      = "javascript:void(0)";
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;
