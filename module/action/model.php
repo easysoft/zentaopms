@@ -51,8 +51,11 @@ class actionModel extends model
         $action->comment  = fixer::stripDataTags($comment);
 
         /* Process action. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
-        if($autoDelete) $this->file->autoDelete($this->post->uid);
+        if($this->post->uid)
+        {
+            $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
+            if($autoDelete) $this->file->autoDelete($this->post->uid);
+        }
 
         /* Get product and project for this object. */
         $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
@@ -62,7 +65,7 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
 
-        $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
+        if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         $this->loadModel('message')->send($objectType, $objectID, $actionType, $actionID, $actor);
 
