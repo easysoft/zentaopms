@@ -472,10 +472,13 @@ class my extends control
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
+        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
+
         $this->view->mode           = $mode;
         $this->view->lists          = $lists;
         $this->view->listID         = $listID;
-        $this->view->users          = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
+        $this->view->users          = $users;
         $this->view->disabled       = $disabled;
         $this->view->globalContacts = $globalContacts;
         $this->display();

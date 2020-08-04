@@ -299,10 +299,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID)
-        {
-            $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
-        }
+        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**
@@ -322,10 +319,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->bugs as $bugID)
-        {
-            $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
-        }
+        foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
     }
 
     /**
@@ -368,10 +362,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->unlinkBugs as $unlinkBugID)
-        {
-            $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
-        }
+        foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**

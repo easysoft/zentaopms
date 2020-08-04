@@ -141,7 +141,21 @@ function setMailto(mailto, contactListID)
     {
         $('#' + mailto).replaceWith(users);
         $('#' + mailto + '_chosen').remove();
-        $('#' + mailto).chosen();
+		    $('.picker').remove();
+
+        if($("[data-pickertype='remote']").length == 0 && $('.picker-select').length == 0)
+        {
+            $('#' + mailto).chosen();
+        }
+        else
+        {
+            $('#' + mailto + "[data-pickertype!='remote']").picker({chosenMode: true});
+            $("[data-pickertype='remote']").each(function()
+            {
+                var pickerremote = $(this).attr('data-pickerremote');
+                $(this).picker({chosenMode: true, remote: pickerremote});
+            });
+        }
     });
 }
 

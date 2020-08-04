@@ -84,10 +84,4 @@ function loadProductPlans(productID, branch)
         $planIdBox.fixInputGroup();
     });
 }
-
-$(function()
-{
-    $("#reviewedBy").chosen();
-    $("#mailto").chosen();
-})
 </script>

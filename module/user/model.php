@@ -69,7 +69,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($params = '', $usersToAppended = '')
+    public function getPairs($params = '', $usersToAppended = '', $maxCount = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getUserPairs();
         /* Set the query fields and orderBy condition.
@@ -88,11 +88,21 @@ class userModel extends model
 
         /* Get raw records. */
         $this->app->loadConfig('user');
+        unset($this->config->user->moreLink);
+
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->orderBy($orderBy)
+            ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll('account');
+        if($maxCount and $maxCount == count($users))
+        {
+            if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
+            $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
+            $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore', "params=" . base64_encode($moreLinkParams));
+        }
+
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
 
         /* Cycle the user records to append the first letter of his account. */

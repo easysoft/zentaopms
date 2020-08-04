@@ -24,6 +24,8 @@ $config->checkVersion = true;              // Auto check for new version or not.
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
 $config->duplicateTime = 30;
+$config->maxCount      = 500;
+$config->moreLinks     = array();
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
