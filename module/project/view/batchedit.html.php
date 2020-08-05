@@ -60,6 +60,12 @@
         </thead>
         <tbody>
           <?php foreach($projectIDList as $projectID):?>
+          <?php
+          if(!empty($this->config->moreLinks["PM"])) $this->config->moreLinks["PMs[$projectID]"] = $this->config->moreLinks["PM"];
+          if(!empty($this->config->moreLinks["PO"])) $this->config->moreLinks["POs[$projectID]"] = $this->config->moreLinks["PO"];
+          if(!empty($this->config->moreLinks["QD"])) $this->config->moreLinks["QDs[$projectID]"] = $this->config->moreLinks["QD"];
+          if(!empty($this->config->moreLinks["RD"])) $this->config->moreLinks["RDs[$projectID]"] = $this->config->moreLinks["RD"];
+          ?>
           <tr>
             <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
             <td title='<?php echo $projects[$projectID]->name?>'><?php echo html::input("names[$projectID]", $projects[$projectID]->name, "class='form-control'");?></td>
@@ -82,6 +88,12 @@
             </td>
             <td><?php echo html::input("orders[$projectID]", $projects[$projectID]->order, "class='form-control'")?></td>
           </tr>
+          <?php
+          if(isset($this->config->moreLinks["PMs[$projectID]"])) unset($this->config->moreLinks["PMs[$projectID]"]);
+          if(isset($this->config->moreLinks["POs[$projectID]"])) unset($this->config->moreLinks["POs[$projectID]"]);
+          if(isset($this->config->moreLinks["QDs[$projectID]"])) unset($this->config->moreLinks["QDs[$projectID]"]);
+          if(isset($this->config->moreLinks["RDs[$projectID]"])) unset($this->config->moreLinks["RDs[$projectID]"]);
+          ?>
           <?php endforeach;?>
         </tbody>
         <tfoot>

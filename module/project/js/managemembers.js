@@ -17,9 +17,18 @@ function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    var accounts = $('#hours' + i).closest('tr').find('select:first')
-    accounts.trigger('liszt:updated');
-    accounts.chosen();
+    var $accounts = $('#hours' + i).closest('tr').find('select:first')
+
+    if($accounts.attr('data-pickertype') != 'remote')
+    {
+        $accounts.chosen();
+    }
+    else
+    {
+        $accounts.parent().find('.picker.picker-ready').remove();
+        var pickerremote = $accounts.attr('data-pickerremote');
+        $accounts.picker({chosenMode: true, remote: pickerremote});
+    }
     i ++;
 }
 

@@ -1249,20 +1249,32 @@ class project extends control
             unset($this->lang->project->endList[365]);
         }
 
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $project->PO, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
+
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pofirst', $project->PO);
-        $this->view->pmUsers        = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
-        $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
+        $this->view->poUsers        = $poUsers;
+        $this->view->pmUsers        = $pmUsers;
+        $this->view->qdUsers        = $qdUsers;
+        $this->view->rdUsers        = $rdUsers;
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->productPlans   = $productPlans;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-
         $this->display();
     }
 
@@ -1310,14 +1322,27 @@ class project extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->project->custom->batchEditFields;
 
+        $this->loadModel('user');
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
+
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst',  $appendPoUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $appendQdUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
         $this->view->projects      = $projects;
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers);
-        $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst', $appendPoUsers);
-        $this->view->qdUsers       = $this->user->getPairs('noclosed|nodeleted|qdfirst', $appendQdUsers);
-        $this->view->rdUsers       = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers);
+        $this->view->pmUsers       = $pmUsers;
+        $this->view->poUsers       = $poUsers;
+        $this->view->qdUsers       = $qdUsers;
+        $this->view->rdUsers       = $rdUsers;
         $this->display();
     }
 
@@ -1893,7 +1918,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1903,6 +1928,7 @@ class project extends control
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
 
         $title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);

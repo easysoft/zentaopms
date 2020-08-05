@@ -132,6 +132,7 @@ function setStories()
         $('#story').replaceWith(stories);
         $('#story').val(value);
         $('#story_chosen').remove();
+        $('#story').next('.picker').remove();
         $("#story").chosen();
     });
 }
