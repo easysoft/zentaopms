@@ -77,7 +77,7 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+        if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', '', $lang->bug->toStory);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
 
         echo $this->buildOperateMenu($bug, 'view');
