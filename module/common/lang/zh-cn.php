@@ -1142,6 +1142,7 @@ $lang->nc             = new stdclass();
 $lang->pssp           = new stdclass();
 $lang->issue          = new stdclass();
 $lang->risk           = new stdclass();
+$lang->stakeholder    = new stdclass();
 $lang->durationestimation = new stdclass();
 
 $lang->workestimation->menu = new stdclass();
@@ -1157,6 +1158,7 @@ $lang->cm->menu             = new stdclass();
 $lang->pssp->menu           = new stdclass();
 $lang->issue->menu          = new stdclass();
 $lang->risk->menu           = new stdclass();
+$lang->stakeholder->menu    = new stdclass();
 $lang->durationestimation->menu = new stdclass();
 
 $lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
@@ -1192,6 +1194,11 @@ $lang->nc->menu            = $lang->auditplan->menu;
 
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit,view');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
+
+$lang->stakeholder->menu->plan        = array('link' => '介入计划|cm|plan|program={PROGRAM}');
+$lang->stakeholder->menu->expectation = array('link' => '期望管理|cm|expectation|program={PROGRAM}');
+$lang->stakeholder->menu->issue       = array('link' => '问题管理|cm|issue|program={PROGRAM}');
+$lang->stakeholder->menu->list        = array('link' => '干系人列表|cm|browse|program={PROGRAM}');
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
