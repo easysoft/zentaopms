@@ -557,7 +557,7 @@ class product extends control
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
         $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
         $this->display();
     }

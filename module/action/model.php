@@ -1082,13 +1082,13 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
     {
         $dateGroup = array();
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date         = date(DT_DATE4, $timeStamp);
+            $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
@@ -1103,7 +1103,7 @@ class actionModel extends model
                 foreach($lastDateActions as $action)
                 {
                     $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = date(DT_DATE4, $timeStamp);
+                    $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
                     $action->time = date(DT_TIME2, $timeStamp);
                     $dateGroup[$date][] = $action;
                 }
