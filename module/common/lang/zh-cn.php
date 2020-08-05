@@ -1102,7 +1102,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
-$lang->menu->cmmi->workestimation = array('link' => '估算|workestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation,budget');
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->cmmi->review         = array('link' => '评审|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
@@ -1118,7 +1117,14 @@ $lang->menu->cmmi->risk           = '风险|risk|browse|';
 $lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,measrecord,');
 $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
-$lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
+$lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list');
+
+$lang->cmmi = new stdclass();
+$lang->cmmi->subMenu = new stdclass();
+$lang->cmmi->subMenu->list = new stdclass();
+$lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->cmmi->subMenu->list->pssp           = '过程|pssp|browse|program=%s';
+$lang->cmmi->subMenu->list->program        = '项目|||';
 
 $lang->cmmiproduct    = new stdclass();
 $lang->workestimation = new stdclass();

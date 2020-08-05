@@ -409,40 +409,6 @@ class program extends control
         $this->display();
     }
 
-    /**
-     * Finish project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function finish($projectID)
-    {
-        $project   = $this->project->getByID($projectID);
-
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->project->finish($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Finished', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->program->finish;
-        $this->view->position[] = $this->lang->program->finish;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $project->id);
-        $this->display();
-    }
-
     public function delete($projectID, $confirm = 'no')
     {
         if($confirm == 'no')

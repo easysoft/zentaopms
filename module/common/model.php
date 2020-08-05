@@ -406,6 +406,47 @@ class commonModel extends model
     }
 
     /**
+     * Init submenu for program menu.
+     *
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function initProgramSubmenu()
+    {
+        global $lang, $app;
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+
+        foreach($lang->menu->cmmi as $key => $menu)
+        {
+            /* Replace for dropdown submenu. */
+            if(isset($lang->cmmi->subMenu->$key))
+            {    
+                $programSubMenu = $lang->cmmi->subMenu->$key;
+                $subMenu        = common::createSubMenu($lang->cmmi->subMenu->$key, $app->session->program);
+
+                if(!empty($subMenu))
+                {    
+                    foreach($subMenu as $menuKey => $menu)
+                    {    
+                        $itemMenu = zget($programSubMenu, $menuKey, ''); 
+                        $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
+                        $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                        $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+                        if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
+                        {    
+                            $lang->menu->cmmi->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                            break;
+                        }    
+                    }    
+                    $lang->menu->cmmi->{$key}['subMenu'] = $subMenu;
+                }    
+            } 
+        }
+    }
+
+    /**
      * Print admin subMenu.
      *
      * @param  string    $subMenu
@@ -553,20 +594,35 @@ class commonModel extends model
                     {
                         if($subMenuItem->hidden) continue;
 
-                        $subActive = '';
-                        $subModule = '';
-                        $subMethod = '';
-                        $subParams = '';
-                        $subLabel  = $subMenuItem->text;
+                        $subActive  = '';
+                        $subModule  = '';
+                        $subMethod  = '';
+                        $subParams  = '';
+                        $subProgram = '';
+                        $subLabel   = $subMenuItem->text;
                         if(isset($subMenuItem->link['module'])) $subModule = $subMenuItem->link['module'];
                         if(isset($subMenuItem->link['method'])) $subMethod = $subMenuItem->link['method'];
                         if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
+                        if($subMenuItem->name == 'program') 
+                        {
+                            global $dbh;
+                            $program    = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+                            $subActive .= 'dropdown-submenu';
+                            $subLink = 'javascript:;';
+                            $subProgram .= "<ul class='dropdown-menu'>";
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->group) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->manageMembers) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->start) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->activate) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->suspend) . '</li>';
+                            $subProgram .= '</ul>';
+                        }
 
                         if($config->global->flow != 'onlyTest' && $currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
-                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
+                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
                     }
 
                     if(empty($subMenu)) continue;
@@ -2142,6 +2198,7 @@ EOD;
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
             $lang->program->dividerMenu = ',product,issue,';
+            self::initProgramSubmenu();
             return self::processMenuVars($lang->menu->cmmi);
         }
     }

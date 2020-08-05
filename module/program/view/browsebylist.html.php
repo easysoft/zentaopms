@@ -14,7 +14,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PM);?></th>
-        <th class='text-center w-210px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-200px'><?php echo $lang->actions;?></th>
         <?php if($canOrder):?>
         <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
         <?php endif;?>
@@ -41,7 +41,6 @@
           <?php common::printIcon('program', 'start', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'activate', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'suspend', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'finish', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'close', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
         </td>
