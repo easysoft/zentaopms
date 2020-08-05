@@ -577,9 +577,14 @@ class task extends control
             unset($_POST['taskIDList']);
             if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
             $taskIDList = array_unique($taskIDList);
-            foreach($taskIDList as $taskID)
+
+            $muletipleTasks = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchPairs();
+            $tasks          = $this->task->getByList($taskIDList);
+            foreach($tasks as $taskID => $task)
             {
                 $this->loadModel('action');
+                if(in_array($taskID, $muletipleTasks) and $task->assignedTo != $this->app->user->account) continue;
+
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);

@@ -121,7 +121,8 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></span></td>
+                <?php $disableAssignedTo = (!empty($task->team) and $task->assignedTo != $this->app->user->account) ? "disabled='disabled'" :'';?>
+                <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
