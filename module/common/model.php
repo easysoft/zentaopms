@@ -406,6 +406,47 @@ class commonModel extends model
     }
 
     /**
+     * Init submenu for program menu.
+     *
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function initProgramSubmenu()
+    {
+        global $lang, $app;
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+
+        foreach($lang->menu->cmmi as $key => $menu)
+        {
+            /* Replace for dropdown submenu. */
+            if(isset($lang->cmmi->subMenu->$key))
+            {    
+                $programSubMenu = $lang->cmmi->subMenu->$key;
+                $subMenu        = common::createSubMenu($lang->cmmi->subMenu->$key, $app->session->program);
+
+                if(!empty($subMenu))
+                {    
+                    foreach($subMenu as $menuKey => $menu)
+                    {    
+                        $itemMenu = zget($programSubMenu, $menuKey, ''); 
+                        $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
+                        $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                        $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+                        if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
+                        {    
+                            $lang->menu->cmmi->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                            break;
+                        }    
+                    }    
+                    $lang->menu->cmmi->{$key}['subMenu'] = $subMenu;
+                }    
+            } 
+        }
+    }
+
+    /**
      * Print admin subMenu.
      *
      * @param  string    $subMenu
@@ -2142,6 +2183,7 @@ EOD;
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
             $lang->program->dividerMenu = ',product,issue,';
+            self::initProgramSubmenu();
             return self::processMenuVars($lang->menu->cmmi);
         }
     }
