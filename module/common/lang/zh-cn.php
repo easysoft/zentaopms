@@ -612,6 +612,7 @@ $lang->navGroup->testsuite   = 'program';
 $lang->navGroup->caselib     = 'program';
 $lang->navGroup->feedback    = 'program';
 $lang->navGroup->deploy      = 'program';
+$lang->navGroup->stakeholder = 'program';
 
 $lang->navGroup->programplan    = 'program';
 $lang->navGroup->workestimation = 'program';
