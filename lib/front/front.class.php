@@ -164,13 +164,29 @@ class html extends baseHTML
         $id = "id='{$id}'";
         if(strpos($attrib, 'id=') !== false) $id = '';
 
-        $string = "<select name='$name' {$id} $attrib>\n";
+        global $config;
+        $string = '';
+        if(count($options) >= $config->maxCount or isset($config->moreLinks[$name]))
+        {
+            if(strpos($attrib, 'chosen') !== false) $attrib = str_replace('chosen', 'picker-select', $attrib);
+            if(isset($config->moreLinks[$name]))
+            {
+                $link = $config->moreLinks[$name];
+                $attrib .= " data-pickertype='remote' data-pickerremote='" . $link . "'";
+            }
+
+            $convertedPinYin = array();
+            if(count($options) <= $config->maxCount) $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
+        }
+        else
+        {
+            $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
+        }
+        $string .= "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
-        global $config;
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);
         $selectedItems   = ",$selectedItems,";
-        $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
         foreach($options as $key => $value)
         {
             $optionPinyin = zget($convertedPinYin, $value, '');

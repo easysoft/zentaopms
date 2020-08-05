@@ -28,20 +28,20 @@ $lang->release->confirmUnlinkStory = "Voulez-vous retirer cette story de la rele
 $lang->release->confirmUnlinkBug   = "Voulez-vous retirer ce bug de la release ?";
 $lang->release->existBuild         = '『Build』『%s』existant. Vous pouvez changer『name』ou choisir un『build』.';
 $lang->release->noRelease          = 'Pas de release à ce jour.';
-$lang->release->errorDate          = 'The release date should not be greater than today.';
+$lang->release->errorDate          = "La date de release ne doit pas être supérieure à aujourd'hui.";
 
 $lang->release->basicInfo = 'Infos de Base';
 
 $lang->release->id            = 'ID';
 $lang->release->product       = $lang->productCommon;
-$lang->release->branch        = 'Platforme/Branche';
+$lang->release->branch        = 'Plateforme/Branche';
 $lang->release->build         = 'Build';
 $lang->release->name          = 'Nom';
 $lang->release->marker        = 'Etape Importante';
 $lang->release->date          = 'Date Release';
 $lang->release->desc          = 'Description';
 $lang->release->status        = 'Statut';
-$lang->release->subStatus     = 'Sub Statut';
+$lang->release->subStatus     = 'Sous-statut';
 $lang->release->last          = 'Dernière Release';
 $lang->release->unlinkStory   = 'Retirer Story';
 $lang->release->unlinkBug     = 'Retirer Bug';
@@ -54,7 +54,7 @@ $lang->release->resolvedBugs  = '%s Bugs Résolus';
 $lang->release->createdBugs   = '%s Bugs non résolus';
 $lang->release->export        = 'Export HTML';
 $lang->release->yesterday     = 'Versionné Hier';
-$lang->release->all           = 'All';
+$lang->release->all           = 'Tout';
 
 $lang->release->filePath = 'Télecharger : ';
 $lang->release->scmPath  = 'SCM Path : ';

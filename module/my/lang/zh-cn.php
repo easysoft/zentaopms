@@ -32,10 +32,10 @@ $lang->my->taskMenu->closedByMe   = '由我关闭';
 $lang->my->taskMenu->canceledByMe = '由我取消';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = '指派给我';
-$lang->my->storyMenu->openedByMe   = '由我创建';
-$lang->my->storyMenu->reviewedByMe = '由我评审';
-$lang->my->storyMenu->closedByMe   = '由我关闭';
+$lang->my->storyMenu->assignedToMe = '指给我';
+$lang->my->storyMenu->openedByMe   = '我创建';
+$lang->my->storyMenu->reviewedByMe = '我评审';
+$lang->my->storyMenu->closedByMe   = '我关闭';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = '最新动态';

@@ -319,6 +319,7 @@ $lang->action->dynamicAction->bug['bugconfirmed']          = 'Xác nhận Bug';
 $lang->action->dynamicAction->bug['resolved']              = 'Giải quyết Bug';
 $lang->action->dynamicAction->bug['undeleted']             = 'Khôi phục Bug';
 $lang->action->dynamicAction->bug['hidden']                = 'Ẩn Bug';
+$lang->action->dynamicAction->bug['deleted']               = 'Xóa tìBug';
 $lang->action->dynamicAction->bug['confirmed']             = 'Xác nhận thay đổi câu chuyện';
 $lang->action->dynamicAction->bug['tostory']               = 'Chuyển thành câu chuyện';
 $lang->action->dynamicAction->bug['totask']                = 'Chuyển thành nhiệm vụ';

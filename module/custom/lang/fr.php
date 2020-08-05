@@ -82,33 +82,33 @@ $lang->custom->system = array('flow', 'working', 'required', 'score');
 
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 
-$lang->custom->currentLang = 'Current Language';
-$lang->custom->allLang     = 'All Languages';
+$lang->custom->currentLang = 'Langage Courant';
+$lang->custom->allLang     = 'Toutes les Langues';
 
 $lang->custom->confirmRestore = 'Voulez-vous réinitialiser ?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice   = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
-$lang->custom->notice->canNotAdd         = 'It will be calculated, so customization is not enabled.';
-$lang->custom->notice->forceReview       = '%s review is required for committers selected.';
-$lang->custom->notice->forceNotReview    = "%s review is not required for committers selected.";
-$lang->custom->notice->longlife          = 'Define stalled bugs.';
-$lang->custom->notice->invalidNumberKey  = 'The key should be =< 255.';
-$lang->custom->notice->invalidStringKey  = 'The key should be lowercase letters, numbers or underlines.';
-$lang->custom->notice->cannotSetTimezone = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
-$lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed permanently.';
-$lang->custom->notice->required          = 'The selected field is required.';
-$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
-$lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
+$lang->custom->notice->userFieldNotice   = 'Contrôlez si les champs ci-dessus sont affichés sur la page utilisateur. Laissez-le vide pour tout afficher.';
+$lang->custom->notice->canNotAdd         = "Il sera calculé, donc la personnalisation n'est pas activée.";
+$lang->custom->notice->forceReview       = '%s un examen est requis pour les valideurs sélectionnés.';
+$lang->custom->notice->forceNotReview    = "%s un examen n'est pas requis pour les valideurs sélectionnés.";
+$lang->custom->notice->longlife          = 'Définir les bugs bloqués.';
+$lang->custom->notice->invalidNumberKey  = 'La clé devrait être =< 255.';
+$lang->custom->notice->invalidStringKey  = 'La clé devrait être composée de miniscules, de chiffres et du caractère souligné.';
+$lang->custom->notice->cannotSetTimezone = "date_default_timezone_set n'existe pas ou est désactivé. Timezone ne peut pas être fixée.";
+$lang->custom->notice->noClosedBlock     = "Vous n'avez aucun bloc fermé définitivement.";
+$lang->custom->notice->required          = 'Le champ sélectionné est obligatoire.';
+$lang->custom->notice->conceptResult     = 'Selon votre préférence, <b> %s-%s </b> peut être fixé pour vous. Utilisez <b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptPath       = 'Allez à Admin -> Custom -> Concept pour le paramétrer.';
 
-$lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home ?";
-$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home ?";
-$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage ?";
+$lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
+$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
+$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ possède une FAQ. Voulez-vous consulter la FAQ ?";
 
-$lang->custom->notice->invalidStrlen['ten']        = 'The key should be <= 10 characters.';
-$lang->custom->notice->invalidStrlen['twenty']     = 'The key should be <= 20 characters.';
-$lang->custom->notice->invalidStrlen['thirty']     = 'The key should be <= 30 characters.';
-$lang->custom->notice->invalidStrlen['twoHundred'] = 'The key should be <= 225 characters.';
+$lang->custom->notice->invalidStrlen['ten']        = 'La clé devrait être <= 10 caractères.';
+$lang->custom->notice->invalidStrlen['twenty']     = 'La clé devrait être <= 20 caractères.';
+$lang->custom->notice->invalidStrlen['thirty']     = 'La clé devrait être <= 30 caractères.';
+$lang->custom->notice->invalidStrlen['twoHundred'] = 'La clé devrait être <= 225 caractères.';
 
 $lang->custom->storyReview    = 'Validation';
 $lang->custom->forceReview    = 'Validation Requise';
@@ -149,18 +149,18 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
 
-$lang->custom->conceptQuestions['overview']         = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['story']            = "2. Do you use the concept of requirement or user story in your company?";
-$lang->custom->conceptQuestions['requirementpoint'] = "3. Do you use hours or function points to make estimations in your company?";
-$lang->custom->conceptQuestions['storypoint']       = "3. Do you use hours or story points to make estimations in your company?";
+$lang->custom->conceptQuestions['overview']         = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
+$lang->custom->conceptQuestions['story']            = "2. Utilisez-vous le concept d'exigence ou de user story dans votre entreprise ?";
+$lang->custom->conceptQuestions['requirementpoint'] = "3. Utilisez-vous des heures ou des points de fonction pour faire des estimations dans votre entreprise ?";
+$lang->custom->conceptQuestions['storypoint']       = "3. Utilisez-vous des heures ou des points de Story pour faire des estimations dans votre entreprise ?";
 
 $lang->custom->conceptOptions = new stdclass;
 
 $lang->custom->conceptOptions->story = array();
-$lang->custom->conceptOptions->story['0'] = 'Requiremenet';
+$lang->custom->conceptOptions->story['0'] = 'Exigence';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['0'] = 'Hour';
-$lang->custom->conceptOptions->hourPoint['1'] = 'Story Point';
-$lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
+$lang->custom->conceptOptions->hourPoint['0'] = 'Heures';
+$lang->custom->conceptOptions->hourPoint['1'] = 'Points de Story';
+$lang->custom->conceptOptions->hourPoint['2'] = 'Points de Fonction';

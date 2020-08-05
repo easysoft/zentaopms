@@ -123,6 +123,7 @@ foreach($fieldParams as $fieldName => $param)
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
+                if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
                 if($param['control'] == 'input')
                 {
@@ -183,6 +184,11 @@ foreach($fieldParams as $fieldName => $param)
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
+                if(isset($config->moreLinks["field{$currentField}"]))
+                {
+                    $selected = $formSession["value$fieldNO"];
+                    if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
+                }
                 if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
 
                 if($param['control'] == 'input')
@@ -447,13 +453,19 @@ $(function()
         }
         else if(params[fieldName]['control'] == 'select')
         {
-            $searchForm.find("#value" + fieldNO).chosen().on('chosen:showing_dropdown', function()
+            $searchForm.find(".picker#value" + fieldNO).remove();
+            if($searchForm.find("#value" + fieldNO).attr('data-pickertype') == 'remote')
             {
-                var $this = $(this);
-                var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
-                var $drop = $chosen.find('.chosen-drop');
-                $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
-            });
+                $searchForm.find("#value" + fieldNO).picker(
+                {
+                    chosenMode: true,
+                    remote: $searchForm.find("#value" + fieldNO).attr('data-pickerremote')
+                });
+            }
+            else
+            {
+                $searchForm.find("#value" + fieldNO).picker({chosenMode: true});
+            }
         }
     };
 

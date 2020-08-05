@@ -16,8 +16,8 @@ $lang->dev->paramRange    = 'Rang Paramètre : %s';
 $lang->dev->paramDate     = 'Format Date : YY-mm-dd, e.g 2019-01-01';
 $lang->dev->paramColor    = 'Format Couleur : #RGB, e.g. #3da7f5';
 $lang->dev->paramMailto   = "Comptes utilisateurs. Séparé par des ','.";
-$lang->dev->noteEditor    = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
-$lang->dev->noteTranslate = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
+$lang->dev->noteEditor    = "L'éditeur est désactivé pour des raisons de sécurité. Pour utiliser cette fonction, veuillez vous rendre sur le site officiel pour télécharger et installer le plugin de l'<a href='https://www.zentao.pm/extension-viewExt-150.html' target='_blank'>editeur</a>.";
+$lang->dev->noteTranslate = "La traduction est désactivée pour des raisons de sécurité. Pour utiliser cette fonctionnalité, veuillez vous rendre sur le site officiel pour télécharger et installer le plugin de <a href='https://www.zentao.pm/extension-viewExt-151.html' target='_blank'>traduction</a>.";
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
