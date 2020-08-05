@@ -313,7 +313,7 @@ $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 
-$lang->product->dividerMenu = ',plan,project,doc,';
+$lang->product->dividerMenu = ',project,doc,';
 
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
@@ -1170,6 +1170,7 @@ $lang->reviewissue->menu = $lang->review->menu;
 $lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
 $lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
+$lang->cmmiproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
 $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
 $lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
