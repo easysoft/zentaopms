@@ -156,6 +156,7 @@ $lang->system->menu->process     = array('link' => '过程|process|browse|', 'su
 $lang->system->menu->reviewcl    = array('link' => '评审|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
 $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
 $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
+$lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
