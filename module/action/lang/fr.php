@@ -319,6 +319,7 @@ $lang->action->dynamicAction->bug['bugconfirmed']          = 'Confirmer Bug';
 $lang->action->dynamicAction->bug['resolved']              = 'Resolu Bug';
 $lang->action->dynamicAction->bug['undeleted']             = 'Restaurer Bug';
 $lang->action->dynamicAction->bug['hidden']                = 'Masquer Bug';
+$lang->action->dynamicAction->bug['deleted']               = 'Supprimé Bug';
 $lang->action->dynamicAction->bug['confirmed']             = 'Confirme Chang.Story';
 $lang->action->dynamicAction->bug['tostory']               = 'Converti en Story';
 $lang->action->dynamicAction->bug['totask']                = 'Converti en Tâche';

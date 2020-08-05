@@ -24,12 +24,14 @@ function loadProjectMembers(projectID)
     $.get(createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
+        $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
         $('#assignedTo').attr('name', 'assignedTo[]').chosen();
 
         $('.modal-dialog #taskTeamEditor tr').each(function()
         {
             $(this).find('#team_chosen').remove();
+            $(this).find('#team').next('.picker').remove();
             $(this).find('#team').replaceWith(data);
             $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
         });
@@ -48,6 +50,7 @@ function loadProjectStories(projectID)
     $.get(createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
     {
         $('#story_chosen').remove();
+        $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
     });
@@ -93,6 +96,7 @@ function setOwners(result)
     $("#multipleBox").removeAttr("checked");
     $('.team-group').addClass('hidden');
     $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+    $('#assignedTo').next('.picker').removeClass('hidden');
     if(result == 'affair')
     {
         $('#assignedTo').attr('multiple', 'multiple');
@@ -228,6 +232,7 @@ function setStories(moduleID, projectID)
         $('#story').val(storyID);
         setPreview();
         $('#story_chosen').remove();
+        $('#story').next('.picker').remove();
         $("#story").addClass('filled').chosen();
     });
 }
@@ -365,12 +370,14 @@ $(document).ready(function()
         if($(this).prop('checked'))
         {
             $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+            $('#assignedTo').next('.picker').addClass('hidden');
             $('.team-group').removeClass('hidden');
             $('#estimate').attr('readonly', true);
         }
         else
         {
             $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+            $('#assignedTo').next('.picker').removeClass('hidden');
             $('.team-group').addClass('hidden');
             $('#estimate').attr('readonly', false);
         }

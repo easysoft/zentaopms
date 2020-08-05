@@ -261,12 +261,22 @@ class product extends control
         if($this->session->product) $rootID = $this->session->product;
         $this->product->setMenu($this->products, $rootID);
 
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed', '', $this->config->maxCount);
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed', '', $this->config->maxCount);
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
+        $this->view->poUsers    = $poUsers;
+        $this->view->qdUsers    = $qdUsers;
+        $this->view->rdUsers    = $rdUsers;
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->rootID     = $rootID;
 
@@ -307,14 +317,25 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->product->getById($productID);
+
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('nodeleted|pofirst',  $product->PO, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst',  $product->QD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst', $product->RD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
         $this->view->product    = $product;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
+        $this->view->poUsers    = $poUsers;
+        $this->view->qdUsers    = $qdUsers;
+        $this->view->rdUsers    = $rdUsers;
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         unset($this->lang->product->typeList['']);
@@ -364,14 +385,24 @@ class product extends control
             $appendRdUsers[$product->RD] = $product->RD;
         }
 
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst', $appendQdUsers);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst', $appendRdUsers);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
         $this->view->lines         = array('') + $this->tree->getLinePairs();
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
-        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst', $appendPoUsers);
-        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst', $appendQdUsers);
-        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst', $appendRdUsers);
+        $this->view->poUsers       = $poUsers;
+        $this->view->qdUsers       = $qdUsers;
+        $this->view->rdUsers       = $rdUsers;
 
         unset($this->lang->product->typeList['']);
         $this->display();
