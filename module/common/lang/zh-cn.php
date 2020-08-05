@@ -1196,10 +1196,10 @@ $lang->nc->menu            = $lang->auditplan->menu;
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit,view');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
-$lang->stakeholder->menu->plan        = array('link' => '介入计划|cm|plan|program={PROGRAM}');
-$lang->stakeholder->menu->expectation = array('link' => '期望管理|cm|expectation|program={PROGRAM}');
-$lang->stakeholder->menu->issue       = array('link' => '问题管理|cm|issue|program={PROGRAM}');
-$lang->stakeholder->menu->list        = array('link' => '干系人列表|cm|browse|program={PROGRAM}');
+$lang->stakeholder->menu->plan        = array('link' => '介入计划|stakeholder|plan|program={PROGRAM}');
+$lang->stakeholder->menu->expectation = array('link' => '期望管理|stakeholder|expectation|program={PROGRAM}');
+$lang->stakeholder->menu->issue       = array('link' => '问题管理|stakeholder|issue|program={PROGRAM}');
+$lang->stakeholder->menu->list        = array('link' => '干系人列表|stakeholder|browse|program={PROGRAM}');
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
