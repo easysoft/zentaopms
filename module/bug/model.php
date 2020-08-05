@@ -2534,7 +2534,7 @@ class bugModel extends model
                 if($bug->assignedTo == $account) $class .= ' red';
             }
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
-            if(strpos(',project,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
+            if(strpos(',type,project,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='" . $class . "' $title>";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('bug', $bug, $id);

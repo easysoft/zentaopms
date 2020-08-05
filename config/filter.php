@@ -95,6 +95,7 @@ $filter->todo->export            = new stdclass();
 $filter->upgrade->license        = new stdclass();
 $filter->user->login             = new stdclass();
 $filter->webhook->bind           = new stdclass();
+$filter->user->ajaxgetmore       = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
@@ -223,10 +224,12 @@ $filter->sso->logout->get['token']      = 'reg::md5';
 
 $filter->upgrade->license->get['agree'] = 'equal::true';
 
-$filter->user->login->get['account']  = 'account';
-$filter->user->login->get['lang']     = 'reg::lang';
-$filter->user->login->get['password'] = 'reg::any';
-$filter->user->edit->get['from']      = 'reg::word';
+$filter->user->login->get['account']      = 'account';
+$filter->user->login->get['lang']         = 'reg::lang';
+$filter->user->login->get['password']     = 'reg::any';
+$filter->user->edit->get['from']          = 'reg::word';
+$filter->user->ajaxgetmore->get['search'] = 'reg::any';
+$filter->user->ajaxgetmore->get['limit']  = 'int';
 
 $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';

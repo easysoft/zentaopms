@@ -36,7 +36,7 @@
         <th><?php echo $lang->user->join;?></th>
         <td class='text-middle'>
           <?php echo formatTime($user->join);?>
-          <?php echo html::hidden('join',$user->join);?>
+          <?php echo html::hidden('join',$user->join) .  html::select('groups[]', $groups, $userGroups, 'multiple=multiple class="form-control hidden"');?>
         </td>
       </tr>
     </table>

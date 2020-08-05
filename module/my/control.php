@@ -375,10 +375,14 @@ class my extends control
         $this->app->loadConfig('user');
         $this->app->loadLang('user');
 
+        $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->position[] = $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->userGroups = implode(',', array_keys($userGroups));
+        $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
 
         $this->display();
     }
@@ -468,10 +472,13 @@ class my extends control
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
+        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
+
         $this->view->mode           = $mode;
         $this->view->lists          = $lists;
         $this->view->listID         = $listID;
-        $this->view->users          = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
+        $this->view->users          = $users;
         $this->view->disabled       = $disabled;
         $this->view->globalContacts = $globalContacts;
         $this->display();

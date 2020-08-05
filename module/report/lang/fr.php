@@ -16,8 +16,8 @@ $lang->report->item       = 'Item';
 $lang->report->value      = 'Valeur';
 $lang->report->percent    = '%';
 $lang->report->undefined  = 'N/D';
-$lang->report->query      = 'Query';
-$lang->report->annual     = 'Annual Summary';
+$lang->report->query      = 'Requête';
+$lang->report->annual     = 'Résumé Annuel';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -99,5 +99,5 @@ $lang->report->mailTitle->task     = " Tâches (%s),";
 $lang->report->mailTitle->todo     = " Agenda (%s),";
 $lang->report->mailTitle->testTask = " Recettes (%s),";
 
-$lang->report->proVersion   = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion   = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Pro pour en savoir plus !</a>';
 $lang->report->proVersionEn = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
