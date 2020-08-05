@@ -2688,11 +2688,11 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start'          and !empty($task->children)) return false;
-        if($action == 'finish'         and !empty($task->children)) return false;
-        if($action == 'pause'          and !empty($task->children)) return false;
-        if($action == 'assignto'       and !empty($task->children)) return false;
-        if($action == 'close'          and !empty($task->children)) return false;
+        if($action == 'start'          and $task->parent < 0) return false;
+        if($action == 'finish'         and $task->parent < 0) return false;
+        if($action == 'pause'          and $task->parent < 0) return false;
+        if($action == 'assignto'       and $task->parent < 0) return false;
+        if($action == 'close'          and $task->parent < 0) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
         if($action == 'batchcreate'    and $task->parent > 0)       return false;
         if($action == 'recordestimate' and $task->parent == -1)     return false;
