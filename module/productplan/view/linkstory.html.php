@@ -41,8 +41,6 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
-        <?php if($story->parent < 0) continue;?>
-        <?php if(isset($planStories[$story->id])) continue;?>
         <tr>
           <td class='c-id text-left'>
             <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
@@ -81,6 +79,7 @@
         <?php echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
 </div>
