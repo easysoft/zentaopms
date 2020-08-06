@@ -287,6 +287,7 @@ class custom extends control
 
         /* Get this module requiredFields. */
         $this->loadModel($moduleName);
+        if($moduleName == 'user') $this->app->loadModuleConfig($moduleName);
         $requiredFields = $this->custom->getRequiredFields($this->config->$moduleName);
 
         if($moduleName == 'doc')
