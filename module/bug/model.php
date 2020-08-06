@@ -539,18 +539,21 @@ class bugModel extends model
      * @param  array    $products
      * @param  int      $branch
      * @param  int      $projectID
+     * @param  array    $excludeBugs
      * @param  object   $pager
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $branch, $projects, $pager = null)
+    public function getActiveBugs($products, $branch, $projects, $excludeBugs, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->andWhere('tostory')->eq(0)
+            ->andWhere('toTask')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
+            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
@@ -594,10 +597,14 @@ class bugModel extends model
     public function getModuleOwner($moduleID, $productID)
     {
         $users = $this->loadModel('user')->getPairs('nodeleted');
+        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
+        $owner = isset($users[$owner]) ? $owner : '';
 
         if($moduleID)
         {
-            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch();
+            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->andWhere('root')->eq($productID)->fetch();
+            if(empty($module)) return $owner;
+
             if($module->owner and isset($users[$module->owner])) return $module->owner;
 
             $moduleIDList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
@@ -616,8 +623,7 @@ class bugModel extends model
             }
         }
 
-        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
-        return isset($users[$owner]) ? $owner : '';
+        return $owner;
     }
 
     /**

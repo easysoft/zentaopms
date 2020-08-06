@@ -2053,7 +2053,7 @@ class project extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $pager = null, $hasParent = false);
+            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
         foreach($allStories as $id => $story)
         {

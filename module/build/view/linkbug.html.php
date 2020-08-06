@@ -37,8 +37,6 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allBugs as $bug):?>
-        <?php if(strpos(",{$build->bugs},", ",$bug->id,") !== false) continue;?>
-        <?php if($build->product != $bug->product) continue; ?>
         <tr>
           <td class='c-id text-left'>
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)), ($bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : '');?>
@@ -73,5 +71,9 @@
   </form>
 </div>
 <script>
-$(function(){$('#unlinkBugList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkBugList .tablesorter').sortTable();
+    setForm();
+});
 </script>

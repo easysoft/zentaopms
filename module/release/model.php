@@ -245,8 +245,14 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         $product = $this->loadModel('product')->getByID($release->product);
 
+        foreach($this->post->stories as $i => $storyID)
+        {
+            if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
+        }
+
         $release->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+
         if($release->stories)
         {
             $this->loadModel('story');
@@ -315,6 +321,12 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
 
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
+
+        foreach($this->post->bugs as $i => $bugID)
+        {
+            if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
+        }
+
         $release->$field .= ',' . join(',', $this->post->bugs);
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
 
