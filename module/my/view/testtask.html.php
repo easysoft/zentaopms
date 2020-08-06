@@ -26,7 +26,7 @@
     ?>
   </div>
 </div>
-<div id="mainContent" class='main-table'>
+<div id="mainContent" class='main-table' data-ride='table'>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span></p>

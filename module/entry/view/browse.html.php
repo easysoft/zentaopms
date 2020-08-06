@@ -13,7 +13,7 @@
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->entry->confirmDelete);?>
 <div id='mainContent'>
-  <form id='ajaxForm' class='main-table' method='post'>
+  <form id='ajaxForm' class='main-table' method='post' data-ride='table'>
     <table id='entryList' class='table has-sort-head table-fix'>
       <thead>
         <tr>
