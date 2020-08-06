@@ -329,9 +329,19 @@ function ajaxDelete(url, replaceID, notice)
             {
                 if(data.result == 'success')
                 {
+                    var $table = $('#' + replaceID).closest('[data-ride="table"]');
+                    if($table.length)
+                    {
+                        var table = $table.data('zui.table');
+                        if(table)
+                        {
+                            table.options.replaceId = replaceID;
+                            return table.reload();
+                        }
+                    }
                     $.get(document.location.href, function(data)
                     {
-                        if(!($(data).find('#' + replaceID).length))location.reload();
+                        if(!($(data).find('#' + replaceID).length)) location.reload();
                         $('#' + replaceID).html($(data).find('#' + replaceID).html());
                         if(typeof sortTable == 'function') sortTable();
                         $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
@@ -715,11 +725,11 @@ function bootAlert(message)
 
 /**
  * Toggle fold or unfold for parent.
- * 
- * @param  string $form 
- * @param  array  $unfoldIdList 
- * @param  int    $objectID 
- * @param  string $objectType 
+ *
+ * @param  string $form
+ * @param  array  $unfoldIdList
+ * @param  int    $objectID
+ * @param  string $objectType
  * @access public
  * @return void
  */

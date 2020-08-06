@@ -39,8 +39,6 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
-        <?php if(strpos(",{$release->stories},", ",{$story->id},") !== false) continue; ?>
-        <?php if($release->product != $story->product) continue; ?>
         <tr>
           <td class='c-id text-left'>
             <div class="checkbox-primary">
@@ -82,5 +80,9 @@
   </form>
 </div>
 <script>
-$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkStoryList .tablesorter').sortTable();
+    setForm();
+});
 </script>

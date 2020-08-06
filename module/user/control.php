@@ -992,7 +992,7 @@ class user extends control
         $this->view->account    = $account;
         $this->view->pager      = $pager;
         $this->view->user       = $this->user->getById($account);
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         $this->view->direction  = $direction;
         $this->display();
     }

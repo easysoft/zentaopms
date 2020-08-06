@@ -313,6 +313,11 @@ class buildModel extends model
     {
         $build = $this->getByID($buildID);
 
+        foreach($this->post->stories as $i => $storyID)
+        {
+            if(strpos(",{$build->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
+        }
+
         $build->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
@@ -368,6 +373,11 @@ class buildModel extends model
     public function linkBug($buildID)
     {
         $build = $this->getByID($buildID);
+
+        foreach($this->post->bugs as $i => $bugID)
+        {
+            if(strpos(",{$build->bugs},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
+        }
 
         $build->bugs .= ',' . join(',', $this->post->bugs);
         $this->updateLinkedBug($build);

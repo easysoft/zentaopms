@@ -1649,13 +1649,14 @@ class storyModel extends model
      * @param  string       $status
      * @param  string       $type    requirement|story
      * @param  string       $orderBy
+     * @param  array|string $excludeStories
      * @param  object       $pager
      * @param  bool         $hasParent
      *
      * @access public
      * @return array
      */
-    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $pager = null, $hasParent = true)
+    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $hasParent = true, $excludeStories = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
@@ -1670,6 +1671,7 @@ class storyModel extends model
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
             ->beginIF($branch)->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
+            ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
@@ -1907,7 +1909,8 @@ class storyModel extends model
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
-        if($excludeStories) $storyQuery = $storyQuery . ' AND `product` NOT ' . helper::dbIN($excludeStories);
+        if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
+        if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         if($projectID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
@@ -2275,7 +2278,7 @@ class storyModel extends model
      */
     public function getZeroCase($productID, $orderBy = 'id_desc')
     {
-        $allStories   = $this->getProductStories($productID, 0, 0, 'all', 'story', $orderBy, null, $hasParent = false);
+        $allStories   = $this->getProductStories($productID, 0, 0, 'all', 'story', $orderBy, $hasParent = false, '', null);
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)
