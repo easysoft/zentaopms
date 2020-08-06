@@ -43,7 +43,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
+    public function create($projectID = 0, $storyID = '', $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $this->project->getLimitedProject();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
