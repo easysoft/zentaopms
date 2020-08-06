@@ -82,7 +82,10 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <?php echo html::submitButton($lang->repo->diff, '', 'btn btn-primary')?>
+      <?php
+      echo html::hidden('isPost', true);
+      echo html::submitButton($lang->repo->diff, '', 'btn btn-primary');
+      ?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

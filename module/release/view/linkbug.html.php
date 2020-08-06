@@ -41,7 +41,6 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allBugs as $bug):?>
-        <?php if(strpos(",{$releaseBugs},", ",$bug->id,") !== false) continue;?>
         <tr>
           <td class='c-id text-left'>
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)), ($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : '');?>

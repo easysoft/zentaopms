@@ -342,6 +342,11 @@
             </div>
             <?php endif;?>
             <div class='text'><?php echo $summary;?></div>
+            <?php
+            $this->app->rawParams['type'] = 'story';
+            $storyPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
           <?php endif;?>
         </form>
@@ -416,6 +421,11 @@
             </div>
             <?php endif;?>
             <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>
+            <?php
+            $this->app->rawParams['type'] = 'bug';
+            $bugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
           <?php endif;?>
         </form>

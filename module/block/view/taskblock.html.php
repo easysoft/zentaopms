@@ -16,6 +16,7 @@
 <style>
 .block-tasks .c-id {width: 55px;}
 .block-tasks .c-pri {width: 45px;text-align: center;}
+.block-tasks .c-pri-long {width: 80px;}
 .block-tasks .c-estimate {width: 60px;}
 .block-tasks .c-deadline {width: 95px;}
 .block-tasks .c-status {width: 80px;}
@@ -26,7 +27,7 @@
     <thead>
       <tr>
         <th class='c-id'><?php echo $lang->idAB;?></th>
-        <th class='c-pri'><?php echo $lang->priAB?></th>
+        <th class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><?php echo $lang->priAB?></th>
         <th class='c-name'> <?php echo $lang->task->name;?></th>
         <?php if($longBlock):?>
         <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
@@ -43,7 +44,7 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
-        <td class='c-pri'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
+        <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
         <?php if($longBlock):?>
         <td class='c-estimate text-center'><?php echo $task->estimate?></td>
