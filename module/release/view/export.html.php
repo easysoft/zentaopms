@@ -14,7 +14,7 @@
 <script>
 function setDownloading()
 {
-    if($.browser.opera) return true;   // Opera don't support, omit it.
+    if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;   // Opera don't support, omit it.
 
     $.cookie('downloading', 0);
     time = setInterval("closeWindow()", 300);
