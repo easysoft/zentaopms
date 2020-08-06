@@ -56,9 +56,12 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function getList()
+    public function getList($type = '')
     {
-        return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($type)
+            ->orderBy('account')->fetchAll();
     }
 
     /**
@@ -78,6 +81,7 @@ class userModel extends model
          * thus to make sure users of this role at first.
          */
         $fields = 'account, realname, deleted';
+        $type   = (strpos($params, 'outside') === false) ? '' : 'outside';
         if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,', role) AS roleOrder";
         if(strpos($params, 'pdfirst') !== false) $fields .= ", INSTR(',po,pd,', role) AS roleOrder";
         if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qd,qa,', role) AS roleOrder";
@@ -90,6 +94,7 @@ class userModel extends model
         $this->app->loadConfig('user');
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
+            ->andWhere('type')->eq($type)
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->orderBy($orderBy)
             ->fetchAll('account');
