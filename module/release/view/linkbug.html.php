@@ -74,5 +74,9 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
   </form>
 </div>
 <script>
-$(function(){$('#<?php echo $formID;?> .tablesorter').sortTable();});
+$(function()
+{
+    $('#<?php echo $formID;?> .tablesorter').sortTable();
+    setForm()
+});
 </script>

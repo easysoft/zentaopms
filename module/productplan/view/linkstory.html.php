@@ -85,5 +85,9 @@
   </form>
 </div>
 <script>
-$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkStoryList .tablesorter').sortTable();
+    setForm();
+});
 </script>
