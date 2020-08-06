@@ -597,10 +597,14 @@ class bugModel extends model
     public function getModuleOwner($moduleID, $productID)
     {
         $users = $this->loadModel('user')->getPairs('nodeleted');
+        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
+        $owner = isset($users[$owner]) ? $owner : '';
 
         if($moduleID)
         {
-            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch();
+            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->andWhere('root')->eq($productID)->fetch();
+            if(empty($module)) return $owner;
+
             if($module->owner and isset($users[$module->owner])) return $module->owner;
 
             $moduleIDList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
@@ -619,8 +623,7 @@ class bugModel extends model
             }
         }
 
-        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
-        return isset($users[$owner]) ? $owner : '';
+        return $owner;
     }
 
     /**

@@ -315,10 +315,9 @@ class buildModel extends model
 
         $build->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
-        foreach($this->post->stories as $storyID)
-        {
-            $this->loadModel('action')->create('story', $storyID, 'linked2build', '', $buildID);
-        }
+
+        $this->loadModel('action');
+        foreach($this->post->stories as $storyID) $this->action->create('story', $storyID, 'linked2build', '', $buildID);
     }
 
     /**
@@ -354,10 +353,9 @@ class buildModel extends model
         foreach($storyList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
         $build->stories = trim($build->stories, ',');
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
-        foreach($this->post->unlinkStories as $unlinkStoryID)
-        {
-            $this->loadModel('action')->create('story', $unlinkStoryID, 'unlinkedfrombuild', '', $buildID);
-        }
+
+        $this->loadModel('action');
+        foreach($this->post->unlinkStories as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfrombuild', '', $buildID);
     }
 
     /**
@@ -374,10 +372,9 @@ class buildModel extends model
         $build->bugs .= ',' . join(',', $this->post->bugs);
         $this->updateLinkedBug($build);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
-        foreach($this->post->bugs as $bugID)
-        {
-            $this->loadModel('action')->create('bug', $bugID, 'linked2bug', '', $buildID);
-        }
+
+        $this->loadModel('action');
+        foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2bug', '', $buildID);
     }
 
     /**
@@ -414,9 +411,8 @@ class buildModel extends model
         foreach($bugList as $bugID) $build->bugs = str_replace(",$bugID,", ',', $build->bugs);
         $build->bugs = trim($build->bugs, ',');
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
-        foreach($this->post->unlinkBugs as $unlinkBugID)
-        {
-            $this->loadModel('action')->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
-        }
+
+        $this->loadModel('action');
+        foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
     }
 }

@@ -71,5 +71,9 @@
   </form>
 </div>
 <script>
-$(function(){$('#unlinkBugList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkBugList .tablesorter').sortTable();
+    setForm();
+});
 </script>

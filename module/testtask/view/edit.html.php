@@ -81,8 +81,8 @@
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control'");?>
-              <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control chosen'");?>
+              <?php echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
         </tr>

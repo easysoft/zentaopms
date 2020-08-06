@@ -145,6 +145,7 @@ function loadAllProjectBuilds(projectID, productID)
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
             $('#openedBuild_chosen').remove();
+            $('#openedBuild').next('.picker').remove();
             $("#openedBuild").chosen();
             notice();
         })
@@ -183,6 +184,7 @@ function loadAllProductBuilds(productID)
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
             $('#openedBuild_chosen').remove();
+            $('#openedBuild').next('.picker').remove();
             $("#openedBuild").chosen();
             notice();
         })
@@ -245,16 +247,11 @@ function loadProductStories(productID)
  */
 function loadProductProjects(productID)
 {
-    required = $('#project_chosen').hasClass('required');
-    branch   = $('#branch').val();
+    branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID + '&branch=' + branch);
-    $('#projectIdBox').load(link, function()
-    {
-        $(this).find('select').chosen();
-        if(required) $('#project_chosen').addClass('required');
-    });
+    $('#projectIdBox').load(link, function(){$(this).find('select').chosen()});
 }
 
 /**
@@ -292,6 +289,7 @@ function loadProductBuilds(productID)
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
             $('#openedBuild_chosen').remove();
+            $('#openedBuild').next('.picker').remove();
             $("#openedBuild").chosen();
             notice();
         })
@@ -343,6 +341,7 @@ function loadProjectTasks(projectID)
         if(!data) data = '<select id="task" name="task" class="form-control"></select>';
         $('#task').replaceWith(data);
         $('#task_chosen').remove();
+        $('#task').next('.picker').remove();
         $("#task").chosen();
     })
 }
@@ -385,6 +384,7 @@ function loadProjectBuilds(projectID)
             $('#openedBuild').replaceWith(data);
             $('#openedBuild').val(oldOpenedBuild);
             $('#openedBuild_chosen').remove();
+            $('#openedBuild').next('.picker').remove();
             $("#openedBuild").chosen();
             notice();
         })
@@ -418,6 +418,7 @@ function setStories(moduleID, productID)
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
+        $('#story').next('.picker').remove();
         $("#story").chosen();
     });
 }
@@ -433,6 +434,7 @@ function loadProductBranches(productID)
 {
     $('#branch').remove();
     $('#branch_chosen').remove();
+    $('#branch').next('.picker').remove();
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
     {
         if(data)
@@ -463,6 +465,7 @@ function loadAssignedTo(projectID, selectedUser = '')
     {
         var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
         $('#assignedTo_chosen').remove();
+        $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
         var defaultAssignedTo = $('#assignedTo').val();
         if(defaultAssignedTo !== oldAssignedTo && selectedUser == '') $('#assignedTo').append(defaultOption);

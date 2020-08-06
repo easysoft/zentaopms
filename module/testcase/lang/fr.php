@@ -12,19 +12,19 @@
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->module           = 'Module';
-$lang->testcase->lib              = "Case Library";
-$lang->testcase->branch           = "Branche/Platforme";
+$lang->testcase->lib              = "Library de cas";
+$lang->testcase->branch           = "Branche/Plateforme";
 $lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
-$lang->testcase->storyVersion     = 'Story Version';
-$lang->testcase->color            = 'Color';
-$lang->testcase->order            = 'Order';
+$lang->testcase->storyVersion     = 'Version Story';
+$lang->testcase->color            = 'Couleur';
+$lang->testcase->order            = 'Ordre';
 $lang->testcase->title            = 'Titre';
 $lang->testcase->precondition     = 'Prérequis';
 $lang->testcase->pri              = 'Priorité';
 $lang->testcase->type             = 'Type';
-$lang->testcase->status           = 'Statur';
-$lang->testcase->subStatus        = 'Sub Status';
+$lang->testcase->status           = 'Statut';
+$lang->testcase->subStatus        = 'Sous-statut';
 $lang->testcase->steps            = 'Etape';
 $lang->testcase->openedBy         = 'Créé par';
 $lang->testcase->openedDate       = 'Créé le';
@@ -150,11 +150,11 @@ $lang->testcase->legendLinkBugs     = 'Bugs';
 $lang->testcase->legendOpenAndEdit  = 'Créer/Editer';
 $lang->testcase->legendComment      = 'Commentaire';
 
-$lang->testcase->summary            = "Total <strong>%s</strong> castests sur cette page, et <strong>%s</strong> castests ont été joués.";
+$lang->testcase->summary            = "Total <strong>%s</strong> CasTests sur cette page, et <strong>%s</strong> castests ont été joués.";
 $lang->testcase->confirmDelete      = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete = 'Voulez-vous supprimer des Castests par Lot ?';
 $lang->testcase->ditto              = 'Idem';
-$lang->testcase->dittoNotice        = "Ce CasTest n'est pas associé au Product alors quele précédent l'était !";
+$lang->testcase->dittoNotice        = "Ce CasTest n'est pas associé au Product alors que le précédent l'était !";
 
 $lang->testcase->reviewList[0] = 'NON';
 $lang->testcase->reviewList[1] = 'OUI';
@@ -201,9 +201,9 @@ $lang->testcase->resultList['blocked'] = 'Bloqué';
 
 $lang->testcase->buttonToList = 'Retour';
 
-$lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
-$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding are not found. You cannot convert the data to the encoding you want!';
-$lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
+$lang->testcase->errorEncode      = 'Pas de données. Veuillez sélectionner le bon encodage et télécharger à nouveau !';
+$lang->testcase->noFunction       = "Iconv et mb_convert_encoding non trouvés. Vous ne pouvez pas convertir les données dans l'encodage souhaité !";
+$lang->testcase->noRequire        = "Ligne %s a“%s ”qui est un champ obligatoire et ne doit pas être vide.";
 $lang->testcase->noLibrary        = "Aucune library n'existe. Créez-en une pour commencer.";
 $lang->testcase->mustChooseResult = 'La Validation du résultat est nécessaire.';
 $lang->testcase->noModule         = "<div>Vous n'avez aucun modules.</div><div>Gérer les modules maintenant.</div>";

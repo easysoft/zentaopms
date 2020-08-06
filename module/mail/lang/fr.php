@@ -55,7 +55,7 @@ $lang->mail->sendTime    = 'Envoi';
 $lang->mail->status      = 'Statut';
 $lang->mail->failReason  = 'Raison';
 
-$lang->mail->statusList['wait']   = 'Wait';
+$lang->mail->statusList['wait']   = 'en Attente';
 $lang->mail->statusList['sended'] = 'Envoy';
 $lang->mail->statusList['fail']   = 'Echec';
 

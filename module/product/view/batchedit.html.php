@@ -54,6 +54,11 @@
         </thead>
         <tbody>
           <?php foreach($productIDList as $productID):?>
+          <?php
+          if(!empty($this->config->moreLinks["PO"])) $this->config->moreLinks["POs[$productID]"] = $this->config->moreLinks["PO"];
+          if(!empty($this->config->moreLinks["QD"])) $this->config->moreLinks["QDs[$productID]"] = $this->config->moreLinks["QD"];
+          if(!empty($this->config->moreLinks["RD"])) $this->config->moreLinks["RDs[$productID]"] = $this->config->moreLinks["RD"];
+          ?>
           <tr>
             <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
@@ -67,6 +72,11 @@
             <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
             <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
           </tr>
+          <?php
+          if(isset($this->config->moreLinks["POs[$productID]"])) unset($this->config->moreLinks["POs[$productID]"]);
+          if(isset($this->config->moreLinks["QDs[$productID]"])) unset($this->config->moreLinks["QDs[$productID]"]);
+          if(isset($this->config->moreLinks["RDs[$productID]"])) unset($this->config->moreLinks["RDs[$productID]"]);
+          ?>
           <?php endforeach;?>
         </tbody>
         <tfoot>

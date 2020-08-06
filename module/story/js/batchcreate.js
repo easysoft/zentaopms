@@ -54,6 +54,7 @@ function setModuleAndPlan(branchID, productID, num)
         if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
         $('#module' + num).replaceWith(modules);
         $("#module" + num + "_chosen").remove();
+        $("#module" + num).next('.picker').remove();
         $("#module" + num).chosen();
     });
 
@@ -63,6 +64,7 @@ function setModuleAndPlan(branchID, productID, num)
         if(!plans) plans = '<select id="plan' + num + '" name="plan[' + num + ']" class="form-control"></select>';
         $('#plan' + num).replaceWith(plans);
         $("#plan" + num + "_chosen").remove();
+        $("#plan" + num).next('.picker').remove();
         $("#plan" + num).chosen();
     });
 }

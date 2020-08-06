@@ -233,6 +233,23 @@ class searchModel extends model
         $hasProject = false;
         $hasUser    = false;
 
+        $appendUsers     = array();
+        $module          = $_SESSION['searchParams']['module'];
+        $formSessionName = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]))
+        {
+            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
+            {
+                $fieldName = 'field' . $i;
+                $valueName = 'value' . $i;
+                $fieldName = $_SESSION[$formSessionName][$fieldName];
+                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
+                {
+                    if($_SESSION[$formSessionName][$valueName]) $appendUsers[] = $_SESSION[$formSessionName][$valueName];
+                }
+            }
+        }
+
         $fields = array_keys($fields);
         foreach($fields as $fieldName)
         {
@@ -244,7 +261,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed');
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
@@ -253,7 +270,11 @@ class searchModel extends model
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
-            if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values']  = $users;
+            if($params[$fieldName]['values'] == 'users')
+            {
+                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
+                $params[$fieldName]['values'] = $users;
+            }
             if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
             if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
             if(is_array($params[$fieldName]['values']))

@@ -30,6 +30,7 @@ function setStories(moduleID, projectID, num)
         }
         var chosenWidth = $("#story" + num + "_chosen").css('max-width');
         $("#story" + num + "_chosen").remove();
+        $("#story" + num).next('.picker').remove();
         $("#story" + num).chosen();
         $("#story" + num + "_chosen").width(chosenWidth).css('max-width', chosenWidth);
     });

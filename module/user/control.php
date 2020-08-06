@@ -992,7 +992,7 @@ class user extends control
         $this->view->account    = $account;
         $this->view->pager      = $pager;
         $this->view->user       = $this->user->getById($account);
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         $this->view->direction  = $direction;
         $this->display();
     }
@@ -1024,10 +1024,11 @@ class user extends control
      */
     public function ajaxGetContactUsers($contactListID)
     {
-        $users = $this->user->getPairs('devfirst|nodeleted');
-        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
-        $list = $this->user->getContactListByID($contactListID);
-        return print(html::select('mailto[]', $users, $list->userList, "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks['mailto[]'] = $this->config->user->moreLink;
+        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        return print(html::select('mailto[]', $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
 
     /**
@@ -1085,5 +1086,33 @@ class user extends control
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
         die();
+    }
+
+    /**
+     * Ajax get more user.
+     * 
+     * @param  string $params 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMore($params)
+    {
+        $params = base64_decode($params);
+        parse_str($params, $parsedParams);
+        $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
+
+        $search   = $this->get->search;
+        $limit    = $this->get->limit;
+        $index    = 0;
+        $newUsers = array();
+        foreach($users as $account => $realname)
+        {
+            if($index >= $limit) break;
+            if(stripos($realname, $search) === false) continue;
+            $index ++;
+            $newUsers[$account] = $realname;
+        }
+
+        die(json_encode($newUsers));
     }
 }

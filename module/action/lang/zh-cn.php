@@ -319,6 +319,7 @@ $lang->action->dynamicAction->bug['bugconfirmed']          = '确认Bug';
 $lang->action->dynamicAction->bug['resolved']              = '解决Bug';
 $lang->action->dynamicAction->bug['undeleted']             = '还原Bug';
 $lang->action->dynamicAction->bug['hidden']                = '隐藏Bug';
+$lang->action->dynamicAction->bug['deleted']               = '删除Bug';
 $lang->action->dynamicAction->bug['confirmed']             = "确认{$lang->storyCommon}变更";
 $lang->action->dynamicAction->bug['tostory']               = "转{$lang->storyCommon}";
 $lang->action->dynamicAction->bug['totask']                = '转任务';

@@ -13,14 +13,14 @@
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'ID';
 $lang->bug->product          = $lang->productCommon;
-$lang->bug->branch           = 'Branche/Platforme';
+$lang->bug->branch           = 'Branche/Plateforme';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
 $lang->bug->project          = $lang->projectCommon;
 $lang->bug->story            = 'Story';
-$lang->bug->storyVersion     = 'Story Version';
-$lang->bug->color            = 'Color';
+$lang->bug->storyVersion     = 'Version Story';
+$lang->bug->color            = 'Couleur';
 $lang->bug->task             = 'Tâche';
 $lang->bug->title            = 'Titre';
 $lang->bug->severity         = 'Sévérité';
@@ -32,7 +32,7 @@ $lang->bug->browser          = 'Browser';
 $lang->bug->steps            = 'Repro Steps';
 $lang->bug->status           = 'Statut';
 $lang->bug->statusAB         = 'Statut';
-$lang->bug->subStatus        = 'Sub Statut';
+$lang->bug->subStatus        = 'Sous-Statut';
 $lang->bug->activatedCount   = 'Heures Activation';
 $lang->bug->activatedCountAB = 'Actif';
 $lang->bug->activatedDate    = 'Date Activation';
@@ -45,7 +45,7 @@ $lang->bug->openedBy         = 'Signalé par';
 $lang->bug->openedByAB       = 'Détecteur';
 $lang->bug->openedDate       = 'Date signalement';
 $lang->bug->openedDateAB     = 'Signalé';
-$lang->bug->openedBuild      = 'Open Build';
+$lang->bug->openedBuild      = 'Build ouverts';
 $lang->bug->assignedTo       = 'Bugs qui me sont affectés';
 $lang->bug->assignBug        = 'Affecter à';
 $lang->bug->assignedToAB     = 'Affecté à';
@@ -67,8 +67,8 @@ $lang->bug->linkBug          = 'Bugs Liés';
 $lang->bug->linkBugs         = 'Associer Bug';
 $lang->bug->unlinkBug        = 'Dissocier';
 $lang->bug->case             = 'CasTests';
-$lang->bug->caseVersion      = 'Case Version';
-$lang->bug->testtask         = 'Request';
+$lang->bug->caseVersion      = 'Version CasTest';
+$lang->bug->testtask         = 'Campagne';
 $lang->bug->files            = 'Fichiers';
 $lang->bug->keywords         = 'Tags';
 $lang->bug->lastEditedByAB   = 'Edité par';
@@ -148,7 +148,7 @@ $lang->bug->noModule     = "<div>Vous n'avez pas de modules.</div><div>Gérer Mo
 $lang->bug->delayWarning = " <strong class='text-danger'> Retard %s jours </strong>";
 
 /* 页面标签。*/
-$lang->bug->lblAssignedTo = 'Affecté à4';
+$lang->bug->lblAssignedTo = 'Affecté à';
 $lang->bug->lblMailto     = 'Mailto';
 $lang->bug->lblLastEdited = 'Edité par';
 $lang->bug->lblResolved   = 'Résolu par';
@@ -177,7 +177,7 @@ $lang->bug->confirmChangeProduct  = "Tout changement aux {$lang->productCommon} 
 $lang->bug->confirmDelete         = 'Voulez-vous supprimer ce bug ?';
 $lang->bug->remindTask            = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';
 $lang->bug->skipClose             = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
-$lang->bug->projectAccessDenied   = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->projectAccessDenied   = "Votre accès à {$lang->projectCommon} auquel ce bug appartient est refusé !";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Etape]</p><br/>";
@@ -293,8 +293,8 @@ $lang->bug->report->charts['bugsPerActivatedCount'] = 'Heure Activation';
 $lang->bug->report->charts['bugsPerPri']            = 'Priorité Bug';
 $lang->bug->report->charts['bugsPerType']           = 'Type de Bug';
 $lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Affecté à';
-//$lang->bug->report->charts['bugLiveDays']        = 'Bug Handling Time Report';
-//$lang->bug->report->charts['bugHistories']       = 'Bug Handling Steps Report';
+//$lang->bug->report->charts['bugLiveDays']        = 'Rapport sur le temps de travail des bugs';
+//$lang->bug->report->charts['bugHistories']       = 'Rapport sur les étapes de gestion des bugs';
 
 $lang->bug->report->options = new stdclass();
 $lang->bug->report->options->graph  = new stdclass();
@@ -364,8 +364,8 @@ $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Heure Activation'
 $lang->bug->report->bugsPerPri->graph->xAxisName            = 'Priorité';
 $lang->bug->report->bugsPerType->graph->xAxisName           = 'Type';
 $lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = 'Affecté à';
-$lang->bug->report->bugLiveDays->graph->xAxisName           = 'Handling Time';
-$lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
+$lang->bug->report->bugLiveDays->graph->xAxisName           = 'Temps résolution';
+$lang->bug->report->bugHistories->graph->xAxisName          = 'Etapes résolution';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();

@@ -23,7 +23,7 @@
 <script>
 function setDownloading()
 {
-    if($.browser.opera) return true;   // Opera don't support, omit it.
+    if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;   // Opera don't support, omit it.
 
     var $fileName = $('#fileName');
     if($fileName.val() === '') $fileName.val('<?php echo $lang->file->untitled;?>');
