@@ -994,7 +994,7 @@ class productModel extends model
         $allCount  = 0;
         foreach($stories as $key => $story)
         {
-            if($story->type != $storyType) continue;
+            if(!empty($story->type) && $story->type != $storyType) continue;
 
             $totalEstimate += $story->estimate;
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
