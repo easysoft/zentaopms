@@ -548,7 +548,7 @@ class repo extends control
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]); 
 
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
-        if(!empty($_POST))
+        if($this->server->request_method)
         {
             $oldRevision = isset($this->post->revision[1]) ?$this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ?$this->post->revision[0] : '';
