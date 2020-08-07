@@ -126,7 +126,7 @@
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
         if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {
-            $divideLang = ($story->type == 'story' || !$story->type) ? $lang->story->subdivide : $lang->story->splitRequirent; 
+            $divideLang = $lang->story->subdivide;
             $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
             $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
             if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
