@@ -43,7 +43,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = '', $moduleID = 0, $taskID = 0, $todoID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $this->project->getLimitedProject();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
@@ -460,7 +460,7 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchAll('root');
+        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -572,19 +572,19 @@ class task extends control
     {
         if(!empty($_POST))
         {
+            $this->loadModel('action');
             $taskIDList = $this->post->taskIDList;
             $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
             $taskIDList = array_unique($taskIDList);
 
-            $muletipleTasks = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchPairs();
+            $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
             $tasks          = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                $this->loadModel('action');
-                if(in_array($taskID, $muletipleTasks) and $task->assignedTo != $this->app->user->account) continue;
-
+                if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue; 
+                if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
