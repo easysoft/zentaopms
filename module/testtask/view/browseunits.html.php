@@ -27,7 +27,7 @@
     <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id='mainContent' class='main-table'>
+<div id='mainContent' class='main-table' data-ride='table'>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
     <p>

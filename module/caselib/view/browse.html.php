@@ -207,6 +207,7 @@ js::set('flow',          $config->global->flow);
             <?php endif;?>
           </div>
         </div>
+        <div class='table-statistic'></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

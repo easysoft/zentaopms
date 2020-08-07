@@ -148,7 +148,7 @@
                   }
                   ?>
                 </div>
-                <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+                <div class='table-statistic'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
                 <?php endif;?>
                 <?php
                 $this->app->rawParams['type'] = 'story';
@@ -226,7 +226,7 @@
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
-                <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
+                <div class='table-statistic'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
                 <?php endif;?>
                 <?php
                 $this->app->rawParams['type'] = 'bug';
@@ -317,7 +317,7 @@
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
-                <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
+                <div class='table-statistic'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
                 <?php endif;?>
                 <?php
                 $this->app->rawParams['type'] = 'leftBug';

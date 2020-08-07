@@ -13,7 +13,7 @@
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->webhook->confirmDelete);?>
 <div id='mainContent'>
-  <form class='main-table' id='ajaxForm' method='post'>
+  <form class='main-table' id='ajaxForm' method='post' data-ride='table'>
     <table id='webhookList' class='table has-sort-head table-fixed'>
       <thead>
         <tr>

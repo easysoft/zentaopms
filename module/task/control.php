@@ -581,10 +581,12 @@ class task extends control
 
             $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
             $tasks          = $this->task->getByList($taskIDList);
+            $this->loadModel('action');
             foreach($tasks as $taskID => $task)
             {
                 if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue; 
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
+
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);

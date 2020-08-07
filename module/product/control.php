@@ -616,7 +616,7 @@ class product extends control
 
         if($number === '')
         {
-            die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
+            die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProjectRelated(this.value)'"));
         }
         else
         {

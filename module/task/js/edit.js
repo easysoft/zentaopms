@@ -1,6 +1,5 @@
 $(function() 
 {
-    $("#story, #mailto").chosen();
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
 })
 

@@ -66,6 +66,7 @@ class userModel extends model
      *
      * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
      * @param  string $usersToAppended  account1,account2
+     * @param  int    $maxCount 
      * @access public
      * @return array
      */
@@ -96,6 +97,7 @@ class userModel extends model
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll('account');
+
         if($maxCount and $maxCount == count($users))
         {
             if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
