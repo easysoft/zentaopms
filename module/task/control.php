@@ -43,7 +43,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = '', $moduleID = 0, $taskID = 0, $todoID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $this->project->getLimitedProject();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
@@ -580,9 +580,9 @@ class task extends control
 
             $muletipleTasks = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchPairs();
             $tasks          = $this->task->getByList($taskIDList);
+            $this->loadModel('action');
             foreach($tasks as $taskID => $task)
             {
-                $this->loadModel('action');
                 if(in_array($taskID, $muletipleTasks) and $task->assignedTo != $this->app->user->account) continue;
 
                 $changes = $this->task->assign($taskID);

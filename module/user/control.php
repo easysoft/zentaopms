@@ -1024,10 +1024,13 @@ class user extends control
      */
     public function ajaxGetContactUsers($contactListID)
     {
-        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+
         $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks['mailto[]'] = $this->config->user->moreLink;
+
         if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+
         return print(html::select('mailto[]', $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
 

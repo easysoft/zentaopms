@@ -28,16 +28,16 @@ tbody tr td:first-child input{display:none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'> 
+      <span class='text' title='<?php echo $build->name;?>'>
       <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
-      <?php 
+      <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
-      {   
+      {
           echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
           echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
           echo '</li>';
-      }       
+      }
       echo '</ul>';
       ?>
       </span>
@@ -246,7 +246,7 @@ tbody tr td:first-child input{display:none;}
               <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
             <?php endif;?>
             <?php
             $this->app->rawParams['type'] = 'bug';
@@ -313,7 +313,7 @@ tbody tr td:first-child input{display:none;}
           </table>
           <div class='table-footer'>
             <?php if($countGeneratedBugs):?>
-            <div class='text'><?php echo sprintf($lang->build->createdBugs, $countGeneratedBugs);?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->build->createdBugs, $countGeneratedBugs);?></div>
             <?php endif;?>
             <?php
             $this->app->rawParams['type'] = 'generatedBug';

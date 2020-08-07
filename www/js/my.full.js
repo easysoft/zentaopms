@@ -141,7 +141,7 @@ function setMailto(mailto, contactListID)
     {
         $('#' + mailto).replaceWith(users);
         $('#' + mailto + '_chosen').remove();
-		    $('.picker').remove();
+        $('.picker').remove();
 
         if($("[data-pickertype='remote']").length == 0 && $('.picker-select').length == 0)
         {
