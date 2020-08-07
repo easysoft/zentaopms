@@ -266,8 +266,8 @@ class productplan extends control
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
 
-        $bugPager    = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $storyPager  = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $bugPager    = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $storyPager  = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
         if($reSort)
         {
