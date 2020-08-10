@@ -137,7 +137,6 @@
                     $taskMembers = $members;
                 }
                 ?>
-                <?php $taskMembers = !empty($task->team) ? array_intersect_key($members, $task->team) : $members;?>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
