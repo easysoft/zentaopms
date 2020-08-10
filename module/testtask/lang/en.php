@@ -15,6 +15,7 @@ $lang->testtask->reportChart      = 'Report';
 $lang->testtask->reportAction     = 'Case Report';
 $lang->testtask->delete           = "Delete Request";
 $lang->testtask->importUnitResult = "Import Unit Result";
+$lang->testtask->importunitresult = "Import Unit Result"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "Unit Test List";
 $lang->testtask->unitCases        = "Unit Test Cases";
 $lang->testtask->view             = "Request Detail";
