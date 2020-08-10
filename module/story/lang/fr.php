@@ -225,7 +225,7 @@ $lang->story->errorNotSubdivide     = "Si le statut n'est pas actif, ou l'étape
 $lang->story->mustChooseResult      = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion  = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory               = "Aucune story pour l'instant. ";
-$lang->story->ignoreChangeStage     = "Story %s est à l'état brouillon et nécessite d'être complétée et validée...";
+$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Impossible de supprimer {$lang->storyCommon} parent";
 $lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 

@@ -122,6 +122,21 @@
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
                 <?php $disableAssignedTo = (!empty($task->team) and $task->assignedTo != $this->app->user->account) ? "disabled='disabled'" :'';?>
+                <?php
+                $taskMembers = array();
+                if(!empty($task->team))
+                {
+                    $teamAccounts = array_keys($task->team);
+                    foreach($teamAccounts as $teamAccount)
+                    {
+                        $taskMembers[] = $members[$teamAccount];
+                    }
+                }
+                else
+                {
+                    $taskMembers = $members;
+                }
+                ?>
                 <?php $taskMembers = !empty($task->team) ? array_intersect_key($members, $task->team) : $members;?>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
               </tr>
