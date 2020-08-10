@@ -1276,6 +1276,8 @@ class repoModel extends model
             foreach($actions['task'] as $taskID => $taskActions)
             {
                 $task = $this->task->getById($taskID);
+                if(empty($task)) continue;
+
                 $action->objectType = 'task';
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndProjects[$taskID]['product'];
@@ -1352,6 +1354,7 @@ class repoModel extends model
             foreach($actions['bug'] as $bugID => $bugActions)
             {
                 $bug = $this->bug->getByID($bugID);
+                if(empty($bug)) continue;
 
                 $action->objectType = 'bug';
                 $action->objectID   = $bugID;
