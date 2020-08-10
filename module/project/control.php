@@ -1649,6 +1649,8 @@ class project extends control
         $this->app->session->set('taskList',    $uri);
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
+        $this->app->session->set('caseList', $uri);
+        $this->app->session->set('bugList', $uri);
 
         if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
