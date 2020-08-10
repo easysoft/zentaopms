@@ -90,10 +90,14 @@
             <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
             <?php $disableHour = isset($teams[$taskID]) ? "disabled='disabled'" : '';?>
             <?php
+            $taskMembers = array();
             if(isset($teams[$taskID]))
             {
-                $taskMembers = array_intersect_key($members, $teams[$taskID]);
-                $taskMembers = array('' => '', 'ditto' => $this->lang->task->ditto) + $taskMembers;
+                $teamAccounts = array_keys($teams[$taskID]);
+                foreach($teamAccounts as $teamAccount)
+                {
+                    $taskMembers[] = $members[$teamAccount];
+                }
             }
             else
             {
