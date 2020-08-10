@@ -36,6 +36,7 @@
                   echo html::hidden('pageID',     isset($this->get->pageID) ? $this->get->pageID : 0);
               }
               ?>
+              <?php echo html::hidden('onlybody', isonlybody() ? 'yes' : 'no');?>
               <?php echo html::input('title', $this->get->title, "class='form-control' placeholder='{$lang->doc->fileTitle}'");?>
               <?php echo html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");?>
             </form>
