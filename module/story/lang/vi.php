@@ -225,7 +225,7 @@ $lang->story->errorNotSubdivide    = "Nếu tình trạng này là chưa kích h
 $lang->story->mustChooseResult     = 'Chọn kết quả';
 $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển thành.';
 $lang->story->noStory              = 'Không có câu chuyện nào';
-$lang->story->ignoreChangeStage    = 'Câu chuyện %s là bản nháp. Vui lòng xét duyệt nó..';
+$lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->storyCommon} mẹ";
 $lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
