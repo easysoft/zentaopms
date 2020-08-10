@@ -1079,7 +1079,7 @@ class actionModel extends model
      * 
      * @param  array  $actions 
      * @param  string $direction 
-     * @param  string $type
+     * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
      */
