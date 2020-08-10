@@ -1056,8 +1056,9 @@ class taskModel extends model
         }
 
         /* Check field not empty. */
-        foreach($tasks as $task)
+        foreach($tasks as $taskID => $task)
         {
+            if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
@@ -1075,7 +1076,6 @@ class taskModel extends model
 
         foreach($tasks as $taskID => $task)
         {
-            if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             $oldTask = $oldTasks[$taskID];
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
