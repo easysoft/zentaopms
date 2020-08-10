@@ -225,7 +225,7 @@ $lang->story->errorNotSubdivide     = "If the status is not active, or the stage
 $lang->story->mustChooseResult      = 'Ergebnis wählen';
 $lang->story->mustChoosePreVersion  = 'Version wählen um es umzukhren.';
 $lang->story->noStory               = 'Keine Storys. ';
-$lang->story->ignoreChangeStage     = 'Story %s is a draft. Please review it..';
+$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 

@@ -1306,7 +1306,7 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->status == 'draft')
+            if($oldStory->status == 'draft' or $oldStory->status == 'closed')
             {
                 $ignoreStories .= "#{$storyID} ";
                 continue;
@@ -1320,7 +1320,6 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
-            $this->setStage($storyID);
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
@@ -2350,7 +2349,7 @@ class storyModel extends model
         $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
 
         /* Format these stories. */
-        $storyPairs = array('' => '');
+        $storyPairs = array(0 => '');
         $i = 0;
         foreach($stories as $story)
         {

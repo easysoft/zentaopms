@@ -163,7 +163,11 @@
               }
               $priList = $lang->task->priList;
               if(end($priList)) unset($priList[0]);
-              if(!isset($priList[$task->pri])) $task->pri = reset($priList);
+              if(!isset($priList[$task->pri]))
+              {
+                  reset($priList);
+                  $task->pri = key($priList);
+              }
               ?>
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control'");?>

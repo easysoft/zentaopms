@@ -50,7 +50,6 @@ if(isset($entry)) $pathInfo .= '&type=file';
     </tbody>
   </table>
   <div class='table-footer'>
-    <?php echo html::hidden('isPost', true);?>
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
     <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&entry=&revision=HEAD&type=$logType", "entry=" . $this->repo->encodePath($path)), $lang->repo->allLog, '', "class='allLogs'");?>
     <div class='pull-right'>

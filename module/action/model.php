@@ -1079,6 +1079,7 @@ class actionModel extends model
      * 
      * @param  array  $actions 
      * @param  string $direction 
+     * @param  string $type
      * @access public
      * @return array
      */

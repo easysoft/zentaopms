@@ -58,7 +58,7 @@
             <th class='w-100px<?php echo zget($visibleFields, 'status',       ' hidden') . zget($requiredFields, 'status',       '', ' required');?>'><?php echo $lang->task->status;?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          '', ' required');?>'><?php echo $lang->task->pri;?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'estimate',     ' hidden') . zget($requiredFields, 'estimate',     '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'record',       ' hidden') . zget($requiredFields, 'record',       '', ' required');?>'><?php echo $lang->task->consumed;?></th>
+            <th class='w-70px<?php  echo zget($visibleFields, 'record',       ' hidden') . zget($requiredFields, 'record',       '', ' required');?>'><?php echo $lang->task->consumedThisTime;?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'left',         ' hidden') . zget($requiredFields, 'left',         '', ' required');?>'><?php echo $lang->task->leftAB?></th>
             <th class='w-90px<?php  echo zget($visibleFields, 'estStarted',   ' hidden') . zget($requiredFields, 'estStarted',   '', ' required');?>'><?php echo $lang->task->estStarted?></th>
             <th class='w-90px<?php  echo zget($visibleFields, 'deadline',     ' hidden') . zget($requiredFields, 'deadline',     '', ' required');?>'><?php echo $lang->task->deadline?></th>
@@ -89,6 +89,17 @@
           <tr>
             <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
             <?php $disableHour = isset($teams[$taskID]) ? "disabled='disabled'" : '';?>
+            <?php
+            if(isset($teams[$taskID]))
+            {
+                $taskMembers = array_intersect_key($members, $teams[$taskID]);
+                $taskMembers = array('' => '', 'ditto' => $this->lang->task->ditto) + $taskMembers;
+            }
+            else
+            {
+                $taskMembers = $members;
+            }
+            ?>
             <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
             <td style='overflow:visible' title='<?php echo $tasks[$taskID]->name?>'>
               <div class="input-control has-icon-right">
@@ -103,7 +114,7 @@
               </div>
             </td>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $members, $tasks[$taskID]->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $taskMembers, $tasks[$taskID]->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></td>
             <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'pri',        "class='hidden'")?>><?php echo html::select("pris[$taskID]",     $priList, $tasks[$taskID]->pri, "class='form-control'");?></td>
