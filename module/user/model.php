@@ -328,6 +328,8 @@ class userModel extends model
                 {
                     $field = trim($field);
                     if(empty($field)) continue;
+
+                    if(!isset($data[$i]->$field)) continue;
                     if(!empty($data[$i]->$field)) continue;
 
                     die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
@@ -535,6 +537,8 @@ class userModel extends model
             {
                 $field = trim($field);
                 if(empty($field)) continue;
+
+                if(!isset($users[$id][$field])) continue;
                 if(!empty($users[$id][$field])) continue;
 
                 die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
