@@ -1492,10 +1492,11 @@ class bug extends control
      * @param  string $productID
      * @param  string $orderBy
      * @param  string $browseType
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $browseType = '')
+    public function export($productID, $orderBy, $browseType = '', $projectID = 0)
     {
         if($_POST)
         {
@@ -1673,10 +1674,20 @@ class bug extends control
         }
 
         $fileName    = $this->lang->bug->common;
-        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
-        $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
+        if($projectID)
+        {
+            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
+            $fileName    = $projectName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
-        $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;
         $this->view->customExport    = true;
         $this->display();
