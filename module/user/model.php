@@ -56,12 +56,9 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function getList($type = '')
+    public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq($type)
-            ->orderBy('account')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
     }
 
     /**
