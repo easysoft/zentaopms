@@ -129,7 +129,7 @@
                     $teamAccounts = array_keys($task->team);
                     foreach($teamAccounts as $teamAccount)
                     {
-                        $taskMembers[] = $members[$teamAccount];
+                        $taskMembers[$teamAccount] = $members[$teamAccount];
                     }
                 }
                 else
