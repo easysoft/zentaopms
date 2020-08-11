@@ -338,7 +338,7 @@ class docModel extends model
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
         }
         elseif($browseType == 'byediteddate')
         {
@@ -365,7 +365,7 @@ class docModel extends model
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
         }
         elseif($browseType == "bymodule")
         {
@@ -422,7 +422,7 @@ class docModel extends model
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
         }
         elseif($browseType == 'fastsearch')
         {
@@ -440,7 +440,7 @@ class docModel extends model
                 ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
             foreach($docs as $doc) $doc->title = str_replace($this->session->searchDoc, "<span style='color:red'>{$this->session->searchDoc}</span>", $doc->title);
         }
 

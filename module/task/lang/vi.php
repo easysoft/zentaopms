@@ -298,3 +298,6 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Lý do đóng';
 
 $lang->task->report->finishedTasksPerDay->type = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Ngày';
+
+$lang->taskestimate = new stdclass();
+$lang->taskestimate->consumed = 'Dự tính';
