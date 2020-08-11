@@ -2917,7 +2917,7 @@ class storyModel extends model
                 echo $story->estimate;
                 break;
             case 'stage':
-                if(isset($storyStages[$story->id]))
+                if(isset($storyStages[$story->id]) and !empty($branches))
                 {
                     echo "<div class='dropdown dropdown-hover'>";
                     echo $this->lang->story->stageList[$story->stage];
