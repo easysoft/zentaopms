@@ -1119,14 +1119,14 @@ $lang->menu->cmmi->risk           = '风险|risk|browse|';
 $lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,measrecord,');
 $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
-$lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list');
+$lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->cmmi = new stdclass();
 $lang->cmmi->subMenu = new stdclass();
 $lang->cmmi->subMenu->list = new stdclass();
 $lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
 $lang->cmmi->subMenu->list->pssp           = '过程|pssp|browse|program=%s';
-$lang->cmmi->subMenu->list->stakeholder    = array('link' => '干系人|stakeholder|browse|program=%s');
+$lang->cmmi->subMenu->list->stakeholder    = array('link' => '干系人|stakeholder|browse|program=%s', 'subModule' => 'stakeholder');
 $lang->cmmi->subMenu->list->program        = '项目|||';
 
 $lang->cmmiproduct    = new stdclass();
@@ -1199,7 +1199,7 @@ $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 $lang->stakeholder->menu->plan        = array('link' => '介入计划|stakeholder|plan|program={PROGRAM}');
 $lang->stakeholder->menu->expectation = array('link' => '期望管理|stakeholder|expectation|program={PROGRAM}');
 $lang->stakeholder->menu->issue       = array('link' => '问题管理|stakeholder|issue|program={PROGRAM}');
-$lang->stakeholder->menu->list        = array('link' => '干系人列表|stakeholder|browse|program={PROGRAM}');
+$lang->stakeholder->menu->list        = array('link' => '干系人列表|stakeholder|browse|program={PROGRAM}', 'alias' => 'create,edit');
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
