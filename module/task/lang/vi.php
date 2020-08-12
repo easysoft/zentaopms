@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "Nếu bạn thay đổi {$lang->projectCom
 $lang->task->confirmFinish         = '"Còn lại" bằng 0. Bạn có muốn thay đổi tình trạng thành "Kết thúc"?';
 $lang->task->confirmRecord         = '"Còn lại" bằng 0. Bạn có muốn thiết lập nhiệm vụ thành "Kết thúc"?';
 $lang->task->confirmTransfer       = '"Còn lại" bằng 0，Bạn có muốn chuyển thành nhiệm vụ?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Không có câu chuyện liên kết. Bạn có thể %s cho dự án này, sau đó %s.";
 $lang->task->noticeSaveRecord      = 'Số giờ làm của bạn chưa được lưu. Vui lòng lưu nó trước.';
 $lang->task->commentActions        = '%s. %s, nhận xét bởi <strong>%s</strong>.';

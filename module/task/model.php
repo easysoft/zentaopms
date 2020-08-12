@@ -1232,6 +1232,11 @@ class taskModel extends model
 
         if($this->post->left == 0)
         {
+            if($task->consumed == 0)
+            {
+                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
+                return false;
+            }
             $task->status       = 'done';
             $task->finishedBy   = $this->app->user->account;
             $task->finishedDate = helper::now();

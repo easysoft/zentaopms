@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
+<?php js::set('noticeTaskStart', $lang->task->noticeTaskStart);?>
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
