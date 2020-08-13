@@ -146,6 +146,7 @@ js::set('docID', $doc->id);
     </div>
   </div>
   <div class="side-col col-4 hidden">
+    <?php if(!empty($doc->digest)):?>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
@@ -154,6 +155,7 @@ js::set('docID', $doc->id);
         </div>
       </details>
     </div>
+    <?php endif;?>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->keywords;?></summary>
