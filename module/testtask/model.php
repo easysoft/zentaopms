@@ -1437,6 +1437,13 @@ class testtaskModel extends model
      */
     public function printCell($col, $run, $users, $task, $branches, $mode = 'datatable')
     {
+        $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+        $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
+        $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+        $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+
+        $canBatchAction = ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun);
+
         $canView     = common::hasPriv('testcase', 'view');
         $caseLink    = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account     = $this->app->user->account;
@@ -1457,7 +1464,14 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
+                }
+                else
+                {
+                    printf('%03d', $run->case);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $run->pri . "' title='" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";

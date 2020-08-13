@@ -186,6 +186,17 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
+
+      $canBatchEdit         = common::hasPriv('story', 'batchEdit');
+      $canBatchClose        = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
+      $canBatchReview       = common::hasPriv('story', 'batchReview');
+      $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
+      $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
+      $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
+      $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
+      $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -196,7 +207,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
           {
               if($value->show)
               {
-                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
                   $columns ++;
               }
           }
@@ -224,11 +235,12 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       </table>
       <?php if(!$useDatatable) echo '</div>';?>
       <div class="table-footer">
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch");
             ?>
@@ -236,13 +248,12 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
               $class         = $canBatchClose ? '' : "class='disabled'";
               $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
-              if(common::hasPriv('story', 'batchReview'))
+              if($canBatchReview)
               {
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript:;', $lang->story->review, '', "id='reviewItem'");
@@ -283,7 +294,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-              if(common::hasPriv('story', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
+              if($canBatchChangeBranch and $this->session->currentProductType != 'normal')
               {
                   $withSearch = count($branches) > 8;
                   echo "<li class='dropdown-submenu'>";
@@ -300,7 +311,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
                   echo '</div></li>';
               }
 
-              if(common::hasPriv('story', 'batchChangeStage'))
+              if($canBatchChangeStage)
               {
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
@@ -323,7 +334,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
             </ul>
           </div>
 
-          <?php if(common::hasPriv('story', 'batchChangeModule')):?>
+          <?php if($canBatchChangeModule):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -350,7 +361,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('story', 'batchChangePlan')):?>
+          <?php if($canBatchChangePlan):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
             <?php
@@ -381,7 +392,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
           </div>
           <?php endif;?>
 
-          <?php if(common::hasPriv('story', 'batchAssignTo')):?>
+          <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php

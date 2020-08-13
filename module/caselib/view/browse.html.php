@@ -97,7 +97,7 @@ js::set('flow',          $config->global->flow);
       <?php $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');?>
       <?php $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview));?>
       <?php $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');?>
-      <?php $canBatchAction       = $canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule;?>
+      <?php $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);?>
       <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
       <div class="table-responsive">
         <table class='table has-sort-head' id='caseList'>
@@ -155,7 +155,9 @@ js::set('flow',          $config->global->flow);
         </table>
       </div>
       <div class='table-footer'>
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php $actionLink = $this->createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib");?>

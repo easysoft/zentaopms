@@ -2817,6 +2817,17 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
+        $canBatchEdit         = common::hasPriv('story', 'batchEdit');
+        $canBatchClose        = common::hasPriv('story', 'batchClose');
+        $canBatchReview       = common::hasPriv('story', 'batchReview');
+        $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
+        $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
+        $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
+        $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+
+        $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
+
         $canView   = common::hasPriv('story', 'view');
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
@@ -2877,7 +2888,14 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                }
+                else
+                {
+                    printf('%03d', $story->id);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
