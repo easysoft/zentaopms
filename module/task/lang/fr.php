@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "Si vous changez {$lang->projectCommon}, Mo
 $lang->task->confirmFinish         = '"Heures Restantes" à 0. Voulez-vous passer le statut à "Terminée" ?';
 $lang->task->confirmRecord         = '"Heures Restantes" à 0. Voulez-vous passer le statut de la tâche à "Finie" ?';
 $lang->task->confirmTransfer       = '"Heures Restantes" à 0. Voulez-vous transférer la tâche ?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
 $lang->task->noticeSaveRecord      = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
 $lang->task->commentActions        = '%s. %s, commenté par <strong>%s</strong>.';

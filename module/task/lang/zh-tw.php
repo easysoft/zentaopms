@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}會導致相�
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
 $lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完成"，您確定嗎？';
 $lang->task->confirmTransfer       = '"當前剩餘"為0，任務將被轉交，您確定嗎？';
+$lang->task->noticeTaskStart       = '"總計消耗"和"預計剩餘"不能同時為0';
 $lang->task->noticeLinkStory       = "沒有可關聯的相關{$lang->storyCommon}，您可以為當前項目%s，然後%s";
 $lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先將其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
