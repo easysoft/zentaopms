@@ -70,12 +70,15 @@
             <?php endif;?>
             <form class='main-table table-story' method='post' id='linkedStoriesForm' data-ride="table">
               <table class='table has-sort-head' id='storyList'>
-                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
+                <?php
+                $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');
+                $canBatchClose  = common::hasPriv('story', 'batchClose');
+                ?>
                 <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr class='text-center'>
                     <th class='c-id text-left'>
-                      <?php if($canBatchUnlink):?>
+                      <?php if($canBatchUnlink or $canBatchClose):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
                       </div>
@@ -96,7 +99,7 @@
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
-                      <?php if($canBatchUnlink):?>
+                      <?php if($canBatchUnlink or $canBatchClose):?>
                       <div class="checkbox-primary">
                         <input type='checkbox' name='storyIdList[]'  value='<?php echo $story->id;?>'/>
                         <label></label>
@@ -131,7 +134,7 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countStories and $canBatchUnlink):?>
+                <?php if($countStories and ($canBatchUnlink or $canBatchClose)):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php

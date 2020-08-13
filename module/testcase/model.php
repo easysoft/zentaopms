@@ -1392,6 +1392,15 @@ class testcaseModel extends model
      */
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
+        $canBatchRun                = common::hasPriv('testtask', 'batchRun');
+        $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
+        $canBatchDelete             = common::hasPriv('testcase', 'batchDelete');
+        $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
+        $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
+        $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
+
+        $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
+
         $canView    = common::hasPriv('testcase', 'view');
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account    = $this->app->user->account;
@@ -1420,7 +1429,14 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                }
+                else
+                {
+                    printf('%03d', $case->id);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";

@@ -129,7 +129,7 @@
                     $teamAccounts = array_keys($task->team);
                     foreach($teamAccounts as $teamAccount)
                     {
-                        $taskMembers[] = $members[$teamAccount];
+                        $taskMembers[$teamAccount] = $members[$teamAccount];
                     }
                 }
                 else
@@ -182,7 +182,7 @@
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
                 <td>
-                  <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
+                  <?php $disabled = (!empty($task->team) or $task->parent < 0) ? "disabled='disabled'" : '';?>
                   <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
                 </td>
               </tr>
@@ -193,7 +193,7 @@
               <tr>
                 <th><?php echo $lang->task->left;?></th>
                 <td>
-                  <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
+                  <?php $disabled = (!empty($task->team)  or $task->parent < 0) ? "disabled='disabled'" : '';?>
                   <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
                 </td>
               </tr>
