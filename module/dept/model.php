@@ -202,7 +202,7 @@ class deptModel extends model
      */
     public function createMemberLink($dept)
     {
-        $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        $linkHtml = html::a(helper::createLink('company', 'browse', "browseType=inside&dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
         return $linkHtml;
     }
 
@@ -353,10 +353,12 @@ class deptModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($deptID, $pager = null, $orderBy = 'id')
+    public function getUsers($browseType = 'inside', $deptID, $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'inside')->andWhere('type')->eq('')->fi()
+            ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
             ->beginIF($deptID)->andWhere('dept')->in($deptID)->fi()
             ->orderBy($orderBy)
             ->page($pager)

@@ -11,6 +11,8 @@
  */
 $lang->user->common           = '用户';
 $lang->user->id               = '用户编号';
+$lang->user->inside           = '内部人员';
+$lang->user->outside          = '外部人员';
 $lang->user->company          = '所属公司';
 $lang->user->dept             = '所属部门';
 $lang->user->account          = '用户名';

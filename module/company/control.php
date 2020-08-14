@@ -46,7 +46,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function browse($param = 0, $type = 'bydept', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'inside', $param = 0, $type = 'bydept', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
         $this->lang->set('menugroup.company', 'company');
@@ -66,11 +66,11 @@ class company extends control
 
         /* Build the search form. */
         $queryID   = $type == 'bydept' ? 0 : (int)$param;
-        $actionURL = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
+        $actionURL = $this->createLink('company', 'browse', "browseType=all&param=myQueryID&type=bysearch");
         $this->company->buildSearchForm($queryID, $actionURL);
 
         /* Get users. */
-        $users = $this->company->getUsers($type, $queryID, $deptID, $sort, $pager);
+        $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
         /* Remove passwd. */
         foreach($users as $user) unset($user->password);
 
@@ -87,6 +87,7 @@ class company extends control
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->type        = $type;
+        $this->view->browseType  = $browseType;
 
         $this->display();
     }
