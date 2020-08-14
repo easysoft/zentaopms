@@ -967,6 +967,7 @@ $lang->resource->user->project        = 'project';
 $lang->resource->user->dynamic        = 'dynamic';
 $lang->resource->user->profile        = 'profile';
 $lang->resource->user->batchEdit      = 'batchEdit';
+$lang->resource->user->unbind         = 'unbind';
 $lang->resource->user->setPublicTemplate = 'setPublicTemplate';
 
 $lang->user->methodOrder[5]  = 'create';
@@ -982,6 +983,7 @@ $lang->user->methodOrder[45] = 'project';
 $lang->user->methodOrder[50] = 'dynamic';
 $lang->user->methodOrder[55] = 'profile';
 $lang->user->methodOrder[60] = 'batchEdit';
+$lang->user->methodOrder[75] = 'unbind';
 $lang->user->methodOrder[80] = 'setPublicTemplate';
 
 /* Tree. */
@@ -1036,11 +1038,13 @@ $lang->resource->admin->index     = 'index';
 $lang->resource->admin->checkDB   = 'checkDB';
 $lang->resource->admin->safe      = 'safeIndex';
 $lang->resource->admin->checkWeak = 'checkWeak';
+$lang->resource->admin->sso       = 'ssoAction';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
 $lang->admin->methodOrder[10] = 'safeIndex';
 $lang->admin->methodOrder[15] = 'checkWeak';
+$lang->admin->methodOrder[20] = 'sso';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();
