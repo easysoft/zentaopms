@@ -266,7 +266,7 @@ class testcaseModel extends model
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
             $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
-            $cases->story[$i]  = (int)$story;
+            $cases->story[$i]  = !empty($storyID) ? $storyID : (int)$story;
             $cases->type[$i]   = $type;
             $cases->pri[$i]    = $pri;
         }
