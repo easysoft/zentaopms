@@ -347,6 +347,43 @@ class custom extends control
     }
 
     /**
+     * Company estimate.
+     * 
+     * @access public
+     * @return void
+     */
+    public function estimate()
+    {   
+        $this->lang->custom->menu = new stdclass();
+        $this->lang->navGroup->custom = 'system';
+        if(strtolower($this->server->request_method) == "post")
+        {   
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $data->hourPoint);
+            $this->loadModel('setting')->setItem('system.custom.cost', $data->cost);
+            $this->loadModel('setting')->setItem('system.custom.efficiency', $data->efficiency);
+            $this->loadModel('setting')->setItem('system.custom.days', $data->days);
+            $this->loadModel('setting')->setItem('system.project.defaultWorkhours', $data->defaultWorkhours);
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'estimate')));
+        }   
+
+        $this->app->loadConfig('project');
+
+        $this->view->unit       = zget($this->config->custom, 'hourPoint', '1'); 
+        $this->view->cost       = zget($this->config->custom, 'cost', '');
+        $this->view->efficiency = zget($this->config->custom, 'efficiency', '');
+        $this->view->hours      = zget($this->config->project, 'defaultWorkhours', '');
+        $this->view->days       = zget($this->config->custom, 'days', '');
+
+        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->estimateConfig;
+        $this->view->position[]  = $this->lang->custom->common;
+        $this->view->position[]  = $this->lang->custom->estimateConfig;
+        $this->display();
+    } 
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 

@@ -1,24 +1,66 @@
 <?php
-$lang->custom->common     = '自定义';
-$lang->custom->index      = '首页';
-$lang->custom->set        = '自定义配置';
-$lang->custom->restore    = '恢复默认';
-$lang->custom->key        = '键';
-$lang->custom->value      = '值';
-$lang->custom->flow       = '流程';
-$lang->custom->working    = '工作方式';
-$lang->custom->select     = '请选择流程：';
-$lang->custom->branch     = '多分支';
-$lang->custom->owner      = '所有者';
-$lang->custom->module     = '模块';
-$lang->custom->section    = '附加部分';
-$lang->custom->lang       = '所属语言';
-$lang->custom->setPublic  = '设为公共';
-$lang->custom->required   = '必填项';
-$lang->custom->score      = '积分';
-$lang->custom->timezone   = '时区';
-$lang->custom->scoreReset = '重置积分';
-$lang->custom->scoreTitle = '积分功能';
+$lang->custom->common             = '自定义';
+$lang->custom->index              = '首页';
+$lang->custom->set                = '自定义配置';
+$lang->custom->restore            = '恢复默认';
+$lang->custom->key                = '键';
+$lang->custom->value              = '值';
+$lang->custom->flow               = '流程';
+$lang->custom->working            = '工作方式';
+$lang->custom->select             = '请选择流程：';
+$lang->custom->branch             = '多分支';
+$lang->custom->owner              = '所有者';
+$lang->custom->module             = '模块';
+$lang->custom->section            = '附加部分';
+$lang->custom->lang               = '所属语言';
+$lang->custom->setPublic          = '设为公共';
+$lang->custom->required           = '必填项';
+$lang->custom->score              = '积分';
+$lang->custom->timezone           = '时区';
+$lang->custom->scoreReset         = '重置积分';
+$lang->custom->scoreTitle         = '积分功能';
+$lang->custom->setscrum           = '区间提示';
+$lang->custom->setcmmi            = '切换视图';
+$lang->custom->estimate           = '估算配置';
+$lang->custom->estimateConfig     = '估算配置';
+$lang->custom->estimateUnit       = '估算单位';
+$lang->custom->estimateEfficiency = '生产率';
+$lang->custom->estimateCost       = '单位人工成本';
+$lang->custom->estimateHours      = '每日工时';
+$lang->custom->estimateDays       = '每周工作天数';
+$lang->custom->region             = '区间';
+$lang->custom->tips               = '提示语';
+$lang->custom->setTips            = '设置提示语';
+$lang->custom->isRange            = '是否目标控制范围';
+$lang->custom->plan               = '排期';
+$lang->custom->planStatus         = '是否启用排期';
+
+$lang->custom->object['program'] = '项目';
+$lang->custom->program->fields['unitList'] = '预算单位';
+
+$lang->custom->unitList['efficiency'] = '工时/';
+$lang->custom->unitList['manhour']    = '人时/';
+$lang->custom->unitList['cost']       = '元/小时';
+$lang->custom->unitList['hours']      = '小时';
+$lang->custom->unitList['days']       = '天';
+$lang->custom->unitList['loc']        = 'KLOC';
+
+$lang->custom->tipProgressList['SPI'] = '项目进度绩效(SPI)';
+$lang->custom->tipProgressList['SV']  = '进度偏差率(SV%)';
+
+$lang->custom->tipCostList['CPI'] = '项目成本绩效(CPI)';
+$lang->custom->tipCostList['CV']  = '成本偏差率(CV%)';
+
+$lang->custom->planStatusList[0]  = '否';
+$lang->custom->planStatusList[1]  = '是';
+
+$lang->custom->tipRangeList[0]  = '否';
+$lang->custom->tipRangeList[1]  = '是';
+
+$lang->custom->regionMustNumber = '区间必须是数字';
+$lang->custom->tipNotEmpty      = '提示语不能为空';
+
+$lang->custom->numberError = '区间必须大于零';
 
 $lang->custom->object['story']    = $lang->storyCommon;
 $lang->custom->object['task']     = '任务';
@@ -78,7 +120,7 @@ $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'estimate');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -160,5 +202,7 @@ $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['0'] = '工时';
 $lang->custom->conceptOptions->hourPoint['1'] = '故事点';
+$lang->custom->conceptOptions->hourPoint['2'] = '功能点';
+$lang->custom->conceptOptions->hourPoint['3'] = '代码行';
+

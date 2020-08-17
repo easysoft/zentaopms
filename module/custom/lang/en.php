@@ -1,24 +1,66 @@
 <?php
-$lang->custom->common     = 'Custom';
-$lang->custom->index      = 'Home';
-$lang->custom->set        = 'Customize';
-$lang->custom->restore    = 'Reset';
-$lang->custom->key        = 'Key';
-$lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Concept';
-$lang->custom->working    = 'Mode';
-$lang->custom->select     = 'Select Concept';
-$lang->custom->branch     = 'Multi-Branch';
-$lang->custom->owner      = 'Owner';
-$lang->custom->module     = 'Module';
-$lang->custom->section    = 'Section';
-$lang->custom->lang       = 'Language';
-$lang->custom->setPublic  = 'Set Public';
-$lang->custom->required   = 'Required Field';
-$lang->custom->score      = 'Point';
-$lang->custom->timezone   = 'Timezone';
-$lang->custom->scoreReset = 'Reset Points';
-$lang->custom->scoreTitle = 'Point Feature';
+$lang->custom->common             = 'Custom';
+$lang->custom->index              = 'Home';
+$lang->custom->set                = 'Customize';
+$lang->custom->restore            = 'Reset';
+$lang->custom->key                = 'Key';
+$lang->custom->value              = 'Value';
+$lang->custom->flow               = 'Concept';
+$lang->custom->working            = 'Mode';
+$lang->custom->select             = 'Select Concept';
+$lang->custom->branch             = 'Multi-Branch';
+$lang->custom->owner              = 'Owner';
+$lang->custom->module             = 'Module';
+$lang->custom->section            = 'Section';
+$lang->custom->lang               = 'Language';
+$lang->custom->setPublic          = 'Set Public';
+$lang->custom->required           = 'Required Field';
+$lang->custom->score              = 'Point';
+$lang->custom->timezone           = 'Timezone';
+$lang->custom->scoreReset         = 'Reset Points';
+$lang->custom->scoreTitle         = 'Point Feature';
+$lang->custom->setscrum           = 'Interval Hint';
+$lang->custom->setcmmi            = 'Switch Views';
+$lang->custom->estimate           = 'Estimated configuration';
+$lang->custom->estimateConfig     = 'Estimated configuration';
+$lang->custom->estimateUnit       = 'Estimating Unit';
+$lang->custom->estimateEfficiency = 'Productivity';
+$lang->custom->estimateCost       = 'Unit Labour Cost';
+$lang->custom->estimateHours      = 'Daily Working Hours';
+$lang->custom->estimateDays       = 'Working Days Per Week';
+$lang->custom->region             = 'Interval';
+$lang->custom->tips               = 'Tips';
+$lang->custom->setTips            = 'Set Tips';
+$lang->custom->isRange            = 'Is Target Control';
+$lang->custom->plan               = 'Plan';
+$lang->custom->planStatus         = 'Enable Plan';
+
+$lang->custom->object['program'] = 'Program';
+$lang->custom->program->fields['unitList'] = 'Unit List';
+
+$lang->custom->unitList['efficiency'] = 'Working Hours/';
+$lang->custom->unitList['manhour']    = 'Man-hour/';
+$lang->custom->unitList['cost']       = 'Yuan/Hour';
+$lang->custom->unitList['hours']      = 'Hours';
+$lang->custom->unitList['days']       = 'Days';
+$lang->custom->unitList['loc']        = 'KLOC';
+
+$lang->custom->tipProgressList['SPI'] = 'Schedule Performance Index(SPI)';
+$lang->custom->tipProgressList['SV']  = 'Schedule Variance(SV%)';
+
+$lang->custom->tipCostList['CPI'] = 'Cost Performed Index(CPI)';
+$lang->custom->tipCostList['CV']  = 'Cost Variance(CV%)';
+
+$lang->custom->planStatusList[0]  = 'No';
+$lang->custom->planStatusList[1]  = 'Yes';
+
+$lang->custom->tipRangeList[0]  = 'No';
+$lang->custom->tipRangeList[1]  = 'Yes';
+
+$lang->custom->regionMustNumber = 'The interval must be a number!';
+$lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
+
+$lang->custom->numberError = 'The interval must be greater than zero!';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -78,7 +120,7 @@ $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Deleted User';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'estimate');
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
