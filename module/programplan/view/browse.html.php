@@ -1,0 +1,26 @@
+<?php include '../../common/view/header.html.php';?>
+<style>#dropMenu{z-index:99999;}</style>
+<?php js::set('browseType', $type);?>
+<div id='mainContent' class='main-table'>
+  <?php if(empty($plans)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->programplan->noData;?></span>
+      <?php if(common::hasPriv('programplan', 'create')):?>
+      <?php echo html::a($this->createLink('programplan', 'create', "program=$programID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
+    <?php if($type == 'gantt') include './gantt.html.php';?>
+    <?php if($type == 'lists') include './list.html.php';?>
+  <?php endif;?>
+</div>
+<script>
+$('#subNavbar').find('ul li').each(function()
+{
+    var that = $(this);
+    if(that.attr('data-id') != browseType) that.removeClass('active');
+});
+</script>
+<?php include '../../common/view/footer.html.php';?>
