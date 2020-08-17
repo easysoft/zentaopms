@@ -39,6 +39,32 @@ class stage extends control
         $this->display();
     }
 
+    public function batchCreate()
+    {
+        if($_POST)
+        {
+            $this->stage->batchCreate(); 
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $response['locate']  = inlink('browse');
+            $this->send($response);
+        }
+
+        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->batchCreate;
+        $this->view->position[]  = $this->lang->stage->common;
+        $this->view->position[]  = $this->lang->stage->batchCreate;
+
+        $this->display();
+    }
+
     public function edit($stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);

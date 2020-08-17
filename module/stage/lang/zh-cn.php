@@ -7,7 +7,6 @@ $lang->stage->edit         = '编辑';
 $lang->stage->delete       = '删除';
 $lang->stage->view         = '阶段详情';
 
-
 /* Fields. */
 $lang->stage->common       = '阶段';
 $lang->stage->id           = '编号';
