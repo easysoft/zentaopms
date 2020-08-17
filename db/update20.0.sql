@@ -34,3 +34,5 @@ INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'pgma
 ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
 
 ALTER TABLE `zt_userview` ADD `programs` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
+
+ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL AFTER `account`;
