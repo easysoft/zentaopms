@@ -57,3 +57,40 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('测试','15','qa','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'), 
 ('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
+
+-- DROP TABLE IF EXISTS `zt_flow_design`;
+CREATE TABLE `zt_design` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` varchar(255) NOT NULL,
+  `product` varchar(255) NOT NULL,
+  `commit` varchar(30) NOT NULL,
+  `project` mediumint(9) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `parent` mediumint(8) unsigned NOT NULL,
+  `status` varchar(30) NOT NULL,
+  `subStatus` varchar(30) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `commitBy` varchar(30) NOT NULL,
+  `commitDate` datetime NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedBy` varchar(30) NOT NULL,
+  `assignedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `story` char(30) NOT NULL,
+  `desc` text NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `type` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_designspec` (
+  `design` mediumint(8) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desc` text NOT NULL,
+  `files` varchar(255) NOT NULL,
+  UNIQUE KEY `design` (`design`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
