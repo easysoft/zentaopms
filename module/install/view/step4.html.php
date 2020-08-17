@@ -49,7 +49,7 @@
             <th class='w-200px'><?php echo $lang->install->company;?></th>
             <td class='w-300px'><?php echo html::input('company', '', "class='form-control'");?></td>
           </tr>
-          <tr>
+          <tr class='hidden'>
             <th><?php echo $lang->install->working;?></th>
             <td><?php echo html::select('flow', $lang->install->workingList, 'full', "class='form-control chosen'");?></td>
           </tr>

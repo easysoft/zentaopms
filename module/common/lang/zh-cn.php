@@ -1106,7 +1106,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 $lang->menu->cmmi = new stdclass();
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->cmmi->review         = array('link' => '评审|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
 $lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
 $lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
 $lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
@@ -1116,17 +1115,12 @@ $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={
 $lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
-$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,measrecord,');
-$lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
-$lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->cmmi = new stdclass();
 $lang->cmmi->subMenu = new stdclass();
 $lang->cmmi->subMenu->list = new stdclass();
 $lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->cmmi->subMenu->list->pssp           = '过程|pssp|browse|program=%s';
-$lang->cmmi->subMenu->list->stakeholder    = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 $lang->cmmi->subMenu->list->program        = '项目|||';
 
 $lang->cmmiproduct    = new stdclass();
@@ -1172,12 +1166,6 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->review->menu->review = array('link' => '基线评审列表|review|browse|program={PROGRAM}', 'subModule' => 'review');
-$lang->review->menu->issue  = array('link' => '问题列表|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');
-
-$lang->reviewissue = new stdclass();
-$lang->reviewissue->menu = $lang->review->menu;
-
 $lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
 $lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
@@ -1186,20 +1174,9 @@ $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PR
 $lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-$lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'subModule' => 'auditplan');
-$lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
-
 $lang->story->menu         = $lang->cmmiproduct->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
-
-$lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit,view');
-$lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
-
-$lang->stakeholder->menu->plan        = array('link' => '介入计划|stakeholder|plan|');
-$lang->stakeholder->menu->expectation = array('link' => '期望管理|stakeholder|expectation|', 'alias' => 'createexpect');
-$lang->stakeholder->menu->issue       = array('link' => '问题管理|stakeholder|issue|');
-$lang->stakeholder->menu->list        = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view');
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
