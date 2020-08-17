@@ -211,7 +211,7 @@ $lang->task->error->work             = '"Bemerkung" muss kleiner als %d Zeichen 
 $lang->task->error->skipClose        = 'Aufgabe: %s ist nicht “Erledigt” oder “Abgebrochen”. Möchten Sie die Aufgabe jetzt schließen?';
 $lang->task->error->consumed         = 'Aufgabe: %s Hour must be more than 0. Ignore changes to this Task.';
 $lang->task->error->assignedTo       = 'Mehere Tasks können nicht zugewisen werden, da die Benutzer nicht teil des Teams sind.';
-$lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
+$lang->task->error->consumedEmpty    = '"Current Cost" should not be 0.';
 $lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
 $lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 

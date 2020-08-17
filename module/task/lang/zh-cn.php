@@ -211,7 +211,7 @@ $lang->task->error->work             = '"备注"必须小于%d个字符';
 $lang->task->error->skipClose        = '任务：%s 不是“已完成”或“已取消”状态，确定要关闭吗？';
 $lang->task->error->consumed         = '任务：%s工时不能小于0，忽略该任务工时的改动';
 $lang->task->error->assignedTo       = '当前状态的多人任务不能指派给任务团队外的成员。';
-$lang->task->error->consumedEmpty    = '"本次消耗"不能为空';
+$lang->task->error->consumedEmpty    = '"本次消耗"不能为0';
 $lang->task->error->deadlineSmall    = '"截止日期"必须大于"预计开始"';
 $lang->task->error->alreadyStarted   = '此任务已被启动，不能重复启动！';
 
