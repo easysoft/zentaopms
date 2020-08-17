@@ -14,6 +14,21 @@ class stageModel extends model
         return false;
     }
 
+    public function update($stageID)
+    {
+        $oldStage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq((int)$stageID)->fetch();
+
+        $stage = fixer::input('post')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::today())
+            ->get();
+
+        $this->dao->update(TABLE_STAGE)->data($stage)->autoCheck()->where('id')->eq((int)$stageID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldStage, $stage);
+        return false;
+    }
+
     public function getStages()
     {
         return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->fetchAll('id');
