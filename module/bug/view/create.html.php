@@ -20,7 +20,6 @@ js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 js::set('flow', $config->global->flow);
-js::set('requestType', $config->requestType);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
