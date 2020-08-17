@@ -193,7 +193,8 @@ define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',   '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',  '`' . $config->db->prefix . 'repobranch`');
-if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_LANG'))  define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_STAGE')) define('TABLE_STAGE', '`' . $config->db->prefix . 'stage`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;

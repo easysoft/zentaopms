@@ -62,10 +62,6 @@ js::set('parentID', $plan->parent);
             <td><?php echo html::input('realFinished', $plan->realFinished, "class='form-control form-date'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->programplan->output;?> </th>
-            <td colspan='2'><?php echo html::select('output[]', $documentList, $plan->output, "class='form-control chosen ' multiple");?></td>
-          </tr>
-          <tr>
             <td colspan='4' class='form-actions text-center'><?php echo html::submitButton() . html::backButton()?></td>
           </tr>
         </tbody>

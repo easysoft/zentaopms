@@ -3,30 +3,7 @@ class programplanModel extends model
 {
     public function setMenu($programID, $productID)
     {
-        $baselines = "";
-        $subMenu   = array();
-        if(!empty($baselines))
-        {
-            foreach($baselines as $id => $version) 
-            {
-                $link = array();
-                $link['module'] = 'programplan';
-                $link['method'] = 'browse';
-                $link['vars']   = "program=$programID&productID=$productID&type=gantt&orderBy=id_desc&baselineID=$id";
-
-                $menu            = new stdclass();
-                $menu->name      = $id;
-                $menu->link      = $link;
-                $menu->text      = $version;
-                $menu->subModule = '';
-                $menu->alias     = '';
-                $menu->hidden    = false;
-                $subMenu[$id] = $menu;
-            }
-
-            $this->lang->programplan->menu->gantt['subMenu'] = $subMenu;
-            $this->lang->programplan->menu->gantt['class']   = 'dropdown dropdown-hover';
-        }
+        return true;
     }
 
     public function getByID($planID)
@@ -92,22 +69,11 @@ class programplanModel extends model
 
     public function getPlans($programID = 0, $productID = 0, $orderBy = 'id_asc')
     {
-        $plans        = $this->getList($programID, $productID, 0, 'all', $orderBy);
-
-        $documentList = $this->getDocumentList();
+        $plans = $this->getList($programID, $productID, 0, 'all', $orderBy);
 
         $parents = array();
         foreach($plans as $planID => $plan)
         {
-            $document = '';
-            if(!empty($plan->output))
-            {
-                $output = explode(',', $plan->output);
-                foreach($output as $title) if(isset($documentList[$title])) $document .= $documentList[$title];
-            }
-
-            $plan->output = empty($plan->output) ? '' : $document;
-
             $plan->parent == 0 ? $parents[$planID] = $plan : $children[$plan->parent][] = $plan;
         }
 
@@ -717,13 +683,6 @@ class programplanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc')
             ->fetchPairs();
-    }
-
-    public function getDocumentList()
-    {
-        return $document = $this->dao->select('*')->from(TABLE_OUTPUT)
-            ->where('deleted')->eq(0)
-            ->fetchPairs('id', 'name');
     }
 
     public function isParent($planID)

@@ -9,8 +9,6 @@ class programplan extends control
 
     public function commonAction($programID, $productID = 0, $extra = '')
     {
-        //$this->loadModel('project')->saveState($programID, array());
-
         $products  = $this->loadModel('product')->getPairs($programID);
         $productID = $this->product->saveState($productID, $products);
         $this->product->setMenu($products, $productID, 0, 0, '', $extra);
@@ -89,7 +87,6 @@ class programplan extends control
         $this->view->stages       = $stages;
         $this->view->plans        = $plans;
         $this->view->planID       = $planID;
-        $this->view->documentList = $this->programplan->getDocumentList();
         $this->view->type         = 'lists';
 
         $this->display();
@@ -116,7 +113,6 @@ class programplan extends control
         $this->app->loadLang('stage');
         $this->view->title        = $this->lang->programplan->edit;
         $this->view->position[]   = $this->lang->programplan->edit;
-        $this->view->documentList = $this->programplan->getDocumentList();
         $this->view->parentStage  = $this->programplan->getParentStageList($planID, $plan->product);
         $this->view->plan         = $plan;
         $this->view->isParent     = $this->programplan->isParent($planID);
