@@ -1,9 +1,10 @@
 <?php
 class stage extends control
 {
-    public function browse()
+    public function browse($orderBy = "id_desc")
     {
-
+        $this->view->stages      = $this->stage->getStages($orderBy);
+        $this->view->orderBy     = $orderBy;
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
         $this->view->position[]  = $this->lang->stage->common;
         $this->view->position[]  = $this->lang->stage->browse;
@@ -56,7 +57,7 @@ class stage extends control
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['locate']  = inlink('view', "stageID=$stageID");
+            $response['locate']  = inlink('browse');
             $this->send($response);
         }
 
@@ -88,5 +89,21 @@ class stage extends control
         $this->view->position[]  = $this->lang->stage->common;
         $this->view->position[]  = $this->lang->stage->setType;
         $this->display();
+    }
+
+    public function delete($stageID, $confirm = 'no')
+    {
+        $stage = $this->stage->getById($stageID);
+
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->stage->confirmDelete, inlink('delete', "stageID=$stageID&confirm=yes")));
+        }
+        else
+        {
+            $this->stage->delete(TABLE_STAGE, $stageID);
+
+            die(js::reload('parent'));
+        }
     }
 }

@@ -29,9 +29,9 @@ class stageModel extends model
         return false;
     }
 
-    public function getStages()
+    public function getStages($orderBy = 'id_desc')
     {
-        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
     }
 
     public function getPairs()
@@ -45,5 +45,10 @@ class stageModel extends model
         }
 
         return $pairs;
+    }
+
+    public function getByID($stageID)
+    {
+        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('id')->eq((int)$stageID)->fetch();
     }
 }

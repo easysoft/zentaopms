@@ -10,6 +10,7 @@ $lang->stage->view         = '阶段详情';
 
 /* Fields. */
 $lang->stage->common       = '阶段';
+$lang->stage->id           = '编号';
 $lang->stage->name         = '阶段名称';
 $lang->stage->type         = '阶段分类';
 $lang->stage->percent      = '工作量比例';
@@ -22,3 +23,6 @@ $lang->stage->typeList['qa']      = '测试';
 $lang->stage->typeList['release'] = '发布';
 $lang->stage->typeList['review']  = '总结评审';
 $lang->stage->typeList['other']   = '其他';
+
+$lang->stage->noStage       = '暂时没有阶段';
+$lang->stage->confirmDelete = '您确定要执行删除操作吗？';
