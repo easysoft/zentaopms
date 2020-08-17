@@ -99,4 +99,4 @@ $('input[name="hourPoint"]').change(function()
     if($(this).val() == 3) $('#efficiency + span').text(manhour + loc);
 })
 </script>
-<?php include '../../../common/view/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
