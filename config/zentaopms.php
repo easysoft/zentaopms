@@ -197,6 +197,7 @@ if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db-
 if(!defined('TABLE_STAGE'))              define('TABLE_STAGE', '`' . $config->db->prefix . 'stage`');
 if(!defined('TABLE_DESIGN'))             define('TABLE_DESIGN', '`' . $config->db->prefix . 'design`');
 if(!defined('TABLE_DESIGNSPEC'))         define('TABLE_DESIGNSPEC', '`' . $config->db->prefix . 'designspec`');
+if(!defined('TABLE_ISSUE'))      define('TABLE_ISSUE', '`' . $config->db->prefix . 'issue`');
 if(!defined('TABLE_RISK'))               define('TABLE_RISK', '`' . $config->db->prefix . 'risk`');
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 if(!defined('TABLE_WORKESTIMATION'))     define('TABLE_WORKESTIMATION', '`' . $config->db->prefix . 'workestimation`');
