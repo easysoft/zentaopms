@@ -62,8 +62,42 @@ class projectModel extends model
      */
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
-        /* Check the privilege. */
-        $project = $this->getById($projectID);
+        if(!$projectID and $this->session->project) $projectID = $this->session->project;
+
+        /* Get project and program */
+        $project   = $this->getById($projectID);
+        $isProgram = false;
+        $program   = array();
+        if(!empty($project))
+        {
+            $isProgram = $project->template;
+            $program   = $isProgram ? $project : $this->getByID($project->program);
+        }
+        if(empty($program)) $program = $this->getByID($this->session->program);
+
+        $projects = $this->getPairs();
+
+        if(empty($projects)) 
+        {
+            if($program->template == 'cmmi')
+            {
+                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'project') die(js::locate(helper::createLink('programplan', 'create', "progarmID=$program->id")));
+            }
+            else
+            {
+                if($this->app->moduleName == 'project' && $this->app->methodName != 'create') die(js::locate(helper::createLink('project', 'create')));
+            }
+        }
+
+        if($isProgram)
+        {
+            $projectID = $this->session->project;
+            if(!$projectID or !in_array($projectID, array_keys($projects))) $projectID = key($projects);
+        }
+
+        $this->session->set('project', $projectID);
+
+        $products = $this->loadModel('product')->getPairs($program->id);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($project and $project->type == 'ops')
@@ -75,83 +109,70 @@ class projectModel extends model
             unset($this->lang->project->subMenu->qa->testtask);
         }
 
-        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($projectID)) $this->accessDenied();
+        /* Hide story and qa menu when project is story or design type. */
+        if($project and ($project->attribute == 'story' || $project->attribute == 'design'))
+        {
+            unset($this->lang->project->menu->story);
+            unset($this->lang->project->menu->qa);
+        }
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
         if($this->cookie->projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'closed'))
         {
-            setcookie('projectMode', 'all', 0, $this->config->webRoot, '', false, false);
+            setcookie('projectMode', 'all');
             $this->cookie->projectMode = 'all';
         }
 
-        $selectHtml = $this->select($projects, $projectID, $buildID, $moduleName, $methodName, $extra);
-
-        $label = $this->lang->project->index;
-        if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
-        if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
-
-        $projectIndex = '';
-        $isMobile     = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $projectIndex  = html::a(helper::createLink('project', 'index'), $this->lang->project->index) . $this->lang->colon;
-            $projectIndex .= $selectHtml;
-        }
-        else
-        {
-            $projectIndex  = '<div class="btn-group angle-btn' . ($methodName == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-            $projectIndex .= '<ul class="dropdown-menu">';
-            if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
-            if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
-
-            if(common::isTutorialMode())
-            {
-                $wizardParams = helper::safe64Encode('');
-                $link = helper::createLink('tutorial', 'wizard', "module=project&method=create&params=$wizardParams");
-                $projectIndex .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->project->create}", '', "class='create-project-btn'") . '</li>';
-            }
-            else
-            {
-                if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create, '') . '</li>';
-            }
-
-            $projectIndex .= '</ul></div></div>';
-            $projectIndex .= $selectHtml;
-        }
-
-        $this->lang->modulePageNav = $projectIndex;
-        if($moduleName != 'project') $this->lang->$moduleName->dividerMenu = $this->lang->project->dividerMenu;
-
+        if(!isset($this->lang->modulePageNav)) $this->lang->modulePageNav = $this->getModuleNav($projectID, $extra);
         foreach($this->lang->project->menu as $key => $menu)
         {
             common::setMenuVars($this->lang->project->menu, $key, $projectID);
 
-            /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
-            {
+            {    
                 $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
-                {
+                {    
                     foreach($subMenu as $menuKey => $menu)
-                    {
-                        $itemMenu = zget($projectSubMenu, $menuKey, '');
+                    {    
+                        $itemMenu = zget($projectSubMenu, $menuKey, ''); 
                         $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                         $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                         $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
                         if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                        {
+                        {    
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
-                        }
-                    }
+                        }    
+                    }    
                     $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
-                }
+                }    
             }
         }
+
+        return true;
+    }
+
+    /**
+     * Set module page nav.
+     * 
+     * @param  int       $activeID 
+     * @param  string    $extra 
+     * @access public
+     * @return string
+     */
+    public function getModuleNav($projectID, $extra = '')
+    {
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+
+        $selectHtml = $this->select(null, $projectID, null, $moduleName, $methodName, $extra);
+
+        return $selectHtml; //暂时先隐藏掉迭代主页、单个创建迭代和所有迭代列表页面，统一使用计划阶段来管理
     }
 
     /**
@@ -175,8 +196,28 @@ class projectModel extends model
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentProject = $this->getById($projectID);
 
+        if(isset($currentProject->type) and $currentProject->type == 'program') return;
+
+        if(isset($currentProject->program))
+            $program = $this->getByID($currentProject->program);
+
+        if(isset($program->category) and $program->category == 'multiple')
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
+            $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
+            if($currentProject->parent)
+            {
+                $parentInfo = $this->getById($currentProject->parent);
+                $currentProject->name = $parentInfo->name . '/' . $currentProject->name;
+            }
+            $currentProject->name = $productName . '/' . $currentProject->name;
+        }
+
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProject->name}'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+
+        $currentProjectName = '';
+        if(isset($currentProject->name)) $currentProjectName = $currentProject->name;
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";

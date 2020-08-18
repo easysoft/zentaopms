@@ -28,72 +28,99 @@ class productModel extends model
      * @return void
      */
     public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
-    {
-        /* Has access privilege?. */
-        if($products and !isset($products[$productID]) and !$this->checkPriv($productID)) $this->accessDenied();
+    {   
+        $product = $this->getByID($productID);
+        if($product)
+        {   
+            $project = $this->loadModel('project')->getByID($product->program);
 
+            if(isset($project->id)) $this->loadModel('project')->setMenu($products, $project->id);
+
+            $this->lang->modulePageNav = $this->getModuleNav($products, $project, $product, $extra, $branch, $module, $moduleType);
+        }
+
+        $pageActions = '';
+        if($this->app->moduleName == 'release')
+        {   
+            $pageActions = html::a(helper::createLink('release', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i> {$this->lang->release->create}", '', "class='btn btn-primary'");
+
+            foreach($this->lang->release->moduleMenus as $key => $menu)
+            {   
+                $replace = array();
+                $replace['productID'] = $productID;
+                $replace['branch']    = $branch;
+
+                common::setMenuVars($this->lang->release->moduleMenus, $key, $replace);
+            }
+            $this->lang->moduleMenus['release'] = $this->lang->release->moduleMenus;
+        }
+        if($this->app->moduleName == 'programplan' and isset($product->program))
+        {   
+            $pageActions .= html::a(helper::createLink('programplan', 'create', "program=$product->program&productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->programplan->create}", '', "class='btn btn-primary'");
+        }
+
+        $this->lang->modulePageActions = $pageActions;
+
+        foreach($this->lang->product->menu as $key => $menu)
+        {    
+            $replace = array();
+            $replace['productID'] = $productID;
+            $replace['branch']    = $branch;
+            common::setMenuVars($this->lang->product->menu, $key, $replace);
+        }
+    }
+
+    /**
+     * Get product module menu.
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @param  string $extra
+     *
+     * @access public
+     * @return string
+     */
+    public function getModuleNav($products, $project, $product, $extra, $branch, $module, $moduleType)
+    {   
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
-        {
-            if($currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
-            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
+        {   
+            if($currentMethod != 'track' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+            if($currentMethod == 'view') $currentMethod = 'browse';
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
-        $label = $this->lang->product->index;
-        if($this->config->global->flow != 'full') $label = $this->lang->product->all;
-        if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
-        if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
+        $selectHtml = $this->select($products, $product->id, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
         $pageNav  = '';
         $isMobile = $this->app->viewType == 'mhtml';
         if($isMobile)
-        {
+        {   
             $pageNav  = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
             $pageNav .= $selectHtml;
         }
         else
-        {
-            $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-            $pageNav .= '<ul class="dropdown-menu">';
-            if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
-            if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
-            if(common::isTutorialMode())
-            {
-                $wizardParams = helper::safe64Encode('');
-                $link = helper::createLink('tutorial', 'wizard', "module=product&method=create&params=$wizardParams");
-                $pageNav .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->product->create}", '', "class='create-product-btn'") . '</li>';
-            }
-            else
-            {
-                if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
-            }
-            $pageNav .= '</ul></div></div>';
-            $pageNav .= $selectHtml;
+        {   
+            if(isset($project->category) and $project->category == 'multiple') $pageNav = $selectHtml;
         }
 
         $pageActions = '';
         if($this->config->global->flow != 'full')
-        {
+        {   
             if($currentMethod == 'build' && common::hasPriv('build', 'create'))
-            {
+            {   
                 $this->app->loadLang('build');
                 $pageActions .= html::a(helper::createLink('build', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->build->create}", '', "class='btn btn-primary'");
             }
         }
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
-        foreach($this->lang->product->menu as $key => $menu)
-        {
-            $replace = $productID;
-            common::setMenuVars($this->lang->product->menu, $key, $replace);
-        }
+        return $pageNav;
     }
 
     /**
@@ -328,6 +355,20 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.order desc')
             ->fetchPairs();
+    }
+
+    /**
+     * Get product id by project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProductIDByProject($projectID)
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+
+        return empty($products) ? 0 : current($products);
     }
 
     /**

@@ -125,3 +125,68 @@ CREATE TABLE `zt_risk` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_projectspec`;
+CREATE TABLE `zt_projectspec` (
+  `project` mediumint(8) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `milestone` enum('0','1') NOT NULL DEFAULT '0',
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  UNIQUE KEY `project` (`project`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- DROP TABLE IF EXISTS `zt_budget`;
+CREATE TABLE `zt_budget` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) NOT NULL,
+  `stage` char(30) NOT NULL,
+  `subject` mediumint(8) NOT NULL,
+  `amount` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` date NOT NULL,
+  `lastEditedBy` char(30) NOT NULL,
+  `lastEditedDate` date NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_durationestimation`;
+CREATE TABLE `zt_durationestimation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
+  `stage` mediumint(9) NOT NULL,
+  `workload` varchar(255) NOT NULL,
+  `worktimeRate` varchar(255) NOT NULL,
+  `people` varchar(255) NOT NULL,
+  `startDate` date NOT NULL,
+  `endDate` date NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_workestimation`;
+CREATE TABLE `zt_workestimation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
+  `scale` mediumint(8) unsigned NOT NULL,
+  `productivity` smallint(3) unsigned NOT NULL,
+  `duration` mediumint(8) unsigned NOT NULL,
+  `unitLaborCost` mediumint(8) unsigned NOT NULL,
+  `totalLaborCost` mediumint(8) unsigned NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `dayHour` float(5,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

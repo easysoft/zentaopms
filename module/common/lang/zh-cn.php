@@ -1121,7 +1121,7 @@ $lang->cmmi = new stdclass();
 $lang->cmmi->subMenu = new stdclass();
 $lang->cmmi->subMenu->list = new stdclass();
 $lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->cmmi->subMenu->list->program        = '项目|||';
+$lang->cmmi->subMenu->list->program        = '项目|program|edit|';
 
 $lang->cmmiproduct    = new stdclass();
 $lang->workestimation = new stdclass();
