@@ -1,5 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
+  <div class="btn-toobar pull-left">
+    <a href="" class="btn btn-link btn-active-text">
+    <span class="text"><?php echo $lang->stage->viewList;?></span>
+  </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('stage', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
     <?php common::printLink('stage', 'create', "", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
@@ -24,7 +28,7 @@
         <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->stage->name);?></th>
         <th class='w-100px'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->stage->percent);?></th>
         <th class='w-120px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->stage->type);?></th>
-        <th class='w-120px'<?php echo $lang->actions;?></th>
+        <th class='w-120px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

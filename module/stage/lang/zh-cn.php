@@ -23,5 +23,6 @@ $lang->stage->typeList['release'] = '发布';
 $lang->stage->typeList['review']  = '总结评审';
 $lang->stage->typeList['other']   = '其他';
 
+$lang->stage->viewList      = '浏览列表';
 $lang->stage->noStage       = '暂时没有阶段';
 $lang->stage->confirmDelete = '您确定要执行删除操作吗？';
