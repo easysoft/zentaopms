@@ -94,3 +94,34 @@ CREATE TABLE `zt_designspec` (
   `files` varchar(255) NOT NULL,
   UNIQUE KEY `design` (`design`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_risk` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `source` char(30) NOT NULL,
+  `category` char(30) NOT NULL,
+  `strategy` char(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `impact` char(30) NOT NULL,
+  `probability` char(30) NOT NULL,
+  `riskindex` char(30) NOT NULL,
+  `pri` char(30) NOT NULL,
+  `identifiedDate` date NOT NULL,
+  `prevention` text NOT NULL,
+  `remedy` text NOT NULL,
+  `plannedClosedDate` date NOT NULL,
+  `actualClosedDate` date NOT NULL,
+  `addedDate` date NOT NULL,
+  `resolution` text NOT NULL,
+  `resolvedBy` varchar(30) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `cancelReason` char(30) NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
