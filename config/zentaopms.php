@@ -197,7 +197,7 @@ if(!defined('TABLE_LANG'))       define('TABLE_LANG', '`' . $config->db->prefix 
 if(!defined('TABLE_STAGE'))      define('TABLE_STAGE', '`' . $config->db->prefix . 'stage`');
 if(!defined('TABLE_DESIGN'))     define('TABLE_DESIGN', '`' . $config->db->prefix . 'design`');
 if(!defined('TABLE_DESIGNSPEC')) define('TABLE_DESIGNSPEC', '`' . $config->db->prefix . 'designspec`');
-if(!defined('TABLE_RISK'))       define('TABLE_DESIGN', '`' . $config->db->prefix . 'risk`');
+if(!defined('TABLE_RISK'))       define('TABLE_RISK', '`' . $config->db->prefix . 'risk`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
