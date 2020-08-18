@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "Si vous changez {$lang->projectCommon}, Mo
 $lang->task->confirmFinish         = '"Heures Restantes" à 0. Voulez-vous passer le statut à "Terminée" ?';
 $lang->task->confirmRecord         = '"Heures Restantes" à 0. Voulez-vous passer le statut de la tâche à "Finie" ?';
 $lang->task->confirmTransfer       = '"Heures Restantes" à 0. Voulez-vous transférer la tâche ?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
 $lang->task->noticeSaveRecord      = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
 $lang->task->commentActions        = '%s. %s, commenté par <strong>%s</strong>.';
@@ -210,7 +211,7 @@ $lang->task->error->work             = '"Commentaire" doit être <  %d caractèr
 $lang->task->error->skipClose        = 'Tâche: %s non “Finie” ou “Annulée”. Voulez-vous la fermer malgré tout ?';
 $lang->task->error->consumed         = 'Tâche: %s heures doivent être < 0. Ignorer changements de cette tâche.';
 $lang->task->error->assignedTo       = "Tâche Multi-user dans le statut courant ne peut pas être assignée à un membre qui ne fait pas partie de l'équipe.";
-$lang->task->error->consumedEmpty    = '"Coût Actuel" ne devrait pas être vide.';
+$lang->task->error->consumedEmpty    = '"Coût Actuel" ne devrait pas être 0.';
 $lang->task->error->deadlineSmall    = '"Date Limite" doit être supérieur à la "Date de Départ".';
 $lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 

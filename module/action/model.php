@@ -856,12 +856,6 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-                $action->objectLink = '';
-                if(!common::hasPriv($moduleName, $methodName))
-                {
-                    unset($actions[$i]);
-                    continue;
-                }
 
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectName));

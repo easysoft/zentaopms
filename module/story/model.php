@@ -331,6 +331,7 @@ class storyModel extends model
             $story->estimate   = $stories->estimate[$i];
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
             $story->keywords   = $stories->keywords[$i];
+            $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
             $story->openedBy   = $this->app->user->account;
             $story->openedDate = $now;
@@ -829,7 +830,7 @@ class storyModel extends model
                 if($data->pris[$storyID]     == 'ditto') $data->pris[$storyID]     = isset($prev['pri'])    ? $prev['pri']    : 0;
                 if(isset($data->branches) and $data->branches[$storyID] == 'ditto') $data->branches[$storyID] = isset($prev['branch']) ? $prev['branch'] : 0;
                 if($data->modules[$storyID]  == 'ditto') $data->modules[$storyID]  = isset($prev['module']) ? $prev['module'] : 0;
-                if($data->plans[$storyID]    == 'ditto') $data->plans[$storyID]    = isset($prev['plan'])   ? $prev['plan']   : 0;
+                if($data->plans[$storyID]    == 'ditto') $data->plans[$storyID]    = isset($prev['plan'])   ? $prev['plan']   : '';
                 if($data->sources[$storyID]  == 'ditto') $data->sources[$storyID]  = isset($prev['source']) ? $prev['source'] : '';
                 if(isset($data->stages[$storyID])        and ($data->stages[$storyID]        == 'ditto')) $data->stages[$storyID]        = isset($prev['stage'])        ? $prev['stage']        : '';
                 if(isset($data->closedBys[$storyID])     and ($data->closedBys[$storyID]     == 'ditto')) $data->closedBys[$storyID]     = isset($prev['closedBy'])     ? $prev['closedBy']     : '';
@@ -874,7 +875,6 @@ class storyModel extends model
                 if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
                 if($story->title != $oldStory->title and $story->status != draft)    $story->status     = 'changed';
-                if($story->plan         !== false and $story->plan == '')            $story->plan       = 0;
                 if($story->closedBy     != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
@@ -2817,6 +2817,17 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
+        $canBatchEdit         = common::hasPriv('story', 'batchEdit');
+        $canBatchClose        = common::hasPriv('story', 'batchClose');
+        $canBatchReview       = common::hasPriv('story', 'batchReview');
+        $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
+        $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
+        $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
+        $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+
+        $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
+
         $canView   = common::hasPriv('story', 'view');
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
@@ -2877,7 +2888,14 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                }
+                else
+                {
+                    printf('%03d', $story->id);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";

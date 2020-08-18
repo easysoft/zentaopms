@@ -16,8 +16,10 @@
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class='label label-id'><?php echo $case->id;?></span>
       <span class='text' title='<?php echo $case->title;?>' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>

@@ -98,7 +98,7 @@
             $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
             $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
 
-            $canBatchAction = $canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo;
+            $canBatchAction = ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo);
             $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
             ?>
             <thead>

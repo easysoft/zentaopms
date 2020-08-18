@@ -88,7 +88,7 @@
           ?>
           <tr>
             <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
-            <?php $disableHour = isset($teams[$taskID]) ? "disabled='disabled'" : '';?>
+            <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $taskMembers = array();
             if(isset($teams[$taskID]))

@@ -622,7 +622,7 @@ class task extends control
         }
         else
         {
-            $story = $this->story->getById($task->story);
+            $story = $this->story->getById($task->story, $task->storyVersion);
             $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
             $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
             $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
