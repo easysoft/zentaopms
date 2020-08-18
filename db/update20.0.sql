@@ -95,6 +95,7 @@ CREATE TABLE `zt_designspec` (
   UNIQUE KEY `design` (`design`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+<<<<<<< HEAD
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -165,26 +166,27 @@ CREATE TABLE `zt_issue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-  `resolvedBy` varchar(30) NOT NULL,
+
+CREATE TABLE `zt_risk` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `program` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `desc` text NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `source` char(30) NOT NULL,
+  `category` char(30) NOT NULL,
+  `strategy` char(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `impact` char(30) NOT NULL,
+  `probability` char(30) NOT NULL,
+  `riskindex` char(30) NOT NULL,
   `pri` char(30) NOT NULL,
-  `severity` char(30) NOT NULL,
-  `type` char(30) NOT NULL,
-  `activity` varchar(255) NOT NULL,
-  `effectedArea` varchar(255) NOT NULL,
-  `deadline` date NOT NULL,
-  `resolution` char(30) NOT NULL,
-  `resolutionComment` text NOT NULL,
-  `objectID` varchar(255) NOT NULL,
-  `resolvedDate` date NOT NULL,
-  `status` varchar(30) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
+  `identifiedDate` date NOT NULL,
+  `prevention` text NOT NULL,
+  `remedy` text NOT NULL,
+  `plannedClosedDate` date NOT NULL,
+  `actualClosedDate` date NOT NULL,
+  `addedDate` date NOT NULL,
+  `resolution` text NOT NULL,
+  `resolvedBy` varchar(30) NOT NULL,
   `activateBy` varchar(30) NOT NULL,
   `activateDate` date NOT NULL,
   `closeBy` varchar(30) NOT NULL,

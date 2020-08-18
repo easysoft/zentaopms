@@ -14,6 +14,31 @@ class stageModel extends model
         return false;
     }
 
+    public function batchCreate()
+    {
+        $data = fixer::input('post')->get(); 
+
+        $this->loadModel('action');
+        foreach($data->name as $i => $name)
+        {
+            if(!$name) continue; 
+
+            $stage = new stdclass();
+            $stage->name        = $name;
+            $stage->percent     = $data->percent[$i];
+            $stage->type        = $data->type[$i];
+            $stage->createdBy   = $this->app->user->account;
+            $stage->createdDate = helper::today();
+
+            $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->exec();
+
+            $stageID = $this->dao->lastInsertID();
+            $this->action->create('stage', $stageID, 'Opened');
+        }
+
+        return true;
+    }
+
     public function update($stageID)
     {
         $oldStage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq((int)$stageID)->fetch();
@@ -29,9 +54,9 @@ class stageModel extends model
         return false;
     }
 
-    public function getStages()
+    public function getStages($orderBy = 'id_desc')
     {
-        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
     }
 
     public function getPairs()
@@ -45,5 +70,10 @@ class stageModel extends model
         }
 
         return $pairs;
+    }
+
+    public function getByID($stageID)
+    {
+        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('id')->eq((int)$stageID)->fetch();
     }
 }
