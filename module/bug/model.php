@@ -779,7 +779,7 @@ class bugModel extends model
 
                 foreach($extendFields as $extendField)
                 {
-                    $bug->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                    $bug->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$bugID]);
                     $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
                     if($message) die(js::alert($message));
                 }

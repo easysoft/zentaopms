@@ -871,7 +871,7 @@ class testcaseModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $case->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $case->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$caseID]);
                 $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
                 if($message) die(js::alert($message));
             }

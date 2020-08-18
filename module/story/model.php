@@ -882,7 +882,7 @@ class storyModel extends model
 
                 foreach($extendFields as $extendField)
                 {
-                    $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                    $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$storyID]);
                     $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
                     if($message) die(js::alert($message));
                 }
