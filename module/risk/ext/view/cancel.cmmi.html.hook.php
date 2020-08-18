@@ -11,4 +11,4 @@ $html .= "</td></tr>";
 $('#cancelReason').closest('tr').after(<?php echo json_encode($html);?>);
 </script>
 
-<?php include '../../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>

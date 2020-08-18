@@ -119,9 +119,18 @@ CREATE TABLE `zt_risk` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `cancelBy` varchar(30) NOT NULL,
+  `cancelDate` datetime NOT NULL,
   `cancelReason` char(30) NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
+  `hangupBy` varchar(30) NOT NULL,
+  `hangupdDate` datetime NOT NULL,
+  `activateBy` varchar(30) NOT NULL,
+  `activateDate` datetime NOT NULL,
+  `isChange` enum('0','1') NOT NULL DEFAULT '0',
+  `trackedBy` varchar(30) NOT NULL,
+  `trackedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -26,29 +26,39 @@
       <tr>
         <th class='text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->risk->id);?></th>
         <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->risk->name);?></th>
-        <th class='w-100px'><?php common::printOrderLink('strategy', $orderBy, $vars, $lang->risk->strategy);?></th>
-        <th class='w-120px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->risk->status);?></th>
+        <th class='w-80px'><?php common::printOrderLink('strategy', $orderBy, $vars, $lang->risk->strategy);?></th>
+        <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->risk->status);?></th>
         <th class='w-120px'><?php common::printOrderLink('identifiedDate', $orderBy, $vars, $lang->risk->identifiedDate);?></th>
-        <th class='w-100px'><?php common::printOrderLink('riskindex', $orderBy, $vars, $lang->risk->riskindex);?></th>
-        <th class='w-100px'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->risk->pri);?></th>
+        <th class='w-80px'><?php common::printOrderLink('riskindex', $orderBy, $vars, $lang->risk->riskindex);?></th>
+        <th class='w-80px'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->risk->pri);?></th>
         <th class='w-120px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->risk->assignedTo);?></th>
         <th class='w-120px'><?php common::printOrderLink('category', $orderBy, $vars, $lang->risk->category);?></th>
-        <th class='w-120px'><?php echo $lang->actions;?></th>
+        <th class='w-180px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach($risks as $risk):?>
       <tr>
-        <td><?php echo printf('%03d', $risk->id);?></td>
+        <td><?php echo $risk->id;?></td>
         <td><?php echo $risk->name;?></td>
         <td><?php echo zget($lang->risk->strategyList, $risk->strategy);?></td>
         <td><?php echo zget($lang->risk->statusList, $risk->status);?></td>
-        <td><?php echo $risk->identifiedDate;?></td>
+        <td><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
         <td><?php echo $risk->riskindex;?></td>
         <td><?php echo zget($lang->risk->priList, $risk->pri)?></td>
-        <td><?php echo zget($users, $risk->assignedTo);?></td>
+        <td><?php echo $this->risk->printAssignedHtml($risk, $users);;?></td>
         <td><?php echo zget($lang->risk->categoryList, $risk->category);?></td>
-        <td></td>
+        <td class='c-actions'>
+          <?php
+          $params = "riskID=$risk->id";
+          common::printIcon('risk', 'track', $params, $risk, "list", 'checked');
+          common::printIcon('risk', 'close', $params, $risk, "list", '', '', 'iframe', true);
+          common::printIcon('risk', 'cancel', $params, $risk, "list", '', '', 'iframe', true);
+          common::printIcon('risk', 'hangup', $params, $risk, "list", 'arrow-up', '', 'iframe', true);
+          common::printIcon('risk', 'activate', $params, $risk, "list", '', '', 'iframe', true);
+          common::printIcon('risk', 'edit', $params, $risk, "list");
+          ?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

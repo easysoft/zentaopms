@@ -2,7 +2,13 @@
 /* Actions */
 $lang->risk->batchCreate = '批量添加';
 $lang->risk->create      = '添加风险';
+$lang->risk->edit        = '编辑风险';
 $lang->risk->browse      = '浏览列表';
+$lang->risk->activate    = '激活';
+$lang->risk->hangup      = '挂起';
+$lang->risk->close       = '关闭';
+$lang->risk->cancel      = '取消';
+$lang->risk->track       = '跟踪';
 
 /* Fields */
 $lang->risk->common            = '风险';
@@ -23,6 +29,21 @@ $lang->risk->plannedClosedDate = '计划关闭日期';
 $lang->risk->assignedTo        = '指派给';
 $lang->risk->createdBy         = '由谁创建';
 $lang->risk->createdDate       = '创建日期';
+$lang->risk->noAssigned        = '未指派';
+$lang->risk->cancelBy          = '由谁取消';
+$lang->risk->cancelDate        = '取消日期';
+$lang->risk->cancelReason      = '取消原因';
+$lang->risk->resolvedBy        = '解决者';
+$lang->risk->closedDate        = '关闭日期';
+$lang->risk->actualClosedDate  = '关闭日期';
+$lang->risk->resolution        = '解决措施';
+$lang->risk->hangupBy          = '由谁挂起';
+$lang->risk->hangupDate        = '挂起日期';
+$lang->risk->activateBy        = '由谁激活';
+$lang->risk->activateDate      = '激活日期';
+$lang->risk->isChange          = '是否有变化';
+$lang->risk->trackedBy         = '由谁跟踪';
+$lang->risk->trackedDate       = '跟踪日期';
 
 $lang->risk->sourceList[''] = '';
 $lang->risk->sourceList['business']    = '业务部门';
@@ -68,3 +89,6 @@ $lang->risk->strategyList['avoidance']    = '规避';
 $lang->risk->strategyList['mitigation']   = '缓解';
 $lang->risk->strategyList['transference'] = '转移';
 $lang->risk->strategyList['acceptance']   = '接受';
+
+$lang->risk->isChangeList[0] = '否';
+$lang->risk->isChangeList[1] = '是';
