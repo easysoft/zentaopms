@@ -60,6 +60,7 @@ class fixer extends baseFixer
                 }
                 if($canImplode) $this->data->$field = implode(',', $value);
             }
+            if(isset($flowFields[$field]) and $flowFields[$field]->control == 'textarea') $this->skipSpecial($field);
             $this->specialChars($field);
         }
 
