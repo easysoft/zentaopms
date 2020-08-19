@@ -234,3 +234,38 @@ CREATE TABLE `zt_workestimation` (
   `dayHour` float(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zt_holiday` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+  `desc` text NOT NULL, 
+  `year` char(4) NOT NULL, 
+  `begin` date NOT NULL, 
+  `end` date NOT NULL, 
+  PRIMARY KEY (`id`),
+  KEY `year` (`year`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_task` 
+ADD `design` mediumint(8) unsigned NOT NULL AFTER `story`,
+ADD `version` smallint(6) NOT NULL AFTER `desc`,
+ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`,
+ADD `planDuration` int(11) NOT NULL AFTER `closedDate`,
+ADD `realDuration` int(11) NOT NULL AFTER `closedDate`,
+ADD `designVersion` smallint(6) unsigned NOT NULL AFTER `storyVersion`;
+
+ALTER TABLE `zt_burn` 
+ADD `storyPoint` float NOT NULL AFTER `consumed`,
+ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `project`;
+
+-- DROP TABLE IF EXISTS `zt_taskspec`;
+CREATE TABLE `zt_taskspec` (
+      `task` mediumint(8) NOT NULL,
+      `version` smallint(6) NOT NULL,
+      `name` varchar(255) NOT NULL,
+      `estStarted` date NOT NULL,
+      `deadline` date NOT NULL,
+      UNIQUE KEY `task` (`task`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

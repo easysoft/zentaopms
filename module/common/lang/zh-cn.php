@@ -120,7 +120,7 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|index|';
+$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|browse|';
 //$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
 //$lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
 $lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
@@ -170,7 +170,7 @@ if($this->cookie->systemModel == 'scrum')
     $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
     
     $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
     unset($lang->system->dividerMenu);
 }
 

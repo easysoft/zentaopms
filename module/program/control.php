@@ -9,7 +9,7 @@ class program extends control
         $this->programs = $this->program->getPairs();
     }
 
-    public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
@@ -36,8 +36,8 @@ class program extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = $this->lang->program->index;
-        $this->view->position[]  = $this->lang->program->index;
+        $this->view->title       = $this->lang->program->browse;
+        $this->view->position[]  = $this->lang->program->browse;
         $this->view->programType = $programType;
         $this->display();
     }
@@ -57,7 +57,7 @@ class program extends control
                 $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             }
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', array('status' => 'wait', 'orderBy' => 'order_desc'))));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', array('status' => 'wait', 'orderBy' => 'order_desc'))));
         }
 
         $name         = '';
@@ -329,7 +329,7 @@ class program extends control
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
@@ -346,7 +346,7 @@ class program extends control
         if(!empty($_POST))
         {    
             $this->project->manageMembers($projectID);
-            die(js::locate($this->createLink('program', 'index'), 'parent'));
+            die(js::locate($this->createLink('program', 'browse'), 'parent'));
         }    
 
         /* Load model. */        
@@ -419,7 +419,7 @@ class program extends control
         else
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
-            die(js::locate(inlink('index'), 'parent'));
+            die(js::locate(inlink('browse'), 'parent'));
         }
     }
 

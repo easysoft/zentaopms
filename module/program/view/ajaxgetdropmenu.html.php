@@ -51,7 +51,7 @@ foreach($programs as $program)
     <div class="col-footer">
       <?php echo html::a(helper::createLink('program', 'createGuide'), '<i class="icon icon-plus"></i>' . $lang->program->create, '', 'class="not-list-item text-primary" data-toggle=modal'); ?>
       <div class='pull-right'>
-        <?php echo html::a(helper::createLink('program', 'index', 'status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
+        <?php echo html::a(helper::createLink('program', 'browse', 'status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
         <span class='text-muted muted'> &nbsp; | &nbsp; </span>
         <a class='toggle-right-col not-list-item'><?php echo $lang->project->doneProjects?><i class='icon icon-angle-right'></i></a>
       </div>

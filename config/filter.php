@@ -131,8 +131,8 @@ $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 
-$filter->program->index->cookie['programType']  = 'code';
-$filter->program->index->cookie['mine']         = 'code';
+$filter->program->browse->cookie['programType']  = 'code';
+$filter->program->browse->cookie['mine']         = 'code';
 $filter->program->export->cookie['checkedItem'] = 'reg::checked';
 
 $filter->project->default->cookie['lastProject']     = 'int';

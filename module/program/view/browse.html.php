@@ -24,7 +24,7 @@
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('index', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('mine', array('1' => $lang->program->mine), '', $this->cookie->mine ? 'checked=checked' : '');?>
   </div>
@@ -40,7 +40,7 @@
 <div id='mainContent' class='main-row'>
   <?php if(empty($projectList)):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->program->noProgram;?></span> <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?></p>
+    <p><span class="text-muted"><?php echo $lang->program->noProgram;?></span> <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info' data-toggle=modal");?></p>
   </div>
   <?php else:?>
   <div class='main-col'>

@@ -122,7 +122,18 @@ class projectModel extends model
             $this->cookie->projectMode = 'all';
         }
 
-        if(!isset($this->lang->modulePageNav)) $this->lang->modulePageNav = $this->getModuleNav($projectID, $extra);
+        /* Set project module page nav. */
+        $label = $this->lang->project->index;
+        $projectIndex  = '<div class="btn-group angle-btn' . ($methodName == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+        $projectIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
+        if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
+        if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+
+        $projectIndex .= '</ul></div></div>';
+        $projectIndex .= $this->select(null, $projectID, null, $moduleName, $methodName, $extra);
+        $this->lang->modulePageNav = $projectIndex;
+
         foreach($this->lang->project->menu as $key => $menu)
         {
             common::setMenuVars($this->lang->project->menu, $key, $projectID);
@@ -155,24 +166,6 @@ class projectModel extends model
     }
 
     /**
-     * Set module page nav.
-     * 
-     * @param  int       $activeID 
-     * @param  string    $extra 
-     * @access public
-     * @return string
-     */
-    public function getModuleNav($projectID, $extra = '')
-    {
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
-
-        $selectHtml = $this->select(null, $projectID, null, $moduleName, $methodName, $extra);
-
-        return $selectHtml; //暂时先隐藏掉迭代主页、单个创建迭代和所有迭代列表页面，统一使用计划阶段来管理
-    }
-
-    /**
      * Create the select code of projects.
      *
      * @param  array     $projects
@@ -195,8 +188,7 @@ class projectModel extends model
 
         if(isset($currentProject->type) and $currentProject->type == 'program') return;
 
-        if(isset($currentProject->program))
-            $program = $this->getByID($currentProject->program);
+        if(isset($currentProject->program)) $program = $this->getByID($currentProject->program);
 
         if(isset($program->category) and $program->category == 'multiple')
         {
@@ -845,6 +837,40 @@ class projectModel extends model
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
+    }
+
+    /**
+     * Get projects by program.
+     *
+     * @param  int  $program 
+     * @access public
+     * @return array
+     */
+    public function getProjectsByProgram($program)
+    {   
+        $projects = $this->dao->select('t1.*, t3.name as productName')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.program')->eq((int)$program->id)
+            ->andWhere('t1.template')->eq('')
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy('t1.order desc')
+            ->fetchAll('id');
+
+        if($program->template == 'cmmi')
+        {
+            foreach($projects as $projectID => $project)
+            {   
+                if($project->parent and isset($projects[$project->id]) and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
+            }   
+            if($program->category == 'multiple')
+            {   
+                foreach($projects as $projectID => $project) $projects[$projectID]->name = $project->productName . '/' . $project->name;
+            }   
+            foreach($projects as $projectID => $project) unset($projects[$project->parent]);
+        }
+
+        return $projects;
     }
 
     /**
