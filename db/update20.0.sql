@@ -122,6 +122,8 @@ CREATE TABLE `zt_issue` (
   `activateDate` date NOT NULL,
   `closeBy` varchar(30) NOT NULL,
   `closedDate` date NOT NULL,
+  `commitBy` varchar(30) NOT NULL,
+  `commitDate` datetime NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `assignedBy` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
@@ -155,6 +157,13 @@ CREATE TABLE `zt_risk` (
   `closedDate` date NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `assignedBy` varchar(30) NOT NULL,
+  `cancelBy` varchar(30) NOT NULL,
+  `cancelDate` datetime NOT NULL,
+  `cancelReason` char(30) NOT NULL,
+  `hangupBy` varchar(30) NOT NULL,
+  `hangupdDate` datetime NOT NULL,
+  `trackedBy` varchar(30) NOT NULL,
+  `trackedDate` datetime NOT NULL,
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
    PRIMARY KEY (`id`)
@@ -170,7 +179,6 @@ CREATE TABLE `zt_projectspec` (
   `end` date NOT NULL,
   UNIQUE KEY `project` (`project`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE `zt_budget` (
@@ -220,6 +228,8 @@ CREATE TABLE `zt_workestimation` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `dayHour` float(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
