@@ -266,5 +266,4 @@ class issue extends control
 
         $this->display();
     }
->>>>>>> Stashed changes
 }
