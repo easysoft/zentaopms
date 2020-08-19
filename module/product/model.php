@@ -40,20 +40,6 @@ class productModel extends model
         }
 
         $pageActions = '';
-        if($this->app->moduleName == 'release')
-        {   
-            $pageActions = html::a(helper::createLink('release', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i> {$this->lang->release->create}", '', "class='btn btn-primary'");
-
-            foreach($this->lang->release->moduleMenus as $key => $menu)
-            {   
-                $replace = array();
-                $replace['productID'] = $productID;
-                $replace['branch']    = $branch;
-
-                common::setMenuVars($this->lang->release->moduleMenus, $key, $replace);
-            }
-            $this->lang->moduleMenus['release'] = $this->lang->release->moduleMenus;
-        }
         if($this->app->moduleName == 'programplan' and isset($product->program))
         {   
             $pageActions .= html::a(helper::createLink('programplan', 'create', "program=$product->program&productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->programplan->create}", '', "class='btn btn-primary'");
@@ -107,7 +93,7 @@ class productModel extends model
         }
         else
         {   
-            if(isset($project->category) and $project->category == 'multiple') $pageNav = $selectHtml;
+            if(isset($project->category) and $project->category == 'multiple' || $project->template == 'scrum') $pageNav = $selectHtml;
         }
 
         $pageActions = '';

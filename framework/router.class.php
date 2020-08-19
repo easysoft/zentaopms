@@ -137,6 +137,12 @@ class router extends baseRouter
                 if($setting->key == 'urAndSr') $config->urAndSr = $setting->value;
             }
 
+            if($this->session->program)
+            {
+                $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
+                if($template->template == 'cmmi') $projectCommon = 2;
+            }
+
             $config->storyCommon = $storyCommon;
 
             /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */

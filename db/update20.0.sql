@@ -95,44 +95,6 @@ CREATE TABLE `zt_designspec` (
   UNIQUE KEY `design` (`design`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-<<<<<<< HEAD
--- DROP TABLE IF EXISTS `zt_issue`;
-CREATE TABLE `zt_issue` (
-  `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
-  `product` varchar(255) NOT NULL,
-  `commit` varchar(30) NOT NULL,
-  `project` mediumint(9) NOT NULL DEFAULT '0',
-  `name` varchar(255) NOT NULL,
-  `parent` mediumint(8) unsigned NOT NULL,
-  `status` varchar(30) NOT NULL,
-  `subStatus` varchar(30) NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `commitBy` varchar(30) NOT NULL,
-  `commitDate` datetime NOT NULL,
-  `assignedTo` varchar(30) NOT NULL,
-  `assignedBy` varchar(30) NOT NULL,
-  `assignedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `story` char(30) NOT NULL,
-  `desc` text NOT NULL,
-  `version` smallint(6) NOT NULL,
-  `type` char(30) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `zt_designspec` (
-  `design` mediumint(8) NOT NULL,
-  `version` smallint(6) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `desc` text NOT NULL,
-  `files` varchar(255) NOT NULL,
-  UNIQUE KEY `design` (`design`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL,

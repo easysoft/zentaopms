@@ -62,21 +62,7 @@ class projectModel extends model
      */
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
-        if(!$projectID and $this->session->project) $projectID = $this->session->project;
-
-        /* Get project and program */
-        $project   = $this->getById($projectID);
-        $isProgram = false;
-        $program   = array();
-        if(!empty($project))
-        {
-            $isProgram = $project->template;
-            $program   = $isProgram ? $project : $this->getByID($project->program);
-        }
-        if(empty($program)) $program = $this->getByID($this->session->program);
-
-        $projects = $this->getPairs();
-
+        $program = $this->getByID($this->session->program);
         if(empty($projects)) 
         {
             if($program->template == 'cmmi')
@@ -87,6 +73,17 @@ class projectModel extends model
             {
                 if($this->app->moduleName == 'project' && $this->app->methodName != 'create') die(js::locate(helper::createLink('project', 'create')));
             }
+        }
+
+        if(!$projectID and $this->session->project) $projectID = $this->session->project;
+
+        /* Get project and program */
+        $project   = $this->getById($projectID);
+        $isProgram = false;
+        if(!empty($project))
+        {
+            $isProgram = $project->template;
+            $program   = $isProgram ? $project : $this->getByID($project->program);
         }
 
         if($isProgram)

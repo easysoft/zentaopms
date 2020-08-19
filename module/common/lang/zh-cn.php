@@ -134,7 +134,7 @@ $lang->dividerMenu = ',admin,';
 $lang->menu = new stdclass();
 //$lang->menu->program = '主页|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = '迭代|project|index|locate=no';
+$lang->menu->project = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->doc     = '文档|doc|index|';
 $lang->menu->qa      = '测试|qa|index';
 $lang->menu->company = new stdclass();
@@ -146,7 +146,7 @@ $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->subMenu = new stdclass();
 $lang->system->subMenu->setmodel = new stdclass();
-//$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
+$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
@@ -160,19 +160,19 @@ $lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-//if($this->cookie->systemModel == 'scrum')
-//{
-//    $lang->system->menu = new stdclass();
-//    $lang->system->subMenu->setmodel = new stdclass();
-//    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
-//    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-//    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
-//    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
-//    
-//    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
-//    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
-//    unset($lang->system->dividerMenu);
-//}
+if($this->cookie->systemModel == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->subMenu->setmodel = new stdclass();
+    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
+    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+    $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
+    $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
+    
+    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
+    unset($lang->system->dividerMenu);
+}
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
