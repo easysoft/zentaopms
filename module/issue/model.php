@@ -15,7 +15,7 @@ class issueModel extends model
 {
     public function create()
     {
-        $now = helper::now();
+        $now  = helper::now();
         $data = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
@@ -44,5 +44,44 @@ class issueModel extends model
 
         $this->dao->insert(TABLE_ISSUE)->data($data)->exec();
         return true;
+    }
+    
+    /**
+     * Batch create issue.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchCreate()
+    {
+        $now  = helper::now();
+	$data = fixer::input('post')->get();
+
+	$issues = array();
+	foreach($data->dataList as $issue)
+	{
+	    if(!trim($issue['title'])) continue;
+
+	    $issue['createdBy']   = $this->app->user->account;
+	    $issue['createdDate'] = $now;
+
+	    if($issue['assignedTo'])
+	    {
+	   	$issue['assignedBy']   = $this->app->user->account;
+		$issue['assignedDate'] = $now;
+  	    }
+
+   	    foreach(explode(',',$this->config->issue->create->requiredFields) as $field)
+	    {
+		$field = trim($field);
+		if($field and empty($issue["$field"])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->issue->$field)));	
+	    } 
+
+	    $issues[] = $issue;
+	}
+
+	foreach($issues as $issue) $this->dao->insert(TABLE_ISSUE)->data($issue)->exec();
+
+	return true;
     }
 }

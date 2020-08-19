@@ -53,4 +53,30 @@ class issue extends control
 
         $this->display();
     }
+   
+   
+   /**
+    * batchCreate issues
+    *
+    * @access public
+    * @return void
+    */ 
+    public function batchCreate()
+    {
+	if($_POST)
+	{
+	    $results = $this->issue->batchCreate();
+	    if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+	    $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse', 'browseType=all')));
+	}
+     
+        $this->view->title      = $this->lang->issue->common . $this->lang->colon . $this->lang->issue->batchCreate;
+        $this->view->position[] = $this->lang->issue->common;
+	$this->view->position[] = $this->lang->issue->batchCreate;
+
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+
+	$this->display();
+    }
+
 }
