@@ -1,0 +1,9 @@
+.row-module {max-width: 500px; min-width: 400px;}
+.row-module + .row-module {margin-top: 5px;}
+.col-module {min-width: 200px;}
+.col-shorts .form-control {border-radius: 0 2px 2px 0; border-left-width: 0;} 
+.col-shorts .form-control:focus {margin-left: -1px; border-left-width: 1px;}
+.col-shorts {width: 110px;}
+.col-actions {width: 80px; padding-left: 5px;}
+
+#modulesTree li {padding-left: 20px;}

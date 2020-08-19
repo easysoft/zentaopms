@@ -95,6 +95,34 @@ CREATE TABLE `zt_designspec` (
   UNIQUE KEY `design` (`design`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_issue`;
+CREATE TABLE `zt_issue` (
+  `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `program` varchar(255) NOT NULL,
+  `product` varchar(255) NOT NULL,
+  `commit` varchar(30) NOT NULL,
+  `project` mediumint(9) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `parent` mediumint(8) unsigned NOT NULL,
+  `status` varchar(30) NOT NULL,
+  `subStatus` varchar(30) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `commitBy` varchar(30) NOT NULL,
+  `commitDate` datetime NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedBy` varchar(30) NOT NULL,
+  `assignedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `story` char(30) NOT NULL,
+  `desc` text NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `type` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `zt_risk` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `program` varchar(255) NOT NULL,
@@ -115,22 +143,86 @@ CREATE TABLE `zt_risk` (
   `addedDate` date NOT NULL,
   `resolution` text NOT NULL,
   `resolvedBy` varchar(30) NOT NULL,
+  `activateBy` varchar(30) NOT NULL,
+  `activateDate` date NOT NULL,
+  `closeBy` varchar(30) NOT NULL,
+  `closedDate` date NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedBy` varchar(30) NOT NULL,
+  `cancelBy` varchar(30) NOT NULL,
+  `cancelDate` datetime NOT NULL,
+  `cancelReason` char(30) NOT NULL,
+  `hangupBy` varchar(30) NOT NULL,
+  `hangupdDate` datetime NOT NULL,
+  `trackedBy` varchar(30) NOT NULL,
+  `trackedDate` datetime NOT NULL,
+  `assignedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_projectspec`;
+CREATE TABLE `zt_projectspec` (
+  `project` mediumint(8) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `milestone` enum('0','1') NOT NULL DEFAULT '0',
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  UNIQUE KEY `project` (`project`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_budget`;
+CREATE TABLE `zt_budget` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) NOT NULL,
+  `stage` char(30) NOT NULL,
+  `subject` mediumint(8) NOT NULL,
+  `amount` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` date NOT NULL,
+  `lastEditedBy` char(30) NOT NULL,
+  `lastEditedDate` date NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_durationestimation`;
+CREATE TABLE `zt_durationestimation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
+  `stage` mediumint(9) NOT NULL,
+  `workload` varchar(255) NOT NULL,
+  `worktimeRate` varchar(255) NOT NULL,
+  `people` varchar(255) NOT NULL,
+  `startDate` date NOT NULL,
+  `endDate` date NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `cancelBy` varchar(30) NOT NULL,
-  `cancelDate` datetime NOT NULL,
-  `cancelReason` char(30) NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_workestimation`;
+CREATE TABLE `zt_workestimation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,
+  `scale` mediumint(8) unsigned NOT NULL,
+  `productivity` smallint(3) unsigned NOT NULL,
+  `duration` mediumint(8) unsigned NOT NULL,
+  `unitLaborCost` mediumint(8) unsigned NOT NULL,
+  `totalLaborCost` mediumint(8) unsigned NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
-  `hangupBy` varchar(30) NOT NULL,
-  `hangupdDate` datetime NOT NULL,
-  `activateBy` varchar(30) NOT NULL,
-  `activateDate` datetime NOT NULL,
-  `isChange` enum('0','1') NOT NULL DEFAULT '0',
-  `trackedBy` varchar(30) NOT NULL,
-  `trackedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `dayHour` float(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

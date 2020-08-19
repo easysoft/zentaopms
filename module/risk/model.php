@@ -68,7 +68,7 @@ class riskModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::today())
             ->stripTags($this->config->risk->editor->track['id'], $this->config->allowedTags)
-            ->remove('comment,uid')
+            ->remove('ischange,comment,uid')
             ->removeIF($this->post->isChange == 0, 'name,category,strategy,impact,probability,riskindex,pri,prevention,resolution' )
             ->get();
 

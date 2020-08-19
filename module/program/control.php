@@ -11,7 +11,7 @@ class program extends control
 
     public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
