@@ -30,6 +30,7 @@ $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolved          = '解决';
 
 $lang->issue->delete            = '删除';
+$lang->issue->basicInfo         = '基本信息';
 $lang->issue->active            = '激活';
 $lang->issue->assign            = '指派';
 $lang->issue->create            = '新建问题';
