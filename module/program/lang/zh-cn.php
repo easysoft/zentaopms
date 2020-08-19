@@ -1,5 +1,6 @@
 <?php
-$lang->program->index           = '项目主页';
+$lang->program->index           = '仪表盘';
+$lang->program->browse          = '项目列表';
 $lang->program->common          = '项目';
 $lang->program->stage           = '阶段';
 $lang->program->name            = '项目名称';

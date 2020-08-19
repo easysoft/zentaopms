@@ -29,11 +29,17 @@ $lang->issue->assignedBy        = '由谁指派';
 $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolved          = '解决';
 
-$lang->issue->create            = '新建';
+$lang->issue->delete            = '删除';
+$lang->issue->basicInfo         = '基本信息';
+$lang->issue->active            = '激活';
+$lang->issue->assign            = '指派';
+$lang->issue->create            = '新建问题';
+$lang->issue->edit              = '编辑问题';
 $lang->issue->batchCreate       = '批量新建';
 
+$lang->issue->labelList['all']       = '全部';
 $lang->issue->labelList['open']      = '开放';
-$lang->issue->labelList['assignTo']  = '指派给我';
+$lang->issue->labelList['assignto']  = '指派给我';
 $lang->issue->labelList['closed']    = '已关闭';
 $lang->issue->labelList['suspended'] = '已挂起';
 $lang->issue->labelList['cancelled'] = '已取消';
@@ -72,4 +78,14 @@ $lang->issue->statusList['unresolved']  = '正解决';
 $lang->issue->statusList['resolved']    = '已解决';
 $lang->issue->statusList['canceled']    = '取消';
 $lang->issue->statusList['closed']      = '已关闭';
+$lang->issue->statusList['active']      = '激活';
+$lang->issue->statusList['suspended']   = '挂起';
 
+$lang->issue->resolveMethods = array();
+$lang->issue->resolveMethods['resolved'] = '已解决';
+$lang->issue->resolveMethods['totask']   = '转任务';
+$lang->issue->resolveMethods['tobug']    = '转BUG';
+$lang->issue->resolveMethods['tostory']  = '转需求';
+$lang->issue->resolveMethods['torisk']   = '转风险'; 
+
+$lang->issue->confirmDelete = '您确认删除该问题？';

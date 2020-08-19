@@ -2243,16 +2243,15 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID, $module, $method, $extra)
     {
+        $project = $this->project->getByID($projectID);
+        $program = $this->project->getByID($project->program);
+
         $this->view->link      = $this->project->getProjectLink($module, $method, $extra);
         $this->view->projectID = $projectID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
-        $projectPairs = array();
-        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
-        $this->view->projects = $projects;
+        $this->view->projects  = $this->project->getProjectsByProgram($program);
         $this->display();
     }
 

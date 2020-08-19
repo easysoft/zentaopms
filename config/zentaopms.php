@@ -27,47 +27,41 @@ $config->duplicateTime = 60;
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
-$config->productCommonList['zh-cn'][1] = '项目';
 
 $config->productCommonList['zh-tw'][0] = '產品';
-$config->productCommonList['zh-tw'][1] = '項目';
 
 $config->productCommonList['en'][0] = 'Product';
-$config->productCommonList['en'][1] = 'Project';
 
 $config->productCommonList['de'][0] = 'Produkt';
-$config->productCommonList['de'][1] = 'Projekt';
 
 $config->productCommonList['fr'][0] = 'Product';
-$config->productCommonList['fr'][1] = 'Projet';
 
 $config->productCommonList['vi'][0] = 'Sản phẩm';
-$config->productCommonList['vi'][1] = 'Dự án';
 
 /* Project common list. */
-$config->projectCommonList['zh-cn'][0] = '项目';
-$config->projectCommonList['zh-cn'][1] = '迭代';
-$config->projectCommonList['zh-cn'][2] = '冲刺';
+$config->projectCommonList['zh-cn'][0] = '迭代';
+$config->projectCommonList['zh-cn'][1] = '冲刺';
+$config->projectCommonList['zh-cn'][2] = '阶段';
 
-$config->projectCommonList['zh-tw'][0] = '項目';
-$config->projectCommonList['zh-tw'][1] = '迭代';
-$config->projectCommonList['zh-tw'][2] = '冲刺';
+$config->projectCommonList['zh-tw'][0] = '迭代';
+$config->projectCommonList['zh-tw'][1] = '冲刺';
+$config->projectCommonList['zh-tw'][2] = '階段';
 
-$config->projectCommonList['en'][0] = 'Project';
-$config->projectCommonList['en'][1] = 'Iteration';
-$config->projectCommonList['en'][2] = 'Sprint';
+$config->projectCommonList['en'][0] = 'Iteration';
+$config->projectCommonList['en'][1] = 'Sprint';
+$config->projectCommonList['en'][2] = 'Stage';
 
-$config->projectCommonList['de'][0] = 'Projekt';
-$config->projectCommonList['de'][1] = 'Iteration';
-$config->projectCommonList['de'][2] = 'Sprint';
+$config->projectCommonList['de'][0] = 'Iteration';
+$config->projectCommonList['de'][1] = 'Sprint';
+$config->projectCommonList['de'][2] = 'Bühne';
 
-$config->projectCommonList['fr'][0] = 'Projet';
-$config->projectCommonList['fr'][1] = 'Iteration';
-$config->projectCommonList['fr'][2] = 'Sprint';
+$config->projectCommonList['fr'][0] = 'Iteration';
+$config->projectCommonList['fr'][1] = 'Sprint';
+$config->projectCommonList['fr'][2] = 'Phase';
 
-$config->projectCommonList['vi'][0] = 'Dự án';
-$config->projectCommonList['vi'][1] = 'Lặp lại';
-$config->projectCommonList['vi'][2] = 'Sprint';
+$config->projectCommonList['vi'][0] = 'Lặp lại';
+$config->projectCommonList['vi'][1] = 'Sprint';
+$config->projectCommonList['vi'][2] = 'Giai đoạn';
 
 /* Story common list. */
 $config->storyCommonList['zh-cn'][0] = '需求';
@@ -203,6 +197,7 @@ if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $conf
 if(!defined('TABLE_WORKESTIMATION'))     define('TABLE_WORKESTIMATION', '`' . $config->db->prefix . 'workestimation`');
 if(!defined('TABLE_DURATIONESTIMATION')) define('TABLE_DURATIONESTIMATION', '`' . $config->db->prefix . 'durationestimation`');
 if(!defined('TABLE_BUDGET'))             define('TABLE_BUDGET', '`' . $config->db->prefix . 'budget`');
+if(!defined('TABLE_HOLIDAY'))            define('TABLE_HOLIDAY', '`' . $config->db->prefix . 'holiday`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;

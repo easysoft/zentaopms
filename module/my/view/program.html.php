@@ -1,12 +1,12 @@
 <?php
 /**
- * The project view file of dashboard module of ZenTaoPMS.
+ * The program view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
- * @version     $Id: project.html.php 5095 2013-07-11 06:03:40Z chencongzhi520@gmail.com $
+ * @version     $Id: program.html.php 5095 2013-07-11 06:03:40Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -21,13 +21,13 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
-      <?php if(common::hasPriv('program', 'create')):?>
-      <?php echo html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info'");?>
+      <?php if(common::hasPriv('program', 'createGuide')):?>
+      <?php echo html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <table class="table has-sort-head table-fixed" id='projectList'>
+  <table class="table has-sort-head table-fixed" id='programList'>
     <thead>
       <tr class='text-center'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -39,19 +39,19 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach($programs as $project):?>
+      <?php foreach($programs as $program):?>
       <tr class='text-center'>
-        <td><?php echo $project->id;?></td>
-        <td class='text-left'><?php echo $project->code;?></td>
-        <td class='text-left'><?php echo html::a("javascript:void(0)", $project->name, '', "class='transfer' data-id={$project->id}");?></td>
-        <td><?php echo $project->begin;?></td>
-        <td><?php echo $project->end;?></td>
+        <td><?php echo $program->id;?></td>
+        <td class='text-left'><?php echo $program->code;?></td>
+        <td class='text-left'><?php echo html::a($this->createLink('program', 'index', "programID=$program->id"), $program->name, '', "class='transfer' data-id={$program->id}");?></td>
+        <td><?php echo $program->begin;?></td>
+        <td><?php echo $program->end;?></td>
         <td class="c-status">
-          <?php if(isset($project->delay)):?>
+          <?php if(isset($program->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'> <?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <?php $statusName = $this->processStatus('project', $project);?>
-          <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'> <?php echo $statusName;?></span>
+          <?php $statusName = $this->processStatus('program', $program);?>
+          <span class="status-project status-<?php echo $program->status?>" title='<?php echo $statusName;?>'> <?php echo $statusName;?></span>
           <?php endif;?>
         </td>
       </tr>

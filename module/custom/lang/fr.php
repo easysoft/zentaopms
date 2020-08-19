@@ -133,10 +133,7 @@ $lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Sélectionnez le concept qui correspond à votre équipe.';
 
-$lang->custom->workingList['full']      = 'Application Lifecycle Management';
-$lang->custom->workingList['onlyTest']  = 'Gestion de la Qualité';
-$lang->custom->workingList['onlyStory'] = 'Gestion des Stories';
-$lang->custom->workingList['onlyTask']  = 'Gestion des Tâches';
+$lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
 $lang->custom->menuTip  = "Cliquez pour montrer/cacher le menu. Déplacez pour changer l'ordre d'affichage.";
 $lang->custom->saveFail = 'Echec de la sauvegarde !';

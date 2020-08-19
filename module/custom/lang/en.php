@@ -34,6 +34,7 @@ $lang->custom->setTips            = 'Set Tips';
 $lang->custom->isRange            = 'Is Target Control';
 $lang->custom->plan               = 'Plan';
 $lang->custom->planStatus         = 'Enable Plan';
+$lang->custom->concept            = 'Concept';
 
 $lang->custom->object['program'] = 'Program';
 $lang->custom->program->fields['unitList'] = 'Unit List';
@@ -167,18 +168,12 @@ $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
 $lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = 'Product - Project';
-$lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
-$lang->custom->productProject->relation['1_1'] = 'Project - Iteration';
-$lang->custom->productProject->relation['0_2'] = 'Product - Sprint';
-$lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
+$lang->custom->productProject->relation['0_0'] = 'Program - Product - Iteration';
+$lang->custom->productProject->relation['0_1'] = 'Program - Product - Sprint';
 
 $lang->custom->productProject->notice = 'Select a concept that fits your team.';
 
-$lang->custom->workingList['full']      = 'Application Lifecycle Management';
-$lang->custom->workingList['onlyTest']  = 'Test Management';
-$lang->custom->workingList['onlyStory'] = 'Story Management';
-$lang->custom->workingList['onlyTask']  = 'Task Management';
+$lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
 $lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail = 'Failed to save!';

@@ -16,7 +16,7 @@ function fixScroll()
     if($tfoot.size() > 0) scrollOffset += $tfoot.height();
     if($('div.datatable.head-fixed').size() == 0) scrollOffset -= '29';
     var windowH = $(window).height();
-    $scrollwrapper.css({'position': 'fixed', 'bottom': 50 + 'px'});
+    if(scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': 50 + 'px'});
     $(window).scroll(function()
     {
           newBottom = $tfoot.hasClass('fixedTfootAction') ? 50 + $tfoot.height() : 50;

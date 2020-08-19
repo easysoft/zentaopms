@@ -612,26 +612,10 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
+        $product = $this->product->getByID($productID);
+        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
+        $this->view->programID = $product->program;
 
-        /* Sort products as lines' order first. */
-        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
-        $productList = array();
-        foreach($lines as $id => $name)
-        {
-            foreach($products as $key => $product)
-            {
-                if($product->line == $id)
-                {
-                    $product->name = $name . '/' . $product->name;
-                    $productList[] = $product;
-                    unset($products[$key]);
-                }
-            }
-        }
-        $productList = array_merge($productList, $products);
-
-        $this->view->products  = $productList;
         $this->display();
     }
 

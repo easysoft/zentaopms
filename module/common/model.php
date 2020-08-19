@@ -532,7 +532,7 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* If program, return.*/
-        if($moduleName == 'program') return;
+        if($moduleName == 'program' and $methodName != 'index') return;
 
         /* Set the main main menu. */
         $mainMenu      = $moduleName;

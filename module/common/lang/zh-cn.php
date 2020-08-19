@@ -120,7 +120,7 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|index|';
+$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|browse|';
 //$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
 //$lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
 $lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
@@ -132,9 +132,9 @@ $lang->dividerMenu = ',admin,';
 
 /* Scrum menu. */
 $lang->menu = new stdclass();
-//$lang->menu->program = '主页|program|index';
+$lang->menu->program = '仪表盘|program|index|';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = '迭代|project|index|locate=no';
+$lang->menu->project = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->doc     = '文档|doc|index|';
 $lang->menu->qa      = '测试|qa|index';
 $lang->menu->company = new stdclass();
@@ -146,7 +146,7 @@ $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->subMenu = new stdclass();
 $lang->system->subMenu->setmodel = new stdclass();
-//$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
+$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
@@ -160,19 +160,19 @@ $lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-//if($this->cookie->systemModel == 'scrum')
-//{
-//    $lang->system->menu = new stdclass();
-//    $lang->system->subMenu->setmodel = new stdclass();
-//    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
-//    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-//    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
-//    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
-//    
-//    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
-//    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
-//    unset($lang->system->dividerMenu);
-//}
+if($this->cookie->systemModel == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->subMenu->setmodel = new stdclass();
+    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
+    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+    $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
+    $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
+    
+    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
+    unset($lang->system->dividerMenu);
+}
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
@@ -1104,6 +1104,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
+$lang->menu->cmmi->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');

@@ -40,20 +40,6 @@ class productModel extends model
         }
 
         $pageActions = '';
-        if($this->app->moduleName == 'release')
-        {   
-            $pageActions = html::a(helper::createLink('release', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i> {$this->lang->release->create}", '', "class='btn btn-primary'");
-
-            foreach($this->lang->release->moduleMenus as $key => $menu)
-            {   
-                $replace = array();
-                $replace['productID'] = $productID;
-                $replace['branch']    = $branch;
-
-                common::setMenuVars($this->lang->release->moduleMenus, $key, $replace);
-            }
-            $this->lang->moduleMenus['release'] = $this->lang->release->moduleMenus;
-        }
         if($this->app->moduleName == 'programplan' and isset($product->program))
         {   
             $pageActions .= html::a(helper::createLink('programplan', 'create', "program=$product->program&productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->programplan->create}", '', "class='btn btn-primary'");
@@ -95,7 +81,6 @@ class productModel extends model
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-
         $selectHtml = $this->select($products, $product->id, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
         $pageNav  = '';
@@ -106,18 +91,16 @@ class productModel extends model
             $pageNav .= $selectHtml;
         }
         else
-        {   
-            if(isset($project->category) and $project->category == 'multiple') $pageNav = $selectHtml;
-        }
+        {
+            $label = $this->lang->product->index;
+            $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $pageNav .= '<ul class="dropdown-menu">';
+            if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
+            if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+            if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
 
-        $pageActions = '';
-        if($this->config->global->flow != 'full')
-        {   
-            if($currentMethod == 'build' && common::hasPriv('build', 'create'))
-            {   
-                $this->app->loadLang('build');
-                $pageActions .= html::a(helper::createLink('build', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->build->create}", '', "class='btn btn-primary'");
-            }
+            $pageNav .= '</ul></div></div>';
+            $pageNav .= $selectHtml;
         }
 
         return $pageNav;
@@ -174,22 +157,6 @@ class productModel extends model
             }
         }
 
-        if($this->config->global->flow == 'onlyTest' and $moduleType)
-        {
-            if($module) $module = $this->loadModel('tree')->getById($module);
-            $moduleName = $module ? $module->name : $this->lang->tree->all;
-            if(!$isMobile)
-            {
-                $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-                $output .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $output .= "</div></div>";
-            }
-            else
-            {
-                $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            }
-        }
         if(!$isMobile) $output .= '</div>';
 
         return $output;

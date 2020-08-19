@@ -9,7 +9,38 @@ class program extends control
         $this->programs = $this->program->getPairs();
     }
 
-    public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    /**
+     * Program index view.
+     * 
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function index($programID = 0)
+    {
+        if(!$programID) $programID = $this->session->program;
+        $this->session->set('program', $programID);
+        $this->lang->navGroup->program = 'program';
+
+
+        $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
+        $this->view->position[] = $this->lang->program->index;
+        $this->view->program    = $this->project->getByID($programID);
+        $this->display();
+    }
+
+    /**
+     * Program list.
+     * 
+     * @param  varchar $status
+     * @param  varchar $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @access public
+     * @return void
+     */
+    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
@@ -36,17 +67,31 @@ class program extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = $this->lang->program->index;
-        $this->view->position[]  = $this->lang->program->index;
+        $this->view->title       = $this->lang->program->browse;
+        $this->view->position[]  = $this->lang->program->browse;
         $this->view->programType = $programType;
         $this->display();
     }
 
+    /**
+     * Program create guide.
+     * 
+     * @access public
+     * @return void
+     */
     public function createGuide()
     {
         $this->display();
     }
 
+    /**
+     * Create a program.
+     * 
+     * @param  varchar $template 
+     * @param  int     $copyProgramID
+     * @access public
+     * @return void
+     */
     public function create($template = 'cmmi', $copyProgramID = '')
     {
         if($_POST)
@@ -57,7 +102,7 @@ class program extends control
                 $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             }
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', array('status' => 'wait', 'orderBy' => 'order_desc'))));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', array('status' => 'wait', 'orderBy' => 'order_desc'))));
         }
 
         $name         = '';
@@ -90,6 +135,37 @@ class program extends control
         $this->view->privway       = $privway;
         $this->view->whitelist     = $whitelist;
         $this->view->copyProgramID = $copyProgramID;
+        $this->display();
+    }
+
+    /**
+     * Edit a program.
+     * 
+     * @param  int $projectID
+     * @access public
+     * @return void
+     */
+    public function edit($projectID = 0)
+    {
+        $project = $this->project->getByID($projectID);
+
+        if($_POST)
+        {
+            $changes = $this->project->update($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->title       = $this->lang->project->edit;
+        $this->view->position[]  = $this->lang->project->edit;
+        $this->view->project     = $project;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -316,37 +392,21 @@ class program extends control
         $this->display('group', 'manageMember');
     }
 
-    public function edit($projectID = 0)
-    {
-        $project = $this->project->getByID($projectID);
-
-        if($_POST)
-        {
-            $changes = $this->project->update($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index')));
-        }
-
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->title       = $this->lang->project->edit;
-        $this->view->position[]  = $this->lang->project->edit;
-        $this->view->project     = $project;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->display();
-    }
-
+    /**
+     * Manage program members.
+     * 
+     * @param  int    $projectID
+     * @param  int    $dept
+     * @access public
+     * @return void
+     */
     public function manageMembers($projectID, $dept = '')
     {
         $this->session->set('program', $projectID);
         if(!empty($_POST))
         {    
             $this->project->manageMembers($projectID);
-            die(js::locate($this->createLink('program', 'index'), 'parent'));
+            die(js::locate($this->createLink('program', 'browse'), 'parent'));
         }    
 
         /* Load model. */        
@@ -409,6 +469,14 @@ class program extends control
         $this->display();
     }
 
+    /**
+     * Delete a program.
+     * 
+     * @param  int     $projectID
+     * @param  varchar $confirm
+     * @access public
+     * @return void
+     */
     public function delete($projectID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -419,10 +487,17 @@ class program extends control
         else
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
-            die(js::locate(inlink('index'), 'parent'));
+            die(js::locate(inlink('browse'), 'parent'));
         }
     }
 
+    /**
+     * Suspend a program.
+     * 
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
     public function suspend($projectID)
     {
         $project = $this->project->getByID($projectID);
@@ -450,6 +525,13 @@ class program extends control
         $this->display('project', 'suspend');
     }
 
+    /**
+     * Activate a program.
+     * 
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
     public function activate($projectID)
     {
         $project = $this->project->getByID($projectID);
@@ -484,6 +566,13 @@ class program extends control
         $this->display('project', 'activate');
     }
 
+    /**
+     * Close a program.
+     * 
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
     public function close($projectID)
     {
         $project = $this->project->getByID($projectID);
@@ -562,6 +651,13 @@ class program extends control
         $this->display();
     }
 
+    /**
+     * Process program errors.
+     * 
+     * @param  array $errors
+     * @access public
+     * @return void
+     */
     public function processErrors($errors)
     {
         foreach($errors as $field => $error)
@@ -572,10 +668,18 @@ class program extends control
         return $errors;
     }
 
+    /**
+     * Ajax get program drop menu.
+     * 
+     * @param  int     $programID
+     * @param  varchar $module
+     * @access public
+     * @return void
+     */
     public function ajaxGetDropMenu($programID, $module, $method, $extra)
     {    
         $this->loadModel('project');
-        $this->view->link      = "javascript:void(0)";
+        $this->view->link      = $this->createLink('program', 'index', "programID=$programID");
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;
@@ -596,7 +700,6 @@ class program extends control
      */
     public function ajaxGetEnterLink($programID = 0)
     {   
-        $this->session->set('program', $programID);
         $program         = $this->project->getByID($programID); 
         $programProjects = $this->project->getPairs();
         $programProject  = key($programProjects);

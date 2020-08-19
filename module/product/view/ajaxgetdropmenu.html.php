@@ -25,22 +25,26 @@ foreach($products as $product)
     {
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $myProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $productID) : sprintf($link, $productID);
+            $myProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $myProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $product->id) : sprintf($link, $product->id);
+            $myProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $normalProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $productID) : sprintf($link, $productID);
+            $normalProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $normalProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $product->id) : sprintf($link, $product->id);
+            $normalProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
     else if($product->status == 'closed')
@@ -48,11 +52,13 @@ foreach($products as $product)
 
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $closedProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $productID) : sprintf($link, $productID);
+            $closedProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $closedProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $linkHtml = $module == 'programplan' ? sprintf($link, $programID, $product->id) : sprintf($link, $product->id);
+            $closedProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
 }
@@ -74,7 +80,8 @@ foreach($products as $product)
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
+      <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
+      <?php echo html::a(helper::createLink('product', 'create', "program=$programID"), '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>

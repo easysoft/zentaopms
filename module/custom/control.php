@@ -384,6 +384,85 @@ class custom extends control
     } 
 
     /**
+     * Display plan or not.
+     * 
+     * @access public
+     * @return void
+     */
+    public function plan()
+    {   
+        $this->lang->custom->menu = new stdclass();
+        $this->lang->navGroup->custom = 'system';
+
+        if(strtolower($this->server->request_method) == "post")
+        {   
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->setItem('system.custom.planStatus', $data->planStatus);
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'plan')));
+        }   
+
+        $this->view->title      = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->plan;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->lang->custom->plan;
+        $this->view->status     = zget($this->config->custom, 'planStatus', 0); 
+
+        $this->display();
+    }
+
+    /**
+     * QC concept. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function concept()
+    {
+        $this->lang->custom->menu = new stdclass();
+        $this->lang->navGroup->custom = 'system';
+
+        if($_POST)
+        {
+            $this->custom->setConcept();
+
+            $this->app->loadLang('common');
+            $locate = inlink('concept');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+        }
+
+        $this->view->title      = $this->lang->custom->concept;
+        $this->view->position[] = $this->lang->custom->concept;
+        $this->display();
+    }
+
+    /**
+     * Set cmmi model.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setcmmi()
+    {   
+        setCookie("systemModel", 'cmmi', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        die(js::locate($this->createLink('custom', 'estimate')));
+    }
+
+    /**
+     * Set scrum model.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setscrum()
+    {   
+        setCookie("systemModel", 'scrum', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        die(js::locate($this->createLink('custom', 'concept')));
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 

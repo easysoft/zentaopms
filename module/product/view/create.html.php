@@ -30,16 +30,6 @@
             <td><?php echo html::input('code', '', "class='form-control input-product-code' required");?></td><td></td>
           </tr>  
           <tr>
-            <th><?php echo $lang->product->line;?></th>
-            <td>
-              <div class='input-group' id='lineIdBox'>
-                <?php echo html::select('line', $lines, '', "class='form-control chosen'");?>
-                <span class='input-group-addon'><?php echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line", '', true), $lang->tree->manageLine, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></span>
-              </div>
-              <div class='hidden'><?php echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'");?></div>
-            </td>
-          </tr>
-          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
           </tr>  
