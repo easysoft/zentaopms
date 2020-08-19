@@ -204,7 +204,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dashboard($module)
+    public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module);
@@ -213,7 +213,7 @@ class block extends control
         /* Init block when vist index first. */
         if(empty($blocks) and !$inited and !defined('TUTORIAL'))
         {
-            if($this->block->initBlock($module)) die(js::reload());
+            if($this->block->initBlock($module, $type)) die(js::reload());
         }
 
         $acls = $this->app->user->rights['acls'];
@@ -983,40 +983,69 @@ class block extends control
     }
 
     /**
-     * Print program statistic block.
+     * Print cmmi report block.
      *
      * @access public
      * @return void
      */
-    public function printProgramStatisticBlock()
+    public function printCmmiReportBlock()
     {
-        $this->loadModel('program');
-        /* Get projects. */
-        $projects = $this->loadModel('project')->getList('all', 0, 0, 0, 'program');
-        $sprints  = $this->project->getList();
-        $total    = count($sprints);
-        foreach($projects as $project)
-        {
-            $project->sprints = 0;
-            foreach($this->lang->project->statusList as $key => $status) 
-            {
-                $project->$key = new stdclass();
-                $project->$key->count = 0;
-            }
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
 
-            foreach($sprints as $sprint)
-            {
-                if($sprint->program == $project->id)
-                {
-                    $project->sprints ++;
-                    $project->{$sprint->status}->count ++;
-                }
-            }
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiGanttBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
 
-            foreach($this->lang->project->statusList as $key => $status) $project->$key->percent = $total ? round($project->$key->count / $total, 2) * 100 . '%' : '0%';
-        }
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiIssueBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
 
-        $this->view->projects = $projects;
+    /**
+     * Print cmmi risk block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiRiskBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print cmmi estimate block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiEstimateBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print cmmi progress block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiprogressBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
     }
 
     /**

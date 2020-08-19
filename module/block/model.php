@@ -218,11 +218,12 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function initBlock($module)
+    public function initBlock($module, $type = '')
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
-        $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
         $account = $this->app->user->account;
+        if($module == 'program') $blocks = $this->lang->block->default[$type]['program'];
+        else $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
         /* Mark this app has init. */
         $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
