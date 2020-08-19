@@ -133,10 +133,7 @@ $lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select a concept according to your team.';
 
-$lang->custom->workingList['full']      = 'Full Management of Dev';
-$lang->custom->workingList['onlyTest']  = 'Test Management';
-$lang->custom->workingList['onlyStory'] = 'Story Management';
-$lang->custom->workingList['onlyTask']  = 'Task Management';
+$lang->custom->workingList['full'] = 'Full Management of Dev';
 
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
