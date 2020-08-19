@@ -63,6 +63,7 @@ class programModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
+            ->add('type', 'program')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())

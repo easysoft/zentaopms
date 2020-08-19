@@ -3772,6 +3772,7 @@ class upgradeModel extends model
         $program->name          = $data->name;
         $program->code          = $data->code;
         $program->template      = 'scrum';
+        $program->type          = 'program';
         $program->category      = count($productIdList) > 1 ? 'multiple' : 'single';
         $program->status        = 'wait';
         $program->begin         = $data->begin;
