@@ -1,8 +1,14 @@
 <?php 
 class risk extends control
 {
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'browse', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        /* Build the search form. */
+        $actionURL = $this->createLink('risk', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $this->config->risk->search['onMenuBar'] = 'yes';
+        $this->risk->buildSearchForm($queryID, $actionURL);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -11,6 +17,8 @@ class risk extends control
         $this->view->title       = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->browse;
         $this->view->position[]  = $this->lang->risk->browse;
         $this->view->risks       = $this->risk->getList($orderBy, $pager);
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -68,12 +76,40 @@ class risk extends control
             $this->send($response);
         }
 
-        $this->view->risk  = $this->risk->getByID($riskID);
+        $this->view->risk  = $this->risk->getById($riskID);
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title       = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->edit;
         $this->view->position[]  = $this->lang->risk->edit;
 
         $this->display();
+    }
+
+    public function view($riskID)
+    {
+        $this->loadModel('action');
+
+        $this->view->risk    = $this->risk->getById($riskID);
+        $this->view->actions = $this->action->getList('risk', $riskID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    public function delete($riskID, $confirm = 'no')
+    {
+        $risk = $this->risk->getById($riskID);
+                        
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->risk->confirmDelete, $this->createLink('risk', 'delete', "risk=$riskID&confirm=yes"), '');
+            exit;
+        }
+        else
+        {
+            $this->risk->delete(TABLE_RISK, $riskID);
+
+            die(js::locate(inlink('browse'), 'parent'));
+        }
     }
 
     public function track($riskID)
@@ -98,7 +134,7 @@ class risk extends control
             $response['locate']  = inlink('browse');
             $this->send($response);
         }
-        $this->view->risk       = $this->risk->getByID($riskID);
+        $this->view->risk       = $this->risk->getById($riskID);
         $this->view->users      = $this->loadModel('user')->getPairs();
         $this->view->title      = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->track;
         $this->view->position[] = $this->lang->risk->track;
@@ -120,7 +156,7 @@ class risk extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
-        $risk = $this->risk->getByID($riskID);
+        $risk = $this->risk->getById($riskID);
 
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->assignedTo;
@@ -144,7 +180,7 @@ class risk extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
-        $risk = $this->risk->getByID($riskID);
+        $risk = $this->risk->getById($riskID);
 
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->cancel;
@@ -167,7 +203,7 @@ class risk extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
-        $risk = $this->risk->getByID($riskID);
+        $risk = $this->risk->getById($riskID);
 
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->close;
@@ -190,7 +226,7 @@ class risk extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
-        $risk = $this->risk->getByID($riskID);
+        $risk = $this->risk->getById($riskID);
 
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->hangup;
@@ -207,13 +243,13 @@ class risk extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $this->loadModel('action');
-            $actionID = $this->action->create('risk', $riskID, 'Hangup', $this->post->comment);            
+            $actionID = $this->action->create('risk', $riskID, 'Activated', $this->post->comment);            
             $this->action->logHistory($actionID, $changes);
             
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
-        $risk = $this->risk->getByID($riskID);
+        $risk = $this->risk->getById($riskID);
 
         $this->view->users = $this->loadModel('user')->getPairs();
         $this->view->title = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->activate;

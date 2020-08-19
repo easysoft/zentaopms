@@ -206,4 +206,31 @@ class riskModel extends model
         if(!dao::isError()) return common::createChanges($oldRisk, $risk);
         return false;
     }
+
+    public static function isClickable($risk, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'cancel' or $action == 'close') return $risk->status != 'canceled' and $risk->status != 'closed';
+        if($action == 'hangup')   return $risk->status == 'active';
+        if($action == 'activate') return $risk->status != 'active';
+
+        return true;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL)
+    {
+        $this->config->risk->search['actionURL'] = $actionURL;
+        $this->config->risk->search['queryID']   = $queryID;
+        
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
 }

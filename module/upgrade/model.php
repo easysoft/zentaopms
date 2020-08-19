@@ -586,6 +586,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_2');
             $this->execSQL($this->getUpgradeFile('12.2'));
             $this->appendExec('12_2');
+        case '20_0':
+            $this->saveLogs('Execute 20_0');
+            $this->execSQL($this->getUpgradeFile('20.0'));
+            $this->setWork2Full();
+            $this->appendExec('20_0');
         }
 
         $this->deletePatch();
@@ -757,6 +762,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
+            case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3766,6 +3772,7 @@ class upgradeModel extends model
         $program->name          = $data->name;
         $program->code          = $data->code;
         $program->template      = 'scrum';
+        $program->type          = 'program';
         $program->category      = count($productIdList) > 1 ? 'multiple' : 'single';
         $program->status        = 'wait';
         $program->begin         = $data->begin;
@@ -3986,6 +3993,18 @@ class upgradeModel extends model
             $data->method = $method;
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
+    }
+
+    /**
+     * Set work to full.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function setWork2Full()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
+        return true;
     }
 
     /**

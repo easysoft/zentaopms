@@ -173,10 +173,7 @@ $lang->custom->productProject->relation['0_1'] = 'Program - Product - Sprint';
 
 $lang->custom->productProject->notice = 'Select a concept that fits your team.';
 
-$lang->custom->workingList['full']      = 'Application Lifecycle Management';
-$lang->custom->workingList['onlyTest']  = 'Test Management';
-$lang->custom->workingList['onlyStory'] = 'Story Management';
-$lang->custom->workingList['onlyTask']  = 'Task Management';
+$lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
 $lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail = 'Failed to save!';

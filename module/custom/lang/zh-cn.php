@@ -173,10 +173,7 @@ $lang->custom->productProject->relation['0_1'] = '项目 - 产品 - 冲刺';
 
 $lang->custom->productProject->notice = '请根据实际情况选择适合自己团队的概念。';
 
-$lang->custom->workingList['full']      = '完整研发管理工具';
-$lang->custom->workingList['onlyTest']  = '测试管理工具';
-$lang->custom->workingList['onlyStory'] = "{$lang->storyCommon}管理工具";
-$lang->custom->workingList['onlyTask']  = '任务管理工具';
+$lang->custom->workingList['full'] = '完整研发管理工具';
 
 $lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';
