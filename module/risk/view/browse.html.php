@@ -40,7 +40,7 @@
       <?php foreach($risks as $risk):?>
       <tr>
         <td><?php echo $risk->id;?></td>
-        <td><?php echo $risk->name;?></td>
+        <td><?php echo html::a($this->createLink('risk', 'view', "riskID=$risk->id"), $risk->name);?></td>
         <td><?php echo zget($lang->risk->strategyList, $risk->strategy);?></td>
         <td><?php echo zget($lang->risk->statusList, $risk->status);?></td>
         <td><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
@@ -64,6 +64,7 @@
     </tbody>
   </table>
   <div class='table-footer'>
+  <?php $pager->show('right', 'pagerjs');?>
   </div>
   <?php endif;?>
 </div>

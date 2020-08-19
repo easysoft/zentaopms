@@ -9,6 +9,12 @@ $lang->risk->hangup      = '挂起';
 $lang->risk->close       = '关闭';
 $lang->risk->cancel      = '取消';
 $lang->risk->track       = '跟踪';
+$lang->risk->assignTo    = '指派';
+$lang->risk->deleted     = '删除';
+
+$lang->risk->legendBasicInfo = '基本信息';
+$lang->risk->legendLifeTime  = '风险的一生';
+$lang->risk->confirmDelete   = '您确认删除该风险吗？';
 
 /* Fields */
 $lang->risk->common            = '风险';
@@ -27,6 +33,7 @@ $lang->risk->remedy            = '应急措施';
 $lang->risk->identifiedDate    = '识别日期';
 $lang->risk->plannedClosedDate = '计划关闭日期';
 $lang->risk->assignedTo        = '指派给';
+$lang->risk->assignedDate      = '指派日期';
 $lang->risk->createdBy         = '由谁创建';
 $lang->risk->createdDate       = '创建日期';
 $lang->risk->noAssigned        = '未指派';
@@ -44,6 +51,12 @@ $lang->risk->activateDate      = '激活日期';
 $lang->risk->isChange          = '是否有变化';
 $lang->risk->trackedBy         = '由谁跟踪';
 $lang->risk->trackedDate       = '跟踪日期';
+$lang->risk->editedBy          = '由谁编辑';
+$lang->risk->editedDate        = '编辑日期';
+
+$lang->risk->action = new stdclass();
+$lang->risk->action->hangup  = '$date, 由 <strong>$actor</strong> 挂起。' . "\n";
+$lang->risk->action->tracked = '$date, 由 <strong>$actor</strong> 跟踪。' . "\n";
 
 $lang->risk->sourceList[''] = '';
 $lang->risk->sourceList['business']    = '业务部门';
@@ -92,3 +105,7 @@ $lang->risk->strategyList['acceptance']   = '接受';
 
 $lang->risk->isChangeList[0] = '否';
 $lang->risk->isChangeList[1] = '是';
+
+$lang->risk->cancelReasonList[''] = '';
+$lang->risk->cancelReasonList['disappeared'] = '风险自行消失';
+$lang->risk->cancelReasonList['mistake']     = '识别错误';

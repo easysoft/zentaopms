@@ -70,15 +70,12 @@
             <td colspan='2'><?php echo html::textarea('resolution', $risk->resolution, "class='form-control'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->risk->prevention;?></th>
-            <td colspan='2'><?php echo html::textarea('prevention', $risk->prevention, "class='form-control'");?></td>
+            <th><?php echo $lang->risk->resolvedBy;?></th>
+            <td><?php echo html::select('resolvedBy', $users, empty($risk->resolvedBy) ? $this->app->user->account : $risk->resolvedBy, "class='form-control chosen'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->risk->remedy;?></th>
-            <td colspan='2'><?php echo html::textarea('remedy', $risk->remedy, "class='form-control'");?></td>
-          </tr><tr>
             <th><?php echo $lang->risk->assignedTo;?></th>
-            <td><?php echo html::select('assignedTo', $users, $risk->assignedTo, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('assignedTo', $users, empty($risk->assignedTo) ? $this->app->user->account : $risk->assignedTo, "class='form-control chosen'");?></td>
           </tr>
           
           <tr>
