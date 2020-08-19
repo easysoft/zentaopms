@@ -132,7 +132,7 @@ $lang->dividerMenu = ',admin,';
 
 /* Scrum menu. */
 $lang->menu = new stdclass();
-//$lang->menu->program = '主页|program|index';
+$lang->menu->program = '仪表盘|program|index|';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->doc     = '文档|doc|index|';
@@ -1104,6 +1104,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
+$lang->menu->cmmi->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');

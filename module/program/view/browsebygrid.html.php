@@ -2,7 +2,7 @@
 <div class='row cell' id='cards'>
   <?php foreach ($projectList as $projectID => $project):?>
   <div class='col' data-id='<?php echo $projectID?>'>
-    <div class='panel' data-url='<?php echo $this->createLink('program', 'transfer', "projectID=$project->id");?>'>
+    <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "projectID=$project->id");?>'>
       <div class='panel-heading'>
         <strong class='project-name' title='<?php echo $project->name;?>'><?php echo $project->name;?></strong>
         <?php if($project->template === 'cmmi'): ?>
