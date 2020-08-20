@@ -15,11 +15,12 @@
       <tr>
         <th class='c-id'><?php echo $lang->idAB;?></th>
         <th class='w-100px'><?php echo $lang->issue->type;?></th>
-        <th class='c-name'> <?php echo $lang->issue->name;?></th>
+        <th class='c-name'> <?php echo $lang->issue->title;?></th>
         <?php if($longBlock):?>
-        <th class='c-severity'><?php echo $lang->issue->severity;?></th>
-        <th class='c-pri'><?php echo $lang->issue->pri;?></th>
+        <th class='w-80px'><?php echo $lang->issue->severity;?></th>
+        <th class='w-80px'><?php echo $lang->issue->pri;?></th>
         <?php endif;?>
+        <th class='w-120px'><?php echo $lang->issue->owner;?></th>
         <th class='w-120px'><?php echo $lang->issue->assignedTo;?></th>
         <th class='w-80px'><?php echo $lang->issue->status;?></th>
       </tr>
@@ -32,11 +33,12 @@
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $issue->id);?></td>
         <td class='c-type'><?php echo zget($lang->issue->typeList, $issue->type);?></td>
-        <td class='c-name' title='<?php echo $issue->name?>'><?php echo $issue->name?></td>
+        <td class='c-name' title='<?php echo $issue->title?>'><?php echo html::a($viewLink, $issue->title);?></td>
         <?php if($longBlock):?>
         <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity, $issue->severity)?></td>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $issue->pri;?>' title='<?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?>'><?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?></span></td>
         <?php endif;?>
+        <td><?php echo zget($users, $issue->owner, $issue->owner)?></td>
         <td><?php echo zget($users, $issue->assignedTo, $issue->assignedTo)?></td>
         <td class='c-status'>
           <span class="status-issue status-<?php echo $issue->status?>"><?php echo zget($lang->issue->statusList, $issue->status);?></span>

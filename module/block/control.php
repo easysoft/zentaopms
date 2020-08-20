@@ -1001,7 +1001,6 @@ class block extends control
             ->andWhere('parent')->lt(1)
             ->fetch();
 
-
         $this->view->pv = $this->weekly->getPV($this->session->program, $today);
         $this->view->ev = $this->weekly->getEV($this->session->program, $today);
         $this->view->ac = $this->weekly->getAC($this->session->program, $today);
@@ -1034,6 +1033,7 @@ class block extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
     }
 

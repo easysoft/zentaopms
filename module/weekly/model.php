@@ -112,12 +112,13 @@ class weeklyModel extends model
         $sunday = $this->getThisSunday($date);
         $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
         $projectIdList = array_keys($projects);
-        return $this->dao->select('count(distinct account) as count')
-            ->from(TABLE_EFFORT)
-            ->where('objectType')->eq('task')
-            ->andWhere('project')->in($projectIdList)
-            ->andWhere('date')->ge($monday)
-            ->andWhere('date')->le($sunday)
+
+        return $this->dao->select('count(distinct t1.account) as count')
+            ->from(TABLE_TASKESTIMATE)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t2.project')->in($projectIdList)
+            ->andWhere('t1.date')->ge($monday)
+            ->andWhere('t1.date')->lt($sunday)
             ->fetch('count');
     }
 
@@ -312,12 +313,12 @@ class weeklyModel extends model
         $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
         $projectIdList = array_keys($projects);
 
-        $AC = $this->dao->select('sum(consumed) as consumed')
-            ->from(TABLE_EFFORT)
-            ->where('objectType')->eq('task')
-            ->andWhere('project')->in($projectIdList)
-            ->andWhere('date')->ge($monday)
-            ->andWhere('date')->lt($nextMonday)
+        $AC = $this->dao->select('sum(t1.consumed) as consumed')
+            ->from(TABLE_TASKESTIMATE)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t2.project')->in($projectIdList)
+            ->andWhere('t1.date')->ge($monday)
+            ->andWhere('t1.date')->lt($nextMonday)
             ->fetch('consumed');
 
         return round($AC, 2);

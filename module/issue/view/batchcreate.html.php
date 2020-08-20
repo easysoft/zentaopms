@@ -38,7 +38,7 @@
       	 <?php echo html::select("dataList[$i][type]", $lang->issue->typeList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'type"')?>
         </td>
         <td>
-       	 <?php echo html::select("dataList[$i][severity]", $lang->issue->serverityList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'severity"')?>
+       	 <?php echo html::select("dataList[$i][severity]", $lang->issue->severityList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'severity"')?>
         </td>
         <td>
         <?php echo html::textarea("dataList[$i][desc]", '', 'class="form-control" id="dataList'.$i.'desc" rows="1"');?>
