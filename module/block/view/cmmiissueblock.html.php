@@ -19,9 +19,9 @@
         <?php if($longBlock):?>
         <th class='w-80px'><?php echo $lang->issue->severity;?></th>
         <th class='w-80px'><?php echo $lang->issue->pri;?></th>
-        <?php endif;?>
         <th class='w-120px'><?php echo $lang->issue->owner;?></th>
         <th class='w-120px'><?php echo $lang->issue->assignedTo;?></th>
+        <?php endif;?>
         <th class='w-80px'><?php echo $lang->issue->status;?></th>
       </tr>
     </thead>
@@ -37,9 +37,9 @@
         <?php if($longBlock):?>
         <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity, $issue->severity)?></td>
         <td class='c-pri'><?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?></td>
-        <?php endif;?>
         <td><?php echo zget($users, $issue->owner, $issue->owner)?></td>
         <td><?php echo zget($users, $issue->assignedTo, $issue->assignedTo)?></td>
+        <?php endif;?>
         <td class='c-status'>
           <span class="status-issue status-<?php echo $issue->status?>"><?php echo zget($lang->issue->statusList, $issue->status);?></span>
         </td>

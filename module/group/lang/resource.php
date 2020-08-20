@@ -180,6 +180,30 @@ $lang->program->methodOrder[60] = 'setPlanduration';
 $lang->program->methodOrder[65] = 'manageMembers';
 $lang->program->methodOrder[70] = 'export';
 
+/* Risk . */
+$lang->resource->risk = new stdclass();
+$lang->resource->risk->browse      = 'browse';
+$lang->resource->risk->create      = 'create';
+$lang->resource->risk->edit        = 'edit';
+$lang->resource->risk->delete      = 'delete';
+$lang->resource->risk->activate    = 'activate';
+$lang->resource->risk->close       = 'close';
+$lang->resource->risk->hangup      = 'hangup';
+$lang->resource->risk->batchCreate = 'batchCreate';
+$lang->resource->risk->cancel      = 'cancel';
+$lang->resource->risk->track       = 'track';
+
+$lang->risk->methodOrder[5]  = 'browse';
+$lang->risk->methodOrder[10] = 'create';
+$lang->risk->methodOrder[15] = 'edit';
+$lang->risk->methodOrder[20] = 'delete';
+$lang->risk->methodOrder[25] = 'activate';
+$lang->risk->methodOrder[30] = 'close';
+$lang->risk->methodOrder[35] = 'hangup';
+$lang->risk->methodOrder[40] = 'batchCreate';
+$lang->risk->methodOrder[45] = 'cancel';
+$lang->risk->methodOrder[50] = 'track';
+
 /* Product. */
 $lang->resource->product = new stdclass();
 $lang->resource->product->index       = 'index';

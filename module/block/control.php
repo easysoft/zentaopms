@@ -1034,7 +1034,7 @@ class block extends control
         $this->session->set('riskList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1045,7 +1045,10 @@ class block extends control
      */
     public function printCmmiRiskBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**

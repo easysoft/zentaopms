@@ -224,6 +224,8 @@ $lang->action->label->unlinkchildrenstory = "取消关联子需求";
 $lang->action->label->linkparentstory     = "关联到父需求";
 $lang->action->label->unlinkparentstory   = "从父需求取消关联";
 $lang->action->label->deletechildrenstory = "删除子需求";
+$lang->action->label->tracked             = '跟踪了';
+$lang->action->label->hangup              = '挂起了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass();
@@ -400,6 +402,7 @@ $lang->action->label->testreport  = '报告|testreport|view|report=%s';
 $lang->action->label->entry       = '应用|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
+$lang->action->label->risk        = '风险|risk|view|riskID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
