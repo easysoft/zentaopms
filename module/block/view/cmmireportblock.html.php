@@ -3,22 +3,48 @@
 .block-cmmireport .col-right{width: 75%;}
 .block-cmmireport .panel-body{padding-top: 0px;}
 .block-cmmireport .table-row{margin-bottom: 20px;}
-.progress {position: absolute; left: 22px; top: 90px; right: 8px;}
+.block-cmmireport .stage{position: absolute; top: 14px; left: 90px;}
+.block-cmmireport .col-right .tiles { padding: 10px 0 0 16px; }
+.block-cmmireport .col-right .tile { width: 20%;}
+.block-cmmireport .col-right .tile .tile-title{font-weight: 700;}
+.progress {position: absolute; left: 45px; top: 90px; right: 40px;}
 .progress-num{font-size: 34px; font-weight: 700}
 </style>
 
-<div class="panel-move-handler"></div>
+<div class="panel-move-handler"><span class='stage text-muted'><?php echo $current;?></span></div>
 <div class="panel-body conatiner-fluid">
   <div class='table-row'>
     <div class="col col-left hide-in-sm">
-      <h4>项目进度</h4>
-      <span class='progress-num'>70%</span>
+      <h4><?php echo $lang->program->progress;?></h4>
+      <span class='progress-num'><?php echo $progress . '%';?></span>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress;?>%">
         </div>
       </div>
     </div>
     <div class='col-right'>
+      <div class='row tiles'>
+        <div class="col tile">
+          <div class="tile-title">PV</div>
+          <div class="tile-amount"><?php echo $pv == 0 ? 0 : $pv;?></div>
+        </div>
+        <div class="col tile">
+          <div class="tile-title">EV</div>
+          <div class="tile-amount"><?php echo $ev == 0 ? 0 : $ev;?></div>
+        </div>
+        <div class="col tile">
+          <div class="tile-title">AC</div>
+          <div class="tile-amount"><?php echo $ac == 0 ? 0 : $ac;?></div>
+        </div>
+        <div class="col tile">
+          <div class="tile-title">SV%</div>
+          <div class="tile-amount"><?php echo $sv . '%';?></div>
+        </div>
+        <div class="col tile">
+          <div class="tile-title">CV%</div>
+          <div class="tile-amount"><?php echo $cv . '%';?></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

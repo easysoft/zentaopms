@@ -46,6 +46,7 @@ $lang->program->mine               = '我参与的';
 $lang->program->setPlanduration    = '设置工期';
 $lang->program->privway            = '权限控制';
 $lang->program->durationEstimation = '工作量估算';
+$lang->program->progress           = '项目进度';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';

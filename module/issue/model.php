@@ -83,6 +83,18 @@ class issueModel extends model
         return $issueList;
     }
 
+    public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    {
+        $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
+            ->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll();
+
+        return $issueList;
+    }
+
     /**
      * Delete a question.
      *

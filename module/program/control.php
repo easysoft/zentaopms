@@ -25,6 +25,7 @@ class program extends control
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
         $this->view->position[] = $this->lang->program->index;
         $this->view->program    = $this->project->getByID($programID);
+
         $this->display();
     }
 
