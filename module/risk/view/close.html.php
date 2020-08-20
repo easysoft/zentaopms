@@ -21,7 +21,8 @@
           <td></td>
         </tr>       <tr>
           <th><?php echo $lang->risk->resolution;?></th>
-          <td colspan='2'><?php echo html::textarea('resolution', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>      </tr>
+          <td colspan='2'><?php echo html::textarea('resolution', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>    
+        </tr>
         <tr>
           <td class='text-center form-actions' colspan='3'><?php echo html::submitButton(); ?></td>        </tr>
       </tbody>

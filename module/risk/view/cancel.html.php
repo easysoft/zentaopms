@@ -26,9 +26,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>      </tr>
+          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+        </tr>
         <tr>
-          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton(); ?></td>        </tr>
+          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton(); ?></td>
+        </tr>
       </tbody>
     </table>
   </form>

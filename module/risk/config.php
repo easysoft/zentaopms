@@ -60,4 +60,4 @@ $config->risk->search['params']['activateBy']        = array('operator' => '=', 
 $config->risk->search['params']['assignedTo']        = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->risk->search['params']['cancelBy']          = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->risk->search['params']['hangupBy']          = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->risk->search['params']['trackedBy']          = array('operator' => '=', 'control' => 'select',  'values' => 'users');
+$config->risk->search['params']['trackedBy']         = array('operator' => '=', 'control' => 'select',  'values' => 'users');

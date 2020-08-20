@@ -34,7 +34,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->issue->severity;?></th>
-            <td class="required"><?php echo html::select('severity', $lang->issue->serverityList, $issue->severity, 'class="form-control chosen"');?></td>
+            <td class="required"><?php echo html::select('severity', $lang->issue->severityList, $issue->severity, 'class="form-control chosen"');?></td>
             <td></td>
             <td></td>
           </tr>

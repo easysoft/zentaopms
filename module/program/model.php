@@ -5,6 +5,7 @@ class programModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
+            ->andWhere('template')->ne('')
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
@@ -92,6 +93,12 @@ class programModel extends model
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
+
+            if($project->parent > 0)
+            {
+                $this->dao->update(TABLE_PROJECT)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
+                $this->fixPath($programID);
+            }
 
             /* Add program admin.*/
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
@@ -188,5 +195,50 @@ class programModel extends model
     public function getProducts($program)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)->where('project')->eq($program)->fetchAll('id');
+    }
+
+    public function checkHasContent($programID)
+    {
+        $count  = 0;
+        $count += $this->dao->select('count(*) as count')->from(TABLE_BUDGET)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_CASE)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_DESIGN)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_ISSUE)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_RELATION)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_RELEASE)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_REPO)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_RISK)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_TESTREPORT)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_TESTSUITE)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_TESTTASK)->where('program')->eq($programID)->fetch('count');
+        $count += $this->dao->select('count(*) as count')->from(TABLE_WORKESTIMATION)->where('program')->eq($programID)->fetch('count');
+
+        return $count > 0;
+    }
+
+    public function fixPath($programID)
+    {
+        $path    = array();
+        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+        if($program->parent == 0)
+        {
+            $path['path']  = ",{$program->id},";
+            $path['grade'] = 1;
+            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
+        }
+        else
+        {
+            $path = $this->fixPath($program->parent);
+            $path['path']  .= "{$program->id},";
+            $path['grade'] += 1;
+            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
+        }
+
+        return $path;
     }
 }

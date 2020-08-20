@@ -51,11 +51,11 @@ $lang->issue->priList['2'] = 2;
 $lang->issue->priList['3'] = 3;
 $lang->issue->priList['4'] = 4;
 
-$lang->issue->serverityList[''] = '';
-$lang->issue->serverityList['1'] = '严重';
-$lang->issue->serverityList['2'] = '较严重';
-$lang->issue->serverityList['3'] = '较小';
-$lang->issue->serverityList['4'] = '建议';
+$lang->issue->severityList[''] = '';
+$lang->issue->severityList['1'] = '严重';
+$lang->issue->severityList['2'] = '较严重';
+$lang->issue->severityList['3'] = '较小';
+$lang->issue->severityList['4'] = '建议';
 
 $lang->issue->typeList[''] = '';
 $lang->issue->typeList['design']       = '设计问题';
