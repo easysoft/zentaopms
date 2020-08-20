@@ -97,7 +97,7 @@ CREATE TABLE `zt_designspec` (
 
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE `zt_issue` (
-  `id` mediumint(8) UNSIGNED NOT NULL,
+  `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL,
   `program` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,

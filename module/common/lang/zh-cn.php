@@ -1118,6 +1118,10 @@ $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
 $lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
+/* Srcum menu. */
+$lang->menu->srcum = new stdclass();
+$lang->menu->srcum->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
+
 $lang->cmmi = new stdclass();
 $lang->cmmi->subMenu = new stdclass();
 $lang->cmmi->subMenu->list = new stdclass();

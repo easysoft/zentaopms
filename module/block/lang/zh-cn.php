@@ -101,6 +101,35 @@ $lang->block->default['cmmi']['program']['7']['params']['type']    = 'all';
 $lang->block->default['cmmi']['program']['7']['params']['num']     = '15';
 $lang->block->default['cmmi']['program']['7']['params']['orderBy'] = 'id_desc';
 
+$lang->block->default['scrum']['program']['1']['title'] = '项目整体情况';
+$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverall';
+$lang->block->default['scrum']['program']['1']['grid']  = 8;
+
+$lang->block->default['scrum']['program']['2']['title'] = '进行中的迭代';
+$lang->block->default['scrum']['program']['2']['block'] = 'scrumprogress';
+$lang->block->default['scrum']['program']['2']['grid']  = 8;
+
+$lang->block->default['scrum']['program']['3']['title'] = '产品路线图';
+$lang->block->default['scrum']['program']['3']['block'] = 'scrumroadmap';
+$lang->block->default['scrum']['program']['3']['grid']  = 8;
+
+$lang->block->default['scrum']['program']['4']['title'] = '待测版本';
+$lang->block->default['scrum']['program']['4']['block'] = 'scrumtest';
+$lang->block->default['scrum']['program']['4']['grid']  = 8;
+
+$lang->block->default['scrum']['program']['5']['title'] = '产品总览';
+$lang->block->default['scrum']['program']['5']['block'] = 'scrumproduct';
+$lang->block->default['scrum']['program']['5']['grid']  = 4;
+
+$lang->block->default['scrum']['program']['6']['title'] = '迭代总览';
+$lang->block->default['scrum']['program']['6']['block'] = 'scrumproject';
+$lang->block->default['scrum']['program']['6']['grid']  = 4;
+
+$lang->block->default['scrum']['program']['7']['title'] = '最新动态';
+$lang->block->default['scrum']['program']['7']['block'] = 'scrumoverview';
+$lang->block->default['scrum']['program']['7']['grid']  = 4;
+>>>>>>> Stashed changes
+
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
