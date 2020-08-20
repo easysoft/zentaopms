@@ -224,6 +224,8 @@ $lang->action->label->unlinkchildrenstory = "unlinked a child story";
 $lang->action->label->linkparentstory     = "linked a parent story";
 $lang->action->label->unlinkparentstory   = "unlink from parent story";
 $lang->action->label->deletechildrenstory = "delete children story";
+$lang->action->label->tracked             = 'tracked';
+$lang->action->label->hangup              = 'hangup';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass;
@@ -400,6 +402,7 @@ $lang->action->label->testreport  = 'Rapport|testreport|view|report=%s';
 $lang->action->label->entry       = 'Application|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
+$lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    
