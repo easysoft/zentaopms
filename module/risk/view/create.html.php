@@ -12,6 +12,7 @@
             <th><?php echo $lang->risk->source;?></th>
             <td><?php echo html::select('source', $lang->risk->sourceList, '', "class='form-control chosen'");?></td>
             <td></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->risk->name;?></th>

@@ -1,6 +1,12 @@
 <?php
 class riskModel extends model
 {
+    /**
+     * Create a bug.
+     *
+     * @access public
+     * @return int|bool
+     */
     public function create()
     {
         $risk = fixer::input('post')
@@ -18,6 +24,12 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Batch create risk.
+     *
+     * @access public
+     * @return bool
+     */
     public function batchCreate()
     {
         $data = fixer::input('post')->get(); 
@@ -29,8 +41,10 @@ class riskModel extends model
 
             $risk = new stdclass();
             $risk->name        = $name;
-            $risk->percent     = $data->percent[$i];
-            $risk->type        = $data->type[$i];
+            $risk->source      = $data->source[$i];
+            $risk->category    = $data->category[$i];
+            $risk->strategy    = $data->strategy[$i];
+            $risk->program     = $this->session->program;
             $risk->createdBy   = $this->app->user->account;
             $risk->createdDate = helper::today();
 
@@ -43,6 +57,13 @@ class riskModel extends model
         return true;
     }
 
+    /**
+     * Update a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function update($riskID)
     {
         $oldRisk = $this->dao->select('*')->from(TABLE_RISK)->where('id')->eq((int)$riskID)->fetch();
@@ -60,6 +81,13 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Track a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function track($riskID)
     {
         $oldRisk = $this->dao->select('*')->from(TABLE_RISK)->where('id')->eq((int)$riskID)->fetch();
@@ -68,8 +96,7 @@ class riskModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::today())
             ->stripTags($this->config->risk->editor->track['id'], $this->config->allowedTags)
-            ->remove('ischange,comment,uid')
-            ->removeIF($this->post->isChange == 0, 'name,category,strategy,impact,probability,riskindex,pri,prevention,resolution' )
+            ->remove('isChange,comment,uid,files,label')
             ->get();
 
         $this->dao->update(TABLE_RISK)->data($risk)->autoCheck()->where('id')->eq((int)$riskID)->exec();
@@ -78,6 +105,16 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Get risks List.
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return object
+     */
     public function getList($browseType = '', $param = '', $orderBy = 'id_desc', $pager = null)
     {
         if($browseType == 'bySearch') return $this->getBySearch($param, $orderBy, $pager);
@@ -92,9 +129,18 @@ class riskModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get risks by search
+     *
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return object
+     */
     public function getBySearch($queryID = '', $orderBy = 'id_desc', $pager = null)
     {
-        if($queryID)
+        if($queryID && $queryID != 'myQueryID')
         {
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
@@ -112,7 +158,7 @@ class riskModel extends model
             if($this->session->riskQuery == false) $this->session->set('riskQuery', ' 1 = 1');
         }
 
-        $riskQuery   = $this->session->riskQuery;
+        $riskQuery = $this->session->riskQuery;
 
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where($riskQuery)
@@ -123,6 +169,12 @@ class riskModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get risks of pairs
+     *
+     * @access public
+     * @return object
+     */
     public function getPairs()
     {
         return $this->dao->select('id, name')->from(TABLE_RISK)
@@ -131,11 +183,26 @@ class riskModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get risk by ID
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return object
+     */
     public function getByID($riskID)
     {
         return $this->dao->select('*')->from(TABLE_RISK)->where('id')->eq((int)$riskID)->fetch();
     }
 
+    /**
+     * Print assignedTo html
+     *
+     * @param  int    $risk
+     * @param  int    $users
+     * @access public
+     * @return string
+     */
     public function printAssignedHtml($risk, $users)
     {
         $btnTextClass   = '';
@@ -156,6 +223,13 @@ class riskModel extends model
         echo !common::hasPriv('risk', 'assignTo', $risk) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
+    /**
+     * Assign a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function assign($riskID)
     {
         $oldRisk = $this->getByID($riskID);
@@ -165,7 +239,7 @@ class riskModel extends model
             ->add('editedDate', helper::today())
             ->setDefault('assignedDate', helper::today())
             ->stripTags($this->config->risk->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('uid,comment')
+            ->remove('uid,comment,files,label')
             ->get();
 
         $this->dao->update(TABLE_RISK)->data($risk)->autoCheck()->where('id')->eq((int)$riskID)->exec();
@@ -174,6 +248,13 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Cancel a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function cancel($riskID)
     {
         $oldRisk = $this->getByID($riskID);
@@ -192,6 +273,13 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Close a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function close($riskID)
     {
         $oldRisk = $this->getByID($riskID);
@@ -210,6 +298,13 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Hangup a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function hangup($riskID)
     {
         $oldRisk = $this->getByID($riskID);
@@ -226,6 +321,13 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Activate a risk.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return array|bool
+     */
     public function activate($riskID)
     {
         $oldRisk = $this->getByID($riskID);
@@ -242,6 +344,15 @@ class riskModel extends model
         return false;
     }
 
+    /**
+     * Adjust the action is clickable.
+     *
+     * @param  int    $risk
+     * @param  int    $action
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function isClickable($risk, $action)
     {
         $action = strtolower($action);

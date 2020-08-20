@@ -1,8 +1,3 @@
-$(function()
-{
-    $('.track').addClass('hidden');
-})
-
 function refreshPage(obj)
 {
     var value = obj.value;
