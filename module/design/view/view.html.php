@@ -1,19 +1,23 @@
-<?php include '../../' . 'common/view/header.html.php';?>
 <?php
-if(!empty($_GET['onlybody']))
-{
-    $data->commit = '';
-    foreach($relations as $relation) $data->commit .= " #$relation->BID";
-    $data->story = $storyTitle;
-}
+/**
+ * The view of design module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: view.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
 ?>
+<?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($this->createLink('design', 'browse', "productID=$productID"), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
-      <span class="label label-id"><?php echo $data->id?></span>
-      <span class="text" title="<?php echo $data->name;?>"><?php echo $data->name;?></span>
+      <span class="label label-id"><?php echo $design->id?></span>
+      <span class="text" title="<?php echo $design->name;?>"><?php echo $design->name;?></span>
     </div>
   </div>
 </div>
@@ -23,8 +27,8 @@ if(!empty($_GET['onlybody']))
       <div class="detail">
         <div class="detail-title"><?php echo $lang->design->desc;?></div>
         <div class="detail-content article-content">
-          <?php echo $data->desc;?>
-          <?php echo $this->fetch('file', 'printFiles', array('files' => $data->files, 'fieldset' => 'true'));?>
+          <?php echo $design->desc;?>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $design->files, 'fieldset' => 'true'));?>
         </div>
       </div>
     </div>
@@ -33,13 +37,13 @@ if(!empty($_GET['onlybody']))
       <div class="btn-toolbar">
         <?php common::printBack($this->session->designList);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$data->deleted):?>
+        <?php if(!$design->deleted):?>
         <?php
-        common::printIcon('design', 'commit',"designID=$data->id", $data, 'button', 'link', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'edit', "designID=$data->id", $data, 'button', '', '', '', true);
-        common::printIcon('design', 'delete', "designID=$data->id", $data, 'button', 'trash', 'hiddenwin');
+        common::printIcon('design', 'commit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'edit',   "designID=$design->id", $design, 'button', '', '', '', true);
+        common::printIcon('design', 'delete', "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
-            <?php endif;?>
+        <?php endif;?>
       </div>
     </div>
   </div>
@@ -49,39 +53,31 @@ if(!empty($_GET['onlybody']))
         <table class='table table-data'>
           <tr>
             <th><?php echo $lang->design->type;?></th>
-            <td><?php echo zget($lang->design->typeList, $data->type);?></td>
+            <td><?php echo zget($lang->design->typeList, $design->type);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->product;?></th>
-            <td><?php echo $data->productName;?></td>
+            <td><?php echo $design->productName;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->story;?></th>
-            <td><?php echo $data->story;?></td>
+            <td><?php echo $design->story;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->commit;?></th>
-            <td><?php echo $data->commit;?></td>
+            <td><?php echo $design->commit;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->createdBy;?></th>
-            <td><?php echo zget($users, $data->createdBy);?></td>
+            <td><?php echo zget($users, $design->createdBy);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->createdDate;?></th>
-            <td><?php echo $data->createdDate;?></td>
+            <td><?php echo $design->createdDate;?></td>
           </tr>
         </table>
       </div>
     </div>
   </div>
 </div>
-<script>
-$('.main-actions').width($('.main-col').outerWidth());
-if(showAction == 'hidden')
-{
-    $('.main-actions').remove();
-    $('.pull-left').children('a').remove();
-};
-</script>
-<?php include '../../' . 'common/view/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
