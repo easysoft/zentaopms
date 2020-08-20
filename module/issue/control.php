@@ -282,9 +282,8 @@ class issue extends control
         $this->view->position[] = $this->lang->issue->common;
         $this->view->position[] = $this->lang->issue->basicInfo;
 
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->issue = $issue;
-
         $this->display();
     }
 

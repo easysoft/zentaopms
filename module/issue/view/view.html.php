@@ -15,6 +15,12 @@
 <?php
 $browseLink = $this->createLink('issue', 'browse');
 $createLink = $this->createLink('issue', 'create');
+
+$dateFiled  = array('deadline', 'resolvedDate', 'createdDate', 'editedDate', 'activateDate', 'closedDate', 'assignedDate');
+foreach($issue as $field => $value)
+{
+	if(in_array($field, $dateFiled) && strpos($value, '0000') === 0) $issue->$field = '';
+}
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -35,8 +41,8 @@ $createLink = $this->createLink('issue', 'create');
   <div class="main-col col-8">
     <div class="cell">
       <div class="detail">
-        <p><strong>标题</strong> - 设计出现偏差，需求重新设计</p>
-        <p><strong>标题</strong> - 设计出现偏差，需求重新设计</p>
+        <p><strong><?php echo $lang->issue->title;?></strong> - <?php echo $issue->title?></p>
+        <p><strong><?php echo $lang->issue->deadline;?></strong> - <?php echo $issue->deadline;?></p>
       </div>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->issue->desc;?></div>
@@ -59,12 +65,80 @@ $createLink = $this->createLink('issue', 'create');
         <div class="tab-content">
           <div class="tab-pane active" id="basicInfo">
             <table class="table table-data">
-              <tbody>
+			  <tbody>
+				<tr valign="middle">
+				<th class="thWidth w-100px"><?php echo $lang->issue->id;?></th>
+				<td><?php echo $issue->id;?></td>
+				</tr>
                 <tr valign="middle">
                   <th class="thWidth w-80px"><?php echo $lang->issue->type;?></th>
-                  <td></td>
-                  
-                </tr>
+				  <td><?php echo zget($lang->issue->typeList, $issue->type);?></td>
+				</tr>
+
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->severity;?></th>
+				  <td><?php echo $issue->severity;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->pri;?></th>
+				  <td><?php echo $issue->pri;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->resolvedDate;?></th>
+				  <td><?php echo $issue->resolvedDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->owner;?></th>
+				  <td><?php echo zget($users, $issue->owner);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->assignedTo;?></th>
+				  <td><?php echo zget($users, $issue->assignedTo);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->createdBy;?></th>
+				  <td><?php echo zget($users, $issue->createdBy);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->createdDate;?></th>
+				  <td><?php echo $issue->createdDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->editedBy;?></th>
+				  <td><?php echo zget($users, $issue->editedBy);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->editedDate;?></th>
+				  <td><?php echo $issue->editedDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->assignedBy;?></th>
+				  <td><?php echo zget($users, $issue->assignedBy);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->assignedDate;?></th>
+				  <td><?php echo $issue->assignedDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->closedDate;?></th>
+				  <td><?php echo $issue->closedDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->activateBy;?></th>
+				  <td><?php echo zget($users, $issue->activateBy);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->activateDate;?></th>
+				  <td><?php echo $issue->activateDate;?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->closeBy;?></th>
+				  <td><?php echo zget($users, $issue->closeBy);?></td>
+				</tr>
+                <tr valign="middle">
+                  <th class="thWidth w-80px"><?php echo $lang->issue->status;?></th>
+				  <td><?php echo zget($lang->issue->statusList, $issue->status);?></td>
+				</tr>
               </tbody>
             </table>
           </div>

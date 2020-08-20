@@ -28,6 +28,7 @@ $lang->issue->assignedTo        = '指派给';
 $lang->issue->assignedBy        = '由谁指派';
 $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolved          = '解决';
+$lang->issue->id                = '编号';
 
 $lang->issue->delete            = '删除';
 $lang->issue->basicInfo         = '基本信息';
