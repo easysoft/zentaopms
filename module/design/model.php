@@ -27,7 +27,7 @@ class designModel extends model
             ->add('createdDate', helper::now())
             ->add('program', $this->session->program)
             ->add('version', 1)
-            ->remove('file,files,labels,children, toList')
+            ->remove('file,files,labels,children,toList')
             ->get();
 
         $design = $this->loadModel('file')->processImgURL($design, 'desc', $this->post->uid);
@@ -67,7 +67,7 @@ class designModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->stripTags($this->config->design->editor->edit['id'], $this->config->allowedTags)
-            ->remove('file,files,labels,children, toList')
+            ->remove('file,files,labels,children,toList')
             ->get();
 
         $design = $this->loadModel('file')->processImgURL($design, 'desc', $this->post->uid);
@@ -147,11 +147,12 @@ class designModel extends model
     public function setProductMenu($productID = 0)
     {
         $programID = $this->session->program;
+        $program   = $this->loadModel('project')->getByID($programID);
         $products  = $this->loadModel('product')->getPairs($programID);
         $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
 
         $productID = $this->loadModel('product')->saveState($productID, $products);
-        $this->loadModel('product')->setMenu($products, $productID);
+        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
     }
 
     /**
@@ -164,7 +165,14 @@ class designModel extends model
     public function getByID($designID)
     {
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
-         return $this->loadModel('file')->replaceImgURL($design, 'desc');
+        $design->files       = $this->loadModel('file')->getByObject('design', $designID);
+        $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
+
+
+        $design->commit = ''; 
+        $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
+        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID"), "#$relation->BID", '_blank');
+        return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
 
     /**
@@ -216,16 +224,24 @@ class designModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID, $type, $orderBy, $pager)
+    public function getList($productID, $type = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_DESIGN)
+        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
             ->where('deleted')->eq(0)
             ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
-            ->beginIF($type !='all')->andWhere('type')->in($type)->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->andWhere('product')->eq($productID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        foreach($designs as $id => $design)
+        {
+            $design->commit = ''; 
+            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
+            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
+        }
+
+        return $designs;
     }
 }

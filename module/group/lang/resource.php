@@ -16,13 +16,13 @@ $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
 
 $lang->moduleOrder[11]  = 'program';
+$lang->moduleOrder[12]  = 'design';
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
 
 $lang->moduleOrder[35]  = 'project';
-$lang->moduleOrder[36]  = 'design';
 $lang->moduleOrder[40]  = 'task';
 $lang->moduleOrder[45]  = 'build';
 
@@ -440,6 +440,7 @@ $lang->resource->design->browse   = 'browse';
 $lang->resource->design->create   = 'create';
 $lang->resource->design->edit     = 'edit';
 $lang->resource->design->commit   = 'commit';
+$lang->resource->design->revision = 'revision';
 $lang->resource->design->delete   = 'delete';
 $lang->resource->design->view     = 'view';
 
@@ -447,8 +448,9 @@ $lang->design->methodOrder[5]     = 'browse';
 $lang->design->methodOrder[10]    = 'create';
 $lang->design->methodOrder[15]    = 'edit';
 $lang->design->methodOrder[20]    = 'commit';
-$lang->design->methodOrder[25]    = 'delete';
-$lang->design->methodOrder[30]    = 'view';
+$lang->design->methodOrder[25]    = 'revision';
+$lang->design->methodOrder[30]    = 'delete';
+$lang->design->methodOrder[35]    = 'view';
 
 /* Task. */
 $lang->resource->task = new stdclass();

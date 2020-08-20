@@ -12,10 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php
-$showSubHeader = $program->category == 'single' ? 'hidden' : 'show';
-js::set('showSubHeader', $showSubHeader);
-?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -100,7 +96,4 @@ js::set('showSubHeader', $showSubHeader);
     </form>
   </div>
 </div>
-<script>
-if(showSubHeader == 'hidden') $("#subHeader").remove();
-</script>
 <?php include '../../common/view/footer.html.php';?>

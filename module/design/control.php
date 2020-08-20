@@ -29,28 +29,27 @@ class design extends control
 
         $this->design->setProductMenu($productID);
         $product = $this->loadModel('product')->getById($productID);
-        $project = $this->loadModel('project')->getById($product->program);
+        $program = $this->loadModel('project')->getById($product->program);
 
         $this->app->session->set('designList', $this->app->getURI(true));
 
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPager = 10;
-        $pager    = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $designs = $this->design->getList($productID, $type, $orderBy, $pager);
 
-        $this->view->title        = $this->lang->design->browse;
-        $this->view->position[]   = $this->lang->design->browse;
+        $this->view->title      = $this->lang->design->browse;
+        $this->view->position[] = $this->lang->design->browse;
 
-        $this->view->designs      = $designs;
-        $this->view->type         = $type;
-        $this->view->recTotal     = $recTotal;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
-        $this->view->orderBy      = $orderBy;
-        $this->view->productID    = $productID;
-        $this->view->program      = $project;
-        $this->view->pager        = $pager;
+        $this->view->designs    = $designs;
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->productID  = $productID;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -67,14 +66,12 @@ class design extends control
     public function create($productID = 0, $prevModule = '', $prevID = 0)
     {
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
-
         $this->design->setProductMenu($productID);
 
         if($_POST)
         {
             $productID = $this->post->product;
-
-            $designID = $this->design->create();
+            $designID  = $this->design->create();
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -93,11 +90,11 @@ class design extends control
         $this->view->title      = $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products   = $this->loadModel('product')->getPairs($this->session->program);
-        $this->view->productID  = $productID;
-        $this->view->program    = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->products  = $this->loadModel('product')->getPairs($this->session->program);
+        $this->view->productID = $productID;
+        $this->view->program   = $this->loadModel('project')->getByID($this->session->program);
 
         $this->display();
     }
@@ -111,34 +108,16 @@ class design extends control
      */
     public function view($designID = 0)
     {
-        $design              = $this->design->getById($designID);
-        $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
-        $design->files       = $this->loadModel('file')->getByObject('design', $designID);
-
-        $relations       = $this->loadModel('common')->getRelations('design', $design->id, 'commit');
-        $storyTitle      = $this->dao->findByID($design->story)->from(TABLE_STORY)->fetch('title');
-        $design->commit = '';
-        if(!empty($_GET['onlybody']))
-        {
-            foreach($relations as $relation) $design->commit .= " #$relation->BID";
-            $design->story = $storyTitle;
-        }
-        else
-        {
-            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '', "class='iframe' data-width='80%' data-height='550'");
-            $design->story = $storyTitle ? html::a($this->createLink('story', 'view', "id=$design->story"), $storyTitle) : '';
-        }
-
-        $actions     = $this->loadModel('action')->getList('design', $design->id);
+        $design = $this->design->getById($designID);
+        $this->design->setProductMenu($design->product);
 
         $this->view->title      = $this->lang->design->designView;
         $this->view->position[] = $this->lang->design->designView;
 
-        $this->view->productID = $design->product;
         $this->view->design    = $design;
-        $this->view->relations = $relations;
+        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($design->product);
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions   = $actions;
+        $this->view->actions   = $this->loadModel('action')->getList('design', $design->id);
 
         $this->display();
     }
@@ -166,8 +145,11 @@ class design extends control
                 $this->send($response);
             }
 
-            $actionID = $this->loadModel('action')->create('design', $designID, 'changed');
-            $this->action->logHistory($actionID, $changes);
+            if(!empty($changes))
+            {
+                $actionID = $this->loadModel('action')->create('design', $designID, 'changed');
+                $this->action->logHistory($actionID, $changes);
+            }
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -239,6 +221,13 @@ class design extends control
         $this->view->pager           = $pager;
 
         $this->display();
+    }
+
+    public function revision($repoID)
+    {   
+        $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
+        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
+        header("location:" . $repoURL);
     }
 
     /**

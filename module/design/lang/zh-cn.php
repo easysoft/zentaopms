@@ -28,9 +28,9 @@ $lang->design->designView    = '查看详情';
 $lang->design->reviewObject  = '评审对象';
 $lang->design->createdBy     = '由谁创建';
 $lang->design->createdDate   = '创建时间';
+$lang->design->basicInfo     = '基本信息';
 
 $lang->design->typeList         = array();
-$lang->design->typeList['all']  = '所有';
 $lang->design->typeList['HLDS'] = '概要设计';
 $lang->design->typeList['DDS']  = '详细设计';
 $lang->design->typeList['DBDS'] = '数据库设计';
@@ -44,3 +44,5 @@ $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
 $lang->design->rangeList['assign'] = '选中记录';
 
+$lang->design->featureBar['all'] = '所有';
+$lang->design->featureBar += $lang->design->typeList;

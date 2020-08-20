@@ -12,20 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
-<?php js::set('productID', $productID);?>
-<?php
-$showSubHeader = $program->category == 'single' ? 'hidden' : 'show';
-js::set('showSubHeader', $showSubHeader);
-?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
-    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink('browse', "productID={$productID}&type=all"),  "<span class='text'>{$lang->design->typeList['all']}</span>"  . ($type == 'all'  ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'all'  ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$productID}&type=HLDS"), "<span class='text'>{$lang->design->typeList['HLDS']}</span>" . ($type == 'HLDS' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'HLDS' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$productID}&type=DDS"),  "<span class='text'>{$lang->design->typeList['DDS']}</span>"  . ($type == 'DDS'  ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'DDS'  ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$productID}&type=DBDS"), "<span class='text'>{$lang->design->typeList['DBDS']}</span>" . ($type == 'DBDS' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'DBDS' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$productID}&type=ADS"),  "<span class='text'>{$lang->design->typeList['ADS']}</span>"  . ($type == 'ADS'  ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'ADS'  ? ' btn-active-text' : '') . "'");
+    foreach($lang->design->featureBar as $key => $label)
+    {
+        $active = $key == $type ? 'btn-active-text' : '';
+        $recTotalLabel = $key == $type ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        echo html::a(inlink('browse', "productID={$productID}&type=$key"),  "<span class='text'>$label</span>"  . $recTotalLabel, '', "class='btn btn-link $active'");
+    }
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -40,14 +35,13 @@ js::set('showSubHeader', $showSubHeader);
   <?php else:?>
   <form id='designFrom' method='post' class="main-table">
     <table class='table has-sort-head table-fixrd' id="designTable">
-      <?php $vars = "productID=$productID&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
+      <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
         <thead>
           <tr>
-            <th class="text-left w-120px">  <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
-            <th class="text-left w-120px">  <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
+            <th class="text-left w-60px">   <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+            <th class="text-left w-100px">  <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
             <th class="text-left">          <?php common::printOrderLink('name',        $orderBy, $vars, $lang->design->name);?></th>
-            <th class="text-left w-130px">  <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
-            <th class="text-left w-70px">   <?php common::printOrderLink('version',     $orderBy, $vars, $lang->design->version);?></th>
+            <th class="text-left w-150px">  <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
             <th class="text-left w-120px">  <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
             <th class="text-left w-150px">  <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
             <th class="text-left w-120px">  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
@@ -57,14 +51,13 @@ js::set('showSubHeader', $showSubHeader);
         <tbody>
           <?php foreach($designs as $design):?>
           <tr>
-            <td class='text-left'><?php printf('%03d', $design->id);?></td>
-            <td class='text-left'><?php echo zget($lang->design->typeList, $design->type);?></td>
-            <td class='text-left' title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td class='text-left'><?php echo zget($lang->design->submission, $design->commit);?></td>
-            <td class='text-left'><?php echo zget($lang->design->version, $design->version);?></td>
-            <td class='text-left'><?php echo $design->createdBy;?></td>
-            <td class='text-left'><?php echo $design->createdDate;?></td>
-            <td class='text-left'><?php echo $design->assignedTo;?></td>
+            <td><?php printf('%03d', $design->id);?></td>
+            <td><?php echo zget($lang->design->typeList, $design->type);?></td>
+            <td title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
+            <td><?php echo $design->commit;?></td>
+            <td><?php echo $design->createdBy;?></td>
+            <td><?php echo substr($design->createdDate, 0, 11);?></td>
+            <td><?php echo $design->assignedTo;?></td>
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";

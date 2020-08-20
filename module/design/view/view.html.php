@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('design', 'browse', "productID=$productID"), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php echo html::a($this->createLink('design', 'browse', "productID=$design->product"), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
       <span class="label label-id"><?php echo $design->id?></span>
@@ -28,9 +28,9 @@
         <div class="detail-title"><?php echo $lang->design->desc;?></div>
         <div class="detail-content article-content">
           <?php echo $design->desc;?>
-          <?php echo $this->fetch('file', 'printFiles', array('files' => $design->files, 'fieldset' => 'true'));?>
         </div>
       </div>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $design->files, 'fieldset' => 'true'));?>
     </div>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
@@ -40,42 +40,45 @@
         <?php if(!$design->deleted):?>
         <?php
         common::printIcon('design', 'commit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'edit',   "designID=$design->id", $design, 'button', '', '', '', true);
+        common::printIcon('design', 'edit',   "designID=$design->id", $design, 'button', 'fork', '', '', true);
         common::printIcon('design', 'delete', "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>
     </div>
   </div>
-  <div class='side-col col4'>
+  <div class='side-col col-4'>
     <div class='cell'>
       <div class="detail">
-        <table class='table table-data'>
-          <tr>
-            <th><?php echo $lang->design->type;?></th>
-            <td><?php echo zget($lang->design->typeList, $design->type);?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->design->product;?></th>
-            <td><?php echo $design->productName;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->design->story;?></th>
-            <td><?php echo $design->story;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->design->commit;?></th>
-            <td><?php echo $design->commit;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->design->createdBy;?></th>
-            <td><?php echo zget($users, $design->createdBy);?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->design->createdDate;?></th>
-            <td><?php echo $design->createdDate;?></td>
-          </tr>
-        </table>
+        <div class='detail-title'><?php echo $lang->design->basicInfo;?></div>
+        <div class='detail-content'>
+          <table class='table table-data'>
+            <tr>
+              <th><?php echo $lang->design->type;?></th>
+              <td><?php echo zget($lang->design->typeList, $design->type);?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->design->product;?></th>
+              <td><?php echo $design->productName;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->design->story;?></th>
+              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->design->commit;?></th>
+              <td><?php echo $design->commit;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->design->createdBy;?></th>
+              <td><?php echo zget($users, $design->createdBy);?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->design->createdDate;?></th>
+              <td><?php echo substr($design->createdDate, 0, 11);?></td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
