@@ -990,7 +990,26 @@ class block extends control
      */
     public function printCmmiReportBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        $today   = date('Y-m-d', strtotime(helper::today()));
+        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $begin   = $program->begin;
+        $weeks   = $this->weekly->getWeekPairs($begin);
+        $current = zget($weeks, $date, '');
+        $task    = $this->dao->select("sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch();
+
+
+        $this->view->pv = $this->weekly->getPV($this->session->program, $today);
+        $this->view->ev = $this->weekly->getEV($this->session->program, $today);
+        $this->view->ac = $this->weekly->getAC($this->session->program, $today);
+        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
+        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
+
+        $this->view->current  = $current;
+        $this->view->progress = ($task->totalConsumed || $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
     }
 
     /**
@@ -1012,7 +1031,10 @@ class block extends control
      */
     public function printCmmiIssueBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
     }
 
     /**
@@ -1034,7 +1056,15 @@ class block extends control
      */
     public function printCmmiEstimateBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->app->loadLang('durationestimation');
+        $programID = $this->session->program;
+        $members   = $this->loadModel('project')->getTeamMemberPairs($programID);
+        $budget    = $this->loadModel('workestimation')->getBudget($programID);
+        if(empty($budget)) $budget = new stdclass();
+
+        $this->view->people  = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
+        $this->view->members = count($members) ? count($members) : '';
+        $this->view->budget  = $budget;
     }
 
     /**

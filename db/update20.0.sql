@@ -262,10 +262,26 @@ ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `project`;
 
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE `zt_taskspec` (
-      `task` mediumint(8) NOT NULL,
-      `version` smallint(6) NOT NULL,
-      `name` varchar(255) NOT NULL,
-      `estStarted` date NOT NULL,
-      `deadline` date NOT NULL,
-      UNIQUE KEY `task` (`task`,`version`)
+  `task` mediumint(8) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `estStarted` date NOT NULL,
+  `deadline` date NOT NULL,
+  UNIQUE KEY `task` (`task`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_weeklyreport`(
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `program` mediumint(8) unsigned NOT NULL,  
+  `weekStart` date NOT NULL,  
+  `pv` float(9,2) NOT NULL,  
+  `ev` float(9,2) NOT NULL,  
+  `ac` float(9,2) NOT NULL,  
+  `sv` float(9,2) NOT NULL, 
+  `cv` float(9,2) NOT NULL, 
+  `staff` smallint(5) unsigned NOT NULL,
+  `progress` varchar(255) NOT NULL,  
+  `workload` varchar(255) NOT NULL, 
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `week` (`program`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

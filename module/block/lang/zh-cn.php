@@ -84,6 +84,10 @@ $lang->block->default['cmmi']['program']['5']['title'] = '项目问题';
 $lang->block->default['cmmi']['program']['5']['block'] = 'cmmiissue';
 $lang->block->default['cmmi']['program']['5']['grid']  = 8;
 
+$lang->block->default['cmmi']['program']['5']['params']['type']    = 'all';
+$lang->block->default['cmmi']['program']['5']['params']['num']     = '15';
+$lang->block->default['cmmi']['program']['5']['params']['orderBy'] = 'id_desc';
+
 $lang->block->default['cmmi']['program']['6']['title']  = '最新动态';
 $lang->block->default['cmmi']['program']['6']['block']  = 'dynamic';
 $lang->block->default['cmmi']['program']['6']['grid']   = 4;
@@ -92,6 +96,10 @@ $lang->block->default['cmmi']['program']['6']['source'] = '';
 $lang->block->default['cmmi']['program']['7']['title'] = '项目风险';
 $lang->block->default['cmmi']['program']['7']['block'] = 'cmmirisk';
 $lang->block->default['cmmi']['program']['7']['grid']  = 8;
+
+$lang->block->default['cmmi']['program']['7']['params']['type']    = 'all';
+$lang->block->default['cmmi']['program']['7']['params']['num']     = '15';
+$lang->block->default['cmmi']['program']['7']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
