@@ -9,4 +9,4 @@ $config->issue->editor = new stdclass();
 $config->issue->editor->create  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->issue->editor->edit    = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->issue->editor->cancel  = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->issue->editor->resolve = array('id' => 'resolutionComment', 'tools' => 'simpleTools');
+$config->issue->editor->resolve = array('id' => 'spec,steps,desc,resolutionComment', 'tools' => 'simpleTools');
