@@ -111,7 +111,6 @@ class riskModel extends model
         {
             if($this->session->riskQuery == false) $this->session->set('riskQuery', ' 1 = 1');
         }
-        a($this->session->riskQuery);die;
 
         $riskQuery   = $this->session->riskQuery;
 
