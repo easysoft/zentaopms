@@ -1,7 +1,7 @@
 <?php 
 class risk extends control
 {
-    public function browse($browseType = 'browse', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
         /* Build the search form. */
@@ -16,7 +16,7 @@ class risk extends control
 
         $this->view->title       = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->browse;
         $this->view->position[]  = $this->lang->risk->browse;
-        $this->view->risks       = $this->risk->getList($orderBy, $pager);
+        $this->view->risks       = $this->risk->getList($browseType, $param, $orderBy, $pager);
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;

@@ -161,7 +161,7 @@ CREATE TABLE `zt_risk` (
   `cancelDate` date NOT NULL,
   `cancelReason` char(30) NOT NULL,
   `hangupBy` varchar(30) NOT NULL,
-  `hangupdDate` date NOT NULL,
+  `hangupDate` date NOT NULL,
   `trackedBy` varchar(30) NOT NULL,
   `trackedDate` date NOT NULL,
   `assignedDate` date NOT NULL,

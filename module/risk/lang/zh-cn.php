@@ -11,6 +11,7 @@ $lang->risk->cancel      = '取消';
 $lang->risk->track       = '跟踪';
 $lang->risk->assignTo    = '指派';
 $lang->risk->deleted     = '删除';
+$lang->risk->byQuery     = '搜索';
 
 $lang->risk->legendBasicInfo = '基本信息';
 $lang->risk->legendLifeTime  = '风险的一生';
@@ -109,3 +110,10 @@ $lang->risk->isChangeList[1] = '是';
 $lang->risk->cancelReasonList[''] = '';
 $lang->risk->cancelReasonList['disappeared'] = '风险自行消失';
 $lang->risk->cancelReasonList['mistake']     = '识别错误';
+
+$lang->risk->featureBar['browse']['all']      = '所有';
+$lang->risk->featureBar['browse']['active']   = '开放';
+$lang->risk->featureBar['browse']['assignTo'] = '指派给我';
+$lang->risk->featureBar['browse']['closed']   = '已关闭';
+$lang->risk->featureBar['browse']['hangup']   = '已挂起';
+$lang->risk->featureBar['browse']['canceled'] = '已取消';

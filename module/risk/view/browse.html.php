@@ -1,16 +1,27 @@
 <?php include "../../common/view/header.html.php"?>
+<style>
+#querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toobar pull-left">
-    <a href="" class="btn btn-link btn-active-text">
-    <span class="text"><?php echo $lang->risk->browse;?></span>
+    <?php
+    $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
+    foreach($menus as $menuItem)
+    {
+        $active = $menuItem->name == $browseType ? ' btn-active-text' : '';
+        echo html::a($this->createLink('risk', 'browse', "browseType=$menuItem->name"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'");
+    }
+    ?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->risk->byQuery;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('risk', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->risk->batchCreate, '', "class='btn btn-primary'");?>
     <?php common::printLink('risk', 'create', "", "<i class='icon icon-plus'></i>" . $lang->risk->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='risk'></div>
 <div id="mainContent" class="main-table">
-<?php if(empty($risks)):?>
+  <?php if(empty($risks)):?>
   <div class="table-empty-tip">
     <p> 
       <span class="text-muted"><?php echo $lang->noData;?></span>
@@ -21,7 +32,7 @@
   </div>
   <?php else:?>
   <table class="table has-sort-head" id='riskList'>
-    <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+    <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr>
         <th class='text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->risk->id);?></th>

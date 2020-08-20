@@ -78,10 +78,46 @@ class riskModel extends model
         return false;
     }
 
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($browseType = '', $param = '', $orderBy = 'id_desc', $pager = null)
     {
+        if($browseType == 'bySearch') return $this->getBySearch($param, $orderBy, $pager);
+
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where('deleted')->eq(0)
+            ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+            ->andWhere('program')->eq($this->session->program)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    public function getBySearch($queryID = '', $orderBy = 'id_desc', $pager = null)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('riskQuery', $query->sql);
+                $this->session->set('riskForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('riskQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->riskQuery == false) $this->session->set('riskQuery', ' 1 = 1');
+        }
+        a($this->session->riskQuery);die;
+
+        $riskQuery   = $this->session->riskQuery;
+
+        return $this->dao->select('*')->from(TABLE_RISK)
+            ->where($riskQuery)
+            ->andWhere('deleted')->eq('0')
             ->andWhere('program')->eq($this->session->program)
             ->orderBy($orderBy)
             ->page($pager)
@@ -231,6 +267,6 @@ class riskModel extends model
         $this->config->risk->search['actionURL'] = $actionURL;
         $this->config->risk->search['queryID']   = $queryID;
         
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        $this->loadModel('search')->setSearchParams($this->config->risk->search);
     }
 }
