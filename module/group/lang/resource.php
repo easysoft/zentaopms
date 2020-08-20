@@ -22,6 +22,7 @@ $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
 
 $lang->moduleOrder[35]  = 'project';
+$lang->moduleOrder[36]  = 'design';
 $lang->moduleOrder[40]  = 'task';
 $lang->moduleOrder[45]  = 'build';
 
@@ -432,6 +433,22 @@ $lang->project->methodOrder[210] = 'all';
 $lang->project->methodOrder[215] = 'export';
 $lang->project->methodOrder[220] = 'storyKanban';
 $lang->project->methodOrder[225] = 'storySort';
+
+/* Design. */
+$lang->resource->design = new stdclass();
+$lang->resource->design->browse   = 'browse';
+$lang->resource->design->create   = 'create';
+$lang->resource->design->edit     = 'edit';
+$lang->resource->design->commit   = 'commit';
+$lang->resource->design->delete   = 'delete';
+$lang->resource->design->view     = 'view';
+
+$lang->design->methodOrder[5]     = 'browse';
+$lang->design->methodOrder[10]    = 'create';
+$lang->design->methodOrder[15]    = 'edit';
+$lang->design->methodOrder[20]    = 'commit';
+$lang->design->methodOrder[25]    = 'delete';
+$lang->design->methodOrder[30]    = 'view';
 
 /* Task. */
 $lang->resource->task = new stdclass();
