@@ -1440,18 +1440,17 @@ class block extends control
      */
     public function printScrumtestBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-
         $this->session->set('testtaskList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadLang('testtask');
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+            ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.product')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
