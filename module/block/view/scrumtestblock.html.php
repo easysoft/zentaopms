@@ -17,16 +17,15 @@
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-testtask table-fixed'>
     <thead>
       <tr class='text-center'>
-        <?php if($longBlock):?>
-        <th class='w-id'><?php echo $lang->idAB?></th>
-        <th class='text-left'><?php echo $lang->testtask->product;?></th>
-        <?php endif;?>
         <th class='text-left'><?php echo $lang->testtask->name;?></th>
         <?php if($longBlock):?>
-        <th class='text-left'><?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
+        <th class='text-left'><?php echo $lang->testtask->product;?></th>
         <?php endif;?>
-        <th class='w-date'><?php echo $lang->testtask->begin;?></th>
-        <th class='w-date'><?php echo $lang->testtask->end;?></th>
+        <?php if($longBlock):?>
+        <th class='text-left'><?php echo $lang->testtask->project?></th>
+        <?php endif;?>
+        <th class='text-left'><?php echo $lang->testtask->build;?></th>
+        <th class='w-date'><?php echo $lang->testtask->status;?></th>
       </tr>
     </thead>
     <tbody>
@@ -36,16 +35,15 @@
       $viewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
       ?>
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <?php if($longBlock):?>
-        <td><?php echo sprintf('%03d', $testtask->id);?></td>
-        <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
-        <?php endif;?>
         <td class='text-left' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
         <?php if($longBlock):?>
-        <td class='text-left' title='<?php echo $testtask->projectName . '/' . $testtask->buildName?>'><?php echo $testtask->projectName . '/' . $testtask->buildName?></td>
+        <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
         <?php endif;?>
-        <td><?php echo $testtask->begin?></td>
-        <td><?php echo $testtask->end?></td>
+        <?php if($longBlock):?>
+        <td class='text-left' title='<?php echo $testtask->projectName?>'><?php echo $testtask->projectName?></td>
+        <?php endif;?>
+        <td class='text-left' title='<?php echo $testtask->buildName?>'><?php echo $testtask->buildName?></td>
+        <td><?php echo zget($lang->testtask->statusList, $testtask->status)?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

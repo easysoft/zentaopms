@@ -36,7 +36,7 @@
         <td class='c-name' title='<?php echo $issue->title?>'><?php echo html::a($viewLink, $issue->title);?></td>
         <?php if($longBlock):?>
         <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity, $issue->severity)?></td>
-        <td class='c-pri'><span class='label-pri label-pri-<?php echo $issue->pri;?>' title='<?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?>'><?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?></span></td>
+        <td class='c-pri'><?php echo zget($lang->issue->priList, $issue->pri, $issue->pri)?></td>
         <?php endif;?>
         <td><?php echo zget($users, $issue->owner, $issue->owner)?></td>
         <td><?php echo zget($users, $issue->assignedTo, $issue->assignedTo)?></td>

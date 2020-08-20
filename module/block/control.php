@@ -1076,9 +1076,40 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printCmmiprogressBlock()
+    public function printCmmiProgressBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->loadModel('milestone');
+        $this->loadModel('weekly');
+        $program = $this->loadModel('project')->getByID($this->session->program);
+
+        $begin = $program->begin;
+        $end   = helper::today();
+
+        $projects = $this->project->getProjectsByProgram($program);
+        $projectIdList = array_keys($projects);
+
+        $charts['PV'] = '[';
+        $charts['EV'] = '[';
+        $charts['AC'] = '[';
+        $i = 1;
+        $start = $begin;
+        while($start < $end)
+        {   
+            $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $sunday             = $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $sunday) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $sunday) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $sunday) . ',';
+            $start              = date('Y-m-d', strtotime("$start + 7 days"));
+            $i ++;
+        }
+
+        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+        $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $end) . ']';
+        $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $end) . ']';
+        $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $end) . ']';
+
+        $this->view->charts = $charts;
     }
 
     /**
@@ -1443,18 +1474,17 @@ class block extends control
      */
     public function printScrumtestBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-
         $this->session->set('testtaskList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadLang('testtask');
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+            ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.product')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')

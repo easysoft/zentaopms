@@ -101,7 +101,7 @@
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
-          <td><?php echo html::hidden('template', $template);?></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -129,6 +129,10 @@
           <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
+            <?php
+            echo html::hidden('template', $template);
+            echo html::hidden('parent', $programID);
+            ?>
           </td>
         </tr>
       </table>
@@ -165,4 +169,5 @@
   </div>
 </div>
 <?php js::set('template', $template);?>
+<?php js::set('programID', $programID);?>
 <?php include '../../common/view/footer.html.php';?>

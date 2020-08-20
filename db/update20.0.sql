@@ -239,10 +239,10 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` text NOT NULL, 
-  `year` char(4) NOT NULL, 
-  `begin` date NOT NULL, 
-  `end` date NOT NULL, 
+  `desc` text NOT NULL,
+  `year` char(4) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `name` (`name`)
@@ -285,3 +285,6 @@ CREATE TABLE `zt_weeklyreport`(
   PRIMARY KEY (`id`),
   UNIQUE KEY `week` (`program`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
+ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
