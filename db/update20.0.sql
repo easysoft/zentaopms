@@ -269,3 +269,6 @@ CREATE TABLE `zt_taskspec` (
       `deadline` date NOT NULL,
       UNIQUE KEY `task` (`task`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
+ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;

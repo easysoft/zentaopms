@@ -22,7 +22,6 @@ class program extends control
         $this->session->set('program', $programID);
         $this->lang->navGroup->program = 'program';
 
-
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
         $this->view->position[] = $this->lang->program->index;
         $this->view->program    = $this->project->getByID($programID);
@@ -87,20 +86,19 @@ class program extends control
     /**
      * Create a program.
      * 
-     * @param  varchar $template 
-     * @param  int     $copyProgramID
+     * @param  string $template 
+     * @param  int    $programID 
+     * @param  int    $copyProgramID 
      * @access public
      * @return void
      */
-    public function create($template = 'cmmi', $copyProgramID = '')
+    public function create($template = 'cmmi', $programID = 0, $copyProgramID = '')
     {
         if($_POST)
         {
             $projectID = $this->program->create();
-            if(dao::isError())
-            {
-                $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
-            }
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+
             $this->loadModel('action')->create('project', $projectID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', array('status' => 'wait', 'orderBy' => 'order_desc'))));
         }
@@ -111,6 +109,19 @@ class program extends control
         $whitelist    = '';
         $acl          = 'open';
         $privway      = 'extend';
+
+        if($programID)
+        {
+            $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+            if($this->program->checkHasContent($programID))
+            {
+                echo js::alert($this->lang->program->cannotCreateChild);
+                die(js::locate('back'));
+            }
+
+            if(empty($template)) $template = $program->template;
+        }
+
         if($copyProgramID)
         {
             $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
@@ -120,6 +131,7 @@ class program extends control
             $acl         = $copyProgram->acl;
             $privway     = $copyProgram->privway;
             $whitelist   = $copyProgram->whitelist;
+            if(empty($template)) $template = $copyProgram->template;
         }
 
         $this->view->title         = $this->lang->program->create;
@@ -134,6 +146,7 @@ class program extends control
         $this->view->acl           = $acl;
         $this->view->privway       = $privway;
         $this->view->whitelist     = $whitelist;
+        $this->view->programID     = $programID;
         $this->view->copyProgramID = $copyProgramID;
         $this->display();
     }

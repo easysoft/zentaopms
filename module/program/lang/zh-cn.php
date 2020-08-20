@@ -41,6 +41,7 @@ $lang->program->transfer        = '进入项目';
 $lang->program->setPlanduration = '设置工期';
 $lang->program->export          = '导出';
 $lang->program->privway         = '权限控制';
+$lang->program->children        = '子项目';
 
 $lang->program->manageGroupMember  = '维护分组用户';
 $lang->program->durationEstimation = '工作量估算';
@@ -82,3 +83,4 @@ $lang->program->scrumDesc         = '<strong>简介：</strong>小步迭代，�
 $lang->program->cmmi              = '瀑布';
 $lang->program->cmmiTitle         = '瀑布式项目管理';
 $lang->program->cmmiDesc          = '<strong>简介：</strong>按阶段规范化管理<br><strong>包含功能点：</strong>估算、计划、阶段、报告';
+$lang->program->cannotCreateChild = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
