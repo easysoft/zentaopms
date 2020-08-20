@@ -39,9 +39,9 @@ class designModel extends model
     {
         $oldDesign = $this->getByID($designID);
         $design = fixer::input('post')
-            ->stripTags('desc', $this->config->allowedTags)
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
+            ->stripTags($this->config->design->editor->edit['id'], $this->config->allowedTags)
             ->remove('file,files,labels,children, toList')
             ->get();
 
@@ -147,7 +147,8 @@ class designModel extends model
 
     public function getByID($designID)
     {
-        return $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+        $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
 
     public function getDesignPairs($productID = 0, $type = 'detailed')
@@ -172,5 +173,18 @@ class designModel extends model
             ->orderBy('id desc')->fetchAll();
 
         return $design;
+    }
+
+    public function getList($productID, $type, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_DESIGN)
+            ->where('deleted')->eq(0)
+            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->beginIF($type !='all')->andWhere('type')->in($type)->fi()
+            ->andWhere('product')->eq($productID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 }

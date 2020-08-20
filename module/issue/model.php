@@ -83,6 +83,18 @@ class issueModel extends model
         return $issueList;
     }
 
+    public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    {
+        $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
+            ->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll();
+
+        return $issueList;
+    }
+
     /**
      * Delete a question.
      *
@@ -260,4 +272,80 @@ class issueModel extends model
 
         return true;
     }
+
+    /**
+     * Resolve issue.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
+    public function resolve($issueID)
+    {
+        $issue = $this->post->issue;
+        $issue['status'] = 'resolved';
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
+    }
+
+    /**
+     * Create task.
+     *
+     * @access public
+     * @return void
+     */
+    public function createTask()
+    {
+        $task = fixer::input('post')->remove('issue,spec')->get();
+        $this->dao->insert(TABLE_TASK)->data($task, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Create story.
+     *
+     * @access public
+     * @return int
+     */
+    public function createStory()
+    {
+        $story = fixer::input('post')->remove('issue,color')
+            ->setIF($this->post->needNotReview or $this->post->projectID > 0, 'status', 'active')
+            ->get();
+        $this->dao->insert(TABLE_STORY)->data($story, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files,spec,story,needNotReview')->exec();
+        $id = $this->dao->lastInsertID();
+        $this->dao->insert(TABLE_STORYSPEC)
+            ->set('story')->eq($id)
+            ->set('title')->eq($story->title)
+            ->set('spec')->eq($story->spec)
+            ->set('version')->eq(1)
+            ->exec();
+        return $id;
+    }
+
+    /**
+     * Create bug.
+     *
+     * @access public
+     * @return int
+     */
+    public function createBug()
+    {
+        $bug = fixer::input('post')->remove('issue,spec,color')->join('openedBuild', ',')->get();
+        $this->dao->insert(TABLE_BUG)->data($bug, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Create risk.
+     *
+     * @access public
+     * @return int
+     */
+    public function createRisk()
+    {
+        $risc = fixer::input('post')->remove('issue,color,estimate')->get();
+        $this->dao->insert(TABLE_RISK)->data($risc, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        return $this->dao->lastInsertID();
+    }
+
 }

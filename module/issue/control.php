@@ -257,6 +257,45 @@ class issue extends control
         if($_POST)
         {
             $this->issue->resolve($issue);
+            $resolution = $this->post->issue['resolution'];
+
+            $objectID = '';
+            if($resolution == 'totask')
+            {
+                $objectID   = $this->issue->createTask($issue);
+                $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
+                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+                $this->loadModel('action')->create('task', $objectID, 'Opened', '');
+                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+            }
+
+            if($resolution == 'tostory')
+            {
+                $objectID   = $this->issue->createStory($issue);
+                $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
+                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+                $this->loadModel('action')->create('story', $objectID, 'Opened', '');
+                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+            }
+            if($resolution == 'tobug')
+            {
+                $objectID   = $this->issue->createBug($issue);
+                $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
+                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+                $this->loadModel('action')->create('bug', $objectID, 'Opened', '');
+                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+            }
+
+            if($resolution == 'torisk')
+            {
+                $objectID   = $this->issue->createRisk($issue);
+                $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
+                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+                $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
+                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+            }
+
+            $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issue)->exec();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -264,6 +303,101 @@ class issue extends control
         $this->view->issue = $this->issue->getByID($issue);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
+        $this->prepairParams($this->view->issue);
         $this->display();
+    }
+
+    public function prepairParams($issue)
+    {
+        $this->loadModel('task');
+        $this->loadModel('risk');
+        $this->loadModel('bug');
+        $this->loadModel('tree');
+        $this->loadModel('story');
+        $this->loadModel('build');
+        $this->loadModel('release');
+        $this->loadModel('project')->getLimitedProject();
+        $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
+
+        $task = new stdClass();
+        $task->module     = 0;
+        $task->assignedTo = '';
+        $task->name       = $issue->title;
+        $task->story      = 0;
+        $task->type       = '';
+        $task->pri        = '3';
+        $task->estimate   = '';
+        $task->desc       = $issue->desc;
+        $task->estStarted = '';
+        $task->deadline   = '';
+        $task->mailto     = '';
+        $task->color      = '';
+
+        $projectID        = $this->session->project;
+        $project          = $this->project->getById($projectID);
+        $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+
+        /* Fix bug #2737. When moduleID is not story module. */
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0);
+
+        /* Set Custom*/
+        foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+
+        $this->view->customFields  = $customFields;
+        $this->view->showFields    = $this->config->task->custom->createFields;
+        $this->view->showAllModule = $showAllModule;
+
+        $this->view->project          = $project;
+        $this->view->task             = $task;
+        $this->view->users            = $users;
+        $this->view->stories          = $stories;
+        $this->view->members          = $members;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+
+        $this->view->projects = $this->loadModel('project')->getPairs();
+        $this->view->program  = $this->loadModel('project')->getById($this->session->program);
+        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->productID = $this->session->product;
+        $this->view->moduleID  = 0;
+        $this->view->branch    = 0;
+        $this->view->modules   = $this->tree->getOptionMenu($this->view->productID, 'story');
+
+        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($this->view->productID, '', 'noempty,noterminate,nodone');
+        $this->view->buildID = 0;
+    }
+
+    /**
+     *  Get question details.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
+    public function view($issueID)
+    {
+        $this->commonAction($issueID, 'issue');
+        $issue = $this->issue->getByID($issueID);
+        $this->view->title      = $this->lang->issue->common . $this->lang->colon . $issue->title;
+        $this->view->position[] = $this->lang->issue->common;
+        $this->view->position[] = $this->lang->issue->basicInfo;
+
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->issue = $issue;
+        $this->display();
+    }
+
+    /** 
+     * Common actions of issue module.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
+    public function commonAction($issueID, $object)
+    {
+        $this->view->actions = $this->loadModel('action')->getList($object, $issueID);
     }
 }

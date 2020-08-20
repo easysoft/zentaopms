@@ -28,8 +28,10 @@ $lang->issue->assignedTo        = '指派给';
 $lang->issue->assignedBy        = '由谁指派';
 $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolved          = '解决';
+$lang->issue->id                = '编号';
 
 $lang->issue->delete            = '删除';
+$lang->issue->basicInfo         = '基本信息';
 $lang->issue->active            = '激活';
 $lang->issue->assign            = '指派';
 $lang->issue->create            = '新建问题';
@@ -49,11 +51,11 @@ $lang->issue->priList['2'] = 2;
 $lang->issue->priList['3'] = 3;
 $lang->issue->priList['4'] = 4;
 
-$lang->issue->serverityList[''] = '';
-$lang->issue->serverityList['1'] = '严重';
-$lang->issue->serverityList['2'] = '较严重';
-$lang->issue->serverityList['3'] = '较小';
-$lang->issue->serverityList['4'] = '建议';
+$lang->issue->severityList[''] = '';
+$lang->issue->severityList['1'] = '严重';
+$lang->issue->severityList['2'] = '较严重';
+$lang->issue->severityList['3'] = '较小';
+$lang->issue->severityList['4'] = '建议';
 
 $lang->issue->typeList[''] = '';
 $lang->issue->typeList['design']       = '设计问题';
@@ -88,3 +90,9 @@ $lang->issue->resolveMethods['tostory']  = '转需求';
 $lang->issue->resolveMethods['torisk']   = '转风险'; 
 
 $lang->issue->confirmDelete = '您确认删除该问题？';
+
+$lang->issue->logComments = array();
+$lang->issue->logComments['totask']  = "创建了任务：%s。";
+$lang->issue->logComments['tostory'] = "创建了需求：%s。";
+$lang->issue->logComments['tobug']   = "创建了BUG：%s。";
+$lang->issue->logComments['torisk']  = "创建了风险：%s。";

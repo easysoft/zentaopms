@@ -18,13 +18,14 @@ class program extends control
      */
     public function index($programID = 0)
     {
+        $this->lang->navGroup->program = 'program';
         if(!$programID) $programID = $this->session->program;
         $this->session->set('program', $programID);
-        $this->lang->navGroup->program = 'program';
 
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
         $this->view->position[] = $this->lang->program->index;
         $this->view->program    = $this->project->getByID($programID);
+
         $this->display();
     }
 
@@ -697,6 +698,7 @@ class program extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
+
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->programs))->orderBy('order desc')->fetchAll();
         $programPairs = array();    
         foreach($programs as $program) $programPairs[$program->id] = $program->name;

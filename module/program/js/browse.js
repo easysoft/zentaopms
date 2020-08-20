@@ -38,14 +38,4 @@ $(function()
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
         $.post(createLink('project', 'updateOrder'), {'projects' : list, 'orderBy' : orderBy});
     });
-
-    $('.pgm-title .transfer').click(function()
-    {
-        var programID = $(this).attr('data-id');        
-        var link = createLink('program', 'ajaxGetEnterLink', "programID=" + programID);
-        $.post(link, function(pgmLink)
-        {
-            location.href = pgmLink;
-        })
-    })
 })

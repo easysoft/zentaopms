@@ -218,11 +218,12 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function initBlock($module)
+    public function initBlock($module, $type = '')
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
-        $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
         $account = $this->app->user->account;
+        if($module == 'program') $blocks = $this->lang->block->default[$type]['program'];
+        else $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
         /* Mark this app has init. */
         $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
@@ -659,5 +660,26 @@ class blockModel extends model
             ->fetch('value');
 
         return $key == $hash;
+    }
+
+    /** 
+     * Get testtask params.
+     *▫
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getScrumtestParams($module = '') 
+    {   
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->testtask;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
     }
 }

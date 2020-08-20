@@ -204,7 +204,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dashboard($module)
+    public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module);
@@ -213,7 +213,7 @@ class block extends control
         /* Init block when vist index first. */
         if(empty($blocks) and !$inited and !defined('TUTORIAL'))
         {
-            if($this->block->initBlock($module)) die(js::reload());
+            if($this->block->initBlock($module, $type)) die(js::reload());
         }
 
         $acls = $this->app->user->rights['acls'];
@@ -983,40 +983,99 @@ class block extends control
     }
 
     /**
-     * Print program statistic block.
+     * Print cmmi report block.
      *
      * @access public
      * @return void
      */
-    public function printProgramStatisticBlock()
+    public function printCmmiReportBlock()
     {
-        $this->loadModel('program');
-        /* Get projects. */
-        $projects = $this->loadModel('project')->getList('all', 0, 0, 0, 'program');
-        $sprints  = $this->project->getList();
-        $total    = count($sprints);
-        foreach($projects as $project)
-        {
-            $project->sprints = 0;
-            foreach($this->lang->project->statusList as $key => $status) 
-            {
-                $project->$key = new stdclass();
-                $project->$key->count = 0;
-            }
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        $today   = date('Y-m-d', strtotime(helper::today()));
+        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $begin   = $program->begin;
+        $weeks   = $this->weekly->getWeekPairs($begin);
+        $current = zget($weeks, $date, '');
+        $task    = $this->dao->select("sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch();
 
-            foreach($sprints as $sprint)
-            {
-                if($sprint->program == $project->id)
-                {
-                    $project->sprints ++;
-                    $project->{$sprint->status}->count ++;
-                }
-            }
+        $this->view->pv = $this->weekly->getPV($this->session->program, $today);
+        $this->view->ev = $this->weekly->getEV($this->session->program, $today);
+        $this->view->ac = $this->weekly->getAC($this->session->program, $today);
+        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
+        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-            foreach($this->lang->project->statusList as $key => $status) $project->$key->percent = $total ? round($project->$key->count / $total, 2) * 100 . '%' : '0%';
-        }
+        $this->view->current  = $current;
+        $this->view->progress = ($task->totalConsumed || $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
+    }
 
-        $this->view->projects = $projects;
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiGanttBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiIssueBlock()
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
+    }
+
+    /**
+     * Print cmmi risk block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiRiskBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print cmmi estimate block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiEstimateBlock()
+    {
+        $this->app->loadLang('durationestimation');
+        $programID = $this->session->program;
+        $members   = $this->loadModel('project')->getTeamMemberPairs($programID);
+        $budget    = $this->loadModel('workestimation')->getBudget($programID);
+        if(empty($budget)) $budget = new stdclass();
+
+        $this->view->people  = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
+        $this->view->members = count($members) ? count($members) : '';
+        $this->view->budget  = $budget;
+    }
+
+    /**
+     * Print cmmi progress block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiprogressBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
     }
 
     /**
@@ -1338,5 +1397,97 @@ class block extends control
         {
             $this->loadModel('setting')->setItem("{$this->app->user->account}.$module.block.initVersion", $this->config->block->version);
         }
+    }
+
+    /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumoverallBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print srcum progress block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumprogressBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print srcum road map block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumroadmapBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print srcum road map block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumtestBlock()
+    {
+        $this->session->set('testtaskList', $this->app->getURI(true));
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->app->loadLang('testtask');
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.product')->eq($this->session->program)->fi()
+            ->andWhere('t1.product = t5.product')
+            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->fetchAll();
+    }
+
+    /**
+     * Print srcum product block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumproductBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumprojectBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+    }
+
+    /**
+     * Print srcum dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumdynamicBlock()
+    {
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
     }
 }

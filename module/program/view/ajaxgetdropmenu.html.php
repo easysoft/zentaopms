@@ -23,13 +23,13 @@ foreach($programs as $program)
 {
     if($program->status != 'done' and $program->status != 'closed' and $program->PM == $this->app->user->account)
     {
-        $myProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "class='text-important transfer' title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
+        $myProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "class='text-important' title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
     }
     else if($program->status != 'done' and $program->status != 'closed' and !($program->PM == $this->app->user->account))
     {
-        $normalProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "class='transfer' title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
+        $normalProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
     }
-    else if($program->status == 'done' or $program->status == 'closed') $closedProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "title='{$program->name}' class='transfer' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
+    else if($program->status == 'done' or $program->status == 'closed') $closedProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
 }
 ?>
 <div class="table-row">
@@ -65,18 +65,3 @@ foreach($programs as $program)
     </div>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#swapper .transfer').click(function()
-    {
-        var programID = $(this).attr('data-id');        
-        var link = createLink('program', 'ajaxGetEnterLink', "programID=" + programID);
-        $.post(link, function(pgmLink)
-        {
-            location.href = pgmLink;
-        })
-    })
-
-})
-</script>

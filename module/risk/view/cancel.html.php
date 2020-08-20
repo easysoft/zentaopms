@@ -19,11 +19,18 @@
           <th class='w-100px'><?php echo $lang->risk->cancelDate;?></th>
           <td><?php echo html::input('cancelDate', helper::today(),  "class='form-control form-date'");?></td>
           <td></td>
-        </tr>       <tr>
-          <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>      </tr>
+        </tr>
         <tr>
-          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton(); ?></td>        </tr>
+          <th class='w-100px'><?php echo $lang->risk->cancelReason;?></th>
+          <td><?php echo html::select('cancelReason', $lang->risk->cancelReasonList, '', "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->comment;?></th>
+          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+        </tr>
+        <tr>
+          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton(); ?></td>
+        </tr>
       </tbody>
     </table>
   </form>

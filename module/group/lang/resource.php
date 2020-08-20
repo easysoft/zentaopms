@@ -22,6 +22,7 @@ $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
 
 $lang->moduleOrder[35]  = 'project';
+$lang->moduleOrder[36]  = 'design';
 $lang->moduleOrder[40]  = 'task';
 $lang->moduleOrder[45]  = 'build';
 
@@ -143,8 +144,16 @@ $lang->todo->methodOrder[75] = 'batchClose';
 /* Program. */
 $lang->resource->program = new stdclass();
 $lang->resource->program->index             = 'index';
-$lang->resource->program->transfer          = 'transfer';
-//$lang->resource->program->createGuide       = 'createGuide';
+$lang->resource->program->browse            = 'browse';
+$lang->resource->program->create            = 'create';
+$lang->resource->program->createGuide       = 'createGuide';
+$lang->resource->program->edit              = 'edit';
+$lang->resource->program->start             = 'start';
+$lang->resource->program->finish            = 'finish';
+$lang->resource->program->delete            = 'delete';
+$lang->resource->program->suspend           = 'suspend';
+$lang->resource->program->activate          = 'activate';
+$lang->resource->program->close             = 'close';
 $lang->resource->program->setPlanduration   = 'setPlanduration';
 $lang->resource->program->group             = 'group';
 $lang->resource->program->createGroup       = 'createGroup';
@@ -155,28 +164,21 @@ $lang->resource->program->managePriv        = 'managePriv';
 $lang->resource->program->manageGroupMember = 'manageGroupMember';
 $lang->resource->program->manageMembers     = 'manageMembers';
 $lang->resource->program->export            = 'export';
-$lang->resource->program->create            = 'create';
-$lang->resource->program->edit              = 'edit';
-$lang->resource->program->start             = 'start';
-$lang->resource->program->finish            = 'finish';
-$lang->resource->program->delete            = 'delete';
-$lang->resource->program->suspend           = 'suspend';
-$lang->resource->program->activate          = 'activate';
-$lang->resource->program->close             = 'close';
 
 $lang->program->methodOrder[5]  = 'index';
-$lang->program->methodOrder[10] = 'transfer';
-$lang->program->methodOrder[15] = 'setPlanduration';
-$lang->program->methodOrder[20] = 'manageMembers';
-$lang->program->methodOrder[25] = 'export';
-$lang->program->methodOrder[30] = 'create';
-$lang->program->methodOrder[35] = 'edit';
-$lang->program->methodOrder[40] = 'start';
-$lang->program->methodOrder[45] = 'finish';
-$lang->program->methodOrder[50] = 'delete';
-$lang->program->methodOrder[55] = 'suspend';
-$lang->program->methodOrder[60] = 'activate';
-$lang->program->methodOrder[65] = 'close';
+$lang->program->methodOrder[10] = 'browse';
+$lang->program->methodOrder[15] = 'create';
+$lang->program->methodOrder[20] = 'createGuide';
+$lang->program->methodOrder[25] = 'edit';
+$lang->program->methodOrder[30] = 'start';
+$lang->program->methodOrder[35] = 'finish';
+$lang->program->methodOrder[40] = 'delete';
+$lang->program->methodOrder[45] = 'suspend';
+$lang->program->methodOrder[50] = 'activate';
+$lang->program->methodOrder[55] = 'close';
+$lang->program->methodOrder[60] = 'setPlanduration';
+$lang->program->methodOrder[65] = 'manageMembers';
+$lang->program->methodOrder[70] = 'export';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -431,6 +433,22 @@ $lang->project->methodOrder[210] = 'all';
 $lang->project->methodOrder[215] = 'export';
 $lang->project->methodOrder[220] = 'storyKanban';
 $lang->project->methodOrder[225] = 'storySort';
+
+/* Design. */
+$lang->resource->design = new stdclass();
+$lang->resource->design->browse   = 'browse';
+$lang->resource->design->create   = 'create';
+$lang->resource->design->edit     = 'edit';
+$lang->resource->design->commit   = 'commit';
+$lang->resource->design->delete   = 'delete';
+$lang->resource->design->view     = 'view';
+
+$lang->design->methodOrder[5]     = 'browse';
+$lang->design->methodOrder[10]    = 'create';
+$lang->design->methodOrder[15]    = 'edit';
+$lang->design->methodOrder[20]    = 'commit';
+$lang->design->methodOrder[25]    = 'delete';
+$lang->design->methodOrder[30]    = 'view';
 
 /* Task. */
 $lang->resource->task = new stdclass();
