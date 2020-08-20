@@ -1073,9 +1073,40 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printCmmiprogressBlock()
+    public function printCmmiProgressBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->loadModel('milestone');
+        $this->loadModel('weekly');
+        $program = $this->loadModel('project')->getByID($this->session->program);
+
+        $begin = $program->begin;
+        $end   = helper::today();
+
+        $projects = $this->project->getProjectsByProgram($program);
+        $projectIdList = array_keys($projects);
+
+        $charts['PV'] = '[';
+        $charts['EV'] = '[';
+        $charts['AC'] = '[';
+        $i = 1;
+        $start = $begin;
+        while($start < $end)
+        {   
+            $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $sunday             = $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $sunday) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $sunday) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $sunday) . ',';
+            $start              = date('Y-m-d', strtotime("$start + 7 days"));
+            $i ++;
+        }
+
+        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+        $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $end) . ']';
+        $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $end) . ']';
+        $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $end) . ']';
+
+        $this->view->charts = $charts;
     }
 
     /**
