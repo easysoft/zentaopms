@@ -128,7 +128,6 @@ $lang->block->default['scrum']['program']['6']['grid']  = 4;
 $lang->block->default['scrum']['program']['7']['title'] = '最新动态';
 $lang->block->default['scrum']['program']['7']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['program']['7']['grid']  = 4;
->>>>>>> Stashed changes
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
