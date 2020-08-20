@@ -1,10 +1,10 @@
-<?php include '../../../common/view/header.html.php';?>
-<?php include '../../../common/view/kindeditor.html.php';?>
-<style> .tabs .tab-pane .table{border: 1px solid #ddd; border-top: none} </style>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php
 $showSubHeader = $program->category == 'single' ? 'hidden' : 'show';
 js::set('showSubHeader', $showSubHeader);
 ?>
+<style> .tabs .tab-pane .table{border: 1px solid #ddd; border-top: none} </style>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -37,7 +37,7 @@ js::set('showSubHeader', $showSubHeader);
           </tr>
           <tr>
             <th><?php echo $lang->design->desc;?></th>
-            <td colspan='2'><?php echo html::textarea('desc', $design->desc, "class='form-control'");?></td>
+            <td colspan='2'><?php echo html::textarea('desc', $design->desc, 'class="form-control"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->file;?></th>
@@ -104,4 +104,4 @@ $('#product').change(function()
 
 if(showSubHeader == 'hidden') $("#subHeader").remove();
 </script>
-<?php include '../../../common/view/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

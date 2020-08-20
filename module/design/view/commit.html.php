@@ -1,5 +1,4 @@
-<?php include '../../../common/view/header.lite.html.php';?>
-<?php js::set('showSubHeader', 0);?>
+<?php include '../../common/view/header.lite.html.php';?>
 <style>.m-design-commit{padding-left: 0px;}</style>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
@@ -60,4 +59,4 @@
   </form>
 </div>
 <?php js::set('designID', $designID);?>
-<?php include '../../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.lite.html.php';?>

@@ -1,22 +1,5 @@
-<?php include '../../../' . 'common/view/header.html.php';?>
-<?php include '../lang/zh-cn/cmmi.php';?>
-<?php js::set('linkType', '');?>
-<?php js::set('viewMode', 'view');?>
-
+<?php include '../../' . 'common/view/header.html.php';?>
 <?php
-$productID = $data->product;
-$data->product = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-
-$this->loadModel('design');
-$relations = $this->loadModel('common')->getRelations('design', $data->id, 'commit');
-$data->commit = '';
-foreach($relations as $relation) $data->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '', "class='iframe' data-width='80%' data-height='550'");
-
-$storyTitle  = $this->dao->findByID($data->story)->from(TABLE_STORY)->fetch('title');
-$data->story = $storyTitle ? html::a($this->createLink('story', 'view', "id=$data->story"), $storyTitle) : '';
-
-$showAction = empty($_GET['onlybody']) ? 'show' : 'hidden';
-js::set('showAction', $showAction);
 if(!empty($_GET['onlybody']))
 {
     $data->commit = '';
@@ -41,13 +24,24 @@ if(!empty($_GET['onlybody']))
         <div class="detail-title"><?php echo $lang->design->desc;?></div>
         <div class="detail-content article-content">
           <?php echo $data->desc;?>
-        <?php echo $this->fetch('file', 'printFiles', array('files' => $data->files, 'fieldset' => 'false'));?>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $data->files, 'fieldset' => 'true'));?>
         </div>
       </div>
     </div>
-    <?php $actions = $this->loadModel('action')->getList($flow->module, $data->id);?>
-    <div class='cell'><?php include '../../../common/view/action.html.php';?></div>
-    <?php echo $this->flow->buildOperateMenu($flow, $data, $type = 'view');?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php common::printBack($this->session->designList);?>
+        <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
+        <?php if(!$data->deleted):?>
+        <?php
+        common::printIcon('design', 'commit',"designID=$data->id", $data, 'button', 'link', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'edit', "designID=$data->id", $data, 'button', '', '', '', true);
+        common::printIcon('design', 'delete', "designID=$data->id", $data, 'button', 'trash', 'hiddenwin');
+        ?>
+            <?php endif;?>
+      </div>
+    </div>
   </div>
   <div class='side-col col4'>
     <div class='cell'>
@@ -55,11 +49,11 @@ if(!empty($_GET['onlybody']))
         <table class='table table-data'>
           <tr>
             <th><?php echo $lang->design->type;?></th>
-            <td><?php echo zget($fields['type']->options, $data->type);?></td>
+            <td><?php echo zget($lang->design->typeList, $data->type);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->product;?></th>
-            <td><?php echo $data->product;?></td>
+            <td><?php echo $data->productName;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->design->story;?></th>
@@ -90,4 +84,4 @@ if(showAction == 'hidden')
     $('.pull-left').children('a').remove();
 };
 </script>
-<?php include '../../../' . 'common/view/footer.html.php';?>
+<?php include '../../' . 'common/view/footer.html.php';?>

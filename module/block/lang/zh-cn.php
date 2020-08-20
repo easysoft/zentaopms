@@ -64,6 +64,35 @@ $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
+$lang->block->default['cmmi']['program']['1']['title'] = '项目周报';
+$lang->block->default['cmmi']['program']['1']['block'] = 'cmmireport';
+$lang->block->default['cmmi']['program']['1']['grid']  = 8;
+
+$lang->block->default['cmmi']['program']['2']['title'] = '估算';
+$lang->block->default['cmmi']['program']['2']['block'] = 'cmmiestimate';
+$lang->block->default['cmmi']['program']['2']['grid']  = 4;
+
+$lang->block->default['cmmi']['program']['3']['title'] = '计划甘特图';
+$lang->block->default['cmmi']['program']['3']['block'] = 'cmmigantt';
+$lang->block->default['cmmi']['program']['3']['grid']  = 8;
+
+$lang->block->default['cmmi']['program']['4']['title'] = '到目前为止项目进展趋势图';
+$lang->block->default['cmmi']['program']['4']['block'] = 'cmmiprogress';
+$lang->block->default['cmmi']['program']['4']['grid']  = 4;
+
+$lang->block->default['cmmi']['program']['5']['title'] = '项目问题';
+$lang->block->default['cmmi']['program']['5']['block'] = 'cmmiissue';
+$lang->block->default['cmmi']['program']['5']['grid']  = 8;
+
+$lang->block->default['cmmi']['program']['6']['title']  = '最新动态';
+$lang->block->default['cmmi']['program']['6']['block']  = 'dynamic';
+$lang->block->default['cmmi']['program']['6']['grid']   = 4;
+$lang->block->default['cmmi']['program']['6']['source'] = '';
+
+$lang->block->default['cmmi']['program']['7']['title'] = '项目风险';
+$lang->block->default['cmmi']['program']['7']['block'] = 'cmmirisk';
+$lang->block->default['cmmi']['program']['7']['grid']  = 8;
+
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
