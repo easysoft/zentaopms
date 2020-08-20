@@ -657,9 +657,11 @@ class storyModel extends model
 
             if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
 
+            /* Fix bug #3153. */
+            if($oldStory->plan != $story->plan and (empty($oldStory->plan) or empty($story->plan))) $this->setStage($storyID);
+
             unset($oldStory->parent);
             unset($story->parent);
-            $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
         }
     }
