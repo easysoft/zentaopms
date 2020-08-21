@@ -14,7 +14,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PM);?></th>
-        <th class='text-center w-215px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-240px'><?php echo $lang->actions;?></th>
         <?php if($canOrder):?>
         <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
         <?php endif;?>
@@ -44,6 +44,7 @@
           <?php common::printIcon('program', 'close', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'create', "template=&projectID=$project->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->children);?>
+          <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
         </td>
         <?php if($canOrder):?>
         <td class='sort-handler'><i class="icon icon-move"></i></td>

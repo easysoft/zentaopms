@@ -77,6 +77,11 @@ $lang->program->aclList['custom']  = "自定义白名单(团队成员和白名�
 $lang->program->privwayList['extend'] = '继承(取项目权限与组织权限的并集)';
 $lang->program->privwayList['reset']  = '重新定义(只取项目权限)';
 
+$lang->program->statusList['wait']      = '未开始';
+$lang->program->statusList['doing']     = '进行中';
+$lang->program->statusList['suspended'] = '已挂起';
+$lang->program->statusList['closed']    = '已关闭';
+
 $lang->program->noProgram          = '暂时没有项目';
 $lang->program->accessDenied       = '您无权访问该项目！';
 $lang->program->chooseProgramType  = '选择项目管理方式';
@@ -91,4 +96,6 @@ $lang->program->scrumDesc          = '<strong>简介：</strong>小步迭代，�
 $lang->program->cmmi               = '瀑布';
 $lang->program->cmmiTitle          = '瀑布式项目管理';
 $lang->program->cmmiDesc           = '<strong>简介：</strong>按阶段规范化管理<br><strong>包含功能点：</strong>估算、计划、阶段、报告';
-$lang->program->cannotCreateChild = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->program->cannotCreateChild  = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->program->hasChildren        = '该项目有子项目存在，不能删除。';
+$lang->program->confirmDelete      = "您确定删除项目[%s]吗？";
