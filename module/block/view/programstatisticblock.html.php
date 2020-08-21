@@ -135,9 +135,9 @@ $(function()
             <div class="program-info">
               <div class='title'><?php echo $lang->program->allInput;?></div>
               <div class='info'>
-                <span><i class='icon icon-group'></i><?php echo $program->countMembers;?></span>
-                <span><i class='icon icon-clock'></i><?php echo $program->consumed;?></span>
-                <span><i class='icon icon-yen'></i><?php echo $program->budget;?></span>
+                <span><i class='icon icon-group'></i> <?php echo $program->countMembers;?></span>
+                <span><i class='icon icon-clock'></i> <?php echo $program->consumed;?></span>
+                <span><i class='icon icon-cost'></i> <?php echo $program->budget;?></span>
               </div>
             </div>
             <div class="project-info">

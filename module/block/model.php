@@ -660,73 +660,68 @@ class blockModel extends model
         return $data;
     }
 
-    public function getRecentProject()
+    public function getRecentPrograms()
     {
-        $projects = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 3);
-        if(empty($projects)) return array();
-
         $this->loadModel('project');
-        foreach($projects as $projectID => $project)
-        {
-            $project->teamCount  = count($this->project->getTeamMembers($project->id));
-        }
+        $programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 3);
+        if(empty($programs)) return array();
 
-        $projectKeys = array_keys($projects);
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $programIdList = array_keys($programs);
 
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('template')->eq('')
+            ->orderBy('id_asc')
+            ->fetchAll('program');
+
+        $projectIdList = array();
+        foreach($projects as $project) $projectIdList[] = $project->id;
+
+        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->in($programIdList)
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        $consumes = $this->dao->select('program, sum(consumed) as consumed')->from(TABLE_TASK)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('program')
+            ->fetchAll('program');
+
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
+            ->where('project')->in($projectIdList)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
-        /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
+            ->fetchAll('id');
+        
+        foreach($programs as $programID => $program) 
         {
-            $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
+            $program->teamCount = isset($teams[$programID]) ? $teams[$programID]->count : 0;
+            $program->consumed  = isset($consumes[$programID]) ? $consumes[$programID]->consumed : 0;
+            $program->project   = isset($projects[$programID]) ? $projects[$programID] : new stdclass();
+
+            if(!empty($program->project))
             {
-                if($task->status != 'cancel')
+                $totalEstimate = $totalConsumed = $totalLeft = 0;
+                foreach($tasks as $id => $task)
                 {
-                    $hour->totalEstimate += $task->estimate;
-                    $hour->totalConsumed += $task->consumed;
+                    if($task->project != $program->project->id) continue;
+                    if($task->status != 'cancel')
+                    {
+                        $totalEstimate += $task->estimate;
+                        $totalConsumed += $task->consumed;
+                    }
+                    if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
                 }
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+
+                $program->project->progress = ($totalLeft + $totalConsumed) == 0 ? 0 : round($totalConsumed / ($totalLeft + $totalConsumed), 3) * 100;
             }
-            $hours[$projectID] = $hour;
         }
 
-        /* Compute totalReal and progress. */
-        foreach($hours as $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
-        }
-
-        /* Process projects. */
-        foreach($projects as $key => $project)
-        {
-            // Process the end time.
-            $project->end = date(DT_DATE1, strtotime($project->end));
-
-            /* Judge whether the project is delayed. */
-            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
-            {
-                $delay = helper::diffDate(helper::today(), $project->end);
-                if($delay > 0) $project->delay = $delay;
-            }
-
-            /* Process the hours. */
-            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
-        }
-
-        return $projects;
+        return $programs;
     }
 
     /**

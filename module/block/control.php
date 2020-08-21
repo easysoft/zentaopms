@@ -1468,15 +1468,7 @@ class block extends control
      */
     public function printRecentprogramBlock()
     {
-        $programs = $this->block->getRecentProject();
-
-        $this->loadModel('project');
-        foreach($programs as $programID => $program)
-        {
-            $program->teamCount  = count($this->project->getTeamMembers($program->id));
-        }
-
-        $this->view->programs = $programs;
+        $this->view->programs = $this->block->getRecentPrograms();
     }
 
     public function printProgramteamBlock()
