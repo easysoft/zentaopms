@@ -1537,6 +1537,13 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-    }
+		$projects = $this->loadModel('project')->getPairs();
+		$actions  = $this->dao->select('*')->from(TABLE_ACTION)
+			->where('project')->in(array_keys($projects))
+			->orderBy('id_desc')
+			->fetchAll();
+
+     	$this->view->actions = $this->loadModel('action')->transformActions($actions);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+	 }
 }
