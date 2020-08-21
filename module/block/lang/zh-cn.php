@@ -256,9 +256,16 @@ $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['7']['params']['num']     = '15';
 $lang->block->default['full']['my']['7']['params']['type']    = 'assignedTo';
 
-$lang->block->default['full']['my']['8']['title']  = '项目人力投入';
-$lang->block->default['full']['my']['8']['block']  = 'programteam';
-$lang->block->default['full']['my']['8']['grid']   = 8;
+$lang->block->default['full']['my']['8']['title'] = '项目人力投入';
+$lang->block->default['full']['my']['8']['block'] = 'programteam';
+$lang->block->default['full']['my']['8']['grid']  = 8;
+
+$lang->block->default['full']['my']['8']['title'] = '项目列表';
+$lang->block->default['full']['my']['8']['block'] = 'program';
+$lang->block->default['full']['my']['8']['grid']  = 8;
+
+$lang->block->default['full']['my']['8']['params']['orderBy'] = 'id_desc';
+$lang->block->default['full']['my']['8']['params']['num']     = '15';
 
 $lang->block->num     = '数量';
 $lang->block->type    = '类型';
@@ -278,15 +285,15 @@ $lang->block->availableBlocks->release  = '发布列表';
 $lang->block->availableBlocks->build    = '版本列表';
 $lang->block->availableBlocks->testtask = '测试版本列表';
 
+$lang->block->moduleList['program'] = '项目';
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
 $lang->block->moduleList['qa']      = '测试';
 $lang->block->moduleList['todo']    = '待办';
-$lang->block->moduleList['program'] = '项目';
-
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
+$lang->block->modules['program']->availableBlocks->list          = '项目列表';
 $lang->block->modules['program']->availableBlocks->scrumoverall  = '项目整体情况';
 $lang->block->modules['program']->availableBlocks->scrumprogress = '进行中的迭代';
 $lang->block->modules['program']->availableBlocks->scrumproject  = '迭代总览';

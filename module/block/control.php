@@ -699,6 +699,29 @@ class block extends control
             ->fetchAll();
     }
 
+    public function printProgramBlock()
+    {
+        $this->loadModel('project');
+        $programs = $this->loadModel('program')->getUserPrograms('all', $this->params->orderBy, $this->params->num);
+        foreach($programs as $programID => $program)
+        {
+            $members     = $this->project->getTeamMemberPairs($programID);
+            $consumed    = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->ne('cancel')->fetch('consumed');
+            $leftTasks   = $this->dao->select('count(*) as leftTasks')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing,pause')->fetch('leftTasks');
+            $leftStories = $this->dao->select('count(*) as leftStories')->from(TABLE_STORY)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftStories');
+            $leftBugs    = $this->dao->select('count(*) as leftBugs')->from(TABLE_BUG)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftBugs');
+
+            $program->countMembers = count($members) ? count($members) : 0;
+            $program->consumed     = $consumed ? $consumed : 0;
+            $program->leftTasks    = $leftTasks ? $leftTasks : 0;
+            $program->leftStories  = $leftStories ? $leftStories : 0;
+            $program->leftBugs     = $leftBugs ? $leftBugs : 0;
+        }
+
+        $this->view->programs = $programs;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+    }
+
     /**
      * Print product block.
      *

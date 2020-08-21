@@ -47,6 +47,10 @@ $lang->program->setPlanduration    = '设置工期';
 $lang->program->privway            = '权限控制';
 $lang->program->durationEstimation = '工作量估算';
 $lang->program->progress           = '项目进度';
+$lang->program->countMembers       = '投入人数';
+$lang->program->leftStories        = '剩余需求';
+$lang->program->leftTasks          = '剩余任务';
+$lang->program->leftBugs           = '剩余Bug';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
