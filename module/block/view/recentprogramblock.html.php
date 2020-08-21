@@ -1,4 +1,4 @@
-<div class='row cell' id='cards'>
+<div class='row' id='cards'>
   <?php foreach ($programs as $projectID => $project):?>
   <div class='col'>
     <div class='panel'>
