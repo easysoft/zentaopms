@@ -1368,6 +1368,21 @@ class block extends control
         $this->display();
     }
 
+    public function printContributeBlock()
+    {
+    
+    }
+
+    public function printRecentprogramBlock()
+    {
+    
+    }
+
+    public function printProgramteamBlock()
+    {
+    
+    }
+
     /**
      * Print flow chart block
      * @access public
