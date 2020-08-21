@@ -94,6 +94,7 @@ $lang->risk->priList['high']   = '高';
 $lang->risk->priList['middle'] = '中';
 $lang->risk->priList['low']    = '低';
 
+$lang->risk->statusList[''] = '';
 $lang->risk->statusList['active']   = '开放';
 $lang->risk->statusList['closed']   = '关闭';
 $lang->risk->statusList['hangup']   = '挂起';
