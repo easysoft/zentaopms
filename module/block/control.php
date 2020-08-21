@@ -1370,7 +1370,7 @@ class block extends control
 
     public function printContributeBlock()
     {
-    
+        $this->view->data = $this->block->getContributeBlockData();
     }
 
     public function printRecentprogramBlock()

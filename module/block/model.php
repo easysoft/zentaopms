@@ -613,6 +613,36 @@ class blockModel extends model
         return $blockPairs;
     }
 
+    public function getContributeBlockData()
+    {
+        $data = array();
+
+        $data['todos']   = $this->dao->select('count(*) AS count')->from(TABLE_TODO)
+            ->where('account')->eq($this->app->user->account)
+            ->fetch('count');
+        $data['stories'] = $this->dao->select('count(*) AS count')->from(TABLE_STORY)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['tasks']   = $this->dao->select('count(*) AS count')->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('finishedBy')->eq($this->app->user->account)
+            ->orWhere('finishedList')->like("%,{$this->app->user->account},%")
+            ->fetch('count');
+        $data['bugs']    = $this->dao->select('count(*) AS count')->from(TABLE_BUG)
+            ->where('resolvedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['cases']   = $this->dao->select('count(*) AS count')->from(TABLE_CASE)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('product')->ne(0)
+            ->andWhere('auto')->ne('unit')
+            ->fetch('count');
+
+        return $data;
+    }
+
     /**
      * Build number params.
      * 
