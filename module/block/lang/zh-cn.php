@@ -294,13 +294,24 @@ $lang->block->moduleList['todo']    = '待办';
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->list          = '项目列表';
-$lang->block->modules['program']->availableBlocks->scrumoverall  = '项目整体情况';
-$lang->block->modules['program']->availableBlocks->scrumprogress = '进行中的迭代';
-$lang->block->modules['program']->availableBlocks->scrumproject  = '迭代总览';
-$lang->block->modules['program']->availableBlocks->scrumproduct  = '产品总览';
-$lang->block->modules['program']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['program']->availableBlocks->scrumroadmap  = '产品路线图';
-$lang->block->modules['program']->availableBlocks->scrumdynamic  = '最新动态';
+
+$lang->block->modules['scrum']['index'] = new stdclass();
+$lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = '项目整体情况';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumprogress = '进行中的迭代';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = '迭代总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = '产品总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = '产品路线图';
+
+$lang->block->modules['cmmi']['index'] = new stdclass();
+$lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmireport    = '项目周报';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiestimate  = '估算';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmigantt     = '计划甘特图';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiprogress  = '到目前为止项目进展趋势图';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiissue     = '项目问题';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmirisk      = '项目风险';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

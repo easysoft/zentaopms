@@ -67,7 +67,7 @@ class block extends control
         }
         elseif(isset($this->lang->block->moduleList[$module]))
         {
-            $this->get->set('mode', 'getblocklist');
+            $module == 'program' ? $this->get->set('mode', 'getprogramlist') : $this->get->set('mode', 'getblocklist');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -400,9 +400,10 @@ class block extends control
 
         $mode = strtolower($this->get->mode);
 
-        if($mode == 'getblocklist')
+        if($mode == 'getblocklist' || $mode == 'getprogramlist')
         {
-            $blocks = $this->block->getAvailableBlocks($module);
+            $type   = $mode == 'getblocklist' ? '' : 'program';
+            $blocks = $this->block->getAvailableBlocks($module, $type);
             if(!$this->selfCall)
             {
                 echo $blocks;
