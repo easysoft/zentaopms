@@ -54,6 +54,39 @@ class designModel extends model
     }
 
     /**
+     * Batch create
+     *
+     * @access public
+     * @return bool
+     */
+    public function batchCreate($productID = 0)
+    {
+        $data = fixer::input('post')->get();
+
+        $this->loadModel('action');
+        foreach($data->name as $i => $name)
+        {
+            if(!$name) continue;
+
+            $design = new stdclass();
+            $design->story       = $data->story[$i];
+            $design->type        = $data->type[$i];
+            $design->name        = $name;
+            $design->product     = $productID;
+            $design->program     = $this->session->program;
+            $design->createdBy   = $this->app->user->account;
+            $design->createdDate = helper::now();
+
+            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->exec();
+
+            $designID = $this->dao->lastInsertID();
+            $this->action->create('design', $designID, 'Opened');
+        }
+
+        return true;
+    }
+
+    /**
      * Update a design.
      *
      * @param  int    $designID
@@ -135,6 +168,11 @@ class designModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
+            $design = new stdclass();
+            $design->commit     = implode(",", $revisions);
+            $design->commitDate = helper::now();
+            $design->commitBy   = $this->app->user->account;
+            $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
     }
 
     /**
@@ -169,7 +207,7 @@ class designModel extends model
         $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
 
 
-        $design->commit = ''; 
+        $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID"), "#$relation->BID", '_blank');
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
@@ -224,8 +262,10 @@ class designModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID, $type = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getList($productID, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
+        if($type == 'bySearch') return $this->getBySearch($param, $orderBy, $pager);
+
         $designs = $this->dao->select('*')->from(TABLE_DESIGN)
             ->where('deleted')->eq(0)
             ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
@@ -237,11 +277,76 @@ class designModel extends model
 
         foreach($designs as $id => $design)
         {
-            $design->commit = ''; 
+            $design->commit = '';
             $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
             foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
         }
 
         return $designs;
+    }
+
+    /**
+     * Get designs by search
+     *
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return object
+     */
+    public function getBySearch($queryID = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('designQuery', $query->sql);
+                $this->session->set('designForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('designQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->designQuery == false) $this->session->set('designQuery', ' 1 = 1');
+        }
+
+        $designQuery = $this->session->designQuery;
+
+        $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
+            ->where($designQuery)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('program')->eq($this->session->program)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        foreach($designs as $id => $design)
+        {
+            $design->commit = '';
+            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
+            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
+        }
+
+        return $designs;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL)
+    {
+        $this->config->design->search['actionURL'] = $actionURL;
+        $this->config->design->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->design->search);
     }
 }

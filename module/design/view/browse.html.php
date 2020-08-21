@@ -22,12 +22,15 @@
         echo html::a(inlink('browse', "productID={$productID}&type=$key"),  "<span class='text'>$label</span>"  . $recTotalLabel, '', "class='btn btn-link $active'");
     }
     ?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->design->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php common::printLink('design', 'batchCreate', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->design->batchCreate, '', "class='btn btn-primary'");?>
     <?php if(common::hasPriv('design', 'create')) echo html::a($this->createLink('design', 'create', "productID=$productID&designID=0"), "<i class='icon icon-plus'></i> {$lang->design->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id="mainContent" class="main-row fade in">
+<div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module='design'></div>
+<div id="mainContent" class="main-table">
   <?php if(empty($designs)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->design->noDesign;?></span></p>
@@ -53,8 +56,8 @@
           <tr>
             <td><?php printf('%03d', $design->id);?></td>
             <td><?php echo zget($lang->design->typeList, $design->type);?></td>
-            <td title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td><?php echo $design->commit;?></td>
+            <td title="<?php echo $design->name;?>" style="overflow:hidden"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
+            <td style="overflow:hidden"><?php echo $design->commit;?></td>
             <td><?php echo $design->createdBy;?></td>
             <td><?php echo substr($design->createdDate, 0, 11);?></td>
             <td><?php echo $design->assignedTo;?></td>
