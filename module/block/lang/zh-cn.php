@@ -245,8 +245,10 @@ $lang->block->default['full']['my']['3']['grid']   = 4;
 $lang->block->default['full']['my']['3']['source'] = 'todo';
 $lang->block->default['full']['my']['3']['params']['num'] = '20';
 
-$lang->block->default['full']['my']['4'] = $lang->block->default['project']['1'];
-$lang->block->default['full']['my']['4']['source'] = 'project';
+$lang->block->default['full']['my']['4']['title']  = '项目统计';
+$lang->block->default['full']['my']['4']['block']  = 'statistic';
+$lang->block->default['full']['my']['4']['source'] = 'program';
+$lang->block->default['full']['my']['4']['grid']   = 8;
 
 $lang->block->default['full']['my']['5']['title']  = '个人贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
@@ -268,12 +270,12 @@ $lang->block->default['full']['my']['8']['title'] = '项目人力投入';
 $lang->block->default['full']['my']['8']['block'] = 'programteam';
 $lang->block->default['full']['my']['8']['grid']  = 8;
 
-$lang->block->default['full']['my']['8']['title'] = '项目列表';
-$lang->block->default['full']['my']['8']['block'] = 'program';
-$lang->block->default['full']['my']['8']['grid']  = 8;
+$lang->block->default['full']['my']['9']['title'] = '项目列表';
+$lang->block->default['full']['my']['9']['block'] = 'program';
+$lang->block->default['full']['my']['9']['grid']  = 8;
 
-$lang->block->default['full']['my']['8']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['8']['params']['num']     = '15';
+$lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
+$lang->block->default['full']['my']['9']['params']['num']     = '15';
 
 $lang->block->num     = '数量';
 $lang->block->type    = '类型';
