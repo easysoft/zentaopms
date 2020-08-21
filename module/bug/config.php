@@ -237,6 +237,11 @@ $config->bug->datatable->fieldList['task']['fixed']    = 'no';
 $config->bug->datatable->fieldList['task']['width']    = '120';
 $config->bug->datatable->fieldList['task']['required'] = 'no';
 
+$config->bug->datatable->fieldList['toTask']['title']    = 'toTask';
+$config->bug->datatable->fieldList['toTask']['fixed']    = 'no';
+$config->bug->datatable->fieldList['toTask']['width']    = '120';
+$config->bug->datatable->fieldList['toTask']['required'] = 'no';
+
 $config->bug->datatable->fieldList['keywords']['title']    = 'keywords';
 $config->bug->datatable->fieldList['keywords']['fixed']    = 'no';
 $config->bug->datatable->fieldList['keywords']['width']    = '100';

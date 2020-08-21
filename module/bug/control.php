@@ -148,8 +148,9 @@ class bug extends control
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {
-            if($bug->story) $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)  $taskIdList[$bug->task]   = $bug->task;
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();

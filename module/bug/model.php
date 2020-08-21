@@ -2603,6 +2603,13 @@ class bugModel extends model
                     echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
                 }
                 break;
+            case 'toTask':
+                if(isset($tasks[$bug->toTask]))
+                {
+                    $task = $tasks[$bug->toTask];
+                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                }
+                break;
             case 'type':
                 echo zget($this->lang->bug->typeList, $bug->type);
                 break;
