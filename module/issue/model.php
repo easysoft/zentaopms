@@ -88,6 +88,11 @@ class issueModel extends model
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('program')->eq($this->session->program)
             ->andWhere('deleted')->eq('0')
+            ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
+            ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF($browseType == 'suspended')->andWhere('status')->eq('suspended')->fi()
+            ->beginIF($browseType == 'cancelled')->andWhere('status')->eq('canceled')->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
