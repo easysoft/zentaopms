@@ -673,6 +673,32 @@ class blockModel extends model
     }
 
     /** 
+     * Get cmmi issue params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getCmmiissueParams($module = '') 
+    {
+        $this->app->loadLang('issue');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /** 
      * Get testtask params.
      *▫
      * @param  string $module▫
