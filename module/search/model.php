@@ -54,6 +54,7 @@ class searchModel extends model
                 $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
                 $control  = ($field->control == 'select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
                 $options  = $this->workflowfield->getFieldOptions($field);
+                /* Set date zui for date and datetime control. */
                 $class    = ($field->control == 'date' or $field->control == 'datetime') ? 'date' : '';
 
                 $searchConfig['fields'][$field->field] = $field->name;
