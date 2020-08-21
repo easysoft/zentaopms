@@ -1449,14 +1449,34 @@ class block extends control
         $this->display();
     }
 
+    /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
     public function printContributeBlock()
     {
         $this->view->data = $this->block->getContributeBlockData();
     }
 
+    /**
+     * Print recent program block.
+     *
+     * @access public
+     * @return void
+     */
     public function printRecentprogramBlock()
     {
-    
+        $programs = $this->block->getRecentProject();
+
+        $this->loadModel('project');
+        foreach($programs as $programID => $program)
+        {
+            $program->teamCount  = count($this->project->getTeamMembers($program->id));
+        }
+
+        $this->view->programs = $programs;
     }
 
     public function printProgramteamBlock()
@@ -1607,7 +1627,9 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+            ->where('program')->eq($this->session->program)
+            ->fetch();
     }
 
     /**

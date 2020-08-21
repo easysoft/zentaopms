@@ -51,6 +51,8 @@ $lang->block->openedStories   = '创建的需求数';
 $lang->block->resolvedTasks   = '完成的任务数';
 $lang->block->resolvedBugs    = '解决Bug数';
 $lang->block->openedTestcases = '创建用例数';
+$lang->block->cmmi            = 'CMMI 3';
+$lang->block->scrum           = 'Scrum+';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
