@@ -108,11 +108,8 @@ class programModel extends model
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
 
-            if($project->parent > 0)
-            {
-                $this->dao->update(TABLE_PROJECT)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
-                $this->fixPath($programID);
-            }
+            if($project->parent > 0) $this->dao->update(TABLE_PROJECT)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
+            $this->setTreePath($programID);
 
             /* Add program admin.*/
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
@@ -148,19 +145,6 @@ class programModel extends model
 
                 $productID = $this->dao->lastInsertId();
                 $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-
-                /* Create doc lib.  */
-                $this->app->loadLang('doc');
-                $lib = new stdclass();
-                $lib->product = $productID;
-                $lib->name    = $this->lang->doclib->main['product'];
-                $lib->type    = 'product';
-                $lib->main    = '1';
-                $lib->acl     = 'default';
-                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-                $docLibID = $this->dao->lastInsertId();
-                $this->loadModel('doc')->syncDocModule($docLibID);
 
                 $data = new stdclass();
                 $data->project = $programID;
@@ -235,24 +219,20 @@ class programModel extends model
         return $count > 0;
     }
 
-    public function fixPath($programID)
+    public function setTreePath($programID)
     {
-        $path    = array();
         $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
-        if($program->parent == 0)
-        {
-            $path['path']  = ",{$program->id},";
-            $path['grade'] = 1;
-            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
-        }
-        else
-        {
-            $path = $this->fixPath($program->parent);
-            $path['path']  .= "{$program->id},";
-            $path['grade'] += 1;
-            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
-        }
 
-        return $path;
+        $path['path']  = ",{$program->id},";
+        $path['grade'] = 1;
+
+        if($program->parent)
+        {
+            $parent = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($program->parent)->fetch();
+
+            $path['path']  = $parent->path . "{$program->id},";
+            $path['grade'] = $parent->grade + 1;
+        }
+        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
     }
 }

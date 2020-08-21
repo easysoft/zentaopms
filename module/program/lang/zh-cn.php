@@ -52,6 +52,7 @@ $lang->program->leftStories        = '剩余需求';
 $lang->program->leftTasks          = '剩余任务';
 $lang->program->leftBugs           = '剩余Bug';
 $lang->program->children           = '子项目';
+$lang->program->parent             = '父项目';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
