@@ -51,7 +51,13 @@
         <tr>
           <th><?php echo $lang->program->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
-          <td></td><td></td>
+          <td>
+            <div class="checkbox-primary">
+              <input type="checkbox" name="isCat" value="1" id="isCat">
+              <label for="isCat"><?php echo $lang->program->parent;?></label>
+            </div>
+          </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->code;?></th>

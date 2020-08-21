@@ -48,6 +48,7 @@ $lang->program->privway            = '权限控制';
 $lang->program->durationEstimation = '工作量估算';
 $lang->program->progress           = '项目进度';
 $lang->program->children           = '子项目';
+$lang->program->parent             = '父项目';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';

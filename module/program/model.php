@@ -132,19 +132,6 @@ class programModel extends model
                 $productID = $this->dao->lastInsertId();
                 $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
-                /* Create doc lib.  */
-                $this->app->loadLang('doc');
-                $lib = new stdclass();
-                $lib->product = $productID;
-                $lib->name    = $this->lang->doclib->main['product'];
-                $lib->type    = 'product';
-                $lib->main    = '1';
-                $lib->acl     = 'default';
-                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-                $docLibID = $this->dao->lastInsertId();
-                $this->loadModel('doc')->syncDocModule($docLibID);
-
                 $data = new stdclass();
                 $data->project = $programID;
                 $data->product = $productID;
