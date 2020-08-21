@@ -20,6 +20,7 @@
           echo html::a($this->createLink('issue', 'browse', 'browseType=' . $label), '<span class="text">' . $labelName . '</span>', '', "class='btn btn-link $active'");
       }
     ?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->issue->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('issue', 'create', '', "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
@@ -28,22 +29,23 @@
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col">
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module="issue"></div>
     <?php if($issueList):?>
       <form class="main-table" data-ride="table" method="post" id="issueForm">
         <table id="issueList" class="table has-sort-head" id="issueTable">
           <thead>
             <tr>
-              <?php $vars = "browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-              <th class="c-id w-40px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-              <th class="w-40px"><?php echo $lang->issue->type;?></th>
-              <th class="w-100px"><?php echo $lang->issue->title;?></th>
-              <th class="w-40px"><?php echo $lang->issue->severity;?></th>
-              <th class="w-40px"><?php echo $lang->issue->pri;?></th>
-              <th class="w-60px"><?php echo $lang->issue->assignedTo;?></th>
-              <th class="w-60px"><?php echo $lang->issue->owner;?></th>
-              <th class="w-60px"><?php echo $lang->issue->status;?></th>
-              <th class="w-80px"><?php echo $lang->issue->createdDate;?></th>
-              <th class="c-actions w-100px"><?php echo $lang->actions;?></th>
+              <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+              <th class="c-id w-60px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+              <th class="w-80px"><?php echo $lang->issue->type;?></th>
+              <th style="width:auto"><?php echo $lang->issue->title;?></th>
+              <th class="w-60px"><?php echo $lang->issue->severity;?></th>
+              <th class="w-60px"><?php echo $lang->issue->pri;?></th>
+              <th class="w-80px"><?php echo $lang->issue->assignedTo;?></th>
+              <th class="w-80px"><?php echo $lang->issue->owner;?></th>
+              <th class="w-100px"><?php echo $lang->issue->status;?></th>
+              <th class="w-140px"><?php echo $lang->issue->createdDate;?></th>
+              <th class="c-actions w-200px"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +53,7 @@
             <tr>
               <td class="c-id"><?php printf('%03d', $issue->id);?></td>
               <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
-              <td title="<?php echo $issue->title;?>"><?php common::printLink('issue', 'view', "id=$issue->id", $issue->title);?></td>
+              <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php common::printLink('issue', 'view', "id=$issue->id", $issue->title);?></td>
               <td title="<?php echo $issue->severity;?>"><?php echo $issue->severity;?></td>
               <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
               <td title="<?php echo zget($users, $issue->assignedTo);?>"><?php echo zget($users, $issue->assignedTo);?></td>
@@ -74,6 +76,11 @@
             <?php endforeach;?>
           </tbody>
         </table>
+      <?php if($issueList):?>
+      <div class='table-footer'>
+        <?php $pager->show('right', 'pagerjs');?>
+      </div>
+      <?php endif;?>
       </form>
     <?php else:?>
       <div class="table-empty-tip"><?php echo $lang->noData;?></div>

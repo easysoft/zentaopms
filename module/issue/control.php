@@ -15,6 +15,7 @@ class issue extends control
      * Get issue list data.
      *
      * @param  string $browseType
+     * @param  int param
      * @param  string orderBy
      * @param  int recTotal
      * @param  int recPerPage
@@ -22,12 +23,17 @@ class issue extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $browseType = strtolower($browseType);
         /* Load pager */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('issue', 'browse', "browseType=bysearch&queryID=myQueryID");
+        $this->issue->buildSearchForm($actionURL, $queryID);
 
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $this->lang->issue->browse;
         $this->view->position[] = $this->lang->issue->browse;
@@ -36,9 +42,10 @@ class issue extends control
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
+        $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
-        $this->view->issueList  = $this->issue->getIssueList($browseType, $orderBy, $pager);
+        $this->view->issueList  = $this->issue->getIssueList($browseType, $queryID, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
 
         $this->display();
@@ -80,7 +87,7 @@ class issue extends control
         if($_POST)
         {
             $results = $this->issue->batchCreate();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse', 'browseType=all')));
         }
 

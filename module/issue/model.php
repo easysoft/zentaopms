@@ -58,16 +58,52 @@ class issueModel extends model
     }
 
     /**
+     * Get stakeholder issue list data.
+     * @param  string $owner
+     * @param  string $activityID
+     * @param  object $pager
+     *
+     * @access public
+     * @return object
+     */
+    public function getStakeholderIssue($owner = '', $activityID = 0, $pager = null)
+    {
+        $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
+            ->where('deleted')->eq('0')
+            ->beginIF($owner)->andWhere('owner')->eq($owner)->fi()
+            ->beginIF($activityID)->andWhere('activity')->eq($activityID)->fi()
+            ->orderBy('id_desc')
+            ->page($pager)
+            ->fetchAll();
+
+        return $issueList;
+    }
+
+    /**
      * Get question list data.
      *
      * @param  string    $browseType
+     * @param  int       $queryID
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return object
      */
-    public function getIssueList($browseType = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getIssueList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
+        $issueQuery = '';
+        if($browseType == 'bysearch')
+        {
+            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : ''; 
+            if($query)
+            {
+                $this->session->set('issueQuery', $query->sql);
+                $this->session->set('issueForm', $query->form);
+            }
+            if($this->session->issueQuery == false) $this->session->set('issueQuery', ' 1=1');
+            $issueQuery = $this->session->issueQuery;
+        }
+
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('program')->eq($this->session->program)
             ->andWhere('deleted')->eq('0')
@@ -76,11 +112,17 @@ class issueModel extends model
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
             ->beginIF($browseType == 'suspended')->andWhere('status')->eq('suspended')->fi()
             ->beginIF($browseType == 'cancelled')->andWhere('status')->eq('canceled')->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($issueQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
 
         return $issueList;
+    }
+
+    public function getActivityList()
+    {
+        return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
     }
 
     public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
@@ -268,7 +310,7 @@ class issueModel extends model
             foreach(explode(',',$this->config->issue->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($issue["$field"])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->issue->$field)));	
+                if($field and empty($issue["$field"])) return dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->issue->$field);
             }
 
             $issues[] = $issue;
@@ -353,4 +395,19 @@ class issueModel extends model
         return $this->dao->lastInsertID();
     }
 
+   /**
+     * Build search form.
+     *
+     * @param  string $actionURL
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($actionURL, $queryID)
+    {
+        $this->config->issue->search['actionURL'] = $actionURL;
+        $this->config->issue->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->issue->search);
+    }
 }

@@ -1549,7 +1549,9 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+            ->where('program')->eq($this->session->program)
+            ->fetch();
     }
 
     /**
