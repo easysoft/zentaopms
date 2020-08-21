@@ -3,6 +3,7 @@ $config->action->objectNameFields['product']     = 'name';
 $config->action->objectNameFields['story']       = 'title';
 $config->action->objectNameFields['productplan'] = 'title';
 $config->action->objectNameFields['release']     = 'name';
+$config->action->objectNameFields['program']     = 'name';
 $config->action->objectNameFields['project']     = 'name';
 $config->action->objectNameFields['task']        = 'name';
 $config->action->objectNameFields['build']       = 'name';

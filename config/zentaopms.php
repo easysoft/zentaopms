@@ -204,6 +204,7 @@ $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
 $config->objectTables['release']     = TABLE_RELEASE;
+$config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;
 $config->objectTables['task']        = TABLE_TASK;
 $config->objectTables['build']       = TABLE_BUILD;

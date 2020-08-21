@@ -68,6 +68,7 @@ $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = $lang->storyCommon;
 $lang->action->objectTypes['productplan'] = '计划';
 $lang->action->objectTypes['release']     = '发布';
+$lang->action->objectTypes['program']     = '项目';
 $lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = '任务';
 $lang->action->objectTypes['build']       = '版本';
@@ -386,6 +387,7 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = '计划|productplan|view|productID=%s';
 $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->storyCommon}|story|view|storyID=%s";
+$lang->action->label->program     = "项目|program|browse|";
 $lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
 $lang->action->label->task        = '任务|task|view|taskID=%s';
 $lang->action->label->build       = '版本|build|view|buildID=%s';
@@ -407,6 +409,7 @@ $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
+$lang->action->search->objectTypeList['program']     = '项目';
 $lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = '用例';
