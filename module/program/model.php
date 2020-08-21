@@ -41,6 +41,20 @@ class programModel extends model
             ->fetchPairs();
     }
 
+    public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('iscat')->eq(0)
+            ->andWhere('template')->ne('')
+            ->andWhere('program')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll('id');
+    }
+
     /**
      * Show accessDenied response.
      *
