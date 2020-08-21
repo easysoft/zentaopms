@@ -50,6 +50,8 @@ $lang->block->openedStories   = 'The Number Of Stories Created';
 $lang->block->resolvedTasks   = 'The Number Of Tasks Resolved';
 $lang->block->resolvedBugs    = 'The Number Of Bugs Resolved';
 $lang->block->openedTestcases = 'The Number Of Test Case Created';
+$lang->block->cmmi            = 'CMMI 3';
+$lang->block->scrum           = 'Scrum+';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Tên';

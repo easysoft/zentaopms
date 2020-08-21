@@ -1392,14 +1392,34 @@ class block extends control
         $this->display();
     }
 
+    /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
     public function printContributeBlock()
     {
         $this->view->data = $this->block->getContributeBlockData();
     }
 
+    /**
+     * Print recent program block.
+     *
+     * @access public
+     * @return void
+     */
     public function printRecentprogramBlock()
     {
-    
+        $programs = $this->block->getRecentProject();
+
+        $this->loadModel('project');
+        foreach($programs as $programID => $program)
+        {
+            $program->teamCount  = count($this->project->getTeamMembers($program->id));
+        }
+
+        $this->view->programs = $programs;
     }
 
     public function printProgramteamBlock()

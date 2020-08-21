@@ -623,6 +623,12 @@ class blockModel extends model
         return $blockPairs;
     }
 
+    /**
+     * Get contribute block data.
+     *
+     * @access public
+     * @return array
+     */
     public function getContributeBlockData()
     {
         $data = array();
@@ -651,6 +657,75 @@ class blockModel extends model
             ->fetch('count');
 
         return $data;
+    }
+
+    public function getRecentProject()
+    {
+        $projects = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 3);
+        if(empty($projects)) return array();
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            $project->teamCount  = count($this->project->getTeamMembers($project->id));
+        }
+
+        $projectKeys = array_keys($projects);
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        /* Process projects. */
+        foreach($projects as $key => $project)
+        {
+            // Process the end time.
+            $project->end = date(DT_DATE1, strtotime($project->end));
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+        }
+
+        return $projects;
     }
 
     /**
