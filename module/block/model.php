@@ -248,10 +248,20 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '')
+    public function getAvailableBlocks($module = '', $type = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        if($type == 'program')
+        {
+            $programID = $this->session->program;
+            $program   = $this->loadModel('project')->getByID($programID);
+            $blocks    = $this->lang->block->modules[$program->template]['index']->availableBlocks;
+        }
+        else
+        {
+            if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        }
+
         if(isset($this->config->block->closed))
         {
             foreach($blocks as $blockKey => $blockName)
