@@ -682,4 +682,5 @@ class blockModel extends model
 
         return json_encode($params);
     }
+
 }
