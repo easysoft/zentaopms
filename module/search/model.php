@@ -54,9 +54,10 @@ class searchModel extends model
                 $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
                 $control  = ($field->control == 'select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
                 $options  = $this->workflowfield->getFieldOptions($field);
+                $class    = ($field->control == 'date' or $field->control == 'datetime') ? 'date' : '';
 
                 $searchConfig['fields'][$field->field] = $field->name;
-                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options);
+                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options, 'class' => $class);
             }
         }
 
