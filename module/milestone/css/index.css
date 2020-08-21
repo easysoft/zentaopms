@@ -1,0 +1,15 @@
+#dropMenu .col-left .list-group {margin-bottom: 0px; }
+.table, .cell{margin-bottom: 15px !important}
+.main-table tbody>tr>td {position: relative; border-bottom: 0; border-bottom: 1px solid #ddd;}
+.main-table tbody>tr:last-child>td {border-bottom: none;}
+.cell{position: relative;}
+#chartUnit {position: absolute; color: #000; top: 20px; left: 15px;}
+#chartLegend {position: absolute; right: 0; width: 80px; height: 60px; top: 50%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px;}
+#chartLegend > div {position: relative; padding-left: 30px;}
+#chartLegend > div > .barline {position: absolute; width: 20px; left: 0; top: 13px; height: 3px;}
+#chartLegend .line-pv .barline{background: #1183fb}
+#chartLegend .line-ev .barline{background: rgb(0, 218, 136)}
+#chartLegend .line-ac .barline{background: rgb(255, 145, 0)}
+
+.scroll-table {overflow-x: scroll}
+.scroll-table > .table {min-width:350%}

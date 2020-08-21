@@ -1,10 +1,17 @@
+<?php
+/**
+ * The edit view of design module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: edit.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php
-$showSubHeader = $program->category == 'single' ? 'hidden' : 'show';
-js::set('showSubHeader', $showSubHeader);
-?>
-<style> .tabs .tab-pane .table{border: 1px solid #ddd; border-top: none} </style>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -89,19 +96,4 @@ js::set('showSubHeader', $showSubHeader);
     </form>
   </div>
 </div>
-<script>
-$('#product').change(function()
-{
-    productID = $(this).val();
-    var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $.post(link, function(data)
-    {
-        $('#story').replaceWith(data);
-        $('#story_chosen').remove();
-        $('#story').chosen();
-    })
-})
-
-if(showSubHeader == 'hidden') $("#subHeader").remove();
-</script>
 <?php include '../../common/view/footer.html.php';?>

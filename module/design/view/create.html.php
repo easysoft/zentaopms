@@ -1,9 +1,17 @@
+<?php
+/**
+ * The create view of design module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: create.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php
-$showSubHeader = $program->category == 'single' ? 'hidden' : 'show';
-js::set('showSubHeader', $showSubHeader);
-?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -19,9 +27,7 @@ js::set('showSubHeader', $showSubHeader);
             <td></td>
           </tr>
           <?php endif;?>
-          <?php if($program->category == 'single'):?>
-          <?php echo html::hidden('product', $productID);?>
-          <?php endif;?>
+          <?php if($program->category == 'single') echo html::hidden('product', $productID);?>
           <tr>
             <th class='w-120px'><?php echo $lang->design->story;?></th>
             <td><?php echo html::select('story', empty($stories) ? '' : $stories, '', "class='form-control chosen'");?></td>
@@ -53,19 +59,4 @@ js::set('showSubHeader', $showSubHeader);
     </form>
   </div>
 </div>
-<script>
-$('#product').change(function()
-{
-    productID = $(this).val();
-    var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $.post(link, function(data)
-    {
-        $('#story').replaceWith(data);
-        $('#story_chosen').remove();
-        $('#story').chosen();
-    })
-})
-
-if(showSubHeader == 'hidden') $("#subHeader").remove();
-</script>
 <?php include '../../common/view/footer.html.php';?>

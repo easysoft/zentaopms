@@ -16,13 +16,13 @@ $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
 
 $lang->moduleOrder[11]  = 'program';
+$lang->moduleOrder[12]  = 'design';
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
 
 $lang->moduleOrder[35]  = 'project';
-$lang->moduleOrder[36]  = 'design';
 $lang->moduleOrder[40]  = 'task';
 $lang->moduleOrder[45]  = 'build';
 
@@ -179,6 +179,30 @@ $lang->program->methodOrder[55] = 'close';
 $lang->program->methodOrder[60] = 'setPlanduration';
 $lang->program->methodOrder[65] = 'manageMembers';
 $lang->program->methodOrder[70] = 'export';
+
+/* Risk . */
+$lang->resource->risk = new stdclass();
+$lang->resource->risk->browse      = 'browse';
+$lang->resource->risk->create      = 'create';
+$lang->resource->risk->edit        = 'edit';
+$lang->resource->risk->delete      = 'delete';
+$lang->resource->risk->activate    = 'activate';
+$lang->resource->risk->close       = 'close';
+$lang->resource->risk->hangup      = 'hangup';
+$lang->resource->risk->batchCreate = 'batchCreate';
+$lang->resource->risk->cancel      = 'cancel';
+$lang->resource->risk->track       = 'track';
+
+$lang->risk->methodOrder[5]  = 'browse';
+$lang->risk->methodOrder[10] = 'create';
+$lang->risk->methodOrder[15] = 'edit';
+$lang->risk->methodOrder[20] = 'delete';
+$lang->risk->methodOrder[25] = 'activate';
+$lang->risk->methodOrder[30] = 'close';
+$lang->risk->methodOrder[35] = 'hangup';
+$lang->risk->methodOrder[40] = 'batchCreate';
+$lang->risk->methodOrder[45] = 'cancel';
+$lang->risk->methodOrder[50] = 'track';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -440,6 +464,7 @@ $lang->resource->design->browse   = 'browse';
 $lang->resource->design->create   = 'create';
 $lang->resource->design->edit     = 'edit';
 $lang->resource->design->commit   = 'commit';
+$lang->resource->design->revision = 'revision';
 $lang->resource->design->delete   = 'delete';
 $lang->resource->design->view     = 'view';
 
@@ -447,8 +472,9 @@ $lang->design->methodOrder[5]     = 'browse';
 $lang->design->methodOrder[10]    = 'create';
 $lang->design->methodOrder[15]    = 'edit';
 $lang->design->methodOrder[20]    = 'commit';
-$lang->design->methodOrder[25]    = 'delete';
-$lang->design->methodOrder[30]    = 'view';
+$lang->design->methodOrder[25]    = 'revision';
+$lang->design->methodOrder[30]    = 'delete';
+$lang->design->methodOrder[35]    = 'view';
 
 /* Task. */
 $lang->resource->task = new stdclass();

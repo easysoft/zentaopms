@@ -196,6 +196,25 @@ class riskModel extends model
     }
 
     /**
+     * Get block risks
+     *
+     * @param  string $browseType
+     * @param  int    $limit
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function getBlockRisks($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_RISK)
+            ->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll();
+    }
+
+    /**
      * Print assignedTo html
      *
      * @param  int    $risk

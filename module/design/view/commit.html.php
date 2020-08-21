@@ -1,5 +1,16 @@
+<?php
+/**
+ * The commit view of design module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: commit.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>.m-design-commit{padding-left: 0px;}</style>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2>
@@ -9,9 +20,9 @@
     </h2>
   </div>
   <div class='searchBox'>
-  <h4><?php echo $lang->design->commitDate . '：';?></h4>
-  <?php echo html::input('begin', $begin, "class='form-control form-date srearch-date'");?>
-  <span>~</span>
+    <h4><?php echo $lang->design->commitDate . '：';?></h4>
+    <?php echo html::input('begin', $begin, "class='form-control form-date srearch-date'");?>
+    <span>~</span>
   <?php echo html::input('end', $end, "class='form-control form-date srearch-date'");?>
   </div>
   <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('commit', "designID=$designID");?> method='post'>

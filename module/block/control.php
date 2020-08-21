@@ -1034,7 +1034,7 @@ class block extends control
         $this->session->set('riskList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1045,7 +1045,10 @@ class block extends control
      */
     public function printCmmiRiskBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1073,9 +1076,40 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printCmmiprogressBlock()
+    public function printCmmiProgressBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->loadModel('milestone');
+        $this->loadModel('weekly');
+        $program = $this->loadModel('project')->getByID($this->session->program);
+
+        $begin = $program->begin;
+        $end   = helper::today();
+
+        $projects = $this->project->getProjectsByProgram($program);
+        $projectIdList = array_keys($projects);
+
+        $charts['PV'] = '[';
+        $charts['EV'] = '[';
+        $charts['AC'] = '[';
+        $i = 1;
+        $start = $begin;
+        while($start < $end)
+        {   
+            $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $sunday             = $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $sunday) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $sunday) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $sunday) . ',';
+            $start              = date('Y-m-d', strtotime("$start + 7 days"));
+            $i ++;
+        }
+
+        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+        $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $end) . ']';
+        $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $end) . ']';
+        $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $end) . ']';
+
+        $this->view->charts = $charts;
     }
 
     /**
@@ -1488,6 +1522,13 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-    }
+		$projects = $this->loadModel('project')->getPairs();
+		$actions  = $this->dao->select('*')->from(TABLE_ACTION)
+			->where('project')->in(array_keys($projects))
+			->orderBy('id_desc')
+			->fetchAll();
+
+     	$this->view->actions = $this->loadModel('action')->transformActions($actions);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+	 }
 }

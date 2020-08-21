@@ -11,7 +11,7 @@ $lang->risk->close       = '关闭';
 $lang->risk->cancel      = '取消';
 $lang->risk->track       = '跟踪';
 $lang->risk->assignTo    = '指派';
-$lang->risk->deleted     = '删除';
+$lang->risk->delete      = '删除';
 $lang->risk->byQuery     = '搜索';
 
 /* Fields */
