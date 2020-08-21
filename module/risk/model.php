@@ -117,7 +117,7 @@ class riskModel extends model
      */
     public function getList($browseType = '', $param = '', $orderBy = 'id_desc', $pager = null)
     {
-        if($browseType == 'bySearch') return $this->getBySearch($param, $orderBy, $pager);
+        if($browseType == 'bysearch') return $this->getBySearch($param, $orderBy, $pager);
 
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where('deleted')->eq(0)

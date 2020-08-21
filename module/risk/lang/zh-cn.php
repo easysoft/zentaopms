@@ -40,7 +40,7 @@ $lang->risk->cancelDate        = '取消日期';
 $lang->risk->cancelReason      = '取消原因';
 $lang->risk->resolvedBy        = '解决者';
 $lang->risk->closedDate        = '关闭日期';
-$lang->risk->actualClosedDate  = '关闭日期';
+$lang->risk->actualClosedDate  = '实际关闭日期';
 $lang->risk->resolution        = '解决措施';
 $lang->risk->hangupBy          = '由谁挂起';
 $lang->risk->hangupDate        = '挂起日期';
@@ -94,6 +94,7 @@ $lang->risk->priList['high']   = '高';
 $lang->risk->priList['middle'] = '中';
 $lang->risk->priList['low']    = '低';
 
+$lang->risk->statusList[''] = '';
 $lang->risk->statusList['active']   = '开放';
 $lang->risk->statusList['closed']   = '关闭';
 $lang->risk->statusList['hangup']   = '挂起';

@@ -32,19 +32,27 @@ $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
 $lang->block->assignToMe   = '指派给我';
+$lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 
-$lang->block->leftToday = '今天剩余工作总计';
-$lang->block->myTask    = '我的任务';
-$lang->block->myStory   = "我的{$lang->storyCommon}";
-$lang->block->myBug     = '我的BUG';
-$lang->block->myProject = '未关闭的' . $lang->projectCommon;
-$lang->block->myProduct = '未关闭的' . $lang->productCommon;
-$lang->block->delayed   = '已延期';
-$lang->block->noData    = '当前统计类型下暂无数据';
-$lang->block->emptyTip  = '暂无信息';
+$lang->block->leftToday       = '今天剩余工作总计';
+$lang->block->myTask          = '我的任务';
+$lang->block->myStory         = "我的{$lang->storyCommon}";
+$lang->block->myBug           = '我的BUG';
+$lang->block->myProject       = '未关闭的' . $lang->projectCommon;
+$lang->block->myProduct       = '未关闭的' . $lang->productCommon;
+$lang->block->delayed         = '已延期';
+$lang->block->noData          = '当前统计类型下暂无数据';
+$lang->block->emptyTip        = '暂无信息';
+$lang->block->openedTodos     = '创建的待办数';
+$lang->block->openedStories   = '创建的需求数';
+$lang->block->resolvedTasks   = '完成的任务数';
+$lang->block->resolvedBugs    = '解决Bug数';
+$lang->block->openedTestcases = '创建用例数';
+$lang->block->cmmi            = 'CMMI 3';
+$lang->block->scrum           = 'Scrum+';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -237,8 +245,10 @@ $lang->block->default['full']['my']['3']['grid']   = 4;
 $lang->block->default['full']['my']['3']['source'] = 'todo';
 $lang->block->default['full']['my']['3']['params']['num'] = '20';
 
-$lang->block->default['full']['my']['4'] = $lang->block->default['project']['1'];
-$lang->block->default['full']['my']['4']['source'] = 'project';
+$lang->block->default['full']['my']['4']['title']  = '项目统计';
+$lang->block->default['full']['my']['4']['block']  = 'statistic';
+$lang->block->default['full']['my']['4']['source'] = 'program';
+$lang->block->default['full']['my']['4']['grid']   = 8;
 
 $lang->block->default['full']['my']['5']['title']  = '个人贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
@@ -260,12 +270,12 @@ $lang->block->default['full']['my']['8']['title'] = '项目人力投入';
 $lang->block->default['full']['my']['8']['block'] = 'programteam';
 $lang->block->default['full']['my']['8']['grid']  = 8;
 
-$lang->block->default['full']['my']['8']['title'] = '项目列表';
-$lang->block->default['full']['my']['8']['block'] = 'program';
-$lang->block->default['full']['my']['8']['grid']  = 8;
+$lang->block->default['full']['my']['9']['title'] = '项目列表';
+$lang->block->default['full']['my']['9']['block'] = 'program';
+$lang->block->default['full']['my']['9']['grid']  = 8;
 
-$lang->block->default['full']['my']['8']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['8']['params']['num']     = '15';
+$lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
+$lang->block->default['full']['my']['9']['params']['num']     = '15';
 
 $lang->block->num     = '数量';
 $lang->block->type    = '类型';
@@ -294,13 +304,24 @@ $lang->block->moduleList['todo']    = '待办';
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->list          = '项目列表';
-$lang->block->modules['program']->availableBlocks->scrumoverall  = '项目整体情况';
-$lang->block->modules['program']->availableBlocks->scrumprogress = '进行中的迭代';
-$lang->block->modules['program']->availableBlocks->scrumproject  = '迭代总览';
-$lang->block->modules['program']->availableBlocks->scrumproduct  = '产品总览';
-$lang->block->modules['program']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['program']->availableBlocks->scrumroadmap  = '产品路线图';
-$lang->block->modules['program']->availableBlocks->scrumdynamic  = '最新动态';
+
+$lang->block->modules['scrum']['index'] = new stdclass();
+$lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = '项目整体情况';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumprogress = '进行中的迭代';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = '迭代总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = '产品总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = '产品路线图';
+
+$lang->block->modules['cmmi']['index'] = new stdclass();
+$lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmireport    = '项目周报';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiestimate  = '估算';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmigantt     = '计划甘特图';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiprogress  = '到目前为止项目进展趋势图';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmiissue     = '项目问题';
+$lang->block->modules['cmmi']['index']->availableBlocks->cmmirisk      = '项目风险';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

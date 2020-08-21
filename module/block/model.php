@@ -169,6 +169,7 @@ class blockModel extends model
         $data = array();
 
         $data['tasks']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        $data['doneTasks']= (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi() //Fix bug #2373.
@@ -248,10 +249,20 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '')
+    public function getAvailableBlocks($module = '', $type = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        if($type == 'program')
+        {
+            $programID = $this->session->program;
+            $program   = $this->loadModel('project')->getByID($programID);
+            $blocks    = $this->lang->block->modules[$program->template]['index']->availableBlocks;
+        }
+        else
+        {
+            if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        }
+
         if(isset($this->config->block->closed))
         {
             foreach($blocks as $blockKey => $blockName)
@@ -614,6 +625,111 @@ class blockModel extends model
     }
 
     /**
+     * Get contribute block data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getContributeBlockData()
+    {
+        $data = array();
+
+        $data['todos']   = $this->dao->select('count(*) AS count')->from(TABLE_TODO)
+            ->where('account')->eq($this->app->user->account)
+            ->fetch('count');
+        $data['stories'] = $this->dao->select('count(*) AS count')->from(TABLE_STORY)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['tasks']   = $this->dao->select('count(*) AS count')->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('finishedBy')->eq($this->app->user->account)
+            ->orWhere('finishedList')->like("%,{$this->app->user->account},%")
+            ->fetch('count');
+        $data['bugs']    = $this->dao->select('count(*) AS count')->from(TABLE_BUG)
+            ->where('resolvedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['cases']   = $this->dao->select('count(*) AS count')->from(TABLE_CASE)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('product')->ne(0)
+            ->andWhere('auto')->ne('unit')
+            ->fetch('count');
+
+        return $data;
+    }
+
+    public function getRecentProject()
+    {
+        $projects = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 3);
+        if(empty($projects)) return array();
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            $project->teamCount  = count($this->project->getTeamMembers($project->id));
+        }
+
+        $projectKeys = array_keys($projects);
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        /* Process projects. */
+        foreach($projects as $key => $project)
+        {
+            // Process the end time.
+            $project->end = date(DT_DATE1, strtotime($project->end));
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+        }
+
+        return $projects;
+    }
+
+    /**
      * Build number params.
      * 
      * @param  object $params 
@@ -660,6 +776,32 @@ class blockModel extends model
             ->fetch('value');
 
         return $key == $hash;
+    }
+
+    /** 
+     * Get cmmi issue params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getCmmiissueParams($module = '') 
+    {
+        $this->app->loadLang('issue');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
     }
 
     /** 

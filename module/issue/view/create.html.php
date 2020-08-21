@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class="main-content" id="mainCentent">
-  <div class="center-block">
-    <div class="main-header">
-      <h2><?php echo $lang->issue->create;?></h2>
-    </div>
+  <div class="panel-heading">
+    <strong><?php echo $lang->issue->create;?></strong>
+  </div>
+  <div class="panel-body">
     <form method="post" class="main-form form-ajax" enctype="multipart/form-data" id="issueForm">
       <table class="table table-form">
         <tbody>
@@ -45,17 +45,33 @@
             <td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->issue->deadline;?></th>
-            <td><?php echo html::input('deadline', '', 'class="form-control form-date"');?></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->issue->assignedTo;?></th>
             <td><?php echo html::select('assignedTo', $users, '', 'class="form-control chosen"');?></td>
             <td></td>
             <td></td>
           </tr>
+          <tr>
+            <th><?php echo $lang->issue->deadline;?></th>
+            <td><?php echo html::input('deadline', '', 'class="form-control form-date"');?></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <?php if(isset($owner) && $owner):?>
+          <tr>
+            <th><?php echo $lang->issue->owner;?></th>
+            <td><?php echo html::select('owner', $users, $account, 'class="form-control chosen"');?></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <?php endif;?>
+          <?php if(isset($activityID) && $activityID):?>
+          <tr>
+            <th><?php echo $lang->issue->activity;?></th>
+            <td><?php echo html::select('activity', $activity, $activityID, 'class="form-control chosen"');?></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->issue->desc;?></th>
             <td colspan="3"><?php echo html::textarea('desc', '', 'row="6"');?></td>
