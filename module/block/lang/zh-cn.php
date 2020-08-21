@@ -32,6 +32,7 @@ $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
 $lang->block->assignToMe   = '指派给我';
+$lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
