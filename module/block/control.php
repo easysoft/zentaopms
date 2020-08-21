@@ -705,7 +705,7 @@ class block extends control
         foreach($programs as $programID => $program)
         {
             $members     = $this->project->getTeamMemberPairs($programID);
-            $consumed    = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->ne('cancel')->fetch('consumed');
+            $consumed    = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
             $leftTasks   = $this->dao->select('count(*) as leftTasks')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing,pause')->fetch('leftTasks');
             $leftStories = $this->dao->select('count(*) as leftStories')->from(TABLE_STORY)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftStories');
             $leftBugs    = $this->dao->select('count(*) as leftBugs')->from(TABLE_BUG)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftBugs');
@@ -760,6 +760,64 @@ class block extends control
         $func = 'print' . ucfirst($module) . 'StatisticBlock';
         $this->view->module = $module;
         $this->$func();
+    }
+
+    /**
+     * Print project statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProgramStatisticBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $this->loadModel('project');
+        $this->app->loadLang('task');
+        $this->app->loadLang('story');
+
+        $status  = isset($this->params->type) ? $this->params->type : 'all';
+        $num     = isset($this->params->num)  ? (int)$this->params->num : 15;
+
+        /* Get projects. */
+        $programs = $this->loadModel('program')->getUserPrograms($status, 'id_desc', $num);
+        if(empty($programs))
+        {
+            $this->view->programs = $programs;
+            return false;
+        }
+
+        foreach($programs as $programID => $program)
+        {
+            $program->allStories = $program->doneStories = $program->leftStories = 0;
+            $program->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)
+                ->where('program')->eq($programID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('parent')->lt(1)
+                ->fetch('consumed');
+
+            $members = $this->project->getTeamMemberPairs($programID);
+            $program->countMembers = count($members) ? count($members) - 1 : 0;
+
+            $stories = $this->dao->select('id, status')->from(TABLE_STORY)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('story')
+                ->andWhere('status')->ne('draft')
+                ->andWhere('program')->eq($programID)
+                ->fetchPairs();
+            foreach($stories as $id => $status)
+            {
+                $program->allStories ++;
+                if($status == 'closed') $program->doneStories ++;
+                if($status != 'closed') $program->leftStories ++;
+            }
+
+            $program->progress = $program->allStories == 0 ? 0 : ceil($program->doneStories / $program->allStories) * 100;
+
+            //$program->projects = $this->dao->select('*')
+        }
+
+        $this->view->programs = $programs;
     }
 
     /**
@@ -1089,7 +1147,7 @@ class block extends control
 
         $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
         $this->view->members  = count($members) ? count($members) - 1 : 0;
-        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->ne('cancel')->fetch('consumed');
+        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
         $this->view->budget   = $budget;
     }
 
