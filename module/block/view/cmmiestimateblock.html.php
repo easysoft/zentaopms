@@ -10,7 +10,7 @@
     <th><?php echo $lang->workestimation->duration;?></th>
     <td><?php echo zget($budget, 'duration', 0) . ' ' . $lang->workestimation->hour;?></td>
     <th><?php echo $lang->workestimation->consumed;?></th>
-    <td><?php echo zget($budget, 'productivity', 0) . ' ' . $lang->workestimation->hour;?></td>
+    <td><?php echo $consumed . $lang->workestimation->hour;?></td>
   </tr>
   <tr>
     <th><?php echo $lang->workestimation->totalLaborCost;?></th>

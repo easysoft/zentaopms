@@ -305,14 +305,12 @@ class block extends control
         $data = $this->block->getWelcomeBlockData();
 
         $this->view->tasks      = $data['tasks'];
+        $this->view->doneTasks  = $data['doneTasks'];
         $this->view->bugs       = $data['bugs'];
         $this->view->stories    = $data['stories'];
-        $this->view->projects   = $data['projects'];
-        $this->view->products   = $data['products'];
 
         $this->view->delay['task']    = $data['delayTask'];
         $this->view->delay['bug']     = $data['delayBug'];
-        $this->view->delay['project'] = $data['delayProject'];
 
         $time = date('H:i');
         $welcomeType = '19:00';
@@ -712,7 +710,7 @@ class block extends control
             $leftStories = $this->dao->select('count(*) as leftStories')->from(TABLE_STORY)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftStories');
             $leftBugs    = $this->dao->select('count(*) as leftBugs')->from(TABLE_BUG)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftBugs');
 
-            $program->countMembers = count($members) ? count($members) : 0;
+            $program->countMembers = count($members) ? count($members) - 1 : 0;
             $program->consumed     = $consumed ? $consumed : 0;
             $program->leftTasks    = $leftTasks ? $leftTasks : 0;
             $program->leftStories  = $leftStories ? $leftStories : 0;
@@ -1089,9 +1087,10 @@ class block extends control
         $budget    = $this->loadModel('workestimation')->getBudget($programID);
         if(empty($budget)) $budget = new stdclass();
 
-        $this->view->people  = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
-        $this->view->members = count($members) ? count($members) : '';
-        $this->view->budget  = $budget;
+        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
+        $this->view->members  = count($members) ? count($members) - 1 : 0;
+        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->ne('cancel')->fetch('consumed');
+        $this->view->budget   = $budget;
     }
 
     /**
@@ -1570,7 +1569,9 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+            ->where('program')->eq($this->session->program)
+            ->fetch();
     }
 
     /**

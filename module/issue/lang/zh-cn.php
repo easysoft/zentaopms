@@ -31,6 +31,7 @@ $lang->issue->resolved          = '解决';
 $lang->issue->id                = '编号';
 
 $lang->issue->delete            = '删除';
+$lang->issue->search            = '搜索';
 $lang->issue->basicInfo         = '基本信息';
 $lang->issue->active            = '激活';
 $lang->issue->assign            = '指派';

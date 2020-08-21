@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class="main-content" id="mainCentent">
-  <div class="center-block">
-    <div class="main-header">
-      <h2><?php echo $lang->issue->edit;?></h2>
-    </div>
+  <div class="panel-heading">
+    <strong><?php echo $lang->issue->edit;?></strong>
+  </div>
+  <div class="panel-body">
     <form method="post" class="main-form form-ajax" enctype="multipart/form-data" id="issueForm">
       <table class="table table-form">
         <tbody>
