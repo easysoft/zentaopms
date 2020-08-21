@@ -20,8 +20,8 @@
 #cards .program-detail .progress {height: 4px;}
 #cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 </style>
-<div class='row cell' id='cards'>
-  <?php foreach ($programs as $programID => $program):?>
+<div class='row' id='cards'>
+  <?php foreach ($programs as $projectID => $project):?>
   <div class='col'>
     <div class='panel'>
       <div class='panel-heading'>

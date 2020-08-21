@@ -491,18 +491,18 @@ class program extends control
      * @access public
      * @return void
      */
-    public function delete($projectID, $confirm = 'no')
+    public function delete($programID, $confirm = 'no')
     {
-        if($confirm == 'no')
-        {
-            echo js::confirm(sprintf($this->lang->project->confirmDelete, $this->projects[$projectID]), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
-            exit;
-        }
-        else
-        {
-            $this->project->delete(TABLE_PROJECT, $projectID);
-            die(js::locate(inlink('browse'), 'parent'));
-        }
+        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($programID)->andWhere('template')->ne('')->andWhere('deleted')->eq(0)->fetch('count');
+        if($childrenCount) die(js::alert($this->lang->program->hasChildren));
+
+        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+        if($confirm == 'no') die(js::confirm(sprintf($this->lang->program->confirmDelete, $program->name), $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+
+        $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
+        $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+
+        die(js::reload('parent'));
     }
 
     /**
