@@ -172,7 +172,7 @@ class milestoneModel extends model
         $today         = helper::today();
         $begin         = $program->begin;
         $projectEnd    = $project->end;
-        $end           = $today > $projectEnd ? $projectEnd : $today;
+        $end           = $today > $projectEnd ? $projectEnd : date('Y-m-d', strtotime("$today + 7 days"));
 
         $charts['PV'] = '[';
         $charts['EV'] = '[';
@@ -190,10 +190,9 @@ class milestoneModel extends model
             $i ++;
         }
 
-        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-        $charts['PV']      .= $this->getPV($projectIdList, $begin, $end) . ']';
-        $charts['EV']      .= $this->getEV($projectIdList, $begin, $end) . ']';
-        $charts['AC']      .= $this->getAC($projectIdList, $begin, $end) . ']';
+        $charts['PV'] .= ']';
+        $charts['EV'] .= ']';
+        $charts['AC'] .= ']';
 
         return $charts;
     }

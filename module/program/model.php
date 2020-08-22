@@ -56,6 +56,52 @@ class programModel extends model
     }
 
     /**
+     * Get program stats.
+     *
+     * @param  string $status
+     * @param  int    $itemCounts
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return void
+     */
+    public function getProgramStats($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    {
+        /* Init vars. */
+        $this->loadModel('project');
+        $programs = $this->getList($status, $orderBy, $pager);
+        if(empty($programs)) return array();
+
+        $programIdList = array_keys($programs);
+        $programs = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->in($programIdList)
+            ->orderBy($orderBy)
+            ->limit($itemCounts)
+            ->fetchAll('id');
+
+        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->in($programIdList)
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        $estimates = $this->dao->select('program, sum(estimate) as estimate')->from(TABLE_TASK)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        foreach($programs as $programID => $program)
+        {
+            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, 'id_desc', $pager, $programID);
+            $program->teamCount = isset($teams[$programID]) ? $teams[$programID]->count : 0;
+            $program->estimate  = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
+        }
+
+        return $programs;
+    }
+
+    /**
      * Show accessDenied response.
      *
      * @access private

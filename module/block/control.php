@@ -1088,7 +1088,7 @@ class block extends control
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $this->view->current  = $current;
-        $this->view->progress = ($task->totalConsumed || $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
+        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
     }
 
     /**
@@ -1164,7 +1164,8 @@ class block extends control
         $program = $this->loadModel('project')->getByID($this->session->program);
 
         $begin = $program->begin;
-        $end   = helper::today();
+        $today = helper::today();
+        $end   = date('Y-m-d', strtotime("$today + 7 days"));
 
         $projects = $this->project->getProjectsByProgram($program);
         $projectIdList = array_keys($projects);
@@ -1185,10 +1186,9 @@ class block extends control
             $i ++;
         }
 
-        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-        $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $end) . ']';
-        $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $end) . ']';
-        $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $end) . ']';
+        $charts['PV'] .= ']';
+        $charts['EV'] .= ']';
+        $charts['AC'] .= ']';
 
         $this->view->charts = $charts;
     }
@@ -1468,7 +1468,7 @@ class block extends control
      */
     public function printRecentprogramBlock()
     {
-        $this->view->programs = $this->block->getRecentPrograms();
+        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 3, 'order_desc');
     }
 
     public function printProgramteamBlock()

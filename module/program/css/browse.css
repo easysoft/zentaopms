@@ -13,16 +13,16 @@
 #cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
 #cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
 #cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
-#cards .project-type-label {padding: 1px 2px;}
-#cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .project-infos {font-size: 12px;}
-#cards .project-infos > span {display: inline-block; line-height: 12px;}
-#cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
-#cards .project-infos > span + span {margin-left: 15px;}
-#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
-#cards .project-detail > p {margin-bottom: 8px;}
-#cards .project-detail .progress {height: 4px;}
-#cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
+#cards .program-type-label {padding: 1px 2px;}
+#cards .program-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#cards .program-infos {font-size: 12px;}
+#cards .program-infos > span {display: inline-block; line-height: 12px;}
+#cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
+#cards .program-infos > span + span {margin-left: 15px;}
+#cards .program-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
+#cards .program-detail > p {margin-bottom: 8px;}
+#cards .program-detail .progress {height: 4px;}
+#cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .pager {margin: 0; float: right;}
 #cards .pager .btn{border: none}
 
