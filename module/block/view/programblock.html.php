@@ -13,7 +13,7 @@
         <th class='w-100px'> <?php echo $lang->program->PM;?></th>
         <th class='w-80px'><?php echo $lang->program->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'><?php echo $lang->program->countMembers;?></th>
+        <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
         <th class='w-80px'><?php echo $lang->task->consumed;?></th>
         <th class='w-100px'><?php echo $lang->program->budget;?></th>
         <th class='w-80px'><?php echo $lang->program->leftStories;?></th>
@@ -34,7 +34,7 @@
           <span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status);?></span>
         </td>
         <?php if($longBlock):?>
-        <td><?php echo $program->countMembers;?></td>
+        <td><?php echo $program->teamCount;?></td>
         <td><?php echo $program->consumed;?></td>
         <td><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
         <td><?php echo $program->leftStories;?></td>

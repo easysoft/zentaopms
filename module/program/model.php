@@ -43,7 +43,7 @@ class programModel extends model
 
     public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15)
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
+        $programs = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('template')->ne('')
             ->andWhere('program')->eq(0)
@@ -53,6 +53,53 @@ class programModel extends model
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll('id');
+
+        if(empty($programs)) return array();
+        $programIdList = array_keys($programs);
+
+        $consumes = $this->dao->select('program, sum(consumed) as consumed')->from(TABLE_TASK)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->in($programIdList)
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        $leftTasks = $this->dao->select('program, count(*) as leftTasks')->from(TABLE_TASK)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->in('wait,doing,pause')
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $leftStories = $this->dao->select('program, count(*) as leftStories')->from(TABLE_STORY)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $leftBugs = $this->dao->select('program, count(*) as leftBugs')->from(TABLE_BUG)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        foreach($programs as $programID => $program)
+        {    
+            $program->teamCount    = isset($teams[$programID]) ? $teams[$programID]->count : 0;
+            $program->consumed     = isset($consumes[$programID]) ? $consumes[$programID] : 0; 
+            $program->leftTasks    = isset($leftTasks[$programID]) ? $leftTasks[$programID] : 0; 
+            $program->leftStories  = isset($leftStories[$programID]) ? $leftStories[$programID] : 0; 
+            $program->leftBugs     = isset($leftBugs[$programID]) ? $leftBugs[$programID] : 0;
+        }
+
+        return $programs;
     }
 
     /**
