@@ -327,6 +327,11 @@ class programModel extends model
             ->get();
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
 
+        if(!empty($program->isCat) and $this->checkHasContent($programID))  dao::$errors['isCat'] = $this->lang->program->cannotChangeToCat;
+        if(empty($program->isCat)  and $this->checkHasChildren($programID)) dao::$errors['isCat'] = $this->lang->program->cannotCancelCat;
+        if(dao::isError()) return false;
+
+
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
@@ -397,6 +402,8 @@ class programModel extends model
     {
         $action = strtolower($action);
 
+        if(empty($program)) return true;
+
         if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'close')    return $program->status != 'closed';
@@ -434,6 +441,19 @@ class programModel extends model
         $count += $this->dao->select('count(*) as count')->from(TABLE_TESTTASK)->where('program')->eq($programID)->fetch('count');
         $count += $this->dao->select('count(*) as count')->from(TABLE_WORKESTIMATION)->where('program')->eq($programID)->fetch('count');
 
+        return $count > 0;
+    }
+
+    /**
+     * Check has children project.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return bool
+     */
+    public function checkHasChildren($programID)
+    {
+        $count = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($programID)->fetch('count');
         return $count > 0;
     }
 
