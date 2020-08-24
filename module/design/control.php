@@ -133,7 +133,6 @@ class design extends control
         $this->view->position[] = $this->lang->design->batchCreate;
 
         $typeList             = (array)$this->lang->design->typeList;
-        $typeList['']         = '';
 
         $this->view->typeList = $typeList;
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productID);
