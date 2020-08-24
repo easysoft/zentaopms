@@ -847,11 +847,11 @@ class blockModel extends model
     /** 
      * Get testtask params.
      *▫
-     * @param  string $module▫
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function getScrumtestParams($module = '') 
+    public function getScrumtestParams($module = '')
     {   
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
@@ -865,4 +865,24 @@ class blockModel extends model
         return json_encode($params);
     }
 
+    /** 
+     * Get scrum project list params.
+     *▫
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumListParams($module = '') 
+    {   
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->scrum;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
 }

@@ -127,8 +127,8 @@ $lang->block->default['scrum']['program']['1']['title'] =  '项目整体情况';
 $lang->block->default['scrum']['program']['1']['block'] = 'scrumoverall';
 $lang->block->default['scrum']['program']['1']['grid']  = 8;
 
-$lang->block->default['scrum']['program']['2']['title'] = '进行中的' . $lang->projectCommon;
-$lang->block->default['scrum']['program']['2']['block'] = 'scrumprogress';
+$lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . '列表';
+$lang->block->default['scrum']['program']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['program']['2']['grid']  = 8;
 
 $lang->block->default['scrum']['program']['3']['title'] = $lang->productCommon . '路线图';
@@ -328,11 +328,11 @@ $lang->block->modules['program']->availableBlocks->statistic     = '项目统计
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = '项目整体情况';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumprogress = '进行中的' . $lang->projectCommon;
-$lang->block->modules['scrum']['index']->availableBlocks->scrumproject  =  $lang->projectCommon . '总览';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  =  $lang->productCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . '列表';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = $lang->projectCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  =  $lang->productCommon . '路线图';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . '路线图';
 
 $lang->block->modules['cmmi']['index'] = new stdclass();
 $lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();
@@ -455,6 +455,11 @@ $lang->block->typeList->project['doing']    = '进行中';
 $lang->block->typeList->project['all']      = '全部';
 $lang->block->typeList->project['involved'] = '我参与的';
 
+$lang->block->typeList->scrum['undone']   = '未完成';
+$lang->block->typeList->scrum['doing']    = '进行中';
+$lang->block->typeList->scrum['all']      = '全部';
+$lang->block->typeList->scrum['involved'] = '我参与的';
+
 $lang->block->typeList->testtask['wait']    = '待测版本';
 $lang->block->typeList->testtask['doing']   = '测试中版本';
 $lang->block->typeList->testtask['blocked'] = '阻塞版本';
@@ -469,6 +474,12 @@ $lang->block->modules['program']->moreLinkList->cmmireport    = 'weekly|index|';
 $lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|index|';
 $lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
+$lang->block->modules['program']->moreLinkList->scrumList     = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
+$lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
+$lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
+$lang->block->modules['program']->moreLinkList->scrumproject  = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumdynamic  = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';

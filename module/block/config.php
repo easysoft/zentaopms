@@ -31,5 +31,9 @@ $config->block->shortBlock['program']['cmmiestimate'] = 'cmmiestimate';
 $config->block->shortBlock['program']['cmmiprogress'] = 'cmmiprogress';
 $config->block->shortBlock['']['contribute'] = 'contribute';
 
+$config->block->showAction['overview']     = array('block' => 'qa', 'module' => 'testcase', 'method' => 'create', 'vars' => '');
+$config->block->showAction['scrumlist']    = array('block' => 'program', 'module' => 'project', 'method' => 'create', 'vars' => '');
+$config->block->showAction['scrumproduct'] = array('block' => 'program', 'module' => 'product', 'method' => 'create', 'vars' => '');
+
 $config->statistic = new stdclass();
 $config->statistic->storyStages = array('wait', 'planned', 'developing', 'testing', 'released');

@@ -247,13 +247,15 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
+
             $block->actionLink = '';
-            if($block->block == 'overview')
+            if(isset($this->config->block->showAction[$block->block]))
             {
-                if($module == 'qa' && common::hasPriv('testcase', 'create'))
+                $action = $this->config->block->showAction[$block->block];
+                if(common::hasPriv($action['module'], $action['method']))
                 {
-                    $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
+                    $this->app->loadLang($action['module']);
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->$action['module']->create, '', "class='btn btn-mini'");
                 }
             }
 
@@ -1567,19 +1569,19 @@ class block extends control
     }
 
     /**
-     * Print srcum progress block.
+     * Print srcum project list block.
      *
      * @access public
      * @return void
      */
-    public function printScrumprogressBlock()
+    public function printScrumlistBlock()
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
    }
 
     /**
