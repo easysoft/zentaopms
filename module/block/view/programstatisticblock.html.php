@@ -55,6 +55,10 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view {width: auto; left: 0; right: 0;}
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view > i {display: none;}
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view:hover {cursor: pointer; background: rgba(0,0,0,.1)}
+.block-statistic .program-info .info span+span{margin-left: 15px}
+.block-statistic .project-info{margin-top: 25px}
+.block-statistic .project-info .col-xs-5, .block-statistic .project-info .col-xs-7{margin-top: 8px}
+.block-statistic .project-info .col-xs-5{padding-left: 0px;}
 
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
@@ -133,14 +137,28 @@ $(function()
           </div>
           <div class="col-7">
             <div class="program-info">
-              <div class='title'><?php echo $lang->program->allInput;?></div>
+              <h4><?php echo $lang->program->allInput;?></h4>
               <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo $program->countMembers;?></span>
-                <span><i class='icon icon-clock'></i> <?php echo $program->consumed;?></span>
-                <span><i class='icon icon-cost'></i> <?php echo $program->budget;?></span>
+                <span><i class='icon icon-group'></i> <?php echo $program->teamCount;?></span>
+                <span><i class='icon icon-clock'></i> <?php echo $program->estimate;?></span>
+                <span><i class='icon icon-cost'></i> <?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></span>
               </div>
             </div>
             <div class="project-info">
+              <?php $i = 0;?>
+              <h4><?php echo $lang->program->lastIteration;?></h4>
+              <?php foreach($program->projects as $project):?>
+              <?php $i ++;?>
+              <?php if($i > 3) break;?>
+              <div class='col-xs-5'><?php echo $project->name;?></div>
+              <div class='col-xs-7'>
+                <div class='progress progress-text-left'>
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+                    <span class='progress-text'><?php echo $project->hours->progress . '%';?></span>
+                  </div>
+                </div>
+              </div>
+              <?php endforeach;?>
             </div>
           </div>
         </div>
