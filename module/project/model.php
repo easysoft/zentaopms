@@ -1969,6 +1969,23 @@ class projectModel extends model
             ->andWhere('status')->eq('closed')
             ->groupBy('project')
             ->fetchAll('project');
+        $finishedEstimates = $this->dao->select("project, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->ge('0')
+            ->andWhere('status')->eq('done')
+            ->orWhere('status')->eq('closed')
+            ->groupBy('project')
+            ->fetchAll('project');
+        $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.project')->in(array_keys($projects))
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.status')->ne('closed')
+            ->andWhere('t2.stage')->in('wait,planned,projected,developing')
+            ->groupBy('project')
+            ->fetchAll('project');
 
         foreach($burns as $projectID => $burn)
         {
@@ -1977,6 +1994,14 @@ class projectModel extends model
                 $closedLeft  = $closedLefts[$projectID];
                 $burn->left -= (int)$closedLeft->left;
             }
+
+            if(isset($finishedEstimates[$projectID]))
+            {
+                $finishedEstimate = $finishedEstimates[$projectID];
+                $burn->estimate  -= (int)$finishedEstimate->estimate;
+            }
+
+            if(isset($storyPoints[$projectID])) $burn->storyPoint = $storyPoints[$projectID]->storyPoint;
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->projectName = $projects[$burn->project];
@@ -2023,7 +2048,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select("date AS name, `left` AS value, `$burnBy`")->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select("date AS name, `$burnBy` AS value, `$burnBy`")->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();
