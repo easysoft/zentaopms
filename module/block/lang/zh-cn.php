@@ -36,6 +36,7 @@ $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
+$lang->block->contribute   = '个人贡献';
 
 $lang->block->leftToday       = '今天剩余工作总计';
 $lang->block->myTask          = '我的任务';
@@ -75,25 +76,29 @@ $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
-$lang->block->default['cmmi']['program']['1']['title'] = '项目周报';
-$lang->block->default['cmmi']['program']['1']['block'] = 'cmmireport';
-$lang->block->default['cmmi']['program']['1']['grid']  = 8;
+$lang->block->default['cmmi']['program']['1']['title']  = '项目周报';
+$lang->block->default['cmmi']['program']['1']['block']  = 'cmmireport';
+$lang->block->default['cmmi']['program']['1']['source'] = 'program';
+$lang->block->default['cmmi']['program']['1']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['2']['title'] = '估算';
-$lang->block->default['cmmi']['program']['2']['block'] = 'cmmiestimate';
-$lang->block->default['cmmi']['program']['2']['grid']  = 4;
+$lang->block->default['cmmi']['program']['2']['title']  = '估算';
+$lang->block->default['cmmi']['program']['2']['block']  = 'cmmiestimate';
+$lang->block->default['cmmi']['program']['2']['source'] = 'program';
+$lang->block->default['cmmi']['program']['2']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['3']['title'] = '计划甘特图';
-$lang->block->default['cmmi']['program']['3']['block'] = 'cmmigantt';
-$lang->block->default['cmmi']['program']['3']['grid']  = 8;
+$lang->block->default['cmmi']['program']['3']['title']  = '计划甘特图';
+$lang->block->default['cmmi']['program']['3']['block']  = 'cmmigantt';
+$lang->block->default['cmmi']['program']['3']['source'] = 'program';
+$lang->block->default['cmmi']['program']['3']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['4']['title'] = '到目前为止项目进展趋势图';
-$lang->block->default['cmmi']['program']['4']['block'] = 'cmmiprogress';
-$lang->block->default['cmmi']['program']['4']['grid']  = 4;
+$lang->block->default['cmmi']['program']['4']['title']  = '到目前为止项目进展趋势图';
+$lang->block->default['cmmi']['program']['4']['block']  = 'cmmiprogress';
+$lang->block->default['cmmi']['program']['4']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['5']['title'] = '项目问题';
-$lang->block->default['cmmi']['program']['5']['block'] = 'cmmiissue';
-$lang->block->default['cmmi']['program']['5']['grid']  = 8;
+$lang->block->default['cmmi']['program']['5']['title']  = '项目问题';
+$lang->block->default['cmmi']['program']['5']['block']  = 'cmmiissue';
+$lang->block->default['cmmi']['program']['5']['source'] = 'program';
+$lang->block->default['cmmi']['program']['5']['grid']   = 8;
 
 $lang->block->default['cmmi']['program']['5']['params']['type']    = 'all';
 $lang->block->default['cmmi']['program']['5']['params']['num']     = '15';
@@ -104,9 +109,10 @@ $lang->block->default['cmmi']['program']['6']['block']  = 'dynamic';
 $lang->block->default['cmmi']['program']['6']['grid']   = 4;
 $lang->block->default['cmmi']['program']['6']['source'] = '';
 
-$lang->block->default['cmmi']['program']['7']['title'] = '项目风险';
-$lang->block->default['cmmi']['program']['7']['block'] = 'cmmirisk';
-$lang->block->default['cmmi']['program']['7']['grid']  = 8;
+$lang->block->default['cmmi']['program']['7']['title']  = '项目风险';
+$lang->block->default['cmmi']['program']['7']['block']  = 'cmmirisk';
+$lang->block->default['cmmi']['program']['7']['source'] = 'program';
+$lang->block->default['cmmi']['program']['7']['grid']   = 8;
 
 $lang->block->default['cmmi']['program']['7']['params']['type']    = 'all';
 $lang->block->default['cmmi']['program']['7']['params']['num']     = '15';
@@ -255,6 +261,7 @@ $lang->block->default['full']['my']['4']['grid']   = 8;
 
 $lang->block->default['full']['my']['5']['title']  = '个人贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
+$lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = '我的近期项目';
@@ -274,9 +281,10 @@ $lang->block->default['full']['my']['8']['title'] = '项目人力投入';
 $lang->block->default['full']['my']['8']['block'] = 'programteam';
 $lang->block->default['full']['my']['8']['grid']  = 8;
 
-$lang->block->default['full']['my']['9']['title'] = '项目列表';
-$lang->block->default['full']['my']['9']['block'] = 'program';
-$lang->block->default['full']['my']['9']['grid']  = 8;
+$lang->block->default['full']['my']['9']['title']  = '项目列表';
+$lang->block->default['full']['my']['9']['block']  = 'program';
+$lang->block->default['full']['my']['9']['source'] = 'program';
+$lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['9']['params']['num']     = '15';
@@ -308,7 +316,9 @@ $lang->block->moduleList['todo']    = '待办';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
-$lang->block->modules['program']->availableBlocks->list          = '项目列表';
+$lang->block->modules['program']->availableBlocks->program       = '项目列表';
+$lang->block->modules['program']->availableBlocks->recentprogram = '近期项目';
+$lang->block->modules['program']->availableBlocks->statistic     = '项目统计';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -448,6 +458,12 @@ $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
 $lang->block->modules['program']->moreLinkList->recentprogram = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->statistic     = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->program       = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->cmmireport    = 'weekly|index|';
+$lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|index|';
+$lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
+$lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';

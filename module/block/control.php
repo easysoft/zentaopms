@@ -59,6 +59,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
+            if(strpos(",$closedBlock,", ",|contribute,") === false) $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -207,11 +208,11 @@ class block extends control
     public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getBlockList($module);
+        $blocks = $this->block->getBlockList($module, $type);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$inited and !defined('TUTORIAL'))
+        if((empty($blocks) and !$inited and !defined('TUTORIAL')) || (empty($blocks) and $module == 'program'))
         {
             if($this->block->initBlock($module, $type)) die(js::reload());
         }
@@ -323,6 +324,19 @@ class block extends control
     }
 
     /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
+    public function contribute()
+    {
+        $this->view->data = $this->block->getContributeBlockData();
+        $this->display();
+    }
+
+
+    /**
      * Print block.
      *
      * @param  int    $id
@@ -373,6 +387,10 @@ class block extends control
         elseif($block->block == 'welcome')
         {
             $html = $this->fetch('block', 'welcome');
+        }
+        elseif($block->block == 'contribute')
+        {
+            $html = $this->fetch('block', 'contribute');
         }
 
         echo $html;
@@ -1062,6 +1080,7 @@ class block extends control
      */
     public function printCmmiReportBlock()
     {
+        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = date('Y-m-d', strtotime(helper::today()));
         $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
@@ -1453,17 +1472,6 @@ class block extends control
         $this->view->hasViewPriv = $hasViewPriv;
         $this->view->longBlock   = $longBlock;
         $this->display();
-    }
-
-    /**
-     * Print contribute block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printContributeBlock()
-    {
-        $this->view->data = $this->block->getContributeBlockData();
     }
 
     /**

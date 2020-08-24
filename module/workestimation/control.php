@@ -11,8 +11,9 @@
  */
 class workestimation extends control
 {
-    public function index($program)
+    public function index($program = 0)
     {
+        $program = $program ? $program : $this->session->program;
         if($_POST)
         {
             $result = $this->workestimation->save($program);
