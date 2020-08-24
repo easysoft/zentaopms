@@ -76,6 +76,11 @@ $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
+$lang->block->productName        = $lang->productCommon . '名称';
+$lang->block->totalStory         = '总' . $lang->storyCommon;
+$lang->block->totalBug           = '总Bug';
+$lang->block->totalRelease       = '发布次数';
+
 $lang->block->default['cmmi']['program']['1']['title']  = '项目周报';
 $lang->block->default['cmmi']['program']['1']['block']  = 'cmmireport';
 $lang->block->default['cmmi']['program']['1']['source'] = 'program';

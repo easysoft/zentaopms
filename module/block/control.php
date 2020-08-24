@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
  * The control file of block of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
@@ -1574,8 +1574,13 @@ class block extends control
      */
     public function printScrumprogressBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-    }
+        $this->app->loadClass('pager', $static = true);
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $pager = pager::init(0, $num, 1);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+   }
 
     /**
      * Print srcum road map block.
@@ -1585,11 +1590,15 @@ class block extends control
      */
     public function printScrumroadmapBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
+        $products  = $this->loadModel('product')->getPairs();
+
     }
 
     /**
-     * Print srcum road map block.
+     * Print srcum test block.
      *
      * @access public
      * @return void
@@ -1622,7 +1631,17 @@ class block extends control
      */
     public function printScrumproductBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $productID = array_keys($products);
+
+        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+
+        $this->view->products = $products;
+        $this->view->stories  = $stories;
+        $this->view->bugs     = $bugs;
+        $this->view->releases = $releases;
     }
 
     /**

@@ -103,3 +103,5 @@ $lang->program->cmmiDesc           = '<strong>简介：</strong>按阶段规范�
 $lang->program->cannotCreateChild  = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->program->hasChildren        = '该项目有子项目存在，不能删除。';
 $lang->program->confirmDelete      = "您确定删除项目[%s]吗？";
+$lang->program->cannotChangeToCat  = "该项目已经有实际的内容，无法修改为父项目";
+$lang->program->cannotCancelCat    = "该项目下已经有子项目，无法取消父项目标记";
