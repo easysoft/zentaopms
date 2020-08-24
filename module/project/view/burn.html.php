@@ -26,6 +26,9 @@
     common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->project->howToUpdateBurn;
     ?>
+    <div class='input-control w-150px'>
+      <?php echo html::select('burnBy', $lang->project->burnByList, $burnBy, "class='form-control chosen'");?>
+    </div>
     <?php if($interval):?>
     <div class='input-control thWidth'>
       <?php echo html::select('interval', $dayList, $interval, "class='form-control chosen'");?>
@@ -37,12 +40,12 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <h2 class='text-center'><?php echo $projectName . ' ' . $this->lang->project->burn;?></h2>
+  <h2 class='text-center'><?php echo $projectName . ' ' . $this->lang->project->burn . '(' . zget($lang->project->burnByList, $burnBy) . ')';?></h2>
   <div id="burnWrapper">
     <div id="burnChart">
       <canvas id="burnCanvas"></canvas>
     </div>
-    <div id="burnYUnit"><?php echo "({$lang->project->workHour})";?></div>
+    <div id="burnYUnit"><?php echo $burnBy == 'storyPoint' ?  "({$lang->project->storyPoint})" : "({$lang->project->workHour})";?></div>
     <div id="burnLegend">
       <div class="line-ref"><div class='barline'></div><?php echo $lang->project->charts->burn->graph->reference;?></div>
       <div class="line-real"><div class='barline bg-primary'></div><?php echo $lang->project->charts->burn->graph->actuality;?></div>
@@ -50,6 +53,13 @@
   </div>
 </div>
 <script>
+$('#burnBy').change(function()
+{
+    $.cookie('burnBy', $(this).val(), {expires:config.cookieLife, path:config.webRoot});
+    var interval = typeof($('#interval').val()) == 'undefined' ? 0 : $('#interval').val() ;
+    location.href = createLink('project', 'burn', 'projectID=' + projectID + '&type=' + type + '&interval=' + interval + '&burnBy=' + $(this).val());
+});
+
 function initBurnChar()
 {
     var themePrimaryColor = $.getThemeColor('primary');
