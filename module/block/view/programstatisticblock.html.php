@@ -110,6 +110,7 @@ $(function()
       <?php foreach($programs as $program):?>
       <div class="tab-pane fade<?php if($program->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $program->id;?>">
         <div class="table-row">
+        <?php if($program->template == 'scrum'):?>
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space" data-value="<?php echo $program->progress;?>" data-doughnut-size="84">
               <canvas width="120" height="120"></canvas>
@@ -161,6 +162,8 @@ $(function()
               <?php endforeach;?>
             </div>
           </div>
+        <?php else:?>
+        <?php endif;?>
         </div>
       </div>
       <?php endforeach;?>

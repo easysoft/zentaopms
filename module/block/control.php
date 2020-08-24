@@ -809,6 +809,7 @@ class block extends control
         }
 
         $this->view->programs = $programs;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
     /**
