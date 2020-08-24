@@ -41,7 +41,7 @@
               <th style="width:auto"><?php echo $lang->issue->title;?></th>
               <th class="w-60px"><?php echo $lang->issue->severity;?></th>
               <th class="w-60px"><?php echo $lang->issue->pri;?></th>
-              <th class="w-80px"><?php echo $lang->issue->assignedTo;?></th>
+              <th class="w-90px"><?php echo $lang->issue->assignedTo;?></th>
               <th class="w-80px"><?php echo $lang->issue->owner;?></th>
               <th class="w-100px"><?php echo $lang->issue->status;?></th>
               <th class="w-140px"><?php echo $lang->issue->createdDate;?></th>

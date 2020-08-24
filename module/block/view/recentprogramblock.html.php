@@ -1,44 +1,68 @@
+<style>
+#cards {margin: 0 10px;}
+#cards > .col {width: 33.33%;}
+#cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
+#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel-heading {padding: 12px 24px 10px 16px;}
+#cards .panel-body {padding: 0 16px 16px;}
+#cards .panel-actions {padding: 7px 0;} 
+#cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
+#cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
+#cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;} 
+#cards .program-type-label {padding: 1px 2px;}
+#cards .program-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#cards .program-infos {font-size: 12px;}
+#cards .program-infos > span {display: inline-block; line-height: 12px;}
+#cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
+#cards .program-infos > span + span {margin-left: 15px;}
+#cards .program-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
+#cards .program-detail > p {margin-bottom: 8px;}
+#cards .program-detail .progress {height: 4px;}
+#cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
+</style>
 <div class='row' id='cards'>
-  <?php foreach ($programs as $projectID => $project):?>
-  <div class='col'>
-    <div class='panel'>
+  <?php foreach ($programs as $programID => $program):?>
+  <div class='col' data-id='<?php echo $programID?>'>
+    <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id");?>'>
       <div class='panel-heading'>
-        <?php if($project->template === 'cmmi'): ?>
-        <span class='project-type-label label label-warning label-outline'><?php echo $lang->block->cmmi; ?></span>
+        <strong class='program-name' title='<?php echo $program->name;?>'><?php echo $program->name;?></strong>
+        <?php if($program->template === 'cmmi'): ?>
+        <span class='program-type-label label label-warning label-outline'><?php echo $lang->program->cmmi; ?></span>
         <?php else: ?>
-        <span class='project-type-label label label-info label-outline'><?php echo $lang->block->scrum; ?></span>
+        <span class='program-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
         <?php endif; ?>
-        <strong class='project-name' title='<?php echo $project->name;?>'><?php echo $project->name;?></strong>
         <nav class='panel-actions nav nav-default'>
           <li class='dropdown'>
             <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
             <ul class='dropdown-menu pull-right'>
-              <li><?php common::printIcon('program', 'group', "projectID=$project->id", $project, 'button', 'group');?></li>
-              <li><?php common::printIcon('program', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
-              <li><?php common::printicon('program', 'activate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-              <li><?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
-              <li><?php common::printIcon('program', 'start',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-              <li><?php common::printIcon('program', 'suspend', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-              <li><?php common::printIcon('program', 'close',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-              <li><?php if(common::hasPriv('program', 'delete'))  echo html::a($this->createLink("project", "delete", "projectID=$project->id"), "<i class='icon-trash'></i> " . $lang->delete, 'hiddenwin', "");?></li>
+              <li><?php common::printIcon('program', 'group', "programID=$program->id", $program, 'button', 'group');?></li>
+              <li><?php common::printIcon('program', 'manageMembers', "programID=$program->id", $program, 'button', 'persons');?></li>
+              <li><?php common::printicon('program', 'activate', "programid=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
+              <li><?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "programID=$program->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
+              <li><?php common::printIcon('program', 'start',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
+              <li><?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
+              <li><?php common::printIcon('program', 'close',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
+              <li><?php if(common::hasPriv('program', 'delete'))  echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i> " . $lang->delete, 'hiddenwin', "");?></li>
             </ul>
           </li>
         </nav>
       </div>
       <div class='panel-body'>
-        <div class='project-infos'>
-          <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $project->teamCount); ?></span>
-          <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->hours->totalEstimate); ?></span>
-          <span><i class='icon icon-cost'></i> <?php echo $project->budget . '' . zget($lang->program->unitList, $project->budgetUnit);?></span>
+        <div class='program-infos'>
+          <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $program->teamCount); ?></span>
+          <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $program->estimate); ?></span>
+          <span><i class='icon icon-cost'></i> <?php echo $program->budget . '' . zget($lang->program->unitList, $program->budgetUnit);?></span>
         </div>
-        <?php if($project->template === 'cmmi'): ?>
-        <div class='project-detail project-stages'>
+        <?php if($program->template === 'cmmi'): ?>
+        <div class='program-detail program-stages'>
           <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
-          <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
+          <div class='label label-outline'><?php echo zget($lang->project->statusList, $program->status);?></div>
         </div>
         <?php else: ?>
-        <div class='project-detail project-iteration'>
+        <?php $project = $program->projects ? current($program->projects) : '';?>
+        <div class='program-detail program-iteration'>
           <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
+          <?php if($project):?>
           <div class='row'>
             <div class='col-xs-5'><?php echo $project->name; ?></div>
             <div class='col-xs-7'>
@@ -49,6 +73,7 @@
             </div>
             </div>
           </div>
+          <?php endif; ?>
         </div>
         <?php endif; ?>
       </div>

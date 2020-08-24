@@ -53,18 +53,14 @@ class program extends control
 
         if($programType === 'bygrid')
         {
-            $projectList = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, 0, 0, 30, $orderBy, $pager, 'program');
-            foreach($projectList as $projectID => $project)
-            {
-                $project->teamCount  = count($this->project->getTeamMembers($project->id));
-            }
+            $programs = $this->program->getProgramStats('all', 20, $orderBy, $pager);
         }
         else
         {
-            $projectList = $this->program->getList($status, $orderBy, $pager);
+            $programs = $this->program->getList($status, $orderBy, $pager);
         }
 
-        $this->view->projectList = $projectList;
+        $this->view->programs    = $programs;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;

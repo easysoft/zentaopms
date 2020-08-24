@@ -756,8 +756,9 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0)
+    public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $programID = 0)
     {
+        $programID = $programID ? $programID : $this->session->programID;
         if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
 
         if($productID != 0)
@@ -767,7 +768,7 @@ class projectModel extends model
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
-                ->beginIF($this->session->program)->andWhere('t2.program')->eq($this->session->program)->fi()
+                ->beginIF($programID)->andWhere('t2.program')->eq($programID)->fi()
                 ->andWhere('t2.template')->eq('')
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
@@ -784,7 +785,7 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
                 ->andWhere('template')->eq('')
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -916,10 +917,10 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null, $programID = 0)
     {
         /* Init vars. */
-        $projects = $this->getList($status, 0, $productID, $branch);
+        $projects = $this->getList($status, 0, $productID, $branch, $programID);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projects))
             ->orderBy($orderBy)

@@ -23,9 +23,14 @@ class design extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $type = 'all', $param = '',  $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
+
+        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
+        /* Build the search form. */
+        $actionURL = $this->createLink('design', 'browse', "productID=$productID&type=bySearch&queryID=myQueryID");
+        $this->design->buildSearchForm($queryID, $actionURL);
 
         $this->design->setProductMenu($productID);
         $product = $this->loadModel('product')->getById($productID);
@@ -37,7 +42,7 @@ class design extends control
         if($this->app->getViewType() == 'mhtml') $recPerPager = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $designs = $this->design->getList($productID, $type, $orderBy, $pager);
+        $designs = $this->design->getList($productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
@@ -99,6 +104,41 @@ class design extends control
         $this->display();
     }
 
+    /**
+     * Batch create
+     *
+     * @access public
+     * @return void
+     */
+    public function batchCreate($productID = 0)
+    {
+        if($_POST)
+        {
+            $this->design->batchCreate($productID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = inlink('browse');
+
+            $this->send($response);
+        }
+
+        $this->view->title      = $this->lang->design->batchCreate;
+        $this->view->position[] = $this->lang->design->batchCreate;
+
+        $typeList             = (array)$this->lang->design->typeList;
+
+        $this->view->typeList = $typeList;
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->display();
+    }
     /**
      * View a design.
      *
@@ -224,7 +264,7 @@ class design extends control
     }
 
     public function revision($repoID)
-    {   
+    {
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
         $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
         header("location:" . $repoURL);

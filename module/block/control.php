@@ -701,23 +701,8 @@ class block extends control
     public function printProgramBlock()
     {
         $this->loadModel('project');
-        $programs = $this->loadModel('program')->getUserPrograms('all', $this->params->orderBy, $this->params->num);
-        foreach($programs as $programID => $program)
-        {
-            $members     = $this->project->getTeamMemberPairs($programID);
-            $consumed    = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
-            $leftTasks   = $this->dao->select('count(*) as leftTasks')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing,pause')->fetch('leftTasks');
-            $leftStories = $this->dao->select('count(*) as leftStories')->from(TABLE_STORY)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftStories');
-            $leftBugs    = $this->dao->select('count(*) as leftBugs')->from(TABLE_BUG)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch('leftBugs');
 
-            $program->countMembers = count($members) ? count($members) - 1 : 0;
-            $program->consumed     = $consumed ? $consumed : 0;
-            $program->leftTasks    = $leftTasks ? $leftTasks : 0;
-            $program->leftStories  = $leftStories ? $leftStories : 0;
-            $program->leftBugs     = $leftBugs ? $leftBugs : 0;
-        }
-
-        $this->view->programs = $programs;
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', $this->params->orderBy, $this->params->num);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -776,8 +761,8 @@ class block extends control
         $this->app->loadLang('task');
         $this->app->loadLang('story');
 
-        $status  = isset($this->params->type) ? $this->params->type : 'all';
-        $num     = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $status = isset($this->params->type) ? $this->params->type : 'all';
+        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
         $programs = $this->loadModel('program')->getUserPrograms($status, 'id_desc', $num);
@@ -790,14 +775,6 @@ class block extends control
         foreach($programs as $programID => $program)
         {
             $program->allStories = $program->doneStories = $program->leftStories = 0;
-            $program->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)
-                ->where('program')->eq($programID)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->lt(1)
-                ->fetch('consumed');
-
-            $members = $this->project->getTeamMemberPairs($programID);
-            $program->countMembers = count($members) ? count($members) - 1 : 0;
 
             $stories = $this->dao->select('id, status')->from(TABLE_STORY)
                 ->where('deleted')->eq(0)
@@ -1088,7 +1065,7 @@ class block extends control
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $this->view->current  = $current;
-        $this->view->progress = ($task->totalConsumed || $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
+        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
     }
 
     /**
@@ -1164,7 +1141,8 @@ class block extends control
         $program = $this->loadModel('project')->getByID($this->session->program);
 
         $begin = $program->begin;
-        $end   = helper::today();
+        $today = helper::today();
+        $end   = date('Y-m-d', strtotime("$today + 7 days"));
 
         $projects = $this->project->getProjectsByProgram($program);
         $projectIdList = array_keys($projects);
@@ -1185,10 +1163,9 @@ class block extends control
             $i ++;
         }
 
-        $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-        $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $end) . ']';
-        $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $end) . ']';
-        $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $end) . ']';
+        $charts['PV'] .= ']';
+        $charts['EV'] .= ']';
+        $charts['AC'] .= ']';
 
         $this->view->charts = $charts;
     }
@@ -1468,15 +1445,7 @@ class block extends control
      */
     public function printRecentprogramBlock()
     {
-        $programs = $this->block->getRecentProject();
-
-        $this->loadModel('project');
-        foreach($programs as $programID => $program)
-        {
-            $program->teamCount  = count($this->project->getTeamMembers($program->id));
-        }
-
-        $this->view->programs = $programs;
+        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 3, 'order_desc');
     }
 
     public function printProgramteamBlock()

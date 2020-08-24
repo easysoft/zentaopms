@@ -38,7 +38,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-row'>
-  <?php if(empty($projectList)):?>
+  <?php if(empty($programs)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->program->noProgram;?></span> <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info' data-toggle=modal");?></p>
   </div>
