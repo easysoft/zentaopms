@@ -1598,7 +1598,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->eq($this->session->program)->fi()
+            ->andWhere('t1.program')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
@@ -1625,7 +1625,7 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
             ->fetch();
     }
@@ -1638,13 +1638,27 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-		$projects = $this->loadModel('project')->getPairs();
-		$actions  = $this->dao->select('*')->from(TABLE_ACTION)
-			->where('project')->in(array_keys($projects))
-			->orderBy('id_desc')
-			->fetchAll();
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = $this->loadModel('product')->getPairs();
+        $productID = array();
+        foreach($products as $id => $name) $productID[] = ',' . $id . ',';
 
-     	$this->view->actions = $this->loadModel('action')->transformActions($actions);
+        if(empty($projects) && empty($products))
+        {
+            $actions = array();
+        }
+        else
+        {
+            $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in($productID)->fi()
+                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
+                ->beginIF(empty($projects) && $products)->where('product')->in($productID)->fi()
+                ->orderBy('id_desc')
+                ->limit(30)
+                ->fetchAll();
+        }
+
+        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-	 }
+    }
 }
