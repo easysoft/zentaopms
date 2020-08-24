@@ -11,3 +11,8 @@ $config->program->editor->suspend  = array('id' => 'comment', 'tools' => 'simple
 
 $config->program->list = new stdclass();
 $config->program->list->exportFields = 'id,name,code,template,category,status,begin,end,budget,PM,end,desc';
+
+$config->program->create = new stdclass();
+$config->program->edit   = new stdclass();
+$config->program->create->requiredFields = 'name,code,begin,end';
+$config->program->edit->requiredFields   = 'name,code,begin,end';

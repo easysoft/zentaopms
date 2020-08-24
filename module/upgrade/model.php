@@ -3804,6 +3804,7 @@ class upgradeModel extends model
         if(dao::isError()) return false;
 
         $programID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
 
         if($pgmAdmins)
         {

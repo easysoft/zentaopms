@@ -264,16 +264,21 @@ class designModel extends model
      */
     public function getList($productID, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
-        if($type == 'bySearch') return $this->getBySearch($param, $orderBy, $pager);
-
-        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
-            ->where('deleted')->eq(0)
-            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
-            ->andWhere('product')->eq($productID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        if($type == 'bySearch')
+        {
+            $designs = $this->getBySearch($param, $orderBy, $pager);
+        }
+        else
+        {
+            $designs = $this->dao->select('*')->from(TABLE_DESIGN)
+                ->where('deleted')->eq(0)
+                ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+                ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
+                ->andWhere('product')->eq($productID)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
         foreach($designs as $id => $design)
         {
@@ -323,13 +328,6 @@ class designModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        foreach($designs as $id => $design)
-        {
-            $design->commit = '';
-            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
-            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
-        }
 
         return $designs;
     }

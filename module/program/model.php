@@ -223,7 +223,6 @@ class programModel extends model
      */
     public function create()
     {
-        $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->add('type', 'program')
@@ -233,14 +232,14 @@ class programModel extends model
             ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')
             ->cleanInt('budget')
-            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
+            ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
-            ->batchcheck($this->config->project->create->requiredFields, 'notempty')
+            ->batchcheck($this->config->program->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted='0'")
             ->check('code', 'unique', "deleted='0'")
             ->exec();
@@ -305,6 +304,56 @@ class programModel extends model
     }
 
     /**
+     * Update program.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return array
+     */
+    public function update($programID)
+    {
+        $programID  = (int)$programID;
+        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROJECT)->fetch();
+
+        $program = fixer::input('post')
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
+            ->setDefault('team', $this->post->name)
+            ->join('whitelist', ',')
+            ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
+            ->remove('products, branch, uid, plans')
+            ->get();
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
+            ->checkIF($program->begin != '', 'begin', 'date')
+            ->checkIF($program->end != '', 'end', 'date')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+            ->check('name', 'unique', "id!=$programID and deleted='0'")
+            ->check('code', 'unique', "id!=$programID and deleted='0'")
+            ->where('id')->eq($programID)
+            ->limit(1)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            if($program->acl != 'open' and ($program->acl != $oldProject->acl or $program->whitelist != $oldProgram->whitelist))
+            {
+                $this->loadModel('user')->updateUserView($programID, 'program');
+            }
+
+            if($oldProgram->parent != $program->parent) $this->moveNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
+
+            return common::createChanges($oldProgram, $program);
+        }
+    }
+
+    /*
      * Get program swapper.
      *
      * @param  object  $programs
@@ -337,14 +386,14 @@ class programModel extends model
     }
 
     /**
-     * Get program swapper.
+     * Judge an action is clickable or not.
      *
-     * @param  object  $program
-     * @param  varchar $action
-     * @access private
-     * @return void
+     * @param  object    $project
+     * @param  string    $action
+     * @access public
+     * @return bool
      */
-    public static function isClickable($program, $action)
+    public static function isClickable($project, $action)
     {
         $action = strtolower($action);
 
@@ -357,6 +406,13 @@ class programModel extends model
         return true;
     }
 
+    /**
+     * Check has content for program
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return bool
+     */
     public function checkHasContent($programID)
     {
         $count  = 0;
@@ -381,6 +437,13 @@ class programModel extends model
         return $count > 0;
     }
 
+    /**
+     * Set program tree path.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return bool
+     */
     public function setTreePath($programID)
     {
         $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
@@ -396,5 +459,69 @@ class programModel extends model
             $path['grade'] = $parent->grade + 1;
         }
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Get program parent pairs 
+     * 
+     * @access public
+     * @return array
+     */
+    public function getParentPairs()
+    {
+        $stmt = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade, `order`')->query();
+
+        $pairs    = array();
+        $pairs[0] = '/';
+        while($program = $stmt->fetch())
+        {
+            if($program->grade == 1)
+            {
+                $pairs[$program->id] = '/' . $program->name;
+                continue;
+            }
+
+            $programName = '/' . $program->name;
+            $pairs[$program->id] = isset($pairs[$program->parent]) ? $pairs[$program->parent] . $programName : $programName;
+        }
+
+        return $pairs;
+    }
+
+    /**
+     * Move project node.
+     * 
+     * @param  int    $programID 
+     * @param  int    $parentID 
+     * @param  string $oldPath 
+     * @param  int    $oldGrade 
+     * @access public
+     * @return bool
+     */
+    public function moveNode($programID, $parentID, $oldPath, $oldGrade)
+    {
+        $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
+
+        $childNodes = $this->dao->select('id,parent,path,grade')->from(TABLE_PROJECT)
+            ->where('path')->like("{$oldPath}%")
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('template')->ne('')
+            ->orderBy('grade')
+            ->fetchAll();
+        /* Process child node path and grade field. */
+        foreach($childNodes as $childNode)
+        {
+            $path  = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
+            $grade = $oldGrade - $childNode->grade + 1;
+            if($parent)
+            {
+                $path  = rtrim($parent->path, ',') . $path;
+                $grade = $parent->grade + $grade;
+            }
+            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
+        }
+
+        return !dao::isError();
     }
 }
