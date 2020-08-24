@@ -935,11 +935,12 @@ class project extends control
      * @access public
      * @return void
      */
-    public function burn($projectID = 0, $type = 'noweekend', $interval = 0)
+    public function burn($projectID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
     {
         $this->loadModel('report');
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
+        $burnBy    = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -949,7 +950,7 @@ class project extends control
         /* Get date list. */
         $projectInfo = $this->project->getByID($projectID);
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
-        $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
+        $chartData = $this->project->buildBurnData($projectID, $dateList, $type, $burnBy);
 
         $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
@@ -958,6 +959,7 @@ class project extends control
         $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->tabID       = 'burn';
+        $this->view->burnBy      = $burnBy;
         $this->view->projectID   = $projectID;
         $this->view->projectName = $project->name;
         $this->view->type        = $type;

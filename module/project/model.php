@@ -2013,16 +2013,17 @@ class projectModel extends model
      * Get burn data for flot
      *
      * @param  int    $projectID
+     * @param  string $burnBy
      * @access public
      * @return array
      */
-    public function getBurnDataFlot($projectID = 0)
+    public function getBurnDataFlot($projectID = 0, $burnBy = '')
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select("date AS name, `left` AS value, `$burnBy`")->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();
@@ -2757,19 +2758,21 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  array  $dateList
      * @param  string $type
+     * @param  string $burnBy
      * @access public
      * @return array
      */
-    public function buildBurnData($projectID, $dateList, $type)
+    public function buildBurnData($projectID, $dateList, $type, $burnBy = 'left')
     {
         $this->loadModel('report');
+        $burnBy = $burnBy ? $burnBy : 'left';
 
-        $sets          = $this->getBurnDataFlot($projectID);
+        $sets          = $this->getBurnDataFlot($projectID, $burnBy);
         $limitJSON     = '[]';
         $baselineJSON  = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->value) ? $firstBurn->value : 0);
+        $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $days         = count($dateList) - 1;
         $rate         = $firstTime / $days;
         $baselineJSON = '[';
