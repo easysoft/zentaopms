@@ -37,6 +37,7 @@ $lang->design->createdDate   = '创建时间';
 $lang->design->basicInfo     = '基本信息';
 
 $lang->design->typeList         = array();
+$lang->design->typeList['']     = '';
 $lang->design->typeList['HLDS'] = '概要设计';
 $lang->design->typeList['DDS']  = '详细设计';
 $lang->design->typeList['DBDS'] = '数据库设计';
