@@ -256,6 +256,7 @@ $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = '我的近期项目';
 $lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
 $lang->block->default['full']['my']['7']['title']  = '指派给我';
@@ -441,6 +442,9 @@ $lang->block->typeList->testtask['doing']   = '测试中版本';
 $lang->block->typeList->testtask['blocked'] = '阻塞版本';
 $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
+
+$lang->block->modules['program']->moreLinkList = new stdclass();
+$lang->block->modules['program']->moreLinkList->recentprogram = 'program|browse|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';
