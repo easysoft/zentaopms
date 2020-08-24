@@ -1365,6 +1365,7 @@ class block extends control
         if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
@@ -1418,6 +1419,19 @@ class block extends control
             $bugs = $stmt->fetchAll();
 
             $this->view->bugs = $bugs;
+        }
+        if(isset($hasViewPriv['risk']))
+        {
+            $this->app->loadLang('risk');
+            $stmt = $this->dao->select('*')->from(TABLE_RISK)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->riskNum)) $stmt->limit($params->riskNum);
+            $risks = $stmt->fetchAll();
+
+            $this->view->risks = $risks;
         }
 
         $this->view->selfCall    = $this->selfCall;

@@ -294,6 +294,7 @@ $lang->block->availableBlocks->plan     = '计划列表';
 $lang->block->availableBlocks->release  = '发布列表';
 $lang->block->availableBlocks->build    = '版本列表';
 $lang->block->availableBlocks->testtask = '测试版本列表';
+$lang->block->availableBlocks->risk     = '我的风险';
 
 $lang->block->moduleList['program'] = '项目';
 $lang->block->moduleList['product'] = $lang->productCommon;
@@ -402,6 +403,7 @@ $lang->block->orderByList->story['stage_desc']  = '阶段倒序';
 $lang->block->todoNum = '待办数';
 $lang->block->taskNum = '任务数';
 $lang->block->bugNum  = 'Bug数';
+$lang->block->riskNum = '风险数';
 
 $lang->block->typeList = new stdclass();
 
