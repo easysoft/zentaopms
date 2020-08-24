@@ -30,3 +30,5 @@ $config->action->majorList['task']    = array('assigned', 'finished', 'activated
 $config->action->majorList['bug']     = array('assigned', 'resolved');
 $config->action->majorList['release'] = array('opened');
 $config->action->majorList['build']   = array('opened');
+$config->action->majorList['product'] = array('opened', 'edited');
+$config->action->majorList['project'] = array('opened', 'edited');

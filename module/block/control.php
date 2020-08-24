@@ -1577,11 +1577,15 @@ class block extends control
      */
     public function printScrumroadmapBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
+        $products  = $this->loadModel('product')->getPairs();
+
     }
 
     /**
-     * Print srcum road map block.
+     * Print srcum test block.
      *
      * @access public
      * @return void
