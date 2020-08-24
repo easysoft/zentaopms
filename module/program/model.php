@@ -393,7 +393,7 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable($project, $action)
+    public static function isClickable($program, $action)
     {
         $action = strtolower($action);
 
