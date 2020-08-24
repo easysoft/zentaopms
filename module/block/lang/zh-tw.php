@@ -252,6 +252,7 @@ $lang->block->availableBlocks->plan     = '計劃列表';
 $lang->block->availableBlocks->release  = '發佈列表';
 $lang->block->availableBlocks->build    = '版本列表';
 $lang->block->availableBlocks->testtask = '測試版本列表';
+$lang->block->availableBlocks->risk     = '我的風險';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;

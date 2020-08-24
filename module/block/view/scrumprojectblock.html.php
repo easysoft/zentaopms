@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(empty($projectOverview)): ?>
+<?php if(empty($summary)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
@@ -27,19 +27,19 @@
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
     <div class="tile">
-      <div class="tile-title">所有阶段</div>
-      <div class="tile-amount">25</div>
+      <div class="tile-title"><?php echo $lang->block->allProject;?></div>
+      <div class="tile-amount"><?php echo $summary->total;?></div>
     </div>
   </div>
   <div class="col-8 text-middle">
-    <ul class="status-bars" style="transform: rotate(90deg);">
+    <ul class="status-bars  all-statistics">
       <li>
-        <span class="bar" style="height: 0%"><span class="value">0</span></span>
-        <span class="title">进行中</span>
+        <span class="bar" style="height: <?php echo empty($summary->doing) ? 0 : round(($summary->doing/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->doing;?></span></span>
+        <span class="title"><?php echo $lang->block->doingProject;?></span>
       </li>
       <li>
-        <span class="bar" style="height: 100%"><span class="value">100</span></span>
-        <span class="title">已挂起</span>
+        <span class="bar" style="height: <?php echo empty($summary->finish) ? 0 : round(($summary->finish/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->finish;?></span></span>
+        <span class="title"><?php echo $lang->block->finishProject;?></span>
       </li>
     </ul>
   </div>

@@ -587,6 +587,10 @@ class blockModel extends model
         $params->bugNum['default'] = 20; 
         $params->bugNum['control'] = 'input';
 
+        $params->riskNum['name']    = $this->lang->block->riskNum;
+        $params->riskNum['default'] = 20;
+        $params->riskNum['control'] = 'input';
+
         return json_encode($params);
     }
 

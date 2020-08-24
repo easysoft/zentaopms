@@ -252,6 +252,7 @@ $lang->block->availableBlocks->plan     = 'Kế hoạch';
 $lang->block->availableBlocks->release  = 'Phát hành';
 $lang->block->availableBlocks->build    = 'Bản dựng';
 $lang->block->availableBlocks->testtask = 'Yêu cầu';
+$lang->block->availableBlocks->risk     = 'My Risks';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;

@@ -758,6 +758,7 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $this->loadModel('project');
+        $this->loadModel('weekly');
         $this->app->loadLang('task');
         $this->app->loadLang('story');
 
@@ -772,29 +773,43 @@ class block extends control
             return false;
         }
 
+        $today = date('Y-m-d', strtotime(helper::today()));
+        $date  = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $tasks = $this->dao->select("program, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+            ->where('program')->in(array_keys($programs))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('program')
+            ->fetchAll('program');
+
         foreach($programs as $programID => $program)
         {
-            $program->allStories = $program->doneStories = $program->leftStories = 0;
-
-            $stories = $this->dao->select('id, status')->from(TABLE_STORY)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->eq('story')
-                ->andWhere('status')->ne('draft')
-                ->andWhere('program')->eq($programID)
-                ->fetchPairs();
-            foreach($stories as $id => $status)
+            if($program->template == 'scrum')
             {
-                $program->allStories ++;
-                if($status == 'closed') $program->doneStories ++;
-                if($status != 'closed') $program->leftStories ++;
+                $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
+                $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
             }
+            else
+            {
+                $begin   = $program->begin;
+                $weeks   = $this->weekly->getWeekPairs($begin);
+                $current = zget($weeks, $date, '');
 
-            $program->progress = $program->allStories == 0 ? 0 : ceil($program->doneStories / $program->allStories) * 100;
+                $program->pv = $this->weekly->getPV($programID, $today);
+                $program->ev = $this->weekly->getEV($programID, $today);
+                $program->ac = $this->weekly->getAC($programID, $today);
+                $program->sv = $this->weekly->getSV($program->ev, $program->pv);
+                $program->cv = $this->weekly->getCV($program->ev, $program->ac);
 
-            //$program->projects = $this->dao->select('*')
+                $progress = isset($tasks[$programID]) ? (($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft)) ? round($tasks[$programID]->totalConsumed / ($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft), 3) * 100 : 0 : 0;
+
+                $program->current  = $current;
+                $program->progress = $progress;
+            }
         }
 
         $this->view->programs = $programs;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
     /**
@@ -1030,7 +1045,7 @@ class block extends control
                 $projects[$project->id]->releasedStories = 0;
             }
 
-            $projects[$project->id]->progress      = ($project->totalConsumed || $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 2) * 100 : 0;
+            $projects[$project->id]->progress      = ($project->totalConsumed || $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;
             $projects[$project->id]->taskProgress  = $project->totalTasks ? round(($project->totalTasks - $project->undoneTasks) / $project->totalTasks, 2) * 100 : 0;
             $projects[$project->id]->storyProgress = $project->totalStories ? round(($project->totalStories - $project->unclosedStories) / $project->totalStories, 2) * 100 : 0;
             $projects[$project->id]->bugProgress   = $project->totalBugs ? round(($project->totalBugs - $project->activeBugs) / $project->totalBugs, 2) * 100 : 0;
@@ -1065,7 +1080,7 @@ class block extends control
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $this->view->current  = $current;
-        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 2) * 100 : 0;
+        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 3) * 100 : 0;
     }
 
     /**
@@ -1365,6 +1380,7 @@ class block extends control
         if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
@@ -1418,6 +1434,19 @@ class block extends control
             $bugs = $stmt->fetchAll();
 
             $this->view->bugs = $bugs;
+        }
+        if(isset($hasViewPriv['risk']))
+        {
+            $this->app->loadLang('risk');
+            $stmt = $this->dao->select('*')->from(TABLE_RISK)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->riskNum)) $stmt->limit($params->riskNum);
+            $risks = $stmt->fetchAll();
+
+            $this->view->risks = $risks;
         }
 
         $this->view->selfCall    = $this->selfCall;
@@ -1569,7 +1598,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->eq($this->session->program)->fi()
+            ->andWhere('t1.program')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
@@ -1596,7 +1625,7 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
             ->fetch();
     }
@@ -1609,13 +1638,27 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-		$projects = $this->loadModel('project')->getPairs();
-		$actions  = $this->dao->select('*')->from(TABLE_ACTION)
-			->where('project')->in(array_keys($projects))
-			->orderBy('id_desc')
-			->fetchAll();
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = $this->loadModel('product')->getPairs();
+        $productID = array();
+        foreach($products as $id => $name) $productID[] = ',' . $id . ',';
 
-     	$this->view->actions = $this->loadModel('action')->transformActions($actions);
+        if(empty($projects) && empty($products))
+        {
+            $actions = array();
+        }
+        else
+        {
+            $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in($productID)->fi()
+                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
+                ->beginIF(empty($projects) && $products)->where('product')->in($productID)->fi()
+                ->orderBy('id_desc')
+                ->limit(30)
+                ->fetchAll();
+        }
+
+        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-	 }
+    }
 }

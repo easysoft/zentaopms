@@ -1,6 +1,15 @@
 <?php
 class programModel extends model
 {
+    /**
+     * Get program list.
+     * 
+     * @param  varchar $status
+     * @param  varchar $orderBy
+     * @param  object  $pager
+     * @access public
+     * @return void
+     */
     public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
@@ -20,6 +29,12 @@ class programModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get program pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getPairs()
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -30,6 +45,13 @@ class programModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get program pairs by template.
+     * 
+     * @param  varchar $template
+     * @access public
+     * @return void
+     */
     public function getPairsByTemplate($template)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -41,6 +63,15 @@ class programModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get user programs for block.
+     * 
+     * @param  varchar $status
+     * @param  varchar $orderBy
+     * @param  int     $limit
+     * @access public
+     * @return void
+     */
     public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15)
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -57,7 +88,7 @@ class programModel extends model
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
 
-        $consumes = $this->dao->select('program, sum(consumed) as consumed')->from(TABLE_TASK)
+        $hours = $this->dao->select('program, sum(consumed) as consumed, sum(estimate) as estimate')->from(TABLE_TASK)
             ->where('program')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
@@ -73,6 +104,21 @@ class programModel extends model
             ->where('program')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $allStories = $this->dao->select('program, count(*) as allStories')->from(TABLE_STORY)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('draft')
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $doneStories = $this->dao->select('program, count(*) as doneStories')->from(TABLE_STORY)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
             ->groupBy('program')
             ->fetchAll('program');
 
@@ -93,10 +139,13 @@ class programModel extends model
         foreach($programs as $programID => $program)
         {    
             $program->teamCount    = isset($teams[$programID]) ? $teams[$programID]->count : 0;
-            $program->consumed     = isset($consumes[$programID]) ? $consumes[$programID] : 0; 
-            $program->leftTasks    = isset($leftTasks[$programID]) ? $leftTasks[$programID] : 0; 
-            $program->leftStories  = isset($leftStories[$programID]) ? $leftStories[$programID] : 0; 
-            $program->leftBugs     = isset($leftBugs[$programID]) ? $leftBugs[$programID] : 0;
+            $program->consumed     = isset($hours[$programID]) ? $hours[$programID]->consumed : 0; 
+            $program->estimate     = isset($hours[$programID]) ? $hours[$programID]->estimate : 0; 
+            $program->leftTasks    = isset($leftTasks[$programID]) ? $leftTasks[$programID]->leftTasks : 0; 
+            $program->allStories   = isset($allStories[$programID]) ? $allStories[$programID]->allStories : 0; 
+            $program->doneStories  = isset($doneStories[$programID]) ? $doneStories[$programID]->doneStories : 0; 
+            $program->leftStories  = isset($leftStories[$programID]) ? $leftStories[$programID]->leftStories : 0; 
+            $program->leftBugs     = isset($leftBugs[$programID]) ? $leftBugs[$programID]->leftBugs : 0;
         }
 
         return $programs;
@@ -166,6 +215,12 @@ class programModel extends model
         die(js::locate('back'));
     }
 
+    /**
+     * Create a program.
+     *
+     * @access private
+     * @return void
+     */
     public function create()
     {
         $project = fixer::input('post')
@@ -298,6 +353,17 @@ class programModel extends model
         }
     }
 
+    /*
+     * Get program swapper.
+     *
+     * @param  object  $programs
+     * @param  int     $programID
+     * @param  varchar $currentModule
+     * @param  varchar $currentMethod
+     * @param  varchar $extra
+     * @access private
+     * @return void
+     */
     public function getSwapper($programs, $programID, $currentModule, $currentMethod, $extra = '')
     {    
         $this->loadModel('project');
@@ -327,29 +393,17 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable($project, $action)
+    public static function isClickable($program, $action)
     {
         $action = strtolower($action);
 
-        if($action == 'start')    return $project->status == 'wait' or $project->status == 'suspended';
-        if($action == 'finish')   return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'close')    return $project->status != 'closed';
-        if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'activate') return $project->status == 'done';
+        if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
+        if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'close')    return $program->status != 'closed';
+        if($action == 'suspend')  return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'activate') return $program->status == 'done';
 
         return true;
-    }
-
-    /**
-     * Get program products 
-     * 
-     * @param  int    $program 
-     * @access public
-     * @return array
-     */
-    public function getProducts($program)
-    {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('project')->eq($program)->fetchAll('id');
     }
 
     /**
