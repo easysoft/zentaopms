@@ -506,9 +506,15 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs()
+    public function getParentPairs($template = '')
     {
-        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchAll('id');
+        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)
+            ->where('isCat')->eq(1)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('template')->ne('')
+            ->beginIF($template)->andWhere('template')->eq($template)->fi()
+            ->orderBy('grade desc, `order`')
+            ->fetchAll('id');
 
         $treeMenu = array();
         foreach($modules as $module)
