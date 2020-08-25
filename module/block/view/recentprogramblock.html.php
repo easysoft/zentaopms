@@ -19,13 +19,14 @@
 #cards .program-detail > p {margin-bottom: 8px;}
 #cards .program-detail .progress {height: 4px;}
 #cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
+#cards .panel-heading {cursor: pointer;}
 </style>
 <div class='row' id='cards'>
   <?php foreach ($programs as $programID => $program):?>
   <div class='col' data-id='<?php echo $programID?>'>
     <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id");?>'>
       <div class='panel-heading'>
-        <strong class='program-name' title='<?php echo $program->name;?>'><?php echo $program->name;?></strong>
+        <strong class='program-name' title='<?php echo $program->name;?>'> <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?> </strong>
         <?php if($program->template === 'cmmi'): ?>
         <span class='program-type-label label label-warning label-outline'><?php echo $lang->program->cmmi; ?></span>
         <?php else: ?>
@@ -64,7 +65,7 @@
           <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
           <?php if($project):?>
           <div class='row'>
-            <div class='col-xs-5'><?php echo $project->name; ?></div>
+            <div class='col-xs-5'><?php echo $project->name;?></div>
             <div class='col-xs-7'>
             <div class="progress progress-text-left">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
