@@ -57,6 +57,8 @@ $lang->block->scrum           = 'Scrum+';
 $lang->block->allProject      = '所有' . $lang->projectCommon;
 $lang->block->doingProject    = '进行中的' . $lang->projectCommon;
 $lang->block->finishProject   = '累积' . $lang->projectCommon;
+$lang->block->estimatedHours  = '预计工时';
+$lang->block->consumedHours   = '已消耗';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';

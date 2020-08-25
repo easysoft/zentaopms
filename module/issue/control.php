@@ -259,7 +259,7 @@ class issue extends control
      * @access public
      * @return void
      */
-    public function  resolve($issue)
+    public function resolve($issue)
     {
         if($_POST)
         {

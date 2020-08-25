@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink = $this->createLink('risk', 'browse');?>
+<?php $browseLink = $app->session->riskList != false ? $app->session->riskList : $this->createLink('risk', 'browse');?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
