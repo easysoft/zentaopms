@@ -542,6 +542,7 @@ class block extends control
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
+        $this->session->set('riskList', $uri);
 
         foreach($todos as $key => $todo)
         {
