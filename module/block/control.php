@@ -1607,9 +1607,10 @@ class block extends control
     {
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
-
         $products  = $this->loadModel('product')->getPairs();
 
+ksort($products);
+        $this->view->roadmaps = $this->product->getRoadmap(key($products), 0, 6);
     }
 
     /**
@@ -1680,27 +1681,12 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $projects  = $this->loadModel('project')->getPairs();
-        $products  = $this->loadModel('product')->getPairs();
-        $productID = array();
-        foreach($products as $id => $name) $productID[] = ',' . $id . ',';
 
-        if(empty($projects) && empty($products))
-        {
-            $actions = array();
-        }
-        else
-        {
-            $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in($productID)->fi()
-                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
-                ->beginIF(empty($projects) && $products)->where('product')->in($productID)->fi()
-                ->orderBy('id_desc')
-                ->limit(30)
-                ->fetchAll();
-        }
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
 
-        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 }
