@@ -94,6 +94,7 @@ $lang->risk->priList['high']   = 'High';
 $lang->risk->priList['middle'] = 'Medium';
 $lang->risk->priList['low']    = 'Low';
 
+$lang->risk->statusList[''] = '';
 $lang->risk->statusList['active']   = 'Active';
 $lang->risk->statusList['closed']   = 'Closed';
 $lang->risk->statusList['hangup']   = 'Suspended';
