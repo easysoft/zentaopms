@@ -175,11 +175,14 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
+        $parents = $this->program->getParentPairs();
+        unset($parents[$programID]);
+
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->title       = $this->lang->program->edit;
         $this->view->position[]  = $this->lang->program->edit;
         $this->view->program     = $program;
-        $this->view->parents     = $this->program->getParentPairs();
+        $this->view->parents     = $parents;
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->display();
     }
