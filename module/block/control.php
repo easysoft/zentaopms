@@ -1585,7 +1585,11 @@ class block extends control
      */
     public function printScrumoverallBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $programID    = $this->session->program;
+        $totalData    = $this->loadModel('program')->getUserPrograms('all','id_desc',15,$programID);
+
+        $this->view->totalData = $totalData;
+        $this->view->programID = $programID;
     }
 
     /**
@@ -1688,7 +1692,6 @@ ksort($products);
      */
     public function printScrumdynamicBlock()
     {
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
