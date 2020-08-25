@@ -109,8 +109,7 @@ function initMilestoneChart()
         });
     }
 
-    if(betterWidth > 200) setTimeout(renderChart, 100);
-    else renderChart();
+    setTimeout(renderChart, betterWidth > 200 ? 100 : 10);
 }
 initMilestoneChart();
 </script>

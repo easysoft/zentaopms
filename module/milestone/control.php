@@ -16,10 +16,12 @@ class milestone extends control
             die;
         }
 
+
+
         $productID = $this->loadModel('product')->getProductIDByProject($projectID);
         $stageList = $this->loadModel('programplan')->getPairs($programID, $productID);
         unset($stageList[0]);
- 
+
         $this->view->projectID      = $projectID;
         $this->view->programID      = $programID;
         $this->view->stageList      = $stageList;
@@ -54,7 +56,7 @@ class milestone extends control
     public function ajaxSaveEstimate()
     {
         $taskID = $this->post->taskID;
-        $estimate = $this->post->estimate; 
+        $estimate = $this->post->estimate;
         $re = $this->milestone->ajaxSaveEstimate($taskID,$estimate);
         $this->send(array('result' => 'success','message' => $this->lang->saveSuccess));
     }
