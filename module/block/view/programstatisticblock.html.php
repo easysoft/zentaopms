@@ -148,8 +148,8 @@ $(function()
             <div class="program-info">
               <h4><?php echo $lang->program->allInput;?></h4>
               <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo $program->teamCount;?></span>
-                <span><i class='icon icon-clock'></i> <?php echo $program->estimate;?></span>
+                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->program->membersUnit, $program->teamCount);?></span>
+                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->program->hoursUnit, $program->estimate);?></span>
                 <span><i class='icon icon-cost'></i> <?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></span>
               </div>
             </div>

@@ -1572,30 +1572,43 @@ class storyModel extends model
     /**
      * Get stories to link.
      *
-     * @param  int    $storyID
-     * @param  string $type
-     * @param  string $browseType
-     * @param  int    $queryID
+     * @param  int     $storyID
+     * @param  string  $type
+     * @param  string  $browseType
+     * @param  int     $queryID
+     * @param  varchar $storyType
      * @access public
      * @return array
      */
-    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0)
+    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story')
     {
+        $story         = $this->getById($storyID);
+        $linkedStories = $this->getRelation($storyID, $story->type);
+        $linkedStories = empty($linkedStories) ? array() : $linkedStories;
+        $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
+
         if($browseType == 'bySearch')
-        {
-            $story        = $this->getById($storyID);
-            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch);
+        {   
+            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch, $tmpStoryType);
             foreach($stories2Link as $key => $story2Link)
-            {
+            {   
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
                 if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
-            }
-            return $stories2Link;
-        }
+            }   
+        }   
         else
-        {
-            return array();
-        }
+        {   
+            $status = $storyType == 'story' ? 'active' : 'all';
+            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc');
+        }   
+
+        foreach($stories2Link as $id => $story)
+        {   
+            if(in_array($story->id, array_keys($linkedStories))) unset($stories2Link[$id]);
+            if($storyType == 'story' && $story->status == 'draft') unset($stories2Link[$id]);
+        }   
+
+        return $stories2Link;
     }
 
     /**
@@ -3134,5 +3147,245 @@ class storyModel extends model
         }
 
         return array($toList, $ccList);
+    }
+
+    /**
+     * Get tracks.
+     *
+     * @param  int  $productID
+     * @access public
+     * @return bool|array
+     */
+    public function getTracks($productID)
+    {
+        $requirements = $this->getProductStories($productID, 0, 0, 'all', 'requirement', 'id_desc');
+
+        foreach($requirements as $requirement)
+        {
+            $stories = $this->getRelation($requirement->id, 'requirement');
+            $stories = empty($stories) ? array() : $stories;
+            foreach($stories as $id => $title)
+            {
+                $stories[$id]           = new stdclass();
+                $stories[$id]->title    = $title;
+                $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
+            }
+
+            $requirement->track = $stories;
+        }
+
+        /* Get no requirements story. */
+        $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc');
+        foreach($stories as $id => $story)
+        {
+            $counts = $this->getStoryRelationCounts($story->id, 'story');
+            if($counts != 0) 
+            {
+                unset($stories[$id]);
+                continue;
+            }
+            $title = $stories[$id]->title;
+            $stories[$id]           = new stdclass();
+            $stories[$id]->title    = $title;
+            $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
+            $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
+            $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+            $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
+        }
+        $requirements['noRequirement'] = $stories;
+
+        return $requirements;
+    }
+
+    /**
+     * Get track by id.
+     *
+     * @param  int  $storyID
+     * @access public
+     * @return bool|array
+     */
+    public function getTrackByID($storyID)
+    {
+        $requirement = $this->getByID($storyID);
+
+        $stories = $this->getRelation($requirement->id, 'requirement');
+        $track   = array();
+        $stories = empty($stories) ? array() : $stories;
+        foreach($stories as $id => $title)
+        {
+            $track[$id] = new stdclass();
+            $track[$id]->title    = $title;
+            $track[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
+            $track[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
+            $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+            $track[$id]->story    = $this->getByID($id);
+            $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
+        }
+
+        return $track;
+    }
+
+    /**
+     * Obtain the direct relationship between UR and SR.
+     *
+     * @param  int  $storyID
+     * @param  string $storyType
+     * @param  string $storyType
+     * @access public
+     * @return int
+     */
+    public function getStoryRelation($storyID, $storyType, $fields = array())
+    {
+        $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
+        $storyType      = ($storyType == 'story') ? 'AID' : 'BID';
+
+        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere($conditionField)->eq($storyID)
+            ->fetchAll($storyType);
+
+        if(empty($relations)) return array();
+
+        $fields = empty($fields) ? '*' : implode(',', $fields);
+        $story  = $this->dao->select($fields)->from(TABLE_STORY)
+            ->where('id')->in(array_keys($relations))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll();
+
+        return $story;
+    }
+
+    /**
+     * Link stories.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID)
+    {
+        $story   = $this->getByID($storyID);
+        $stories = $this->post->stories;
+        $isStory = ($story->type == 'story');
+
+        foreach($stories as $id)
+        {
+            $requirement = $this->getByID($id);
+            $data = new stdclass();
+            $data->program  = $this->session->program;
+            $data->product  = $this->session->product;
+            $data->AType    = 'requirement';
+            $data->BType    = 'story';
+            $data->relation = 'subdivideinto';
+            $data->AID      = $isStory ? $id : $storyID;
+            $data->BID      = $isStory ? $storyID : $id;
+            $data->AVersion = $isStory ? $requirement->version : $story->version;
+            $data->BVersion = $isStory ? $story->version : $requirement->version;
+
+            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $data->AType    = 'story';
+            $data->BType    = 'requirement';
+            $data->relation = 'subdividedfrom';
+            $data->AID      = $isStory ? $storyID : $id;
+            $data->BID      = $isStory ? $id : $storyID;
+            $data->AVersion = $isStory ? $story->version : $requirement->version;
+            $data->BVersion = $isStory ? $requirement->version : $story->version;
+
+            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+        }
+    }
+
+    /**
+     * Unlink story.
+     *
+     * @param  int $storyID
+     * @param  int $linkedStoryID
+     * @access public
+     * @return void
+     */
+    public function unlinkStory($storyID, $linkedStoryID)
+    {
+        $idList = "$storyID,$linkedStoryID";
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->in('story,requirement')
+            ->andWhere('BType')->in('story,requirement')
+            ->andWhere('relation')->in('subdivideinto,subdividedfrom')
+            ->andWhere('AID')->in($idList)
+            ->andWhere('BID')->in($idList)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Get story relations.
+     *
+     * @param  int     $storyID
+     * @param  varchar $storyType
+     * @access public
+     * @return int
+     */
+    public function getRelation($storyID, $storyType, $extraField = array())
+    {
+        $BType    = $storyType == 'story' ? 'requirement' : 'story';
+        $relation = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
+
+        $relations = $this->dao->select('BID')->from(TABLE_RELATION)
+            ->where('AType')->eq($storyType)
+            ->andWhere('BType')->eq($BType) 
+            ->andWhere('relation')->eq($relation) 
+            ->andWhere('AID')->eq($storyID)
+            ->fetchPairs();
+
+        if(!empty($relations))
+        {   
+            if(empty($extraField))
+            {   
+                return $this->dao->select('id, title')
+                    ->from(TABLE_STORY)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('id')->in($relations)
+                    ->fetchPairs();
+            }   
+            else
+            {   
+                return $this->dao->select(implode($extraField, ','))
+                    ->from(TABLE_STORY)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('id')->in($relations)
+                    ->fetchAll('id');
+            }   
+        }
+    }
+
+    /**
+     * Get software requirements associated with user needs.
+     *
+     * @param  array  $storyID
+     * @param  string $storyType
+     * @access public
+     * @return int
+     */
+    public function getStoryRelationCounts($storyID, $storyType = '') 
+    {
+        $selectField    = ($storyType == 'story') ? 'AID' : 'BID';
+        $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
+
+        $relations = $this->dao->select('count('. $selectField .') as id')->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere($conditionField)->eq($storyID)
+            ->fetch('id');
+
+        return $relations;
     }
 }

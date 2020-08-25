@@ -62,6 +62,56 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
+      <?php if($story->type == 'requirement'):?>
+        <?php if(!empty($track)):?>
+        <div class="detail">
+          <div class="detail-title"><?php echo $lang->story->track;?></div>
+          <div class="detail-content article-content main-table">
+            <table class="table">
+              <thead>
+                  <tr>
+                    <th class="w-120px"><?php echo $lang->story->story;?></th>
+                    <th class="w-120px"><?php echo $lang->story->design;?></th>
+                    <th class="w-120px"><?php echo $lang->story->case;?></th>
+                    <th class="w-60px"><?php echo $lang->story->repoCommit;?></th>
+                    <th class="w-120px"><?php echo $lang->story->bug;?></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php foreach($track as $storyID => $storyInfo):?>
+                  <tr>
+                     <td style='padding-left: 10px;'><?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $storyInfo->title, '', "title='$storyInfo->title'");?>
+                     </td>
+                     <td>
+                      <?php foreach($storyInfo->design as $designID => $design):?>
+                      <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?>
+                      <?php endforeach;?>
+                     </td>
+                     <td>
+                       <?php foreach($storyInfo->case as $caseID => $case):?>
+                       <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?>
+                       <?php endforeach;?>
+                     </td>
+                     <td>
+                       <?php foreach($storyInfo->revision as $revision => $repoID):?>
+                       <?php
+                       echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
+                       ?>
+                       <?php endforeach;?>
+                     </td>
+                     <td>
+                       <?php foreach($storyInfo->bug as $bugID => $bug):?>
+                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
+                       <?php endforeach;?>
+                     </td>
+                  </tr>
+                  <?php endforeach;?>
+                </tbody>
+            </table>
+          </div>
+        </div>
+        <?php endif;?>
+      <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
       <?php if(!empty($story->children)):?>
@@ -334,12 +384,34 @@
         <ul class='nav nav-tabs'>
           <?php if($config->global->flow == 'onlyStory'):?>
           <li class='active'><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <?php elseif($program->template == 'cmmi'):?>
+          <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
+          <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
           <?php else:?>
           <li class='active'><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>
+          <?php if($program->template == 'cmmi'):?>
+          <div class='tab-pane active' id='legendStories'>
+            <ul class="list-unstyled">
+              <?php
+              $relation = array();
+              foreach($relations as $item) $relation[$item->id] = $item->title;
+              foreach($relation as $id => $title)
+              {   
+                  echo "<li title='$title'>" . html::a($this->createLink('story', 'view', "id=$id", '', true), "#$id $title", '', "class='iframe' data-width='80%'"); 
+                  echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
+              }   
+              ?>  
+              <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
+              <li><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
+              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>
+            </ul>
+          </div>
+          <?php endif;?>
           <?php if($config->global->flow != 'onlyStory'):?>
           <div class='tab-pane active' id='legendProjectAndTask'>
             <ul class="list-unstyled">
@@ -454,6 +526,8 @@ js::set('productID', $story->product);
 js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
 js::set('storyType', $story->type);
+js::set('unlink', $lang->story->unlink);
+js::set('cancel', $lang->cancel);
 ?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

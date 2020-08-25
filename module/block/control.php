@@ -1178,7 +1178,7 @@ class block extends control
 
         $begin = $program->begin;
         $today = helper::today();
-        $end   = date('Y-m-d', strtotime("$today + 7 days"));
+        $end   = date('Y-m-d', strtotime($today));
 
         $projects = $this->project->getProjectsByProgram($program);
         $projectIdList = array_keys($projects);
@@ -1188,14 +1188,15 @@ class block extends control
         $charts['AC'] = '[';
         $i = 1;
         $start = $begin;
+        $longProgram = helper::diffDate($today, $begin) / 7 > 10;
         while($start < $end)
         {   
-            $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-            $sunday             = $this->weekly->getThisSunday($start);
-            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $sunday) . ',';
-            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $sunday) . ',';
-            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $sunday) . ',';
-            $start              = date('Y-m-d', strtotime("$start + 7 days"));
+            $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
+            $start              = $longProgram ? date('Y-m-d', strtotime("$start + 1 month")) : date('Y-m-d', strtotime("$start + 7 days"));
             $i ++;
         }
 

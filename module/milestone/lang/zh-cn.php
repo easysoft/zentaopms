@@ -81,6 +81,7 @@ $lang->milestone->chart = new stdclass();
 $lang->milestone->chart->title    = '到目前为止项目进展趋势图';
 $lang->milestone->chart->time     = '第';
 $lang->milestone->chart->week     = '周';
+$lang->milestone->chart->month    = '月';
 $lang->milestone->chart->workhour = '研发工作量分析图';
 
 $lang->milestone->otherproblem      = '6.其它问题';

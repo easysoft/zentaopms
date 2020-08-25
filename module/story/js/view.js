@@ -8,4 +8,18 @@ $(function()
 
     /* Add for task #5385. */
     if(config.onlybody == 'yes') $('.main-actions').css('width', '100%')
+
+    $('#unlinkStory').click(function()
+    {
+        if($('.removeButton').hasClass('hide'))
+        {
+            $('.removeButton').removeClass('hide');
+            $(this).text(cancel);
+        }
+        else
+        {
+            $('.removeButton').addClass('hide');
+            $(this).text(unlink);
+        }
+    })
 });

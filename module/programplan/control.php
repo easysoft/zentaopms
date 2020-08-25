@@ -74,7 +74,7 @@ class programplan extends control
 
         $this->app->loadLang('stage');
         $program = $this->loadModel('project')->getById($programID);
-        $stages  = $planID ? array() : $this->loadModel('stage')->getStages();
+        $stages  = $planID ? array() : $this->loadModel('stage')->getStages('id_asc');
         $plans   = $this->programplan->getList($programID, $this->productID, $planID);
 
         $title      = $this->lang->programplan->create . $this->lang->colon . $program->name;

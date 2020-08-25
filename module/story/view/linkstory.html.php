@@ -36,11 +36,11 @@
           <?php echo $lang->idAB;?>
         </th>
         <th class='c-pri'><?php echo $lang->priAB;?></th>
-        <th><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
-        <th><?php echo $lang->story->plan;?></th>
         <th class='w-80px'><?php echo $lang->story->status;?></th>
+        <?php if($story->type == 'requirement'):?>
         <th class='w-80px'><?php echo $lang->story->stage;?></th>
+        <?php endif;?>
         <th class='w-user'><?php echo $lang->openedByAB;?></th>
         <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
       </tr>
@@ -58,11 +58,11 @@
           <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
         </td>
         <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story2Link->pri?>' title='<?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
-        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
         <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
-        <td><?php echo $story2Link->planTitle;?></td>
         <td><?php echo $this->processStatus('story', $story2Link);?></td>
+        <?php if($story->type == 'requirement'):?>
         <td><?php echo zget($lang->story->stageList, $story2Link->stage);?></td>
+        <?php endif;?>
         <td><?php echo zget($users, $story2Link->openedBy);?></td>
         <td><?php echo $story2Link->estimate;?></td>
       </tr>
@@ -87,20 +87,6 @@ $(function()
     $('#linkStoryForm').table();
     setTimeout(function(){$('#linkStoryForm .table-footer').removeClass('fixed-footer');}, 100);
     <?php endif;?>
-
-    $('#submit').click(function(){
-        var output = '';
-        $('#linkStoryForm').find('tr.checked').each(function(){
-            var storyID   = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var storyName = "#" + storyID + ' ' + $(this).find('td').eq(3).attr('title');
-            var checkbox  = "<li><div class='checkbox-primary'><input type='checkbox' checked='checked' name='" + linkType + "[]' " + "value=" + storyID + " /><label>" + storyName + "</label></div></li>";
-
-            output += checkbox;
-        });
-        $.closeModal();
-        parent.$('#' + linkType + 'Box').html(output);
-        return false;
-    });
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
