@@ -1114,7 +1114,13 @@ class block extends control
      */
     public function printCmmiGanttBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $products  = $this->loadModel('product')->getPairs();
+        $productID = isset($this->session->product) ? 0 : $this->session->product;
+        if($productID && !array_key_exists($productID, $products)) $productID = 0;
+
+        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID);
+        $this->view->products  = $products;
+        $this->view->productID = $productID;
     }
 
     /**
@@ -1192,7 +1198,7 @@ class block extends control
         $start = $begin;
         $longProgram = helper::diffDate($today, $begin) / 7 > 10;
         while($start < $end)
-        {   
+        {
             $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
             $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
             $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
