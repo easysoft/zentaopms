@@ -149,18 +149,13 @@ $lang->system->subMenu->setmodel = new stdclass();
 $lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
-$lang->system->menu->auditcl     = array('link' => 'QA|auditcl|browse|', 'subModule' => 'auditcl');
-$lang->system->menu->cmcl        = array('link' => '配置|cmcl|browse|', 'subModule' => ',cmcl,baseline,');
-$lang->system->menu->process     = array('link' => '过程|process|browse|', 'subModule' => ',activity,output,classify,');
-$lang->system->menu->reviewcl    = array('link' => '评审|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
 $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
 $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
 $lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-if($this->cookie->systemModel == 'scrum')
+if($_COOKIE['systemModel'] == 'scrum')
 {
     $lang->system->menu = new stdclass();
     $lang->system->subMenu->setmodel = new stdclass();
@@ -178,48 +173,6 @@ $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
 $lang->stage->menu->settype = '阶段类型|stage|settype|';
-
-$lang->measurement = new stdclass();
-$lang->measurement->menu = new stdclass();
-$lang->measurement->menu->settips  = '区间提示|measurement|settips|';
-$lang->measurement->menu->define   = array('link' => '度量定义|measurement|browse|', 'alias' => 'createbasic,design,editbasic,setsql');
-$lang->measurement->menu->data     = array('link' => '度量数据|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
-$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate,edittemplate');
-
-$lang->sqlbuilder = new stdclass();
-$lang->sqlbuilder->menu = $lang->measurement->menu;
-
-$lang->cmcl = new stdclass();
-$lang->cmcl->menu = new stdclass();
-$lang->cmcl->menu->browse   = array('link' => '审计清单|cmcl|browse|', 'subModule' => 'cmcl');
-$lang->cmcl->menu->catalog  = array('link' => '文档目录|baseline|catalog|', 'alias' => 'catalog');
-$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'alias' => 'template,createtemplate,edittemplate,view,managebook');
-
-$lang->baseline = new stdclass();
-$lang->baseline->menu = $lang->cmcl->menu;
-
-$lang->process = new stdclass();
-$lang->process->menu = new stdclass();
-$lang->process->menu->browse   = array('link' => '标准过程|process|browse|', 'subModule' => 'process');
-$lang->process->menu->activity = array('link' => '活动|activity|browse|', 'subModule' => 'activity');
-$lang->process->menu->output   = array('link' => '文档|output|browse|', 'subModule' => 'output');
-$lang->process->menu->classify = array('link' => '分类项|classify|browse|', 'subModule' => 'classify');
-
-$lang->activity = new stdclass();
-$lang->output   = new stdclass();
-$lang->classify = new stdclass();
-$lang->activity->menu = $lang->process->menu;
-$lang->output->menu   = $lang->process->menu;
-$lang->classify->menu = $lang->process->menu;
-
-$lang->reviewcl = new stdclass();
-$lang->reviewcl->menu = new stdclass();
-$lang->reviewcl->menu->browse   = array('link' => '检查清单|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
-$lang->reviewcl->menu->version  = array('link' => '版本规则|reviewsetting|version|');
-$lang->reviewcl->menu->reviewer = array('link' => '评审人|reviewsetting|reviewer|');
-
-$lang->reviewsetting = new stdclass();
-$lang->reviewsetting->menu = $lang->reviewcl->menu;
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -277,7 +230,7 @@ $lang->my->menu = new stdclass();
 
 $lang->my->menu->index            = '首页|my|index';
 //$lang->my->menu->todo             = '待办|my|todo|';
-$lang->my->menu->effort           = '日志|my|effort|';
+//$lang->my->menu->effort           = '日志|my|effort|';
 //$lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->program          = array('link' => '项目|my|program|');
 $lang->my->menu->task             = array('link' => '任务|my|task|', 'subModule' => 'task');
