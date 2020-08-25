@@ -49,9 +49,8 @@
       <?php foreach($bugs as $bug):?>
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $bug->id);?></td>
         <td class='c-severity'>
           <?php if($hasCustomSeverity):?>
@@ -63,7 +62,7 @@
         <?php if($longBlock):?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
-        <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+        <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->program), $bug->title)?></td>
         <?php $status = $this->processStatus('bug', $bug);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-bug status-<?php echo $bug->status?>"><?php echo $status;?></span>
