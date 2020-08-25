@@ -69,10 +69,11 @@ class programModel extends model
      * @param  varchar $status
      * @param  varchar $orderBy
      * @param  int     $limit
+     * @param  int     $programID
      * @access public
      * @return void
      */
-    public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15)
+    public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15, $programID = 0)
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
@@ -81,6 +82,7 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->beginIF($programID)->andWhere('id')->eq($programID)->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll('id');
@@ -136,8 +138,21 @@ class programModel extends model
             ->groupBy('program')
             ->fetchAll('program');
 
+        $allBugs = $this->dao->select('program, count(*) as allBugs')->from(TABLE_BUG)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        $doneBugs = $this->dao->select('program, count(*) as doneBugs')->from(TABLE_BUG)
+            ->where('program')->in($programIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('resolved')
+            ->groupBy('program')
+            ->fetchAll('program');
+
         foreach($programs as $programID => $program)
-        {    
+        {
             $program->teamCount    = isset($teams[$programID]) ? $teams[$programID]->count : 0;
             $program->consumed     = isset($hours[$programID]) ? $hours[$programID]->consumed : 0; 
             $program->estimate     = isset($hours[$programID]) ? $hours[$programID]->estimate : 0; 
@@ -146,6 +161,8 @@ class programModel extends model
             $program->doneStories  = isset($doneStories[$programID]) ? $doneStories[$programID]->doneStories : 0; 
             $program->leftStories  = isset($leftStories[$programID]) ? $leftStories[$programID]->leftStories : 0; 
             $program->leftBugs     = isset($leftBugs[$programID]) ? $leftBugs[$programID]->leftBugs : 0;
+            $program->allBugs      = isset($allBugs[$programID]) ? $allBugs[$programID]->allBugs : 0;
+            $program->doneBugs     = isset($doneBugs[$programID]) ? $doneBugs[$programID]->doneBugs : 0;
         }
 
         return $programs;
