@@ -343,15 +343,17 @@ class repoModel extends model
     /**
      * Get commits.
      * 
-     * @param  object $repo 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @param  string $type 
-     * @param  object $pager 
+     * @param  object $repo
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $type
+     * @param  object $pager
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return array
      */
-    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null)
+    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
@@ -395,6 +397,8 @@ class repoModel extends model
             ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
             ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
+            ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
             ->orderBy('time desc');
         if($entry == '/' or empty($entry))$comments->page($pager, 't1.id');
         $comments = $comments->fetchAll('revision');
