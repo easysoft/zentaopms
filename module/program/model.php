@@ -189,7 +189,8 @@ class programModel extends model
 
         foreach($programs as $programID => $program)
         {
-            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, 'id_desc', $pager, $programID);
+            $orderBy = $program->template == 'cmmi' ? 'id_asc' : 'id_desc';
+            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, $pager, $programID);
             $program->teamCount = isset($teams[$programID]) ? $teams[$programID]->count : 0;
             $program->estimate  = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
         }

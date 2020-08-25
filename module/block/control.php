@@ -1498,7 +1498,7 @@ class block extends control
     {
         $this->loadModel('project');
 
-        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $num = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
         $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
