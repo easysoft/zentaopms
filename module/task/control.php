@@ -53,6 +53,9 @@ class task extends control
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
 
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+
         $task = new stdClass();
         $task->module     = $moduleID;
         $task->assignedTo = '';
@@ -235,6 +238,9 @@ class task extends control
             echo js::alert($this->lang->task->createDenied);
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
+
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");

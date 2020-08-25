@@ -1196,7 +1196,7 @@ class block extends control
             $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
             $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
             $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
-            $start              = $longProgram ? date('Y-m-d', strtotime("$start + 1 month")) : date('Y-m-d', strtotime("$start + 7 days"));
+            $start              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
             $i ++;
         }
 
