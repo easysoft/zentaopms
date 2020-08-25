@@ -22,6 +22,7 @@ $config->action->objectNameFields['caselib']     = 'name';
 $config->action->objectNameFields['testreport']  = 'title';
 $config->action->objectNameFields['entry']       = 'name';
 $config->action->objectNameFields['webhook']     = 'name';
+$config->action->objectNameFields['risk']        = 'name';
 
 $config->action->commonImgSize = 870;
 
