@@ -56,7 +56,7 @@ $lang->program->weekly             = 'Program Weekly';
 $lang->program->pv                 = 'PV';
 $lang->program->ev                 = 'EV';
 $lang->program->sv                 = 'SV%';
-$lang->program->ac                 = 'AV';
+$lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->pm                 = 'PM';
 

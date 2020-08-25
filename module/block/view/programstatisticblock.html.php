@@ -172,7 +172,7 @@ $(function()
           </div>
         <?php else:?>
           <div class="col-6">
-            <div class='table-row text-left weekly-row'>
+            <div class='table-row text-left weekly-row with-padding'>
               <span class='weekly-title'><?php echo $lang->program->weekly;?></span>
               <span class='stage text-muted'><?php echo $program->current;?></span>
             </div>
