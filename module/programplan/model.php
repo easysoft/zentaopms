@@ -133,6 +133,7 @@ class programplanModel extends model
 
             $data = new stdclass();
             $data->id           = $plan->id;
+            $data->type         = 'plan';
             $data->text         = empty($plan->milestone) ? $plan->name : $isMilestone . $plan->name;
             $data->percent      = $plan->percent;
             $data->attribute    = zget($this->lang->stage->typeList, $plan->attribute);
@@ -141,7 +142,7 @@ class programplanModel extends model
             $data->deadline     = $end;
             $data->realStarted  = $plan->realStarted == '0000-00-00' ? '' : $plan->realStarted;
             $data->realFinished = $plan->realFinished  == '0000-00-00' ? '' : $plan->realFinished;
-            $data->duration     = helper::diffDate($plan->end, $plan->begin) + 1;; 
+            $data->duration     = helper::diffDate($plan->end, $plan->begin) + 1;;
             $data->parent       = $plan->parent;
             $data->open         = true;
 
@@ -192,6 +193,7 @@ class programplanModel extends model
 
             $data = new stdclass();
             $data->id           = $task->project . '-' . $task->id;
+            $data->type         = 'task';
             $data->text         = $taskSign . $priIcon . $task->name;
             $data->percent      = '';
             $data->attribute    = '';
@@ -287,7 +289,7 @@ class programplanModel extends model
 
         return $plan;
     }
-    
+
     public function getDuration($begin, $end)
     {
         $duration = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);

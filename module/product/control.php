@@ -622,9 +622,9 @@ class product extends control
 
     /**
      * Ajax set unfoldID.
-     * 
-     * @param  int    $productID 
-     * @param  string $action 
+     *
+     * @param  int    $productID
+     * @param  string $action
      * @access public
      * @return void
      */
@@ -833,5 +833,18 @@ class product extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
+    }
+
+    /**
+     * Set product id to session in ajax
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxSetState($productID)
+    {
+        $this->session->set('product', (int)$productID);
+        $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }
