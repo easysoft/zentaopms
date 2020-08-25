@@ -40,7 +40,7 @@ class weekly extends control
         $this->view->postponed = $this->weekly->getPostponed($program);
         $this->view->nextWeek  = $this->weekly->getTasksOfNextWeek($program, $date);
         $this->view->workload  = $this->weekly->getWorkloadByType($program, $date);
-        $this->weekly->save($program, $this->view, $date);
+        $this->weekly->save($program, $date);
 
         $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->program, $date);
         $this->display();

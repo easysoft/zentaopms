@@ -189,7 +189,8 @@ class programModel extends model
 
         foreach($programs as $programID => $program)
         {
-            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, 'id_desc', $pager, $programID);
+            $orderBy = $program->template == 'cmmi' ? 'id_asc' : 'id_desc';
+            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, $pager, $programID);
             $program->teamCount = isset($teams[$programID]) ? $teams[$programID]->count : 0;
             $program->estimate  = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
         }
@@ -490,23 +491,40 @@ class programModel extends model
      */
     public function getParentPairs()
     {
-        $stmt = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade, `order`')->query();
+        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchAll('id');
 
-        $pairs    = array();
-        $pairs[0] = '/';
-        while($program = $stmt->fetch())
+        $treeMenu = array();
+        foreach($modules as $module)
         {
-            if($program->grade == 1)
+            $moduleName    = '/';
+            $parentModules = explode(',', $module->path);
+            foreach($parentModules as $parentModuleID)
             {
-                $pairs[$program->id] = '/' . $program->name;
-                continue;
+                if(empty($parentModuleID)) continue;
+                if(empty($modules[$parentModuleID])) continue;
+                $moduleName .= $modules[$parentModuleID]->name . '/';
             }
+            $moduleName  = str_replace('|', '&#166;', rtrim($moduleName, '/'));
+            $moduleName .= "|$module->id\n";
 
-            $programName = '/' . $program->name;
-            $pairs[$program->id] = isset($pairs[$program->parent]) ? $pairs[$program->parent] . $programName : $programName;
+            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+            $treeMenu[$module->parent] .= $moduleName;
+
+            if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id])) $treeMenu[$module->parent] .= $treeMenu[$module->id];
         }
 
-        return $pairs;
+        ksort($treeMenu);
+        $topMenu = array_shift($treeMenu);
+        $topMenu = explode("\n", trim($topMenu));
+        $lastMenu[] = '/';
+        foreach($topMenu as $menu)
+        {
+            if(strpos($menu, '|') === false) continue;
+            list($label, $moduleID) = explode('|', $menu);
+            $lastMenu[$moduleID] = str_replace('&#166;', '|', $label);
+        }
+
+        return $lastMenu;
     }
 
     /**
@@ -533,7 +551,7 @@ class programModel extends model
         foreach($childNodes as $childNode)
         {
             $path  = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
-            $grade = $oldGrade - $childNode->grade + 1;
+            $grade = $childNode->grade - $oldGrade + 1;
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;

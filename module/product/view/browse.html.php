@@ -24,7 +24,7 @@ js::set('unfoldID',  $config->product->browse->unfoldID);
 js::set('unfoldAll', $lang->project->treeLevel['all']);
 js::set('foldAll',   $lang->project->treeLevel['root']);
 js::set('storyType', $storyType);
-$lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
+if($program->template == 'cmmi') $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">

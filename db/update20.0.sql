@@ -292,4 +292,4 @@ ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','URAndSR','1'),('system','custom','','URSRName','{\"urCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"srCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),('system','custom','','storyPoint','1');
 
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
-ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `account_module_order_type`;
+ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;

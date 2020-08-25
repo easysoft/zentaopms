@@ -1178,7 +1178,7 @@ class block extends control
 
         $begin = $program->begin;
         $today = helper::today();
-        $end   = date('Y-m-d', strtotime("$today + 7 days"));
+        $end   = date('Y-m-d', strtotime($today));
 
         $projects = $this->project->getProjectsByProgram($program);
         $projectIdList = array_keys($projects);
@@ -1188,14 +1188,15 @@ class block extends control
         $charts['AC'] = '[';
         $i = 1;
         $start = $begin;
+        $longProgram = helper::diffDate($today, $begin) / 7 > 10;
         while($start < $end)
         {   
-            $charts['labels'][] = $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-            $sunday             = $this->weekly->getThisSunday($start);
-            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $sunday) . ',';
-            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $sunday) . ',';
-            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $sunday) . ',';
-            $start              = date('Y-m-d', strtotime("$start + 7 days"));
+            $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
+            $start              = $longProgram ? date('Y-m-d', strtotime("$start + 1 month")) : date('Y-m-d', strtotime("$start + 7 days"));
             $i ++;
         }
 
@@ -1398,13 +1399,14 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
-        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task'] = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']  = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk'] = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
+        $count  = array();
 
         if(isset($hasViewPriv['todo']))
         {
@@ -1428,6 +1430,7 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
+            $count['todo'] = count($todos);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['task']))
@@ -1441,6 +1444,7 @@ class block extends control
             if(isset($params->taskNum)) $stmt->limit($params->taskNum);
             $tasks = $stmt->fetchAll();
 
+            $count['task'] = count($tasks);
             $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
@@ -1454,6 +1458,7 @@ class block extends control
             if(isset($params->bugNum)) $stmt->limit($params->bugNum);
             $bugs = $stmt->fetchAll();
 
+            $count['bug'] = count($bugs);
             $this->view->bugs = $bugs;
         }
         if(isset($hasViewPriv['risk']))
@@ -1467,11 +1472,13 @@ class block extends control
             if(isset($params->riskNum)) $stmt->limit($params->riskNum);
             $risks = $stmt->fetchAll();
 
+            $count['risk'] = count($risks);
             $this->view->risks = $risks;
         }
 
         $this->view->selfCall    = $this->selfCall;
         $this->view->hasViewPriv = $hasViewPriv;
+        $this->view->count       = $count;
         $this->view->longBlock   = $longBlock;
         $this->display();
     }
@@ -1491,7 +1498,7 @@ class block extends control
     {
         $this->loadModel('project');
 
-        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $num = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
         $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);

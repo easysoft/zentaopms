@@ -752,8 +752,11 @@ class story extends control
         $this->view->fromBug     = $fromBug;
         $this->view->cases       = $cases;
         $this->view->story       = $story;
+        $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $users;
+        $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->projects    = $this->loadModel('project')->getPairs('nocode');
+        $this->view->program     = $this->project->getByID($story->program);
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;
         $this->view->modulePath  = $modulePath;
@@ -1167,6 +1170,26 @@ class story extends control
     }
 
     /**
+     * Story track.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function track($productID)
+    {   
+        $products  = $this->loadModel('product')->getPairs($this->session->program);
+        $productID = $this->product->saveState($productID, $products);
+        $this->product->setMenu($products, $productID, 0, 0, '');
+        $tracks = $this->story->getTracks($productID);
+
+        $this->view->tracks     = $tracks;
+        $this->view->title      = $this->lang->story->track;
+        $this->view->posision[] = $this->lang->story->track;
+        $this->display();
+    }
+
+    /**
      * Tasks of a story.
      *
      * @param  int    $storyID
@@ -1260,21 +1283,36 @@ class story extends control
      * @access public
      * @return void
      */
-    public function linkStory($storyID, $type = 'linkStories', $browseType = '', $param = 0)
+    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0)
     {
         $this->commonAction($storyID);
+
+        if($type == 'remove')
+        {
+            $result = $this->story->unlinkStory($storyID, $linkedStoryID);
+            die(js::reload('parent'));
+        }
+
+        if($_POST)
+        {
+            $this->story->linkStories($storyID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::closeModal('parent.parent', 'this'));
+        }
 
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs();
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID  = 0;
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
         $this->loadModel('product')->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         /* Get stories to link. */
-        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID);
+        $storyType    = $story->type;
+        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $storyType);
 
         /* Assign. */
         $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
