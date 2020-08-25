@@ -2,7 +2,7 @@
 <div class='row cell' id='cards'>
   <?php foreach ($programs as $programID => $program):?>
   <div class='col' data-id='<?php echo $programID?>'>
-    <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id");?>'>
+    <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id", '', '', $program->id);?>'>
       <div class='panel-heading'>
         <strong class='program-name' title='<?php echo $program->name;?>'><?php echo $program->name;?></strong>
         <?php if($program->template === 'cmmi'): ?>

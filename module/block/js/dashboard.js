@@ -79,6 +79,7 @@ function refreshBlock($panel, afterRefresh)
         }
         $panel.find('.tablesorter').sortTable();
         initTableHeader($panel);
+        $(".sparkline").sparkline();
     }).fail(function()
     {
         $panel.addClass('panel-error');

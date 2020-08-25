@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
  * The control file of block of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
@@ -59,6 +59,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
+            if(strpos(",$closedBlock,", ",|contribute,") === false) $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -207,11 +208,11 @@ class block extends control
     public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getBlockList($module);
+        $blocks = $this->block->getBlockList($module, $type);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$inited and !defined('TUTORIAL'))
+        if((empty($blocks) and !$inited and !defined('TUTORIAL')) || (empty($blocks) and $module == 'program'))
         {
             if($this->block->initBlock($module, $type)) die(js::reload());
         }
@@ -246,13 +247,15 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
+
             $block->actionLink = '';
-            if($block->block == 'overview')
+            if(isset($this->config->block->showAction[$block->block]))
             {
-                if($module == 'qa' && common::hasPriv('testcase', 'create'))
+                $action = $this->config->block->showAction[$block->block];
+                if(common::hasPriv($action['module'], $action['method']))
                 {
-                    $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
+                    $this->app->loadLang($action['module']);
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->$action['module']->create, '', "class='btn btn-mini'");
                 }
             }
 
@@ -323,6 +326,19 @@ class block extends control
     }
 
     /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
+    public function contribute()
+    {
+        $this->view->data = $this->block->getContributeBlockData();
+        $this->display();
+    }
+
+
+    /**
      * Print block.
      *
      * @param  int    $id
@@ -373,6 +389,10 @@ class block extends control
         elseif($block->block == 'welcome')
         {
             $html = $this->fetch('block', 'welcome');
+        }
+        elseif($block->block == 'contribute')
+        {
+            $html = $this->fetch('block', 'contribute');
         }
 
         echo $html;
@@ -1062,6 +1082,7 @@ class block extends control
      */
     public function printCmmiReportBlock()
     {
+        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = date('Y-m-d', strtotime(helper::today()));
         $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
@@ -1462,17 +1483,6 @@ class block extends control
     }
 
     /**
-     * Print contribute block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printContributeBlock()
-    {
-        $this->view->data = $this->block->getContributeBlockData();
-    }
-
-    /**
      * Print recent program block.
      *
      * @access public
@@ -1485,7 +1495,12 @@ class block extends control
 
     public function printProgramteamBlock()
     {
-    
+        $this->loadModel('project');
+
+        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+
+        /* Get projects. */
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
     }
 
     /**
@@ -1565,15 +1580,20 @@ class block extends control
     }
 
     /**
-     * Print srcum progress block.
+     * Print srcum project list block.
      *
      * @access public
      * @return void
      */
-    public function printScrumprogressBlock()
+    public function printScrumlistBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
-    }
+        $this->app->loadClass('pager', $static = true);
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $pager = pager::init(0, $num, 1);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
+   }
 
     /**
      * Print srcum road map block.
@@ -1583,11 +1603,15 @@ class block extends control
      */
     public function printScrumroadmapBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
+        $products  = $this->loadModel('product')->getPairs();
+
     }
 
     /**
-     * Print srcum road map block.
+     * Print srcum test block.
      *
      * @access public
      * @return void
@@ -1604,7 +1628,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->eq($this->session->program)->fi()
+            ->andWhere('t1.program')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
@@ -1620,7 +1644,17 @@ class block extends control
      */
     public function printScrumproductBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $productID = array_keys($products);
+
+        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+
+        $this->view->products = $products;
+        $this->view->stories  = $stories;
+        $this->view->bugs     = $bugs;
+        $this->view->releases = $releases;
     }
 
     /**
@@ -1631,7 +1665,7 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->projectOverview = $this->dao->select('count(*) total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
             ->fetch();
     }
@@ -1644,13 +1678,27 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-		$projects = $this->loadModel('project')->getPairs();
-		$actions  = $this->dao->select('*')->from(TABLE_ACTION)
-			->where('project')->in(array_keys($projects))
-			->orderBy('id_desc')
-			->fetchAll();
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = $this->loadModel('product')->getPairs();
+        $productID = array();
+        foreach($products as $id => $name) $productID[] = ',' . $id . ',';
 
-     	$this->view->actions = $this->loadModel('action')->transformActions($actions);
+        if(empty($projects) && empty($products))
+        {
+            $actions = array();
+        }
+        else
+        {
+            $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in($productID)->fi()
+                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
+                ->beginIF(empty($projects) && $products)->where('product')->in($productID)->fi()
+                ->orderBy('id_desc')
+                ->limit(30)
+                ->fetchAll();
+        }
+
+        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-	 }
+    }
 }

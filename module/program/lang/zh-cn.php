@@ -112,3 +112,5 @@ $lang->program->cannotCreateChild  = '该项目已经有实际的内容，无法
 $lang->program->hasChildren        = '该项目有子项目存在，不能删除。';
 $lang->program->confirmDelete      = "您确定删除项目[%s]吗？";
 $lang->program->emptyPM            = '暂无';
+$lang->program->cannotChangeToCat  = "该项目已经有实际的内容，无法修改为父项目";
+$lang->program->cannotCancelCat    = "该项目下已经有子项目，无法取消父项目标记";

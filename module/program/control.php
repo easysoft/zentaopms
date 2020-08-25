@@ -175,11 +175,14 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
+        $parents = $this->program->getParentPairs();
+        unset($parents[$programID]);
+
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->title       = $this->lang->program->edit;
         $this->view->position[]  = $this->lang->program->edit;
         $this->view->program     = $program;
-        $this->view->parents     = $this->program->getParentPairs();
+        $this->view->parents     = $parents;
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->display();
     }
@@ -694,7 +697,7 @@ class program extends control
     public function ajaxGetDropMenu($programID, $module, $method, $extra)
     {    
         $this->loadModel('project');
-        $this->view->link      = $this->createLink('program', 'index', "programID=$programID");
+        $this->view->link      = $this->createLink('program', 'index', "programID=$programID", '', '', $programID);
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;

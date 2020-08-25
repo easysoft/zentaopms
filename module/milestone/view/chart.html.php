@@ -1,35 +1,47 @@
-<div class='cell table-row chart-row'>
-  <div class='chart-wrapper text-center'>
-    <h4><?php echo $lang->milestone->chart->title;?></h4>
-    <div class='chart-canvas'><canvas id='chart-line' width='500' height='140' data-responsive='true'></canvas></div>
+<div class='milestone-chart' id='milestoneChart'>
+  <div class='chart-canvas scrollbar-hover'>
+    <div class='chart-wrapper'>
+      <canvas width='400' height='120' data-responsive='true'></canvas>
+    </div>
   </div>
-  <div id="chartUnit"><?php echo "({$lang->project->workHour})";?></div>
-  <div id="chartLegend">
-    <div class="line-pv"><div class='barline bg-primary'></div>PV</div>
-    <div class="line-ev"><div class='barline'></div>EV</div>
-    <div class="line-ac"><div class='barline'></div>AC</div>
+  <div class='chart-unit'><?php echo "({$lang->project->workHour})";?></div>
+  <div class='chart-legend'>
+    <span class="barline line-pv">PV</span>
+    <span class="barline line-ev">EV</span>
+    <span class="barline line-ac">AC</span>
   </div>
 </div>
+<style>
+.milestone-chart {position: relative}
+.milestone-chart .chart-canvas {overflow: auto; max-width: 1002px}
+.milestone-chart .chart-wrapper {background: none; padding: 15px 0 0 0}
+.milestone-chart .chart-unit {position: absolute; left: 10px; top: 0;}
+.milestone-chart .chart-legend {position: absolute; right: 5px; top: 0;}
+.milestone-chart .barline {padding-left: 20px; position: relative; display: inline-block; line-height: 20px}
+.milestone-chart .barline + .barline {margin-left: 5px}
+.milestone-chart .barline:before {content: ' '; display: block; position: absolute; top: 8px; left: 0; width: 16px; height: 3px; background: #0c64eb}
+.milestone-chart .barline.line-ev:before {background: rgb(0, 218, 136)}
+.milestone-chart .barline.line-ac:before {background: rgb(255, 145, 0)}
+</style>
 <script>
-function initChar()
+function initMilestoneChart()
 {
-    var themePrimaryColor = $.getThemeColor('primary');
     var data =
     {
         labels: <?php echo json_encode($charts['labels'])?>,
         datasets: [
         {
-            label: "PV",
-            color: themePrimaryColor,
-            pointColor: themePrimaryColor,
-            pointStrokeColor: themePrimaryColor,
-            pointHighlightStroke: themePrimaryColor,
+            label: 'PV',
+            color: '#0c64eb',
+            pointColor: '#0c64eb',
+            pointStrokeColor: '#0c64eb',
+            pointHighlightStroke: '#0c64eb',
             fillColor: 'rgba(0,106,241, .07)',
             pointHighlightFill: '#fff',
             data: <?php echo $charts['PV']?>
         },
         {
-            label: "EV",
+            label: 'EV',
             color: 'rgb(0, 218, 136)',
             pointColor: 'rgb(0, 218, 136)',
             pointStrokeColor: 'rgb(0, 218, 136)',
@@ -39,7 +51,7 @@ function initChar()
             data: <?php echo $charts['EV']?>
         },
         {
-            label: "AC",
+            label: 'AC',
             color: 'rgb(255, 145, 0)',
             pointColor: 'rgb(255, 145, 0)',
             pointStrokeColor: 'rgb(255, 145, 0)',
@@ -50,22 +62,55 @@ function initChar()
         }]
     };
 
-    var chartLine= $("#chart-line").lineChart(data,
+    var betterWidth = data.labels.length * 15;
+    var renderChart = function()
     {
-        pointDotStrokeWidth: 2,
-        pointDotRadius: 3,
-        datasetStrokeWidth: 3,
-        datasetFill: true,
-        datasetStroke: true,
-        scaleShowBeyondLine: false,
-        responsive: true,
-        bezierCurve: false,
-        scaleFontColor: '#838A9D',
-        tooltipXPadding: 10,
-        tooltipYPadding: 10,
-        multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
-        multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
-    });
+        var $chart       = $('#milestoneChart');
+        var $wrapper     = $chart.find('.chart-wrapper');
+        var $canvas      = $chart.find('canvas');
+        var $chartCanvas = $chart.find('.chart-canvas');
+        if (betterWidth > 400)
+        {
+            var updateWrapperSize = function()
+            {
+                $wrapper.hide();
+                $chartCanvas.css('max-width', 'initial');
+                var maxWidth = $chartCanvas.width();
+                $chartCanvas.css('max-width', maxWidth);
+                $chart.toggleClass('has-scrollbar', maxWidth < betterWidth);
+                $wrapper.show();
+            };
+            updateWrapperSize();
+            $(window).on('resize', updateWrapperSize);
+
+            $wrapper.css('min-width', betterWidth);
+            $canvas.attr(
+            {
+                width:  betterWidth,
+                height: Math.min(200, Math.floor(betterWidth / 4))
+            });
+        }
+        $canvas.lineChart(data,
+        {
+            animation: betterWidth < 400,
+            pointDotStrokeWidth: 1,
+            pointDotRadius: 2,
+            datasetStrokeWidth: 2,
+            datasetFill: false,
+            datasetStroke: true,
+            scaleShowBeyondLine: true,
+            responsive: true,
+            bezierCurve: false,
+            scaleFontColor: '#838A9D',
+            tooltipXPadding: 10,
+            tooltipYPadding: 10,
+            multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
+            multiTooltipTemplate: '<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>',
+        });
+    }
+
+    if(betterWidth > 200) setTimeout(renderChart, 100);
+    else renderChart();
 }
-initChar();
+initMilestoneChart();
 </script>

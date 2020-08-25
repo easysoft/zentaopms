@@ -327,6 +327,11 @@ class programModel extends model
             ->get();
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
 
+        if(!empty($program->isCat) and $this->checkHasContent($programID))  dao::$errors['isCat'] = $this->lang->program->cannotChangeToCat;
+        if(empty($program->isCat)  and $this->checkHasChildren($programID)) dao::$errors['isCat'] = $this->lang->program->cannotCancelCat;
+        if(dao::isError()) return false;
+
+
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
@@ -397,6 +402,8 @@ class programModel extends model
     {
         $action = strtolower($action);
 
+        if(empty($program)) return true;
+
         if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'close')    return $program->status != 'closed';
@@ -438,6 +445,19 @@ class programModel extends model
     }
 
     /**
+     * Check has children project.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return bool
+     */
+    public function checkHasChildren($programID)
+    {
+        $count = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($programID)->fetch('count');
+        return $count > 0;
+    }
+
+    /**
      * Set program tree path.
      * 
      * @param  int    $programID 
@@ -470,23 +490,40 @@ class programModel extends model
      */
     public function getParentPairs()
     {
-        $stmt = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade, `order`')->query();
+        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)->where('isCat')->eq(1)->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchAll('id');
 
-        $pairs    = array();
-        $pairs[0] = '/';
-        while($program = $stmt->fetch())
+        $treeMenu = array();
+        foreach($modules as $module)
         {
-            if($program->grade == 1)
+            $moduleName    = '/';
+            $parentModules = explode(',', $module->path);
+            foreach($parentModules as $parentModuleID)
             {
-                $pairs[$program->id] = '/' . $program->name;
-                continue;
+                if(empty($parentModuleID)) continue;
+                if(empty($modules[$parentModuleID])) continue;
+                $moduleName .= $modules[$parentModuleID]->name . '/';
             }
+            $moduleName  = str_replace('|', '&#166;', rtrim($moduleName, '/'));
+            $moduleName .= "|$module->id\n";
 
-            $programName = '/' . $program->name;
-            $pairs[$program->id] = isset($pairs[$program->parent]) ? $pairs[$program->parent] . $programName : $programName;
+            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+            $treeMenu[$module->parent] .= $moduleName;
+
+            if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id])) $treeMenu[$module->parent] .= $treeMenu[$module->id];
         }
 
-        return $pairs;
+        ksort($treeMenu);
+        $topMenu = array_shift($treeMenu);
+        $topMenu = explode("\n", trim($topMenu));
+        $lastMenu[] = '/';
+        foreach($topMenu as $menu)
+        {
+            if(strpos($menu, '|') === false) continue;
+            list($label, $moduleID) = explode('|', $menu);
+            $lastMenu[$moduleID] = str_replace('&#166;', '|', $label);
+        }
+
+        return $lastMenu;
     }
 
     /**
@@ -513,7 +550,7 @@ class programModel extends model
         foreach($childNodes as $childNode)
         {
             $path  = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
-            $grade = $oldGrade - $childNode->grade + 1;
+            $grade = $childNode->grade - $oldGrade + 1;
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;

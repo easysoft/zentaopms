@@ -2213,6 +2213,7 @@ EOD;
         {
             $lang->product->menu     = $lang->cmmiproduct->menu;
             $lang->productplan->menu = $lang->cmmiproduct->menu;
+            $lang->story->menu       = $lang->cmmiproduct->menu;
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
     }

@@ -20,10 +20,18 @@
     </h2>
   </div>
   <div class='searchBox'>
-    <h4><?php echo $lang->design->commitDate . '：';?></h4>
-    <?php echo html::input('begin', $begin, "class='form-control form-date srearch-date'");?>
-    <span>~</span>
-  <?php echo html::input('end', $end, "class='form-control form-date srearch-date'");?>
+    <table class="table">
+      <tr>
+        <td class="w-100px"><h4><?php echo $lang->repo->maintain . ': ';?></h4></td>
+        <td><?php echo html::select('repo', $repos, $repoID, "class='form-control chosen'");?></td>
+        <td>
+          <h4><?php echo $lang->design->commitDate . '：';?></h4>
+          <?php echo html::input('begin', $begin, "class='form-control form-date srearch-date'");?>
+          <span>~</span>
+          <?php echo html::input('end', $end, "class='form-control form-date srearch-date'");?>
+        </td>
+      </tr>
+    </table>
   </div>
   <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('commit', "designID=$designID");?> method='post'>
     <table class='table'>
