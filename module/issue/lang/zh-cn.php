@@ -35,9 +35,16 @@ $lang->issue->search            = '搜索';
 $lang->issue->basicInfo         = '基本信息';
 $lang->issue->active            = '激活';
 $lang->issue->assign            = '指派';
+$lang->issue->assignTo          = '指派问题';
 $lang->issue->create            = '新建问题';
 $lang->issue->edit              = '编辑问题';
 $lang->issue->batchCreate       = '批量新建';
+$lang->issue->close             = '关闭问题';
+$lang->issue->cancel            = '取消问题';
+$lang->issue->activate          = '激活问题';
+$lang->issue->resolve           = '解决问题';
+$lang->issue->resolve           = '解决问题';
+$lang->issue->view              = '问题概况';
 
 $lang->issue->labelList['all']       = '全部';
 $lang->issue->labelList['open']      = '开放';

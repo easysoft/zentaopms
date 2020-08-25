@@ -17,10 +17,13 @@ $lang->moduleOrder[10]  = 'todo';
 
 $lang->moduleOrder[11]  = 'program';
 $lang->moduleOrder[12]  = 'design';
+$lang->moduleOrder[13]  = 'programplan';
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
+$lang->moduleOrder[31]  = 'issue';
+$lang->moduleOrder[32]  = 'risk';
 
 $lang->moduleOrder[35]  = 'project';
 $lang->moduleOrder[40]  = 'task';
@@ -36,14 +39,22 @@ $lang->moduleOrder[80]  = 'caselib';
 
 $lang->moduleOrder[85]  = 'doc';
 $lang->moduleOrder[90]  = 'report';
+$lang->moduleOrder[91]  = 'workestimation';
+$lang->moduleOrder[92]  = 'durationestimation';
+$lang->moduleOrder[93]  = 'budget';
 
 $lang->moduleOrder[95]  = 'company';
+$lang->moduleOrder[96]  = 'milestone';
+$lang->moduleOrder[97]  = 'stage';
+$lang->moduleOrder[98]  = 'weekly';
 $lang->moduleOrder[100] = 'dept';
 $lang->moduleOrder[105] = 'group';
 $lang->moduleOrder[110] = 'user';
 
 $lang->moduleOrder[115] = 'admin';
 $lang->moduleOrder[120] = 'extension';
+$lang->moduleOrder[121] = 'subject';
+$lang->moduleOrder[122] = 'holiday';
 $lang->moduleOrder[125] = 'custom';
 $lang->moduleOrder[140] = 'action';
 
@@ -88,6 +99,7 @@ $lang->resource->my->changePassword = 'changePassword';
 $lang->resource->my->manageContacts = 'manageContacts';
 $lang->resource->my->deleteContacts = 'deleteContacts';
 $lang->resource->my->score          = 'score';
+$lang->resource->my->unbind         = 'unbind';
 
 $lang->my->methodOrder[0]  = 'index';
 $lang->my->methodOrder[5]  = 'todo';
@@ -106,6 +118,7 @@ $lang->my->methodOrder[65] = 'changePassword';
 $lang->my->methodOrder[75] = 'manageContacts';
 $lang->my->methodOrder[80] = 'deleteContacts';
 $lang->my->methodOrder[85] = 'score';
+$lang->my->methodOrder[90] = 'unbind';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -180,6 +193,32 @@ $lang->program->methodOrder[60] = 'setPlanduration';
 $lang->program->methodOrder[65] = 'manageMembers';
 $lang->program->methodOrder[70] = 'export';
 
+/* Issue . */
+$lang->resource->issue = new stdclass();
+$lang->resource->issue->browse        = 'browse';
+$lang->resource->issue->create        = 'create';
+$lang->resource->issue->batchCreate   = 'batchCreate';
+$lang->resource->issue->delete        = 'delete';
+$lang->resource->issue->edit          = 'edit';
+$lang->resource->issue->assignTo      = 'assignTo';
+$lang->resource->issue->close         = 'close';
+$lang->resource->issue->cancel        = 'cancel';
+$lang->resource->issue->activate      = 'activate';
+$lang->resource->issue->resolve       = 'resolve';
+$lang->resource->issue->view          = 'view';
+
+$lang->issue->methodOrder[5]  = 'browse';
+$lang->issue->methodOrder[10] = 'create';
+$lang->issue->methodOrder[15] = 'batchCreate';
+$lang->issue->methodOrder[20] = 'delete';
+$lang->issue->methodOrder[25] = 'edit';
+$lang->issue->methodOrder[30] = 'assignTo';
+$lang->issue->methodOrder[35] = 'close';
+$lang->issue->methodOrder[40] = 'cancel';
+$lang->issue->methodOrder[45] = 'activate';
+$lang->issue->methodOrder[50] = 'resolve';
+$lang->issue->methodOrder[60] = 'view';
+
 /* Risk . */
 $lang->resource->risk = new stdclass();
 $lang->resource->risk->browse      = 'browse';
@@ -192,6 +231,8 @@ $lang->resource->risk->hangup      = 'hangup';
 $lang->resource->risk->batchCreate = 'batchCreate';
 $lang->resource->risk->cancel      = 'cancel';
 $lang->resource->risk->track       = 'track';
+$lang->resource->risk->view        = 'view';
+$lang->resource->risk->assignTo    = 'assignTo';
 
 $lang->risk->methodOrder[5]  = 'browse';
 $lang->risk->methodOrder[10] = 'create';
@@ -203,6 +244,8 @@ $lang->risk->methodOrder[35] = 'hangup';
 $lang->risk->methodOrder[40] = 'batchCreate';
 $lang->risk->methodOrder[45] = 'cancel';
 $lang->risk->methodOrder[50] = 'track';
+$lang->risk->methodOrder[55] = 'view';
+$lang->risk->methodOrder[60] = 'assignTo';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -460,21 +503,35 @@ $lang->project->methodOrder[225] = 'storySort';
 
 /* Design. */
 $lang->resource->design = new stdclass();
-$lang->resource->design->browse   = 'browse';
-$lang->resource->design->create   = 'create';
-$lang->resource->design->edit     = 'edit';
-$lang->resource->design->commit   = 'commit';
-$lang->resource->design->revision = 'revision';
-$lang->resource->design->delete   = 'delete';
-$lang->resource->design->view     = 'view';
+$lang->resource->design->browse      = 'browse';
+$lang->resource->design->create      = 'create';
+$lang->resource->design->batchCreate = 'batchCreate';
+$lang->resource->design->edit        = 'edit';
+$lang->resource->design->commit      = 'commit';
+$lang->resource->design->revision    = 'revision';
+$lang->resource->design->delete      = 'delete';
+$lang->resource->design->view        = 'view';
 
 $lang->design->methodOrder[5]     = 'browse';
 $lang->design->methodOrder[10]    = 'create';
+$lang->design->methodOrder[11]    = 'batchCreate';
 $lang->design->methodOrder[15]    = 'edit';
 $lang->design->methodOrder[20]    = 'commit';
 $lang->design->methodOrder[25]    = 'revision';
 $lang->design->methodOrder[30]    = 'delete';
 $lang->design->methodOrder[35]    = 'view';
+
+/* Program plan. */
+$lang->resource->programplan = new stdclass();
+$lang->resource->programplan->browse = 'browse';
+$lang->resource->programplan->create = 'create';
+$lang->resource->programplan->edit   = 'edit';
+$lang->resource->programplan->delete = 'delete';
+
+$lang->programplan->methodOrder[5]  = 'browse';
+$lang->programplan->methodOrder[10] = 'create';
+$lang->programplan->methodOrder[15] = 'edit';
+$lang->programplan->methodOrder[20] = 'delete';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -874,7 +931,7 @@ $lang->doc->methodOrder[65] = 'sort';
 $lang->doc->methodOrder[70] = 'collect';
 //$lang->doc->methodOrder[55] = 'diff';
 
-/* mail. */
+/* Mail. */
 $lang->resource->mail = new stdclass();
 $lang->resource->mail->index  = 'index';
 $lang->resource->mail->detect = 'detectAction';
@@ -902,7 +959,25 @@ $lang->mail->methodOrder[50] = 'resend';
 $lang->mail->methodOrder[55] = 'sendCloud';
 $lang->mail->methodOrder[60] = 'sendcloudUser';
 
-/* custom. */
+/* Subject. */
+$lang->resource->subject = new stdclass();
+$lang->resource->subject->browse = 'browse';
+
+$lang->subject->methodOrder[5]  = 'browse';
+
+/* Holiday. */
+$lang->resource->holiday = new stdclass();
+$lang->resource->holiday->browse = 'browse';
+$lang->resource->holiday->create = 'create';
+$lang->resource->holiday->edit   = 'edit';
+$lang->resource->holiday->delete = 'delete';
+
+$lang->holiday->methodOrder[5]  = 'browse';
+$lang->holiday->methodOrder[10] = 'create';
+$lang->holiday->methodOrder[15] = 'edit';
+$lang->holiday->methodOrder[20] = 'delete';
+
+/* Custom. */
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index     = 'index';
 $lang->resource->custom->set       = 'set';
@@ -911,6 +986,11 @@ $lang->resource->custom->flow      = 'flow';
 $lang->resource->custom->working   = 'working';
 $lang->resource->custom->setPublic = 'setPublic';
 $lang->resource->custom->timezone  = 'timezone';
+$lang->resource->custom->estimate  = 'estimate';
+$lang->resource->custom->plan      = 'plan';
+$lang->resource->custom->concept   = 'concept';
+$lang->resource->custom->setcmmi   = 'setcmmi';
+$lang->resource->custom->setscrum  = 'setscrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -919,6 +999,11 @@ $lang->custom->methodOrder[20] = 'flow';
 $lang->custom->methodOrder[25] = 'working';
 $lang->custom->methodOrder[30] = 'setPublic';
 $lang->custom->methodOrder[35] = 'timezone';
+$lang->custom->methodOrder[40] = 'estimate';
+$lang->custom->methodOrder[45] = 'plan';
+$lang->custom->methodOrder[50] = 'concept';
+$lang->custom->methodOrder[55] = 'setcmmi';
+$lang->custom->methodOrder[60] = 'setscrum';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -945,6 +1030,36 @@ $lang->git->methodOrder[5]  = 'diff';
 $lang->git->methodOrder[10] = 'cat';
 $lang->git->methodOrder[15] = 'apiSync';
 
+/* Milestone. */
+$lang->resource->milestone = new stdclass();
+$lang->resource->milestone->index            = 'index';
+$lang->resource->milestone->saveOtherProblem = 'saveOtherProblem';
+
+$lang->milestone->methodOrder[0] = 'index';
+$lang->milestone->methodOrder[5] = 'saveOtherProblem';
+
+/* Weekly. */
+$lang->resource->weekly = new stdclass();
+$lang->resource->weekly->index = 'index';
+
+$lang->weekly->methodOrder[0]  = 'index';
+
+/* Stage. */
+$lang->resource->stage = new stdclass();
+$lang->resource->stage->browse      = 'browse';
+$lang->resource->stage->create      = 'create';
+$lang->resource->stage->batchCreate = 'batchCreate';
+$lang->resource->stage->edit        = 'edit';
+$lang->resource->stage->setType     = 'setType';
+$lang->resource->stage->delete      = 'delete';
+
+$lang->stage->methodOrder[5]  = 'browse';
+$lang->stage->methodOrder[10] = 'create';
+$lang->stage->methodOrder[15] = 'batchCreate';
+$lang->stage->methodOrder[20] = 'edit';
+$lang->stage->methodOrder[25] = 'setType';
+$lang->stage->methodOrder[30] = 'delete';
+
 /* Company. */
 $lang->resource->company = new stdclass();
 $lang->resource->company->index  = 'index';
@@ -957,6 +1072,38 @@ $lang->company->methodOrder[0]  = 'index';
 $lang->company->methodOrder[5]  = 'browse';
 $lang->company->methodOrder[15] = 'edit';
 $lang->company->methodOrder[25] = 'dynamic';
+
+/* Work estimation. */
+$lang->resource->workestimation = new stdclass();
+$lang->resource->workestimation->index  = 'index';
+
+$lang->workestimation->methodOrder[0] = 'index';
+
+/* Duration estimation. */
+$lang->resource->durationestimation = new stdclass();
+$lang->resource->durationestimation->index  = 'index';
+$lang->resource->durationestimation->create = 'create';
+
+$lang->durationestimation->methodOrder[0] = 'index';
+$lang->durationestimation->methodOrder[5] = 'create';
+
+/* Budget. */
+$lang->resource->budget = new stdclass();
+$lang->resource->budget->browse       = 'browse';
+$lang->resource->budget->summary      = 'summary';
+$lang->resource->budget->create       = 'create';
+$lang->resource->budget->batchCreate  = 'batchCreate';
+$lang->resource->budget->edit         = 'edit';
+$lang->resource->budget->view         = 'view';
+$lang->resource->budget->delete       = 'delete';
+
+$lang->budget->methodOrder[5]  = 'browse';
+$lang->budget->methodOrder[10] = 'summary';
+$lang->budget->methodOrder[15] = 'create';
+$lang->budget->methodOrder[20] = 'batchCreate';
+$lang->budget->methodOrder[25] = 'edit';
+$lang->budget->methodOrder[30] = 'view';
+$lang->budget->methodOrder[35] = 'delete';
 
 /* Department. */
 $lang->resource->dept = new stdclass();
