@@ -24,7 +24,7 @@ $maxConsumed  = 0;
           <?php foreach($programs as $program):?>
           <div class='chart-col-item'>
             <div class='progress'>
-              <div class='progress-bar' style='width: <?php echo $maxConsumed ? (100 * $program->teamCount / $maxTeamCount) : 0; ?>%'>
+              <div class='progress-bar' style='width: <?php echo $maxTeamCount ? (100 * $program->teamCount / $maxTeamCount) : 0; ?>%'>
                 <div class='progress-text'><?php echo $program->teamCount;?></div>
               </div>
             </div>
