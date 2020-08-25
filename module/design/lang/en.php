@@ -26,6 +26,7 @@ $lang->design->desc          = 'Description';
 $lang->design->product       = 'Linked Product';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->commitDate    = 'Committed Date';
+$lang->design->commitBy      = 'Commit By';
 $lang->design->affectedStory = "{$lang->storyCommon}";
 $lang->design->affectedTasks = 'Task';
 $lang->design->submit        = 'Submit Review';
