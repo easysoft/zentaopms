@@ -1,7 +1,8 @@
-$('#begin, #end').change(function()
+$('#begin, #end, #repo').change(function()
 {
     var begin   = $('#begin').val();
     var end     = $('#end').val();
+    var repo    = $('#repo').val();
 
     if(begin.indexOf('-') != -1) 
     {   
@@ -16,5 +17,5 @@ $('#begin, #end').change(function()
         for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
-    location.href = createLink('design', 'commit', "designID=" + designID + '&begin=' + begin + '&end=' + end);
+    location.href = createLink('design', 'commit', "designID=" + designID + '&repoID=' + repo + '&begin=' + begin + '&end=' + end);
 })

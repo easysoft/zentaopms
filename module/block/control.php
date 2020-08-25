@@ -59,6 +59,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
+            if(strpos(",$closedBlock,", ",|contribute,") === false) $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -207,11 +208,11 @@ class block extends control
     public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getBlockList($module);
+        $blocks = $this->block->getBlockList($module, $type);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$inited and !defined('TUTORIAL'))
+        if((empty($blocks) and !$inited and !defined('TUTORIAL')) || (empty($blocks) and $module == 'program'))
         {
             if($this->block->initBlock($module, $type)) die(js::reload());
         }
@@ -246,13 +247,15 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
+
             $block->actionLink = '';
-            if($block->block == 'overview')
+            if(isset($this->config->block->showAction[$block->block]))
             {
-                if($module == 'qa' && common::hasPriv('testcase', 'create'))
+                $action = $this->config->block->showAction[$block->block];
+                if(common::hasPriv($action['module'], $action['method']))
                 {
-                    $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
+                    $this->app->loadLang($action['module']);
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->$action['module']->create, '', "class='btn btn-mini'");
                 }
             }
 
@@ -323,6 +326,19 @@ class block extends control
     }
 
     /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
+    public function contribute()
+    {
+        $this->view->data = $this->block->getContributeBlockData();
+        $this->display();
+    }
+
+
+    /**
      * Print block.
      *
      * @param  int    $id
@@ -373,6 +389,10 @@ class block extends control
         elseif($block->block == 'welcome')
         {
             $html = $this->fetch('block', 'welcome');
+        }
+        elseif($block->block == 'contribute')
+        {
+            $html = $this->fetch('block', 'contribute');
         }
 
         echo $html;
@@ -1062,6 +1082,7 @@ class block extends control
      */
     public function printCmmiReportBlock()
     {
+        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = date('Y-m-d', strtotime(helper::today()));
         $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
@@ -1456,17 +1477,6 @@ class block extends control
     }
 
     /**
-     * Print contribute block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printContributeBlock()
-    {
-        $this->view->data = $this->block->getContributeBlockData();
-    }
-
-    /**
      * Print recent program block.
      *
      * @access public
@@ -1479,7 +1489,12 @@ class block extends control
 
     public function printProgramteamBlock()
     {
-    
+        $this->loadModel('project');
+
+        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+
+        /* Get projects. */
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
     }
 
     /**
@@ -1559,19 +1574,19 @@ class block extends control
     }
 
     /**
-     * Print srcum progress block.
+     * Print srcum project list block.
      *
      * @access public
      * @return void
      */
-    public function printScrumprogressBlock()
+    public function printScrumlistBlock()
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
    }
 
     /**

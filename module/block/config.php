@@ -15,15 +15,25 @@ $config->block->editor  = new stdclass();
 $config->block->editor->set = array('id' => 'html', 'tools' => 'simple');
 
 $config->block->longBlock = array();
-$config->block->longBlock['']['flowchart']        = 'flowchart';
-$config->block->longBlock['']['welcome']          = 'welcome';
-$config->block->longBlock['product']['statistic'] = 'statistic';
-$config->block->longBlock['project']['statistic'] = 'statistic';
-$config->block->longBlock['qa']['statistic']      = 'statistic';
+$config->block->longBlock['']['flowchart']         = 'flowchart';
+$config->block->longBlock['']['welcome']           = 'welcome';
+$config->block->longBlock['product']['statistic']  = 'statistic';
+$config->block->longBlock['project']['statistic']  = 'statistic';
+$config->block->longBlock['qa']['statistic']       = 'statistic';
+$config->block->longBlock['program']['cmmireport'] = 'cmmireport';
+$config->block->longBlock['program']['cmmiissue']  = 'cmmiissue';
+$config->block->longBlock['program']['cmmirisk']   = 'cmmirisk';
 
 $config->block->shortBlock = array();
-$config->block->shortBlock['product']['overview'] = 'overview';
-$config->block->shortBlock['project']['overview'] = 'overview';
+$config->block->shortBlock['product']['overview']     = 'overview';
+$config->block->shortBlock['project']['overview']     = 'overview';
+$config->block->shortBlock['program']['cmmiestimate'] = 'cmmiestimate';
+$config->block->shortBlock['program']['cmmiprogress'] = 'cmmiprogress';
+$config->block->shortBlock['']['contribute'] = 'contribute';
+
+$config->block->showAction['overview']     = array('block' => 'qa', 'module' => 'testcase', 'method' => 'create', 'vars' => '');
+$config->block->showAction['scrumlist']    = array('block' => 'program', 'module' => 'project', 'method' => 'create', 'vars' => '');
+$config->block->showAction['scrumproduct'] = array('block' => 'program', 'module' => 'product', 'method' => 'create', 'vars' => '');
 
 $config->statistic = new stdclass();
 $config->statistic->storyStages = array('wait', 'planned', 'developing', 'testing', 'released');

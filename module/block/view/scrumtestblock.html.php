@@ -35,14 +35,14 @@
       $viewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
       ?>
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='text-left' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
         <?php if($longBlock):?>
-        <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
         <?php endif;?>
         <?php if($longBlock):?>
-        <td class='text-left' title='<?php echo $testtask->projectName?>'><?php echo $testtask->projectName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->projectName?>'><?php echo $testtask->projectName?></td>
         <?php endif;?>
-        <td class='text-left' title='<?php echo $testtask->buildName?>'><?php echo $testtask->buildName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->buildName?>'><?php echo $testtask->buildName?></td>
         <td><?php echo zget($lang->testtask->statusList, $testtask->status)?></td>
       </tr>
       <?php endforeach;?>

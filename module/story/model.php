@@ -993,29 +993,62 @@ class storyModel extends model
     {
         $now      = helper::now();
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if($oldStory->type == 'requirement')
+        {   
+            foreach($stories as $id) 
+            {   
+                $data = new stdclass();
+                $data->product  = $oldStory->product;
+                $data->AType    = 'requirement';
+                $data->relation = 'subdivideinto';
+                $data->BType    = 'story';
+                $data->AID      = $storyID;
+                $data->BID      = $id;
+                $data->AVersion = $oldStory->version;
+                $data->BVersion = 1;
+                $data->extra    = 1;
 
-        /* Set parent to child story. */
-        $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($stories)->exec();
-        $this->computeEstimate($storyID);
+                $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
 
-        /* Set childStories. */
-        $childStories = join(',', $stories);
+                $data->AType    = 'story';
+                $data->relation = 'subdividedfrom';
+                $data->BType    = 'requirement';
+                $data->AID      = $id;
+                $data->BID      = $storyID;
+                $data->AVersion = 1;
+                $data->BVersion = $oldStory->version;
 
-        $newStory = new stdClass();
-        $newStory->parent         = '-1';
-        $newStory->plan           = 0;
-        $newStory->lastEditedBy   = $this->app->user->account;
-        $newStory->lastEditedDate = $now;
-        $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
+                $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+            }   
 
-        /* Subdivide story. */
-        $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
-
-        $changes = common::createChanges($oldStory, $newStory);
-        if($changes)
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), 'parent.parent'));
+        }
+        else
         {
-            $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
-            $this->action->logHistory($actionID, $changes);
+            /* Set parent to child story. */
+            $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($stories)->exec();
+            $this->computeEstimate($storyID);
+
+            /* Set childStories. */
+            $childStories = join(',', $stories);
+
+            $newStory = new stdClass();
+            $newStory->parent         = '-1';
+            $newStory->plan           = 0;
+            $newStory->lastEditedBy   = $this->app->user->account;
+            $newStory->lastEditedDate = $now;
+            $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
+
+            /* Subdivide story. */
+            $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
+
+            $changes = common::createChanges($oldStory, $newStory);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
     }
 

@@ -17,6 +17,7 @@
     <?php
     foreach($lang->design->featureBar as $key => $label)
     {
+        if(empty($key)) continue;
         $active = $key == $type ? 'btn-active-text' : '';
         $recTotalLabel = $key == $type ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
         echo html::a(inlink('browse', "productID={$productID}&type=$key"),  "<span class='text'>$label</span>"  . $recTotalLabel, '', "class='btn btn-link $active'");
