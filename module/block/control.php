@@ -815,6 +815,7 @@ class block extends control
                 $begin   = $program->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
                 $current = zget($weeks, $date, '');
+                $current = substr($current, 0, -11) . substr($current, -6);
 
                 $program->pv = $this->weekly->getPV($programID, $today);
                 $program->ev = $this->weekly->getEV($programID, $today);
