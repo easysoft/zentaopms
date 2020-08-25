@@ -84,7 +84,7 @@
       // Update gantt plans and bars
       $.each(plans, function(index, plan)
       {
-          plan.progress = plan.progress / plan.tasks.length;
+          plan.progress = !plan.tasks.length ? 0 : plan.progress / plan.tasks.length;
           var $plan = $('<div class="gantt-plan"></div>');
           $plan.append('<div class="strong">' + plan.text + '</div>');
           $plan.append('<div class="text-muted small"><?php echo $lang->programplan->planPercent?> ' + plan.percent + '%</div>');
