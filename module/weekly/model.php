@@ -60,19 +60,18 @@ class weeklyModel extends model
             ->fetch();
     }
 
-    public function save($program, $data, $date)
+    public function save($program, $date)
     {
         $report = new stdclass;
-        $report->pv        = zget($data, 'pv',        '');
-        $report->ev        = zget($data, 'ev',        '');
-        $report->ac        = zget($data, 'ac',        '');
-        $report->sv        = zget($data, 'sv',        '');
-        $report->cv        = zget($data, 'cv',        '');
+        $report->pv        = $this->getPV($program, $date);
+        $report->ev        = $this->getEV($program, $date);
+        $report->ac        = $this->getAC($program, $date);
+        $report->sv        = $this->getSV($report->ev, $report->pv);
+        $report->cv        = $this->getCV($report->ev, $report->ac);
         $report->program   = $program;
         $report->weekStart = $this->getThisMonday($date);
-        $report->staff     = zget($data, 'staff',     '');
-        $report->progress  = zget($data, 'progress',  '');
-        $report->workload  = json_encode(zget($data, 'workload',  ''));
+        $report->staff     = $this->getStaff($program);
+        $report->workload  = json_encode($this->getWorkloadByType($program, $date));
         $this->dao->replace(TABLE_WEEKLYREPORT)->data($report)->exec();
     }
 
