@@ -58,7 +58,7 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
--- DROP TABLE IF EXISTS `zt_flow_design`;
+-- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `program` varchar(255) NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_task` 
-ADD `design` mediumint(8) unsigned NOT NULL AFTER `story`,
+ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`,
 ADD `version` smallint(6) NOT NULL AFTER `desc`,
 ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`,
 ADD `planDuration` int(11) NOT NULL AFTER `closedDate`,
@@ -289,7 +289,7 @@ CREATE TABLE `zt_weeklyreport`(
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','URAndSR','1'),('system','custom','','URSRName','{\"urCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"srCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),('system','custom','','storyPoint','1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','storyPoint','1');
 
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
 ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;
