@@ -255,7 +255,7 @@ class block extends control
                 if(common::hasPriv($action['module'], $action['method']))
                 {
                     $this->app->loadLang($action['module']);
-                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->$action['module']->create, '', "class='btn btn-mini'");
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->{$action['module']}->create, '', "class='btn btn-mini'");
                 }
             }
 
@@ -1585,7 +1585,11 @@ class block extends control
      */
     public function printScrumoverallBlock()
     {
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $programID    = $this->session->program;
+        $totalData    = $this->loadModel('program')->getUserPrograms('all','id_desc',15,$programID);
+
+        $this->view->totalData = $totalData;
+        $this->view->programID = $programID;
     }
 
     /**
@@ -1617,7 +1621,10 @@ class block extends control
         $products  = $this->loadModel('product')->getPairs();
 
 ksort($products);
-        $this->view->roadmaps = $this->product->getRoadmap(key($products), 0, 6);
+$productID = key($products);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->productID = $productID;
+        $this->view->products = $products;
     }
 
     /**
@@ -1688,7 +1695,6 @@ ksort($products);
      */
     public function printScrumdynamicBlock()
     {
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);

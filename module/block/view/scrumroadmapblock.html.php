@@ -13,8 +13,16 @@
 <style>
 .release-line>li:nth-child(even)>a{height:92px;}
 .release-line>li:nth-child(odd){padding-top: 87px;}
+#dashboard .panel-move-handler{right:78px}
+#productList{width:28%; position: absolute; top: 6px; left: 96px;}
+#createPlan{position: absolute; top: 3px; right:0px;}
+#createPlan a{padding: 0 5px;line-height: 24px;margin: 3px;color: #3C4353;}
 </style>
-<div class="panel-body">
+<div class="panel-move-handler">
+<div id="productList"><?php echo html::select('productID', $products, '', 'class="form-control chosen"');?></div>
+<div id="createPlan"><?php echo html::a($this->createLink('productplan', 'create', 'productID=' . $productID), '<i class="icon icon-sm icon-plus"></i>'. $lang->productplan->create, '', 'class="btn btn-mini" id="createPlan"');?></div>
+</div>
+<div class="panel-body conatiner-fluid">
   <div class="release-path">
     <ul class="release-line">
       <?php foreach($roadmaps as $year => $mapBranches):?>

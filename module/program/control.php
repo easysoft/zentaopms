@@ -175,7 +175,7 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
-        $parents = $this->program->getParentPairs();
+        $parents = $this->program->getParentPairs($program->template);
         unset($parents[$programID]);
 
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
