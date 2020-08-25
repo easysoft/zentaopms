@@ -255,7 +255,7 @@ class block extends control
                 if(common::hasPriv($action['module'], $action['method']))
                 {
                     $this->app->loadLang($action['module']);
-                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->$action['module']->create, '', "class='btn btn-mini'");
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->{$action['module']}->create, '', "class='btn btn-mini'");
                 }
             }
 
