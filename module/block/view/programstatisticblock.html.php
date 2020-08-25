@@ -63,7 +63,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
 
-.block-statistic .progress-group{margin-top: 20px; height: 65px;}
+.block-statistic .progress-group{margin-top: 20px; margin-bottom: 10px; height: 65px;}
 .block-statistic .weekly-title{font-weight: bold; font-size:14px; color: #3C4253;}
 .block-statistic .weekly-small{font-size:12px; color: #838A9D;}
 .block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
