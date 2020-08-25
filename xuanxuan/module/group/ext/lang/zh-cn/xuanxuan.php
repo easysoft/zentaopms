@@ -6,6 +6,7 @@ if(!isset($lang->resource->setting)) $lang->resource->setting = new stdclass();
 $lang->resource->setting->xuanxuan    = 'xuanxuan';
 $lang->resource->setting->downloadxxd = 'downloadXXD';
 
+$lang->setting = new stdclass();
 $lang->setting->methodOrder[26] = 'xuanxuan';
 $lang->setting->methodOrder[31] = 'downloadxxd';
 

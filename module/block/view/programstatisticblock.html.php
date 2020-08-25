@@ -68,7 +68,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .weekly-small{font-size:12px; color: #838A9D;}
 .block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
 .block-statistic .weekly-name{font-size:14px; color: #838A9D;}
-.block-statistic .weekly-value{font-size:18px; color: #3C4253;}
+.block-statistic .weekly-value{font-size:14px;}
 .block-statistic .col-6 .stage{margin-left: 10px}
 </style>
 <script>
@@ -185,7 +185,7 @@ $(function()
                 <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $program->progress;?>%"></div>
               </div>
             </div>
-            <div class="table-row text-center small text-muted with-padding col-10 center-block">
+            <div class="table-row text-center small with-padding col-10 center-block">
               <div class="col-4 text-bottom">
                 <div class='weekly-name'><?php echo $lang->program->pv;?></div>
                 <div class='weekly-value'><?php echo $program->pv;?></div>
@@ -208,7 +208,7 @@ $(function()
               <div class='col-8'></div>
             </div>
             <div class='progress-group'>
-              <div class="table-row text-center small text-muted with-padding">
+              <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
                   <div class='weekly-name'><?php echo $lang->program->pm;?></div>
                   <div class='weekly-value'><?php echo $program->PM ? zget($users, $program->PM) : $lang->program->emptyPM;?></div>
@@ -223,7 +223,7 @@ $(function()
                 </div>
               </div>
             </div>
-            <div class="table-row text-center small text-muted with-padding">
+            <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
                   <div class='weekly-name'><?php echo $lang->program->ac;?></div>
                   <div class='weekly-value'><?php echo $program->ac;?></div>
