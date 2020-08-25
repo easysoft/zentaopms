@@ -11,7 +11,7 @@ class program extends control
 
     /**
      * Program index view.
-     * 
+     *
      * @param  int    $programID
      * @access public
      * @return void
@@ -31,7 +31,7 @@ class program extends control
 
     /**
      * Program list.
-     * 
+     *
      * @param  varchar $status
      * @param  varchar $orderBy
      * @param  int     $recTotal
@@ -53,7 +53,7 @@ class program extends control
 
         if($programType === 'bygrid')
         {
-            $programs = $this->program->getProgramStats('all', 20, $orderBy, $pager);
+            $programs = $this->program->getProgramStats($status, 20, $orderBy, $pager);
         }
         else
         {
@@ -73,7 +73,7 @@ class program extends control
 
     /**
      * Program create guide.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -84,10 +84,10 @@ class program extends control
 
     /**
      * Create a program.
-     * 
-     * @param  string $template 
-     * @param  int    $programID 
-     * @param  int    $copyProgramID 
+     *
+     * @param  string $template
+     * @param  int    $programID
+     * @param  int    $copyProgramID
      * @access public
      * @return void
      */
@@ -152,7 +152,7 @@ class program extends control
 
     /**
      * Edit a program.
-     * 
+     *
      * @param  int $programID
      * @access public
      * @return void
@@ -189,8 +189,8 @@ class program extends control
 
     /**
      * Browse groups.
-     * 
-     * @param  int    $companyID 
+     *
+     * @param  int    $companyID
      * @access public
      * @return void
      */
@@ -215,7 +215,7 @@ class program extends control
 
     /**
      * Create a group.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -236,8 +236,8 @@ class program extends control
 
     /**
      * Edit a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -260,8 +260,8 @@ class program extends control
 
     /**
      * Copy a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -283,9 +283,9 @@ class program extends control
     }
 
     /**
-     * manageView 
-     * 
-     * @param  int    $groupID 
+     * manageView
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -305,7 +305,7 @@ class program extends control
         $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;
         $this->view->position[] = $this->lang->group->manageView;
-        
+
         $this->view->group      = $group;
         $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->program)->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('program')->eq($group->program)->orderBy('order_desc')->fetchPairs('id', 'name');
@@ -322,7 +322,7 @@ class program extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        if($type == 'byGroup') 
+        if($type == 'byGroup')
         {
             $groupID = $param;
             $group   = $this->group->getById($groupID);
@@ -366,7 +366,7 @@ class program extends control
             $this->view->version    = $version;
             $program = $this->project->getByID($group->program);
             /* Unset not program privs. */
-            foreach($this->lang->resource as $method => $label) 
+            foreach($this->lang->resource as $method => $label)
             {
                 if(!in_array($method, $this->config->programPriv->{$program->template})) unset($this->lang->resource->$method);
             }
@@ -377,8 +377,8 @@ class program extends control
 
     /**
      * Manage members of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @param  int    $deptID
      * @access public
      * @return void
@@ -412,7 +412,7 @@ class program extends control
 
     /**
      * Manage program members.
-     * 
+     *
      * @param  int    $projectID
      * @param  int    $dept
      * @access public
@@ -422,12 +422,12 @@ class program extends control
     {
         $this->session->set('program', $projectID);
         if(!empty($_POST))
-        {    
+        {
             $this->project->manageMembers($projectID);
             die(js::locate($this->createLink('program', 'browse'), 'parent'));
-        }    
+        }
 
-        /* Load model. */        
+        /* Load model. */
         $this->loadModel('user');
         $this->loadModel('dept');
 
@@ -489,7 +489,7 @@ class program extends control
 
     /**
      * Delete a program.
-     * 
+     *
      * @param  int     $projectID
      * @param  varchar $confirm
      * @access public
@@ -511,7 +511,7 @@ class program extends control
 
     /**
      * Suspend a program.
-     * 
+     *
      * @param  int     $projectID
      * @access public
      * @return void
@@ -545,7 +545,7 @@ class program extends control
 
     /**
      * Activate a program.
-     * 
+     *
      * @param  int     $projectID
      * @access public
      * @return void
@@ -586,7 +586,7 @@ class program extends control
 
     /**
      * Close a program.
-     * 
+     *
      * @param  int     $projectID
      * @access public
      * @return void
@@ -671,7 +671,7 @@ class program extends control
 
     /**
      * Process program errors.
-     * 
+     *
      * @param  array $errors
      * @access public
      * @return void
@@ -688,14 +688,14 @@ class program extends control
 
     /**
      * Ajax get program drop menu.
-     * 
+     *
      * @param  int     $programID
      * @param  varchar $module
      * @access public
      * @return void
      */
     public function ajaxGetDropMenu($programID, $module, $method, $extra)
-    {    
+    {
         $this->loadModel('project');
         $this->view->link      = $this->createLink('program', 'index', "programID=$programID", '', '', $programID);
         $this->view->programID = $programID;
@@ -704,7 +704,7 @@ class program extends control
         $this->view->extra     = $extra;
 
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->programs))->orderBy('order desc')->fetchAll();
-        $programPairs = array();    
+        $programPairs = array();
         foreach($programs as $program) $programPairs[$program->id] = $program->name;
         $this->view->programs = $programs;
         $this->display();
@@ -712,25 +712,25 @@ class program extends control
 
     /**
      * Ajax get program enter link.
-     * 
+     *
      * @param  int    $programID
      * @access public
      * @return void
      */
     public function ajaxGetEnterLink($programID = 0)
-    {   
-        $program         = $this->project->getByID($programID); 
+    {
+        $program         = $this->project->getByID($programID);
         $programProjects = $this->project->getPairs();
         $programProject  = key($programProjects);
 
         if($program->template == 'cmmi')
-        {   
+        {
             $link = $this->createLink('programplan', 'browse', 'programID=' . $programID);
-        }   
+        }
         if($program->template == 'scrum')
-        {   
-            $link = $programProject ? $this->createLink('project', 'task', 'projectID=' . $programProject) : $this->createLink('project', 'create', '', '', '', $programID); 
-        }   
+        {
+            $link = $programProject ? $this->createLink('project', 'task', 'projectID=' . $programProject) : $this->createLink('project', 'create', '', '', '', $programID);
+        }
 
         die($link);
     }
