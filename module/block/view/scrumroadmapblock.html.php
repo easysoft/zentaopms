@@ -10,44 +10,37 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+.release-line>li:nth-child(even)>a{height:92px;}
+.release-line>li:nth-child(odd){padding-top: 87px;}
+</style>
 <div class="panel-body">
   <div class="release-path">
     <ul class="release-line">
-      <li>
-        <a href="/index.php?m=release&amp;f=view&amp;releaseID=2&amp;pgm=7">
-          <span class="title" title="发布二">渠成一期V1.1.2</span>
-          <span class="date">2020/08/01-09/01</span>
-          <span class="date">总消耗 120h</span>
-        </a>
-      </li>
-      <li>
-        <a href="/index.php?m=release&amp;f=view&amp;releaseID=2&amp;pgm=7">
-          <span class="title" title="发布二">渠成一期V1.1.2</span>
-          <span class="date">2020/08/01-09/01</span>
-          <span class="date">总消耗 120h</span>
-        </a>
-      </li>
-      <li>
-        <a href="/index.php?m=release&amp;f=view&amp;releaseID=2&amp;pgm=7">
-          <span class="title" title="发布二">渠成一期V1.1.2</span>
-          <span class="date">2020/08/01-09/01</span>
-          <span class="date">总消耗 120h</span>
-        </a>
-      </li>
-      <li>
-        <a href="/index.php?m=release&amp;f=view&amp;releaseID=2&amp;pgm=7">
-          <span class="title" title="发布二">渠成一期V1.1.2</span>
-          <span class="date">2020/08/01-09/01</span>
-          <span class="date">总消耗 120h</span>
-        </a>
-      </li>
-      <li>
-        <a href="/index.php?m=release&amp;f=view&amp;releaseID=2&amp;pgm=7">
-          <span class="title" title="发布二">渠成一期V1.1.2</span>
-          <span class="date">2020/08/01-09/01</span>
-          <span class="date">总消耗 120h</span>
-        </a>
-      </li>
+      <?php foreach($roadmaps as $year => $mapBranches):?>
+        <?php foreach($mapBranches as $plans):?>
+          <?php foreach($plans as $plan):?>
+            <?php if(isset($plan->begin)):?>
+            <li <?php if(date('Y-m-d') < $plan->begin) echo 'class="active"';?>>
+              <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
+                <span class="title" title="<?php echo $plan->title;?>"><?php echo $plan->title;?></span>
+                <span class="date" title="<?php echo $plan->begin;?>"><?php echo $plan->begin;?></span>
+                <span class="date"><?php echo $lang->block->estimatedHours;?> <?php echo $plan->hour;?> h</span>
+              </a>
+            </li>
+            <?php else:?>
+            <li>
+              <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
+                <span class="title" title="<?php echo $plan->name;?>"><?php echo $plan->name . "($plan->buildName)";?></span>
+                <span class="date" title="<?php echo $plan->date;?>"><?php echo $plan->date;?></span>
+                <?php $estimate = empty($plan->stories) ? 0 : $this->block->getStorysEstimateHours(explode(',', $plan->stories));?>
+                <span class="date"><?php echo $lang->block->consumedHours;?> <?php echo empty($estimate) ? 0 : $estimate;?> h</span>
+              </a>
+            </li>
+            <?php endif;?>
+          <?php endforeach;?>
+        <?php endforeach;?>
+      <?php endforeach;?>
     </ul>
   </div>
 </div>
