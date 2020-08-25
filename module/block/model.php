@@ -865,15 +865,15 @@ class blockModel extends model
         return json_encode($params);
     }
 
-    /** 
+    /**
      * Get scrum project list params.
-     *▫
+     *
      * @param  string $module
      * @access public
-     * @return void
+     * @return string
      */
-    public function getScrumListParams($module = '') 
-    {   
+    public function getScrumListParams($module = '')
+    {
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->scrum;
@@ -884,5 +884,77 @@ class blockModel extends model
         $params->num['control'] = 'input';
 
         return json_encode($params);
+    }
+
+    /**
+     * Get scrum overall list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumoverallParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum roadmap list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumroadmapParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum product list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumproductParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum project list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumprojectParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get the total estimated man hours required.
+     *
+     * @param  array $storyID
+     * @access public
+     * @return string
+     */
+    public function getStorysEstimateHours($storyID)
+    {
+        return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
     }
 }
