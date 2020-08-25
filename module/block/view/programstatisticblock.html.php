@@ -211,7 +211,7 @@ $(function()
               <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
                   <div class='weekly-name'><?php echo $lang->program->pm;?></div>
-                  <div class='weekly-value'><?php echo $program->PM ? $program->PM : $lang->program->emptyPM;?></div>
+                  <div class='weekly-value'><?php echo $program->PM ? zget($users, $program->PM) : $lang->program->emptyPM;?></div>
                 </div>
                 <div class="col-4">
                   <div class='weekly-name'><?php echo $lang->program->teamCount;?></div>
