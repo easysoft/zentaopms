@@ -1377,13 +1377,14 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
-        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task'] = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']  = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk'] = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
+        $count  = array();
 
         if(isset($hasViewPriv['todo']))
         {
@@ -1407,6 +1408,7 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
+            $count['todo'] = count($todos);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['task']))
@@ -1420,6 +1422,7 @@ class block extends control
             if(isset($params->taskNum)) $stmt->limit($params->taskNum);
             $tasks = $stmt->fetchAll();
 
+            $count['task'] = count($tasks);
             $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
@@ -1433,6 +1436,7 @@ class block extends control
             if(isset($params->bugNum)) $stmt->limit($params->bugNum);
             $bugs = $stmt->fetchAll();
 
+            $count['bug'] = count($bugs);
             $this->view->bugs = $bugs;
         }
         if(isset($hasViewPriv['risk']))
@@ -1446,11 +1450,13 @@ class block extends control
             if(isset($params->riskNum)) $stmt->limit($params->riskNum);
             $risks = $stmt->fetchAll();
 
+            $count['risk'] = count($risks);
             $this->view->risks = $risks;
         }
 
         $this->view->selfCall    = $this->selfCall;
         $this->view->hasViewPriv = $hasViewPriv;
+        $this->view->count       = $count;
         $this->view->longBlock   = $longBlock;
         $this->display();
     }

@@ -62,6 +62,14 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
+
+.block-statistic .progress-group{margin-top: 20px; height: 65px;}
+.block-statistic .weekly-title{font-weight: bold; font-size:14px; color: #3C4253;}
+.block-statistic .weekly-small{font-size:12px; color: #838A9D;}
+.block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
+.block-statistic .weekly-name{font-size:14px; color: #838A9D;}
+.block-statistic .weekly-value{font-size:18px; color: #3C4253;}
+.block-statistic .col-6 .stage{margin-left: 10px}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -163,6 +171,71 @@ $(function()
             </div>
           </div>
         <?php else:?>
+          <div class="col-6">
+            <div class='table-row text-left weekly-row'>
+              <span class='weekly-title'><?php echo $lang->program->weekly;?></span>
+              <span class='stage text-muted'><?php echo $program->current;?></span>
+            </div>
+            <div class='progress-group col-10 center-block'>
+              <div class='progress-num text-center'>
+                <div class='weekly-title'><?php echo $lang->program->progress;?></div>
+                <div class='weekly-progress'><?php echo $program->progress . '%';?></div>
+              </div>
+              <div class='progress'>
+                <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $program->progress;?>%"></div>
+              </div>
+            </div>
+            <div class="table-row text-center small text-muted with-padding col-10 center-block">
+              <div class="col-4 text-bottom">
+                <div class='weekly-name'><?php echo $lang->program->pv;?></div>
+                <div class='weekly-value'><?php echo $program->pv;?></div>
+              </div>
+              <div class="col-4">
+                <div class='weekly-name'><?php echo $lang->program->ev;?></div>
+                <div class='weekly-value'><?php echo $program->ev;?></div>
+              </div>
+              <div class="col-4">
+                <div class='weekly-name'><?php echo $lang->program->sv;?></div>
+                <div class='weekly-value'><?php echo $program->sv;?></div>
+              </div>
+            </div>
+          </div>
+          <div class='col-6'>
+            <div class='table-row weekly-row with-padding'>
+              <div class='col-4 text-center'>
+                <span class='weekly-title'><?php echo $lang->program->allInput;?></span>
+              </div>
+              <div class='col-8'></div>
+            </div>
+            <div class='progress-group'>
+              <div class="table-row text-center small text-muted with-padding">
+                <div class="col-4 text-bottom">
+                  <div class='weekly-name'><?php echo $lang->program->pm;?></div>
+                  <div class='weekly-value'><?php echo $program->PM ? $program->PM : $lang->program->emptyPM;?></div>
+                </div>
+                <div class="col-4">
+                  <div class='weekly-name'><?php echo $lang->program->teamCount;?></div>
+                  <div class='weekly-value'><?php echo $program->teamCount;?></div>
+                </div>
+                <div class="col-4">
+                  <div class='weekly-name'><?php echo $lang->program->budget;?></div>
+                  <div class='weekly-value'><?php echo $program->budget;?></div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row text-center small text-muted with-padding">
+                <div class="col-4 text-bottom">
+                  <div class='weekly-name'><?php echo $lang->program->ac;?></div>
+                  <div class='weekly-value'><?php echo $program->ac;?></div>
+                </div>
+                <div class="col-4">
+                  <div class='weekly-name'><?php echo $lang->program->cv;?></div>
+                  <div class='weekly-value'><?php echo $program->cv;?></div>
+                </div>
+                <div>
+                </div>
+              </div>
+            </div>
         <?php endif;?>
         </div>
       </div>

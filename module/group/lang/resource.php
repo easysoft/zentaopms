@@ -192,6 +192,7 @@ $lang->resource->risk->hangup      = 'hangup';
 $lang->resource->risk->batchCreate = 'batchCreate';
 $lang->resource->risk->cancel      = 'cancel';
 $lang->resource->risk->track       = 'track';
+$lang->resource->risk->view        = 'view';
 
 $lang->risk->methodOrder[5]  = 'browse';
 $lang->risk->methodOrder[10] = 'create';
@@ -203,6 +204,7 @@ $lang->risk->methodOrder[35] = 'hangup';
 $lang->risk->methodOrder[40] = 'batchCreate';
 $lang->risk->methodOrder[45] = 'cancel';
 $lang->risk->methodOrder[50] = 'track';
+$lang->risk->methodOrder[55] = 'view';
 
 /* Product. */
 $lang->resource->product = new stdclass();
