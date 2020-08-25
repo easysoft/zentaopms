@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 
-
 /* Module order. */
 $lang = new stdclass();
 $lang->moduleOrder[0]   = 'index';
