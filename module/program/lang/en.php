@@ -1,5 +1,28 @@
 <?php
+/* Actions. */
 $lang->program->index              = 'Project';
+$lang->program->create             = 'Create';
+$lang->program->createGuide        = 'Select The Project Template';
+$lang->program->edit               = 'Edit';
+$lang->program->browse             = 'Project List';
+$lang->program->all                = 'All';
+$lang->program->start              = 'Start';
+$lang->program->finish             = 'Finish';
+$lang->program->suspend            = 'Suspend';
+$lang->program->delete             = 'Delete';
+$lang->program->close              = 'Close';
+$lang->program->activate           = 'Activate';
+$lang->program->group              = 'Group';
+$lang->program->createGroup        = 'Create Group';
+$lang->program->editGroup          = 'Edit Group';
+$lang->program->copyGroup          = 'Copy Group';
+$lang->program->manageView         = 'Manage View';
+$lang->program->managePriv         = 'Manage Priv';
+$lang->program->manageMembers      = 'Project Team';
+$lang->program->export             = 'Export';
+$lang->program->manageGroupMember  = 'Manage Grop';
+
+/* Fields. */
 $lang->program->common             = 'Project';
 $lang->program->stage              = 'Stage';
 $lang->program->name               = 'Name';
@@ -12,15 +35,6 @@ $lang->program->begin              = 'Begin';
 $lang->program->end                = 'End';
 $lang->program->status             = 'Status';
 $lang->program->PM                 = 'Project Manager';
-$lang->program->create             = 'Create';
-$lang->program->edit               = 'Edit';
-$lang->program->all                = 'All';
-$lang->program->start              = 'Start';
-$lang->program->finish             = 'Finish';
-$lang->program->suspend            = 'Suspend';
-$lang->program->delete             = 'Delete';
-$lang->program->close              = 'Close';
-$lang->program->activate           = 'Activate';
 $lang->program->budget             = 'Budget';
 $lang->program->dateRange          = 'Date Range';
 $lang->program->to                 = ' to ';
@@ -29,16 +43,7 @@ $lang->program->realStarted        = 'Real started';
 $lang->program->bygrid             = 'Grid';
 $lang->program->bylist             = 'List';
 $lang->program->mine               = 'Participated';
-$lang->program->group              = 'Group';
-$lang->program->createGroup        = 'Create Group';
-$lang->program->editGroup          = 'Edit Group';
-$lang->program->copyGroup          = 'Copy Group';
-$lang->program->manageView         = 'Manage View';
-$lang->program->managePriv         = 'Manage Priv';
-$lang->program->manageMembers      = 'Manage Members';
-$lang->program->transfer           = 'Transfer';
 $lang->program->setPlanduration    = 'Set Planduration';
-$lang->program->export             = 'Export';
 $lang->program->privway            = 'Priv Way';
 $lang->program->durationEstimation = 'Duration Estimation';
 $lang->program->progress           = 'Program Progress';
@@ -53,16 +58,15 @@ $lang->program->doneStories        = 'Done stories';
 $lang->program->leftStories        = 'Left stories';
 $lang->program->allInput           = 'All Input';
 $lang->program->weekly             = 'Program Weekly';
+
+
 $lang->program->pv                 = 'PV';
 $lang->program->ev                 = 'EV';
 $lang->program->sv                 = 'SV%';
 $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->pm                 = 'PM';
-
-$lang->program->manageGroupMember  = 'Manage Group Members';
-$lang->program->durationEstimation  = 'Workload estimate';
-$lang->program->noProgram           = 'No projects';
+$lang->program->teamCount          = 'The Number Of Team';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = 'Yuan';
@@ -87,6 +91,13 @@ $lang->program->aclList['custom']  = 'Custom (Team members and the whitelist use
 $lang->program->privwayList['extend'] = 'Extend(Mix program priv and common priv.)';
 $lang->program->privwayList['reset']  = 'Reset(Only program prive.)';
 
+$lang->program->statusList['wait']      = 'Wait';
+$lang->program->statusList['doing']     = 'Doing';
+$lang->program->statusList['suspended'] = 'Suspended';
+$lang->program->statusList['closed']    = 'Closed';
+
+$lang->program->noProgram          = 'No Program';
+$lang->program->accessDenied       = 'Has No Access To The Program';
 $lang->program->chooseProgramType = 'Choose management type';
 $lang->program->nextStep          = 'Next step';
 $lang->program->hoursUnit         = '%s hours';
@@ -99,4 +110,9 @@ $lang->program->scrumDesc         = '<strong>Introduction: </strong>Iterate in s
 $lang->program->cmmi              = 'CMMI';
 $lang->program->cmmiTitle         = 'CMMI management';
 $lang->program->cmmiDesc          = '<strong>Introduction: </strong>Standardized management by stages<br><strong>Contains function points: </strong>Estimate, plan, stage, report, etc.';
+$lang->program->cannotCreateChild  = 'The project already has actual content and can not add subprojects directly. You can create a parent project for the current project and then add a child project under the new parent project.';
+$lang->program->hasChildren        = 'This project has a subproject and can not be deleted.';
+$lang->program->confirmDelete      = 'Do you want to delete this project?';
 $lang->program->emptyPM           = 'No program manager';
+$lang->program->cannotChangeToCat  = "The project already has the actual content and can not be modified as a parent project";
+$lang->program->cannotCancelCat    = "There are already children under this project. You can not unmark the parent project";
