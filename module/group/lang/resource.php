@@ -320,6 +320,7 @@ $lang->resource->story->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage  = 'batchChangeStage';
 $lang->resource->story->batchAssignTo     = 'batchAssignTo';
 $lang->resource->story->batchChangeModule = 'batchChangeModule';
+$lang->resource->story->track             = 'track';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -345,6 +346,7 @@ $lang->story->methodOrder[105] = 'report';
 $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
+$lang->story->methodOrder[125] = 'track';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
