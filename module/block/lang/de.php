@@ -252,6 +252,7 @@ $lang->block->availableBlocks->plan     = 'Plan';
 $lang->block->availableBlocks->release  = 'Release';
 $lang->block->availableBlocks->build    = 'Build';
 $lang->block->availableBlocks->testtask = 'Testaufgaben';
+$lang->block->availableBlocks->risk     = 'My Risks';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;

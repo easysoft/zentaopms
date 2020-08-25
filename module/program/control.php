@@ -44,6 +44,8 @@ class program extends control
     {
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
+        $this->app->session->set('programList', $this->app->getURI(true));
+
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
         $this->app->loadClass('pager', $static = true);
@@ -151,30 +153,33 @@ class program extends control
     /**
      * Edit a program.
      * 
-     * @param  int $projectID
+     * @param  int $programID
      * @access public
      * @return void
      */
-    public function edit($projectID = 0)
+    public function edit($programID = 0)
     {
-        $project = $this->project->getByID($projectID);
+        $program = $this->project->getByID($programID);
 
         if($_POST)
         {
-            $changes = $this->project->update($projectID);
+            $changes = $this->program->update($programID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $actionID = $this->loadModel('action')->create('program', $programID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+
+            $url = $this->session->programList ? $this->session->programList : inlink('browse');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->title       = $this->lang->project->edit;
-        $this->view->position[]  = $this->lang->project->edit;
-        $this->view->project     = $project;
+        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
+        $this->view->title       = $this->lang->program->edit;
+        $this->view->position[]  = $this->lang->program->edit;
+        $this->view->program     = $program;
+        $this->view->parents     = $this->program->getParentPairs();
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->display();
     }
@@ -689,7 +694,7 @@ class program extends control
     public function ajaxGetDropMenu($programID, $module, $method, $extra)
     {    
         $this->loadModel('project');
-        $this->view->link      = $this->createLink('program', 'index', "programID=$programID");
+        $this->view->link      = $this->createLink('program', 'index', "programID=$programID", '', '', $programID);
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;

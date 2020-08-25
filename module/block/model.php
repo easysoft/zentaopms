@@ -59,6 +59,8 @@ class blockModel extends model
             unset($_SESSION['album'][$uid]);
         }
 
+        if(strpos($data->block, 'cmmi')  !== false) $data->type = 'cmmi';
+        if(strpos($data->block, 'scrum') !== false) $data->type = 'scrum';
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
         if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
@@ -129,11 +131,12 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function getBlockList($module = 'my')
+    public function getBlockList($module = 'my', $type = '')
     {
         $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->andWhere('hidden')->eq(0)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('source')->notin('project,qa')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('source')->notin('product,qa')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('source')->notin('product,project')->fi()
@@ -233,6 +236,7 @@ class blockModel extends model
         {
             $block['order']   = $index;
             $block['module']  = $module;
+            $block['type']    = $type;
             $block['account'] = $account;
             $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             if(!isset($block['source'])) $block['source'] = $module;
@@ -447,6 +451,26 @@ class blockModel extends model
     }
 
     /**
+     * Get program params.
+     * 
+     * @access public
+     * @return json
+     */
+    public function getProgramParams()
+    {
+        $this->app->loadLang('program');
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->program->featureBar;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($this->onlyNumParams($params));
+    }
+
+    /**
      * Get Build params.
      * 
      * @access public
@@ -548,6 +572,17 @@ class blockModel extends model
     }
 
     /**
+     * Get recent program pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getRecentprogramParams()
+    {
+        return false;
+    }
+
+    /**
      * Get product overview pararms.
      *
      * @access public
@@ -556,6 +591,102 @@ class blockModel extends model
     public function getOverviewParams()
     {
         return false;
+    }
+
+    /**
+     * Get cmmi program report pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmireportParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program estimate pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiestimateParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program gantt pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiganttParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program progress pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiprogressParams()
+    {
+        return false;
+    }
+
+    /** 
+     * Get cmmi issue params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getCmmiissueParams($module = '') 
+    {
+        $this->app->loadLang('issue');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /** 
+     * Get cmmi risk params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getCmmiriskParams($module = '') 
+    {
+        $this->app->loadLang('risk');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->risk->featureBar['browse'];
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
     }
 
     /**
@@ -586,6 +717,10 @@ class blockModel extends model
         $params->bugNum['name']    = $this->lang->block->bugNum;
         $params->bugNum['default'] = 20; 
         $params->bugNum['control'] = 'input';
+
+        $params->riskNum['name']    = $this->lang->block->riskNum;
+        $params->riskNum['default'] = 20;
+        $params->riskNum['control'] = 'input';
 
         return json_encode($params);
     }
@@ -710,39 +845,13 @@ class blockModel extends model
     }
 
     /** 
-     * Get cmmi issue params.
-     *
-     * @param  string $module▫
-     * @access public
-     * @return void
-     */
-    public function getCmmiissueParams($module = '') 
-    {
-        $this->app->loadLang('issue');
-        $params = new stdclass();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
-        $params->type['control'] = 'select';
-
-        $params->num['name']    = $this->lang->block->num;
-        $params->num['default'] = 20;
-        $params->num['control'] = 'input';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /** 
      * Get testtask params.
      *▫
-     * @param  string $module▫
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function getScrumtestParams($module = '') 
+    public function getScrumtestParams($module = '')
     {   
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
@@ -756,4 +865,24 @@ class blockModel extends model
         return json_encode($params);
     }
 
+    /** 
+     * Get scrum project list params.
+     *▫
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumListParams($module = '') 
+    {   
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->scrum;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
 }

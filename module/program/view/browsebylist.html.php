@@ -28,7 +28,7 @@
         </td>
         <td class='text-left'><?php echo $program->code;?></td>
         <td class='text-left pgm-title' title='<?php echo $program->name?>'>
-          <?php echo html::a(inlink('index', "programID=$program->id"), $program->name);?>
+          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>

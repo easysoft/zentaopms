@@ -110,7 +110,7 @@ class weeklyModel extends model
         if(!$date) $date = date('Y-m-d');
         $monday = $this->getThisMonday($date);
         $sunday = $this->getThisSunday($date);
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         return $this->dao->select('count(distinct t1.account) as count')
@@ -128,7 +128,7 @@ class weeklyModel extends model
         $monday = $this->getThisMonday($date);
         $sunday = $this->getThisSunday($date);
 
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         $tasks = $this->dao->select('*')
@@ -148,7 +148,7 @@ class weeklyModel extends model
         $sunday = $this->getThisSunday($date);
         $nextMonday = date('Y-m-d', strtotime("$sunday +1 days"));
 
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
         $unFinished = $this->dao->select('*')
             ->from(TABLE_TASK)
@@ -177,7 +177,7 @@ class weeklyModel extends model
         $nextMonday   = date('Y-m-d', strtotime("$sunday +1 days"));
         $sencondMondy = date('Y-m-d', strtotime("$sunday +8 days"));
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         $tasks = $this->dao->select('*')
@@ -197,7 +197,7 @@ class weeklyModel extends model
         $nextMonday   = date('Y-m-d', strtotime("$sunday +1 days"));
         $sencondMondy = date('Y-m-d', strtotime("$sunday +8 days"));
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         return $this->dao->select('type, sum(cast(estimate as decimal(10,2))) as workload')
@@ -213,7 +213,7 @@ class weeklyModel extends model
         $monday     = $this->getThisMonday($date);
         $nextMonday = date('Y-m-d', strtotime("$monday +7 days"));
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         return $this->dao->select('*')
@@ -237,7 +237,7 @@ class weeklyModel extends model
         $nextMonday = date('Y-m-d', strtotime("$sunday +1 days"));
         $workdays   = $this->loadModel('holiday')->getActualWorkingDays($monday, $sunday);
  
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program->id);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program->id);
         $projectIdList = array_keys($projects);
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
@@ -269,7 +269,7 @@ class weeklyModel extends model
         $report = $this->getFromDB($program, $date);
         if(!empty($report)) return $report->ev;
  
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         if(!$date) $date = date('Y-m-d');
@@ -310,7 +310,7 @@ class weeklyModel extends model
 
         $monday        = $this->getThisMonday($date);
         $nextMonday    = date('Y-m-d', strtotime("$monday +7 days"));
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $type = 'project', $program);
+        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
         $AC = $this->dao->select('sum(t1.consumed) as consumed')

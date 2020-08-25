@@ -17,8 +17,9 @@ class weekly extends control
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
     }
 
-    public function index($program, $date = '')
+    public function index($program = 0, $date = '')
     {
+        $program = $program ? $program : $this->session->program;
         if(!$date) $date = helper::today();
         $date = date('Y-m-d', strtotime($date));
 

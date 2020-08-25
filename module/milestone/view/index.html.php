@@ -11,7 +11,7 @@ table .btn.addItem, table .btn.delItem{padding: 3px 8px; font-size: 12px; line-h
     <div class="main-table">
     <?php include 'basicinfo.html.php';?>
     <?php include 'process.html.php';?>
-    <?php include 'chart.html.php';?>
+    <div class="cell"><?php include 'chart.html.php';?></div>
     <?php include 'productquality.html.php';?>
     <?php include 'workhour.html.php';?>
     <?php include 'progress.html.php';?>

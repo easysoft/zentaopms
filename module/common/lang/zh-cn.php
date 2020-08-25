@@ -1179,9 +1179,8 @@ $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PR
 $lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-$lang->story->menu         = $lang->cmmiproduct->menu;
-$lang->milestone->menu     = $lang->weekly->menu;
-$lang->nc->menu            = $lang->auditplan->menu;
+$lang->milestone->menu = $lang->weekly->menu;
+$lang->nc->menu        = $lang->auditplan->menu;
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');

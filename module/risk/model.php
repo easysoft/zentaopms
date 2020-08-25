@@ -208,6 +208,8 @@ class riskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where('program')->eq($this->session->program)
+            ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->limit($limit)

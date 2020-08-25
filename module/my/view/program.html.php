@@ -43,7 +43,7 @@
       <tr class='text-center'>
         <td><?php echo $program->id;?></td>
         <td class='text-left'><?php echo $program->code;?></td>
-        <td class='text-left'><?php echo html::a($this->createLink('program', 'index', "programID=$program->id"), $program->name);?></td>
+        <td class='text-left'><?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end;?></td>
         <td class="c-status">

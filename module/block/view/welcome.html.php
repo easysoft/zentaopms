@@ -27,7 +27,7 @@
 .block-welcome .progress-group{margin-top: 20px;}
 .block-welcome .progress{margin-top: 10px; width: 85%}
 </style>
-<?php $progress = $tasks == 0 ? 0 : ceil($doneTasks / $tasks) * 100;?>
+<?php $progress = $tasks == 0 ? 0 : round($doneTasks / $tasks, 3) * 100;?>
 <div class='panel-move-handler'></div>
 <div class="panel-body conatiner-fluid">
   <div class="table-row">
