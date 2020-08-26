@@ -262,7 +262,7 @@ function reloadRoadmap(productID)
         {
             $("#roadMap").html('');
             $("#roadMap").html(data);
-            $("#createPlanLink").attr('href',createLink('productplan', 'create', 'id=' + productID) );
+            $('#productID').chosen();
         }
     })
 }
