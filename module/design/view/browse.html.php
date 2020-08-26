@@ -39,7 +39,7 @@
   <?php else:?>
   <form id='designFrom' method='post' class="main-table">
     <table class='table has-sort-head table-fixrd' id="designTable">
-      <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
+      <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <thead>
           <tr>
             <th class="text-left w-60px">   <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
