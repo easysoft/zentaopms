@@ -91,6 +91,7 @@ class testreportModel extends model
     {
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
+            ->add('program', $this->session->program)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')

@@ -108,6 +108,7 @@ class doc extends control
         /* According the from, set menus. */
         if($from == 'product')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
@@ -115,6 +116,7 @@ class doc extends control
         }
         elseif($from == 'project')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
@@ -166,24 +168,11 @@ class doc extends control
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
         }
 
-        $attachLibs = array();
-        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
-        {
-            $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
-            if($count == 1 and $type and isset($lib->$type))
-            {
-                $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
-                if(isset($objectLibs['project'])) $attachLibs['project'] = $objectLibs['project'];
-                if(isset($objectLibs['files']))   $attachLibs['files']   = $objectLibs['files'];
-            }
-        }
-
         $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, '`order`', $browseType);
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-        $this->view->attachLibs = $attachLibs;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
@@ -313,7 +302,7 @@ class doc extends control
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
-            $files = $docResult['files'];
+            $files = isset($docResult['files']) ? $docResult['files'] : '';
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
@@ -336,6 +325,7 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
@@ -345,6 +335,7 @@ class doc extends control
         }
         elseif($this->from == 'project')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
@@ -755,6 +746,7 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
@@ -762,6 +754,7 @@ class doc extends control
         }
         elseif($this->from == 'project')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $objectID);
@@ -847,6 +840,7 @@ class doc extends control
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
         if($from == 'product')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
@@ -854,6 +848,7 @@ class doc extends control
         }
         elseif($from == 'project')
         {
+            $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $objectID);

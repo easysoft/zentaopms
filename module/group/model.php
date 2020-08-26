@@ -22,6 +22,11 @@ class groupModel extends model
     public function create()
     {
         $group = fixer::input('post')->get();
+        if(isset($group->limited)) 
+        {
+            unset($group->limited);
+            $group->role = 'limited';
+        }
         return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
     }
 
@@ -101,9 +106,9 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getList()
+    public function getList($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchAll();
     }
 
     /**
@@ -112,9 +117,9 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs($programID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchPairs();
     }
 
     /**
@@ -178,6 +183,24 @@ class groupModel extends model
             ->where('`group`')->eq((int)$groupID)
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.account')
+            ->fetchPairs();
+    }
+
+    /**
+     * Get user programs of a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return array
+     */
+    public function getUserPrograms($groupID)
+    {
+        return $this->dao->select('t1.account, t1.program')
+            ->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('`group`')->eq((int)$groupID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('account')
             ->fetchPairs();
     }
 
@@ -356,6 +379,40 @@ class groupModel extends model
             $this->loadModel('user');
             foreach($changedUsers as $account) $this->user->computeUserView($account, true);
         }
+    }
+
+    /**
+     * Update program admins.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
+    public function updatePgmAdmin($groupID)
+    {
+        $this->loadModel('user');
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
+
+        $members  = $this->post->members ? $this->post->members : array();
+        $programs = $this->post->program ? $this->post->program : array();
+        foreach($members as $id => $account)
+        {
+            if(!$account) continue;
+            $data = new stdclass();
+            $data->group   = $groupID;
+            $data->account = $account;
+            $data->program = implode($programs[$account], ',');
+
+            $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+            foreach($programs[$account] as $programID) 
+            {
+                if(!$programID) continue;
+                $this->user->updateUserView($programID, 'program');
+            }
+        }
+
+        if(!dao::isError()) return true;
+        return false;
     }
     
     /**

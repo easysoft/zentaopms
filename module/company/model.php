@@ -72,13 +72,13 @@ class companyModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($type, $queryID, $deptID, $sort, $pager)
+    public function getUsers($browseType = 'inside', $type, $queryID, $deptID, $sort, $pager)
     {
         /* Get users. */
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
-            return $this->dept->getUsers($childDeptIds, $pager, $sort);
+            return $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
         }
         else
         {
@@ -95,7 +95,7 @@ class companyModel extends model
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            return $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
+            return $this->loadModel('user')->getByQuery($browseType, $this->session->userQuery, $pager, $sort);
         }
     }
 

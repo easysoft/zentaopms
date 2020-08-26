@@ -163,6 +163,12 @@ class router extends baseRouter
                 }
             }
 
+            if($this->session->program)
+            {
+                $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
+                if($template->template == 'cmmi') $projectCommon = 2;
+            }
+
             $config->storyCommon = $storyCommon;
 
             /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
@@ -544,6 +550,7 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
+        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']);
         /* If the isFlow is true, reset the passed params. */
         if($this->isFlow)
         {

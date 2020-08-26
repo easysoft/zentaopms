@@ -40,12 +40,11 @@
       <?php foreach($tasks as $task):?>
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('task', 'view', "taskID={$task->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
         <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
-        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
+        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->program), $task->name)?></td>
         <?php if($longBlock):?>
         <td class='c-estimate text-center'><?php echo $task->estimate?></td>
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

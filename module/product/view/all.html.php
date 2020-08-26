@@ -12,12 +12,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php echo $line ? zget($lines, $line) : $lang->product->line;?>
-      <?php if($line) echo html::a(inlink('all', "productID={$productID}&line=&status={$status}"), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
-    </div>
-  </div>
   <div class="btn-toolbar pull-left">
     <?php 
     foreach($lang->product->featureBar['all'] as $key => $label)
@@ -42,16 +36,6 @@
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
-  <div class="side-col" id="sidebar">
-    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
-    <div class="cell">
-      <?php echo $lineTree;?>
-      <div class="text-center">
-        <?php common::printLink('tree', 'browse', "rootID=$productID&view=line", $lang->tree->manageLine, '', "class='btn btn-info btn-wide'");?>
-        <hr class="space-sm" />
-      </div>
-    </div>
-  </div>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" method="post" id='productsForm' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
       <?php $canOrder = (common::hasPriv('product', 'updateOrder'))?>

@@ -92,7 +92,7 @@ $(function()
             return true;
         }
 
-        if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart' || moduleID == 'assigntome' || moduleID == 'welcome')
+        if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart' || moduleID == 'assigntome' || moduleID == 'welcome' || moduleID == 'contribute')
         {
             getNotSourceParams(moduleID, blockID, onFinish);
             return true;

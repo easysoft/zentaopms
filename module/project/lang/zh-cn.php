@@ -117,6 +117,12 @@ $lang->project->aclList['open']    = "默认设置(有{$lang->projectCommon}视�
 $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang->projectCommon}团队成员才能访问)";
 $lang->project->aclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
 
+$lang->project->storyPoint = '故事点';
+
+$lang->project->burnByList['left']       = '按剩余工时查看';
+$lang->project->burnByList['estimate']   = '按计划工时查看';
+$lang->project->burnByList['storyPoint'] = '按故事点查看';
+
 /* 方法列表。*/
 $lang->project->index             = "{$lang->projectCommon}主页";
 $lang->project->task              = '任务列表';

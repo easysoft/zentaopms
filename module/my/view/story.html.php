@@ -49,7 +49,8 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-product'>  <?php common::printOrderLink('program',      $orderBy, $vars, $lang->story->program);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
           <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
@@ -62,7 +63,7 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->program);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
@@ -74,6 +75,7 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+          <td class='c-product'><?php echo zget($programs, $story->program, '');?></td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
@@ -84,11 +86,11 @@
           <td class='c-actions'>
             <?php
             $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-            common::printIcon('story', 'edit',       $vars, $story, 'list');
-            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $story->program);
+            common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $story->program);
+            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $story->program);
             ?>
           </td>
         </tr>
@@ -117,7 +119,7 @@
             unset($lang->story->reviewResultList['revert']);
             foreach($lang->story->reviewResultList as $key => $result)
             {
-                $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $story->program);
                 if($key == 'reject')
                 {
                     echo "<li class='dropdown-submenu'>";
@@ -129,7 +131,7 @@
 
                     foreach($lang->story->reasonList as $key => $reason)
                     {
-                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $story->program);
                         echo "<li>";
                         echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                         echo "</li>";
@@ -150,7 +152,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($users) > 10;
-          $actionLink = $this->createLink('story', 'batchAssignTo');
+          $actionLink = $this->createLink('story', 'batchAssignTo', '', '', '', $story->program);
           echo html::select('assignedTo', $users, '', 'class="hidden"');
           if($withSearch)
           {

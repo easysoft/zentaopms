@@ -68,6 +68,7 @@ $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = 'Story';
 $lang->action->objectTypes['productplan'] = 'Plan';
 $lang->action->objectTypes['release']     = 'Release';
+$lang->action->objectTypes['program']     = 'Program';
 $lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = 'Task';
 $lang->action->objectTypes['build']       = 'Build';
@@ -224,6 +225,8 @@ $lang->action->label->unlinkchildrenstory = "unlinked a child story";
 $lang->action->label->linkparentstory     = "linked a parent story";
 $lang->action->label->unlinkparentstory   = "unlink from parent story";
 $lang->action->label->deletechildrenstory = "delete children story";
+$lang->action->label->tracked             = 'tracked';
+$lang->action->label->hangup              = 'hangup';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction = new stdclass;
@@ -384,6 +387,7 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
+$lang->action->label->program     = "Program|program|browse|";
 $lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
 $lang->action->label->task        = 'Task|task|view|taskID=%s';
 $lang->action->label->build       = 'Build|build|view|buildID=%s';
@@ -400,10 +404,12 @@ $lang->action->label->testreport  = 'Report|testreport|view|report=%s';
 $lang->action->label->entry       = 'Application|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
+$lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
+$lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = 'Case'; 

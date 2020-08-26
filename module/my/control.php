@@ -121,6 +121,45 @@ class my extends control
     }
 
     /**
+     * My requirement. 
+
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session. */
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->position[] = $this->lang->my->story;
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->programs   = $this->loadModel('program')->getPairs();
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
+        $this->display();
+    }
+
+    /**
      * My stories
 
      * @param  string $type
@@ -148,6 +187,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->programs   = $this->loadModel('program')->getPairs();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -198,6 +238,7 @@ class my extends control
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
+        $this->view->programs   = $this->loadModel('program')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
 
@@ -350,8 +391,32 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
         $this->view->position[] = $this->lang->my->myProject;
         $this->view->tabID      = 'project';
-        $this->view->projects   = @array_reverse($this->user->getProjects($this->app->user->account));
+        $this->view->projects   = $this->user->getProjects($this->app->user->account);
 
+        $this->display();
+    }
+
+    /**
+     * My programs.
+     *
+     * @param  int     $recTotal 
+     * @param  varchar $date
+     * @param  varchar $direction
+     * @access public
+     * @return void
+     */
+    public function program($recTotal = 0, $date = '', $direction = 'next')
+    {   
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1); 
+
+        $this->view->position[] = $this->lang->my->myProgram;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
+        $this->view->programs   = $this->loadModel('program')->getList($status = 'all', $orderBy = 'id_desc', $pager);
         $this->display();
     }
 

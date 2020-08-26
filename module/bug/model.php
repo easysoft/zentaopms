@@ -36,7 +36,7 @@ class bugModel extends model
         if($isMobile)
         {
             $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+            $pageNav  = html::a(helper::createLink('qa', 'index', ''), $this->lang->qa->index) . $this->lang->colon;
         }
         else
         {
@@ -135,6 +135,7 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
+            ->setDefault('program', $this->session->program)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
@@ -295,6 +296,7 @@ class bugModel extends model
                 }
             }
 
+            $bug->program = $this->session->program;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -429,7 +431,7 @@ class bugModel extends model
         {
             echo(js::alert($this->lang->bug->projectAccessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index')));
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index', '')));
             die(js::locate('back'));
         }
     }
@@ -2508,7 +2510,7 @@ class bugModel extends model
             }
         }
 
-        $bugLink = inlink('view', "bugID=$bug->id");
+        $bugLink = helper::createLink('bug', 'view', "bugID=$bug->id");
         $account = $this->app->user->account;
         $id = $col->id;
         if($col->show)
@@ -2704,7 +2706,7 @@ class bugModel extends model
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list');
+                common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '');
                 common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
                 break;
             }

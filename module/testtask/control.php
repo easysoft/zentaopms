@@ -188,23 +188,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         if($projectID == 0)
         {
-            $params   = 'nodeleted';
-            $projects = array();
-            $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
-                ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.product')->eq((int)$productID)
-                ->beginIF('0')->andWhere('t1.branch')->in('0')->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-                ->andWhere('t2.type')->ne('ops')
-                ->orderBy('t1.project desc')
-                ->fetchAll();
-    
-            foreach($datas as $data)
-            {
-                if($params == 'nodeleted' and $data->deleted) continue;
-                $projects[$data->id] = $data->name;
-            }
-            $projects = array('' => '') +  $projects;
+            $projects = $this->loadModel('product')->getProjectPairs($productID, 0, $params = 'nodeleted');
             $builds   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
         }
 

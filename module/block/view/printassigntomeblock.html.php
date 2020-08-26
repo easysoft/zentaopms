@@ -16,7 +16,12 @@
     <?php foreach($hasViewPriv as $type => $bool):?>
     <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTask' && $type == 'task') continue;?>
     <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTest' && $type == 'bug') continue;?>
-    <li<?php if($isFirstTab) {echo ' class="active"'; $isFirstTab = false;}?>><a data-tab href='#assigntomeTab-<?php echo $type;?>'><?php echo $lang->block->availableBlocks->$type;?></a></li>
+    <li<?php if($isFirstTab) {echo ' class="active"';}?>>
+        <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
+        <?php echo $lang->block->availableBlocks->$type;?>
+        <span class='label label-light label-badge label-assignto <?php echo $type . "-count "; echo $isFirstTab ? '' : 'hidden'; $isFirstTab = false ?>'><?php echo $count[$type];?></span>
+      </a>
+    </li>
     <?php endforeach;?>
   </ul>
   <div class="tab-content">
@@ -36,3 +41,10 @@
 #assigntomeBlock > .nav {position: absolute; top: -41px; left: 120px;}
 #assigntomeBlock .block-todoes .todoes-form{top: -50px;}
 </style>
+<script>
+function changeLabel(type)
+{
+  $('.label-assignto').addClass('hidden');
+  $('.' + type + '-count').removeClass('hidden');
+}
+</script>

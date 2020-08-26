@@ -222,34 +222,6 @@
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
               </tr>
               <?php endif;?>
-              <tr>
-                <th class='linkThWidth'><?php echo $lang->story->linkStories;?></th>
-                <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
-              </tr>
-              <tr>
-                <th></th>
-                <td>
-                  <ul class='list-unstyled'>
-                    <?php
-                    if($story->linkStories)
-                    {
-                        $linkStories = explode(',', $story->linkStories);
-                        foreach($linkStories as $linkStoryID)
-                        {
-                            if(isset($story->extraStories[$linkStoryID]))
-                            {
-                                echo "<li><div class='checkbox-primary'>";
-                                echo "<input type='checkbox' checked='checked' name='linkStories[]' value=$linkStoryID />";
-                                echo "<label>#{$linkStoryID} {$story->extraStories[$linkStoryID]}</label>";
-                                echo '</div></li>';
-                            }
-                        }
-                    }
-                    ?>
-                    <span id='linkStoriesBox'></span>
-                  </ul>
-                </td>
-              </tr>
               <?php if($story->status == 'closed'):?>
               <tr class='text-top'>
                 <th><?php echo $lang->story->childStories;?></th>

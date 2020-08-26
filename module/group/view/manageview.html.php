@@ -20,7 +20,7 @@
   </div>
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
-      <tr>
+      <!--tr>
         <th class='text-bottom thWidth'><?php echo $lang->group->viewList;?></th>
         <td class='text-bottom'>
           <?php foreach($lang->menu as $menuKey => $menu):?>
@@ -46,21 +46,21 @@
             </div>
           </div>
         </td>
-      </tr>
-      <tr id='productBox' style='display:none'>
-        <th class='text-right'><?php echo $lang->group->productList?></th>
+      </tr-->
+      <tr id='productBox'>
+        <th class='text-right'><?php echo $lang->group->programList?></th>
         <td>
-          <?php if($products):?>
+          <?php if($programs):?>
           <div class='input-group'>
-            <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?>
+            <?php echo html::select("actions[programs][]", $programs, isset($group->acl['programs']) ? join(',', $group->acl['programs']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
-          <?php echo $lang->group->noneProduct;?>
+          <?php echo $lang->group->noneProgram;?>
           <?php endif;?>
         </td>
       </tr>
-      <tr id='projectBox' style='display:none'>
+      <!--tr id='projectBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->projectList?></th>
         <td>
           <?php if($products):?>
@@ -123,7 +123,7 @@
             <?php endforeach;?>
           </table>
         </td>
-     </tr>
+     </tr-->
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton();?>

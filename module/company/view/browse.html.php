@@ -13,6 +13,7 @@
 <?php
 include '../../common/view/header.html.php';
 js::set('deptID', $deptID);
+js::set('browseType', $browseType);
 js::set('confirmDelete', $lang->user->confirmDelete);
 ?>
 <div id='mainMenu' class='clearfix'>
@@ -23,6 +24,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </div>
   </div>
   <div class='btn-toolbar pull-left'>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=inside'), '<span class="text">' . $lang->user->inside . '</span>', '', 'class="btn btn-link inside"');?>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=outside'), '<span class="text">' . $lang->user->outside . '</span>', '', 'class="btn btn-link outside"');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -124,5 +127,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </form>
   </div>
 </div>
-<script lanugage='javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
+<script lanugage='javascript'>
+$('#dept<?php echo $deptID;?>').addClass('active');
+$('.pull-left .' + browseType).addClass('btn-active-text');
+</script>
 <?php include '../../common/view/footer.html.php';?>

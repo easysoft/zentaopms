@@ -57,6 +57,7 @@
               </div>
             </td>
           </tr>
+          <?php if($type == 'story'):?>
           <tr>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
@@ -88,6 +89,7 @@
             </td>
             <?php endif;?>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
@@ -98,6 +100,20 @@
                 <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
               </div>
             </td>
+            <?php endif;?>
+            <?php if($type == 'requirement'):?>
+              <?php if(strpos(",$showFields,", ',source,') !== false):?>
+              <td colspan="2" class='sourceTd'>
+                <div class="input-group">
+                  <div class="input-group">
+                    <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                    <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                    <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
+                    <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                  </div>
+                </div>
+              </td>
+              <?php endif;?>
             <?php endif;?>
           </tr>
           <tr>

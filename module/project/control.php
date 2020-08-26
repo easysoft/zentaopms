@@ -44,8 +44,8 @@ class project extends control
 
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
-        
-        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
+
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -115,6 +115,8 @@ class project extends control
         $this->loadModel('search');
         $this->loadModel('task');
         $this->loadModel('datatable');
+
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->project->getLimitedProject();
 
@@ -938,11 +940,12 @@ class project extends control
      * @access public
      * @return void
      */
-    public function burn($projectID = 0, $type = 'noweekend', $interval = 0)
+    public function burn($projectID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
     {
         $this->loadModel('report');
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
+        $burnBy    = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -952,7 +955,7 @@ class project extends control
         /* Get date list. */
         $projectInfo = $this->project->getByID($projectID);
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
-        $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
+        $chartData = $this->project->buildBurnData($projectID, $dateList, $type, $burnBy);
 
         $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
@@ -961,6 +964,7 @@ class project extends control
         $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->tabID       = 'burn';
+        $this->view->burnBy      = $burnBy;
         $this->view->projectID   = $projectID;
         $this->view->projectName = $project->name;
         $this->view->type        = $type;
@@ -1127,7 +1131,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2')) 
+        if(isset($this->config->custom->productProject) and strpos($this->config->custom->productProject, '_2'))
         {
             $this->view->isSprint = true;
             unset($this->lang->project->typeList['waterfall']);
@@ -1140,7 +1144,6 @@ class project extends control
         }
 
         $projectID = key($this->projects);
-        if($this->session->project) $projectID = $this->session->project;
         $this->project->setMenu($this->projects, $projectID);
 
         $this->view->title         = $this->lang->project->create;
@@ -1236,7 +1239,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2')) 
+        if(strpos($this->config->custom->productProject, '_2'))
         {
             $this->view->isSprint = true;
 
@@ -2289,16 +2292,15 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID, $module, $method, $extra)
     {
+        $project = $this->project->getByID($projectID);
+        $program = $this->project->getByID($project->program);
+
         $this->view->link      = $this->project->getProjectLink($module, $method, $extra);
         $this->view->projectID = $projectID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
-        $projectPairs = array();
-        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
-        $this->view->projects = $projects;
+        $this->view->projects  = $this->project->getProjectsByProgram($program);
         $this->display();
     }
 
@@ -2526,9 +2528,9 @@ class project extends control
         {
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft') 
+                if($story->status == 'draft')
                 {
-                    $count++; 
+                    $count++;
                     unset($planStory[$id]);
                     continue;
                 }

@@ -120,12 +120,13 @@ class releaseModel extends model
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
         $release = fixer::input('post')
+            ->add('program', $this->session->program)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
-            ->cleanInt('build')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
             ->get();
@@ -146,6 +147,7 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
+                $build->program = $this->session->program;
                 $build->product = (int)$productID;
                 $build->branch  = (int)$branch;
                 $build->name    = $release->name;
@@ -168,7 +170,7 @@ class releaseModel extends model
         }
 
         if($release->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('branch');
-        
+
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()

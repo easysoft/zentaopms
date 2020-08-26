@@ -8,6 +8,7 @@ $config->custom->canAdd['testtask'] = 'priList';
 $config->custom->canAdd['todo']     = 'priList,typeList';
 $config->custom->canAdd['user']     = 'roleList';
 $config->custom->canAdd['block']    = '';
+$config->custom->canAdd['program']  = 'unitList';
 
 $config->custom->noModuleMenu = array();
 

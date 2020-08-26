@@ -119,18 +119,57 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
-$lang->menu = new stdclass();
-$lang->menu->my      = '<span> 我的地盘</span>|my|index';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = '测试|qa|index';
-$lang->menu->ci      = '集成|repo|browse';
-$lang->menu->doc     = '文档|doc|index';
-$lang->menu->report  = '统计|report|index';
-$lang->menu->company = '组织|company|index';
-$lang->menu->admin   = '后台|admin|index';
+$lang->mainNav = new stdclass();
+$lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|browse|';
+//$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
+//$lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
+$lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
+$lang->mainNav->admin     = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
+//$lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
-$lang->dividerMenu = ',qa,report,';
+$lang->reporting = new stdclass();
+$lang->dividerMenu = ',admin,';
+
+/* Scrum menu. */
+$lang->menu = new stdclass();
+$lang->menu->program = '仪表盘|program|index|';
+$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->project = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->doc     = '文档|doc|index|';
+$lang->menu->qa      = '测试|qa|index';
+$lang->menu->company = new stdclass();
+
+$lang->program = new stdclass();
+
+/* System menu. */
+$lang->system = new stdclass();
+$lang->system->menu = new stdclass();
+$lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
+$lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
+$lang->system->menu->subject     = array('link' => '科目|subject|browse|');
+$lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
+$lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
+$lang->system->dividerMenu = ',auditcl,subject,';
+
+if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+    $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
+    $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
+    
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
+    unset($lang->system->dividerMenu);
+}
+
+$lang->stage = new stdclass();
+$lang->stage->menu = new stdclass();
+$lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
+$lang->stage->menu->settype = '阶段类型|stage|settype|';
+
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -186,20 +225,23 @@ $lang->index->menu->project = "浏览{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index          = '首页|my|index';
-$lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
-$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
-$lang->my->menu->dynamic        = '动态|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密码|my|changepassword';
-$lang->my->menu->manageContacts = '联系人|my|managecontacts';
-$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
+$lang->my->menu->index            = '首页|my|index';
+//$lang->my->menu->todo             = '待办|my|todo|';
+//$lang->my->menu->effort           = '日志|my|effort|';
+//$lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->program          = array('link' => '项目|my|program|');
+$lang->my->menu->task             = array('link' => '任务|my|task|', 'subModule' => 'task');
+$lang->my->menu->bug              = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
+$lang->my->menu->testtask         = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->story            = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
+$lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
+$lang->my->menu->dynamic          = '动态|my|dynamic|';
+//$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
+//$lang->my->menu->changePassword = '密码|my|changepassword';
+//$lang->my->menu->manageContacts = '联系人|my|managecontacts';
+//$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
-$lang->my->dividerMenu = ',task,myProject,profile,';
+$lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -222,12 +264,12 @@ $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 
-$lang->product->dividerMenu = ',plan,project,doc,';
+$lang->product->dividerMenu = ',project,doc,';
 
-$lang->story       = new stdclass();
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
+$lang->story       = new stdclass();
 
 $lang->branch->menu      = $lang->product->menu;
 $lang->story->menu       = $lang->product->menu;
@@ -368,7 +410,6 @@ $lang->job->menu     = $lang->ci->menu;
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加文件夹|doc|createLib', 'float' => 'right');
 
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
@@ -388,34 +429,40 @@ $lang->report->notice->help = '注：统计报表的数据来源于列表页面�
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
+$lang->dept    = new stdclass();
+$lang->group   = new stdclass();
+$lang->user    = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => 'user');
+$lang->dept->menu    = new stdclass();
+$lang->group->menu   = new stdclass();
+$lang->user->menu    = new stdclass();
+
+$lang->company = new stdclass();
+$lang->company->menu = new stdclass();
+$lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => ',user,');
 $lang->company->menu->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
 $lang->company->menu->dynamic     = '动态|company|dynamic|';
 $lang->company->menu->view        = array('link' => '公司|company|view');
 
-$lang->dept  = new stdclass();
-$lang->group = new stdclass();
-$lang->user  = new stdclass();
-
-$lang->dept->menu  = $lang->company->menu;
-$lang->group->menu = $lang->company->menu;
-$lang->user->menu  = $lang->company->menu;
-
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
-$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
+//$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
+//$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
+//$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+//$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
 $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
+
+$lang->company->menu = $lang->company->menu;
+$lang->dept->menu    = $lang->company->menu;
+$lang->group->menu   = $lang->company->menu;
+$lang->user->menu    = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -455,19 +502,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->backup->menu    = $lang->admin->menu;
-$lang->cron->menu      = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->custom->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->dev->menu       = $lang->admin->menu;
-$lang->entry->menu     = $lang->admin->menu;
-$lang->webhook->menu   = $lang->admin->menu;
-$lang->message->menu   = $lang->admin->menu;
-
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
@@ -487,8 +521,8 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->doclib      = 'doc';
-$lang->menugroup->people      = 'company';
+$lang->menugroup->report      = 'reporting';
+$lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->score       = 'my';
@@ -507,6 +541,94 @@ $lang->menugroup->repo    = 'ci';
 $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
+
+/* Nav group.*/
+$lang->navGroup = new stdclass();
+$lang->navGroup->my     = 'my';
+$lang->navGroup->todo   = 'my';
+$lang->navGroup->effort = 'my';
+
+$lang->navGroup->product     = 'program';
+$lang->navGroup->story       = 'program';
+$lang->navGroup->branch      = 'program';
+$lang->navGroup->productplan = 'program';
+$lang->navGroup->release     = 'program';
+$lang->navGroup->tree        = 'program';
+$lang->navGroup->project     = 'program';
+$lang->navGroup->task        = 'program';
+$lang->navGroup->qa          = 'program';
+$lang->navGroup->bug         = 'program';
+$lang->navGroup->doc         = 'program';
+$lang->navGroup->testcase    = 'program';
+$lang->navGroup->testtask    = 'program';
+$lang->navGroup->testreport  = 'program';
+$lang->navGroup->testsuite   = 'program';
+$lang->navGroup->caselib     = 'program';
+$lang->navGroup->feedback    = 'program';
+$lang->navGroup->deploy      = 'program';
+$lang->navGroup->stakeholder = 'program';
+
+$lang->navGroup->programplan    = 'program';
+$lang->navGroup->workestimation = 'program';
+$lang->navGroup->budget         = 'program';
+$lang->navGroup->review         = 'program';
+$lang->navGroup->reviewissue    = 'program';
+$lang->navGroup->weekly         = 'program';
+$lang->navGroup->milestone      = 'program';
+$lang->navGroup->pssp           = 'program';
+$lang->navGroup->design         = 'program';
+$lang->navGroup->repo           = 'program';
+$lang->navGroup->issue          = 'program';
+$lang->navGroup->risk           = 'program';
+$lang->navGroup->auditplan      = 'program';
+$lang->navGroup->cm             = 'program';
+$lang->navGroup->nc             = 'program';
+$lang->navGroup->job            = 'program';
+$lang->navGroup->jenkins        = 'program';
+$lang->navGroup->compile        = 'program';
+$lang->navGroup->build          = 'program';
+
+$lang->navGroup->durationestimation = 'program';
+
+$lang->navGroup->stage         = 'system';
+$lang->navGroup->measurement   = 'system';
+$lang->navGroup->report        = 'system';
+$lang->navGroup->sqlbuilder    = 'system';
+$lang->navGroup->auditcl       = 'system';
+$lang->navGroup->cmcl          = 'system';
+$lang->navGroup->process       = 'system';
+$lang->navGroup->activity      = 'system';
+$lang->navGroup->output        = 'system';
+$lang->navGroup->classify      = 'system';
+$lang->navGroup->subject       = 'system';
+$lang->navGroup->baseline      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->reviewsetting = 'system';
+$lang->navGroup->holiday       = 'system';
+
+$lang->navGroup->attend   = 'attend';
+$lang->navGroup->leave    = 'attend';
+$lang->navGroup->makeup   = 'attend';
+$lang->navGroup->overtime = 'attend';
+$lang->navGroup->lieu     = 'attend';
+
+$lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->webhook   = 'admin';
+$lang->navGroup->sms       = 'admin';
+$lang->navGroup->message   = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->custom    = 'admin';
+$lang->navGroup->cron      = 'admin';
+$lang->navGroup->backup    = 'admin';
+$lang->navGroup->mail      = 'admin';
+$lang->navGroup->dev       = 'admin';
+$lang->navGroup->extension = 'admin';
+$lang->navGroup->action    = 'admin';
+$lang->navGroup->search    = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
@@ -851,6 +973,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     $lang->testcase->subMenu = new stdclass();
     $lang->testcase->subMenu->bysuite = new stdclass();
+    $lang->testcase->subMenu->bysuite = new stdclass();
     $lang->testcase->subMenu->bysuite->create = '建套件|testsuite|create|productID=%s';
 
     $lang->testcase->menuOrder[5]  = 'product';
@@ -932,3 +1055,86 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
 }
+
+/* Cmmi menu. */
+$lang->menu->cmmi = new stdclass();
+$lang->menu->cmmi->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
+$lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
+$lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
+$lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
+$lang->menu->cmmi->ci             = '代码|repo|browse|';
+$lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
+$lang->menu->cmmi->issue          = '问题|issue|browse|';
+$lang->menu->cmmi->risk           = '风险|risk|browse|';
+$lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+
+/* Srcum menu. */
+$lang->menu->srcum = new stdclass();
+$lang->menu->srcum->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
+
+$lang->cmmi = new stdclass();
+$lang->cmmi->subMenu = new stdclass();
+$lang->cmmi->subMenu->list = new stdclass();
+$lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->cmmi->subMenu->list->program        = '项目|program|edit|';
+
+$lang->cmmiproduct    = new stdclass();
+$lang->workestimation = new stdclass();
+$lang->budget         = new stdclass();
+$lang->programplan    = new stdclass();
+$lang->review         = new stdclass();
+$lang->weekly         = new stdclass();
+$lang->milestone      = new stdclass();
+$lang->design         = new stdclass();
+$lang->auditplan      = new stdclass();
+$lang->cm             = new stdclass();
+$lang->nc             = new stdclass();
+$lang->pssp           = new stdclass();
+$lang->issue          = new stdclass();
+$lang->risk           = new stdclass();
+$lang->stakeholder    = new stdclass();
+$lang->durationestimation = new stdclass();
+
+$lang->workestimation->menu = new stdclass();
+$lang->budget->menu         = new stdclass();
+$lang->programplan->menu    = new stdclass();
+$lang->review->menu         = new stdclass();
+$lang->weekly->menu         = new stdclass();
+$lang->milestone->menu      = new stdclass();
+$lang->cmmiproduct->menu    = new stdclass();
+$lang->design->menu         = new stdclass();
+$lang->auditplan->menu      = new stdclass();
+$lang->cm->menu             = new stdclass();
+$lang->pssp->menu           = new stdclass();
+$lang->issue->menu          = new stdclass();
+$lang->risk->menu           = new stdclass();
+$lang->stakeholder->menu    = new stdclass();
+$lang->durationestimation->menu = new stdclass();
+
+$lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget   = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
+
+$lang->durationestimation->menu = $lang->workestimation->menu;
+$lang->budget->menu = $lang->workestimation->menu;
+
+$lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
+$lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
+
+$lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
+$lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
+
+$lang->cmmiproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
+$lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
+$lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+
+$lang->milestone->menu = $lang->weekly->menu;
+$lang->nc->menu        = $lang->auditplan->menu;
+
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->haveMenuMethod   = array('custom');

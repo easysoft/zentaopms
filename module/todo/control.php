@@ -579,6 +579,20 @@ class todo extends control
     }
 
     /**
+     * AJAX: get program id.
+     *
+     * @param  int     $objectID
+     * @param  varchar $objectType
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProgramID($objectID, $objectType)
+    {
+        $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
+        die($this->dao->select('program')->from($table)->where('id')->eq($objectID)->fetch('program'));
+    }
+
+    /**
      * Create cycle.
      *
      * @access public

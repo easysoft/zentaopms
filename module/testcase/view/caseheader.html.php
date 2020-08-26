@@ -8,7 +8,7 @@
       echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
       if(!empty($moduleID))
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -28,7 +28,7 @@
     if($config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
     if($hasBrowsePriv and $menuType == 'QUERY')
     {
-        $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+        $searchBrowseLink = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
         $isBySearch       = $browseType == 'bysearch';
         include '../../common/view/querymenu.html.php';
     }

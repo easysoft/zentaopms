@@ -16,13 +16,13 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
 <?php
-/* Set unfold parent taskID. */
-$this->app->loadLang('project');
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->project->treeLevel['all']);
 js::set('foldAll',       $lang->project->treeLevel['root']);
+js::set('storyType', $storyType);
+if($program->template == 'cmmi') $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -31,7 +31,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -62,20 +62,20 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
                 foreach($lang->product->moreSelects as $key => $value)
                 {
                     $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    echo '<li>' . html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
             }
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
+            $searchBrowseLink = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
             $isBySearch       = $this->session->storyBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
         else
         {
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
+            echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
         }
     }
     ?>
@@ -95,7 +95,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       </ul>
     </div>
     <?php if(!common::checkNotCN()):?>
-    <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
+    <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())
     {
@@ -105,7 +105,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
     }
     else
     {
-        $link = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID");
+        $link = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
         if(common::hasPriv('story', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
     }
     ?>
@@ -120,7 +120,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       }
       else
       {
-          $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID");
+          $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
           $disabled = '';
           if(!common::hasPriv('story', 'create'))
           {
@@ -134,7 +134,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
         <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $disabled?>>
         <?php
-          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
           echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->story->batchCreate) . "</li>";
         ?>
         </li>
@@ -168,7 +168,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
         <?php if(common::hasPriv('story', 'create')):?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>

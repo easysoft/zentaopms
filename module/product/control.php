@@ -208,6 +208,7 @@ class product extends control
         $this->view->position[]    = $this->products[$productID];
         $this->view->position[]    = $this->lang->product->browse;
         $this->view->productID     = $productID;
+        $this->view->program       = $this->loadModel('project')->getById($this->session->program);
         $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
@@ -671,26 +672,10 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
+        $product = $this->product->getByID($productID);
+        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
+        $this->view->programID = $product->program;
 
-        /* Sort products as lines' order first. */
-        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
-        $productList = array();
-        foreach($lines as $id => $name)
-        {
-            foreach($products as $key => $product)
-            {
-                if($product->line == $id)
-                {
-                    $product->name = $name . '/' . $product->name;
-                    $productList[] = $product;
-                    unset($products[$key]);
-                }
-            }
-        }
-        $productList = array_merge($productList, $products);
-
-        $this->view->products  = $productList;
         $this->display();
     }
 
@@ -873,5 +858,18 @@ class product extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
+    }
+
+    /**
+     * Set product id to session in ajax
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxSetState($productID)
+    {
+        $this->session->set('product', (int)$productID);
+        $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }

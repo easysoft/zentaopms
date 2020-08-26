@@ -606,6 +606,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4');
             $this->execSQL($this->getUpgradeFile('12.4'));
             $this->appendExec('12_4');
+        case '20_0':
+            $this->saveLogs('Execute 20_0');
+            $this->execSQL($this->getUpgradeFile('20.0'));
+            $this->setWork2Full();
+            $this->appendExec('20_0');
         }
 
         $this->deletePatch();
@@ -777,11 +782,15 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
+<<<<<<< HEAD
+            case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
+=======
             case '12_3':
             case '12_3_1':
             case '12_3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.2'));
             case '12_3_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.3'));
             case '12_4':   $confirmContent .= file_get_contents($this->getUpgradeFile('12.4'));
+>>>>>>> master
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1413,6 +1422,8 @@ class upgradeModel extends model
             }
 
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = str_replace('__DELIMITER__', ';', $sql);
+            $sql = str_replace('__TABLE__', $this->config->db->name, $sql);
             try
             {
                 $this->saveLogs($sql);
@@ -3833,6 +3844,257 @@ class upgradeModel extends model
         static $fh;
         if(empty($fh)) $fh = fopen($logFile, 'a');
         fwrite($fh, $log);
+    }
+
+    /**
+     * Create program.
+     * 
+     * @param  array  $productIdList 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return int
+     */
+    public function createProgram($productIdList = array(), $projectIdList = array(), $pgmAdmins = '')
+    {
+        $data    = fixer::input('post')->get();
+        $program = new stdclass();
+        $program->name          = $data->name;
+        $program->code          = $data->code;
+        $program->template      = 'scrum';
+        $program->type          = 'program';
+        $program->category      = count($productIdList) > 1 ? 'multiple' : 'single';
+        $program->status        = 'wait';
+        $program->begin         = $data->begin;
+        $program->end           = $data->end;
+        $program->days          = $data->days;
+        $program->budget        = $data->budget;
+        $program->budgetUnit    = $data->budgetUnit;
+        $program->PM            = $data->PM;
+        $program->privway       = 'extend';
+        $program->team          = substr($data->name, 0, 30);
+        $program->openedBy      = $this->app->user->account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = $data->acl;
+        if(!empty($data->whitelist)) $program->whitelist = join(',', $data->whitelist);
+
+        $this->app->loadLang('project');
+        $this->lang->upgrade->name  = $this->lang->project->name;
+        $this->lang->upgrade->code  = $this->lang->project->code;
+        $this->lang->upgrade->begin = $this->lang->project->begin;
+        $this->lang->upgrade->end   = $this->lang->project->end;
+
+        $this->dao->insert(TABLE_PROJECT)->data($program)
+            ->batchcheck('name,code,begin,end', 'notempty')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+            ->check('name', 'unique', "deleted='0'")
+            ->check('code', 'unique', "deleted='0'")
+            ->exec();
+        if(dao::isError()) return false;
+
+        $programID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
+
+        if($pgmAdmins)
+        {
+            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+            if($groupID)
+            {
+                foreach($pgmAdmins as $pgmAdmin)
+                {
+                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
+                    if(empty($userGroup))
+                    {
+                        $userGroup = new stdclass();
+                        $userGroup->account = $pgmAdmin;
+                        $userGroup->group   = $groupID;
+                        $userGroup->program = '';
+                    }
+
+                    $userGroup->program .= ',' . $programID;
+                    $userGroup->program  = trim($userGroup->program, ',');
+
+                    $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
+                }
+            }
+        }
+
+        return $programID;
+    }
+
+    /**
+     * Create product for program.
+     * 
+     * @param  int    $programID 
+     * @access public
+     * @return void
+     */
+    public function createProduct4Program($programID)
+    {
+        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+
+        $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('code')->eq($program->code)->fetch();
+        if($product) return $product->id;
+
+        $product = new stdclass();
+        $product->name           = $program->name;
+        $product->code           = $program->code;
+        $product->program        = $program->id;
+        $product->type           = 'normal';
+        $product->status         = 'normal';
+        $product->acl            = $program->acl;
+        $product->whitelist      = $program->whitelist;
+        $product->createdBy      = $program->createdBy;
+        $product->createdDate    = $program->createdDate;
+        $product->createdVersion = $this->config->version;
+
+        $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+        $productID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->product = $productID;
+        $lib->name    = $this->lang->doclib->main['product'];
+        $lib->type    = 'product';
+        $lib->main    = '1'; 
+        $lib->acl     = 'default';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+        return $productID;
+    }
+
+    /**
+     * Set program for product
+     * 
+     * @param  int    $programID 
+     * @param  array  $productIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgram4Product($programID, $productIdList = array())
+    {
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->in($productIdList)->exec();
+        $this->dao->update(TABLE_STORY)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_RELEASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_CASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUILD)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
+    }
+
+    /**
+     * Set program for project
+     * 
+     * @param  int    $programID 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgram4Project($programID, $projectIdList = array())
+    {
+        $this->dao->update(TABLE_PROJECT)->set('program')->eq($programID)->where('id')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('program')->eq($programID)->where('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($projectIdList) . ')')->exec();
+    }
+
+    /**
+     * Set program team.
+     * 
+     * @param  int    $programID 
+     * @param  array  $productIdList 
+     * @param  array  $projectIdList 
+     * @access public
+     * @return void
+     */
+    public function setProgramTeam($programID, $productIdList = array(), $projectIdList = array())
+    {
+        $teams    = array();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        foreach($products as $product)
+        {
+            $teams[$product->PO] = $product->PO;
+            $teams[$product->QD] = $product->QD;
+            $teams[$product->RD] = $product->RD;
+            if(isset($product->feedback)) $teams[$product->feedback] = $product->feedback;
+        }
+
+        foreach($projects as $project)
+        {
+            $teams[$project->PO] = $project->PO;
+            $teams[$project->PM] = $project->PM;
+            $teams[$project->QD] = $project->QD;
+            $teams[$project->RD] = $project->RD;
+            if(isset($project->feedback)) $teams[$project->feedback] = $project->feedback;
+        }
+
+        foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
+        $teams += $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($projectIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
+        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIdList)->fetchPairs('account', 'account');
+
+        $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
+        $today = helper::today();
+        foreach($teams as $account)
+        {
+            if(empty($account)) continue;
+            if(!isset($users[$account])) continue;
+
+            $team = new stdclass();
+            $team->root    = $programID;
+            $team->type    = 'project';
+            $team->account = $account;
+            $team->join    = $today;
+            $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+        }
+    }
+
+    /**
+     * Set program default priv.
+     * 
+     * @param  string $fromVersion 
+     * @access public
+     * @return void
+     */
+    public function setDefaultPriv()
+    {
+        $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('role')->ne('pgmadmin')->fetchPairs();
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'program';
+            $data->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'transfer';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $pgmAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+        foreach($this->lang->resource->program as $method => $methodLang)
+        {
+            $data = new stdclass();
+            $data->group  = $pgmAdminGroupID;
+            $data->module = 'program';
+            $data->method = $method;
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+    }
+
+    /**
+     * Set work to full.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function setWork2Full()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
+        return true;
     }
 
     /**

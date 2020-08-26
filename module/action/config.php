@@ -3,6 +3,7 @@ $config->action->objectNameFields['product']     = 'name';
 $config->action->objectNameFields['story']       = 'title';
 $config->action->objectNameFields['productplan'] = 'title';
 $config->action->objectNameFields['release']     = 'name';
+$config->action->objectNameFields['program']     = 'name';
 $config->action->objectNameFields['project']     = 'name';
 $config->action->objectNameFields['task']        = 'name';
 $config->action->objectNameFields['build']       = 'name';
@@ -21,6 +22,7 @@ $config->action->objectNameFields['caselib']     = 'name';
 $config->action->objectNameFields['testreport']  = 'title';
 $config->action->objectNameFields['entry']       = 'name';
 $config->action->objectNameFields['webhook']     = 'name';
+$config->action->objectNameFields['risk']        = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -29,3 +31,5 @@ $config->action->majorList['task']    = array('assigned', 'finished', 'activated
 $config->action->majorList['bug']     = array('assigned', 'resolved');
 $config->action->majorList['release'] = array('opened');
 $config->action->majorList['build']   = array('opened');
+$config->action->majorList['product'] = array('opened', 'edited');
+$config->action->majorList['project'] = array('opened', 'edited');

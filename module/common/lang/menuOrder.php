@@ -1,14 +1,30 @@
 <?php
 /* Sort of main menu. */
-$lang->menuOrder[5]  = 'my';
-$lang->menuOrder[10] = 'product';
-$lang->menuOrder[15] = 'project';
-$lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'ci';
-$lang->menuOrder[30] = 'doc';
-$lang->menuOrder[35] = 'report';
-$lang->menuOrder[40] = 'company';
-$lang->menuOrder[45] = 'admin';
+$lang->cmmipgm = new stdclass();
+$lang->cmmipgm->menuOrder[5]   = 'programindex';
+$lang->cmmipgm->menuOrder[10]  = 'programplan';
+$lang->cmmipgm->menuOrder[15]  = 'project';
+$lang->cmmipgm->menuOrder[20]  = 'weekly';
+$lang->cmmipgm->menuOrder[25]  = 'review';
+$lang->cmmipgm->menuOrder[30]  = 'doc';
+$lang->cmmipgm->menuOrder[35]  = 'product';
+$lang->cmmipgm->menuOrder[40]  = 'design';
+$lang->cmmipgm->menuOrder[45]  = 'ci';
+$lang->cmmipgm->menuOrder[50]  = 'qa';
+$lang->cmmipgm->menuOrder[55]  = 'release';
+$lang->cmmipgm->menuOrder[60]  = 'issue';
+$lang->cmmipgm->menuOrder[65]  = 'risk';
+$lang->cmmipgm->menuOrder[70]  = 'report';
+$lang->cmmipgm->menuOrder[75]  = 'auditplan';
+$lang->cmmipgm->menuOrder[80]  = 'cm';
+$lang->cmmipgm->menuOrder[85]  = 'list';
+
+$lang->scrumpgm = new stdclass();
+$lang->scrumpgm->menuOrder[5]   = 'program';
+$lang->scrumpgm->menuOrder[10]  = 'product';
+$lang->scrumpgm->menuOrder[15]  = 'project';
+$lang->scrumpgm->menuOrder[20]  = 'qa';
+$lang->scrumpgm->menuOrder[25]  = 'doc';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
@@ -17,20 +33,25 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[15] = 'task';
-$lang->my->menuOrder[20] = 'bug';
-$lang->my->menuOrder[25] = 'testtask';
-$lang->my->menuOrder[30] = 'story';
-$lang->my->menuOrder[35] = 'myProject';
-$lang->my->menuOrder[40] = 'dynamic';
-$lang->my->menuOrder[45] = 'profile';
-$lang->my->menuOrder[50] = 'changePassword';
-$lang->my->menuOrder[55] = 'score';
+$lang->my->menuOrder[12] = 'program';
+$lang->my->menuOrder[20] = 'myProject';
+$lang->my->menuOrder[25] = 'review';
+$lang->my->menuOrder[29] = 'requirement';
+$lang->my->menuOrder[31] = 'story';
+$lang->my->menuOrder[40] = 'task';
+$lang->my->menuOrder[45] = 'bug';
+$lang->my->menuOrder[50] = 'testtask';
+$lang->my->menuOrder[55] = 'nc';
+$lang->my->menuOrder[60] = 'dynamic';
+$lang->my->menuOrder[65] = 'profile';
+$lang->my->menuOrder[70] = 'changePassword';
+$lang->my->menuOrder[75] = 'score';
 $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */
+$lang->product->menuOrder[0]  = 'plan';
+$lang->product->menuOrder[1]  = 'requirement';
 $lang->product->menuOrder[5]  = 'story';
-$lang->product->menuOrder[10] = 'plan';
 $lang->product->menuOrder[15] = 'release';
 $lang->product->menuOrder[20] = 'roadmap';
 $lang->product->menuOrder[25] = 'project';
@@ -114,8 +135,20 @@ $lang->dept->menuOrder        = $lang->company->menuOrder;
 $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
+/* system menu order. */
+$lang->system->menuOrder[1]  = 'setmodel';
+$lang->system->menuOrder[5]  = 'estimate';
+$lang->system->menuOrder[10] = 'stage';
+$lang->system->menuOrder[15] = 'measurement';
+$lang->system->menuOrder[20] = 'auditcl';
+$lang->system->menuOrder[25] = 'cmcl';
+$lang->system->menuOrder[30] = 'process';
+$lang->system->menuOrder[35] = 'reviewcl';
+$lang->system->menuOrder[40] = 'subject';
+
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
+$lang->admin->menuOrder[9]  = 'company';
 $lang->admin->menuOrder[10] = 'message';
 $lang->admin->menuOrder[15] = 'custom';
 $lang->admin->menuOrder[20] = 'sso';

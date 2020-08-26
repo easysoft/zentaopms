@@ -362,6 +362,25 @@ class customModel extends model
     }
 
     /**
+     * Get system swapper. 
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getSwapper()
+    {
+        $current = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? 'scrum' : 'cmmi'; 
+        $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setcmmi'), 'CMMI') : html::a(helper::createLink('custom', 'setscrum'), 'SCRUM');
+
+        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' title='{$current}'>{$current} <i class='icon icon-swap'></i></button>";
+        $output .= "<ul class='dropdown-menu'><li>" . $link . "</li></ul>";
+        $output .= "</div>";
+
+        return $output;
+    }
+
+    /**
      * Merge shortcut query in featureBar.
      * 
      * @param  string $module 
@@ -509,6 +528,34 @@ class customModel extends model
      * @return void
      */
     public function setFlow()
+    {
+        $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
+
+        /* Change block title. */
+        $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
+        $newConfig = $this->post->productProject;
+
+        list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
+        list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
+
+        foreach($this->config->productCommonList as $clientLang => $productCommonList)
+        {
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
+        }
+
+        foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
+        {
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
+        }
+    }
+
+    /**
+     * Set qc concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setConcept()
     {
         $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
 

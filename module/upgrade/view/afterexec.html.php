@@ -23,7 +23,7 @@
             <div><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-primary btn-wide' id='tohome'")?></div>
           </div>
         </div>
-        <div class='divider'></div>
+        <!--div class='divider'></div>
         <div class='col-md-6'>
           <div class='panel adbox'>
             <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
@@ -38,7 +38,7 @@
               <?php endforeach;?>
             </div>
           </div>
-        </div>
+        </div-->
       </div>
     </div>
   </div>

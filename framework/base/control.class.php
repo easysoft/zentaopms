@@ -930,10 +930,10 @@ class baseControl
      * @access  public
      * @return  string the link string.
      */
-    public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
+    public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false, $programID = 0)
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
-        return helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
+        return helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody, $programID);
     }
 
     /**

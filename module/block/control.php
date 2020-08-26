@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
  * The control file of block of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
@@ -59,6 +59,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
+            if(strpos(",$closedBlock,", ",|contribute,") === false) $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -67,7 +68,7 @@ class block extends control
         }
         elseif(isset($this->lang->block->moduleList[$module]))
         {
-            $this->get->set('mode', 'getblocklist');
+            $module == 'program' ? $this->get->set('mode', 'getprogramlist') : $this->get->set('mode', 'getblocklist');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -204,16 +205,16 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dashboard($module)
+    public function dashboard($module, $type = '')
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getBlockList($module);
+        $blocks = $this->block->getBlockList($module, $type);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$inited and !defined('TUTORIAL'))
+        if((empty($blocks) and !$inited and !defined('TUTORIAL')) || (empty($blocks) and $module == 'program'))
         {
-            if($this->block->initBlock($module)) die(js::reload());
+            if($this->block->initBlock($module, $type)) die(js::reload());
         }
 
         $acls = $this->app->user->rights['acls'];
@@ -246,13 +247,15 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
+
             $block->actionLink = '';
-            if($block->block == 'overview')
+            if(isset($this->config->block->showAction[$block->block]))
             {
-                if($module == 'qa' && common::hasPriv('testcase', 'create'))
+                $action = $this->config->block->showAction[$block->block];
+                if(common::hasPriv($action['module'], $action['method']))
                 {
-                    $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
+                    $this->app->loadLang($action['module']);
+                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->{$action['module']}->create, '', "class='btn btn-mini'");
                 }
             }
 
@@ -305,14 +308,12 @@ class block extends control
         $data = $this->block->getWelcomeBlockData();
 
         $this->view->tasks      = $data['tasks'];
+        $this->view->doneTasks  = $data['doneTasks'];
         $this->view->bugs       = $data['bugs'];
         $this->view->stories    = $data['stories'];
-        $this->view->projects   = $data['projects'];
-        $this->view->products   = $data['products'];
 
         $this->view->delay['task']    = $data['delayTask'];
         $this->view->delay['bug']     = $data['delayBug'];
-        $this->view->delay['project'] = $data['delayProject'];
 
         $time = date('H:i');
         $welcomeType = '19:00';
@@ -323,6 +324,19 @@ class block extends control
         $this->view->welcomeType = $welcomeType;
         $this->display();
     }
+
+    /**
+     * Print contribute block.
+     *
+     * @access public
+     * @return void
+     */
+    public function contribute()
+    {
+        $this->view->data = $this->block->getContributeBlockData();
+        $this->display();
+    }
+
 
     /**
      * Print block.
@@ -376,6 +390,10 @@ class block extends control
         {
             $html = $this->fetch('block', 'welcome');
         }
+        elseif($block->block == 'contribute')
+        {
+            $html = $this->fetch('block', 'contribute');
+        }
 
         echo $html;
     }
@@ -400,9 +418,10 @@ class block extends control
 
         $mode = strtolower($this->get->mode);
 
-        if($mode == 'getblocklist')
+        if($mode == 'getblocklist' || $mode == 'getprogramlist')
         {
-            $blocks = $this->block->getAvailableBlocks($module);
+            $type   = $mode == 'getblocklist' ? '' : 'program';
+            $blocks = $this->block->getAvailableBlocks($module, $type);
             if(!$this->selfCall)
             {
                 echo $blocks;
@@ -523,6 +542,7 @@ class block extends control
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
+        $this->session->set('riskList', $uri);
 
         foreach($todos as $key => $todo)
         {
@@ -699,6 +719,14 @@ class block extends control
             ->fetchAll();
     }
 
+    public function printProgramBlock()
+    {
+        $this->loadModel('project');
+
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', $this->params->orderBy, $this->params->num);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+    }
+
     /**
      * Print product block.
      *
@@ -738,6 +766,72 @@ class block extends control
         $func = 'print' . ucfirst($module) . 'StatisticBlock';
         $this->view->module = $module;
         $this->$func();
+    }
+
+    /**
+     * Print project statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProgramStatisticBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $this->loadModel('project');
+        $this->loadModel('weekly');
+        $this->app->loadLang('task');
+        $this->app->loadLang('story');
+
+        $status = isset($this->params->type) ? $this->params->type : 'all';
+        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+
+        /* Get projects. */
+        $programs = $this->loadModel('program')->getUserPrograms($status, 'id_desc', $num);
+        if(empty($programs))
+        {
+            $this->view->programs = $programs;
+            return false;
+        }
+
+        $today = date('Y-m-d', strtotime(helper::today()));
+        $date  = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $tasks = $this->dao->select("program, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+            ->where('program')->in(array_keys($programs))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('program')
+            ->fetchAll('program');
+
+        foreach($programs as $programID => $program)
+        {
+            if($program->template == 'scrum')
+            {
+                $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
+                $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
+            }
+            else
+            {
+                $begin   = $program->begin;
+                $weeks   = $this->weekly->getWeekPairs($begin);
+                $current = zget($weeks, $date, '');
+                $current = substr($current, 0, -11) . substr($current, -6);
+
+                $program->pv = $this->weekly->getPV($programID, $today);
+                $program->ev = $this->weekly->getEV($programID, $today);
+                $program->ac = $this->weekly->getAC($programID, $today);
+                $program->sv = $this->weekly->getSV($program->ev, $program->pv);
+                $program->cv = $this->weekly->getCV($program->ev, $program->ac);
+
+                $progress = isset($tasks[$programID]) ? (($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft)) ? round($tasks[$programID]->totalConsumed / ($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft), 3) * 100 : 0 : 0;
+
+                $program->current  = $current;
+                $program->progress = $progress;
+            }
+        }
+
+        $this->view->programs = $programs;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
     /**
@@ -989,13 +1083,287 @@ class block extends control
                 $projects[$project->id]->releasedStories = 0;
             }
 
-            $projects[$project->id]->progress      = ($project->totalConsumed || $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 2) * 100 : 0;
+            $projects[$project->id]->progress      = ($project->totalConsumed || $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;
             $projects[$project->id]->taskProgress  = $project->totalTasks ? round(($project->totalTasks - $project->undoneTasks) / $project->totalTasks, 2) * 100 : 0;
             $projects[$project->id]->storyProgress = $project->totalStories ? round(($project->totalStories - $project->unclosedStories) / $project->totalStories, 2) * 100 : 0;
             $projects[$project->id]->bugProgress   = $project->totalBugs ? round(($project->totalBugs - $project->activeBugs) / $project->totalBugs, 2) * 100 : 0;
         }
 
         $this->view->projects = $projects;
+    }
+
+    /**
+     * Print cmmi report block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiReportBlock()
+    {
+        $this->loadModel('program');
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        $today   = date('Y-m-d', strtotime(helper::today()));
+        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $begin   = $program->begin;
+        $weeks   = $this->weekly->getWeekPairs($begin);
+        $current = zget($weeks, $date, '');
+        $task    = $this->dao->select("sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch();
+
+        $this->view->pv = $this->weekly->getPV($this->session->program, $today);
+        $this->view->ev = $this->weekly->getEV($this->session->program, $today);
+        $this->view->ac = $this->weekly->getAC($this->session->program, $today);
+        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
+        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
+
+        $this->view->current  = $current;
+        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 3) * 100 : 0;
+    }
+
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiGanttBlock()
+    {
+        $products  = $this->loadModel('product')->getPairs();
+        $productID = isset($this->session->product) ? 0 : $this->session->product;
+        if($productID && !array_key_exists($productID, $products)) $productID = 0;
+
+        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
+        $this->view->products  = $products;
+        $this->view->productID = $productID;
+    }
+
+    /**
+     * Print cmmi gantt block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiIssueBlock()
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+    }
+
+    /**
+     * Print cmmi risk block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiRiskBlock()
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+    }
+
+    /**
+     * Print cmmi estimate block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiEstimateBlock()
+    {
+        $this->app->loadLang('durationestimation');
+        $programID = $this->session->program;
+        $members   = $this->loadModel('project')->getTeamMemberPairs($programID);
+        $budget    = $this->loadModel('workestimation')->getBudget($programID);
+        if(empty($budget)) $budget = new stdclass();
+
+        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
+        $this->view->members  = count($members) ? count($members) - 1 : 0;
+        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $this->view->budget   = $budget;
+    }
+
+    /**
+     * Print cmmi progress block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCmmiProgressBlock()
+    {
+        $this->loadModel('milestone');
+        $this->loadModel('weekly');
+        $program = $this->loadModel('project')->getByID($this->session->program);
+
+        $begin = $program->begin;
+        $today = helper::today();
+        $end   = date('Y-m-d', strtotime($today));
+
+        $projects = $this->project->getProjectsByProgram($program);
+        $projectIdList = array_keys($projects);
+
+        $charts['PV'] = '[';
+        $charts['EV'] = '[';
+        $charts['AC'] = '[';
+        $i = 1;
+        $start = $begin;
+        $longProgram = helper::diffDate($today, $begin) / 7 > 10;
+        while($start < $end)
+        {
+            $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
+            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
+            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
+            $start              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
+            $i ++;
+        }
+
+        $charts['PV'] .= ']';
+        $charts['EV'] .= ']';
+        $charts['AC'] .= ']';
+
+        $this->view->charts = $charts;
+    }
+
+    /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumoverallBlock()
+    {
+        $programID = $this->session->program;
+        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
+
+        $this->view->totalData = $totalData;
+        $this->view->programID = $programID;
+    }
+
+    /**
+     * Print srcum project list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumlistBlock()
+    {
+        $this->app->loadClass('pager', $static = true);
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $pager = pager::init(0, $num, 1);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
+    }
+
+    /**
+     * Print srcum product block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumproductBlock()
+    {
+        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $productID = array_keys($products);
+
+        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+
+        $this->view->products = $products;
+        $this->view->stories  = $stories;
+        $this->view->bugs     = $bugs;
+        $this->view->releases = $releases;
+    }
+
+    /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumprojectBlock()
+    {
+        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+            ->where('program')->eq($this->session->program)
+            ->fetch();
+    }
+
+    /**
+     * Print srcum dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumdynamicBlock()
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+    }
+
+    /**
+     * Print srcum road map block.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function printScrumroadmapBlock($productID = 0)
+    {
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
+        $products  = $this->loadModel('product')->getPairs();
+        if(!is_numeric($productID)) $productID = key($products);
+
+        $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
+
+        $this->view->productID = $productID;
+        $this->view->products  = $products;
+        $this->view->sync      = 1;
+
+        if($_POST)
+        {
+            $this->view->sync = 0;
+            $this->display('block', 'scrumroadmapblock');
+        }
+    }
+
+    /**
+     * Print srcum test block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumtestBlock()
+    {
+        $this->session->set('testtaskList', $this->app->getURI(true));
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->app->loadLang('testtask');
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.program')->eq($this->session->program)->fi()
+            ->andWhere('t1.product = t5.product')
+            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->fetchAll();
     }
 
     /**
@@ -1190,12 +1558,14 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
-        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task'] = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']  = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk'] = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
+        $count  = array();
 
         if(isset($hasViewPriv['todo']))
         {
@@ -1219,6 +1589,7 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
+            $count['todo'] = count($todos);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['task']))
@@ -1232,6 +1603,7 @@ class block extends control
             if(isset($params->taskNum)) $stmt->limit($params->taskNum);
             $tasks = $stmt->fetchAll();
 
+            $count['task'] = count($tasks);
             $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
@@ -1245,13 +1617,50 @@ class block extends control
             if(isset($params->bugNum)) $stmt->limit($params->bugNum);
             $bugs = $stmt->fetchAll();
 
+            $count['bug'] = count($bugs);
             $this->view->bugs = $bugs;
+        }
+        if(isset($hasViewPriv['risk']))
+        {
+            $this->app->loadLang('risk');
+            $stmt = $this->dao->select('*')->from(TABLE_RISK)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->riskNum)) $stmt->limit($params->riskNum);
+            $risks = $stmt->fetchAll();
+
+            $count['risk'] = count($risks);
+            $this->view->risks = $risks;
         }
 
         $this->view->selfCall    = $this->selfCall;
         $this->view->hasViewPriv = $hasViewPriv;
+        $this->view->count       = $count;
         $this->view->longBlock   = $longBlock;
         $this->display();
+    }
+
+    /**
+     * Print recent program block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printRecentprogramBlock()
+    {
+        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 3, 'order_desc');
+    }
+
+    public function printProgramteamBlock()
+    {
+        $this->loadModel('project');
+
+        $num = isset($this->params->num)  ? (int)$this->params->num : 15;
+
+        /* Get projects. */
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
     }
 
     /**

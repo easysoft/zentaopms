@@ -1,0 +1,91 @@
+<?php
+/**
+ * The project block view file of block module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     block
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<?php if(empty($totalData)): ?>
+<div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
+<?php else:?>
+<style>
+#totalInvestment{padding-bottom: 5px;}
+.overview-title{font-size: 14px; color: #838a9d;}
+.extra-tips{font-size: 12px; color: #a1a7b7;}
+.progress{margin-bottom: 8px;}
+.total-block{padding: 0px 25px;}
+.hours-statistics{position: relative; padding: 0px 5px 5px; display: table-cell;text-align: center;}
+.hours-statistics > small {display: block; color: #A6AAB8;}
+.hours-statistics > span {display: block; color: #3c4353; font-weight: bold;}
+</style>
+<div class="panel-body conatiner-fluid">
+  <div class="table-row">
+    <div class="col-6 tile">
+      <div class="text-left" id="totalInvestment"><strong><?php echo $lang->block->totalInvestment;?></strong></div>
+      <div class="table-row">
+        <div class="col-4 tile">
+          <div class="overview-title"><i class="icon-program-group icon-group"></i><?php echo $lang->block->totalPeople;?></div>
+          <div class="tile-amount">
+          <?php echo $totalData[$programID]->teamCount ? html::a($this->createLink('program', 'manageMembers', 'programID=' . $programID), $totalData[$programID]->teamCount) : 0;?>
+          </div>
+        </div>
+        <div class="col-4 tile">
+          <div class="overview-title"><i class="icon icon-time"></i><?php echo $lang->block->consumedHours;?></div>
+          <div class="tile-amount"><a href="/my-task-assignedTo.html"><?php echo $totalData[$programID]->consumed;?></a>
+          </div>
+          <div class="tile-info">
+          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$programID]->estimate;?></span>
+          </div>
+        </div>
+        <div class="col-4 tile">
+          <div class="overview-title"><i class="icon icon-circle"></i><?php echo $lang->block->spent;?></div>
+          <div class="tile-amount"><a href="/my-task-assignedTo.html">￥0</a>
+          </div>
+          <div class="tile-info">
+          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$programID]->budget;?></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 total-block">
+      <div><strong><?php echo $lang->block->totalStory;?></strong></div>
+      <div class="tile-amount">
+      <?php echo $totalData[$programID]->allStories ? html::a($this->createLink('project', 'story', 'projectID=' . $programID), $totalData[$programID]->allStories) : 0;?>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$programID]->doneStories;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$programID]->allStories;?>" style="width: <?php echo floor(($totalData[$programID]->doneStories/$totalData[$programID]->allStories)*100).'%';?>"></div>
+      </div>
+      <div class="hours-statistics">
+        <small><?php echo $lang->block->done;?></small>
+        <span><?php echo $totalData[$programID]->doneStories;?></span>
+      </div>
+      <div class="hours-statistics">
+        <small><?php echo $lang->block->left;?></small>
+        <span><?php echo $totalData[$programID]->leftStories;?></span>
+      </div>
+    </div>
+    <div class="col-3 total-block">
+      <div><strong><?php echo $lang->block->totalBug;?></strong></div>
+      <div class="tile-amount">
+      <?php echo $totalData[$programID]->allBugs ? html::a($this->createLink('qa', 'index', 'pgm=' . $programID), $totalData[$programID]->allBugs) : 0;?>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$programID]->doneBugs;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$programID]->allBugs;?>" style="width: <?php echo floor(($totalData[$programID]->doneBugs/$totalData[$programID]->allBugs)*100).'%';?>"></div>
+      </div>
+      <div class="hours-statistics">
+        <small><?php echo $lang->block->done;?></small>
+        <span><?php echo $totalData[$programID]->doneBugs;?></span>
+      </div>
+      <div class="hours-statistics">
+        <small><?php echo $lang->block->left;?></small>
+        <span><?php echo $totalData[$programID]->leftBugs;?></span>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif;?>

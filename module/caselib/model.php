@@ -235,6 +235,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
+            ->add('program', $this->session->program)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')

@@ -51,7 +51,9 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)
+            ->where('deleted')->eq('0')
+            ->orderBy('id')->fetchPairs('id', 'name');
         $jenkins = array('' => '') + $jenkins;
         return $jenkins;
     }

@@ -1,0 +1,8 @@
+.modal-dialog{width:100%;}
+.checkbox-primary{overflow:hidden;}
+.pgmWidth{width:48% !important;}
+#whitelistBox .checkbox-inline {display: inline-block !important; padding-left: 0px !important;}
+#whitelistBox .checkbox-inline:first-child {margin-left: 10px !important;}
+#budget {border-right:0px;}
+.divider{background:#f1f1f1 !important; width:20px !important; padding:1px !important;}
+.gray{background:#f1f1f1 !important}

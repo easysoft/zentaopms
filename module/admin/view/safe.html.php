@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style type='text/css'>
+  .table-form>tbody>tr>th{width:118px !important;}
+</style>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

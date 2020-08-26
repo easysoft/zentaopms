@@ -130,7 +130,7 @@ class group extends control
             $this->group->updateView($groupID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $group = $this->group->getById($groupID);
@@ -140,6 +140,7 @@ class group extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group      = $group;
+        $this->view->programs   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('program')->eq(0)->andWhere('template')->ne('')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
@@ -252,6 +253,42 @@ class group extends control
         $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
         $this->view->groupUsers = $groupUsers;
         $this->view->otherUsers = $otherUsers;
+
+        $this->display();
+    }
+
+    /**
+     * Manage members of a group.
+     * 
+     * @param  int    $groupID 
+     * @param  int    $deptID
+     * @access public
+     * @return void
+     */
+    public function managePgmAdmin($groupID, $deptID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->group->updatePgmAdmin($groupID);
+            die(js::locate(inlink('managePgmAdmin', "group=$groupID"), 'parent'));
+        }
+        $group        = $this->group->getById($groupID);
+        $groupUsers   = $this->group->getUserPairs($groupID);
+        $userPrograms = $this->group->getUserPrograms($groupID);
+        $allUsers     = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
+
+        $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $position[] = $group->name;
+        $position[] = $this->lang->group->manageMember;
+
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->allUsers     = $allUsers;
+        $this->view->group        = $group;
+        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs();
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePgmAdminLink'), $groupID);
+        $this->view->groupUsers   = $groupUsers;
+        $this->view->userPrograms = $userPrograms;
 
         $this->display();
     }

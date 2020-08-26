@@ -59,6 +59,8 @@ class blockModel extends model
             unset($_SESSION['album'][$uid]);
         }
 
+        if(strpos($data->block, 'cmmi')  !== false) $data->type = 'cmmi';
+        if(strpos($data->block, 'scrum') !== false) $data->type = 'scrum';
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
         if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
@@ -129,11 +131,12 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function getBlockList($module = 'my')
+    public function getBlockList($module = 'my', $type = '')
     {
         $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->andWhere('hidden')->eq(0)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->beginIF($this->config->global->flow != 'full')->andWhere('block')->notin('flowchart')->fi()
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('source')->notin('project,qa')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('source')->notin('product,qa')->fi()
@@ -170,6 +173,7 @@ class blockModel extends model
         $data = array();
 
         $data['tasks']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        $data['doneTasks']= (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi() //Fix bug #2373.
@@ -219,11 +223,12 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function initBlock($module)
+    public function initBlock($module, $type = '')
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
-        $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
         $account = $this->app->user->account;
+        if($module == 'program') $blocks = $this->lang->block->default[$type]['program'];
+        else $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
         /* Mark this app has init. */
         $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
@@ -232,6 +237,7 @@ class blockModel extends model
         {
             $block['order']   = $index;
             $block['module']  = $module;
+            $block['type']    = $type;
             $block['account'] = $account;
             $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             if(!isset($block['source'])) $block['source'] = $module;
@@ -248,10 +254,20 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '')
+    public function getAvailableBlocks($module = '', $type = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        if($type == 'program')
+        {
+            $programID = $this->session->program;
+            $program   = $this->loadModel('project')->getByID($programID);
+            $blocks    = $this->lang->block->modules[$program->template]['index']->availableBlocks;
+        }
+        else
+        {
+            if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        }
+
         if(isset($this->config->block->closed))
         {
             foreach($blocks as $blockKey => $blockName)
@@ -436,6 +452,26 @@ class blockModel extends model
     }
 
     /**
+     * Get program params.
+     * 
+     * @access public
+     * @return json
+     */
+    public function getProgramParams()
+    {
+        $this->app->loadLang('program');
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->program->featureBar;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($this->onlyNumParams($params));
+    }
+
+    /**
      * Get Build params.
      * 
      * @access public
@@ -537,6 +573,17 @@ class blockModel extends model
     }
 
     /**
+     * Get recent program pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getRecentprogramParams()
+    {
+        return false;
+    }
+
+    /**
      * Get product overview pararms.
      *
      * @access public
@@ -545,6 +592,102 @@ class blockModel extends model
     public function getOverviewParams()
     {
         return false;
+    }
+
+    /**
+     * Get cmmi program report pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmireportParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program estimate pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiestimateParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program gantt pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiganttParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get program progress pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCmmiprogressParams()
+    {
+        return false;
+    }
+
+    /** 
+     * Get cmmi issue params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getCmmiissueParams($module = '') 
+    {
+        $this->app->loadLang('issue');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /** 
+     * Get cmmi risk params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getCmmiriskParams($module = '') 
+    {
+        $this->app->loadLang('risk');
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->risk->featureBar['browse'];
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
     }
 
     /**
@@ -575,6 +718,10 @@ class blockModel extends model
         $params->bugNum['name']    = $this->lang->block->bugNum;
         $params->bugNum['default'] = 20; 
         $params->bugNum['control'] = 'input';
+
+        $params->riskNum['name']    = $this->lang->block->riskNum;
+        $params->riskNum['default'] = 20;
+        $params->riskNum['control'] = 'input';
 
         return json_encode($params);
     }
@@ -611,6 +758,42 @@ class blockModel extends model
         }
 
         return $blockPairs;
+    }
+
+    /**
+     * Get contribute block data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getContributeBlockData()
+    {
+        $data = array();
+
+        $data['todos']   = $this->dao->select('count(*) AS count')->from(TABLE_TODO)
+            ->where('account')->eq($this->app->user->account)
+            ->fetch('count');
+        $data['stories'] = $this->dao->select('count(*) AS count')->from(TABLE_STORY)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['tasks']   = $this->dao->select('count(*) AS count')->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('finishedBy')->eq($this->app->user->account)
+            ->orWhere('finishedList')->like("%,{$this->app->user->account},%")
+            ->fetch('count');
+        $data['bugs']    = $this->dao->select('count(*) AS count')->from(TABLE_BUG)
+            ->where('resolvedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        $data['cases']   = $this->dao->select('count(*) AS count')->from(TABLE_CASE)
+            ->where('openedBy')->eq($this->app->user->account)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('product')->ne(0)
+            ->andWhere('auto')->ne('unit')
+            ->fetch('count');
+
+        return $data;
     }
 
     /**
@@ -660,5 +843,119 @@ class blockModel extends model
             ->fetch('value');
 
         return $key == $hash;
+    }
+
+    /** 
+     * Get testtask params.
+     *▫
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumtestParams($module = '')
+    {   
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->testtask;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum project list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumListParams($module = '')
+    {
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->scrum;
+        $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['default'] = 20;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum overall list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumoverallParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum roadmap list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumroadmapParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum product list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumproductParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum project list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getScrumprojectParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get the total estimated man hours required.
+     *
+     * @param  array $storyID
+     * @access public
+     * @return string
+     */
+    public function getStorysEstimateHours($storyID)
+    {
+        return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
     }
 }

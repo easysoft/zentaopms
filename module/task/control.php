@@ -53,6 +53,9 @@ class task extends control
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
 
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+
         $task = new stdClass();
         $task->module     = $moduleID;
         $task->assignedTo = '';
@@ -81,6 +84,7 @@ class task extends control
         }
 
         $project   = $this->project->getById($projectID);
+
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
@@ -234,6 +238,9 @@ class task extends control
             echo js::alert($this->lang->task->createDenied);
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
+
+        $program = $this->loadModel('project')->getByID($this->session->program);
+        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -862,7 +869,7 @@ class task extends control
                 {
                     if($change['field'] == 'status')
                     {
-                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug", '', true);
                         unset($_GET['onlybody']);
                         $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
                         die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));

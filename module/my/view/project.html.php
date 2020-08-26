@@ -16,7 +16,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProject;?></span></span>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-primary'") ?>
+    <?php if(common::hasPriv('program', 'createguide')) echo html::a(helper::createLink('program', 'createguide'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'") ?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
@@ -24,8 +24,8 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->project->noProject;?></span>
-      <?php if(common::hasPriv('project', 'create')):?>
-      <?php echo html::a($this->createLink('project', 'create'), "<i class='icon icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-info'");?>
+      <?php if(common::hasPriv('program', 'createguide')):?>
+      <?php echo html::a($this->createLink('program', 'createguide'), "<i class='icon icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-info' data-toggle='modal' data-type='ajax'");?>
       <?php endif;?>
     </p>
   </div>
@@ -46,7 +46,7 @@
     </thead>
     <tbody>
       <?php foreach($projects as $project):?>
-      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
+      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id", '', '', $project->program);?>
       <tr class='text-center'>
         <td><?php echo html::a($projectLink, $project->id);?></td>
         <td class='text-left'><?php echo $project->code;?></td>

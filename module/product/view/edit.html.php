@@ -34,11 +34,6 @@
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
           </tr>  
           <tr>
-            <th><?php echo $lang->product->line;?></th>
-            <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td>
-            <td><?php if(!$lines) common::printLink('tree', 'browse', 'rootID=&view=line', $lang->tree->manageLine);?></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
           </tr>

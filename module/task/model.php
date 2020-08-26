@@ -36,6 +36,7 @@ class taskModel extends model
             ->setDefault('project', $projectID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
+            ->setDefault('program', $this->session->program)
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -56,6 +57,9 @@ class taskModel extends model
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
             ->get();
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
+
+        /* Record task version. */
+        if(isset($this->config->qcVersion)) $task->version = 1;
 
         foreach($this->post->assignedTo as $assignedTo)
         {
@@ -115,6 +119,29 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
+
+            /* Mark design version.*/
+            if(isset($this->config->qcVersion) && $task->design)
+            {
+                $design = $this->loadModel('design')->getByID($task->design);
+                $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
+            }
+
+            if(isset($this->config->qcVersion))
+            {
+                $taskSpec = new stdClass();
+                $taskSpec->task       = $taskID;
+                $taskSpec->version    = $task->version;
+                $taskSpec->name       = $task->name;
+                $taskSpec->estStarted = $task->estStarted;
+                $taskSpec->deadline   = $task->deadline;
+                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)
+                    ->autoCheck()
+                    ->exec();
+
+                if(dao::isError()) return false;
+            }
+
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
             if($this->post->selectTestStory)
             {
@@ -279,6 +306,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
+            $data[$i]->program    = $this->session->program;
             $data[$i]->project    = $projectID;
             $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
             $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
@@ -343,6 +371,9 @@ class taskModel extends model
 
         foreach($data as $i => $task)
         {
+            /* Record task version.*/
+            if(isset($this->config->qcVersion)) $task->version = 1;
+
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->checkIF($task->estimate != '', 'estimate', 'float')
@@ -351,6 +382,22 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
+
+            if(isset($this->config->qcVersion))
+            {
+                $taskSpec = new stdClass();
+                $taskSpec->task        = $taskID;
+                $taskSpec->version     = $task->version;
+                $taskSpec->name        = $task->name;
+                $taskSpec->estStarted  = $task->estStarted;
+                $taskSpec->deadline    = $task->deadline;
+                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)
+                    ->autoCheck()
+                    ->exec();
+
+                if(dao::isError()) die(js::error(dao::getError()));
+            }
+
             $childTasks .= $taskID . ',';
             if($story) $this->story->setStage($task->story);
 
@@ -822,6 +869,21 @@ class taskModel extends model
             }
         }
 
+        /* Record task version.*/
+        if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
+        {
+            $task->version = $oldTask->version + 1;
+            $taskSpec = new stdClass();
+            $taskSpec->task       = $taskID;
+            $taskSpec->version    = $task->version;
+            $taskSpec->name       = $task->name;
+            $taskSpec->estStarted = $task->estStarted;
+            $taskSpec->deadline   = $task->deadline;
+            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)
+                ->autoCheck()
+                ->exec();
+        }
+
         $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('type');
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
         if($projectType == 'ops')
@@ -982,11 +1044,29 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
 
+<<<<<<< HEAD
+            /* Record task version.*/
+            if(isset($this->config->qcVersion))
+            {
+                if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $data->deadline)
+                {
+                    $task->version = $oldTask->version + 1; 
+                    $taskSpec = new stdClass();
+                    $taskSpec->task       = $taskID;
+                    $taskSpec->version    = $task->version;
+                    $taskSpec->name       = $task->name;
+                    $taskSpec->estStarted = $task->estStarted;
+                    $taskSpec->deadline   = $task->deadline;
+
+                    $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+                }
+=======
             foreach($extendFields as $extendField)
             {
                 $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$taskID]);
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
+>>>>>>> master
             }
 
             if($data->consumeds[$taskID])
@@ -1458,6 +1538,18 @@ class taskModel extends model
         if(empty($currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
+            return false;
+        }
+
+        if(!$this->post->realStarted)
+        {
+            dao::$errors[] = $this->lang->task->error->realStartedEmpty;
+            return false;
+        }
+
+        if(!$this->post->finishedDate)
+        {
+            dao::$errors[] = $this->lang->task->error->finishedDateEmpty;
             return false;
         }
 

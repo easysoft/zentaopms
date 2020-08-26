@@ -22,7 +22,6 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?>
   </div>
 </div>
 <div id='mainContent'>

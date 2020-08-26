@@ -25,6 +25,10 @@
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
+            <th><?php echo $lang->repo->program; ?></th>
+            <td class='required'><?php echo html::select('program[]', $programs, $this->session->program, "class='form-control chosen' multiple"); ?></td>
+          </tr>
+          <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Git', "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
             <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>

@@ -51,12 +51,7 @@ class docModel extends model
                 $mainLib     = $this->lang->doc->libTypeList[$type];
                 $selectHtml .= "<div class='btn-group angle-btn'>";
                 $selectHtml .= "<div class='btn-group'>";
-                $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
-                $selectHtml .= "<ul class='dropdown-menu'>";
-                foreach($this->lang->doc->libTypeList as $libType => $libName)
-                {
-                    $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), "<i class='icon {$this->lang->doc->libIconList[$libType]}'></i> {$this->lang->doc->libTypeList[$libType]}") . '</li>';
-                }
+                $selectHtml .= "<a class='btn btn-limit' title=$mainLib href=" . helper::createLink('doc', 'allLibs', "type=product") . ">" . $mainLib . "</a>";
                 $selectHtml .='</ul></div></div>';
             }
 
@@ -108,7 +103,6 @@ class docModel extends model
             }
 
             $actions  = $this->setFastMenu($fastLib);
-            $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
             $this->lang->modulePageActions = $actions;
         }
@@ -1184,8 +1178,6 @@ class docModel extends model
             {
                 if($this->checkPrivLib($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
             }
-            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doclib->project;
-            if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
         }
 
         return $buildGroups;
@@ -1230,22 +1222,6 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
-
-        if(strpos($mode, 'onlylib') === false)
-        {
-            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs'))
-            {
-                $libs['project'] = new stdclass();
-                $libs['project']->name = $this->lang->doclib->project;
-                $libs['project']->allCount = $hasProject[$objectID];
-            }
-            if(common::hasPriv('doc', 'showFiles'))
-            {
-                $libs['files'] = new stdclass();
-                $libs['files']->name = $this->lang->doclib->files;
-                $libs['files']->allCount = count($this->getLibFiles($type, $objectID, 'id_desc'));
-            }
-        }
 
         return $libs;
     }

@@ -36,7 +36,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -67,7 +67,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+            $searchBrowseLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
             $isBySearch       = $browseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }

@@ -1,5 +1,8 @@
 $(function()
 {
+    $('#subNavbar .nav li').removeClass('active');
+    $("#subNavbar .nav li[data-id=" + storyType + ']').addClass('active');
+
     if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
     $('#storyList td.has-child .story-toggle').each(function()
     {

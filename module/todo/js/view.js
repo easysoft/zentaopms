@@ -15,38 +15,37 @@ $(function()
     $('#toTaskButton').click(function()
     {
         var onlybody    = config.onlybody;
-        config.onlybody = 'no';
+        var programID   = $('#projectProgram').val();
 
         var projectID = $(this).closest('.input-group').find('#project').val();
-        var link      = createLink('task', 'create', 'projectID=' + projectID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID);
+        var link      = createLink('task', 'create', 'projectID=' + projectID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', programID);
 
-        config.onlybody      = onlybody;
         parent.location.href = link;
     })
 
     $('#toStoryButton').click(function()
     {
         var onlybody    = config.onlybody;
-        config.onlybody = 'no';
+        var programID   = $('#productProgram').val();
 
         var productID = $(this).closest('.input-group').find('#product').val();
-        var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID);
+        var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, 'no', programID);
 
-        config.onlybody      = onlybody;
         parent.location.href = link;
     })
 
     $('#toBugButton').click(function()
     {
         var onlybody    = config.onlybody;
-        config.onlybody = 'no';
+        var programID   = $('#productProgram').val();
 
         var productID = $(this).closest('.input-group').find('#product').val();
-        var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID);
+        var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', programID);
 
-        config.onlybody      = onlybody;
         parent.location.href = link;
     })
+
+    $('#project, #product').change();
 });
 
 function createProduct()
@@ -69,4 +68,22 @@ function createProject()
 
     config.onlybody      = onlybody;
     parent.location.href = link;
+}
+
+function getProgramByProject(projectID)
+{
+    link = createLink('todo', 'ajaxGetProgramID', "projectID=" + projectID + '&type=project');
+    $.post(link, function(data)
+    {
+        $('#projectProgram').val(data);        
+    })
+}
+
+function getProgramByProduct(productID)
+{
+    link = createLink('todo', 'ajaxGetProgramID', "productID=" + productID + '&type=product');
+    $.post(link, function(data)
+    {
+        $('#productProgram').val(data);
+    })
 }

@@ -1,0 +1,43 @@
+<?php
+/**
+ * The project block view file of block module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     block
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<?php if(empty($products)): ?>
+<div class='empty-tip'><?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'")?></div>
+<?php else:?>
+<div class="panel-body has-table scrollbar-hover">
+  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
+    <thead>
+      <tr class='text-center'>
+        <th class='c-num'><?php echo $lang->block->productName;?></th>
+        <th class='c-num'><?php echo $lang->block->totalStory;?></th>
+        <th class='c-num'><?php echo $lang->block->totalBug;?></th>
+        <th class='c-num'><?php echo $lang->block->totalRelease;?></th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <?php $id = 0; ?>
+      <?php foreach($products as $id => $name):?>
+      <?php
+      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : "";
+      $viewLink = $this->createLink('product', 'browse', 'productID=' . $id);
+      ?>
+        <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+          <td class="c-num text-ellipsis" title="<?php echo $name;?>"><?php echo $name;?></td>
+          <td class="c-num"><?php echo empty($stories[$id]) ? 0: $stories[$id];?></td>
+          <td class="c-num"><?php echo empty($bugs[$id]) ? 0: $bugs[$id];?></td>
+          <td class="c-num"><?php echo empty($releases[$id]) ? 0: $releases[$id];?></td>
+        </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+<?php endif;?>

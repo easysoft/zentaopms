@@ -4,3 +4,4 @@ form {position:relative}
 #moreOrLite {right: 10px!important}
 
 #userList tbody td{white-space: nowrap; overflow:hidden}
+.space-sm + .text-center{display: none;}

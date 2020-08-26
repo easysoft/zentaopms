@@ -29,47 +29,41 @@ $config->moreLinks     = array();
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
-$config->productCommonList['zh-cn'][1] = '项目';
 
 $config->productCommonList['zh-tw'][0] = '產品';
-$config->productCommonList['zh-tw'][1] = '項目';
 
 $config->productCommonList['en'][0] = 'Product';
-$config->productCommonList['en'][1] = 'Project';
 
 $config->productCommonList['de'][0] = 'Produkt';
-$config->productCommonList['de'][1] = 'Projekt';
 
 $config->productCommonList['fr'][0] = 'Product';
-$config->productCommonList['fr'][1] = 'Projet';
 
 $config->productCommonList['vi'][0] = 'Sản phẩm';
-$config->productCommonList['vi'][1] = 'Dự án';
 
 /* Project common list. */
-$config->projectCommonList['zh-cn'][0] = '项目';
-$config->projectCommonList['zh-cn'][1] = '迭代';
-$config->projectCommonList['zh-cn'][2] = '冲刺';
+$config->projectCommonList['zh-cn'][0] = '迭代';
+$config->projectCommonList['zh-cn'][1] = '冲刺';
+$config->projectCommonList['zh-cn'][2] = '阶段';
 
-$config->projectCommonList['zh-tw'][0] = '項目';
-$config->projectCommonList['zh-tw'][1] = '迭代';
-$config->projectCommonList['zh-tw'][2] = '冲刺';
+$config->projectCommonList['zh-tw'][0] = '迭代';
+$config->projectCommonList['zh-tw'][1] = '冲刺';
+$config->projectCommonList['zh-tw'][2] = '階段';
 
-$config->projectCommonList['en'][0] = 'Project';
-$config->projectCommonList['en'][1] = 'Iteration';
-$config->projectCommonList['en'][2] = 'Sprint';
+$config->projectCommonList['en'][0] = 'Iteration';
+$config->projectCommonList['en'][1] = 'Sprint';
+$config->projectCommonList['en'][2] = 'Stage';
 
-$config->projectCommonList['de'][0] = 'Projekt';
-$config->projectCommonList['de'][1] = 'Iteration';
-$config->projectCommonList['de'][2] = 'Sprint';
+$config->projectCommonList['de'][0] = 'Iteration';
+$config->projectCommonList['de'][1] = 'Sprint';
+$config->projectCommonList['de'][2] = 'Bühne';
 
-$config->projectCommonList['fr'][0] = 'Projet';
-$config->projectCommonList['fr'][1] = 'Iteration';
-$config->projectCommonList['fr'][2] = 'Sprint';
+$config->projectCommonList['fr'][0] = 'Iteration';
+$config->projectCommonList['fr'][1] = 'Sprint';
+$config->projectCommonList['fr'][2] = 'Phase';
 
-$config->projectCommonList['vi'][0] = 'Dự án';
-$config->projectCommonList['vi'][1] = 'Lặp lại';
-$config->projectCommonList['vi'][2] = 'Sprint';
+$config->projectCommonList['vi'][0] = 'Lặp lại';
+$config->projectCommonList['vi'][1] = 'Sprint';
+$config->projectCommonList['vi'][2] = 'Giai đoạn';
 
 /* Story common list. */
 $config->storyCommonList['zh-cn'][0] = '需求';
@@ -166,6 +160,7 @@ define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
 
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
+define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
@@ -204,12 +199,24 @@ define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',   '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',  '`' . $config->db->prefix . 'repobranch`');
-if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_STAGE'))              define('TABLE_STAGE', '`' . $config->db->prefix . 'stage`');
+if(!defined('TABLE_DESIGN'))             define('TABLE_DESIGN', '`' . $config->db->prefix . 'design`');
+if(!defined('TABLE_DESIGNSPEC'))         define('TABLE_DESIGNSPEC', '`' . $config->db->prefix . 'designspec`');
+if(!defined('TABLE_ISSUE'))              define('TABLE_ISSUE', '`' . $config->db->prefix . 'issue`');
+if(!defined('TABLE_RISK'))               define('TABLE_RISK', '`' . $config->db->prefix . 'risk`');
+if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
+if(!defined('TABLE_WORKESTIMATION'))     define('TABLE_WORKESTIMATION', '`' . $config->db->prefix . 'workestimation`');
+if(!defined('TABLE_DURATIONESTIMATION')) define('TABLE_DURATIONESTIMATION', '`' . $config->db->prefix . 'durationestimation`');
+if(!defined('TABLE_BUDGET'))             define('TABLE_BUDGET', '`' . $config->db->prefix . 'budget`');
+if(!defined('TABLE_HOLIDAY'))            define('TABLE_HOLIDAY', '`' . $config->db->prefix . 'holiday`');
+if(!defined('TABLE_WEEKLYREPORT'))       define('TABLE_WEEKLYREPORT', '`' . $config->db->prefix . 'weeklyreport`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
 $config->objectTables['release']     = TABLE_RELEASE;
+$config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;
 $config->objectTables['task']        = TABLE_TASK;
 $config->objectTables['build']       = TABLE_BUILD;
@@ -229,3 +236,9 @@ $config->objectTables['module']      = TABLE_MODULE;
 $config->objectTables['caselib']     = TABLE_TESTSUITE;
 $config->objectTables['entry']       = TABLE_ENTRY;
 $config->objectTables['webhook']     = TABLE_WEBHOOK;
+$config->objectTables['risk']        = TABLE_RISK;
+
+/* Program privs.*/
+$config->programPriv = new stdclass();
+$config->programPriv->scrum = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'job', 'ci', 'branch');
+$config->programPriv->cmmi  = $config->programPriv->scrum + array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'auditplan', 'nc', 'cm', 'pssp');
