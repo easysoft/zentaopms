@@ -68,7 +68,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $prevModule = '', $prevID = 0)
+    public function create($productID = 0)
     {
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
         $this->design->setProductMenu($productID);

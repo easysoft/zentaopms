@@ -27,7 +27,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('design', 'batchCreate', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->design->batchCreate, '', "class='btn btn-primary'");?>
-    <?php if(common::hasPriv('design', 'create')) echo html::a($this->createLink('design', 'create', "productID=$productID&designID=0"), "<i class='icon icon-plus'></i> {$lang->design->create}", '', "class='btn btn-primary'");?>
+    <?php common::printLink('design', 'create', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->design->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module='design'></div>
