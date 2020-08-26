@@ -387,7 +387,7 @@ $(function()
 
     $(".checkbox-primary").on('click', function()
     {
-        var stageCustom = new Array();
+        var stageCustom = [];
         $("input[name='stageCustom[]']:checked").each(function()
         {
             var custom = $(this).val();
@@ -398,7 +398,7 @@ $(function()
         $.ajax({
             url: customUrl,
             dataType: "json",
-            data: {stageCustom, stageCustom},
+            data: {stageCustom: stageCustom},
             type: "post",
             success: function(result)
             {
