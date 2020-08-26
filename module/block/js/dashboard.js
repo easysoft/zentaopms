@@ -1,7 +1,7 @@
 /**
  * Delete block.
- * 
- * @param  int    $index 
+ *
+ * @param  int    $index
  * @access public
  * @return void
  */
@@ -26,8 +26,8 @@ function deleteBlock(index)
 
 /**
  * Sort blocks.
- * 
- * @param  array $orders  format is {'blockid' : 1, 'block1' : 2} 
+ *
+ * @param  array $orders  format is {'blockid' : 1, 'block1' : 2}
  * @param  function $callback
  * @access public
  * @return void
@@ -65,7 +65,7 @@ function refreshBlock($panel, afterRefresh)
         else
         {
             $panel.children('.panel-move-handler,style,script').remove();
-            $panel.find('.panel-body,.empty-tip').replaceWith($data);
+            $panel.find('.panel-body,.empty-tip').first().replaceWith($data);
         }
         $panel.find('.progress-pie').progressPie();
         if($.isFunction(afterRefresh))
@@ -78,6 +78,7 @@ function refreshBlock($panel, afterRefresh)
             });
         }
         $panel.find('.tablesorter').sortTable();
+        $panel.find('.chosen').chosen();
         initTableHeader($panel);
         $(".sparkline").sparkline();
     }).fail(function()
@@ -121,7 +122,7 @@ function initTableHeader($wrapper)
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
-        
+
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
         if(!isFixed)
@@ -194,7 +195,7 @@ function checkRefreshProgress($dashboard, doneCallback)
  * @param  index $index
  * @access public
  * @return void
- */ 
+ */
 function hiddenBlock(index)
 {
     $.getJSON(createLink('block', 'delete', 'index=' + index + '&module=' + module + '&type=hidden'), function(data)
@@ -240,7 +241,7 @@ $(function()
             {
                 resizeBlock(e.element.data('id'), isSideCol ? 4 : 8);
             });
-            
+
             e.element.toggleClass('block-sm', isSideCol);
         }
     }).on('click', '.refresh-panel', function()

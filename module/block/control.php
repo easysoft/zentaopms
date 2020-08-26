@@ -1118,7 +1118,7 @@ class block extends control
         $productID = isset($this->session->product) ? 0 : $this->session->product;
         if($productID && !array_key_exists($productID, $products)) $productID = 0;
 
-        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task');
+        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
         $this->view->products  = $products;
         $this->view->productID = $productID;
     }

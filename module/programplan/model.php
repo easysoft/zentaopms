@@ -106,10 +106,11 @@ class programplanModel extends model
      * @param  int    $productID
      * @param  int    $baselineID
      * @param  string $selectCustom
+     * @param  bool   $returnJson
      * @access public
      * @return string
      */
-    public function getDataForGantt($programID, $productID, $baselineID = 0, $selectCustom = '')
+    public function getDataForGantt($programID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
 
@@ -240,7 +241,7 @@ class programplanModel extends model
             $datas['data'][$index]->taskProgress = $progress;
         }
 
-        return json_encode($datas);
+        return $returnJson ? json_encode($datas) : $datas;
     }
 
     public function getTotalPercent($plan)
