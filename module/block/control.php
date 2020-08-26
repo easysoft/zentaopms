@@ -1232,6 +1232,141 @@ class block extends control
     }
 
     /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumoverallBlock()
+    {
+        $programID = $this->session->program;
+        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
+
+        $this->view->totalData = $totalData;
+        $this->view->programID = $programID;
+    }
+
+    /**
+     * Print srcum project list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumlistBlock()
+    {
+        $this->app->loadClass('pager', $static = true);
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $pager = pager::init(0, $num, 1);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
+    }
+
+    /**
+     * Print srcum product block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumproductBlock()
+    {
+        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $productID = array_keys($products);
+
+        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+
+        $this->view->products = $products;
+        $this->view->stories  = $stories;
+        $this->view->bugs     = $bugs;
+        $this->view->releases = $releases;
+    }
+
+    /**
+     * Print srcum project block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumprojectBlock()
+    {
+        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
+            ->where('program')->eq($this->session->program)
+            ->fetch();
+    }
+
+    /**
+     * Print srcum dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumdynamicBlock()
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+    }
+
+    /**
+     * Print srcum road map block.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function printScrumroadmapBlock($productID = 0)
+    {
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
+        $products  = $this->loadModel('product')->getPairs();
+        if(!is_numeric($productID)) $productID = key($products);
+
+        $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
+
+        $this->view->productID = $productID;
+        $this->view->products  = $products;
+        $this->view->sync      = 1;
+
+        if($_POST)
+        {
+            $this->view->sync = 0;
+            $this->display('block', 'scrumroadmapblock');
+        }
+    }
+
+    /**
+     * Print srcum test block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumtestBlock()
+    {
+        $this->session->set('testtaskList', $this->app->getURI(true));
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        $this->app->loadLang('testtask');
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.program')->eq($this->session->program)->fi()
+            ->andWhere('t1.product = t5.product')
+            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->fetchAll();
+    }
+
+    /**
      * Print qa statistic block.
      *
      * @access public
@@ -1591,140 +1726,5 @@ class block extends control
         {
             $this->loadModel('setting')->setItem("{$this->app->user->account}.$module.block.initVersion", $this->config->block->version);
         }
-    }
-
-    /**
-     * Print srcum project block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumoverallBlock()
-    {
-        $programID = $this->session->program;
-        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
-
-        $this->view->totalData = $totalData;
-        $this->view->programID = $programID;
-    }
-
-    /**
-     * Print srcum project list block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumlistBlock()
-    {
-        $this->app->loadClass('pager', $static = true);
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
-        $type  = isset($this->params->type) ? $this->params->type : 'all';
-        $pager = pager::init(0, $num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
-   }
-
-    /**
-     * Print srcum road map block.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function printScrumroadmapBlock($productID = 0)
-    {
-        $this->session->set('releaseList',     $this->app->getURI(true));
-        $this->session->set('productPlanList', $this->app->getURI(true));
-
-        $products  = $this->loadModel('product')->getPairs();
-        if(!is_numeric($productID)) $productID = key($products);
-
-        $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
-
-        $this->view->productID = $productID;
-        $this->view->products  = $products;
-        $this->view->sync      = 1;
-
-        if($_POST)
-        {
-            $this->view->sync = 0;
-            $this->display('block', 'scrumroadmapblock');
-        }
-    }
-
-    /**
-     * Print srcum test block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumtestBlock()
-    {
-        $this->session->set('testtaskList', $this->app->getURI(true));
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $this->app->loadLang('testtask');
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
-            ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.program')->eq($this->session->program)->fi()
-            ->andWhere('t1.product = t5.product')
-            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
-            ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
-            ->fetchAll();
-    }
-
-    /**
-     * Print srcum product block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumproductBlock()
-    {
-        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
-        $productID = array_keys($products);
-
-        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
-        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
-        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
-
-        $this->view->products = $products;
-        $this->view->stories  = $stories;
-        $this->view->bugs     = $bugs;
-        $this->view->releases = $releases;
-    }
-
-    /**
-     * Print srcum project block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumprojectBlock()
-    {
-        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
-            ->where('program')->eq($this->session->program)
-            ->fetch();
-    }
-
-    /**
-     * Print srcum dynamic block.
-     *
-     * @access public
-     * @return void
-     */
-    public function printScrumdynamicBlock()
-    {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 }
