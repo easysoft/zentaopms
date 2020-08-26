@@ -19,6 +19,11 @@
       <small><?php echo $lang->arrow . $lang->design->commit;?></small>
     </h2>
   </div>
+  <?php if(empty($repoID)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->design->noCommit;?></span></p>
+  </div>
+  <?php else:?>
   <div class='searchBox'>
     <table class="table">
       <tr>
@@ -76,6 +81,7 @@
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
+  <?php endif;?>
 </div>
 <?php js::set('designID', $designID);?>
 <?php include '../../common/view/footer.lite.html.php';?>

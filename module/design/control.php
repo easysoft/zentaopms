@@ -68,7 +68,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $prevModule = '', $prevID = 0)
+    public function create($productID = 0)
     {
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
         $this->design->setProductMenu($productID);
@@ -231,9 +231,9 @@ class design extends control
 
         $repos     = $this->loadModel('repo')->getRepoPairs();
         $repoID    = $repoID ? $repoID : key($repos);
-        $repo      = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo      = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
-        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end);
+        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end) : '';
 
         if($_POST)
         {

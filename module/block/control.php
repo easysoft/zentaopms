@@ -1621,7 +1621,10 @@ class block extends control
         $products  = $this->loadModel('product')->getPairs();
 
 ksort($products);
-        $this->view->roadmaps = $this->product->getRoadmap(key($products), 0, 6);
+$productID = key($products);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->productID = $productID;
+        $this->view->products = $products;
     }
 
     /**

@@ -1,4 +1,14 @@
 <?php
+/**
+ * The design module English file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->design->common        = 'Design';
 $lang->design->browse        = 'List';
 $lang->design->commit        = 'Link Commit';
@@ -26,6 +36,7 @@ $lang->design->desc          = 'Description';
 $lang->design->product       = 'Linked Product';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->commitDate    = 'Committed Date';
+$lang->design->commitBy      = 'Commit By';
 $lang->design->affectedStory = "{$lang->storyCommon}";
 $lang->design->affectedTasks = 'Task';
 $lang->design->submit        = 'Submit Review';
@@ -46,6 +57,7 @@ $lang->design->typeList['ADS']  = 'API';
 $lang->design->range          = 'Impact';
 $lang->design->errorSelection = 'No record selected!';
 $lang->design->noDesign       = 'No record.';
+$lang->design->noCommit       = 'No record commited.';
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';

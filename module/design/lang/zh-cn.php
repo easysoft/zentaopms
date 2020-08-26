@@ -1,4 +1,14 @@
 <?php
+/**
+ * The design module zh-cn file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->design->common        = '设计';
 $lang->design->browse        = '浏览列表';
 $lang->design->commit        = '关联提交';
@@ -46,6 +56,7 @@ $lang->design->typeList['ADS']  = '接口设计';
 $lang->design->range          = '影响范围';
 $lang->design->errorSelection = '还没有选中记录!';
 $lang->design->noDesign       = '暂时没有记录';
+$lang->design->noCommit       = '暂时没有提交记录';
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
