@@ -55,6 +55,7 @@ $lang->task->allModule           = 'Tất cả Module';
 
 $lang->task->common           = 'Nhiệm vụ';
 $lang->task->id               = 'ID';
+$lang->task->program          = 'Program';
 $lang->task->project          = $lang->projectCommon;
 $lang->task->module           = 'Module';
 $lang->task->moduleAB         = 'Module';

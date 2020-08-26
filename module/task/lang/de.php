@@ -55,6 +55,7 @@ $lang->task->allModule           = 'All Module';
 
 $lang->task->common            = 'Aufgabe';
 $lang->task->id                = 'ID';
+$lang->task->program           = 'Program';
 $lang->task->project           = $lang->projectCommon;
 $lang->task->module            = 'Modul';
 $lang->task->moduleAB          = 'Modul';
