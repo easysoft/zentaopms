@@ -1,3 +1,4 @@
+#mainContent {min-height: 350px;}
 .searchBox{min-height: 45px;}
 .searchBox .srearch-date{float: left; width: 20%}
 .searchBox h4{float:left;display: inline-block}
