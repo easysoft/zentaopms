@@ -1,14 +1,30 @@
 <?php
 /* Sort of main menu. */
-$lang->menuOrder[5]  = 'my';
-$lang->menuOrder[10] = 'program';
-$lang->menuOrder[15] = 'product';
-$lang->menuOrder[20] = 'project';
-$lang->menuOrder[25] = 'qa';
-$lang->menuOrder[30] = 'ci';
-$lang->menuOrder[35] = 'doc';
-$lang->menuOrder[40] = 'report';
-$lang->menuOrder[45] = 'admin';
+$lang->cmmipgm = new stdclass();
+$lang->cmmipgm->menuOrder[5]   = 'programindex';
+$lang->cmmipgm->menuOrder[10]  = 'programplan';
+$lang->cmmipgm->menuOrder[15]  = 'project';
+$lang->cmmipgm->menuOrder[20]  = 'weekly';
+$lang->cmmipgm->menuOrder[25]  = 'review';
+$lang->cmmipgm->menuOrder[30]  = 'doc';
+$lang->cmmipgm->menuOrder[35]  = 'product';
+$lang->cmmipgm->menuOrder[40]  = 'design';
+$lang->cmmipgm->menuOrder[45]  = 'ci';
+$lang->cmmipgm->menuOrder[50]  = 'qa';
+$lang->cmmipgm->menuOrder[55]  = 'release';
+$lang->cmmipgm->menuOrder[60]  = 'issue';
+$lang->cmmipgm->menuOrder[65]  = 'risk';
+$lang->cmmipgm->menuOrder[70]  = 'report';
+$lang->cmmipgm->menuOrder[75]  = 'auditplan';
+$lang->cmmipgm->menuOrder[80]  = 'cm';
+$lang->cmmipgm->menuOrder[85]  = 'list';
+
+$lang->scrumpgm = new stdclass();
+$lang->scrumpgm->menuOrder[5]   = 'program';
+$lang->scrumpgm->menuOrder[10]  = 'product';
+$lang->scrumpgm->menuOrder[15]  = 'project';
+$lang->scrumpgm->menuOrder[20]  = 'qa';
+$lang->scrumpgm->menuOrder[25]  = 'doc';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';

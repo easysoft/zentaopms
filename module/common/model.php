@@ -2192,12 +2192,16 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'scrum') return $lang->menu;
+        if($program->template == 'scrum') 
+        {
+            $lang->menuOrder = $lang->scrumpgm->menuOrder;
+            return $lang->menu;
+        }
         if($program->template == 'cmmi') 
         {
-            unset($lang->menuOrder);
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
+            $lang->menuOrder            = $lang->cmmipgm->menuOrder;
             $lang->program->dividerMenu = ',product,issue,';
             self::initProgramSubmenu();
             return self::processMenuVars($lang->menu->cmmi);
