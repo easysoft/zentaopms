@@ -155,7 +155,7 @@ $lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-if($_COOKIE['systemModel'] == 'scrum')
+if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
 {
     $lang->system->menu = new stdclass();
     $lang->system->subMenu->setmodel = new stdclass();

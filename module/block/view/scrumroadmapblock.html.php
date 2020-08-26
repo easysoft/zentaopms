@@ -13,6 +13,7 @@
 <style>
 .release-line>li:nth-child(even)>a{height:92px;}
 .release-line>li:nth-child(odd){padding-top: 87px;}
+.release-line>li>a .title {overflow: hidden; width:150%; text-overflow: ellipsis;}
 #dashboard .panel-move-handler{right:78px}
 #productList{width:28%; position: absolute; top: 6px; left: 96px;}
 #createPlan{position: absolute; top: 3px; right:0px;}
@@ -39,7 +40,7 @@
             <?php else:?>
             <li>
               <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
-                <span class="title" title="<?php echo $plan->name;?>"><?php echo $plan->name . "($plan->buildName)";?></span>
+                <span class="title" title="<?php echo $plan->name . " ($plan->buildName)";?>"><?php echo $plan->name . "($plan->buildName)";?></span>
                 <span class="date" title="<?php echo $plan->date;?>"><?php echo $plan->date;?></span>
                 <?php $estimate = empty($plan->stories) ? 0 : $this->block->getStorysEstimateHours(explode(',', $plan->stories));?>
                 <span class="date"><?php echo $lang->block->consumedHours;?> <?php echo empty($estimate) ? 0 : $estimate;?> h</span>

@@ -75,8 +75,14 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->budget;?></th>
-          <td><?php echo html::input('budget', '', "class='form-control'");?></td>
-          <td style='float:left'><?php echo html::select('budgetUnit', $lang->program->unitList, 'yuan', "class='form-control'");?></td><td></td>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('budget', '', "class='form-control'");?>
+              <span class='input-group-addon'></span>
+              <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'yuan' : $parentProgram->budgetUnit, "class='form-control'");?>
+            </div>
+          </td>
+          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBudget, $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->dateRange;?></th>
@@ -87,7 +93,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'></td>
+          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBeginEnd, $parentProgram->begin, $parentProgram->end);?></td>
         </tr>
         <?php if($template == 'scrum'):?>
         <tr>
@@ -137,7 +143,7 @@
             <?php echo html::backButton();?>
             <?php
             echo html::hidden('template', $template);
-            echo html::hidden('parent', $programID);
+            echo html::hidden('parent', $parentProgram->id);
             ?>
           </td>
         </tr>
@@ -175,5 +181,5 @@
   </div>
 </div>
 <?php js::set('template', $template);?>
-<?php js::set('programID', $programID);?>
+<?php js::set('parentProgramID', $parentProgram->id);?>
 <?php include '../../common/view/footer.html.php';?>
