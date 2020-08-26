@@ -1304,11 +1304,22 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = $this->loadModel('product')->getPairs();
 
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $actions = array();
+        if(!empty($projects) || !empty($products))
+        {
+            $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
+                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
+                ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
+                ->orderBy('id_desc')
+                ->limit(30)
+                ->fetchAll();
+        }
+
+        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 
