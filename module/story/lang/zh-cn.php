@@ -65,6 +65,8 @@ $lang->story->batchChangeStage  = "批量修改阶段";
 $lang->story->batchAssignTo     = "批量指派";
 $lang->story->batchChangeModule = "批量修改模块";
 $lang->story->viewAll           = '查看全部';
+$lang->story->skipStory         = '需求：%s 为父需求，将不会被关闭。';
+$lang->story->closedStory       = '需求：%s 已关闭，将不会被关闭。';
 
 $lang->story->common         = $lang->storyCommon;
 $lang->story->id             = '编号';
@@ -135,6 +137,9 @@ $lang->story->noRequirement  = '无需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->storyCommon}与上一{$lang->storyCommon}不属于同一产品！";
+
+$lang->story->needNotReviewList[0] = '需要评审';
+$lang->story->needNotReviewList[1] = '不需要评审';
 
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
@@ -233,8 +238,9 @@ $lang->story->errorNotSubdivide     = "状态不是激活，或者阶段不是�
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->storyCommon}。";
-$lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 为草稿状态，没有修改其阶段。";
+$lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 为草稿状态或已关闭状态，没有修改其阶段。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->storyCommon}";
+$lang->story->moveChildrenTips      = "修改父{$lang->storyCommon}的所属产品会将其下的子{$lang->storyCommon}也移动到所选产品下。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->storyCommon}所属范围";

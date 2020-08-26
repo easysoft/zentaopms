@@ -81,6 +81,7 @@ $lang->mail->noticeResend   = '已经重新发信！';
 $lang->mail->inputFromEmail = '请输入发信邮箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '配置信息已经成功保存。';
+$lang->mail->setForUser     = '系统内用户都没有维护可用邮箱，无法测试发信，请先为用户维护邮箱。';
 $lang->mail->testSubject    = '测试邮件';
 $lang->mail->testContent    = '邮箱设置成功';
 $lang->mail->successSended  = '成功发送！';

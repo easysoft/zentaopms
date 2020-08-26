@@ -13,6 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
+define('IN_USE', true);
 
 /* Start output buffer. */
 ob_start();

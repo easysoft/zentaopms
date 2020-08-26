@@ -151,6 +151,8 @@ class project extends control
             $this->session->set('taskBrowseType', $browseType);
         }
 
+        if($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') $this->session->set('taskBrowseType', 'unclosed');
+
         /* Set queryID, moduleID and productID. */
         $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
         $moduleID  = ($browseType == 'bymodule')  ? (int)$param : (($browseType == 'bysearch' or $browseType == 'byproduct') ? 0 : $this->cookie->moduleBrowseParam);
@@ -454,7 +456,7 @@ class project extends control
         }
         else
         {
-            $tasks2Imported = $tasks[$fromProject];
+            $tasks2Imported = zget($tasks, $fromProject, array());
         }
 
         /* Save session. */
@@ -484,6 +486,8 @@ class project extends control
      */
     public function importBug($projectID = 0, $browseType = 'all', $param = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
+        $this->app->loadConfig('task');
+
         if(!empty($_POST))
         {
             $mails = $this->project->importBug($projectID);
@@ -607,17 +611,18 @@ class project extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->pager      = $pager;
-        $this->view->bugs       = $bugs;
-        $this->view->recTotal   = $pager->recTotal;
-        $this->view->recPerPage = $pager->recPerPage;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $param;
-        $this->view->users      = $users;
-        $this->view->project    = $this->project->getByID($projectID);
-        $this->view->projectID  = $projectID;
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->pager          = $pager;
+        $this->view->bugs           = $bugs;
+        $this->view->recTotal       = $pager->recTotal;
+        $this->view->recPerPage     = $pager->recPerPage;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->users          = $users;
+        $this->view->project        = $this->project->getByID($projectID);
+        $this->view->projectID      = $projectID;
+        $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
     }
 
@@ -697,7 +702,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
+        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
 
@@ -814,7 +819,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, $pager);
+        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -1176,7 +1181,8 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
-            $changes = $this->project->update($projectID);
+            $oldProducts = $this->project->getProducts($projectID);
+            $changes     = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->project->updateProducts($projectID);
@@ -1188,9 +1194,15 @@ class project extends control
                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
                 $this->action->create('project', $projectID, 'undeleted');
             }
-            if($changes)
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            $products     = $diffProducts ? join(',', $newProducts) : '';
+
+            if($changes or $diffProducts)
             {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1240,20 +1252,32 @@ class project extends control
             unset($this->lang->project->endList[365]);
         }
 
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $project->PO, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
+
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pofirst', $project->PO);
-        $this->view->pmUsers        = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
-        $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
+        $this->view->poUsers        = $poUsers;
+        $this->view->pmUsers        = $pmUsers;
+        $this->view->qdUsers        = $qdUsers;
+        $this->view->rdUsers        = $rdUsers;
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->productPlans   = $productPlans;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-
         $this->display();
     }
 
@@ -1301,14 +1325,27 @@ class project extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->project->custom->batchEditFields;
 
+        $this->loadModel('user');
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
+
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst',  $appendPoUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $appendQdUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
         $this->view->projects      = $projects;
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers);
-        $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst', $appendPoUsers);
-        $this->view->qdUsers       = $this->user->getPairs('noclosed|nodeleted|qdfirst', $appendQdUsers);
-        $this->view->rdUsers       = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers);
+        $this->view->pmUsers       = $pmUsers;
+        $this->view->poUsers       = $poUsers;
+        $this->view->qdUsers       = $qdUsers;
+        $this->view->rdUsers       = $rdUsers;
         $this->display();
     }
 
@@ -1615,6 +1652,8 @@ class project extends control
         $this->app->session->set('taskList',    $uri);
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
+        $this->app->session->set('caseList', $uri);
+        $this->app->session->set('bugList', $uri);
 
         if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
@@ -1816,12 +1855,19 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
+            $oldProducts = $this->project->getProducts($projectID);
+
             if($from == 'buildCreate' && $this->session->buildCreate) $browseProjectLink = $this->session->buildCreate;
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action')->create('project', $projectID, 'Managed', '', $_POST['products'] ? join(',', $_POST['products']) : '');
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+
             die(js::locate($browseProjectLink));
         }
 
@@ -1877,7 +1923,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1887,6 +1933,7 @@ class project extends control
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
 
         $title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -2007,11 +2054,11 @@ class project extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', $queryID, 'id', null, $projectID);
+            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $projectID);
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $pager = null, $hasParent = false);
+            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
         foreach($allStories as $id => $story)
         {
@@ -2179,7 +2226,7 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
         $this->display();
     }
@@ -2461,40 +2508,6 @@ class project extends control
         if(common::hasPriv('project', 'kanbanColsColor')) $this->setting->deleteItems("owner=system&module=project&section=kanbanSetting&key=colorList");
 
         die(js::reload('parent.parent'));
-    }
-
-    /**
-     * Ajax set unfoldID.
-     *
-     * @param  int    $projectID
-     * @param  string $action
-     * @access public
-     * @return void
-     */
-    public function ajaxSetUnfoldID($projectID, $action = 'add')
-    {
-        $this->loadModel('setting');
-        $setting     = $this->setting->createDAO($this->setting->parseItemParam("owner={$this->app->user->account}&module=project&section=task&key=unfoldID"), 'select')->fetch();
-        $newUnfoldID = $this->post->newUnfoldID;
-        if(empty($newUnfoldID)) die();
-
-        $newUnfoldID  = json_decode($newUnfoldID);
-        $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
-        foreach($newUnfoldID as $unfoldID)
-        {
-            unset($unfoldIdList[$projectID][$unfoldID]);
-            if($action == 'add') $unfoldIdList[$projectID][$unfoldID] = $unfoldID;
-        }
-
-        if(empty($setting))
-        {
-            $this->setting->setItem($this->app->user->account . ".project.task.unfoldID", json_encode($unfoldIdList));
-        }
-        else
-        {
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
-        }
-        die('success');
     }
 
     /**

@@ -52,9 +52,9 @@
             $stepClass = $step->type == 'item' ? 'step-item' : 'step-group';
             ?>
             <tr>
-              <td class='text-left w-p30' <?php if($step->type == 'group') echo "colspan='2'"?>><?php echo "<span title='$step->desc' class='$stepClass'>" . $ID . "、" . $step->desc . '</span>'?></td>
+              <td class='text-left w-p30 wordwrap' <?php if($step->type == 'group') echo "colspan='2'"?>><?php echo "<span title='$step->desc' class='$stepClass'>" . $ID . "、" . $step->desc . '</span>'?></td>
               <?php if($step->type != 'group'):?>
-              <td class='text-left w-p30'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
+              <td class='text-left w-p30 wordwrap'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
               <td class='w-90px hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass', "class='form-control'")?></td>
               <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='form-control'");?></td>
               <?php endif;?>

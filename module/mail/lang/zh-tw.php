@@ -81,6 +81,7 @@ $lang->mail->noticeResend   = '已經重新發信！';
 $lang->mail->inputFromEmail = '請輸入發信郵箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '配置信息已經成功保存。';
+$lang->mail->setForUser     = '系統內用戶都沒有維護可用郵箱，無法測試發信，請先為用戶維護郵箱。';
 $lang->mail->testSubject    = '測試郵件';
 $lang->mail->testContent    = '郵箱設置成功';
 $lang->mail->successSended  = '成功發送！';

@@ -27,7 +27,7 @@ class branchModel extends model
             if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
             return $this->lang->branch->all . $this->lang->product->branchName[$product->type];
         }
-        return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name');
+        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name'));
     }
 
     /**
@@ -41,6 +41,8 @@ class branchModel extends model
     public function getPairs($productID, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchPairs('id', 'name');
+        foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
+
         if(strpos($params, 'noempty') === false)
         {
             $product = $this->loadModel('product')->getById($productID);
@@ -71,7 +73,7 @@ class branchModel extends model
             $product = $products[$productID];
             foreach($branches as $branch)
             {
-                $branchPairs[$branch->id] = $product->name . '/' . $branch->name;
+                $branchPairs[$branch->id] = $product->name . '/' . htmlspecialchars_decode($branch->name);
             }
         }
 
@@ -133,7 +135,7 @@ class branchModel extends model
             }
             else
             {
-                $branchGroups[$branch->product][$branch->id] = $branch->name;
+                $branchGroups[$branch->product][$branch->id] = htmlspecialchars_decode($branch->name);
             }
         }
 

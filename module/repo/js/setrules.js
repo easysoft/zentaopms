@@ -7,7 +7,7 @@ $(function()
 function replaceExample()
 {
     var html = '';
-    var startTask    = $('[id*=start').val().split(';');
+    var startTask    = $('[id*=start]').val().split(';');
     var taskModule   = $('[id*=module][id*=task]').val().split(';');
     var idMark       = $('[id*=id][id*=mark]').val().split(';');
     var idSplit      = $('[id*=id][id*=split]').val().split(';');
@@ -45,9 +45,9 @@ function replaceExample()
                                     for(q in cunits)
                                     {
                                         cunit = cunits[q];
-                                        for(r in cunits)
+                                        for(r in lunits)
                                         {
-                                            lunit = lunits[q];
+                                            lunit = lunits[r];
                                             html += '<br />' + rulesExample['task']['start'].replace('%start%', start)
                                               .replace('%task%', task)
                                               .replace('%id%', id)
@@ -69,7 +69,7 @@ function replaceExample()
         }
     }
 
-    var finishTask = $('[id*=finish').val().split(';');
+    var finishTask = $('[id*=finish]').val().split(';');
     for(i in finishTask)
     {
         finish = finishTask[i];
@@ -91,18 +91,13 @@ function replaceExample()
                             for(o in cunits)
                             {
                                 cunit = cunits[o];
-                                for(p in cunits)
-                                {
-                                    lunit = lunits[p];
-                                    html += '<br />' + rulesExample['task']['finish'].replace('%finish%', finish)
-                                      .replace('%task%', task)
-                                      .replace('%id%', id)
-                                      .replace('%split%', split)
-                                      .replace('%cost%', cost)
-                                      .replace('%consumedmark%', consumed)
-                                      .replace('%cunit%', cunit)
-                                      .replace('%lunit%', lunit);
-                                }
+                                html += '<br />' + rulesExample['task']['finish'].replace('%finish%', finish)
+                                  .replace('%task%', task)
+                                  .replace('%id%', id)
+                                  .replace('%split%', split)
+                                  .replace('%cost%', cost)
+                                  .replace('%consumedmark%', consumed)
+                                  .replace('%cunit%', cunit);
                             }
                         }
                     }
@@ -111,7 +106,7 @@ function replaceExample()
         }
     }
 
-    var effortTask = $('[id*=logEfforts').val().split(';');
+    var effortTask = $('[id*=logEfforts]').val().split(';');
     for(i in effortTask)
     {
         effort = effortTask[i];
@@ -139,7 +134,7 @@ function replaceExample()
                                     for(q in cunits)
                                     {
                                         cunit = cunits[q];
-                                        for(r in cunits)
+                                        for(r in lunits)
                                         {
                                             lunit = lunits[r];
                                             html += '<br />' + rulesExample['task']['effort'].replace('%effort%', effort)

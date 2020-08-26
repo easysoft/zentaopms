@@ -146,7 +146,7 @@ $lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to 
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
-$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage?";
+$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Test Homepage. Do you want to go to Test Homepage?";
 
 $lang->custom->notice->invalidStrlen['ten']        = 'The key should be <= 10 characters.';
 $lang->custom->notice->invalidStrlen['twenty']     = 'The key should be <= 20 characters.';
@@ -186,9 +186,10 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
 
-$lang->custom->conceptQuestions['overview']   = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['story']      = "2. Do you use the concept of requirement or user story in your company?";
-$lang->custom->conceptQuestions['storypoint'] = "2. Do you use hours or story points to make estimations in your company?";
+$lang->custom->conceptQuestions['overview']         = "1. Which combination of management fits your company?";
+$lang->custom->conceptQuestions['story']            = "2. Do you use the concept of requirement or user story in your company?";
+$lang->custom->conceptQuestions['requirementpoint'] = "2. Do you use hours or function points to make estimations in your company?";
+$lang->custom->conceptQuestions['storypoint']       = "2. Do you use hours or story points to make estimations in your company?";
 
 $lang->custom->conceptOptions = new stdclass;
 

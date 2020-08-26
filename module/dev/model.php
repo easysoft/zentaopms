@@ -43,7 +43,7 @@ class devModel extends model
         {
             if(isset($this->config->dev->tableMap[$module])) $aliasModule = $this->config->dev->tableMap[$module];
             if(strpos($aliasModule, '-') !== false) list($aliasModule, $subLang) = explode('-', $aliasModule);
-            $this->app->loadLang($aliasModule ? $aliasModule : $module);
+            if(empty($aliasModule) and strpos($module, 'im_') === false) $this->app->loadLang($aliasModule ? $aliasModule : $module);
         }
         catch(PDOException $e)
         {
@@ -241,6 +241,8 @@ class devModel extends model
         $modules = array();
         foreach($moduleList as $module)
         {
+            if(!file_exists($module . DS . 'control.php')) continue;
+
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
             $group  = zget($this->config->dev->group, $module, 'other');

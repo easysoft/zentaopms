@@ -1,12 +1,13 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Liste de Flux';
-$lang->webhook->api      = 'API';
-$lang->webhook->entry    = 'Entrée';
-$lang->webhook->log      = 'Log';
-$lang->webhook->bind     = 'Bind User';
-$lang->webhook->assigned = 'Assign';
-$lang->webhook->setting  = 'Paramétrages';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Liste de Flux';
+$lang->webhook->api        = 'API';
+$lang->webhook->entry      = 'Entrée';
+$lang->webhook->log        = 'Log';
+$lang->webhook->bind       = 'Bind User';
+$lang->webhook->chooseDept = 'Choose department';
+$lang->webhook->assigned   = 'Assign';
+$lang->webhook->setting    = 'Paramétrages';
 
 $lang->webhook->browse = 'Consulter';
 $lang->webhook->create = 'Créer';
@@ -44,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Others';
 $lang->webhook->sendTypeList['sync']  = 'Synchrone';
 $lang->webhook->sendTypeList['async'] = 'Asynchrone';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding Userid';
-$lang->webhook->dingBindStatus = 'Bind Status';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding Userid';
+$lang->webhook->dingBindStatus  = 'Bind Status';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -77,17 +79,18 @@ $lang->webhook->trimWords = '';
 
 $lang->webhook->note = new stdClass();
 $lang->webhook->note->async   = "Si le type d'envoi est asynchrone, vous devez aller dans la console d'administration pour lancer la tâche cron.";
-$lang->webhook->note->bind    = 'Bind User is only required for Dingding Notifier.';
+$lang->webhook->note->bind    = "Lier l'utilisateur n'est requis que pour Dingding Notifier.";
 $lang->webhook->note->product = "Toutes les actions vont déclencher le flux si {$lang->productCommon} est vide, ou seulement les actions du {$lang->productCommon} sélectionné vont le déclencher.";
 $lang->webhook->note->project = "Toutes les actions vont déclencher le flux si {$lang->projectCommon} est vide, ou seulement les actions du {$lang->projectCommon} sélectionné vont le déclencher.";
 
-$lang->webhook->note->dingHelp   = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
-$lang->webhook->note->wechatHelp = " <a href='http://www.zentao.net/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";
+$lang->webhook->note->dingHelp   = " <a href='https://www.zentao.pm/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
+$lang->webhook->note->wechatHelp = " <a href='https://www.zentao.pm/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = "Ajout d'un bot a ZenTao dans bearychat et obtenez l'url du flux.";
 $lang->webhook->note->typeList['dingding']  = "Ajout d'un bot personnalisé dans dingding et obtenez l'url du flux.";
-$lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat and get the webhook url.';
+$lang->webhook->note->typeList['weixin']    = "Ajoutez un bot personnalisé dans WeChat et obtenez l'url du webhook.";
 $lang->webhook->note->typeList['default']   = "Obtenir les url d'autres flux webhook.";
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = 'Chargez php-curl dans php.ini.';
+$lang->webhook->error->curl   = 'Chargez php-curl dans php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

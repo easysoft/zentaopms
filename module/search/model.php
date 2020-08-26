@@ -34,6 +34,8 @@ class searchModel extends model
 
             foreach($fields as $field)
             {
+                if($field->canSearch == 0) continue;
+
                 /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
                 if($field->field == 'subStatus')
                 {
@@ -52,9 +54,11 @@ class searchModel extends model
                 $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
                 $control  = ($field->control == 'select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
                 $options  = $this->workflowfield->getFieldOptions($field);
+                /* Set date zui for date and datetime control. */
+                $class    = ($field->control == 'date' or $field->control == 'datetime') ? 'date' : '';
 
                 $searchConfig['fields'][$field->field] = $field->name;
-                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options);
+                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options, 'class' => $class);
             }
         }
 
@@ -103,11 +107,12 @@ class searchModel extends model
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
 
             /* Skip empty values. */
             if($this->post->$valueName == false) continue;
-            if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName == 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
 
             $scoreNum += 1;
 
@@ -230,6 +235,23 @@ class searchModel extends model
         $hasProject = false;
         $hasUser    = false;
 
+        $appendUsers     = array();
+        $module          = $_SESSION['searchParams']['module'];
+        $formSessionName = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]))
+        {
+            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
+            {
+                $fieldName = 'field' . $i;
+                $valueName = 'value' . $i;
+                $fieldName = $_SESSION[$formSessionName][$fieldName];
+                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
+                {
+                    if($_SESSION[$formSessionName][$valueName]) $appendUsers[] = $_SESSION[$formSessionName][$valueName];
+                }
+            }
+        }
+
         $fields = array_keys($fields);
         foreach($fields as $fieldName)
         {
@@ -241,7 +263,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed');
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
@@ -250,7 +272,11 @@ class searchModel extends model
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
-            if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values']  = $users;
+            if($params[$fieldName]['values'] == 'users')
+            {
+                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
+                $params[$fieldName]['values'] = $users;
+            }
             if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
             if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
             if(is_array($params[$fieldName]['values']))

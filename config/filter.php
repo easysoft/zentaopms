@@ -3,7 +3,7 @@ $filter = new stdclass();
 $filter->rules = new stdclass();
 $filter->rules->md5        = '/^[a-z0-9]{32}$/';
 $filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=]+$/';
-$filter->rules->checked    = '/^[0-9,]+$/';
+$filter->rules->checked    = '/^[0-9,\-]+$/';
 $filter->rules->idList     = '/^[0-9\|]+$/';
 $filter->rules->lang       = '/^[a-zA-Z_\-]+$/';
 $filter->rules->any        = '/./';
@@ -50,6 +50,7 @@ $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
 $filter->repo       = new stdclass();
+$filter->webhook    = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -97,9 +98,13 @@ $filter->testtask->default       = new stdclass();
 $filter->todo->export            = new stdclass();
 $filter->upgrade->license        = new stdclass();
 $filter->user->login             = new stdclass();
+$filter->webhook->bind           = new stdclass();
+$filter->user->ajaxgetmore       = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
+$filter->bug->browse->cookie['bugBranch']      = 'int';
+$filter->bug->browse->cookie['treeBranch']     = 'int';
 $filter->bug->browse->cookie['preBranch']      = 'int';
 $filter->bug->browse->cookie['qaBugOrder']     = 'reg::orderBy';
 $filter->bug->browse->cookie['windowWidth']    = 'int';
@@ -127,6 +132,8 @@ $filter->product->browse->cookie['preBranch']         = 'int';
 $filter->product->browse->cookie['preProductID']      = 'int';
 $filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
 $filter->product->browse->cookie['storyModule']       = 'int';
+$filter->product->browse->cookie['storyBranch']       = 'int';
+$filter->product->browse->cookie['treeBranch']        = 'int';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
@@ -225,10 +232,12 @@ $filter->sso->logout->get['token']      = 'reg::md5';
 
 $filter->upgrade->license->get['agree'] = 'equal::true';
 
-$filter->user->login->get['account']  = 'account';
-$filter->user->login->get['lang']     = 'reg::lang';
-$filter->user->login->get['password'] = 'reg::any';
-$filter->user->edit->get['from']      = 'reg::word';
+$filter->user->login->get['account']      = 'account';
+$filter->user->login->get['lang']         = 'reg::lang';
+$filter->user->login->get['password']     = 'reg::any';
+$filter->user->edit->get['from']          = 'reg::word';
+$filter->user->ajaxgetmore->get['search'] = 'reg::any';
+$filter->user->ajaxgetmore->get['limit']  = 'int';
 
 $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';
@@ -247,3 +256,6 @@ $filter->repo->diff->cookie['arrange']       = 'reg::word';
 $filter->repo->diff->cookie['repoPairs']     = 'array';
 $filter->repo->view->cookie['repoPairs']     = 'array';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
+
+$filter->webhook->bind->get['selectedDepts']    = 'reg::checked';
+$filter->webhook->bind->cookie['selectedDepts'] = 'reg::checked';

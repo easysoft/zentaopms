@@ -3,6 +3,30 @@
 <script>
 function loadProduct(productID)
 {
+    if(parentStory)
+    {
+        confirmLoadProduct = confirm(moveChildrenTips);
+        if(!confirmLoadProduct)
+        {
+            $('#product').val(oldProductID);
+            $('#product').trigger("chosen:updated");
+            return false;
+        }
+    }
+
+    if(typeof hasSR != 'undefined' && hasSR)
+    {
+        confirmLoadProduct = confirm(moveSRTips);//Set hasSR variable in pro and biz.
+        if(!confirmLoadProduct)
+        {
+            $('#product').val(oldProductID);
+            $('#product').trigger("chosen:updated");
+            return false;
+        }
+    }
+
+    oldProductID = $('#product').val();
+
     loadProductBranches(productID)
     loadProductModules(productID);
     loadProductPlans(productID);
@@ -60,10 +84,4 @@ function loadProductPlans(productID, branch)
         $planIdBox.fixInputGroup();
     });
 }
-
-$(function()
-{
-    $("#reviewedBy").chosen();
-    $("#mailto").chosen();
-})
 </script>

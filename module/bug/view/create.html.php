@@ -195,6 +195,11 @@ js::set('flow', $config->global->flow);
                 }
                 $priList = $lang->bug->priList;
                 if(end($priList)) unset($priList[0]);
+                if(!isset($priList[$pri]))
+                {
+                    reset($priList);
+                    $pri = key($priList);
+                }
                 ?>
                 <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
@@ -290,7 +295,7 @@ js::set('flow', $config->global->flow);
               <?php echo html::submitButton();?>
               <?php if($caseID == 0) echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
-              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', (int)$testtask);?>
+              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', $testtask ? (int)$testtask->id : 0);?>
             </td>
           </tr>
         </tfoot>

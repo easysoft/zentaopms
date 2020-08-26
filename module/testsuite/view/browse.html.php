@@ -26,7 +26,7 @@
   </div>
 </div>
 <?php endif;?>
-<div id='mainContent' class='main-table'>
+<div id='mainContent' class='main-table' data-ride='table'>
   <?php if(empty($suites)):?>
   <div class="table-empty-tip">
     <p>

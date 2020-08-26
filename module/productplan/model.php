@@ -470,7 +470,9 @@ class productplanModel extends model
         foreach($this->post->stories as $storyID)
         {
             if(!isset($stories[$storyID])) continue;
+
             $story = $stories[$storyID];
+            if(strpos(",$story->plan,", ",{$planID},") !== false) continue;
 
             /* Fix Bug #1538*/
             $currentOrder = $currentOrder . $storyID . ',';
@@ -533,8 +535,15 @@ class productplanModel extends model
     {
         $this->loadModel('story');
         $this->loadModel('action');
+
+        $bugs = $this->loadModel('bug')->getByList($this->post->bugs);
         foreach($this->post->bugs as $bugID)
         {
+            if(!isset($bugs[$bugID])) continue;
+
+            $bug = $bugs[$bugID];
+            if($bug->plan == $planID) continue;
+
             $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('id')->eq((int)$bugID)->exec();
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }

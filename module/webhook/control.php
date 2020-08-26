@@ -40,6 +40,9 @@ class webhook extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Unset selectedDepts cookie. */
+        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', false, true);
+
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
@@ -132,6 +135,20 @@ class webhook extends control
      */
     public function log($id, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Save session. */
+        $uri   = $this->app->getURI(true);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+        $this->session->set('todoList',        $uri);
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -175,11 +192,19 @@ class webhook extends control
         }
         $webhook->secret = json_decode($webhook->secret);
 
+        /* Get selected depts. */
+        if($this->get->selectedDepts)
+        {
+            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', false, true);
+            $_COOKIE['selectedDepts'] = $this->get->selectedDepts;
+        }
+        $selectedDepts = $this->cookie->selectedDepts ? $this->cookie->selectedDepts : '';
+
         if($webhook->type == 'dinguser')
         {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getAllUsers();
+            $response = $dingapi->getUsers($selectedDepts);
         }
         elseif($webhook->type == 'wechatuser')
         {
@@ -190,6 +215,12 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
+            if($response['message'] == 'nodept')
+            {
+                echo js::error($this->lang->webhook->error->noDept);
+                die(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
+            }
+
             echo js::error($response['message']);
             die(js::locate($this->createLink('webhook', 'browse')));
         }
@@ -216,12 +247,51 @@ class webhook extends control
         $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->bind;
 
-        $this->view->webhook     = $webhook;
-        $this->view->dingUsers   = $dingUsers;
-        $this->view->useridPairs = $useridPairs;
-        $this->view->users       = $users;
-        $this->view->pager       = $pager;
-        $this->view->bindedUsers = $bindedPairs;
+        $this->view->webhook       = $webhook;
+        $this->view->dingUsers     = $dingUsers;
+        $this->view->useridPairs   = $useridPairs;
+        $this->view->users         = $users;
+        $this->view->pager         = $pager;
+        $this->view->bindedUsers   = $bindedPairs;
+        $this->view->selectedDepts = $selectedDepts;
+        $this->display();
+    }
+
+    /**
+     * choose dept.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function chooseDept($id)
+    {
+        $webhook = $this->webhook->getById($id);
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser')
+        {
+            echo js::alert($this->lang->webhook->note->bind);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+        $webhook->secret = json_decode($webhook->secret);
+
+        if($webhook->type == 'dinguser')
+        {
+            $this->app->loadClass('dingapi', true);
+            $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response = $dingapi->getDeptTree();
+        }
+
+        if($response['result'] == 'fail')
+        {
+            echo js::error($response['message']);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+
+        $this->view->title      = $this->lang->webhook->chooseDept;
+        $this->view->position[] = $this->lang->webhook->chooseDept;
+
+        $this->view->deptTree  = $response['data'];
+        $this->view->webhookID = $id;
         $this->display();
     }
 

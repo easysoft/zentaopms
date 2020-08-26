@@ -92,10 +92,11 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['project']) ? key($projects) : $this->session->project;?>
+        <?php $selected = empty($_SESSION['project'])  ? key($projects) : $this->session->project;?>
+        <?php $selected = !isset($projects[$selected]) ? key($projects) : $selected;?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab" title='<?php echo $project->name;?>'><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
         </li>
         <?php endforeach;?>
@@ -153,6 +154,7 @@ $(function()
                 </div>
               </div>
             </div>
+            <?php if($this->config->global->flow != 'onlyTask'): ?>
             <div class="product-info">
               <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $project->releasedStories;?></strong></div>
               <div class="progress">
@@ -194,6 +196,7 @@ $(function()
                 </div>
               </div>
             </div>
+            <?php endif;?>
           </div>
         </div>
       </div>

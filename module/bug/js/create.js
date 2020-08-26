@@ -59,7 +59,25 @@ function setAssignedTo(moduleID, productID)
     var link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
-        $('#assignedTo').val(owner);
+        owner        = JSON.parse(owner);
+        var account  = owner[0];
+        var realName = owner[1];
+        var isExist  = false;
+        var count    = $('#assignedTo').find('option').length;
+        for(var i=0; i < count; i++)
+        {
+            if($('#assignedTo').get(0).options[i].value == account)
+            {
+                isExist = true;
+                break;
+            }
+        }
+        if(!isExist && account)
+        {
+            option = "<option title='" + realName + "' value='" + account + "'>" + realName + "</option>";
+            $("#assignedTo").append(option);
+        }
+        $('#assignedTo').val(account);
         $("#assignedTo").trigger("chosen:updated");
     });
 }

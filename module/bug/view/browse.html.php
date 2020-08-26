@@ -48,11 +48,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     foreach($menus as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
-
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";
-        $label .= $menuBrowseType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-        $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+        $label .= $menuBrowseType == $this->session->bugBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $active = $menuBrowseType == $this->session->bugBrowseType ? 'btn-active-text' : '';
 
         if($menuItem->name == 'my')
         {
@@ -207,6 +206,17 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $setting = $this->datatable->getSetting('bug');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
+
+      $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
+      $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
+      $canBatchClose        = common::hasPriv('bug', 'batchClose');
+      $canBatchActivate     = common::hasPriv('bug', 'batchActivate');
+      $canBatchChangeBranch = common::hasPriv('bug', 'batchChangeBranch');
+      $canBatchChangeModule = common::hasPriv('bug', 'batchChangeModule');
+      $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
+      $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
+
+      $canBatchAction       = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='bugList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -220,7 +230,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                   if(common::checkNotCN() and $value->id == 'severity')  $value->name = $lang->bug->severity;
                   if(common::checkNotCN() and $value->id == 'pri')       $value->name = $lang->bug->pri;
                   if(common::checkNotCN() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
-                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
                   $columns ++;
               }
           }
@@ -237,31 +247,35 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </table>
       <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class = "class='disabled'";
-              $actionLink = $this->createLink('bug', 'batchConfirm', '');
-              $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
+              $class      = $canBatchConfirm ? '' : "class='disabled'";
+              $actionLink = $this->createLink('bug', 'batchConfirm');
+              $misc       = $canBatchConfirm ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
-              $actionLink = $this->createLink('bug', 'batchClose', '');
-              $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
+              $class      = $canBatchClose ? '' : "class='disabled'";
+              $actionLink = $this->createLink('bug', 'batchClose');
+              $misc       = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
+              $class      = $canBatchActivate ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
-              $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
+              $misc       = $canBatchActivate ? "onclick=\"setFormAction('$actionLink')\"" : '';
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
-              $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : '';
+              $misc = $canBatchResolve ? "id='resolveItem'" : '';
               if($misc)
               {
                   echo "<li class='dropdown-submenu'>" . html::a('javascript:;', $lang->bug->resolve,  '', $misc);
@@ -301,7 +315,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               ?>
             </ul>
           </div>
-          <?php if(common::hasPriv('bug', 'batchChangeBranch') and $this->session->currentProductType != 'normal'):?>
+          <?php if($canBatchChangeBranch and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
             <?php $withSearch = count($branches) > 8;?>
@@ -329,7 +343,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('bug', 'batchChangeModule')):?>
+          <?php if($canBatchChangeModule):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -357,7 +371,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('bug', 'batchAssignTo')):?>
+          <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
             <?php $withSearch = count($memberPairs) > 10;?>
@@ -397,6 +411,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 </div>
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
+var branchID = $.cookie('bugBranch');
+$('#branch' + branchID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>

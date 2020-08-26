@@ -37,6 +37,13 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task, story, uid, feedback')
             ->get();
+
+        if($todo->end < $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
         {
@@ -58,6 +65,7 @@ class todoModel extends model
                 unset($todo->config['week']);
                 $todo->config['month'] = join(',', $todo->config['month']);
             }
+            $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
             $todo->config = json_encode($todo->config);
             $todo->type   = 'cycle';
         }
@@ -91,6 +99,8 @@ class todoModel extends model
     public function batchCreate()
     {
         $todos = fixer::input('post')->get();
+
+        $validTodos = array();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
@@ -118,15 +128,9 @@ class todoModel extends model
                 if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
                 if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
 
-                $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
-                if(dao::isError())
-                {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
-                }
-                $todoID = $this->dao->lastInsertID();
-                $this->loadModel('score')->create('todo', 'create', $todoID);
-                $this->loadModel('action')->create('todo', $todoID, 'opened');
+                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+
+                $validTodos[] = $todo;
             }
             else
             {
@@ -137,6 +141,19 @@ class todoModel extends model
                 unset($todos->begins[$i]);
                 unset($todos->ends[$i]);
             }
+        }
+
+        foreach($validTodos as $todo)
+        {
+            $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+            $todoID = $this->dao->lastInsertID();
+            $this->loadModel('score')->create('todo', 'create', $todoID);
+            $this->loadModel('action')->create('todo', $todoID, 'opened');
         }
     }
 
@@ -154,14 +171,25 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->cleanInt('pri, begin, end, private')
             ->add('account', $oldTodo->account)
-            ->setIF(in_array($oldTodo->type, array('bug', 'task', 'story')), 'name', '')
+            ->setIF(in_array($this->post->type, array('bug', 'task', 'story')), 'name', '')
+            ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
+            ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
+            ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
+            ->setIF($this->post->type == 'feedback' and $this->post->feedback, 'idvalue', $this->post->feedback)
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid')
+            ->remove('bug, task, story, feedback, uid')
             ->get();
+
+        if($todo->end < $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
         if(!empty($oldTodo->cycle))
         {
             $todo->config['begin'] = $todo->date;
@@ -182,6 +210,7 @@ class todoModel extends model
                 unset($todo->config['week']);
                 $todo->config['month'] = join(',', $todo->config['month']);
             }
+            $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
             $todo->config = json_encode($todo->config);
         }
 
@@ -189,6 +218,10 @@ class todoModel extends model
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'feedback' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
         if(!dao::isError())
@@ -229,6 +262,8 @@ class todoModel extends model
                 if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
                 if($todo->type == 'story')$todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
 
+                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+
                 $todos[$todoID] = $todo;
             }
 
@@ -236,12 +271,14 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
-                if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
+                if($oldTodo->type == 'bug' or $oldTodo->type == 'task' or $oldTodo->type == 'story' or $oldTodo->type == 'feedback') $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
-                    ->checkIF($todo->type == 'bug', 'idvalue', 'notempty')
-                    ->checkIF($todo->type == 'task', 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'feedback' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->where('id')->eq($todoID)
                     ->exec();
 
@@ -260,6 +297,20 @@ class todoModel extends model
 
         return $allChanges;
     }
+
+    /**
+     * Start one todo.
+     *
+     * @param  string $todoID
+     * @access public
+     * @return void
+     */
+    public function start($todoID)
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq((int)$todoID)->exec();
+        $this->loadModel('action')->create('todo', $todoID, 'started');
+    }
+
 
     /**
      * Change the status of a todo.
@@ -449,6 +500,12 @@ class todoModel extends model
         {
             if(!empty($todo->cycle)) return false;
             return $todo->status != 'done';
+        }
+
+        if($action == 'start')
+        {
+            if(!empty($todo->cycle)) return false;
+            return $todo->status == 'wait';
         }
 
         return true;

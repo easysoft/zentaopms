@@ -39,8 +39,6 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
-        <?php if(strpos(",{$release->stories},", ",{$story->id},") !== false) continue; ?>
-        <?php if($release->product != $story->product) continue; ?>
         <tr>
           <td class='c-id text-left'>
             <div class="checkbox-primary">
@@ -77,9 +75,14 @@
         <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
 </div>
 <script>
-$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkStoryList .tablesorter').sortTable();
+    setForm();
+});
 </script>

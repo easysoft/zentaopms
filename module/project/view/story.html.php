@@ -110,12 +110,16 @@
           <tr>
           <?php
           $totalEstimate = 0;
-          $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-          $canBatchClose = common::hasPriv('story', 'batchClose');
+          $canBatchEdit         = common::hasPriv('story', 'batchEdit');
+          $canBatchClose        = common::hasPriv('story', 'batchClose');
+          $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
+          $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
+
+          $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink);
           ?>
           <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
-              <?php if($canBatchEdit or $canBatchClose):?>
+              <?php if($canBatchAction):?>
               <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                 <label></label>
               </div>
@@ -146,7 +150,7 @@
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
-              <?php if($canBatchEdit or $canBatchClose):?>
+              <?php if($canBatchAction):?>
               <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));?>
               <?php else:?>
               <?php printf('%03d', $story->id);?>
@@ -220,7 +224,7 @@
         </tbody>
       </table>
       <div class='table-footer'>
-        <?php if($canBatchEdit or $canBatchClose):?>
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <?php endif;?>
         <div class='table-actions btn-toolbar'>
@@ -245,7 +249,7 @@
             foreach($lang->story->stageList as $key => $stage)
             {
                 if(empty($key)) continue;
-                if(strpos('tested|verified|released|closed', $key) === false) continue;
+                if(strpos('wait|planned|projected', $key) !== false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                 echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
             }
@@ -292,7 +296,11 @@
 $(function()
 {
     // Update table summary text
-    var checkedSummary = '<?php echo $lang->product->checkedSummary?>';
+    <?php
+    $storyCommon = $lang->storyCommon;
+    if(!empty($config->URAndSR)) $storyCommon = $lang->srCommon;
+    ?>
+    var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#projectStoryForm').table(
     {
         statisticCreator: function(table)

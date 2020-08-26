@@ -36,7 +36,7 @@ class ciModel extends model
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
             ->where('t1.status')->ne('success')
-            ->andWhere('t1.status')->ne('fail')
+            ->andWhere('t1.status')->ne('failure')
             ->andWhere('t1.status')->ne('create_fail')
             ->andWhere('t1.status')->ne('timeout')
             ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
@@ -54,28 +54,36 @@ class ciModel extends model
      */
     public function syncCompileStatus($compile)
     {
+        if($compile->times >= 3)
+        {
+            $this->dao->update(TABLE_COMPILE)->set('status')->eq('failure')->where('id')->eq($compile->id)->exec();
+            return false;
+        }
+
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
+        $userPWD         = "$jenkinsUser:$jenkinsPassword";
+        $queueUrl        = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
 
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $queueUrl      = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
+        $response = common::http($queueUrl, '', false, $userPWD);
 
-        $response = common::http($queueUrl);
+        $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         if(strripos($response, "404") > -1)
         {
             $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
-            $response = common::http($infoUrl);
+            $response = common::http($infoUrl, '', false, $userPWD);
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
                 $buildNumber = strtolower($buildInfo->number);
-                $result      = strtolower($buildInfo->result);
+                if(empty($buildNumber)) return false;
+
+                $result = strtolower($buildInfo->result);
                 $this->updateBuildStatus($compile, $result);
 
                 $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
-                $response = common::http($logUrl);
+                $response = common::http($logUrl, '', false, $userPWD);
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
             }
         }
@@ -84,10 +92,8 @@ class ciModel extends model
             $queueInfo = json_decode($response);
             if(!empty($queueInfo->executable))
             {
-                $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
-                $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
-
-                $response  = common::http($buildUrl);
+                $buildUrl  = $queueInfo->executable->url . 'api/json?pretty=true';
+                $response  = common::http($buildUrl, '', false, $userPWD);
                 $buildInfo = json_decode($response);
 
                 if($buildInfo->building)
@@ -100,8 +106,7 @@ class ciModel extends model
                     $this->updateBuildStatus($compile, $result);
 
                     $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
-                    $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
-                    $response = common::http($logUrl);
+                    $response = common::http($logUrl, '', false, $userPWD);
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
             }
@@ -125,16 +130,16 @@ class ciModel extends model
     /**
      * Send request.
      * 
-     * @param  string $url 
-     * @param  object $data 
+     * @param  string $url
+     * @param  object $data
+     * @param  string $userPWD
      * @access public
      * @return int
      */
-    public function sendRequest($url, $data)
+    public function sendRequest($url, $data, $userPWD = '')
     {
         if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
-
-        $response = common::http($url, $data, true);
+        $response = common::http($url, $data, true, $userPWD);
         if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
         return 0;
     }

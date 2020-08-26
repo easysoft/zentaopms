@@ -10,7 +10,6 @@ $lang->my->bug            = 'Bugs của bạn';
 $lang->my->testTask       = 'Bản dựng của bạn';
 $lang->my->testCase       = 'Tình huống của bạn';
 $lang->my->story          = 'Câu chuyện của bạn';
-$lang->my->requirement    = 'Điều kiện của bạn';
 $lang->my->myProject      = "{$lang->projectCommon} của bạn";
 $lang->my->profile        = 'Hồ sơ của bạn';
 $lang->my->dynamic        = 'Lịch sử của bạn';

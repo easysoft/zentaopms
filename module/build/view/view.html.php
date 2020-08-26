@@ -28,16 +28,16 @@ tbody tr td:first-child input{display:none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'> 
+      <span class='text' title='<?php echo $build->name;?>'>
       <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
-      <?php 
+      <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
-      {   
+      {
           echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
           echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
           echo '</li>';
-      }       
+      }
       echo '</ul>';
       ?>
       </span>
@@ -82,12 +82,12 @@ tbody tr td:first-child input{display:none;}
   </div>
   <?php else:?>
   <div class='tabs' id='tabsNav'>
-  <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
+  <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>
     <ul class='nav nav-tabs'>
-      <li <?php if($type == 'story')     echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->build->stories;?></a></li>
-      <li <?php if($type == 'bug')       echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-green') . ' ' . $lang->build->bugs;?></a></li>
-      <li <?php if($type == 'newbug')    echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->build->generatedBugs;?></a></li>
-      <li <?php if($type == 'buildInfo') echo "class='active'"?>><a href='#buildInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->build->view;?></a></li>
+      <li <?php if($type == 'story')        echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->build->stories;?></a></li>
+      <li <?php if($type == 'bug')          echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-green') . ' ' . $lang->build->bugs;?></a></li>
+      <li <?php if($type == 'generatedBug') echo "class='active'"?>><a href='#generatedBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->build->generatedBugs;?></a></li>
+      <li <?php if($type == 'buildInfo')    echo "class='active'"?>><a href='#buildInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->build->view;?></a></li>
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
@@ -133,7 +133,7 @@ tbody tr td:first-child input{display:none;}
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-                  echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");
+                  echo html::a($storyLink,$story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -157,8 +157,8 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countStories):?>
           <div class='table-footer'>
+            <?php if($countStories):?>
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
@@ -166,8 +166,13 @@ tbody tr td:first-child input{display:none;}
             </div>
             <?php endif;?>
             <div class='table-statistic'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'story';
+            $storyPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
@@ -208,7 +213,9 @@ tbody tr td:first-child input{display:none;}
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'>
+                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
+                </td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>
@@ -231,23 +238,28 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countBugs):?>
           <div class='table-footer'>
+            <?php if($countBugs):?>
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
               <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'bug';
+            $bugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </form>
       </div>
-      <div class='tab-pane <?php if($type == 'newbug') echo 'active'?>' id='newBugs'>
-        <div class='main-table'>
+      <div class='tab-pane <?php if($type == 'generatedBug') echo 'active'?>' id='generatedBugs'>
+        <div class='main-table' data-ride='table'>
           <table class='table has-sort-head'>
-            <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
+            <?php $vars = "buildID={$build->id}&type=generatedBug&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
                 <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
@@ -283,7 +295,9 @@ tbody tr td:first-child input{display:none;}
                   <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
                   <?php endif;?>
                 </td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'>
+                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
+                </td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>
@@ -297,11 +311,16 @@ tbody tr td:first-child input{display:none;}
               <?php endforeach;?>
             </tbody>
           </table>
-          <?php if($countNewBugs):?>
           <div class='table-footer'>
-            <div class='text'><?php echo sprintf($lang->build->createdBugs, $countNewBugs);?></div>
+            <?php if($countGeneratedBugs):?>
+            <div class='table-statistic'><?php echo sprintf($lang->build->createdBugs, $countGeneratedBugs);?></div>
+            <?php endif;?>
+            <?php
+            $this->app->rawParams['type'] = 'generatedBug';
+            $generatedBugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
-          <?php endif;?>
         </div>
       </div>
       <div class='tab-pane <?php if($type == 'buildInfo') echo 'active'?>' id='buildInfo'>

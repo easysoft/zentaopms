@@ -58,6 +58,8 @@ $lang->trunk        = 'Trunk';
 $lang->sort         = 'Sắp xếp';
 $lang->required     = 'Bắt buộc';
 $lang->noData       = 'Không có dữ liệu.';
+$lang->fullscreen   = 'Fullscreen';
+$lang->retrack      = 'Retrack';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
@@ -84,7 +86,6 @@ $lang->homepage        = 'Trang thiết lập';
 $lang->noviceTutorial  = 'Hướng dẫn ZenTao';
 $lang->changeLog       = 'Thay đổi nhật ký';
 $lang->manual          = 'Hướng dẫn người dùng';
-$lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
 $lang->customMenu      = 'Tùy biến Menu';
 $lang->customField     = 'Tùy biến trường';
 $lang->lineNumber      = 'Số dòng';
@@ -335,13 +336,17 @@ $lang->testreport->menu->caselib   = array('link' => 'Thư viện tình huống|
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
-$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => 'Tình huống|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Báo cáo|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => 'Thư viện tình huống|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+$lang->caselib->subMenu = new stdclass();
+$lang->caselib->subMenu->testcase = new stdclass();
+$lang->caselib->subMenu->testcase->feature = array('link' => 'Functional Test|testcase|browse|', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => 'Unit Test|testtask|browseUnits|');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -401,11 +406,11 @@ $lang->user->menu  = $lang->company->menu;
 /* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index   = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->message = array('link' => 'Thông báo|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom  = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso     = array('link' => 'Integration|admin|sso');
-
+$lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->message   = array('link' => 'Thông báo|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
+$lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
@@ -522,7 +527,7 @@ $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』nên là chữ hoặc số.";
 $lang->error->account         = "『%s』should be >= 3 letters or numbers.";
-$lang->error->passwordsame    = "Passwords should be consistent.";
+$lang->error->passwordsame    = "The two passwords should be the same.";
 $lang->error->passwordrule    = "Password should conform to rules. It should be >= 6 characters.";
 $lang->error->accessDenied    = 'Truy cập bị từ chối.';
 $lang->error->pasteImg        = 'Images are not allowed to be pasted in your browser!';
@@ -576,7 +581,6 @@ $lang->importAndInsert = "Insert";
 $lang->noResultsMatch     = "Không có results match found!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Chọn users that will be notified.";
-$lang->browserNotice      = 'The browser you currently use might not get the best browsing results. It is recommended that you use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Bạn có thể paste images into the editor.";
 $lang->pasteImgFail       = "Lỗi paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";

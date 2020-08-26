@@ -58,6 +58,8 @@ $lang->trunk        = '主幹';
 $lang->sort         = '排序';
 $lang->required     = '必填';
 $lang->noData       = '暫無';
+$lang->fullscreen   = '全屏';
+$lang->retrack      = '收起';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
@@ -84,7 +86,6 @@ $lang->homepage        = '設為模組首頁';
 $lang->noviceTutorial  = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
-$lang->manualUrl       = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = '自定義導航';
 $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
@@ -335,13 +336,17 @@ $lang->testreport->menu->caselib   = array('link' => '用例庫|caselib|browse')
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
-$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => '測試單|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '報告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+$lang->caselib->subMenu = new stdclass();
+$lang->caselib->subMenu->testcase = new stdclass();
+$lang->caselib->subMenu->testcase->feature = array('link' => '功能測試|testcase|browse|', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->caselib->subMenu->testcase->unit    = array('link' => '單元測試|testtask|browseUnits|');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -420,7 +425,7 @@ $lang->admin->subMenu->message->browser = array('link' => '瀏覽器|message|bro
 $lang->admin->subMenu->message->setting = array('link' => '設置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
-$lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
+$lang->admin->subMenu->sso->ranzhi = 'ZDOO|admin|sso';
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -522,7 +527,7 @@ $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
 $lang->error->account         = "『%s』只能是字母和數字的組合三位以上。";
-$lang->error->passwordsame    = "兩次密碼應當相等。";
+$lang->error->passwordsame    = "兩次密碼應該相同。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
 $lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
@@ -576,7 +581,6 @@ $lang->importAndInsert = "全新插入";
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->searchMore        = "搜索此關鍵字的更多結果：";
 $lang->chooseUsersToMail = "選擇要發信通知的用戶...";
-$lang->browserNotice     = '你目前使用的瀏覽器可能無法得到最佳瀏覽效果，建議使用Chrome、火狐、IE9+、Opera、Safari瀏覽器。';
 $lang->noticePasteImg    = "可以在編輯器直接貼圖。";
 $lang->pasteImgFail      = "貼圖失敗，請稍後重試。";
 $lang->pasteImgUploading = "正在上傳圖片，請稍後...";

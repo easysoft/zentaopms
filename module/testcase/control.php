@@ -505,8 +505,11 @@ class testcase extends control
 
             $results = $this->testtask->getResults($run->id);
             $result  = array_shift($results);
-            $case->xml      = $result->xml;
-            $case->duration = $result->duration;
+            if($result)
+            {
+                $case->xml      = $result->xml;
+                $case->duration = $result->duration;
+            }
         }
 
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
@@ -587,7 +590,7 @@ class testcase extends control
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $this->loadModel('action');
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);
@@ -614,7 +617,7 @@ class testcase extends control
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->testsuite->menu;
+            $this->lang->testcase->menu = $this->lang->caselib->menu;
             if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testcase = 'caselib';
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
@@ -652,7 +655,8 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
-        if($this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
+        $forceNotReview = $this->testcase->forceNotReview();
+        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -663,6 +667,7 @@ class testcase extends control
         $this->view->case            = $case;
         $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
         $this->view->isLibCase       = $isLibCase;
+        $this->view->forceNotReview  = $forceNotReview;
 
         $this->display();
     }
@@ -708,7 +713,7 @@ class testcase extends control
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
                 $this->caselib->setLibMenu($libraries, $libID);
-                $this->lang->testcase->menu = $this->lang->testsuite->menu;
+                $this->lang->testcase->menu = $this->lang->caselib->menu;
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
@@ -763,7 +768,7 @@ class testcase extends control
 
         // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
-        /* Judge whether the editedTasks is too large and set session. */
+        /* Judge whether the editedCases is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -778,14 +783,15 @@ class testcase extends control
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
         /* Assign. */
-        $this->view->position[]    = $this->lang->testcase->common;
-        $this->view->position[]    = $this->lang->testcase->batchEdit;
-        $this->view->caseIDList    = $caseIDList;
-        $this->view->productID     = $productID;
-        $this->view->branchProduct = $branchProduct;
-        $this->view->priList       = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
-        $this->view->typeList      = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
-        $this->view->cases         = $cases;
+        $this->view->position[]     = $this->lang->testcase->common;
+        $this->view->position[]     = $this->lang->testcase->batchEdit;
+        $this->view->caseIDList     = $caseIDList;
+        $this->view->productID      = $productID;
+        $this->view->branchProduct  = $branchProduct;
+        $this->view->priList        = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
+        $this->view->typeList       = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
+        $this->view->cases          = $cases;
+        $this->view->forceNotReview = $this->testcase->forceNotReview();
 
         $this->display();
     }
@@ -804,7 +810,7 @@ class testcase extends control
             $changes = $this->testcase->review($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if($changes)
+            if($changes or $this->post->comment != '')
             {
                 $result = $this->post->result;
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
@@ -1200,7 +1206,14 @@ class testcase extends control
                 $case->stepExpect = '';
                 $case->real       = '';
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
-                $case->real = empty($result) ? '' : $result[0]['real'];
+
+                $case->real = '';
+                if(!empty($result))
+                {
+                    $firstStep  = reset($result);
+                    $case->real = $firstStep['real'];
+                }
+
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = $childId = 0;
@@ -1394,8 +1407,8 @@ class testcase extends control
 
             if(count($columnKey) <= 3 or $this->post->encode != 'utf-8')
             {
-                $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
+                $fc     = file_get_contents($fileName);
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
@@ -1416,7 +1429,7 @@ class testcase extends control
                 if(count($columnKey) == 0) die(js::alert($this->lang->testcase->errorEncode));
             }
 
-            $this->session->set('importFile', $fileName);
+            $this->session->set('fileImport', $fileName);
 
             die(js::locate(inlink('showImport', "productID=$productID&branch=$branch"), 'parent.parent'));
         }
@@ -1497,29 +1510,31 @@ class testcase extends control
     /**
      * Show import data
      *
-     * @param  int    $productID
-     * @param  int    $branch 
-     * @param  int    $pagerID 
+     * @param  int        $productID 
+     * @param  int        $branch 
+     * @param  int        $pagerID 
+     * @param  int        $maxImport 
+     * @param  string|int $insert     0 is covered old, 1 is insert new.
      * @access public
      * @return void
      */
-    public function showImport($productID, $branch = 0, $pagerID = 1)
+    public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0, $insert = '')
     {
-        $file      = $this->session->importFile;
-        $cachePath = $this->loadModel('file')->getShowImportPath();
-        $cacheFile = $cachePath . DS . md5(basename($file));
-        $maxImport = $this->config->file->maxImport;
+        $file    = $this->session->fileImport;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
         if($_POST)
         {
             $this->testcase->createFromImport($productID, (int)$branch);
             if($this->post->isEndPage)
             {
-                unlink($cacheFile);
+                unlink($tmpFile);
                 die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
             }
             else
             {
-                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . $this->post->pagerID + 1), 'parent'));
+                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -1532,9 +1547,9 @@ class testcase extends control
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
 
-        if($pagerID != 1 and file_exists($cacheFile))
+        if(!empty($maxImport) and file_exists($tmpFile))
         {
-            $data = unserialize(file_get_contents($cacheFile));
+            $data = unserialize(file_get_contents($tmpFile));
             $caseData = $data['caseData'];
             $stepData = $data['stepData'];
         }
@@ -1667,7 +1682,7 @@ class testcase extends control
 
             $data['caseData'] = $caseData;
             $data['stepData'] = $stepData;
-            file_put_contents($cacheFile, serialize($data));
+            file_put_contents($tmpFile, serialize($data));
         }
 
         if(empty($caseData))
@@ -1677,31 +1692,46 @@ class testcase extends control
         }
 
         $allCount = count($caseData);
-        $allPager = ceil($allCount / $maxImport);
-        $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                $this->view->productID = $productID;
+                $this->view->branch    = $branch;
+                die($this->display());
+            }
+
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
         if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
 
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($caseData) * 12 + $stepVars;
+        /* Judge whether the editedCases is too large and set session. */
+        $countInputVars  = count($caseData) * 12 + (isset($stepVars) ? $stepVars : 0);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;
 
-        $this->view->stories   = $stories;
-        $this->view->modules   = $modules;
-        $this->view->cases     = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $this->view->caseData  = $caseData;
-        $this->view->stepData  = $stepData;
-        $this->view->productID = $productID;
-        $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
-        $this->view->isEndPage = $pagerID >= $allPager;
-        $this->view->allCount  = $allCount;
-        $this->view->allPager  = ceil($allCount / $maxImport);
-        $this->view->pagerID   = $pagerID;
-        $this->view->branch    = $branch;
-        $this->view->product   = $this->products[$productID];
+        $this->view->stories    = $stories;
+        $this->view->modules    = $modules;
+        $this->view->cases      = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->view->caseData   = $caseData;
+        $this->view->stepData   = $stepData;
+        $this->view->productID  = $productID;
+        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->isEndPage  = $pagerID >= $allPager;
+        $this->view->allCount   = $allCount;
+        $this->view->allPager   = $allPager;
+        $this->view->pagerID    = $pagerID;
+        $this->view->branch     = $branch;
+        $this->view->product    = $this->products[$productID];
+        $this->view->maxImport  = $maxImport;
+        $this->view->dataInsert = $insert;
         $this->display();
     }
 

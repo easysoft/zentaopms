@@ -191,6 +191,7 @@ $lang->task->confirmChangeProject  = "Nếu bạn thay đổi {$lang->projectCom
 $lang->task->confirmFinish         = '"Còn lại" bằng 0. Bạn có muốn thay đổi tình trạng thành "Kết thúc"?';
 $lang->task->confirmRecord         = '"Còn lại" bằng 0. Bạn có muốn thiết lập nhiệm vụ thành "Kết thúc"?';
 $lang->task->confirmTransfer       = '"Còn lại" bằng 0，Bạn có muốn chuyển thành nhiệm vụ?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Không có câu chuyện liên kết. Bạn có thể %s cho dự án này, sau đó %s.";
 $lang->task->noticeSaveRecord      = 'Số giờ làm của bạn chưa được lưu. Vui lòng lưu nó trước.';
 $lang->task->commentActions        = '%s. %s, nhận xét bởi <strong>%s</strong>.';
@@ -200,8 +201,11 @@ $lang->task->createDenied          = 'Tạo nhiệm vụ bị từ chối trong 
 $lang->task->cannotDeleteParent    = 'Không thể xóa nhiệm vụ cha';
 
 $lang->task->error = new stdclass();
+$lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber    = '"Giờ làm" phải là số.';
 $lang->task->error->estimateNumber    = '"Dự tính" phải là số.';
+$lang->task->error->recordMinus       = 'Giờ làm không nên là số âm';
+$lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Giờ làm không nên là số âm';
 $lang->task->error->consumedSmall     = '"Tổng giờ làm" phải là > số cuối cùng.';
 $lang->task->error->consumedThisTime  = 'Vui lòng nhập "Số giờ làm"';
@@ -210,8 +214,9 @@ $lang->task->error->work              = '"Nhận xét" phải là <  %d ký tự
 $lang->task->error->skipClose         = 'Nhiệm vụ: %s không là "Kết thúc” hoặc “Đã hủy”. Bạn có muốn đóng nó?';
 $lang->task->error->consumed          = 'Nhiệm vụ: %s giờ phải là < 0. Bỏ qua thay đổi cho nhiệm vụ này.';
 $lang->task->error->assignedTo        = 'Nhiệm vụ nhiều người dùng trong tình trạng hiện tại không thể giao cho một thành viên người không trong Nhóm nhiệm vụ.';
-$lang->task->error->consumedEmpty     = '"Giờ làm" không nên trống.';
+$lang->task->error->consumedEmpty     = '"Giờ làm" không nên 0.';
 $lang->task->error->deadlineSmall     = '"Hạn chót" phải lớn hơn "Ngày bắt đầu".';
+$lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 
@@ -299,3 +304,6 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Lý do đóng';
 
 $lang->task->report->finishedTasksPerDay->type = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Ngày';
+
+$lang->taskestimate = new stdclass();
+$lang->taskestimate->consumed = 'Dự tính';

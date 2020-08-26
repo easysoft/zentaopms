@@ -211,6 +211,9 @@ class fileModel extends model
         $file['chunks']    = isset($_POST['chunks']) ? intval($_POST['chunks']) : 0;
         $file['chunk']     = isset($_POST['chunk'])  ? intval($_POST['chunk'])  : 0;
 
+        /* Fix for build uuid like '../../'. */
+        if(!preg_match('/[a-z0-9_]/i', $file['uuid'])) return false;
+
         if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
         {
             $file['pathname'] = $file['pathname'] . '.notAllowed';
@@ -533,11 +536,10 @@ class fileModel extends model
     public function parseCSV($fileName)
     {
         /* Parse file only in zentao. */
-        if(strpos(realpath($fileName), $this->app->getBasePath()) !== 0) return array();
-
+        if(strpos($fileName, $this->app->getBasePath()) !== 0) return array();
         $content = file_get_contents($fileName);
         /* Fix bug #890. */
-        $content = str_replace("\x82\x32", "\x10", $content);
+        $content = str_replace(array("\r\n","\r"), "\n", $content);
         $lines   = explode("\n", $content);
 
         $col  = -1;

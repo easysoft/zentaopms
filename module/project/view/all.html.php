@@ -26,15 +26,18 @@
 </div>
 <div id='mainContent'>
   <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
+  <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='projectList'>
       <?php $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-id'>
+            <?php if($canBatchEdit):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
+            <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
@@ -52,7 +55,6 @@
           <?php endif;?>
         </tr>
       </thead>
-      <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
       <tbody class='sortable' id='projectTableList'>
         <?php foreach($projectStats as $project):?>
         <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->order ?>'>

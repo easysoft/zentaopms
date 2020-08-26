@@ -16,8 +16,10 @@
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class='label label-id'><?php echo $case->id;?></span>
       <span class='text' title='<?php echo $case->title;?>' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
@@ -47,6 +49,7 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
+    <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
     <?php common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
   </div>
   <?php endif;?>
@@ -55,7 +58,7 @@
 <div id="mainContent" class="main-row">
   <div class='main-col col-8'>
     <div class='cell' style='word-break:break-all'>
-      <?php if($case->auto != 'unit'):?>
+      <?php if($case->auto != 'unit' and !empty($case->precondition)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
         <div class="detail-content article-content"><?php echo nl2br($case->precondition);?></div>
@@ -96,7 +99,7 @@
           </table>
         </div>
       </div>
-      <?php if(isset($case->xml)):?>
+      <?php if(!empty($case->xml)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->xml;?></div>
         <div class="detail-content article-content"><?php echo nl2br(htmlspecialchars($case->xml));?></div>
@@ -105,7 +108,6 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
-    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -129,7 +131,7 @@
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
         if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', 'showinonlybody');
+        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
         ?>
         <?php endif;?>
       </div>
@@ -336,15 +338,22 @@
       </details>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=right&inForm=0&inCell=1");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext, $this->createLink('testcase', 'view', "caseID=%s&version=&from=$from&taskID=$taskID"));?>
 </div>
+<?php
+js::set('fullscreen', $lang->fullscreen);
+js::set('retrack', $lang->retrack);
+?>
+<?php if(!$isLibCase):?>
 <script>
 $(function()
 {
     $('#subNavbar [data-id=testcase]').addClass('active');
 })
 </script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

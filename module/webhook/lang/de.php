@@ -1,12 +1,13 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Hook Liste';
-$lang->webhook->api      = 'API';
-$lang->webhook->entry    = 'Eintrag';
-$lang->webhook->log      = 'Log';
-$lang->webhook->bind     = 'Bind User';
-$lang->webhook->assigned = 'Augeordnet an';
-$lang->webhook->setting  = 'Einstellungen';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Hook Liste';
+$lang->webhook->api        = 'API';
+$lang->webhook->entry      = 'Eintrag';
+$lang->webhook->log        = 'Log';
+$lang->webhook->bind       = 'Bind User';
+$lang->webhook->chooseDept = 'Choose department';
+$lang->webhook->assigned   = 'Augeordnet an';
+$lang->webhook->setting    = 'Einstellungen';
 
 $lang->webhook->browse = 'Durchsuchen';
 $lang->webhook->create = 'Erstellen';
@@ -44,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Others';
 $lang->webhook->sendTypeList['sync']  = 'Synchron';
 $lang->webhook->sendTypeList['async'] = 'Asynchron';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding Userid';
-$lang->webhook->dingBindStatus = 'Bind Status';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding Userid';
+$lang->webhook->dingBindStatus  = 'Bind Status';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat an
 $lang->webhook->note->typeList['default']   = 'Webhookadresse on anderen erhalten.';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->curl   = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

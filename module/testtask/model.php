@@ -259,7 +259,7 @@ class testtaskModel extends model
 
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.auto')->ne('unit')
-                ->andWhere('t3.id')->in($this->app->user->view->projects)
+                ->andWhere('t1.project')->in("0,{$this->app->user->view->projects}") //Fix bug #3260.
                 ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
                 ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
                 ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
@@ -399,15 +399,29 @@ class testtaskModel extends model
         }
         else
         {
-            $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
-                ->where('t1.id')->eq((int)$taskID)
-                ->andWhere('t5.product = t1.product')
-                ->fetch();
+            $task = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
+            if($task)
+            {
+                $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
+                $task->productName = $product->name;
+                $task->productType = $product->type;
+                $task->branch      = 0;
+                $task->projectName = '';
+                $task->buildName   = '';
+
+                if($task->project)
+                {
+                    $task->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('name');
+                    $task->branch      = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->project)->andWhere('product')->eq($task->product)->fetch('branch');
+                }
+
+                $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+                if($build)
+                {
+                    $task->buildName = $build->name;
+                    $task->branch    = $build->branch;
+                }
+            }
         }
 
         if(!$task) return false;
@@ -482,7 +496,7 @@ class testtaskModel extends model
         if($type == 'bystory') $cases = $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bybug')   $cases = $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $task, $query, $param, $linkedCases, $pager);
-        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $pager);
+        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $query, $pager);
 
         return $cases;
     }
@@ -611,11 +625,11 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
+    public function getLinkableCasesByTestTask($testTask, $linkedCases, $query, $pager)
     {
         $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
 
-        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
+        return $this->dao->select("*")->from(TABLE_CASE)->where($query)->andWhere('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
     }
 
     /**
@@ -722,7 +736,13 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunner($taskID)
     {
-        $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select("t1.lastRunner AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
@@ -853,7 +873,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid,comment')->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid,comment,contactListMenu')->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
@@ -1418,6 +1438,13 @@ class testtaskModel extends model
      */
     public function printCell($col, $run, $users, $task, $branches, $mode = 'datatable')
     {
+        $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+        $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
+        $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+        $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+
+        $canBatchAction = ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun);
+
         $canView     = common::hasPriv('testcase', 'view');
         $caseLink    = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account     = $this->app->user->account;
@@ -1438,7 +1465,14 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
+                }
+                else
+                {
+                    printf('%03d', $run->case);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $run->pri . "' title='" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";
@@ -1447,7 +1481,7 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
-                echo $canView ? html::a($caseLink, $run->title) : $run->title;
+                echo $canView ? html::a($caseLink, $run->title, null, "style='color: $run->color'") : $run->title;
                 break;
             case 'branch':
                 echo $branches[$run->branch];

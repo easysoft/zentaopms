@@ -39,8 +39,6 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
-        <?php if(strpos(",{$build->stories},", ",{$story->id},") !== false) continue; ?>
-        <?php if($build->product != $story->product) continue; ?>
         <tr>
           <td class='c-id text-left'>
             <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)), ($story->stage == 'developed' or $story->status == 'closed') ? $story->id : '');?>
@@ -76,10 +74,15 @@
         <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   </form>
 </div>
 <script>
-$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+$(function()
+{
+    $('#unlinkStoryList .tablesorter').sortTable();
+    setForm();
+});
 </script>

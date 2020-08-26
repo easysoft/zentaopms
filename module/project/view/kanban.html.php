@@ -74,8 +74,6 @@
   <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
-        <?php $hasGroupCol = (($type == 'story' and count($stories) > 0) or $type != 'story');?>
-        <?php if($hasGroupCol):?>
         <th class="c-board c-side has-btn">
           <div class="dropdown">
             <?php $dropTitle = $type == 'story' ? $lang->project->orderList[$storyOrder] : $lang->task->$type;?>
@@ -91,7 +89,6 @@
             </ul>
           </div>
         </th>
-        <?php endif;?>
         <?php foreach($kanbanColumns as $col):?>
         <th class='c-board s-<?php echo $col?>'><?php echo zget($statusList, $col);?></th>
         <?php endforeach;?>
@@ -102,7 +99,6 @@
       <?php foreach($kanbanGroup as $groupKey => $group):?>
       <?php if(count(get_object_vars($group)) == 0) continue;?>
       <tr data-id='<?php echo $rowIndex++?>'>
-        <?php if($hasGroupCol):?>
         <td class='c-side text-left'>
           <?php if($groupKey != 'nokey'):?>
           <?php if($type == 'story'):?>
@@ -147,7 +143,6 @@
           <?php endif;?>
           <?php endif;?>
         </td>
-        <?php endif;?>
         <td class="c-boards no-padding text-left" colspan="<?php echo count($kanbanColumns);?>">
           <div class="boards-wrapper">
             <div class="boards">

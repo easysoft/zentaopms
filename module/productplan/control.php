@@ -234,17 +234,24 @@ class productplan extends control
      * @param  string $orderBy
      * @param  string $link
      * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      *
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '')
+    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $reSort = false;
         if($type == 'story' && strpos($orderBy, 'order') !== false)
@@ -259,7 +266,9 @@ class productplan extends control
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
 
-        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        $bugPager    = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $storyPager  = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
         if($reSort)
         {
             if(!empty($plan->order))
@@ -290,7 +299,7 @@ class productplan extends control
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $planStories;
-        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc');
+        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
         $this->view->products    = $products;
         $this->view->summary     = $this->product->summary($this->view->planStories);
         $this->view->plan        = $plan;
@@ -302,6 +311,8 @@ class productplan extends control
         $this->view->orderBy     = $orderBy;
         $this->view->link        = $link;
         $this->view->param       = $param;
+        $this->view->storyPager  = $storyPager;
+        $this->view->bugPager    = $bugPager;
         $this->display();
     }
 
@@ -345,11 +356,14 @@ class productplan extends control
      * @param string $browseType
      * @param int    $param
      * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
      *
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc')
+    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -364,6 +378,10 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -391,21 +409,19 @@ class productplan extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
+        $planStories = $this->story->getPlanStories($planID);
+
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, $queryID, 'id', $pager = null, $projectID = '', $plan->branch);
-            foreach($allStories as $key => $story)
-            {
-                if($story->status == 'closed') unset($allStories[$key]);
-            }
+            $allStories = $this->story->getBySearch($plan->product, $plan->branch, $queryID, 'id', '', 'story', array_keys($planStories), $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', 'story', 'id_desc', null, $hasParent = false);
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', 'story', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
         }
 
         $this->view->allStories  = $allStories;
-        $this->view->planStories = $this->story->getPlanStories($planID);
+        $this->view->planStories = $planStories;
         $this->view->products    = $products;
         $this->view->plan        = $plan;
         $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
@@ -414,6 +430,7 @@ class productplan extends control
         $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
         $this->display();
     }
 
@@ -477,11 +494,14 @@ class productplan extends control
      * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      *
      * @access public
      * @return void
      */
-    public function linkBug($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc')
+    public function linkBug($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $projects = $this->app->user->view->projects . ',0';
 
@@ -498,6 +518,10 @@ class productplan extends control
         $products  = $this->product->getPairs('nocode');
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
@@ -523,27 +547,26 @@ class productplan extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
+        $planBugs = $this->bug->getPlanBugs($planID);
+
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id_desc', null, $plan->branch);
-            foreach($allBugs as $key => $bug)
-            {
-                if($bug->status != 'active' or $bug->toTask != 0 or $bug->toStory != 0) unset($allBugs[$key]);
-            }
+            $allBugs = $this->bug->getBySearch($plan->product, $plan->branch, $queryID, 'id_desc', array_keys($planBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects);
+            $allBugs = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects, array_keys($planBugs), $pager);
         }
 
         $this->view->allBugs    = $allBugs;
-        $this->view->planBugs   = $this->bug->getPlanBugs($planID);
+        $this->view->planBugs   = $planBugs;
         $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 

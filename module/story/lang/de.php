@@ -65,6 +65,8 @@ $lang->story->batchChangeStage  = "Mehere Phasen ändern";
 $lang->story->batchAssignTo     = "Mehere zuordnen";
 $lang->story->batchChangeModule = "Mehere Module ändern";
 $lang->story->viewAll           = "Alle";
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -135,6 +137,9 @@ $lang->story->noRequirement  = 'No Requirements';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';
+
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
 
 $lang->story->useList[0] = 'Ja';
 $lang->story->useList[1] = 'Nein';
@@ -233,8 +238,9 @@ $lang->story->errorNotSubdivide     = "If the status is not active, or the stage
 $lang->story->mustChooseResult      = 'Ergebnis wählen';
 $lang->story->mustChoosePreVersion  = 'Version wählen um es umzukhren.';
 $lang->story->noStory               = 'Keine Storys. ';
-$lang->story->ignoreChangeStage     = 'Story %s is a draft. Please review it..';
+$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Bereich';

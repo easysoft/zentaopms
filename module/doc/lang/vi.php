@@ -47,8 +47,6 @@ $lang->doc->users              = 'Người dùng';
 $lang->doc->item               = ' Items';
 $lang->doc->num             = 'Documents';
 $lang->doc->searchResult             = 'Search kết quả';
-$lang->doc->fullscreen            = 'Fullscreen';
-$lang->doc->retrack            = 'Retrack';
 
 $lang->doc->moduleDoc             = 'By Module';
 $lang->doc->searchDoc             = 'Tìm kiếm';
@@ -167,6 +165,7 @@ $lang->doc->accessDenied              = "Access bị từ chối!";
 $lang->doc->versionNotFount           = 'Nó does not exist in bản dựng này.';
 $lang->doc->noDoc               = 'Không có documents. ';
 $lang->doc->cannotCreateOffice           = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
+$lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc             = 'Không có documents found.';
 $lang->doc->noEditedDoc            = 'Bạn có not edited any documents.';
 $lang->doc->noOpenedDoc            = 'Bạn chưa tạo any documents.';

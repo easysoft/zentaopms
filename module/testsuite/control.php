@@ -229,6 +229,7 @@ class testsuite extends control
         }
         else
         {
+            $suite = $this->testsuite->getById($suiteID);
             if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $this->testsuite->delete($suiteID);

@@ -37,11 +37,14 @@
               <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
               <td class='w-p50'>
                 <div class='input-group'>
-                  <?php echo html::input('begin', $begin, "class='form-control form-date'")?>
+                  <?php echo html::input('begin', $begin, "class='form-control form-date' onchange=changeDate()")?>
                   <span class='input-group-addon'> ~ </span>
-                  <?php echo html::input('end', $end, "class='form-control form-date'")?>
+                  <?php echo html::input('end', $end, "class='form-control form-date' onchange=changeDate()")?>
+                  <div class='input-group-btn hidden' id='refresh'>
+                    <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
+                  </div>
                   <?php
-                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);
+                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', isset($project->id) ? $project->id : 0) : '') . html::hidden('tasks', $tasks);
                   echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
                   ?>
                 </div>
@@ -67,7 +70,7 @@
             <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th><?php echo $lang->testreport->goal?></th>
-              <td colspan='2'><?php echo $project->desc?></td>
+              <td colspan='2'><?php echo isset($project->desc) ? $project->desc : '';?></td>
               <td></td>
             </tr>
             <?php endif;?>
@@ -136,4 +139,10 @@
     </form>
   </div>
 </div>
+<script>
+objectID   = $("#objectID").val();
+objectType = $("#objectType").val();
+extra      = '<?php echo $extra;?>';
+method     = 'create';
+</script>
 <?php include '../../common/view/footer.html.php';?>

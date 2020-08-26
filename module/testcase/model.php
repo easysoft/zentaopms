@@ -81,7 +81,7 @@ class testcaseModel extends model
                     if($importPriv)
                     {
                         $link = helper::createLink('testcase', 'import', "productID=$productID&branch=$branch");
-                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->importFile, '', "class='export'") . '</li>';
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->fileImport, '', "class='export'") . '</li>';
                     }
                     if($importFromLibPriv)
                     {
@@ -267,12 +267,13 @@ class testcaseModel extends model
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
             $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
-            $cases->story[$i]  = (int)$story;
+            $cases->story[$i]  = !empty($storyID) ? $storyID : (int)$story;
             $cases->type[$i]   = $type;
             $cases->pri[$i]    = $pri;
         }
 
         $this->loadModel('story');
+        $extendFields   = $this->getFlowExtendFields();
         $storyVersions  = array();
         $forceNotReview = $this->forceNotReview();
         $data           = array();
@@ -287,7 +288,7 @@ class testcaseModel extends model
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];
             $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
-            $data[$i]->story        = $storyID ? $storyID : $cases->story[$i];
+            $data[$i]->story        = $cases->story[$i];
             $data[$i]->color        = $cases->color[$i];
             $data[$i]->title        = $cases->title[$i];
             $data[$i]->precondition = $cases->precondition[$i];
@@ -303,6 +304,13 @@ class testcaseModel extends model
             {
                 $data[$i]->storyVersion = $this->story->getVersion($caseStory);
                 $storyVersions[$caseStory] = $data[$i]->storyVersion;
+            }
+
+            foreach($extendFields as $extendField)
+            {
+                $data[$i]->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
+                if($message) die(js::alert($message));
             }
 
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
@@ -325,7 +333,10 @@ class testcaseModel extends model
                 die(js::reload('parent'));
             }
 
-            $caseID   = $this->dao->lastInsertID();
+            $caseID = $this->dao->lastInsertID();
+
+            $this->executeHooks($caseID);
+
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
         }
@@ -841,15 +852,16 @@ class testcaseModel extends model
         }
 
         /* Initialize cases from the post data.*/
+        $extendFields = $this->getFlowExtendFields();
         foreach($caseIDList as $caseID)
         {
             $case = new stdclass();
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
-            $case->status         = $data->statuses[$caseID];
             $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
+            $case->status         = $data->statuses[$caseID];
             $case->story          = $data->stories[$caseID];
             $case->color          = $data->color[$caseID];
             $case->title          = $data->title[$caseID];
@@ -857,6 +869,13 @@ class testcaseModel extends model
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
+
+            foreach($extendFields as $extendField)
+            {
+                $case->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$caseID]);
+                $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
 
             $cases[$caseID] = $case;
             unset($case);
@@ -874,6 +893,8 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
+                $this->executeHooks($caseID);
+
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
             }
@@ -1103,7 +1124,8 @@ class testcaseModel extends model
                 foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
                 {
                     if(empty($appendField)) continue;
-                    $caseData->$appendField = $_POST[$appendField][$key];
+                    $caseData->$appendField = zget($_POST[$appendField], $key, '');
+                    if(is_array($caseData->$appendField)) $caseData->$appendField = join(',', $caseData->$appendField);
                 }
             }
 
@@ -1125,7 +1147,6 @@ class testcaseModel extends model
             if($caseID)
             {
                 $stepChanged = false;
-                $steps       = array();
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
                 $oldCase     = $oldCases[$caseID];
 
@@ -1139,8 +1160,8 @@ class testcaseModel extends model
                         if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
-                        $step->desc    = htmlspecialchars($desc);
-                        $step->expect  = htmlspecialchars(trim($this->post->expect[$key][$id]));
+                        $step->desc   = htmlspecialchars($desc);
+                        $step->expect = htmlspecialchars(trim($this->post->expect[$key][$id]));
 
                         $steps[] = $step;
                     }
@@ -1188,8 +1209,8 @@ class testcaseModel extends model
                             $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
-                            $stepData->desc    = htmlspecialchars($step['desc']);
-                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $stepData->desc    = $step['desc'];
+                            $stepData->expect  = $step['expect'];
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -1216,20 +1237,23 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    foreach($this->post->desc[$key] as $id => $desc)
+                    if($this->post->desc)
                     {
-                        $desc = trim($desc);
-                        if(empty($desc)) continue;
-                        $stepData = new stdclass();
-                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
-                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                        $stepData->case    = $caseID;
-                        $stepData->version = 1;
-                        $stepData->desc    = htmlspecialchars($desc);
-                        $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
-                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                        if($stepData->type == 'step')  $parentStepID = 0;
+                        foreach($this->post->desc[$key] as $id => $desc)
+                        {
+                            $desc = trim($desc);
+                            if(empty($desc)) continue;
+                            $stepData = new stdclass();
+                            $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                            $stepData->case    = $caseID;
+                            $stepData->version = 1;
+                            $stepData->desc    = htmlspecialchars($desc);
+                            $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'step')  $parentStepID = 0;
+                        }
                     }
                     $this->action->create('case', $caseID, 'Opened');
                 }
@@ -1238,8 +1262,8 @@ class testcaseModel extends model
 
         if($this->post->isEndPage)
         {
-            unlink($this->session->importFile);
-            unset($_SESSION['importFile']);
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
         }
     }
 
@@ -1369,6 +1393,15 @@ class testcaseModel extends model
      */
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
+        $canBatchRun                = common::hasPriv('testtask', 'batchRun');
+        $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
+        $canBatchDelete             = common::hasPriv('testcase', 'batchDelete');
+        $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
+        $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
+        $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
+
+        $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
+
         $canView    = common::hasPriv('testcase', 'view');
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account    = $this->app->user->account;
@@ -1397,7 +1430,14 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                if($canBatchAction)
+                {
+                    echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                }
+                else
+                {
+                    printf('%03d', $case->id);
+                }
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
@@ -1582,7 +1622,7 @@ class testcaseModel extends model
             if(!isset($this->config->testcase->forceReview)) return true;
             if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
         }
-        if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false) return true;
+        if($this->config->testcase->needReview && isset($this->config->testcase->forceNotReview) && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false) return true;
 
         return false;
     }
@@ -1643,8 +1683,9 @@ class testcaseModel extends model
                 $data = fixer::input('post')->get();
                 foreach($data->steps as $key => $desc)
                 {
-                    $desc = trim($desc);
-                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $data->stepType[$key], 'expect' => trim($data->expects[$key]));
+                    $desc     = trim($desc);
+                    $stepType = isset($data->stepType[$key]) ? $data->stepType[$key] : 'step';
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $stepType, 'expect' => trim($data->expects[$key]));
                 }
 
                 /* If step count changed, case changed. */

@@ -79,7 +79,7 @@ class repo extends control
         {
             $repoID = $this->repo->create();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
@@ -112,7 +112,8 @@ class repo extends control
         if($_POST)
         {
             $noNeedSync = $this->repo->update($repoID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if(!$noNeedSync)
             {
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
@@ -408,10 +409,26 @@ class repo extends control
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
         {
-            $oldRevision = $this->dao->select('revision')->from(TABLE_REPOHISTORY)->where('commit')->eq($history->commit - 1)->andWhere('repo')->eq($repoID)->fetch('revision');
+            if($repo->SCM == 'Git')
+            {
+                $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$history->revision} --");
+
+                array_shift($thisAndPrevRevisions);
+                if($thisAndPrevRevisions) $oldRevision = array_shift($thisAndPrevRevisions);
+            }
+            else
+            {
+                $oldRevision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->lt($history->revision)->andWhere('repo')->eq($repoID)->orderBy('revision_desc')->limit(1)->fetch('revision');
+            }
+
             $log[0]->commit = $history->commit;
         }
-        if(empty($oldRevision)) $oldRevision = '^';
+
+        if(empty($oldRevision))
+        {
+            $oldRevision = '^';
+            if($history and $repo->SCM == 'Git') $oldRevision = "{$history->revision}^";
+        }
 
         $changes  = array();
         $viewPriv = common::hasPriv('repo', 'view');
@@ -533,7 +550,7 @@ class repo extends control
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]); 
 
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $oldRevision = isset($this->post->revision[1]) ?$this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ?$this->post->revision[0] : '';
@@ -717,19 +734,21 @@ class repo extends control
                 /* Init branchID. */
                 if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
                 if(!isset($branches[$branchID])) $branchID = '';
-                if(empty($branchID)) $branchID = reset($branches);
+                if(empty($branchID)) $branchID = 'master';
 
                 /* Get unsynced branches. */
-                foreach($branches as $branch)
+                unset($branches['master']);
+                if($branchID != 'master')
                 {
-                    unset($branches[$branch]);
-                    if($branch == $branchID)
+                    foreach($branches as $branch)
                     {
-                        $this->repo->setRepoBranch($branchID);
-                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
-                        break;
+                        unset($branches[$branch]);
+                        if($branch == $branchID) break;
                     }
                 }
+
+                $this->repo->setRepoBranch($branchID);
+                setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
             }
         }
 

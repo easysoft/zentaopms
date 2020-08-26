@@ -64,7 +64,7 @@
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
                 <?php if(isset($_POST["chart-{$infoKey}"])):?>
-                <img src='<?php echo $_POST["chart-{$infoKey}"]?>' />
+                <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
                 <?php endif;?>

@@ -47,8 +47,6 @@ $lang->doc->users          = '用户';
 $lang->doc->item           = '项';
 $lang->doc->num            = '文档数量';
 $lang->doc->searchResult   = '搜索结果';
-$lang->doc->fullscreen     = '全屏';
-$lang->doc->retrack        = '收起';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -167,6 +165,7 @@ $lang->doc->accessDenied       = "您没有权限访问！";
 $lang->doc->versionNotFount    = '该版本文档不存在';
 $lang->doc->noDoc              = '暂时没有文档。';
 $lang->doc->cannotCreateOffice = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
+$lang->doc->notSetOffice       = "<p>创建%s文档，需要配置<a href='%s' target='_parent'>Office转换设置</a>。<p>";
 $lang->doc->noSearchedDoc      = '没有搜索到任何文档。';
 $lang->doc->noEditedDoc        = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc        = '您还没有创建任何文档。';

@@ -60,7 +60,7 @@ $lang->project->createStory   = "Story erstellen";
 $lang->project->all           = 'Alle';
 $lang->project->undone        = 'Unabgeschlossen ';
 $lang->project->unclosed      = 'Geschlossen';
-$lang->project->typeDesc      = 'Keine Story, Bug, Build, Testaufgabe oder Burndown ist bei OPS erlaubt';
+$lang->project->typeDesc      = "Keine {$lang->storyCommon}, Bug, Build, Testaufgabe oder ist bei OPS erlaubt";
 $lang->project->mine          = 'Meine Zuständigkeit: ';
 $lang->project->other         = 'Andere:';
 $lang->project->deleted       = 'Gelöscht';
@@ -227,6 +227,7 @@ $lang->project->end                 = 'Ende';
 $lang->project->lblStats            = 'Mannstunden Summe(h) : ';
 $lang->project->stats               = '<strong>%s</strong> Verfügbar, <strong>%s</strong> geplant, <strong>%s</strong> genutzt, <strong>%s</strong> Rest.';
 $lang->project->taskSummary         = "Aufgaben auf dieser Seite: <strong>%s</strong> Total, <strong>%s</strong> Wartend, <strong>%s</strong> In Arbeit;  &nbsp;&nbsp;&nbsp;  Stunden : <strong>%s</strong> geplant., <strong>%s</strong> genutzt, <strong>%s</strong> Rest.";
+$lang->project->pageSummary         = "Aufgaben auf dieser Seite:  <strong>%total%</strong>, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
 $lang->project->checkedSummary      = " <strong>%total%</strong> Geprüft, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
 $lang->project->memberHoursAB       = "%s hat <strong>%s</strong> Stunden";
 $lang->project->memberHours         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Arbeitsstunden</div><div class="segment-value">%s</div></div></div></div>';
@@ -274,8 +275,9 @@ $lang->project->interval              = 'Intervale ';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
 
 $lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
-$lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
+$lang->project->action->opened  = '$date, created by <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
 $lang->project->action->extra   = "The linked {$lang->productCommon}s are %s.";
 
 /* 统计。*/

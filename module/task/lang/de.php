@@ -191,6 +191,7 @@ $lang->task->confirmChangeProject  = "Wenn Sie {$lang->projectCommon} ändern, d
 $lang->task->confirmFinish         = '"Reststunden " sind 0. Möchten Sue den Status auf Erledigt setzen?';
 $lang->task->confirmRecord         = '"Reststunden " sind 0. Möchten Sie den Task auf Erledigt setzen?';
 $lang->task->confirmTransfer       = '"Reststunden " sind 0. Möchten Sie den Task transferieren?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Es wurde keine Story verknüpft. Sie können %s für dieses Projekt, anschließend %s.";
 $lang->task->noticeSaveRecord      = 'Ihre Stunden wurden nicht gespeichrt. Bitte erst speichern.';
 $lang->task->commentActions        = '%s. %s, kommentiert von <strong>%s</strong>.';
@@ -200,8 +201,11 @@ $lang->task->createDenied          = 'Aufgben erstellen it in diesem Projekt ges
 $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
+$lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber    = '"Verbraucht" muss eine Zahl sein.';
 $lang->task->error->estimateNumber    = '"Stunden" müss eine Zahl sein.';
+$lang->task->error->recordMinus       = 'Work hours should not be negative number.';
+$lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Genutzt" muss larger than before.';
 $lang->task->error->consumedThisTime  = 'Bitte geben Sie die Stunden an';
@@ -210,8 +214,9 @@ $lang->task->error->work              = '"Bemerkung" muss kleiner als %d Zeichen
 $lang->task->error->skipClose         = 'Aufgabe: %s ist nicht “Erledigt” oder “Abgebrochen”. Möchten Sie die Aufgabe jetzt schließen?';
 $lang->task->error->consumed          = 'Aufgabe: %s Hour must be more than 0. Ignore changes to this Task.';
 $lang->task->error->assignedTo        = 'Mehere Tasks können nicht zugewisen werden, da die Benutzer nicht teil des Teams sind.';
-$lang->task->error->consumedEmpty     = '"Current Cost" should not be empty.';
+$lang->task->error->consumedEmpty     = '"Current Cost" should not be 0.';
 $lang->task->error->deadlineSmall     = '"Deadline" must be greater than "StartDate".';
+$lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 
@@ -299,3 +304,6 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Grund';
 
 $lang->task->report->finishedTasksPerDay->type             = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Datum';
+
+$lang->taskestimate = new stdclass();
+$lang->taskestimate->consumed = 'Schätzung';

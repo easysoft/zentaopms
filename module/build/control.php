@@ -15,10 +15,11 @@ class build extends control
      * Create a build.
      * 
      * @param  int    $projectID 
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create($projectID, $productID = 0)
     {
         if(!empty($_POST))
         {
@@ -65,7 +66,7 @@ class build extends control
             $project = $this->loadModel('project')->getById($projectID);
 
             $productGroups = $this->project->getProducts($projectID);
-            $productID     = key($productGroups);
+            $productID     = $productID ? $productID : key($productGroups);
             $products      = array();
             foreach($productGroups as $product) $products[$product->id] = $product->name;
 
@@ -185,16 +186,27 @@ class build extends control
      * View a build.
      * 
      * @param  int    $buildID 
+     * @param  string $type 
+     * @param  string $link 
+     * @param  string $param 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc')
+    public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
 
         $this->loadModel('story');
         $this->loadModel('bug');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         /* Set menu. */
         $build = $this->build->getById((int)$buildID, true);
@@ -203,8 +215,10 @@ class build extends control
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
+        $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)
             ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+            ->page($bugPager)
             ->fetchAll();
 
         if($this->config->global->flow == 'onlyTest')
@@ -219,8 +233,10 @@ class build extends control
         }
         else
         {
+            $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
             $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)
                 ->beginIF($type == 'story')->orderBy($orderBy)->fi()
+                ->page($storyPager)
                 ->fetchAll('id');
             $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
@@ -232,9 +248,11 @@ class build extends control
             $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
             $this->view->position[]    = $this->lang->build->view;
             $this->view->stories       = $stories;
-            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'newbug' ? $orderBy : 'status_desc,id_desc', null);
-            $this->view->bugs          = $bugs;
-            $this->view->type          = $type;
+            $this->view->storyPager    = $storyPager;
+
+            $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
+            $this->view->generatedBugs     = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
+            $this->view->generatedBugPager = $generatedBugPager;
         }
 
         $this->executeHooks($buildID);
@@ -247,6 +265,9 @@ class build extends control
         $this->view->link          = $link;
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;
+        $this->view->bugs          = $bugs;
+        $this->view->type          = $type;
+        $this->view->bugPager      = $bugPager;
         $this->view->branchName    = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
         $this->display();
     }
@@ -376,7 +397,7 @@ class build extends control
             {
                 if(empty($builds))
                 {
-                    echo html::a($this->createLink('build', 'create', "projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                     echo '&nbsp; ';
                     echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
                 }
@@ -402,10 +423,13 @@ class build extends control
      * @param  int    $buildID 
      * @param  string $browseType 
      * @param  int    $param 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function linkStory($buildID = 0, $browseType = '', $param = 0)
+    public function linkStory($buildID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -420,6 +444,10 @@ class build extends control
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -447,11 +475,11 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project, $build->branch);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $build->project, 'story', $build->stories, $pager);
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project);
+            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byProduct', $build->product, 'story', $build->stories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -460,6 +488,7 @@ class build extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
+        $this->view->pager        = $pager;
         $this->display();
     }
 
@@ -512,10 +541,13 @@ class build extends control
      * @param  int    $buildID 
      * @param  string $browseType 
      * @param  int    $param 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function linkBug($buildID = 0, $browseType = '', $param = 0)
+    public function linkBug($buildID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
@@ -528,6 +560,10 @@ class build extends control
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -560,33 +596,19 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $queryID, 'id_desc', null, $build->branch);
+            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->bugs, $pager);
         }
         else
         {
-            $projectBugs = $this->bug->getProjectBugs($build->project); 
-            $allBugs     = array();
-            foreach($projectBugs as $key => $bug)
-            {
-                if($bug->status == 'resolved')
-                {
-                    $allBugs[$key] = $bug;
-                    unset($projectBugs[$key]);
-                }
-                elseif($bug->status == 'closed') 
-                {
-                    unset($projectBugs[$key]);
-                }
-            }
-            $allBugs += $projectBugs;
+            $allBugs = $this->bug->getProjectBugs($build->project, 0, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;
-        $this->view->buildBugs  = empty($build->bugs) ? array() : $this->bug->getByList($build->bugs);
         $this->view->build      = $build;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
+        $this->view->pager      = $pager;
         $this->display();
     }
 

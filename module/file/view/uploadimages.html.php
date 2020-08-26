@@ -50,7 +50,7 @@ $('#uploader').uploader({
     filters:
     {
         mime_types: [
-            {title: 'uploadImages', extensions: 'jpg,gif,png,jpeg,.bmp'},
+            {title: 'uploadImages', extensions: 'jpg,gif,png,jpeg,bmp'},
         ],
         prevent_duplicates: true
     },

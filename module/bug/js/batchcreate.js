@@ -23,6 +23,7 @@ function setBranchRelated(branchID, productID, num)
         if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';
         $('#modules' + num).replaceWith(modules);
         $("#modules" + num + "_chosen").remove();
+        $("#modules" + num).next('.picker').remove();
         $("#modules" + num).chosen();
     });
 
@@ -32,6 +33,7 @@ function setBranchRelated(branchID, productID, num)
         if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
         $('#projects' + num).replaceWith(projects);
         $("#projects" + num + "_chosen").remove();
+        $("#projects" + num).next('.picker').remove();
         $("#projects" + num).chosen();
     });
 
@@ -59,6 +61,7 @@ function setOpenedBuilds(link, index)
             $('#buildBox' + index).html(builds);
             $('#buildBox' + index).find('select').val(selected);
             $('#openedBuilds' + index + '_chosen').remove();
+            $('#openedBuilds' + index).next('.picker').remove();
             $('#buildBox' + index + ' select').removeClass('select-3');
             $('#buildBox' + index + ' select').addClass('select-1');
             $('#buildBox' + index + ' select').attr('name','openedBuilds[' + index + '][]');

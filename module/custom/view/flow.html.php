@@ -32,16 +32,15 @@
     <div class='modal-body'>
       <div class="form-group">
         <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
-        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?> </div>
+        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', empty($this->config->isINT) ? '0_0' : '0_1'))?> </div>
       </div>
-      <?php if(!common::checkNotCN()):?>
       <div class="form-group">
         <label><?php echo $lang->custom->conceptQuestions['story']?></label>
         <div class="checkbox"> <?php echo html::radio('storyRequirement', $lang->custom->conceptOptions->story, zget($this->config->custom, 'storyRequirement', '0'));?></div>
       </div>
-      <?php endif;?>
       <div class="form-group">
-        <label><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
+        <label id='requirementpoint'><?php echo $lang->custom->conceptQuestions['requirementpoint'];?></label>
+        <label id='storypoint'><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
         <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>
       </div>
       <div class="form-group">

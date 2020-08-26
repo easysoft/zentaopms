@@ -191,6 +191,7 @@ $lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, Modu
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the status to "Finished"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
 $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "No story has been linked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord      = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';
@@ -200,8 +201,11 @@ $lang->task->createDenied          = 'Create Task is denied in this project';
 $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
+$lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber    = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber    = '"Estimates" must be numbers.';
+$lang->task->error->recordMinus       = 'Work hours should not be negative number.';
+$lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Total Cost" must be > the last number.';
 $lang->task->error->consumedThisTime  = 'Please enter "Hours Cost"';
@@ -210,8 +214,9 @@ $lang->task->error->work              = '"Comment" must be <  %d characters.';
 $lang->task->error->skipClose         = 'Task: %s is not "Finished” or “Cancelled”. Do you want to close it?';
 $lang->task->error->consumed          = 'Task: %s hour must be < 0. Ignore changes to this task.';
 $lang->task->error->assignedTo        = 'Multi-user task in the current status cannot be assigned to a member who is not in the task team.';
-$lang->task->error->consumedEmpty     = '"Current Cost" should not be empty.';
+$lang->task->error->consumedEmpty     = '"Current Cost" should not be 0.';
 $lang->task->error->deadlineSmall     = '"Deadline" must be greater than "StartDate".';
+$lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 
@@ -299,3 +304,6 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Close Reason';
 
 $lang->task->report->finishedTasksPerDay->type             = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
+
+$lang->taskestimate = new stdclass();
+$lang->taskestimate->consumed = 'Estimates';

@@ -329,6 +329,19 @@ class GitRepo
     }
 
     /**
+     * Exec git cmd.
+     * 
+     * @param  string $cmd 
+     * @access public
+     * @return array
+     */
+    public function exec($cmd)
+    {
+        chdir($this->root);
+        return execCmd(escapeCmd("$this->client $cmd"), 'array');
+    }
+
+    /**
      * Parse diff.
      * 
      * @param  array $lines 

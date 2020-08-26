@@ -261,7 +261,7 @@ class customModel extends model
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
 
-                if(isset($item['subMenu']))
+                if(is_array($item) and isset($item['subMenu']))
                 {
                     foreach($item['subMenu'] as $subItem)
                     {

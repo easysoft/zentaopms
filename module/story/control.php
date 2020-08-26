@@ -311,18 +311,19 @@ class story extends control
             if($project) $this->loadModel('project')->linkStory($project, $stories);
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
-            if($storyID)
+            if($storyID and !empty($mails))
             {
-                if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
                 $this->story->subdivide($storyID, $stories);
-
                 if(dao::isError()) die(js::error(dao::getError()));
-
-                if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
 
-            if($project)
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+
+            if($storyID)
+            {
+                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            }
+            elseif($project)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
                 die(js::locate($this->createLink('project', 'story', "projectID=$project&orderBy=id_desc&browseType=unclosed"), 'parent'));
@@ -478,10 +479,13 @@ class story extends control
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
         $product = $this->loadModel('product')->getById($story->product);
+        $stories = $this->story->getParentStoryPairs($story->product, $story->parent); 
+        if(isset($stories[$storyID])) unset($stories[$storyID]);
+
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
-        $this->view->stories    = $this->story->getParentStoryPairs($story->product, $story->parent);
+        $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
@@ -944,6 +948,7 @@ class story extends control
     {
         if($this->post->comments)
         {
+            $data       = fixer::input('post')->get();
             $allChanges = $this->story->batchClose();
 
             if($allChanges)
@@ -954,6 +959,7 @@ class story extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
+
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->storyList, 'parent'));
         }
@@ -965,9 +971,22 @@ class story extends control
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
         foreach($stories as $story)
         {
-            if($story->status == 'closed') unset($stories[$story->id]);
+            if($story->parent == -1)
+            {
+                $skipStory[] = $story->id;
+                unset($stories[$story->id]);
+            }
+            if($story->status == 'closed')
+            {
+                $closedStory[] = $story->id;
+                unset($stories[$story->id]);
+            }
         }
-        if(empty($stories)) die(js::alert($this->lang->story->notice->closed) . js::locate($this->session->storyList, 'parent'));
+
+        $errorTips = '';
+        if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, join(',', $closedStory));
+        if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, join(',', $skipStory));
+        if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
         /* The stories of a product. */
         if($productID)

@@ -136,6 +136,7 @@ class testreportModel extends model
             ->remove('files,labels,uid')
             ->get();
         $data->members = trim($data->members, ',');
+        if(empty($data->bugs)) $data->bugs = '';
 
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
@@ -203,14 +204,14 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $allNewBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
-        $foundBugs   = array();
-        $legacyBugs  = array();
-        $byCaseNum   = 0;
-        $buildIdList = array_keys($builds);
-        $taskIdList  = array_keys($tasks);
+        $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $foundBugs     = array();
+        $legacyBugs    = array();
+        $byCaseNum     = 0;
+        $buildIdList   = array_keys($builds);
+        $taskIdList    = array_keys($tasks);
 
-        foreach($allNewBugs as $bug)
+        foreach($generatedBugs as $bug)
         {
             if(!array_diff(explode(',', $bug->openedBuild), $buildIdList))
             {
@@ -322,7 +323,7 @@ class testreportModel extends model
      * @param  string $idList 
      * @param  object $pager 
      * @access public
-     * @return void
+     * @return array
      */
     public function getTaskCases($tasks, $begin, $end, $idList = '', $pager = null)
     {

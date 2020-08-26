@@ -47,8 +47,6 @@ $lang->doc->users          = 'Benutzer';
 $lang->doc->item           = ' Einträge';
 $lang->doc->num            = 'Doks';
 $lang->doc->searchResult   = 'Suchergebnis';
-$lang->doc->fullscreen     = 'Fullscreen';
-$lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'Nach Modulen';
 $lang->doc->searchDoc      = 'Suche';
@@ -167,6 +165,7 @@ $lang->doc->accessDenied       = "Zugriff verweigert!";
 $lang->doc->versionNotFount    = 'Existiert nicht in diesem Build.';
 $lang->doc->noDoc              = 'Keine Dokumente. ';
 $lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
+$lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc      = 'Nichts gesucht.';
 $lang->doc->noEditedDoc        = 'Sie haben kein Dokument bearbeitet.';
 $lang->doc->noOpenedDoc        = 'Sie haben kein Dokument erstellt.';

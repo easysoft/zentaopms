@@ -105,7 +105,7 @@ $lang->repo->objectIdRule = 'Object ID Rule';
 $lang->repo->actionRule   = 'Action Rule';
 $lang->repo->manHourRule  = 'Man-hour Rule';
 $lang->repo->ruleUnit     = "Unit";
-$lang->repo->ruleSplit    = "Multiple keywords are divided by ';'. For example: task multiple keywords: Task;task";
+$lang->repo->ruleSplit    = "Multiple keywords are divided by ';', e.g. task multiple keywords: Task;task";
 
 $lang->repo->viewDiffList['inline'] = 'Inline';
 $lang->repo->viewDiffList['appose'] = 'Parallel';
@@ -158,10 +158,10 @@ $lang->repo->error->noFile        = '%s does not exist.';
 $lang->repo->error->noPriv        = 'The program does not have the privilege  to switch to %s';
 $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n";
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
-$lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
+$lang->repo->error->encoding      = "The encoding might be wrong. Please change the encoding and try again.";
 
 $lang->repo->syncTips      = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
-$lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
+$lang->repo->encodingsTips = "The encodings of comments can be comma separated values, e.g. utf-8.";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();

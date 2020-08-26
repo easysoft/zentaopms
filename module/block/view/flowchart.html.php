@@ -1,7 +1,7 @@
 <div class='panel-body scrollbar-hover'>
-<?php foreach ($lang->block->flowchart as $rowIndex => $flow):?>
+<?php foreach ($lang->block->flowchart as $flowName => $flow):?>
 <?php $idx = 0; ?>
-  <div class='row row-<?php echo $rowIndex?>'>
+  <div class='row row-<?php echo $flowName?>'>
   <?php foreach ($flow as $flowItem):?>
     <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><?php echo $flowItem ?></div></div>
   <?php endforeach; ?>

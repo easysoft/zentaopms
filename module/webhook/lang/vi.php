@@ -1,17 +1,18 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Hook danh sách';
-$lang->webhook->api      = 'API';
-$lang->webhook->entry    = 'Entry';
-$lang->webhook->log      = 'Nhật ký';
-$lang->webhook->bind     = 'Bind người dùng';
-$lang->webhook->assigned = 'Giao cho';
-$lang->webhook->setting  = 'Thiết lập';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Hook danh sách';
+$lang->webhook->api        = 'API';
+$lang->webhook->entry      = 'Entry';
+$lang->webhook->log        = 'Nhật ký';
+$lang->webhook->bind       = 'Bind người dùng';
+$lang->webhook->chooseDept = 'Choose department';
+$lang->webhook->assigned   = 'Giao cho';
+$lang->webhook->setting    = 'Thiết lập';
 
-$lang->webhook->browse = 'Browse';
-$lang->webhook->create = 'Tạo';
-$lang->webhook->edit   = 'Sửa';
-$lang->webhook->delete = 'Xóa';
+$lang->webhook->browse       = 'Browse';
+$lang->webhook->create       = 'Tạo';
+$lang->webhook->edit         = 'Sửa';
+$lang->webhook->delete       = 'Xóa';
 
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Loại';
@@ -44,11 +45,12 @@ $lang->webhook->typeList['default']     = 'Khác';
 $lang->webhook->sendTypeList['sync']  = 'Synchronous';
 $lang->webhook->sendTypeList['async'] = 'Asynchronous';
 
-$lang->webhook->dingAgentId    = 'AgentID';
-$lang->webhook->dingAppKey     = 'AppKey';
-$lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'Ding UserID';
-$lang->webhook->dingBindStatus = 'Bind tình trạng';
+$lang->webhook->dingAgentId     = 'AgentID';
+$lang->webhook->dingAppKey      = 'AppKey';
+$lang->webhook->dingAppSecret   = 'AppSecret';
+$lang->webhook->dingUserid      = 'Ding UserID';
+$lang->webhook->dingBindStatus  = 'Bind tình trạng';
+$lang->webhook->chooseDeptAgain = 'Rechoose department';
 
 $lang->webhook->wechatCorpId     = 'Corp ID';
 $lang->webhook->wechatCorpSecret = 'Corp Secret';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = 'Thêm a customized bot in WeChat 
 $lang->webhook->note->typeList['default']   = 'Nhận a webhook url from others';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = 'Load php-curl in php.ini.';
+$lang->webhook->error->curl   = 'Load php-curl in php.ini.';
+$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';

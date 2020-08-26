@@ -149,6 +149,11 @@
 
                     $priList = $lang->story->priList;
                     if(end($priList)) unset($priList[0]);
+                    if(!isset($priList[$pri]))
+                    {
+                        reset($priList);
+                        $pri = key($priList);
+                    }
                     ?>
                     <?php if($hasCustomPri):?>
                     <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>

@@ -67,7 +67,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('datatable');
 
@@ -80,20 +80,42 @@ class bug extends control
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['bugModule'] = 0;
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
-        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+        if($browseType == 'bymodule' or $browseType == '')
+        {
+            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
+            $_COOKIE['bugBranch'] = 0;
+            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', false, false);
+            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+        }
+        if($browseType == 'bybranch') setcookie('bugBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID, $branch, $moduleID, $browseType, $orderBy);
         $this->session->set('bugList', $this->app->getURI(true));
+
+        /* Set moduleTree. */
+        if($browseType == '')
+        {
+            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            $browseType = 'unclosed';
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', (int)$this->cookie->treeBranch);
+        }
+
+        if(($browseType != 'bymodule' && $browseType != 'bybranch')) $this->session->set('bugBrowseType', $browseType);
+        if(($browseType == 'bymodule' || $browseType == 'bybranch') and $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
@@ -126,8 +148,9 @@ class bug extends control
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {
-            if($bug->story) $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)  $taskIdList[$bug->task]   = $bug->task;
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
@@ -149,7 +172,7 @@ class bug extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->moduleTree    = $moduleTree;
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->summary       = $this->bug->summary($bugs);
         $this->view->browseType    = $browseType;
@@ -350,6 +373,11 @@ class bug extends control
 
         if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
+        if($testtask)
+        {
+            $testtask = $this->loadModel('testtask')->getById($testtask);
+            $buildID  = $testtask->build;
+        }
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID))
@@ -395,10 +423,14 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
+
+        $moduleID    = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
+        $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
+
         /* Set team members of the latest project as assignedTo list. */
         $latestProject  = $this->product->getLatestProject($productID);
         $projectMembers = array();
-        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
+        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $moduleOwner);
         if(empty($projectMembers)) $projectMembers = $this->view->users;
         if($assignedTo and !isset($projectMembers[$assignedTo]))
         {
@@ -629,7 +661,7 @@ class bug extends control
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
@@ -761,7 +793,7 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set product menu. */
@@ -795,7 +827,7 @@ class bug extends control
             $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
         }
 
-        /* Judge whether the editedTasks is too large and set session. */
+        /* Judge whether the editedBugs is too large and set session. */
         $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -812,7 +844,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst|nodeleted', $appendUsers);
+        $users = $this->user->getPairs('devfirst|nodeleted', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -951,7 +983,7 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID"), 'parent'));
+        if($type == 'product') die(js::locate($this->session->bugList, 'parent'));
         if($type == 'my')      die(js::locate($this->createLink('my', 'bug')));
         die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
     }
@@ -1378,8 +1410,16 @@ class bug extends control
      */
     public function ajaxGetModuleOwner($moduleID, $productID = 0)
     {
-        $owner = $this->bug->getModuleOwner($moduleID, $productID);
-        die($owner);
+        $account  = $this->bug->getModuleOwner($moduleID, $productID);
+        $realName = '';
+        if(!empty($account))
+        {
+            $user        = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $realName = $firstLetter . ($user->realname ? $user->realname : $account);
+        }
+        die(json_encode(array($account, $realName)));
     }
 
     /**
@@ -1392,7 +1432,7 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
     {
-        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
+        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID, '', $selectedUser);
 
         die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
     }
@@ -1401,7 +1441,6 @@ class bug extends control
      * AJAX: get team members of the latest project of a product as assignedTo list.
      *
      * @param  int    $productID
-     * x
      * @param  string $selectedUser
      * @access public
      * @return string
@@ -1411,7 +1450,7 @@ class bug extends control
         $latestProject = $this->product->getLatestProject($productID);
         if(!empty($latestProject))
         {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $selectedUser);
         }
         else
         {
@@ -1454,10 +1493,11 @@ class bug extends control
      * @param  string $productID
      * @param  string $orderBy
      * @param  string $browseType
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $browseType = '')
+    public function export($productID, $orderBy, $browseType = '', $projectID = 0)
     {
         if($_POST)
         {
@@ -1534,11 +1574,9 @@ class bug extends control
             {
                 if($this->post->fileType == 'csv')
                 {
-                    $bug->steps = htmlspecialchars_decode($bug->steps);
                     $bug->steps = str_replace("<br />", "\n", $bug->steps);
                     $bug->steps = str_replace('"', '""', $bug->steps);
                     $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
-                    $bug->steps = strip_tags($bug->steps);
                 }
 
                 /* fill some field with useful value. */
@@ -1602,6 +1640,7 @@ class bug extends control
                 }
 
                 /* Set related files. */
+                $bug->files = '';
                 if(isset($relatedFiles[$bug->id]))
                 {
                     foreach($relatedFiles[$bug->id] as $file)
@@ -1636,10 +1675,20 @@ class bug extends control
         }
 
         $fileName    = $this->lang->bug->common;
-        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
-        $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
+        if($projectID)
+        {
+            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
+            $fileName    = $projectName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
-        $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;
         $this->view->customExport    = true;
         $this->display();

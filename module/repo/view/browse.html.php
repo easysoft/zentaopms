@@ -30,7 +30,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <span class='last-sync-time'<?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
+    <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
     <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision&refresh=1", "path=" . $this->repo->encodePath($path)), "<i class='icon icon-refresh'></i> ". $lang->refresh, '', "class='btn btn-primary'");?>
   </div>
 </div>

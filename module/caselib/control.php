@@ -547,7 +547,7 @@ class caselib extends control
                 if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
             }
 
-            $this->session->set('importFile', $fileName);
+            $this->session->set('fileImport', $fileName);
 
             die(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
         }
@@ -557,29 +557,32 @@ class caselib extends control
     /**
      * Show import case.
      *
-     * @param  int    $libID
+     * @param  int        $libID 
+     * @param  int        $pagerID 
+     * @param  int        $maxImport 
+     * @param  string|int $insert  0 is covered old, 1 is insert new.
      * @access public
      * @return void
      */
-    public function showImport($libID, $pagerID = 1)
+    public function showImport($libID, $pagerID = 1, $maxImport = 0, $insert = '')
     {
         $this->loadModel('testcase');
 
-        $file      = $this->session->importFile;
-        $cachePath = $this->loadModel('file')->getShowImportPath();
-        $cacheFile = $cachePath . DS . md5(basename($file));
-        $maxImport = $this->config->file->maxImport;
+        $file    = $this->session->fileImport;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
         if($_POST)
         {
             $this->caselib->createFromImport($libID);
             if($this->post->isEndPage)
             {
-                unlink($cacheFile);
+                unlink($tmpFile);
                 die(js::locate(inlink('browse', "libID=$libID"), 'parent'));
             }
             else
             {
-                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . $this->post->pagerID + 1), 'parent'));
+                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -602,9 +605,9 @@ class caselib extends control
 
         $fields = array_flip($fields);
 
-        if($pagerID != 1 and file_exists($cacheFile))
+        if(!empty($maxImport) and file_exists($tmpFile))
         {
-            $data = unserialize(file_get_contents($cacheFile));
+            $data = unserialize(file_get_contents($tmpFile));
             $caseData = $data['caseData'];
             $stepData = $data['stepData'];
         }
@@ -737,39 +740,53 @@ class caselib extends control
 
             $data['caseData'] = $caseData;
             $data['stepData'] = $stepData;
-            file_put_contents($cacheFile, serialize($data));
+            file_put_contents($tmpFile, serialize($data));
         }
 
         if(empty($caseData))
         {
-            unlink($this->session->importFile);
-            unset($_SESSION['importFile']);
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
         $allCount = count($caseData);
-        $allPager = ceil($allCount / $maxImport);
-        $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
-        if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                $this->view->libID     = $libID;
+                die($this->display());
+            }
 
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($caseData) * 9 + $stepVars;
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
+        if(empty($caseData)) die(js::locate(inlink('browse', "libID=$libID")));
+
+        /* Judge whether the items is too large and set session. */
+        $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;
 
-        $this->view->modules   = $modules;
-        $this->view->cases     = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
-        $this->view->caseData  = $caseData;
-        $this->view->stepData  = $stepData;
-        $this->view->libID     = $libID;
-        $this->view->isEndPage = $pagerID >= $allPager;
-        $this->view->allCount  = $allCount;
-        $this->view->allPager  = ceil($allCount / $maxImport);
-        $this->view->pagerID   = $pagerID;
+        $this->view->modules    = $modules;
+        $this->view->cases      = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
+        $this->view->caseData   = $caseData;
+        $this->view->stepData   = $stepData;
+        $this->view->libID      = $libID;
+        $this->view->isEndPage  = $pagerID >= $allPager;
+        $this->view->allCount   = $allCount;
+        $this->view->allPager   = $allPager;
+        $this->view->pagerID    = $pagerID;
+        $this->view->maxImport  = $maxImport;
+        $this->view->dataInsert = $insert;
         $this->display();
     }
 }

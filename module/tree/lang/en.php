@@ -43,6 +43,7 @@ $lang->tree->confirmRoot4Doc    = "Any changes to the library will change the do
 $lang->tree->successSave        = 'Saved.';
 $lang->tree->successFixed       = 'Fixed.';
 $lang->tree->repeatName         = 'The name "%s" exists!';
+$lang->tree->shouldNotBlank     = 'Module name should not be blank!';
 
 $lang->tree->module     = 'Module';
 $lang->tree->name       = 'Name';

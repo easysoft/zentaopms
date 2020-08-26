@@ -142,13 +142,14 @@ class todo extends control
                 $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->session->todoList, 'parent'));
+            die(js::locate($this->session->todoList, 'parent.parent'));
         }
 
         /* Judge a private todo or not, If private, die. */
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
 
+        unset($this->lang->todo->typeList['cycle']);
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
         $this->view->position[] = $this->lang->todo->common;
@@ -206,6 +207,8 @@ class todo extends control
             $countInputVars  = count($editedTodos) * $columns;
             $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
+
+            unset($this->lang->todo->typeList['cycle']);
             /* Set Custom*/
             foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
             $this->view->customFields = $customFields;
@@ -243,6 +246,28 @@ class todo extends control
 
             die(js::locate($this->session->todoList, 'parent'));
         }
+    }
+
+    /**
+     * Start a todo.
+     *
+     * @param  int    $todoID
+     * @access public
+     * @return void
+     */
+    public function start($todoID)
+    {
+        $todo = $this->todo->getById($todoID);
+        if($todo->status == 'wait') $this->todo->start($todoID);
+        if(in_array($todo->type, array('bug', 'task', 'story')))
+        {
+            $confirmNote = 'confirm' . ucfirst($todo->type);
+            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $cancelURL   = $this->server->HTTP_REFERER;
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
+        }
+        if(isonlybody())die(js::reload('parent.parent'));
+        die(js::reload('parent'));
     }
 
     /**

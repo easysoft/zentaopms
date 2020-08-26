@@ -16,8 +16,7 @@
 <div id='formSettingBtn' class='pull-right btn-toolbar'>
   <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
   <?php include '../../common/view/customfield.html.php';?>
-  <div class="divider"></div>
-  <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
+  <div class="divider" style="margin-right: 30px;"></div>
 </div>
 <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
   <div id="mainContent">
@@ -25,10 +24,10 @@
       <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
       <div class="input-group pull-left">
         <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
-        <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
+        <input type="text" name="date" id='date' value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
         <span class="input-group-addon">
           <div class="checkbox-primary">
-            <input type="checkbox" name="switchDate" id='switchDate' class="control-time-switch" />
+            <input type='checkbox' name='switchDate' id='switchDate' class='control-time-switch 'onclick='switchDateTodo(this);' />
             <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
           </div>
         </span>
@@ -77,8 +76,8 @@
           </td>
           <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
             <div class='checkbox-primary'>
-              <input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" class='control-time-switch' onclick='switchDateList(<?php echo $i?>);' />
-              <label for="switchDate<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
+              <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onclick='switchTimeList(<?php echo $i?>);' />
+              <label for="switchTime<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
             </div>
           </td>
         </tr>

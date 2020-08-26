@@ -1,12 +1,13 @@
 <?php
-$lang->webhook->common   = 'Webhook';
-$lang->webhook->list     = 'Webhook列表';
-$lang->webhook->api      = '介面';
-$lang->webhook->entry    = '應用';
-$lang->webhook->log      = '日誌';
-$lang->webhook->bind     = '綁定用戶';
-$lang->webhook->assigned = '指派給';
-$lang->webhook->setting  = '設置';
+$lang->webhook->common     = 'Webhook';
+$lang->webhook->list       = 'Webhook列表';
+$lang->webhook->api        = '介面';
+$lang->webhook->entry      = '應用';
+$lang->webhook->log        = '日誌';
+$lang->webhook->bind       = '綁定用戶';
+$lang->webhook->chooseDept = '選擇同步部門';
+$lang->webhook->assigned   = '指派給';
+$lang->webhook->setting    = '設置';
 
 $lang->webhook->browse = '瀏覽Webhook';
 $lang->webhook->create = '添加Webhook';
@@ -44,11 +45,12 @@ $lang->webhook->typeList['default']     = '其他';
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '非同步';
 
-$lang->webhook->dingAgentId    = '釘釘AgentId';
-$lang->webhook->dingAppKey     = '釘釘AppKey';
-$lang->webhook->dingAppSecret  = '釘釘AppSecret';
-$lang->webhook->dingUserid     = '釘釘用戶';
-$lang->webhook->dingBindStatus = '釘釘綁定狀態';
+$lang->webhook->dingAgentId     = '釘釘AgentId';
+$lang->webhook->dingAppKey      = '釘釘AppKey';
+$lang->webhook->dingAppSecret   = '釘釘AppSecret';
+$lang->webhook->dingUserid      = '釘釘用戶';
+$lang->webhook->dingBindStatus  = '釘釘綁定狀態';
+$lang->webhook->chooseDeptAgain = '重選部門';
 
 $lang->webhook->wechatCorpId     = '企業ID';
 $lang->webhook->wechatCorpSecret = '應用的憑證密鑰';
@@ -90,4 +92,5 @@ $lang->webhook->note->typeList['weixin']    = '請在企業微信中添加一個
 $lang->webhook->note->typeList['default']   = '從第三方系統獲取webhook並填寫到此處。';
 
 $lang->webhook->error = new stdclass();
-$lang->webhook->error->curl = '需要加載php-curl擴展。';
+$lang->webhook->error->curl   = '需要加載php-curl擴展。';
+$lang->webhook->error->noDept = '沒有選擇部門，請先選擇同步部門。';

@@ -98,7 +98,7 @@
             $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
             $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
 
-            $canBatchAction = $canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo;
+            $canBatchAction = ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo);
             $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
             ?>
             <thead>
@@ -341,7 +341,12 @@
               </div>
             </div>
             <?php endif;?>
-            <div class='text'><?php echo $summary;?></div>
+            <div class='table-statistic'><?php echo $summary;?></div>
+            <?php
+            $this->app->rawParams['type'] = 'story';
+            $storyPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
           <?php endif;?>
         </form>
@@ -415,7 +420,12 @@
               <?php echo html::submitButton($lang->productplan->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>
+            <?php
+            $this->app->rawParams['type'] = 'bug';
+            $bugPager->show('right', 'pagerjs');
+            $this->app->rawParams['type'] = $type;
+            ?>
           </div>
           <?php endif;?>
         </form>

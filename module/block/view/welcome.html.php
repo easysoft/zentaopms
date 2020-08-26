@@ -44,6 +44,7 @@
     <div class="col col-right">
     <h4><small class="text-muted"><?php echo date(DT_DATE3)?></small> <?php echo $lang->block->leftToday?></h4>
       <div class="row tiles">
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyTask'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myTask?></div>
           <div class="tile-amount"><?php echo empty($tasks) ? 0 : html::a($this->createLink('my', 'task', 'type=assignedTo'), (int)$tasks);?></div>
@@ -53,6 +54,8 @@
           </div>
           <?php endif;?>
         </div>
+        <?php endif;?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyTest'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myBug?></div>
           <div class="tile-amount"><?php echo empty($bugs) ? 0 : html::a($this->createLink('my', 'bug', 'type=assignedTo'), (int)$bugs);?></div>
@@ -62,6 +65,8 @@
           </div>
           <?php endif;?>
         </div>
+        <?php endif;?>
+        <?php if($this->config->global->flow == 'full' or $this->config->global->flow == 'onlyStory'):?>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myStory?></div>
           <div class="tile-amount"><?php echo empty($stories) ? 0 : html::a($this->createLink('my', 'story', 'type=assignedTo'), (int)$stories);?></div>

@@ -48,3 +48,6 @@ $lang->search->andor['and']         = '並且';
 $lang->search->andor['or']          = '或者';
 
 $lang->search->null = '空';
+
+$lang->userquery        = new stdclass();
+$lang->userquery->title = '標題';

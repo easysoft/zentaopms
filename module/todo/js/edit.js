@@ -1,0 +1,4 @@
+$(function()
+{
+    loadList($('#type').val());
+});

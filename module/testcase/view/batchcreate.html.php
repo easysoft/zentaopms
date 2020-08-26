@@ -64,6 +64,10 @@
             <th class='w-100px<?php echo zget($visibleFields, 'keywords',     ' hidden') . zget($requiredFields, 'keywords',     '', ' required')?>'><?php echo $lang->testcase->keywords;?></th>
             <th class='w-140px<?php echo zget($visibleFields, 'stage',        ' hidden') . zget($requiredFields, 'stage',        '', ' required')?>'><?php echo $lang->testcase->stage;?></th>
             <th class='w-100px<?php  echo zget($visibleFields, 'review',       ' hidden') . zget($requiredFields, 'review',       '', ' required')?>'><?php echo $lang->testcase->review;?></th>
+            <?php
+            $extendFields = $this->testcase->getFlowExtendFields();
+            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            ?>
           </tr>
         </thead>
         <tbody>
@@ -99,6 +103,7 @@
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
+            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";?>
           </tr>
           <?php endfor;?>
         </tbody>
@@ -139,6 +144,7 @@
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
+      <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";?>
     </tr>
   </tbody>
 </table>

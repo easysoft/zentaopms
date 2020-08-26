@@ -146,9 +146,10 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
 
-$lang->custom->conceptQuestions['overview']   = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['story']      = "2. Do you use the concept of requirement or user story in your company?";
-$lang->custom->conceptQuestions['storypoint'] = "2. Do you use hours or story points to make estimations in your company?";
+$lang->custom->conceptQuestions['overview']         = "1. Which combination of management fits your company?";
+$lang->custom->conceptQuestions['story']            = "2. Do you use the concept of requirement or user story in your company?";
+$lang->custom->conceptQuestions['requirementpoint'] = "2. Do you use hours or function points to make estimations in your company?";
+$lang->custom->conceptQuestions['storypoint']       = "2. Do you use hours or story points to make estimations in your company?";
 
 $lang->custom->conceptOptions = new stdclass;
 
@@ -159,3 +160,4 @@ $lang->custom->conceptOptions->story['1'] = 'Story';
 $lang->custom->conceptOptions->hourPoint = array();
 $lang->custom->conceptOptions->hourPoint['0'] = 'Hour';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Story Point';
+$lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';

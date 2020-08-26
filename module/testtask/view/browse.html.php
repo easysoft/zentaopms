@@ -103,7 +103,7 @@ $status = $this->session->testTaskVersionStatus;
         <?php
         echo '<div id="action-divider">';
         common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-        common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+        common::printIcon('testtask',   'linkCase', "taskID=$task->id&type=all&param=myQueryID", $task, 'list', 'link');
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         echo '</div>';
         common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true);

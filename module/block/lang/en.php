@@ -210,7 +210,7 @@ $lang->block->default['project']['4']['params']['num']     = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['1']['title'] = 'Testing Report';
+$lang->block->default['qa']['1']['title'] = 'Test Report';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
@@ -318,7 +318,7 @@ $lang->block->availableBlocks->risk     = 'My Risks';
 $lang->block->moduleList['program'] = $lang->projectCommon;
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
-$lang->block->moduleList['qa']      = 'QA';
+$lang->block->moduleList['qa']      = 'Test';
 $lang->block->moduleList['todo']    = 'Todo';
 
 $lang->block->modules['program'] = new stdclass();
@@ -362,7 +362,7 @@ $lang->block->modules['project']->availableBlocks->task  = 'Task';
 $lang->block->modules['project']->availableBlocks->build = 'Build';
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
-$lang->block->modules['qa']->availableBlocks->statistic = 'Testing Report';
+$lang->block->modules['qa']->availableBlocks->statistic = 'Test Report';
 //$lang->block->modules['qa']->availableBlocks->overview  = 'Testcase Overview';
 $lang->block->modules['qa']->availableBlocks->bug      = 'Bug';
 $lang->block->modules['qa']->availableBlocks->case     = 'Case';
@@ -512,8 +512,8 @@ $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart['admin']   = array('Administrator', 'Add Department', 'Add User', 'Maintain Privileges');
+$lang->block->flowchart['admin']   = array('Administrator', 'Add Departments', 'Add Users', 'Maintain Privileges');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Owner', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Releases');
-$lang->block->flowchart['project'] = array('Scrum Master', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Create Tasks');
+$lang->block->flowchart['project'] = array('Scrum Master', 'Add ' . $lang->projectCommon . 's', 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Create Tasks');
 $lang->block->flowchart['dev']     = array('Dev Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');
-$lang->block->flowchart['tester']  = array('QA Team', 'Write Cases', 'Run Cases', 'Report Bugs', 'Verify Bugs', 'Close Bugs');
+$lang->block->flowchart['tester']  = array('Test Team', 'Write Cases', 'Run Cases', 'Report Bugs', 'Verify Bugs', 'Close Bugs');

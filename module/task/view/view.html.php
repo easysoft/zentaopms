@@ -83,7 +83,7 @@
         <div class='detail-title'><?php echo $lang->task->case;?></div>
         <div class='detail-content article-content'>
           <ul class='list-unstyled'>
-            <?php foreach($task->cases as $caseID => $case) echo '<li>' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), "#$caseID " . $case, '', "data-toggle='modal' data-type='iframe' data-width='90%'") . '</li>';?>
+            <?php foreach($task->cases as $caseID => $case) echo '<li>' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), "#$caseID " . $case, '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='90%'") . '</li>';?>
           </ul>
         </div>
       </div>
@@ -233,7 +233,8 @@
                   <td>
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
-                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class='iframe' data-width='80%'", true, true)) echo $task->storyTitle;
+                    $class = isonlybody() ? 'showinonlybody' : 'iframe';
+                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";

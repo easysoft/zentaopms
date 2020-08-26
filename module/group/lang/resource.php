@@ -84,7 +84,6 @@ $lang->resource->my = new stdclass();
 $lang->resource->my->index          = 'index';
 $lang->resource->my->todo           = 'todo';
 $lang->resource->my->calendar       = 'calendar';
-$lang->resource->my->requirement    = 'requirement';
 $lang->resource->my->task           = 'task';
 $lang->resource->my->bug            = 'bug';
 $lang->resource->my->testTask       = 'testTask';
@@ -130,6 +129,7 @@ $lang->resource->todo->batchEdit    = 'batchEdit';
 $lang->resource->todo->view         = 'view';
 $lang->resource->todo->delete       = 'delete';
 $lang->resource->todo->export       = 'export';
+$lang->resource->todo->start        = 'start';
 $lang->resource->todo->finish       = 'finish';
 $lang->resource->todo->batchFinish  = 'batchFinish';
 $lang->resource->todo->import2Today = 'import2Today';
@@ -146,13 +146,14 @@ $lang->todo->methodOrder[25] = 'batchEdit';
 $lang->todo->methodOrder[30] = 'view';
 $lang->todo->methodOrder[35] = 'delete';
 $lang->todo->methodOrder[40] = 'export';
-$lang->todo->methodOrder[45] = 'finish';
-$lang->todo->methodOrder[50] = 'batchFinish';
-$lang->todo->methodOrder[55] = 'import2Today';
-$lang->todo->methodOrder[60] = 'assignTo';
-$lang->todo->methodOrder[65] = 'activate';
-$lang->todo->methodOrder[70] = 'close';
-$lang->todo->methodOrder[75] = 'batchClose';
+$lang->todo->methodOrder[45] = 'start';
+$lang->todo->methodOrder[50] = 'finish';
+$lang->todo->methodOrder[55] = 'batchFinish';
+$lang->todo->methodOrder[60] = 'import2Today';
+$lang->todo->methodOrder[65] = 'assignTo';
+$lang->todo->methodOrder[70] = 'activate';
+$lang->todo->methodOrder[75] = 'close';
+$lang->todo->methodOrder[80] = 'batchClose';
 
 /* Program. */
 $lang->resource->program = new stdclass();
@@ -1265,12 +1266,13 @@ $lang->extension->methodOrder[50] = 'upgrade';
 
 /* Webhook. */
 $lang->resource->webhook = new stdclass();
-$lang->resource->webhook->browse = 'browse';
-$lang->resource->webhook->create = 'create';
-$lang->resource->webhook->edit   = 'edit';
-$lang->resource->webhook->delete = 'delete';
-$lang->resource->webhook->log    = 'log';
-$lang->resource->webhook->bind   = 'bind';
+$lang->resource->webhook->browse     = 'browse';
+$lang->resource->webhook->create     = 'create';
+$lang->resource->webhook->edit       = 'edit';
+$lang->resource->webhook->delete     = 'delete';
+$lang->resource->webhook->log        = 'log';
+$lang->resource->webhook->bind       = 'bind';
+$lang->resource->webhook->chooseDept = 'chooseDept';
 
 $lang->webhook->methodOrder[5]  = 'browse';
 $lang->webhook->methodOrder[10] = 'create';
@@ -1278,6 +1280,7 @@ $lang->webhook->methodOrder[15] = 'edit';
 $lang->webhook->methodOrder[20] = 'delete';
 $lang->webhook->methodOrder[25] = 'log';
 $lang->webhook->methodOrder[30] = 'bind';
+$lang->webhook->methodOrder[35] = 'chooseDept';
 
 /* Others. */
 $lang->resource->api = new stdclass();

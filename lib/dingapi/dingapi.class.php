@@ -47,22 +47,29 @@ class dingapi
     }
 
     /**
-     * Get all users.
+     * Get users.
      * 
+     * @param  string $selectedDepts
      * @access public
      * @return array
      */
-    public function getAllUsers()
+    public function getUsers($selectedDepts = '')
     {
-        $depts = $this->getAllDepts();
-        if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
+        $depts = trim($selectedDepts);
+        if(empty($depts)) return array('result' => 'fail', 'message' => 'nodept');
 
         set_time_limit(0);
         $users = array();
-        foreach($depts as $deptID => $deptName)
+        foreach(explode(',', $depts) as $deptID)
         {
+            if(empty($deptID)) continue;
+
             $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}");
-            if($this->isError()) continue;
+            if($this->isError())
+            {
+                $this->getErrors();
+                continue;
+            }
 
             foreach($response->userlist as $user) $users[$user->name] = $user->userid;
         }
@@ -71,19 +78,39 @@ class dingapi
     }
 
     /**
-     * Get all depts.
+     * Get dept tree.
      * 
      * @access public
      * @return array
      */
-    public function getAllDepts()
+    public function getDeptTree()
     {
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
-        if($this->isError()) return false;
+        if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
 
-        $deptPairs = array();
-        foreach($response->department as $dept) $deptPairs[$dept->id] = $dept->name;
-        return $deptPairs;
+        $parentDepts = array();
+        foreach($response->department as $dept)
+        {
+            $parentID = isset($dept->parentid) ? $dept->parentid : 0;
+            $parentDepts[$parentID][$dept->id] = $dept->name;
+        }
+
+        $tree = array();
+        foreach($parentDepts as $parentID => $depts)
+        {
+            foreach($depts as $deptID => $deptName)
+            {
+                $node = array();
+                $node['id']   = $deptID;
+                $node['pId']  = $parentID;
+                $node['name'] = $deptName;
+                if($parentID == 0) $node['open'] = true;
+
+                $tree[] = $node;
+            }
+        }
+
+        return array('result' => 'success', 'data' => $tree);
     }
 
     /**

@@ -21,11 +21,11 @@ js::set('projectID', $projectID);
 js::set('browseType', $browseType);
 
 /* Set unfold parent taskID. */
-$config->project->task->unfoldID = isset($config->project->task->unfoldID) ? json_decode($config->project->task->unfoldID, true) : array();
-$config->project->task->unfoldID = zget($config->project->task->unfoldID, $projectID, array());
-js::set('unfoldID',  $config->project->task->unfoldID);
-js::set('unfoldAll', $lang->project->treeLevel['all']);
-js::set('foldAll',   $lang->project->treeLevel['root']);
+$unfoldTasks = isset($config->project->task->unfoldTasks) ? json_decode($config->project->task->unfoldTasks, true) : array();
+$unfoldTasks = zget($unfoldTasks, $projectID, array());
+js::set('unfoldTasks', $unfoldTasks);
+js::set('unfoldAll',   $lang->project->treeLevel['all']);
+js::set('foldAll',     $lang->project->treeLevel['root']);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -69,8 +69,8 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
         elseif($menuType != 'status' and $menuType != 'QUERY')
         {
             $label   = "<span class='text'>{$menuItem->text}</span>";
-            $label  .= $menuType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-            $active  = $menuType == $browseType ? 'btn-active-text' : '';
+            $label  .= $menuType == $this->session->taskBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+            $active  = $menuType == $this->session->taskBrowseType ? 'btn-active-text' : '';
             $title   = $menuType == 'needconfirm' ? "title='{$lang->task->storyChange}'" : '';
             echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
         }
@@ -143,13 +143,13 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
     $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
 
-    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
     <?php else:?>
     <?php
     echo "<div class='btn-group dropdown-hover'>";
-    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
     ?>
     <ul class='dropdown-menu'>
@@ -158,7 +158,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       <?php
         $batchLink = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";
-      ?>  
+      ?>
       </li>
     </ul>
     <?php echo "</div>";?>
@@ -183,7 +183,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
         <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-        <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
@@ -209,6 +209,14 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       }
       $widths  = $this->datatable->setFixedFieldWidth($customFields);
       $columns = 0;
+
+      $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty(reset($tasks)) ? reset($tasks) : null);
+      $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty(reset($tasks)) ? reset($tasks) : null) and strtolower($browseType) != 'closed');
+      $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty(reset($tasks)) ? reset($tasks) : null);
+      $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty(reset($tasks)) ? reset($tasks) : null);
+      $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty(reset($tasks)) ? reset($tasks) : null);
+
+      $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='taskList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -219,7 +227,7 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
           {
               if($field->show)
               {
-                  $this->datatable->printHead($field, $orderBy, $vars);
+                  $this->datatable->printHead($field, $orderBy, $vars, $canBatchAction);
                   $columns++;
               }
           }
@@ -248,15 +256,10 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
       <?php if(!$useDatatable) echo '</div>';?>
 
       <div class="table-footer">
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
         <div class="table-actions btn-toolbar">
-          <?php
-          $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
-          $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) && strtolower($browseType) != 'closedBy');
-          $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
-          $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
-          $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
-          ?>
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
@@ -266,13 +269,15 @@ js::set('foldAll',   $lang->project->treeLevel['root']);
             echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu'>";
 
+            $class      = $canBatchClose ? '' : "class=disabled";
             $actionLink = $this->createLink('task', 'batchClose');
-            $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : "class='disabled'";
-            echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+            $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : '';
+            echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
+            $class      = $canBatchCancel ? '' : "class=disabled";
             $actionLink = $this->createLink('task', 'batchCancel');
-            $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : "class='disabled'";
-            echo "<li>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
+            $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"" : '';
+            echo "<li $class>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
             echo "</ul>";
             ?>
           </div>
@@ -351,14 +356,16 @@ $(function()
 {
     // Update table summary text
     var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
+    var pageSummary    = '<?php echo $lang->project->pageSummary?>';
     $('#projectTaskForm').table(
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $table = table.getTable();
+            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
             var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
-            if(!checkedTotal) return;
+            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
 
             var checkedWait     = 0;
             var checkedDoing    = 0;
@@ -366,7 +373,7 @@ $(function()
             var checkedConsumed = 0;
             var checkedLeft     = 0;
             var taskIdList      = [];
-            $checkedRows.each(function()
+            $rows.each(function()
             {
                 var $row = $(this);
                 if ($originTable)
@@ -400,15 +407,12 @@ $(function()
 
                 if(canStatistics)
                 {
-                    if(status !== 'cancel')
-                    {
-                        checkedEstimate += Number(data.estimate);
-                        checkedConsumed += Number(data.consumed);
-                    }
+                    checkedEstimate += Number(data.estimate);
+                    checkedConsumed += Number(data.consumed);
                     if(status != 'cancel' && status != 'closed') checkedLeft += Number(data.left);
                 }
             });
-            return checkedSummary.replace('%total%', checkedTotal).replace('%wait%', checkedWait)
+            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait)
               .replace('%doing%', checkedDoing)
               .replace('%estimate%', checkedEstimate.toFixed(1))
               .replace('%consumed%', checkedConsumed.toFixed(1))

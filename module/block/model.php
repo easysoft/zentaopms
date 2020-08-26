@@ -137,6 +137,7 @@ class blockModel extends model
             ->andWhere('module')->eq($module)
             ->andWhere('hidden')->eq(0)
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->beginIF($this->config->global->flow != 'full')->andWhere('block')->notin('flowchart')->fi()
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('source')->notin('project,qa')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('source')->notin('product,qa')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('source')->notin('product,project')->fi()

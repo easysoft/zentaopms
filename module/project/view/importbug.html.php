@@ -27,7 +27,7 @@ var browseType = '<?php echo $browseType;?>';
     <div id='queryBox' data-module='importBug' class='show'></div>
   </div>
   <form class='main-table' method='post' target='hiddenwin' id='importBugForm' data-ride='table'>
-    <table class='table has-sort-head table-fixed'>
+    <table class='table table-form has-sort-head table-fixed'>
       <thead>
         <tr>
           <th class='c-id'>
@@ -40,10 +40,10 @@ var browseType = '<?php echo $browseType;?>';
           <th class='w-pri'>      <?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
-          <th class='w-100px'><?php echo $lang->task->pri;?></th>
-          <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-80px'><?php echo $lang->task->estimate;?></th>
-          <th class='w-120px'><?php echo $lang->task->deadline;?></th>
+          <th class='w-100px <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
+          <th class='w-150px <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='w-80px  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
+          <th class='w-120px <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
         </tr>
       </thead>
       <tbody>

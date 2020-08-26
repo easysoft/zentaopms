@@ -14,7 +14,7 @@ public function getRemind()
         $remind .= '<p>' . $this->lang->im->xxClientConfirm . '</p>';
         $this->loadModel('setting')->setItem("system.common.xxclient.{$account}installed", 1);
     }
-    elseif(!isset($this->config->xxserver->noticed) and $this->app->user->admin and $this->config->global->flow == 'full' and $this->config->$module->block->initVersion >= '2')
+    elseif(!isset($this->config->xxserver->noticed) and $this->app->user->admin and $this->config->global->flow == 'full' and isset($this->config->$module->block->initVersion) and $this->config->$module->block->initVersion >= '2')
     {
         $remind .= '<h4>' . $this->lang->im->zentaoClient . '</h4>';
         $remind .= '<p>' . $this->lang->im->xxServerConfirm . '</p>';

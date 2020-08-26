@@ -475,7 +475,7 @@ class productModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            if($product->acl != 'open' and ($product->acl != $oldProduct->acl or $product->whitelist != $oldProduct->whitelist)) $this->loadModel('user')->updateUserView($productID, 'product');
+            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }
     }
@@ -572,6 +572,8 @@ class productModel extends model
 
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
+
+        $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
         $browseType = ($browseType == 'bymodule' and $this->session->storyBrowseType and $this->session->storyBrowseType != 'bysearch') ? $this->session->storyBrowseType : $browseType;
 
         /* Get stories by browseType. */
@@ -580,12 +582,12 @@ class productModel extends model
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, $pager);
+            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
         if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
-        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, $pager);
-        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, $pager);
-        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch, $type);
+        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
         if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
@@ -693,51 +695,60 @@ class productModel extends model
         $roadmap  = array();
         $total    = 0;
 
-        $parents = array();
+        $parents      = array();
+        $orderedPlans = array();
         foreach($plans as $planID => $plan)
         {
             if($plan->parent == '-1')
             {
                 $parents[$planID] = $plan->title;
                 unset($plans[$planID]);
+                continue;
             }
-
-            if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
-        }
-
-        foreach($plans as $plan)
-        {
             if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
-            $year = substr($plan->end, 0, 4);
-            $roadmap[$year][$plan->branch][$plan->end] = $plan;
-
-            $total++;
+            $orderedPlans[$plan->end][] = $plan;
         }
 
-        if($count > 0 and $total >= $count)
+        krsort($orderedPlans);
+        foreach($orderedPlans as $plans)
         {
-            krsort($roadmap);
-            return $this->sliceRoadmap($roadmap, $count);
+            krsort($plans);
+            foreach($plans as $plan)
+            {
+                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+
+                $year = substr($plan->end, 0, 4);
+                $roadmap[$year][$plan->branch][] = $plan;
+                $total++;
+
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+            }
         }
 
-        foreach($releases as $release)
+        $orderedReleases = array();
+        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+
+        krsort($orderedReleases);
+        foreach($orderedReleases as $releases)
         {
-            $year = substr($release->date, 0, 4);
-            $roadmap[$year][$release->branch][$release->date] = $release;
+            krsort($releases);
+            foreach($releases as $release)
+            {
+                $year = substr($release->date, 0, 4);
+                $roadmap[$year][$release->branch][] = $release;
+                $total++;
 
-            $total++;
-            if($count > 0 and $total >= $count) break;
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+            }
         }
 
-        krsort($roadmap);
-        if($count > 0) return $this->sliceRoadmap($roadmap, $count);
+        if($count > 0) return $this->processRoadmap($roadmap);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
         {
             foreach($branchRoadmaps as $branch => $roadmaps)
             {
-                krsort($roadmaps);
                 $totalData = count($roadmaps);
                 $rows      = ceil($totalData / 8);
                 $maxPerRow = ceil($totalData / $rows);
@@ -769,31 +780,23 @@ class productModel extends model
     }
 
     /**
-     * Slice roadmap.
+     * Process roadmap.
      *
-     * @param  string $roadmap
-     * @param  int    $count
+     * @param  array  $roadmap
      * @access public
      * @return array
      */
-    public function sliceRoadmap($roadmap, $count)
+    public function processRoadmap($roadmapGroups)
     {
-        $i = 0;
         $newRoadmap = array();
-        foreach($roadmap as $year => $branches)
+        foreach($roadmapGroups as $year => $branchRoadmaps)
         {
-            foreach($branches as $branch => $plans)
+            foreach($branchRoadmaps as $branch => $roadmaps)
             {
-                krsort($plans);
-                foreach($plans as $plan)
-                {
-                    $newRoadmap[$year][$branch][] = $plan;
-                    $i++;
-                    if($i >= $count) break;
-                }
-                krsort($newRoadmap[$year][$branch]);
+                foreach($roadmaps as $roadmap) $newRoadmap[] = $roadmap;
             }
         }
+        krsort($newRoadmap);
         return $newRoadmap;
     }
 
@@ -990,17 +993,21 @@ class productModel extends model
      * Get the summary of product's stories.
      *
      * @param  array    $stories
+     * @param  string   $storyType  story|requirement
      * @access public
      * @return string.
      */
-    public function summary($stories)
+    public function summary($stories, $storyType = 'story')
     {
         $totalEstimate = 0.0;
         $storyIdList   = array();
 
-        $count = 0;
+        $rateCount = 0;
+        $allCount  = 0;
         foreach($stories as $key => $story)
         {
+            if(!empty($story->type) && $story->type != $storyType) continue;
+
             $totalEstimate += $story->estimate;
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
             if(
@@ -1009,29 +1016,39 @@ class productModel extends model
             )
             {
                 $storyIdList[] = $story->id;
+                $rateCount ++;
             }
 
-            $count ++;
+            $allCount ++;
             if(!empty($story->children))
             {
                 foreach($story->children as $child)
                 {
+                    if($child->type != $storyType) continue;
+
                     if(
                         $child->status != 'closed' or
                         ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
                     )
                     {
                         $storyIdList[] = $child->id;
+                        $rateCount ++;
                     }
-                    $count ++;
+                    $allCount ++;
                 }
             }
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll();
-        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $count, 2);
+        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+        $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        return sprintf($this->lang->product->storySummary, $count, $totalEstimate, $rate * 100 . "%");
+        $storyCommon = $this->lang->storyCommon;
+        if(!empty($this->config->URAndSR))
+        {
+            if($storyType == 'requirement') $storyCommon = $this->lang->urCommon;
+            if($storyType == 'story') $storyCommon = $this->lang->srCommon;
+        }
+        return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
 
     /**

@@ -172,6 +172,7 @@ class jobModel extends model
      */
     public function initJob($id, $job, $repoType)
     {
+        if(empty($id)) return false;
         if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false)
         {
             $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
@@ -221,11 +222,11 @@ class jobModel extends model
             ->fetch();
         if(!$job) return false;
 
-		$buildUrl = $this->loadModel('compile')->getBuildUrl($job);
-        $build    = new stdclass();
+        $build = new stdclass();
         $build->job  = $job->id;
         $build->name = $job->name;
 
+        $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
         $data->PARAM_TAG = '';
@@ -273,7 +274,7 @@ class jobModel extends model
 
         $data->ZENTAO_DATA = "compile={$compileID}";
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
         $compile->status = $compile->queue ? 'created' : 'create_fail';
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 

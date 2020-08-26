@@ -164,9 +164,18 @@ class tree extends control
             $position[] = $this->lang->tree->manageTrainskill;
         }
         elseif($viewType == 'trainpost')
-        {   
-            $this->lang->set('menugroup.tree', 'train');
-            $this->lang->tree->menu = $this->lang->train->menu;
+        {
+            $postBrowseType = $this->session->postBrowseType ? $this->session->postBrowseType : 'train';
+            if($postBrowseType == 'train')
+            {
+                $this->lang->set('menugroup.tree', 'train');
+                $this->lang->tree->menu = $this->lang->train->menu;
+            }
+            else
+            {
+                $this->lang->set('menugroup.tree', 'company');
+                $this->lang->tree->menu = $this->lang->company->menu;
+            }
 
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;

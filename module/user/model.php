@@ -66,10 +66,11 @@ class userModel extends model
      *
      * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
      * @param  string $usersToAppended  account1,account2
+     * @param  int    $maxCount 
      * @access public
      * @return array
      */
-    public function getPairs($params = '', $usersToAppended = '')
+    public function getPairs($params = '', $usersToAppended = '', $maxCount = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getUserPairs();
         /* Set the query fields and orderBy condition.
@@ -89,19 +90,30 @@ class userModel extends model
 
         /* Get raw records. */
         $this->app->loadConfig('user');
+        unset($this->config->user->moreLink);
+
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->orderBy($orderBy)
+            ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll('account');
+
+        if($maxCount and $maxCount == count($users))
+        {
+            if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
+            $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
+            $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore', "params=" . base64_encode($moreLinkParams));
+        }
+
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
 
         /* Cycle the user records to append the first letter of his account. */
         foreach($users as $account => $user)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
-            if((strpos($params, 'noletter') !== false) or (isset($this->config->isINT) and $this->config->isINT)) $firstLetter =  '';
+            if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $account : ($user->realname ? $user->realname : $account));
         }
 
@@ -315,6 +327,18 @@ class userModel extends model
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
 
+                /* Check required fields. */
+                foreach(explode(',', $this->config->user->create->requiredFields) as $field)
+                {
+                    $field = trim($field);
+                    if(empty($field)) continue;
+
+                    if(!isset($data[$i]->$field)) continue;
+                    if(!empty($data[$i]->$field)) continue;
+
+                    die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                }
+
                 /* Change for append field, such as feedback.*/
                 if(!empty($this->config->user->batchAppendFields))
                 {
@@ -381,7 +405,7 @@ class userModel extends model
         $oldUser = $this->getById($userID, 'id');
 
         $userID = $oldUser->id;
-        $user = fixer::input('post')
+        $user   = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
@@ -422,18 +446,33 @@ class userModel extends model
             }
         }
 
-        if(isset($_POST['groups']))
+        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
+        $newGroups = zget($_POST, 'groups', array());
+        sort($oldGroups);
+        sort($newGroups);
+
+        /* If change group then reset usergroup. */
+        if(join(',', $oldGroups) != join(',', $newGroups))
         {
+            /* Reset usergroup for account. */
             $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
-            foreach($this->post->groups as $groupID)
+
+            /* Set usergroup for account. */
+            if(isset($_POST['groups']))
             {
-                $data          = new stdclass();
-                $data->account = $this->post->account;
-                $data->group   = $groupID;
-                $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+                foreach($this->post->groups as $groupID)
+                {
+                    $data          = new stdclass();
+                    $data->account = $this->post->account;
+                    $data->group   = $groupID;
+                    $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
+                }
             }
+
+            /* Compute user view. */
             $this->computeUserView($this->post->account, true);
         }
+
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
         if(!dao::isError())
         {
@@ -496,6 +535,18 @@ class userModel extends model
             $users[$id]['zipcode']  = $data->zipcode[$id];
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
+
+            /* Check required fields. */
+            foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if(empty($field)) continue;
+
+                if(!isset($users[$id][$field])) continue;
+                if(!empty($users[$id][$field])) continue;
+
+                die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+            }
 
             if(!empty($this->config->user->batchAppendFields))
             {
@@ -683,7 +734,7 @@ class userModel extends model
             }
 
             /* code for bug #2729. */
-            if(!defined('RUN_MODE') or RUN_MODE != 'xuanxuan') $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
+            if(defined('IN_USE')) $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
 
             /* Create cycle todo in login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('account')->eq($user->account)->fetchAll('id');
@@ -1160,6 +1211,10 @@ class userModel extends model
         unset($newUser->password);
         unset($newUser->deleted);
         $newUser->company = $this->app->company->name;
+
+        /* App client will use session id as token. */
+        $newUser->token = session_id();
+
         return array('user' => $newUser);
     }
 
@@ -1457,71 +1512,61 @@ class userModel extends model
     /**
      * Update user view.
      * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  array  $users 
+     * @param  int|array $objectID 
+     * @param  string    $objectType 
+     * @param  array     $users 
      * @access public
      * @return void
      */
-    public function updateUserView($objectID, $objectType, $users = array())
+    public function updateUserView($objectIdList, $objectType, $users = array())
     {
         $table = '';
         if($objectType == 'product') $table = TABLE_PRODUCT;
         if($objectType == 'project' || $objectType == 'program') $table = TABLE_PROJECT;
         if(empty($table)) return false;
 
-        $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        if($object->acl == 'open') return true;
+        if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
+        if(!is_array($objectIdList)) return false;
 
         $allGroups      = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
         $managePrograms = $this->dao->select('account, program')->from(TABLE_USERGROUP)->where('program')->ne('')->fetchPairs();
         $userGroups = array();
+        $groupUsers = array();
         foreach($allGroups as $group)
         {
             if(!isset($userGroups[$group->account])) $userGroups[$group->account] = '';
             $userGroups[$group->account] .= "{$group->group},";
+            $groupUsers[$group->group][$group->account] = $group->account;
         }
 
-        $linkedProjects = array();
+        $linkedProductProjects = array();
+        $linkedProjectProducts = array();
         if($objectType == 'product')
         {
-            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($objectID)->query();
-            while($projectProduct = $stmt->fetch()) $linkedProjects[$projectProduct->project] = $projectProduct->project;
+            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->in($objectIdList)->query();
+            while($projectProduct = $stmt->fetch())
+            {
+                $linkedProductProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+                $linkedProjectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
+            }
         }
 
-        $teams = array();
-        $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->alias('team')
-            ->leftJoin(TABLE_PROJECT)->alias('project')
-            ->on('team.root=project.id')
-            ->where('team.type')->eq('project')
-            ->andWhere('project.deleted')->eq(0)
-            ->beginIF($objectType == 'product')->andWhere('root')->in($linkedProjects)->fi()
-            ->beginIF($objectType == 'project' || $objectType == 'program')->andWhere('root')->eq($objectID)->fi()
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->beginIF($objectType == 'product')->andWhere('root')->in(array_keys($linkedProjectProducts))->fi()
+            ->beginIF($objectType == 'project' || $objectType == 'program')->andWhere('root')->in($objectIdList)->fi()
             ->query();
-        while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
-
-        $field = $objectType . 's';
-        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
-            ->beginIF($users)->where('account')->in($users)->fi()
-            ->query();
-
-        $userObjects = array();
-        while($userView = $stmt->fetch())
+        while($team = $stmt->fetch())
         {
-            $account = $userView->account;
             if($objectType == 'product')
             {
-                $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $teams);
-                if($hasPriv and strpos(",{$userView->products},", ",{$objectID},") === false) $userView->products .= ",{$objectID}";
-                if(!$hasPriv and strpos(",{$userView->products},", ",{$objectID},") !== false) $userView->products = trim(str_replace(",{$objectID},", ',', ",{$userView->products},"), ',');
-                $userObjects[$account]['products'] = $userView->products;
+                $productIdList = zget($linkedProjectProducts, $team->root, array());
+                foreach($productIdList as $productID) $teamGroups[$productID][$team->root][$team->account] = $team->account;
             }
             elseif($objectType == 'project')
             {
-                $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
-                if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
-                if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
-                $userObjects[$account]['projects'] = $userView->projects;
+                $teamGroups[$team->root][$team->account] = $team->account;
             }
             elseif($objectType == 'program')
             {
@@ -1540,9 +1585,53 @@ class userModel extends model
             }
         }
 
-        foreach($userObjects as $account => $data)
+        $whiteList = array();
+        $objects   = $this->dao->select('*')->from($table)->where('id')->in($objectIdList)->fetchAll('id');
+        foreach($objects as $objectID => $object)
         {
-            $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
+            if($object->acl == 'open')
+            {
+                unset($objects[$objectID]);
+                continue;
+            }
+            if(!empty($users)) continue;
+
+            if($objectType == 'product') $whiteList += $this->getProductWhiteListUsers($object, $groupUsers, zget($linkedProductProjects, $objectID, array()), zget($teamGroups, $objectID, array()));
+            if($objectType == 'project') $whiteList += $this->getProjectWhiteListUsers($object, $groupUsers, zget($teamGroups, $objectID, array()));
+        }
+        if(empty($objects)) return true;
+
+        if($whiteList) $users = $whiteList;
+
+        $field = $objectType == 'product' ? 'products' : 'projects';
+        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)->where('account')->in($users);
+        if($whiteList)
+        {
+            foreach($objects as $objectID => $object) $stmt->orWhere("CONCAT(',', {$field}, ',')")->like("%,{$objectID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', $field);
+
+        foreach($userViews as $account => $view)
+        {
+            foreach($objects as $objectID => $object)
+            {
+                $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objectID, array()) : array();
+                $members        = zget($teamGroups, $objectID, array());
+
+                if($objectType == 'product')
+                {
+                    $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $members);
+                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
+                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
+                }
+                elseif($objectType == 'project')
+                {
+                    $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), $members);
+                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
+                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
+                }
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set($field)->eq($view)->where('account')->eq($account)->exec();
         }
     }
 
@@ -1584,6 +1673,45 @@ class userModel extends model
     }
 
     /**
+     * Get product white list users.
+     * 
+     * @param  object $product 
+     * @param  array  $groupUsers 
+     * @param  array  $linkedProjects 
+     * @param  array  $teams 
+     * @access public
+     * @return array
+     */
+    public function getProductWhiteListUsers($product, $groupUsers, $linkedProjects, $teams)
+    {
+        $users = array();
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$product->PO]        = $product->PO;
+        $users[$product->QD]        = $product->QD;
+        $users[$product->RD]        = $product->RD;
+        $users[$product->createdBy] = $product->createdBy;
+        if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
+
+        if($product->acl == 'custom')
+        {
+            foreach(explode(',', $product->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                $users += zget($groupUsers, $whitelist, array());
+            }
+        }
+
+        if(!empty($linkedProjects))
+        {
+            foreach($linkedProjects as $projectID) $users += zget($teams, $projectID, array());
+        }
+
+        return $users;
+    }
+
+    /**
      * Check project priv.
      * 
      * @param  object    $project 
@@ -1610,6 +1738,42 @@ class userModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Get project white list users.
+     * 
+     * @param  object $project 
+     * @param  array  $groupUsers 
+     * @param  array  $teams 
+     * @access public
+     * @return array
+     */
+    public function getProjectWhiteListUsers($project, $groupUsers, $teams)
+    {
+        $users = array();
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$project->PO]       = $project->PO;
+        $users[$project->QD]       = $project->QD;
+        $users[$project->RD]       = $project->RD;
+        $users[$project->PM]       = $project->PM;
+        $users[$project->openedBy] = $project->openedBy;
+        if(isset($project->feedback)) $users[$project->feedback] = $project->feedback;
+
+        $users += $teams;
+
+        if($project->acl == 'custom')
+        {
+            foreach(explode(',', $project->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                $users += zget($groupUsers, $whitelist, array());
+            }
+        }
+
+        return $users;
     }
 
     /**

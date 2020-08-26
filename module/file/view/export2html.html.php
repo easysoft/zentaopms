@@ -19,7 +19,7 @@ table th,table td{padding:5px;}
 </style>
 <title><?php echo $fileName;?></title>
 <body>
-<?php if($this->post->kind == 'task') echo "<font color='red'>" . $this->lang->file->childTaskTag . '</font>';?>
+<?php if($this->post->kind == 'task') echo "<font color='red'>" . $this->lang->file->childTaskTips . '</font>';?>
 <table>
   <tr>
   <?php

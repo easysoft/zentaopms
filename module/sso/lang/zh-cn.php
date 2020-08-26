@@ -12,7 +12,7 @@
 $lang->sso = new stdclass();
 $lang->sso->settings = '配置';
 $lang->sso->turnon   = '是否打开';
-$lang->sso->redirect = '自动跳回然之';
+$lang->sso->redirect = '自动跳回ZDOO';
 $lang->sso->code     = '代号';
 $lang->sso->key      = '密钥';
 $lang->sso->addr     = '接口地址';
@@ -30,8 +30,8 @@ $lang->sso->bindTypeList['bind'] = '绑定已有用户';
 $lang->sso->bindTypeList['add']  = '添加新用户';
 
 $lang->sso->help = <<<EOD
-<p>1、接口地址的填写，如果是PATH_INFO ：http://然之网址/sys/sso-check.html，如果是GET：http://然之网址/sys/index.php?m=sso&f=check</p>
-<p>2、代号和密钥必须与然之后台设置的一致。</p>
+<p>1、接口地址的填写，如果是PATH_INFO ：http://ZDOO网址/sys/sso-check.html，如果是GET：http://ZDOO网址/sys/index.php?m=sso&f=check</p>
+<p>2、代号和密钥必须与ZDOO后台设置的一致。</p>
 EOD;
 $lang->sso->bindNotice     = '添加的新用户暂时没有权限，需要联系禅道管理员，给该用户分配权限。';
 $lang->sso->bindNoPassword = '密码不能为空';

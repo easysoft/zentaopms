@@ -9,9 +9,15 @@ $lang->backup->change      = 'Sửa Expiration';
 $lang->backup->changeAB    = 'Sửa';
 $lang->backup->rmPHPHeader = 'Xóa PHP header';
 
-$lang->backup->time  = 'Ngày';
-$lang->backup->files = 'Files';
-$lang->backup->size  = 'Size';
+$lang->backup->time     = 'Ngày';
+$lang->backup->files    = 'Files';
+$lang->backup->allCount = 'All Count';
+$lang->backup->count    = 'Backup Count';
+$lang->backup->size     = 'Size';
+$lang->backup->status   = 'Status';
+
+$lang->backup->statusList['success'] = 'Success';
+$lang->backup->statusList['fail']    = 'Fail';
 
 $lang->backup->setting    = 'Thiết lập';
 $lang->backup->settingDir = 'Thư mục sao lưu';
@@ -25,6 +31,7 @@ $lang->backup->progressCode   = '<p>Sao lưu SQL đã hoàn thành.</p><p>Sao l�
 $lang->backup->confirmDelete  = 'Bạn có muốn xóa sao lưu này?';
 $lang->backup->confirmRestore = 'Bạn có muốn khôi phục sao lưu này?';
 $lang->backup->holdDays       = 'Giữ ít nhất %s ngày sao lưu';
+$lang->backup->copiedFail     = 'Copy failed files: ';
 $lang->backup->restoreTip     = 'Chỉ tập tin và CSDL có thể được khôi phục bằng cách Click Khôi phục. Mã nguồn có thể khôi phục thủ công.';
 
 $lang->backup->success = new stdclass();

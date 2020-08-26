@@ -124,7 +124,7 @@ class custom extends control
                     {
                         if(!is_numeric($key) or $key > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
                     }
-                    if(!empty($key) and !empty($oldCustoms) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
+                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
                     /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
@@ -287,6 +287,7 @@ class custom extends control
 
         /* Get this module requiredFields. */
         $this->loadModel($moduleName);
+        if($moduleName == 'user') $this->app->loadModuleConfig($moduleName);
         $requiredFields = $this->custom->getRequiredFields($this->config->$moduleName);
 
         if($moduleName == 'doc')
@@ -576,8 +577,13 @@ class custom extends control
             }
             if($module !== 'main')
             {
-                $menu['module']     = customModel::getModuleMenu($module, true);
-                $menu['feature']    = customModel::getFeatureMenu($module, $method);
+                $menu['module']  = array();
+                $menu['feature'] = array();
+                if(!isset($this->config->custom->noModuleMenu[$module]))
+                {
+                    $menu['module']  = customModel::getModuleMenu($module, true);
+                    $menu['feature'] = customModel::getFeatureMenu($module, $method);
+                }
                 $menu['moduleName'] = $module;
                 $menu['methodName'] = $method;
             }

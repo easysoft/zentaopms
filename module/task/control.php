@@ -97,7 +97,7 @@ class task extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
-            if($this->post->project) $projectID = $this->post->project;
+            if($this->post->project) $projectID = (int)$this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
@@ -337,7 +337,7 @@ class task extends control
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
@@ -370,10 +370,12 @@ class task extends control
         $noclosedProjects = $this->project->getPairs('noclosed,nocode');
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
-        $tasks = $this->task->getParentTaskPairs($this->view->project->id);
+        $tasks = $this->task->getParentTaskPairs($this->view->project->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
+        if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -397,6 +399,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
+            if(dao::isError()) die(js::error(dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -464,7 +467,7 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchAll('root');
+        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -527,6 +530,9 @@ class task extends control
             $members = $this->task->getMemberPairs($task);
         }
 
+        if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
+        if(isset($members['closed']) or $task->status == 'closed') $members['closed'] = 'Closed';
+
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
         $this->view->task       = $task;
@@ -573,14 +579,21 @@ class task extends control
     {
         if(!empty($_POST))
         {
+            $this->loadModel('action');
             $taskIDList = $this->post->taskIDList;
             $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
             $taskIDList = array_unique($taskIDList);
-            foreach($taskIDList as $taskID)
+
+            $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
+            $tasks          = $this->task->getByList($taskIDList);
+            $this->loadModel('action');
+            foreach($tasks as $taskID => $task)
             {
-                $this->loadModel('action');
+                if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue; 
+                if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
+
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
@@ -616,7 +629,7 @@ class task extends control
         }
         else
         {
-            $story = $this->story->getById($task->story);
+            $story = $this->story->getById($task->story, $task->storyVersion);
             $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
             $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
             $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
@@ -735,6 +748,7 @@ class task extends control
         if(!empty($_POST))
         {
             $changes = $this->task->recordEstimate($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
@@ -1064,8 +1078,9 @@ class task extends control
         if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
-            $taskIDList = array_unique($taskIDList);
+            if($taskIDList)     $taskIDList = array_unique($taskIDList);
             if($skipTaskIdList) $taskIDList = $skipTaskIdList;
+
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');
@@ -1507,9 +1522,9 @@ class task extends control
                 $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
 
                 /* Set related files. */
+                $task->files = '';
                 if(isset($relatedFiles[$task->id]))
                 {
-                    $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
                         $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");

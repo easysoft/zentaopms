@@ -24,3 +24,5 @@ $lang->datatable->showAllModule          = 'Hiện module sản phẩm';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Node cơ bản';
 $lang->datatable->showModuleList['end']  = 'Node cuối';
+$lang->datatable->showAllModuleList[0]   = 'Hide';
+$lang->datatable->showAllModuleList[1]   = 'Show';

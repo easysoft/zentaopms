@@ -19,7 +19,7 @@ $lang->my->profile        = '我的档案';
 $lang->my->dynamic        = '我的动态';
 $lang->my->editProfile    = '修改档案';
 $lang->my->changePassword = '修改密码';
-$lang->my->unbind         = '解除然之绑定';
+$lang->my->unbind         = '解除ZDOO绑定';
 $lang->my->manageContacts = '维护联系人';
 $lang->my->deleteContacts = '删除联系人';
 $lang->my->shareContacts  = '共享联系人列表';
@@ -36,10 +36,10 @@ $lang->my->taskMenu->closedByMe   = '由我关闭';
 $lang->my->taskMenu->canceledByMe = '由我取消';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = '指派给我';
-$lang->my->storyMenu->openedByMe   = '由我创建';
-$lang->my->storyMenu->reviewedByMe = '由我评审';
-$lang->my->storyMenu->closedByMe   = '由我关闭';
+$lang->my->storyMenu->assignedToMe = '指给我';
+$lang->my->storyMenu->openedByMe   = '我创建';
+$lang->my->storyMenu->reviewedByMe = '我评审';
+$lang->my->storyMenu->closedByMe   = '我关闭';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = '最新动态';

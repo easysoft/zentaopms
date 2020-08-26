@@ -32,13 +32,17 @@
     <table class="table has-sort-head table-fixed">
       <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
-      $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-      $canBatchClose = (common::hasPriv('story', 'batchClose') && strtolower($type) != 'closedbyme');
+      $canBatchEdit     = common::hasPriv('story', 'batchEdit');
+      $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
+      $canBatchReview   = common::hasPriv('story', 'batchReview');
+      $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');
+
+      $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
       ?>
       <thead>
         <tr>
           <th class="c-id">
-            <?php if($canBatchEdit or $canBatchClose):?>
+            <?php if($canBatchAction):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
@@ -62,7 +66,7 @@
         <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->program);?>
         <tr>
           <td class="c-id">
-            <?php if($canBatchEdit or $canBatchClose):?>
+            <?php if($canBatchAction):?>
             <div class="checkbox-primary">
               <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
               <label></label>
@@ -94,11 +98,19 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchEdit or $canBatchClose):?>
+      <?php if($canBatchAction):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
-        <?php if(common::hasPriv('story', 'batchReview')):?>
+        <?php
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('story', 'batchEdit');
+            $misc       = "data-form-action='$actionLink'";
+            echo html::commonButton($lang->edit, $misc);
+        }
+        ?>
+        <?php if($canBatchReview):?>
         <div class="btn-group dropup">
           <button type='button' class='btn' data-toggle='dropdown'><?php echo $lang->story->review;?> <span class='caret'></span></button>
           <ul class='dropdown-menu'>
@@ -135,7 +147,7 @@
           </ul>
         </div>
         <?php endif;?>
-        <?php if(common::hasPriv('story', 'batchAssignTo')):?>
+        <?php if($canBatchAssignTo):?>
         <div class="btn-group dropup">
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
@@ -167,6 +179,13 @@
           echo "</div>";
           ?>
         </div>
+        <?php endif;?>
+        <?php if($canBatchClose):?>
+        <?php
+        $actionLink = $this->createLink('story', 'batchClose');
+        $misc = "data-form-action=\"$actionLink\"";
+        echo html::commonButton($lang->close, $misc);
+        ?>
         <?php endif;?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>

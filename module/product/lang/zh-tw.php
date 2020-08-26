@@ -133,8 +133,8 @@ $lang->product->aclList['open']    = "預設設置(有{$lang->productCommon}視�
 $lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->productCommon}相關負責人和{$lang->projectCommon}團隊成員才能訪問)";
 $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
-$lang->product->storySummary   = "本頁共 <strong>%s</strong> 個{$lang->storyCommon}，預計 <strong>%s</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%s</strong>。";
-$lang->product->checkedSummary = "選中 <strong>%total%</strong> 個{$lang->storyCommon}，預計 <strong>%estimate%</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%rate%</strong>。";
+$lang->product->storySummary   = "本頁共 <strong>%s</strong> 個%s，預計 <strong>%s</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%s</strong>。";
+$lang->product->checkedSummary = "選中 <strong>%total%</strong> 個%storyCommon%，預計 <strong>%estimate%</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%rate%</strong>。";
 $lang->product->noModule       = "<div>您現在還沒有模組信息</div><div>請維護{$lang->productCommon}模組</div>";
 $lang->product->noProduct      = "暫時沒有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;

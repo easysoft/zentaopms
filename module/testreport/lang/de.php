@@ -73,6 +73,7 @@ $lang->testreport->errorTrunk     = "Die Trunk Version kann kein Testbericht ers
 $lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
 $lang->testreport->noObjectID     = "No test request or {$lang->projectCommon} is selected, so no report can be generated.";
 $lang->testreport->moreProduct    = "Ein Testbericht kann nur innerhalb des selben Produkts erstellt werden.";
+$lang->testreport->hiddenCase     = "Hide %s use cases";
 
 $lang->testreport->bugSummary = <<<EOD
 <strong>%s</strong> Bug(s) in Summe erstellt <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-exclamation-sign'></i></a>,

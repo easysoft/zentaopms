@@ -227,6 +227,7 @@ $lang->project->end                 = 'Kết thúc';
 $lang->project->lblStats            = 'Chấm công';
 $lang->project->stats               = 'Khả dụng: <strong>%s</strong>(giờ). Dự tính: <strong>%s</strong>(giờ). Đã làm: <strong>%s</strong>(giờ). Còn: <strong>%s</strong>(giờ).';
 $lang->project->taskSummary         = "Tổng nhiệm vụ:<strong>%s</strong>. Đang đợi: <strong>%s</strong>. Đang làm: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Dự tính: <strong>%s</strong>(giờ). Đã làm: <strong>%s</strong>(giờ). Còn: <strong>%s</strong>(giờ).";
+$lang->project->pageSummary         = "Tổng nhiệm vụ: <strong>%total%</strong>. Đang đợi: <strong>%wait%</strong>. Đang làm: <strong>%doing%</strong>. Dự tính: <strong>%estimate%</strong>(giờ). Đã làm: <strong>%consumed%</strong>(giờ). Còn: <strong>%left%</strong>(giờ).";
 $lang->project->checkedSummary      = "Đã chọn: <strong>%total%</strong>. Đang đợi: <strong>%wait%</strong>. Đang làm: <strong>%doing%</strong>. Dự tính: <strong>%estimate%</strong>(giờ). Đã làm: <strong>%consumed%</strong>(giờ). Còn: <strong>%left%</strong>(giờ).";
 $lang->project->memberHoursAB       = "%s có <strong>%s</ strong> giờ.";
 $lang->project->memberHours         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Giờ khả dụng </div><div class="segment-value">%s</div></div></div></div>';
@@ -274,8 +275,9 @@ $lang->project->interval              = 'Intervals ';
 $lang->project->fixFirstWithLeft      = 'Cập nhật cả giờ còn lại';
 
 $lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, được tạo bởi <strong>$actor</strong> .' . "\n";
-$lang->project->action->managed = '$date, quản lý bởi <strong>$actor</strong> .' . "\n";
+$lang->project->action->opened  = '$date, được tạo bởi <strong>$actor</strong>  $extra.' . "\n";
+$lang->project->action->managed = '$date, quản lý bởi <strong>$actor</strong> . $extra' . "\n";
+$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
 $lang->project->action->extra   = "{$lang->productCommon} liên kết này là %s.";
 
 /* Statistics. */

@@ -33,7 +33,7 @@
           }
           ?>
           <td colspan="2">
-            <?php echo '<span class="label label-badge label-primary label-outline">' . $useridPairs[$userid] . '</span>';?>
+            <?php echo '<span class="label label-badge label-primary label-outline">' . zget($useridPairs, $userid) . '</span>';?>
             <?php echo html::input("userid[{$user->account}]", $userid, 'class="form-control hidden"');?>
           </td>
           <td class='text-center c-actions'><?php echo '<button class="btn bind" type="button" data-value="userid[' . $user->account . ']"><i class="icon-common-edit icon-edit"></i></button>';?></td>
@@ -48,6 +48,7 @@
         <div class='text'>
           <?php echo html::submitButton($lang->save, '', 'btn btn-primary');?>
           <?php echo html::a($this->createLink('webhook', 'browse'), $lang->goback, '', "class='btn'");?>
+          <?php if($selectedDepts) echo html::a($this->createLink('webhook', 'chooseDept', "id={$webhook->id}"), $lang->webhook->chooseDeptAgain, '', "class='btn'");?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

@@ -30,19 +30,28 @@ class myModel extends model
             $role = $this->app->user->role;
             if($role == 'qa')
             {
-                unset($this->lang->my->menuOrder[15]);
+                $taskOrder = '15';
+                $bugOrder  = '20';
+
+                unset($this->lang->my->menuOrder[$taskOrder]);
                 $this->lang->my->menuOrder[32] = 'task';
-                $this->lang->my->dividerMenu = str_replace(',task,', ',' . $this->lang->my->menuOrder[20] . ',', $this->lang->my->dividerMenu);
+                $this->lang->my->dividerMenu = str_replace(',task,', ',' . $this->lang->my->menuOrder[$bugOrder] . ',', $this->lang->my->dividerMenu);
             }
             elseif($role == 'po')
             {
+                $requirementOrder = 29;
+                unset($this->lang->my->menuOrder[$requirementOrder]);
+
                 $this->lang->my->menuOrder[15] = 'story';
+                $this->lang->my->menuOrder[16] = 'requirement';
                 $this->lang->my->menuOrder[30] = 'task';
                 $this->lang->my->dividerMenu = str_replace(',task,', ',story,', $this->lang->my->dividerMenu);
             }
             elseif($role == 'pm')
             {
-                unset($this->lang->my->menuOrder[35]);
+                $projectOrder = 35;
+                unset($this->lang->my->menuOrder[$projectOrder]);
+
                 $this->lang->my->menuOrder[17] = 'myProject';
             }
         }

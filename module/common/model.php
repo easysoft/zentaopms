@@ -167,10 +167,19 @@ class commonModel extends model
         {
             if(stripos($method, 'ajax') !== false) return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
+            if($module == 'misc' and $method == 'changelog')  return true;
+            if($module == 'tutorial' and $method == 'start')  return true;
+            if($module == 'tutorial' and $method == 'index')  return true;
+            if($module == 'tutorial' and $method == 'quit')   return true;
+            if($module == 'tutorial' and $method == 'wizard') return true;
+            if($module == 'block' and $method == 'admin') return true;
+            if($module == 'block' and $method == 'set') return true;
+            if($module == 'block' and $method == 'sort') return true;
+            if($module == 'block' and $method == 'resize') return true;
+            if($module == 'block' and $method == 'dashboard') return true;
+            if($module == 'block' and $method == 'printblock') return true;
             if($module == 'block' and $method == 'main') return true;
-            if($module == 'misc' and $method == 'changelog') return true;
-            if($module == 'tutorial') return true;
-            if($module == 'block') return true;
+            if($module == 'block' and $method == 'delete') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
             if($module == 'report' and $method == 'annualdata') return true;
         }
@@ -319,7 +328,10 @@ class commonModel extends model
         echo "<a data-toggle='dropdown'>" . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
         if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
-        echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
+
+        $manualUrl = (!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home'];
+        echo '<li>' . html::a($manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
+
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
         echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
@@ -727,8 +739,11 @@ class commonModel extends model
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule  = $app->getModuleName();
         $currentMethod  = $app->getMethodName();
-        $menu           = customModel::getModuleMenu($moduleName);
         $isMobile       = $app->viewType === 'mhtml';
+
+        /* When use workflow then set rawModule to moduleName. */
+        if($moduleName == 'flow') $moduleName = $app->rawModule;
+        $menu = customModel::getModuleMenu($moduleName);
 
         /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
         if($app->isFlow)
@@ -736,6 +751,7 @@ class commonModel extends model
             $currentModule  = $app->rawModule;
             $currentMethod  = $app->rawMethod;
         }
+
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
@@ -857,9 +873,10 @@ class commonModel extends model
             echo '</ul>';
             return;
         }
-        foreach($position as $key => $link)
+
+        if(is_array($position))
         {
-            echo "<li class='active'>" . $link . '</li>';
+            foreach($position as $key => $link) echo "<li class='active'>" . $link . '</li>';
         }
         echo '</ul>';
     }
@@ -1036,6 +1053,13 @@ class commonModel extends model
     </div>
   </div>
 </div>
+<script>
+$(function()
+{
+    \$body = $('body', window.parent.document);
+    if(\$body.hasClass('hide-modal-close')) \$body.removeClass('hide-modal-close');
+});
+</script>
 EOD;
     }
 
@@ -1598,7 +1622,7 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword')));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -1953,16 +1977,19 @@ EOD;
         $isFreepasswd = ($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd);
         if($isFreepasswd) $entry->account = $_GET['account'];
 
-        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->fetch();
+        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
         if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
+        $user->last   = time();
         $user->rights = $this->user->authorize($user->account);
         $user->groups = $this->user->getGroups($user->account);
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
         $this->app->user = $user;
+
+        $this->dao->update(TABLE_USER)->set('last')->eq($user->last)->where('account')->eq($user->account)->exec();
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
@@ -2051,11 +2078,13 @@ EOD;
      *
      * @param  string       $url
      * @param  string|array $data
+     * @param  bool         $optHeader
+     * @param  string       $userPWD
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $optHeader = false)
+    public static function http($url, $data = null, $optHeader = false, $userPWD = '')
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
@@ -2082,6 +2111,8 @@ EOD;
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
+
+        if(!empty($userPWD)) curl_setopt($curl, CURLOPT_USERPWD, $userPWD);
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);

@@ -32,7 +32,7 @@
           <td class='c-actions text-left'>
             <?php
             common::printIcon('jenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
-            if(common::hasPriv('jenkins', 'delete')) echo html::a($this->createLink('jenkins', 'delete', "jenkinsID=$id"), '<i class="icon-trash"></i>', '', "title='{$lang->jenkins->delete}' class='btn'");
+            if(common::hasPriv('jenkins', 'delete')) echo html::a($this->createLink('jenkins', 'delete', "jenkinsID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->jenkins->delete}' class='btn'");
             ?>
           </td>
         </tr>

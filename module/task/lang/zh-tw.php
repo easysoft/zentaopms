@@ -47,7 +47,7 @@ $lang->task->case                = '相關用例';
 $lang->task->confirmStoryChange  = "確認{$lang->storyCommon}變動";
 $lang->task->storyChange         = "{$lang->storyCommon}變更";
 $lang->task->progress            = '進度';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = '進度';
 $lang->task->progressTips        = '已消耗/(已消耗+剩餘)';
 $lang->task->copy                = '複製任務';
 $lang->task->waitTask            = '未開始的任務';
@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}會導致相�
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
 $lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完成"，您確定嗎？';
 $lang->task->confirmTransfer       = '"當前剩餘"為0，任務將被轉交，您確定嗎？';
+$lang->task->noticeTaskStart       = '"總計消耗"和"預計剩餘"不能同時為0';
 $lang->task->noticeLinkStory       = "沒有可關聯的相關{$lang->storyCommon}，您可以為當前項目%s，然後%s";
 $lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先將其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
@@ -198,8 +199,10 @@ $lang->task->createDenied          = '你不能在該項目添加任務';
 $lang->task->cannotDeleteParent    = '不能刪除父任務。';
 
 $lang->task->error                   = new stdclass();
+$lang->task->error->totalNumber      = '"總計消耗"必須為數字';
 $lang->task->error->consumedNumber   = '"本次消耗"必須為數字';
-$lang->task->error->estimateNumber   = '"預計剩餘"必須為數字';
+$lang->task->error->estimateNumber   = '"最初預計"必須為數字';
+$lang->task->error->leftNumber       = '"預計剩餘"必須為數字';
 $lang->task->error->recordMinus      = '工時不能為負數';
 $lang->task->error->consumedSmall    = '"總計消耗"必須大於之前消耗';
 $lang->task->error->consumedThisTime = '請填寫"工時"';
@@ -208,8 +211,9 @@ $lang->task->error->work             = '"備註"必須小於%d個字元';
 $lang->task->error->skipClose        = '任務：%s 不是“已完成”或“已取消”狀態，確定要關閉嗎？';
 $lang->task->error->consumed         = '任務：%s工時不能小於0，忽略該任務工時的改動';
 $lang->task->error->assignedTo       = '當前狀態的多人任務不能指派給任務團隊外的成員。';
-$lang->task->error->consumedEmpty    = '"本次消耗"不能為空';
+$lang->task->error->consumedEmpty    = '"本次消耗"不能為0';
 $lang->task->error->deadlineSmall    = '"截止日期"必須大於"預計開始"';
+$lang->task->error->alreadyStarted   = '此任務已被啟動，不能重複啟動！';
 
 /* Report. */
 $lang->task->report         = new stdclass();
@@ -295,3 +299,6 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = '關閉原因';
 
 $lang->task->report->finishedTasksPerDay->type             = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = '日期';
+
+$lang->taskestimate           = new stdclass();
+$lang->taskestimate->consumed = '工時';

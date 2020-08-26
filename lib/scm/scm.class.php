@@ -142,6 +142,18 @@ class scm
     }
 
     /**
+     * Exec scm cmd.
+     * 
+     * @param  string $cmd 
+     * @access public
+     * @return array
+     */
+    public function exec($cmd)
+    {
+        return $this->engine->exec($cmd);
+    }
+
+    /**
      * Get commit count 
      * 
      * @param  int    $commits 

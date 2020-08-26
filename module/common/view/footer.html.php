@@ -21,12 +21,6 @@ $.initSidebar();
 </footer>
 <div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
-<?php if(!isset($config->global->browserNotice)):?>
-browserNotice = <?php echo json_encode($lang->browserNotice)?>;
-function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
-$(function(){showBrowserNotice()});
-<?php endif;?>
-
 <?php $this->app->loadConfig('message');?>
 <?php if($config->message->browser->turnon):?>
 /* Alert got messages. */

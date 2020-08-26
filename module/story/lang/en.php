@@ -65,6 +65,8 @@ $lang->story->batchChangeStage  = "Batch Change Phases";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Modules";
 $lang->story->viewAll           = "See All";
+$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -107,7 +109,7 @@ $lang->story->rejectedReason = 'Reject Reason';
 $lang->story->reviewedBy     = 'ReviewedBy';
 $lang->story->reviewedDate   = 'ReviewedDate';
 $lang->story->version        = 'Version';
-$lang->story->plan           = 'Linked Plans';
+$lang->story->plan           = 'Linked Plan';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Comment';
 $lang->story->children       = "Child {$lang->storyCommon}";
@@ -136,6 +138,9 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';
 
+$lang->story->needNotReviewList[0] = 'Need Review';
+$lang->story->needNotReviewList[1] = 'Need Not Review';
+
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
 
@@ -160,11 +165,11 @@ $lang->story->stageList['closed']     = 'Closed';
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = 'Already Done';
 $lang->story->reasonList['subdivided'] = 'Decomposed';
-$lang->story->reasonList['duplicate']  = 'Duplicated';
+$lang->story->reasonList['duplicate']  = 'Duplicate';
 $lang->story->reasonList['postponed']  = 'Postponed';
 $lang->story->reasonList['willnotdo']  = "Won't Do";
 $lang->story->reasonList['cancel']     = 'Cancelled';
-$lang->story->reasonList['bydesign']   = 'As Design';
+$lang->story->reasonList['bydesign']   = 'As Designed';
 //$lang->story->reasonList['isbug']      = 'Bug!';
 
 $lang->story->reviewResultList['']        = '';
@@ -233,8 +238,9 @@ $lang->story->errorNotSubdivide     = "If the status is not active, or the stage
 $lang->story->mustChooseResult      = 'Select Result';
 $lang->story->mustChoosePreVersion  = 'Select a version to revert to.';
 $lang->story->noStory               = 'No stories yet. ';
-$lang->story->ignoreChangeStage     = 'Story %s is a draft. Please review it..';
+$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
+$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Scope';

@@ -190,11 +190,12 @@ class repoModel extends model
      */
     public function create()
     {
-        $this->checkConnection();
+        if(!$this->checkConnection()) return false;
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
             ->join('program', ',')
             ->get();
+
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
         if(empty($data->client)) $data->client = 'svn';
 
@@ -225,7 +226,7 @@ class repoModel extends model
      */
     public function update($id)
     {
-        $this->checkConnection();
+        if(!$this->checkConnection()) return false;
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
             ->join('program', ',')
@@ -681,7 +682,7 @@ class repoModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $logs = $scm->log('', $lastInDB->revision);
+        $logs = $scm->log('', $lastInDB ? $lastInDB->revision : 0);
         if(empty($logs)) return false;
 
         /* Process logs. */
@@ -937,59 +938,82 @@ class repoModel extends model
 
         if($scm == 'Subversion')
         {
-            $path = '"' . str_replace(array('%3A', '%2F'), array(':', '/'), urlencode($path)) . '"';
+            /* Get svn version. */
+            $versionCommand = "$client --version --quiet 2>&1";
+            exec($versionCommand, $versionOutput, $versionResult);
+            if($versionResult)
+            {
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("<br />", $versionOutput));
+                dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
+                return false;
+            }
+            $svnVersion = end($versionOutput);
+
+            $path = '"' . str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode($path)) . '"';
             if(stripos($path, 'https://') === 1 or stripos($path, 'svn://') === 1)
             {
-                $ssh     = true;
-                $remote  = true; 
+                if(version_compare($svnVersion, '1.6', '<'))
+                {
+                    dao::$errors['client'] = $this->lang->repo->error->version;
+                    return false;
+                }
+
                 $command = "$client info --username $account --password $password --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache $path 2>&1";
+                if(version_compare($svnVersion, '1.9', '<')) $command = "$client info --username $account --password $password --non-interactive --trust-server-cert --no-auth-cache $path 2>&1";
             }
             else if(stripos($path, 'file://') === 1)
             {
-                $ssh     = false;
-                $remote  = false; 
                 $command = "$client info --non-interactive --no-auth-cache $path 2>&1";
             }
             else
             {
-                $ssh     = false;
-                $remote  = true; 
                 $command = "$client info --username $account --password $password --non-interactive --no-auth-cache $path 2>&1";
             }
+
             exec($command, $output, $result);
             if($result) 
             {
-                $versionCommand = "$client --version --quiet 2>&1";
-                exec($versionCommand, $versionOutput, $versionResult);
-                if($versionResult)
+                $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
-                    $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("\n", $versionOutput));
-                    echo $message;
-                    die(js::alert($this->lang->repo->error->cmd . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
+                    dao::$errors['client'] = $this->lang->repo->error->clientVersion;
+                    return false;
                 }
-                if($ssh and version_compare(end($versionOutput), '1.6', '<')) die(js::alert($this->lang->repo->error->version));
-                $message = sprintf($this->lang->repo->error->output, $command, $result, join("\n", $output));
-                echo $message;
-                if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false) die(js::alert($this->lang->repo->error->clientVersion));
-                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"]/', $path)) die(js::alert($this->lang->repo->error->encoding . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
-                die(js::alert($this->lang->repo->error->connect . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
+                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"\.]/', $path))
+                {
+                    dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
+                    return false;
+                }
+
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br>" . nl2br($message);
+                return false;
             }
         }
         elseif($scm == 'Git')
         {
+            if(!is_dir($path))
+            {
+                dao::$errors['path'] = sprintf($this->lang->repo->error->noFile, $path);
+                return false;
+            }
+
             if(!chdir($path))
             {
-                if(!is_dir($path)) die(js::alert(sprintf($this->lang->repo->error->noFile, $path)));
-                if(!is_executable($path)) die(js::alert(sprintf($this->lang->repo->error->noPriv, $path)));
-                die(js::alert($this->lang->repo->error->path));
+                if(!is_executable($path))
+                {
+                    dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
+                    return false;
+                }
+                dao::$errors['path'] = $this->lang->repo->error->path;
+                return false;
             }
 
             $command = "$client tag 2>&1";
             exec($command, $output, $result);
             if($result)
             {
-                echo sprintf($this->lang->repo->error->output, $command, $result, join("\n", $output));
-                die(js::alert($this->lang->repo->error->connect));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                return false;
             }
         }
         return true;
@@ -1265,15 +1289,22 @@ class repoModel extends model
             $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
             foreach($actions['task'] as $taskID => $taskActions)
             {
+                $task = $this->task->getById($taskID);
+                if(empty($task)) continue;
+
                 $action->objectType = 'task';
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndProjects[$taskID]['product'];
                 $action->project    = $productsAndProjects[$taskID]['project'];
+                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $action->comment;
                 foreach($taskActions as $taskAction => $params)
                 {
+                    $_POST = array();
                     foreach($params as $field => $param) $this->post->set($field, $param);
-                    if($taskAction == 'start')
+
+                    if($taskAction == 'start' and $task->status == 'wait')
                     {
+                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $this->post->set('realStarted', date('Y-m-d'));
                         $changes = $this->task->start($taskID);
                         foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
@@ -1283,15 +1314,18 @@ class repoModel extends model
                             $this->saveRecord($action, $changes);
                         }
                     }
-                    elseif($taskAction == 'effort')
+                    elseif($taskAction == 'effort' and in_array($task->status, array('wait', 'pause', 'doing')))
                     {
+                        unset($_POST['consumed']);
+                        unset($_POST['left']);
+
                         $_POST['id'][1]         = 1;
                         $_POST['dates'][1]      = date('Y-m-d');
                         $_POST['consumed'][1]   = $params['consumed'];
                         $_POST['left'][1]       = $params['left'];
                         $_POST['objectType'][1] = 'task';
                         $_POST['objectID'][1]   = $taskID;
-                        $_POST['work'][1]       = $action->comment;
+                        $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
                         if(is_dir($this->app->getModuleRoot() . 'effort'))
                         {
                             $this->loadModel('effort')->batchCreate();
@@ -1310,9 +1344,8 @@ class repoModel extends model
                         $changes = $this->createActionChanges($log, $repoRoot, $scm);
                         $this->saveRecord($action, $changes);
                     }
-                    elseif($taskAction == 'finish')
+                    elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
                     {
-                        $task = $this->task->getById($taskID);
                         $this->post->set('finishedDate', date('Y-m-d'));
                         $this->post->set('currentConsumed', $this->post->consumed);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
@@ -1334,13 +1367,17 @@ class repoModel extends model
             $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
             foreach($actions['bug'] as $bugID => $bugActions)
             {
+                $bug = $this->bug->getByID($bugID);
+                if(empty($bug)) continue;
+
                 $action->objectType = 'bug';
                 $action->objectID   = $bugID;
                 $action->product    = $productsAndProjects[$bugID]->product;
                 $action->project    = $productsAndProjects[$bugID]->project;
                 foreach($bugActions as $bugAction => $params)
                 {
-                    if($bugAction == 'resolve')
+                    $_POST = array();
+                    if($bugAction == 'resolve' and $bug->status == 'active')
                     {
                         $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
@@ -1349,6 +1386,7 @@ class repoModel extends model
                         if($changes)
                         {
                             $action->action = 'resolved';
+                            $action->extra  = 'fixed';
                             $this->saveRecord($action, $changes);
                         }
                     }
@@ -1359,6 +1397,23 @@ class repoModel extends model
 
         $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
         $changes = $this->createActionChanges($log, $repoRoot, $scm);
+
+        if($objects['stories'])
+        {
+            $productsAndProjects = $this->getTaskProductsAndProjects($objects['stories']);
+            foreach($objects['stories'] as $storyID)
+            {
+                $storyID = (int)$storyID;
+                if(!isset($productsAndProjects[$storyID])) continue;
+
+                $action->objectType = 'story';
+                $action->objectID   = $storyID;
+                $action->product    = $productsAndProjects[$storyID]['product'];
+                $action->project    = $productsAndProjects[$storyID]['project'];
+
+                $this->saveRecord($action, $changes);
+            }
+        }
 
         if($objects['tasks'])
         {
@@ -1407,6 +1462,9 @@ class repoModel extends model
      */
     public function saveRecord($action, $changes)
     {
+        /* Remove sql error. */
+        dao::getError();
+
         $record = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($action->objectType)
             ->andWhere('objectID')->eq($action->objectID)

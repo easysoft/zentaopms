@@ -54,7 +54,7 @@ js::set('flow',          $config->global->flow);
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
      <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
-     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
+     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
     </div>
     <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
     <?php common::printLink('caselib', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
@@ -97,7 +97,7 @@ js::set('flow',          $config->global->flow);
       <?php $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');?>
       <?php $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview));?>
       <?php $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');?>
-      <?php $canBatchAction       = $canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule;?>
+      <?php $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);?>
       <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
       <div class="table-responsive">
         <table class='table has-sort-head' id='caseList'>
@@ -155,7 +155,9 @@ js::set('flow',          $config->global->flow);
         </table>
       </div>
       <div class='table-footer'>
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php $actionLink = $this->createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib");?>
@@ -207,6 +209,7 @@ js::set('flow',          $config->global->flow);
             <?php endif;?>
           </div>
         </div>
+        <div class='table-statistic'></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

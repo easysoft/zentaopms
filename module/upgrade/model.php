@@ -459,7 +459,7 @@ class upgradeModel extends model
         case '11_1':
             $this->saveLogs('Execute 11_1');
             $this->execSQL($this->getUpgradeFile('11.1'));
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -488,7 +488,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_4_1');
             $this->execSQL($this->getUpgradeFile('11.4.1'));
             $this->addPriv11_5();
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -540,7 +540,7 @@ class upgradeModel extends model
             $this->rmEditorAndTranslateDir();
             $this->setConceptSetted();
 
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -572,7 +572,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_1');
             $this->execSQL($this->getUpgradeFile('12.1'));
 
-            if(!isset($this->config->isINT) or !($this->config->isINT))
+            if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
                 {
@@ -586,6 +586,26 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_2');
             $this->execSQL($this->getUpgradeFile('12.2'));
             $this->appendExec('12_2');
+        case '12_3':
+            $this->saveLogs('Execute 12_3');
+            $this->appendExec('12_3');
+        case '12_3_1':
+            $this->saveLogs('Execute 12_3_1');
+            $this->appendExec('12_3_1');
+        case '12_3_2':
+            $this->saveLogs('Execute 12_3_2');
+            $this->execSQL($this->getUpgradeFile('12.3.2'));
+            $this->appendExec('12_3_2');
+        case '12_3_3':
+            $this->saveLogs('Execute 12_3_3');
+            $this->execSQL($this->getUpgradeFile('12.3.3'));
+            $this->addPriv12_3_3();
+            $this->processImport2TaskBugs();  //Code for task #7552
+            $this->appendExec('12_3_3');
+        case '12_4':
+            $this->saveLogs('Execute 12_4');
+            $this->execSQL($this->getUpgradeFile('12.4'));
+            $this->appendExec('12_4');
         case '20_0':
             $this->saveLogs('Execute 20_0');
             $this->execSQL($this->getUpgradeFile('20.0'));
@@ -715,7 +735,7 @@ class upgradeModel extends model
             case '11_0':
             case '11_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -725,7 +745,7 @@ class upgradeModel extends model
             case '11_4': $confirmContent .= file_get_contents($this->getUpgradeFile('11.4'));
             case '11_4_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.4.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -742,7 +762,7 @@ class upgradeModel extends model
             case '11_6_4' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.4'));
             case '11_6_5' :
                 $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.5'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
@@ -756,13 +776,21 @@ class upgradeModel extends model
             case '12_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.0.1'));
             case '12_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('12.1'));
-                if(!isset($this->config->isINT) or !($this->config->isINT))
+                if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
+<<<<<<< HEAD
             case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
+=======
+            case '12_3':
+            case '12_3_1':
+            case '12_3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.2'));
+            case '12_3_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.3'));
+            case '12_4':   $confirmContent .= file_get_contents($this->getUpgradeFile('12.4'));
+>>>>>>> master
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -812,61 +840,72 @@ class upgradeModel extends model
         $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
-        $tableExists = true;
-        $handle      = fopen($standardSQL, 'r');
-        if($handle)
+        $lines = file($standardSQL);
+        if(empty($this->config->isINT))
         {
-            while(!feof($handle))
+            $xVersion = $version;
+            $version  = str_replace('.', '_', $version);
+            if(strpos($version, 'pro') !== false and isset($this->config->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->proVersion[$version]);
+            if(strpos($version, 'biz') !== false and isset($this->config->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->bizVersion[$version]);
+
+            $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
+            if(file_exists($xStandardSQL))
             {
-                $line = trim(fgets($handle));
-                if(strpos($line, 'DROP TABLE ') !== false) continue;
-                if(strpos($line, 'CREATE TABLE ') !== false)
+                $xLines = file($xStandardSQL);
+                $lines  = array_merge($lines, $xLines);
+            }
+        }
+
+        $tableExists = true;
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+            if(strpos($line, 'DROP TABLE ') !== false) continue;
+            if(strpos($line, 'CREATE TABLE ') !== false)
+            {
+                preg_match_all('/`([^`]*)`/', $line, $out);
+                if(isset($out[1][0]))
                 {
-                    preg_match_all('/`([^`]*)`/', $line, $out);
-                    if(isset($out[1][0]))
+                    $fields = array();
+                    $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+                    try
                     {
-                        $fields = array();
-                        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+                        $tableExists = true;
+                        $stmt        = $this->dbh->query("show fields from `{$table}`");
+                        while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                    }
+                    catch(PDOException $e)
+                    {
+                        $errorInfo = $e->errorInfo;
+                        $errorCode = $errorInfo[1];
+                        $line      = str_replace('zt_', $this->config->db->prefix, $line);
+                        if($errorCode == '1146') $tableExists = false;
+                    }
+                }
+            }
+            if(!$tableExists) $alterSQL .= $line . "\n";
+
+            if(!empty($fields))
+            {
+                if(preg_match('/^`([^`]*)` /', $line))
+                {
+                    list($field) = explode(' ', $line);
+                    $field = trim($field, '`');
+                    if(!isset($fields[$field]))
+                    {
+                        $line = rtrim($line, ',');
+                        if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
                         try
                         {
-                            $tableExists = true;
-                            $stmt        = $this->dbh->query("show fields from `{$table}`");
-                            while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                            $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
                         }
                         catch(PDOException $e)
                         {
-                            $errorInfo = $e->errorInfo;
-                            $errorCode = $errorInfo[1];
-                            $line      = str_replace('zt_', $this->config->db->prefix, $line);
-                            if($errorCode == '1146') $tableExists = false;
-                        }
-                    }
-                }
-                if(!$tableExists) $alterSQL .= $line . "\n";
-
-                if(!empty($fields))
-                {
-                    if(preg_match('/^`([^`]*)` /', $line))
-                    {
-                        list($field) = explode(' ', $line);
-                        $field = trim($field, '`');
-                        if(!isset($fields[$field]))
-                        {
-                            $line = rtrim($line, ',');
-                            if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
-                            try
-                            {
-                                $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
-                            }
-                            catch(PDOException $e)
-                            {
-                                $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
-                            }
+                            $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
                         }
                     }
                 }
             }
-            fclose($handle);
         }
 
         return $alterSQL;
@@ -1549,6 +1588,34 @@ class upgradeModel extends model
     }
 
     /**
+     * Add priv for version 12.3.3
+     *
+     * @access public
+     * @return bool
+     */
+    public function addPriv12_3_3()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $privTable = $this->config->db->prefix . 'grouppriv';
+
+        $oldPriv = $this->dao->select('*')->from($privTable)
+            ->where('module')->eq('todo')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($oldPriv as $item)
+        {
+            $this->dao->replace($privTable)
+                ->set('module')->eq('todo')
+                ->set('method')->eq('start')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        return true;
+    }
+
+    /**
      * Add priv for 8.2.
      *
      * @access public
@@ -1714,6 +1781,28 @@ class upgradeModel extends model
             ->where('status')->in('done,closed')
             ->andWhere('finishedBy')->eq('')
             ->exec();
+        $this->saveLogs($this->dao->get());
+
+        return true;
+    }
+
+    /**
+     * Process bugs which import to project tasks but canceled.
+     *
+     * @access public
+     * @return void
+     */
+    public function processImport2TaskBugs()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $bugs = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.toTask = t2.id')
+            ->where('t1.toTask')->ne(0)
+            ->andWhere('t1.status')->eq('active')
+            ->andWhere('t2.canceledBy')->ne('')
+            ->fetchPairs();
+
+        $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->in($bugs)->exec();
         $this->saveLogs($this->dao->get());
 
         return true;
@@ -2586,7 +2675,7 @@ class upgradeModel extends model
     {
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!file_exists($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
     }
 
     /**

@@ -1,6 +1,5 @@
 $(function() 
 {
-    $("#story, #mailto").chosen();
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
 })
 
@@ -96,10 +95,14 @@ $(document).ready(function()
         if(checked)
         {
             $('#teamTr').removeClass('hidden');
+            $('#parent').val('');
+            $('#parent').trigger('chosen:updated');
+            $('#parent').closest('tr').addClass('hidden');
         }
         else
         {
             $('#teamTr').addClass('hidden');
+            $('#parent').closest('tr').removeClass('hidden');
         }
     });
 

@@ -257,6 +257,7 @@ class baseHelper
             return "IN ('" . join("','", $idList) . "')";
         }
 
+        if(!is_string($idList)) $idList = json_encode($idList);
         if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc()) $idList = addslashes($idList);
         return "IN ('" . str_replace(',', "','", str_replace(' ', '', $idList)) . "')";
     }

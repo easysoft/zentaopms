@@ -66,6 +66,7 @@ class webhookModel extends model
 
         $this->loadModel('action');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+
         $users   = $this->loadModel('user')->getPairs('noletter');
         foreach($logs as $log)
         {
@@ -80,16 +81,20 @@ class webhookModel extends model
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
 
-            if(!is_object($object)) 
+            if(!is_object($object))
             {
                 $object = new stdclass;
                 $object->$field = '';
             }
 
             $text = '';
-            if(isset($data->markdown) and is_object($data->markdown)) 
+            if(isset($data->markdown->text))
             {
                 $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
+            }
+            elseif(isset($data->markdown->content))
+            {
+                $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
             }
             else
             {
@@ -98,6 +103,9 @@ class webhookModel extends model
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
+            $log->module    = $action->objectType;
+            $log->moduleID  = $action->objectID;
+            $log->dialog    = $action->objectType == 'todo' ? 1 : 0;
         }
         return $logs;
     }
@@ -321,9 +329,9 @@ class webhookModel extends model
                 $this->saveData($id, $actionID, $postData, $actor);
                 continue;
             }
-            
+
             $result = $this->fetchHook($webhook, $postData, $actionID);
-            $this->saveLog($webhook, $actionID, $postData, $result);
+            if(!empty($result)) $this->saveLog($webhook, $actionID, $postData, $result);
         }
         return !dao::isError();
     }
@@ -423,7 +431,7 @@ class webhookModel extends model
             unset($_GET['onlybody']);
         }
         if($objectType == 'case') $objectType = 'testcase';
-        $viewLink = helper::createLink($objectType, 'view', "id=$objectID");
+        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html');
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
         return $viewLink;

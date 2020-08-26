@@ -38,7 +38,7 @@
         <tr>
           <th><?php echo $lang->doc->title;?></th>
           <td colspan='2'><?php echo html::input('title', $doc->title, "class='form-control' required");?></td>
-        </tr> 
+        </tr>
         <tr>
           <th><?php echo $lang->doc->keywords;?></th>
           <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control'");?></td>

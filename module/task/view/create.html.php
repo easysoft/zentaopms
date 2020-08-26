@@ -75,7 +75,7 @@
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
             <?php if(empty($stories)):?>
-            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
+            <span id='storyBox'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <?php else:?>
             <div class='input-group'>
               <?php echo html::select('story', array($task->story => $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
@@ -163,6 +163,11 @@
               }
               $priList = $lang->task->priList;
               if(end($priList)) unset($priList[0]);
+              if(!isset($priList[$task->pri]))
+              {
+                  reset($priList);
+                  $task->pri = key($priList);
+              }
               ?>
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control'");?>

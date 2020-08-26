@@ -82,7 +82,7 @@ $lang->user->setTemplateTitle      = 'Entrez le titre du Modèle.';
 $lang->user->applyTemplate         = 'Modèles';
 $lang->user->confirmDeleteTemplate = 'Voulez-vous vraiment supprimer ce modèle ?';
 $lang->user->setPublicTemplate     = 'Définir comme Modèle Public';
-$lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
+$lang->user->tplContentNotEmpty    = 'Le contenu du modèle ne peut pas être vide !';
 
 $lang->user->profile     = 'Profil';
 $lang->user->project     = $lang->projectCommon . 's';
@@ -108,13 +108,13 @@ $lang->user->testTask2Him = 'Recette assignée à %s';
 $lang->user->case2Him     = 'CasTest assigné à %s';
 $lang->user->caseByHim    = 'CasTest créé par %s';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
-$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
+$lang->user->errorDeny    = "Désolé, votre accès à <b>%s</b> of <b>%s</b> est refusé. Veuillez contacter votre administrateur pour obtenir des privilèges. Cliquez sur Retour pour revenir.";
+$lang->user->errorView    = "Désolé, votre accès en consultation <b>%s</b> est refusé. Veuillez contacter votre administrateur pour obtenir des privilèges. Cliquez sur Retour pour revenir.";
 $lang->user->loginFailed  = "Echec de connexion. Vérifiez votre login et mot de passe.";
 $lang->user->lockWarning  = "Vous avez %s essais.";
 $lang->user->loginLocked  = "Votre compte est bloqué. Contactez l'administrateur pour débloquer votre compte ou attendez %s minutes pour une nouvelle tentative.";
 $lang->user->weakPassword = "Votre mot de passe ne respecte pas les règles de sécurité.";
-$lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
+$lang->user->errorWeak    = "Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Développeur';
@@ -176,8 +176,8 @@ $lang->user->error->realname      = "ID %s，doit être votre véritable nom";
 $lang->user->error->password      = "ID %s，Mot de passe doit être >= 6 caractères.";
 $lang->user->error->mail          = "ID %s，entrez une adresse mail valide";
 $lang->user->error->reserved      = "ID %s，compte réservé. Vous ne pouvez pas l'utiliser.";
-$lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
-$lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->error->weakPassword   = "ID %s，la force du mot de passe est inférieure au paramètrage système.";
+$lang->user->error->dangerPassword = "ID %s，Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
 
 $lang->user->error->verifyPassword   = "Vérification en échec. Entrez votre Mot de Passe de Connexion.";
 $lang->user->error->originalPassword = "Ancien Mot de Passe incorrect.";

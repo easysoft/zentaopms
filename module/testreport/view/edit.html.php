@@ -28,9 +28,12 @@
             <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
             <td class='w-p50'>
               <div class='input-group'>
-                <?php echo html::input('begin', $report->begin, "class='form-control form-date'")?>
+                <?php echo html::input('begin', $begin, "class='form-control form-date' onchange=changeDate()")?>
                 <span class='input-group-addon'> ~ </span>
-                <?php echo html::input('end', $report->end, "class='form-control form-date'")?>
+                <?php echo html::input('end', $end, "class='form-control form-date' onchange=changeDate()")?>
+                <div class='input-group-btn hidden' id='refresh'>
+                  <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
+                </div>
                 <?php echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);?>
               </div>
             </td>
@@ -113,4 +116,9 @@
     </form>
   </div>
 </div>
+<script>
+var reportID = <?php echo $report->id;?>;
+var from     = '<?php echo $from;?>';
+var method   = 'edit';
+</script>
 <?php include '../../common/view/footer.html.php';?>

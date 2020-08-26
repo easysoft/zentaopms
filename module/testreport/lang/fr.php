@@ -29,7 +29,7 @@ $lang->testreport->cases       = 'CasTest';
 $lang->testreport->bugInfo     = 'Distribution Bugs';
 $lang->testreport->report      = 'Résumé';
 $lang->testreport->legacyBugs  = 'Bugs Restants';
-$lang->testreport->createdBy   = 'CreatedBy';
+$lang->testreport->createdBy   = 'Créé par';
 $lang->testreport->createdDate = 'Créé le';
 $lang->testreport->objectID    = 'Objet';
 $lang->testreport->objectType  = 'Object Type';
@@ -63,7 +63,7 @@ $lang->testreport->bugCreateByCaseRate = 'Taux Bug Signalés par CasTest (Bugs s
 $lang->testreport->caseSummary    = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
 $lang->testreport->buildSummary   = 'Testé <strong>%s</strong> builds.';
 $lang->testreport->confirmDelete  = 'Voulez-vous supprimer ce rapport ?';
-$lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
+$lang->testreport->moreNotice     = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à renee@easysoft.ltd pour la personnalisation.";
 $lang->testreport->exportNotice   = "Exporté par <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "Aucun rapport n'a été généré. Vérifiez plus tard.";
 $lang->testreport->foundBugTip    = "Bugs trouvés dans cette période de build et les build affectés sont dans la période de test.";
@@ -73,6 +73,7 @@ $lang->testreport->errorTrunk     = "Vous ne pouvez pas créer un rapport de tes
 $lang->testreport->noTestTask     = "Pas de campagne de test pour ce {$lang->productCommon}, aucun rapport ne peut être généré. Choisissez un {$lang->productCommon} avec des campagnes de recette et vous pourrez produire des rapports.";
 $lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->projectCommon} est sélectionné, aucun rapport ne peut être généré.";
 $lang->testreport->moreProduct    = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
+$lang->testreport->hiddenCase     = "Hide %s use cases";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs signalés <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

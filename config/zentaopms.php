@@ -23,7 +23,9 @@ $config->checkVersion = true;              // Auto check for new version or not.
 /* Set the wide window size and timeout(ms) and duplicate interval time(s). */
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
-$config->duplicateTime = 60;
+$config->duplicateTime = 30;
+$config->maxCount      = 500;
+$config->moreLinks     = array();
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
@@ -85,21 +87,30 @@ $config->storyCommonList['vi'][1] = 'Câu chuyện';
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
 $config->hourPointCommonList['zh-cn'][1] = '故事点';
+$config->hourPointCommonList['zh-cn'][2] = '功能点';
 
 $config->hourPointCommonList['zh-tw'][0] = '工时';
 $config->hourPointCommonList['zh-tw'][1] = '故事点';
+$config->hourPointCommonList['zh-tw'][2] = '功能点';
 
 $config->hourPointCommonList['en'][0] = 'hour';
 $config->hourPointCommonList['en'][1] = 'story point';
+$config->hourPointCommonList['en'][2] = 'function point';
 
 $config->hourPointCommonList['de'][0] = 'hour';
 $config->hourPointCommonList['de'][1] = 'story point';
+$config->hourPointCommonList['de'][2] = 'function point';
 
 $config->hourPointCommonList['fr'][0] = 'hour';
 $config->hourPointCommonList['fr'][1] = 'story point';
+$config->hourPointCommonList['fr'][2] = 'function point';
 
 $config->hourPointCommonList['vi'][0] = 'giờ';
 $config->hourPointCommonList['vi'][1] = 'điểm';
+$config->hourPointCommonList['vi'][2] = 'function point';
+
+$config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+$config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
@@ -149,6 +160,7 @@ define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
 
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
+define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
