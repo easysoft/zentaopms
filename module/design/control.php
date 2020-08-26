@@ -49,6 +49,7 @@ class design extends control
 
         $this->view->designs    = $designs;
         $this->view->type       = $type;
+        $this->view->param      = $param;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
