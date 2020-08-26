@@ -143,7 +143,7 @@
             <?php echo html::backButton();?>
             <?php
             echo html::hidden('template', $template);
-            echo html::hidden('parent', $parentProgram->id);
+            echo html::hidden('parent', isset($parentProgram->id) ? $parentProgram->id : 0);
             ?>
           </td>
         </tr>
@@ -181,5 +181,5 @@
   </div>
 </div>
 <?php js::set('template', $template);?>
-<?php js::set('parentProgramID', $parentProgram->id);?>
+<?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
 <?php include '../../common/view/footer.html.php';?>
