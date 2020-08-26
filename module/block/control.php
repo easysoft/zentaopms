@@ -1660,7 +1660,7 @@ class block extends control
         $num = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('doing', 'id_desc', $num);
     }
 
     /**
