@@ -1611,20 +1611,29 @@ class block extends control
     /**
      * Print srcum road map block.
      *
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function printScrumroadmapBlock()
+    public function printScrumroadmapBlock($productID = 0)
     {
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
-        $products  = $this->loadModel('product')->getPairs();
 
-ksort($products);
-$productID = key($products);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $products  = $this->loadModel('product')->getPairs();
+        if(!is_numeric($productID)) $productID = key($products);
+
+        $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
+
         $this->view->productID = $productID;
-        $this->view->products = $products;
+        $this->view->products  = $products;
+        $this->view->sync      = 1;
+
+        if($_POST)
+        {
+            $this->view->sync = 0;
+            $this->display('block', 'scrumroadmapblock');
+        }
     }
 
     /**
