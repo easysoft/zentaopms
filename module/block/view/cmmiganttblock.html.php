@@ -4,7 +4,9 @@
     <div class='gantt clearfix'>
       <div class='gantt-plans pull-left'></div>
       <div class='gantt-container scrollbar-hover'>
-        <div class='gantt-canvas'></div>
+        <div class='gantt-canvas'>
+            <div class='gantt-today'><div><?php echo $lang->programplan->today; ?></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -13,9 +15,9 @@
   #cmmiGantt {position: relative}
   #cmmiGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important}
   [lang="zh-cn"] #cmmiGanttProductID_chosen {left: 85px}
-  .gantt-plans {padding: 20px 0 12px}
+  .gantt-plans {padding: 20px 0 22px; max-height: 380px; overflow: hidden;}
   .gantt-plan {margin-top: 10px; line-height: 20px}
-  .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow-x: auto; padding-top: 20px}
+  .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow: auto; padding-top: 20px; max-height: 380px;}
   .gantt-canvas {border: 1px solid #dddee4; border-style: solid dotted; position: relative}
   .gantt-row {height: 50px; position: relative; z-index: 1}
   .gantt-row:hover {background-color: rgba(0,0,0,.05)}
@@ -24,6 +26,8 @@
   .gantt-task-info {white-space: nowrap; width: 100%; overflow: visible}
   .gantt-col {position: absolute; z-index: 0; top: 0; border-right: 1px dotted #dddee4}
   .gantt-col-time {position: absolute; top: -18px; left: 0}
+  .gantt-today {position: absolute; top: -16px; left: 0; bottom: 0; border-left: #00da88 dotted 1px;}
+  .gantt-today > div {position: absolute; top: 0; left: 0; font-size: 12px; line-height: 16px; padding: 0 5px; background: #00da88; color: #fff; white-space: nowrap; z-index: 10;}
   </style>
   <script>
   function initCmmiGanttBlock()
@@ -31,14 +35,14 @@
       var ganttData = <?php echo $plans; ?>;
       if(!ganttData.data) ganttData = {data: []};
 
-      var plans = [];
-      var tasks = [];
-      var plansMap = {};
+      var plans         = [];
+      var tasks         = [];
+      var plansMap      = {};
       var startDatetime = Number.MAX_SAFE_INTEGER;
-      var endDatetime = 0;
-      var minTimeGap = Number.MAX_SAFE_INTEGER;
-      var $gantt = $('#cmmiGantt');
-      var ONE_DAY = 24 * 3600 * 1000;
+      var endDatetime   = 0;
+      var minTimeGap    = Number.MAX_SAFE_INTEGER;
+      var $gantt        = $('#cmmiGantt');
+      var ONE_DAY       = 24 * 3600 * 1000;
       var TIME_GAP_STEP = 7;
       var MIN_COL_WIDTH = 60;
 
@@ -48,13 +52,13 @@
           if(item.type === 'plan' && item.parent === '0')
           {
               item.startDatetime = createDatetime(item.start_date);
-              item.endDatetime = createDatetime(item.deadline);
-              startDatetime = Math.min(startDatetime, item.startDatetime);
-              endDatetime = Math.max(endDatetime, item.endDatetime);
-              minTimeGap = Math.min(minTimeGap, endDatetime - startDatetime);
-              item.tasks = [];
+              item.endDatetime   = createDatetime(item.deadline);
+              startDatetime      = Math.min(startDatetime, item.startDatetime);
+              endDatetime        = Math.max(endDatetime, item.endDatetime);
+              minTimeGap         = Math.min(minTimeGap, endDatetime - startDatetime);
+              item.tasks         = [];
               item.completeTasks = [];
-              item.progress = 0;
+              item.progress      = 0;
               plans.push(item);
           }
           else if(item.type === 'task')
@@ -73,12 +77,13 @@
           plan.tasks.push(task);
       });
 
-      var $plans = $gantt.find('.gantt-plans');
+      var $plans          = $gantt.find('.gantt-plans');
       var $ganttContainer = $gantt.find('.gantt-container');
-      var $ganttCanvas = $gantt.find('.gantt-canvas');
-      var themeColor = $.getThemeColor('primary');
-      var days = Math.ceil((endDatetime - startDatetime) / ONE_DAY);
-      var canvasHeight = plans.length * 50 + 10;
+      var $ganttCanvas    = $gantt.find('.gantt-canvas');
+      var themeColor      = $.getThemeColor('primary');
+      var canvasHeight    = plans.length * 50 + 10;
+
+      var days   = Math.ceil((endDatetime - startDatetime) / ONE_DAY);
       minTimeGap = Math.max(1, Math.ceil(minTimeGap / ONE_DAY));
 
       /* Update gantt plans and bars */
@@ -115,10 +120,22 @@
           });
       });
 
+      /* Layout gantt */
       layoutGantt();
       $(window).on('resize', layoutGantt);
       setTimeout(layoutGantt, 100);
 
+      /* Bind events */
+      $ganttContainer.on('scroll', function()
+      {
+          $plans.scrollTop($ganttContainer.scrollTop());
+      });
+
+      /**
+       * Layout gantt
+       *
+       * @return {void}
+       */
       function layoutGantt()
       {
           var minWidth = $ganttContainer.width();
@@ -133,8 +150,8 @@
               var $col = $('<div class="gantt-col"></div>');
               $col.css(
               {
-                  left: i * colWidth,
-                  width: colWidth,
+                  left:   i * colWidth,
+                  width:  colWidth,
                   height: canvasHeight
               });
               var colTime = startDatetime + i * timeGap * ONE_DAY;
@@ -147,18 +164,26 @@
               var $planRow = $gantt.find('.gantt-row[data-id="' + plan.id + '"]');
               $planRow.find('.gantt-bar').css(
               {
-                  left: Math.floor((plan.startDatetime - startDatetime) * pxPerMs),
+                  left:  Math.floor((plan.startDatetime - startDatetime) * pxPerMs),
                   width: Math.floor((plan.endDatetime - plan.startDatetime) * pxPerMs)
               });
           });
+
+          $gantt.find('.gantt-today').css('left', (Date.now() - startDatetime) * pxPerMs);
       }
 
+      /**
+       * Create date from string
+       *
+       * @param {String} dateStr like '2020-08-02'
+       * @return {Number} Date timestramp
+       */
       function createDatetime(dateStr)
       {
-          dateStr = dateStr.split('-');
-          var year = Number.parseInt(dateStr[0].length > 3 ? dateStr[0] : dateStr[2], 10);
+          dateStr   = dateStr.split('-');
+          var year  = Number.parseInt(dateStr[0].length > 3 ? dateStr[0] : dateStr[2], 10);
           var month = Number.parseInt(dateStr[1], 10);
-          var day = Number.parseInt(dateStr[2].length > 3 ? dateStr[0] : dateStr[2], 10);
+          var day   = Number.parseInt(dateStr[2].length > 3 ? dateStr[0] : dateStr[2], 10);
           return new Date(year, month - 1, day).getTime();
       }
   }
