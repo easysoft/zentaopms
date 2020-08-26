@@ -1,6 +1,9 @@
 <div class="panel-body">
   <div id='cmmiGantt'>
     <?php echo html::select('cmmiGanttProductID', $products, $productID, "class='form-control chosen'"); ?>
+    <?php if(empty($plans['data'])): ?>
+    <div class='empty-tip'><?php echo $lang->programplan->noData;?></div>
+    <?php else:?>
     <div class='gantt clearfix'>
       <div class='gantt-plans pull-left'></div>
       <div class='gantt-container scrollbar-hover'>
@@ -9,6 +12,7 @@
         </div>
       </div>
     </div>
+    <?php endif;?>
   </div>
   <style>
   .block-cmmigantt > .panel-body {overflow: visible!important}
@@ -27,13 +31,24 @@
   .gantt-col {position: absolute; z-index: 0; top: 0; border-right: 1px dotted #dddee4}
   .gantt-col-time {position: absolute; top: -18px; left: 0}
   .gantt-today {position: absolute; top: -16px; left: 0; bottom: 0; border-left: #00da88 dotted 1px;}
-  .gantt-today > div {position: absolute; top: 0; left: 0; font-size: 12px; line-height: 16px; padding: 0 5px; background: #00da88; color: #fff; white-space: nowrap; z-index: 10;}
+  .gantt-today > div {position: absolute; top: 0; left: 0; font-size: 12px; line-height: 14px; padding: 0 3px; background: #00da88; color: #fff; white-space: nowrap; z-index: 10;}
   </style>
   <script>
   function initCmmiGanttBlock()
   {
-      var ganttData = <?php echo $plans; ?>;
-      if(!ganttData.data) ganttData = {data: []};
+      /* Init product select control */
+      var $cmmiGanttProductID = $('#cmmiGanttProductID');
+      $cmmiGanttProductID.on('change', function()
+      {
+          $.get(createLink('product', 'ajaxSetState', 'productID=' + $cmmiGanttProductID.val()), function()
+          {
+              refreshBlock($cmmiGanttProductID.closest('.panel'));
+          });
+      });
+
+      <?php if(!empty($plans['data'])): ?>
+      var ganttData = <?php echo json_encode($plans['data']); ?>;
+      if(!ganttData) return;
 
       var plans         = [];
       var tasks         = [];
@@ -46,7 +61,7 @@
       var TIME_GAP_STEP = 7;
       var MIN_COL_WIDTH = 60;
 
-      $.each(ganttData.data, function(index, item)
+      $.each(ganttData, function(index, item)
       {
           plansMap[item.id] = item;
           if(item.type === 'plan' && item.parent === '0')
@@ -109,16 +124,6 @@
       /* Layout gantt container */
       $ganttContainer.css('left', $plans.width() + 15);
       $ganttCanvas.css('height', canvasHeight);
-
-      var $cmmiGanttProductID = $('#cmmiGanttProductID');
-      if(!$cmmiGanttProductID.data('chosen')) $cmmiGanttProductID.chosen();
-      $cmmiGanttProductID.on('change', function()
-      {
-          $.get(createLink('product', 'ajaxSetState', 'productID=' + $cmmiGanttProductID.val()), function()
-          {
-              refreshBlock($cmmiGanttProductID.closest('.panel'));
-          });
-      });
 
       /* Layout gantt */
       layoutGantt();
@@ -186,7 +191,10 @@
           var day   = Number.parseInt(dateStr[2].length > 3 ? dateStr[0] : dateStr[2], 10);
           return new Date(year, month - 1, day).getTime();
       }
+
+      <?php endif;?>
   }
+
   initCmmiGanttBlock();
   </script>
 </div>
