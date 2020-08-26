@@ -9,20 +9,20 @@
     </div>
   </div>
   <style>
-  .block-cmmigantt > .panel-body {overflow: visible!important;}
-  #cmmiGantt {position: relative;}
-  #cmmiGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important;}
+  .block-cmmigantt > .panel-body {overflow: visible!important}
+  #cmmiGantt {position: relative}
+  #cmmiGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important}
   [lang="zh-cn"] #cmmiGanttProductID_chosen {left: 85px}
   .gantt-plans {padding: 20px 0 12px}
-  .gantt-plan {margin-top: 10px; line-height: 20px;}
-  .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow-x: auto; padding-top: 20px;}
+  .gantt-plan {margin-top: 10px; line-height: 20px}
+  .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow-x: auto; padding-top: 20px}
   .gantt-canvas {border: 1px solid #dddee4; border-style: solid dotted; position: relative}
   .gantt-row {height: 50px; position: relative; z-index: 1}
-  .gantt-row:hover {background-color: rgba(0,0,0,.05);}
+  .gantt-row:hover {background-color: rgba(0,0,0,.05)}
   .gantt-bar {height: 15px; background: #dddee4; position: absolute; left: 0; top: 10px}
   .gantt-bar-progress {height: 15px; margin-bottom: 5px}
-  .gantt-task-info {white-space: nowrap; width: 100%; overflow: visible;}
-  .gantt-col {position: absolute; z-index: 0; top: 0; border-right: 1px dotted #dddee4;}
+  .gantt-task-info {white-space: nowrap; width: 100%; overflow: visible}
+  .gantt-col {position: absolute; z-index: 0; top: 0; border-right: 1px dotted #dddee4}
   .gantt-col-time {position: absolute; top: -18px; left: 0}
   </style>
   <script>
@@ -81,7 +81,7 @@
       var canvasHeight = plans.length * 50 + 10;
       minTimeGap = Math.max(1, Math.ceil(minTimeGap / ONE_DAY));
 
-      // Update gantt plans and bars
+      /* Update gantt plans and bars */
       $.each(plans, function(index, plan)
       {
           plan.progress = !plan.tasks.length ? 0 : plan.progress / plan.tasks.length;
@@ -101,7 +101,7 @@
           $ganttCanvas.append($row);
       });
 
-      // Layout gantt container
+      /* Layout gantt container */
       $ganttContainer.css('left', $plans.width() + 15);
       $ganttCanvas.css('height', canvasHeight);
 
