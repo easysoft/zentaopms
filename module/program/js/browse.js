@@ -7,7 +7,7 @@ $(function()
         window.location.reload();
     });
 
-    // Auto resize cards size
+    /* Auto resize cards size */
     var minCardWidth = 280;
     var $cards = $('#cards');
     var resizeCards = function()
@@ -23,7 +23,22 @@ $(function()
     resizeCards();
     $(window).on('resize', resizeCards);
 
-    // Make cards clickable
+    /* Auto resize stages */
+    $cards.find('.program-stages-container').each(function()
+    {
+        var $container = $(this);
+        var $row = $container.children();
+        var totalWidth = 0;
+        $row.children().each(function()
+        {
+            var $item = $(this);
+            $item.css('left', totalWidth);
+            totalWidth += $item.width();
+        });
+        $row.css('minWidth', totalWidth);
+    });
+
+    /* Make cards clickable */
     $cards.on('click', '.panel', function(e)
     {
         if(!$(e.target).closest('.panel-actions').length)

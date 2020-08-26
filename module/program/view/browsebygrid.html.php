@@ -35,7 +35,26 @@
         <?php if($program->template === 'cmmi'): ?>
         <div class='program-detail program-stages'>
           <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
+          <?php
+          $programProjects = array();
+          foreach($program->projects as $project)
+          {
+              if(!$project->parent) $programProjects[] = $project;
+          }
+          ?>
+          <?php if(empty($programProjects)): ?>
           <div class='label label-outline'><?php echo zget($lang->project->statusList, $program->status);?></div>
+          <?php else: ?>
+          <div class='program-stages-container scrollbar-hover'>
+            <div class='program-stages-row'>
+              <?php foreach ($programProjects as $project): ?>
+              <div class='program-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going'; ?>'>
+                <div><?php echo $project->name; ?></div>
+              </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
         <?php else: ?>
         <?php $project = $program->projects ? current($program->projects) : '';?>
@@ -58,6 +77,7 @@
       </div>
     </div>
   </div>
+
   <?php endforeach;?>
   <div class='col-xs-12' id='cardsFooter'>
     <?php $pager->show('right', 'pagerjs');?>
