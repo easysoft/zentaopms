@@ -71,6 +71,7 @@
           <div class="tile-title"><?php echo $lang->block->myStory?></div>
           <div class="tile-amount"><?php echo empty($stories) ? 0 : html::a($this->createLink('my', 'story', 'type=assignedTo'), (int)$stories);?></div>
         </div>
+        <?php endif;?>
       </div>
     </div>
   </div>

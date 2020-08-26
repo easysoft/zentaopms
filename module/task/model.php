@@ -1044,29 +1044,24 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
 
-<<<<<<< HEAD
-            /* Record task version.*/
-            if(isset($this->config->qcVersion))
+            if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $data->deadline)
             {
-                if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $data->deadline)
-                {
-                    $task->version = $oldTask->version + 1; 
-                    $taskSpec = new stdClass();
-                    $taskSpec->task       = $taskID;
-                    $taskSpec->version    = $task->version;
-                    $taskSpec->name       = $task->name;
-                    $taskSpec->estStarted = $task->estStarted;
-                    $taskSpec->deadline   = $task->deadline;
+                $task->version = $oldTask->version + 1; 
+                $taskSpec = new stdClass();
+                $taskSpec->task       = $taskID;
+                $taskSpec->version    = $task->version;
+                $taskSpec->name       = $task->name;
+                $taskSpec->estStarted = $task->estStarted;
+                $taskSpec->deadline   = $task->deadline;
 
-                    $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-                }
-=======
+                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            }
+
             foreach($extendFields as $extendField)
             {
                 $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$taskID]);
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
->>>>>>> master
             }
 
             if($data->consumeds[$taskID])
