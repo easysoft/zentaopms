@@ -347,6 +347,7 @@ class programModel extends model
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
             ->setDefault('team', $this->post->name)
+            ->setDefault('isCat', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans')
