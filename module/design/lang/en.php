@@ -47,6 +47,7 @@ $lang->design->typeList['ADS']  = 'API';
 $lang->design->range          = 'Impact';
 $lang->design->errorSelection = 'No record selected!';
 $lang->design->noDesign       = 'No record.';
+$lang->design->noCommit       = 'No record commited.';
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';

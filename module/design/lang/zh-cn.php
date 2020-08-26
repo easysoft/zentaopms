@@ -46,6 +46,7 @@ $lang->design->typeList['ADS']  = '接口设计';
 $lang->design->range          = '影响范围';
 $lang->design->errorSelection = '还没有选中记录!';
 $lang->design->noDesign       = '暂时没有记录';
+$lang->design->noCommit       = '暂时没有提交记录';
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
