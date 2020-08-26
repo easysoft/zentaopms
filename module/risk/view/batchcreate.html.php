@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th class='w-50px'><?php echo $lang->risk->id;?></th>
-          <th><?php echo $lang->risk->name;?></th>
+          <th class='required'><?php echo $lang->risk->name;?></th>
           <th class='w-200px'><?php echo $lang->risk->source;?></th>
           <th class='w-200px'><?php echo $lang->risk->category;?></th>
           <th class='w-200px'><?php echo $lang->risk->strategy;?></th>
