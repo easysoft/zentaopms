@@ -969,6 +969,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     $lang->testcase->subMenu = new stdclass();
     $lang->testcase->subMenu->bysuite = new stdclass();
+    $lang->testcase->subMenu->bysuite = new stdclass();
     $lang->testcase->subMenu->bysuite->create = '建套件|testsuite|create|productID=%s';
 
     $lang->testcase->menuOrder[5]  = 'product';

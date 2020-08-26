@@ -365,7 +365,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
-            if($program->acl != 'open' and ($program->acl != $oldProject->acl or $program->whitelist != $oldProgram->whitelist))
+            if($program->acl != 'open' and ($program->acl != $oldProgram->acl or $program->whitelist != $oldProgram->whitelist))
             {
                 $this->loadModel('user')->updateUserView($programID, 'program');
             }
