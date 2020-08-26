@@ -68,6 +68,7 @@ $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = 'Câu chuyện';
 $lang->action->objectTypes['productplan'] = 'Kế hoạch';
 $lang->action->objectTypes['release']     = 'Phát hành';
+$lang->action->objectTypes['program']     = 'Program';
 $lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = 'Nhiệm vụ';
 $lang->action->objectTypes['build']       = 'Bản dựng';
@@ -386,6 +387,7 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = 'Kế hoạch|productplan|view|productID=%s';
 $lang->action->label->release     = 'Phát hành|release|view|productID=%s';
 $lang->action->label->story       = 'Câu chuyện|story|view|storyID=%s';
+$lang->action->label->program     = "Program|program|browse|";
 $lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
 $lang->action->label->task        = 'Nhiệm vụ|task|view|taskID=%s';
 $lang->action->label->build       = 'Bản dựng|build|view|buildID=%s';
@@ -407,6 +409,7 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID%s';
 /* Object type. */
 $lang->action->search->objectTypeList['']            = ''; 
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
+$lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = 'Tình huống'; 
