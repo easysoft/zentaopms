@@ -27,13 +27,13 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <script>
 var scriptLoadedMap   = {};
 var loadingPrefixText = '<?php echo $lang->programplan->exporting;?>';
-function getRemoteScript(url, sucessCallback, errorCallback)
+function getRemoteScript(url, successCallback, errorCallback)
 {
-    if(scriptLoadedMap[url]) return sucessCallback && sucessCallback();
+    if(scriptLoadedMap[url]) return successCallback && successCallback();
     $.getScript(url, function()
     {
         scriptLoadedMap[url] = true;
-        if(sucessCallback) sucessCallback();
+        if(successCallback) successCallback();
     }).fail(function()
     {
         if(errorCallback) errorCallback('Cannot load "' + url + '".');
@@ -45,7 +45,7 @@ function updateProgress(progress)
     if(progress < 1) progressText += Math.floor(progress * 100) + '%';
     $('#mainContent').attr('data-loading', progressText);
 }
-function drawGanttToCanvas(exportType, sucessCallback, errorCallback)
+function drawGanttToCanvas(exportType, successCallback, errorCallback)
 {
     updateProgress(0);
     exportType          = exportType || 'image';
@@ -118,7 +118,7 @@ function drawGanttToCanvas(exportType, sucessCallback, errorCallback)
                         });
                         pdf.addImage(canvas, 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
                         pdf.save('gantt-export-<?php echo $programID;?>.pdf');
-                        if(sucessCallback) sucessCallback(pdf);
+                        if(successCallback) successCallback(pdf);
                         afterFinish();
                     }, function(error)
                     {
@@ -133,7 +133,7 @@ function drawGanttToCanvas(exportType, sucessCallback, errorCallback)
                         updateProgress(0.95);
                         var imageUrl = URL.createObjectURL(blob);
                         $('#ganttDownload').attr({href: imageUrl})[0].click();
-                        if(sucessCallback) sucessCallback(imageUrl);
+                        if(successCallback) successCallback(imageUrl);
                         afterFinish(canvas);
                     });
                 }
@@ -387,7 +387,7 @@ $(function()
 
     $(".checkbox-primary").on('click', function()
     {
-        var stageCustom = new Array();
+        var stageCustom = [];
         $("input[name='stageCustom[]']:checked").each(function()
         {
             var custom = $(this).val();
@@ -398,7 +398,7 @@ $(function()
         $.ajax({
             url: customUrl,
             dataType: "json",
-            data: {stageCustom, stageCustom},
+            data: {stageCustom: stageCustom},
             type: "post",
             success: function(result)
             {

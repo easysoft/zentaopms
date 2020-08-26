@@ -83,6 +83,13 @@ $lang->block->totalStory         = '总' . $lang->storyCommon;
 $lang->block->totalBug           = '总Bug';
 $lang->block->totalRelease       = '发布次数';
 
+$lang->block->totalInvestment    = '总投入';
+$lang->block->totalPeople        = '总人数';
+$lang->block->spent              = '已花费';
+$lang->block->budget             = '预算';
+$lang->block->left               = '剩余';
+
+
 $lang->block->default['cmmi']['program']['1']['title']  = '项目周报';
 $lang->block->default['cmmi']['program']['1']['block']  = 'cmmireport';
 $lang->block->default['cmmi']['program']['1']['source'] = 'program';
@@ -334,7 +341,6 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang-
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = $lang->projectCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . '路线图';
 
 $lang->block->modules['cmmi']['index'] = new stdclass();
 $lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();

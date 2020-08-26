@@ -24,7 +24,6 @@ $lang->design->products      = 'Linked Product';
 $lang->design->story         = 'Linked Story';
 $lang->design->file          = 'File';
 $lang->design->id            = 'ID';
-$lang->design->type          = 'Type';
 $lang->design->story         = 'Story';
 $lang->design->ditto         = 'Ditto';
 $lang->design->type          = 'Type';

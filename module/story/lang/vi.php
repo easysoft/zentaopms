@@ -10,6 +10,10 @@
  * @link  http://www.zentao.net
  */
 $lang->story->create            = "Tạo câu chuyện";
+$lang->story->createStory       = 'Create Story';
+$lang->story->createRequirement = 'Create Requirement';
+$lang->story->requirement       = 'Requirement';
+$lang->story->story             = 'Story';
 $lang->story->batchCreate       = "Tạo hàng loạt";
 $lang->story->change            = "Thay đổi";
 $lang->story->changeAction      = "Thay đổi câu chuyện";
@@ -23,6 +27,9 @@ $lang->story->batchReview       = 'Duyệt hàng loạt';
 $lang->story->edit              = "Sửa câu chuyện";
 $lang->story->batchEdit         = "Sửa hàng loạt";
 $lang->story->subdivide         = 'Phân rã';
+$lang->story->link              = 'Link';
+$lang->story->unlink            = 'Unlink';
+$lang->story->track             = 'Track';
 $lang->story->subdivideAction   = 'Phân rã câu chuyện';
 $lang->story->splitRequirent    = 'Phân rã';
 $lang->story->close             = 'Đóng';
@@ -63,6 +70,7 @@ $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Mẹ';
 $lang->story->product        = $lang->productCommon;
+$lang->story->program        = 'Program';
 $lang->story->branch         = "Branch/Platform";
 $lang->story->module         = 'Module';
 $lang->story->moduleAB       = 'Module';
@@ -119,6 +127,11 @@ $lang->story->allStories     = 'Tất cả câu chuyện';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
+$lang->story->design         = 'Designs';
+$lang->story->case           = 'Cases';
+$lang->story->bug            = 'Bugs';
+$lang->story->repoCommit     = 'Commits';
+$lang->story->noRequirement  = 'No Requirements';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';

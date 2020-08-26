@@ -1118,7 +1118,7 @@ class block extends control
         $productID = isset($this->session->product) ? 0 : $this->session->product;
         if($productID && !array_key_exists($productID, $products)) $productID = 0;
 
-        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID);
+        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task');
         $this->view->products  = $products;
         $this->view->productID = $productID;
     }
@@ -1585,8 +1585,8 @@ class block extends control
      */
     public function printScrumoverallBlock()
     {
-        $programID    = $this->session->program;
-        $totalData    = $this->loadModel('program')->getUserPrograms('all','id_desc',15,$programID);
+        $programID = $this->session->program;
+        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
 
         $this->view->totalData = $totalData;
         $this->view->programID = $programID;
@@ -1611,20 +1611,29 @@ class block extends control
     /**
      * Print srcum road map block.
      *
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function printScrumroadmapBlock()
+    public function printScrumroadmapBlock($productID = 0)
     {
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
-        $products  = $this->loadModel('product')->getPairs();
 
-ksort($products);
-$productID = key($products);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $products  = $this->loadModel('product')->getPairs();
+        if(!is_numeric($productID)) $productID = key($products);
+
+        $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
+
         $this->view->productID = $productID;
-        $this->view->products = $products;
+        $this->view->products  = $products;
+        $this->view->sync      = 1;
+
+        if($_POST)
+        {
+            $this->view->sync = 0;
+            $this->display('block', 'scrumroadmapblock');
+        }
     }
 
     /**

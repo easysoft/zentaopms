@@ -86,12 +86,12 @@ class program extends control
      * Create a program.
      *
      * @param  string $template
-     * @param  int    $programID
+     * @param  int    $parentProgramID
      * @param  int    $copyProgramID
      * @access public
      * @return void
      */
-    public function create($template = 'cmmi', $programID = 0, $copyProgramID = '')
+    public function create($template = 'cmmi', $parentProgramID = 0, $copyProgramID = '')
     {
         if($_POST)
         {
@@ -109,16 +109,16 @@ class program extends control
         $acl          = 'open';
         $privway      = 'extend';
 
-        if($programID)
+        if($parentProgramID)
         {
-            $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
-            if($this->program->checkHasContent($programID))
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parentProgramID)->fetch();
+            if($this->program->checkHasContent($parentProgramID))
             {
                 echo js::alert($this->lang->program->cannotCreateChild);
                 die(js::locate('back'));
             }
 
-            if(empty($template)) $template = $program->template;
+            if(empty($template)) $template = $parentProgram->template;
         }
 
         if($copyProgramID)
@@ -145,7 +145,7 @@ class program extends control
         $this->view->acl           = $acl;
         $this->view->privway       = $privway;
         $this->view->whitelist     = $whitelist;
-        $this->view->programID     = $programID;
+        $this->view->parentProgram = $parentProgramID ? $parentProgram : '';
         $this->view->copyProgramID = $copyProgramID;
         $this->display();
     }

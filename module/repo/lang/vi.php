@@ -2,6 +2,7 @@
 $lang->repo->common         = 'Repo';
 $lang->repo->browse         = 'Xem';
 $lang->repo->viewRevision   = 'Xem Revision';
+$lang->repo->program         = 'Program';
 $lang->repo->create         = 'Tạo';
 $lang->repo->createAction   = 'Tạo Repo';
 $lang->repo->maintain       = 'Repo danh sách';

@@ -152,7 +152,7 @@ class programplan extends control
         $custom  = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
         $setting->setItem("$owner.$module.$section.$object", $custom);
 
-        $respone             = array();
+        $response            = array();
         $response['result']  = 'success';
         $response['message'] = '';
         $this->send($response);

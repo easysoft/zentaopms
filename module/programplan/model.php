@@ -99,7 +99,17 @@ class programplanModel extends model
         return $pairs;
     }
 
-    public function getDataForGantt($programID, $productID, $baselineID = 0)
+    /**
+     * Get gantt data
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  int    $baselineID
+     * @param  string $selectCustom
+     * @access public
+     * @return string
+     */
+    public function getDataForGantt($programID, $productID, $baselineID = 0, $selectCustom = '')
     {
         $this->loadModel('stage');
 
@@ -161,7 +171,8 @@ class programplanModel extends model
         $section      = 'browse';
         $object       = 'stageCustom';
         $setting      = $this->loadModel('setting');
-        $selectCustom = $setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+
+        if(empty($selectCustom)) $selectCustom = $setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
         $tasks = array();
         if(strpos($selectCustom, 'task') !== false)

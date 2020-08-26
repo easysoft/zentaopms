@@ -21,8 +21,8 @@
         <tr>
           <th class='w-50px'> <?php echo $lang->design->id;?></th>
           <th class='w-200px'><?php echo $lang->design->story;?></th>
-          <th class='w-200px'><?php echo $lang->design->type;?></th>
-          <th><?php echo $lang->design->name;?></th>
+          <th class='w-200px required'><?php echo $lang->design->type;?></th>
+          <th class='required'><?php echo $lang->design->name;?></th>
         </tr>
       </thead>
       <tbody>
