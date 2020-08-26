@@ -1585,8 +1585,8 @@ class block extends control
      */
     public function printScrumoverallBlock()
     {
-        $programID    = $this->session->program;
-        $totalData    = $this->loadModel('program')->getUserPrograms('all','id_desc',15,$programID);
+        $programID = $this->session->program;
+        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
 
         $this->view->totalData = $totalData;
         $this->view->programID = $programID;
