@@ -144,27 +144,20 @@ $lang->program = new stdclass();
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->subMenu = new stdclass();
-$lang->system->subMenu->setmodel = new stdclass();
-$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
 $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
 $lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
-$lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
 if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
 {
     $lang->system->menu = new stdclass();
-    $lang->system->subMenu->setmodel = new stdclass();
-    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
     $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
     $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
     $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
     
-    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
     $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
     unset($lang->system->dividerMenu);
 }
@@ -173,6 +166,9 @@ $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
 $lang->stage->menu->settype = '阶段类型|stage|settype|';
+
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -972,6 +968,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testcase->menu->bysuite = array('link' => '套件|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->testcase->subMenu = new stdclass();
+    $lang->testcase->subMenu->bysuite = new stdclass();
     $lang->testcase->subMenu->bysuite = new stdclass();
     $lang->testcase->subMenu->bysuite->create = '建套件|testsuite|create|productID=%s';
 

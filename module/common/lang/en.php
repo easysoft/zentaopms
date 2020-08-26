@@ -132,7 +132,7 @@ $lang->dividerMenu = ',admin,';
 
 /* Scrum menu. */
 $lang->menu = new stdclass();
-//$lang->menu->program = 'Home|program|index';
+$lang->menu->program = 'Home|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = 'Iteration|project|index|locate=no';
 $lang->menu->doc     = 'Doc|doc|index|';
@@ -144,34 +144,24 @@ $lang->program = new stdclass();
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->subMenu = new stdclass();
-$lang->system->subMenu->setmodel = new stdclass();
-//$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => 'Estimate|custom|estimate|');
 $lang->system->menu->stage       = array('link' => 'Stage|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->measurement = array('link' => 'Measurement|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
-$lang->system->menu->auditcl     = array('link' => 'QA|auditcl|browse|', 'subModule' => 'auditcl');
-$lang->system->menu->cmcl        = array('link' => 'Cmcl|cmcl|browse|', 'subModule' => ',cmcl,baseline,');
-$lang->system->menu->process     = array('link' => 'Process|process|browse|', 'subModule' => ',activity,output,classify,');
-$lang->system->menu->reviewcl    = array('link' => 'Reviewcl|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
 $lang->system->menu->subject     = array('link' => 'Subject|subject|browse|');
 $lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
-$lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
+$lang->system->menu->custom      = array('link' => 'Custom|custom|plan|');
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-//if($this->cookie->systemModel == 'scrum')
-//{
-//    $lang->system->menu = new stdclass();
-//    $lang->system->subMenu->setmodel = new stdclass();
-//    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
-//    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-//    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
-//    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
-//    
-//    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
-//    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
-//    unset($lang->system->dividerMenu);
-//}
+if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
+    $lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
+	$lang->system->menu->custom   = array('link' => 'Custom|custom|concept|');
+    
+    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|settips|';
+    unset($lang->system->dividerMenu);
+}
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
@@ -180,45 +170,6 @@ $lang->stage->menu->settype = 'Stage Type|stage|settype|';
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
-$lang->measurement->menu->settips  = 'Set Tips|measurement|settips|';
-$lang->measurement->menu->define   = array('link' => 'Measurement|measurement|browse|type=basic', 'alias' => 'createbasic');
-$lang->measurement->menu->data     = array('link' => 'Sqlbuilder|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
-$lang->measurement->menu->template = array('link' => 'Measurement|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate');
-
-$lang->sqlbuilder = new stdclass();
-$lang->sqlbuilder->menu = $lang->measurement->menu;
-
-$lang->cmcl = new stdclass();
-$lang->cmcl->menu = new stdclass();
-$lang->cmcl->menu->browse   = array('link' => 'Cmcl|cmcl|browse|', 'subModule' => 'cmcl');
-$lang->cmcl->menu->catalog  = 'Catalog|baseline|catalog|';
-$lang->cmcl->menu->template = array('link' => 'Template|baseline|template|', 'alias' => 'createtemplate,edittemplate,view,editbook,managebook');
-
-$lang->baseline = new stdclass();
-$lang->baseline->menu = $lang->cmcl->menu;
-
-$lang->process = new stdclass();
-$lang->process->menu = new stdclass();
-$lang->process->menu->browse   = array('link' => 'Process|process|browse|', 'subModule' => 'process');
-$lang->process->menu->activity = array('link' => 'Activity|activity|browse|', 'subModule' => 'activity');
-$lang->process->menu->output   = array('link' => 'Output|output|browse|', 'subModule' => 'output');
-$lang->process->menu->classify = array('link' => 'Classify|classify|browse|', 'subModule' => 'classify');
-
-$lang->activity = new stdclass();
-$lang->output   = new stdclass();
-$lang->classify = new stdclass();
-$lang->activity->menu = $lang->process->menu;
-$lang->output->menu   = $lang->process->menu;
-$lang->classify->menu = $lang->process->menu;
-
-$lang->reviewcl = new stdclass();
-$lang->reviewcl->menu = new stdclass();
-$lang->reviewcl->menu->browse   = array('link' => 'Reviewcl|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
-$lang->reviewcl->menu->version  = array('link' => 'Review Version|reviewsetting|version|');
-$lang->reviewcl->menu->reviewer = array('link' => 'Reviewer|reviewsetting|reviewer|');
-
-$lang->reviewsetting = new stdclass();
-$lang->reviewsetting->menu = $lang->reviewcl->menu;
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
@@ -611,6 +562,7 @@ $lang->navGroup->testsuite   = 'program';
 $lang->navGroup->caselib     = 'program';
 $lang->navGroup->feedback    = 'program';
 $lang->navGroup->deploy      = 'program';
+$lang->navGroup->stakeholder = 'program';
 
 $lang->navGroup->programplan    = 'program';
 $lang->navGroup->workestimation = 'program';
@@ -630,6 +582,7 @@ $lang->navGroup->nc             = 'program';
 $lang->navGroup->job            = 'program';
 $lang->navGroup->jenkins        = 'program';
 $lang->navGroup->compile        = 'program';
+$lang->navGroup->build          = 'program';
 
 $lang->navGroup->durationestimation = 'program';
 
@@ -1101,10 +1054,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
-$lang->menu->cmmi->workestimation = array('link' => 'Estimation|workestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation,budget');
+$lang->menu->cmmi->programindex   = array('link' => 'Home|program|index|program={PROGRAM}');
 $lang->menu->cmmi->programplan    = array('link' => 'Programplan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->cmmi->review         = array('link' => 'Review|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
 $lang->menu->cmmi->weekly         = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
 $lang->menu->cmmi->doc            = array('link' => 'Doc|doc|index|program={PROGRAM}');
 $lang->menu->cmmi->product        = array('link' => 'Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
@@ -1114,10 +1066,17 @@ $lang->menu->cmmi->qa             = array('link' => 'QA|bug|browse|product={PROD
 $lang->menu->cmmi->release        = array('link' => 'Release|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = 'Issue|issue|browse|';
 $lang->menu->cmmi->risk           = 'Risk|risk|browse|';
-$lang->menu->cmmi->report         = array('link' => 'Measurement|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
-$lang->menu->cmmi->auditplan      = array('link' => 'Audit|auditplan|browse|', 'subModule' => 'nc');
-$lang->menu->cmmi->cm             = array('link' => 'CM|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
-$lang->menu->cmmi->pssp           = 'Process|pssp|browse|program={PROGRAM}';
+$lang->menu->cmmi->list           = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+
+/* Srcum menu. */
+$lang->menu->srcum = new stdclass();
+$lang->menu->srcum->programindex   = array('link' => 'Home|program|index|program={PROGRAM}');
+
+$lang->cmmi = new stdclass();
+$lang->cmmi->subMenu = new stdclass();
+$lang->cmmi->subMenu->list = new stdclass();
+$lang->cmmi->subMenu->list->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->cmmi->subMenu->list->program        = 'Program|program|edit|';
 
 $lang->cmmiproduct    = new stdclass();
 $lang->workestimation = new stdclass();
@@ -1133,6 +1092,7 @@ $lang->nc             = new stdclass();
 $lang->pssp           = new stdclass();
 $lang->issue          = new stdclass();
 $lang->risk           = new stdclass();
+$lang->stakeholder    = new stdclass();
 $lang->durationestimation = new stdclass();
 
 $lang->workestimation->menu = new stdclass();
@@ -1148,6 +1108,7 @@ $lang->cm->menu             = new stdclass();
 $lang->pssp->menu           = new stdclass();
 $lang->issue->menu          = new stdclass();
 $lang->risk->menu           = new stdclass();
+$lang->stakeholder->menu    = new stdclass();
 $lang->durationestimation->menu = new stdclass();
 
 $lang->workestimation->menu->index    = 'Workestimation|workestimation|index|program={PROGRAM}';
@@ -1160,28 +1121,16 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = 'Stage|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
 
-$lang->review->menu->review = array('link' => 'Reivew|review|browse|program={PROGRAM}', 'subModule' => 'review');
-$lang->review->menu->issue  = array('link' => 'Reviewissue|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');
-
-$lang->reviewissue = new stdclass();
-$lang->reviewissue->menu = $lang->review->menu;
-
 $lang->weekly->menu->browse = 'Weekly|weekly|index|program={PROGRAM}';
 $lang->weekly->menu->issue  = 'Milestone|milestone|index|program={PROGRAM}';
 
+$lang->cmmiproduct->menu->plan        = array('link' => 'Plan|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
 $lang->cmmiproduct->menu->requirement = 'User Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
 $lang->cmmiproduct->menu->story       = 'Software Story|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = 'Track|story|track|product={PRODUCT}';
 
-$lang->auditplan->menu->browse = array('link' => 'Auditplan|auditplan|browse|', 'alias' => 'create,edit');
-$lang->auditplan->menu->nc     = array('link' => 'NC|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
-
-$lang->story->menu         = $lang->cmmiproduct->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
-
-$lang->cm->menu->browse = array('link' => 'Baseline|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
-$lang->cm->menu->report = 'Report|cm|report|program={PROGRAM}';
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');

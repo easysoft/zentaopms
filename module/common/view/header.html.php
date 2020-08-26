@@ -15,6 +15,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
+<?php $isSystem  = (zget($lang->navGroup, $app->rawModule) == 'system');?>
 <div id='menu'>
   <nav id='menuNav'><?php commonModel::printMainNav($app->rawModule);?></nav>
   <div id='menuFooter'>
@@ -26,6 +27,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
     <div class='container'>
       <div id='heading'>
         <?php if($isProgram) echo $this->loadModel('program')->getSwapper($this->program->getPairs(), $this->session->program, $app->rawModule, $app->rawMethod);?>
+        <?php if($isSystem)  echo $this->loadModel('custom')->getSwapper();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
