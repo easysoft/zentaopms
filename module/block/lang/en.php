@@ -57,6 +57,8 @@ $lang->block->scrum           = 'Scrum+';
 $lang->block->allProject      = 'All ' . $lang->projectCommon;
 $lang->block->doingProject    = 'Doning ' . $lang->projectCommon;
 $lang->block->finishProject   = 'Finish ' . $lang->projectCommon;
+$lang->block->estimatedHours  = 'Estimated Hours';
+$lang->block->consumedHours   = 'Consumed Hours';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
@@ -247,6 +249,7 @@ $lang->block->default['full']['my']['1']['title']  = 'Welcome';
 $lang->block->default['full']['my']['1']['block']  = 'welcome';
 $lang->block->default['full']['my']['1']['grid']   = 8;
 $lang->block->default['full']['my']['1']['source'] = '';
+
 $lang->block->default['full']['my']['2']['title']  = 'Dynamics';
 $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
@@ -259,7 +262,7 @@ $lang->block->default['full']['my']['3']['source'] = 'todo';
 $lang->block->default['full']['my']['3']['params']['num'] = '20';
 
 $lang->block->default['full']['my']['4']['title']  = $lang->projectCommon . ' Statistic';
-$lang->block->default['full']['my']['4']['source'] = 'statistic';
+$lang->block->default['full']['my']['4']['block']  = 'statistic';
 $lang->block->default['full']['my']['4']['source'] = 'program';
 $lang->block->default['full']['my']['4']['grid']   = 8;
 
