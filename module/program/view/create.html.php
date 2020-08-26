@@ -143,7 +143,7 @@
             <?php echo html::backButton();?>
             <?php
             echo html::hidden('template', $template);
-            echo html::hidden('parent', $parentProgram->id);
+            echo html::hidden('parent', $parentProgram ? $parentProgram->id : '0');
             ?>
           </td>
         </tr>
