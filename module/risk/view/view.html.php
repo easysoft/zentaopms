@@ -78,7 +78,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->strategy;?></th>
-                  <td><?php echo zget($lang->risk->strategy, $risk->strategy);?></td>
+                  <td><?php echo zget($lang->risk->strategyList, $risk->strategy);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->status;?></th>
@@ -86,11 +86,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->impact;?></th>
-                  <td><?php echo zget($lang->risk->impact, $risk->impact);?></td>
+                  <td><?php echo zget($lang->risk->impactList, $risk->impact);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->probability;?></th>
-                  <td><?php echo zget($lang->risk->probability, $risk->probability);?></td>
+                  <td><?php echo zget($lang->risk->probabilityList, $risk->probability);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->riskindex;?></th>
