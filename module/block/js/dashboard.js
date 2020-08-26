@@ -248,3 +248,21 @@ $(function()
         refreshBlock($(this).closest('.panel'));
     });
 });
+
+function reloadRoadmap(productID)
+{
+    $.ajax(
+    {
+        url: createLink('block', 'printScrumroadmapBlock', 'id=' + productID),
+        dataType: "html",
+        async: false,
+        data: {id: productID},
+        type: 'post',
+        success: function(data)
+        {
+            $("#roadMap").html('');
+            $("#roadMap").html(data);
+            $("#createPlanLink").attr('href',createLink('productplan', 'create', 'id=' + productID) );
+        }
+    })
+}

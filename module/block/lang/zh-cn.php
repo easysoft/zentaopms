@@ -334,7 +334,6 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang-
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = $lang->projectCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . '路线图';
 
 $lang->block->modules['cmmi']['index'] = new stdclass();
 $lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();
