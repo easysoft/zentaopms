@@ -7,6 +7,16 @@ class budget extends control
         $this->view->program = $this->loadModel('project')->getByID($this->session->program); 
     }
 
+    /**
+     * The budget browse page.
+     *
+     * @param  varchar $orderBy 
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @access public
+     * @return void
+     */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
@@ -23,6 +33,12 @@ class budget extends control
         $this->display();
     }
 
+    /**
+     * The budget summary page.
+     *
+     * @access public
+     * @return void
+     */
     public function summary()
     {
         $getSubjectStructure = $this->budget->getSubjectStructure();
@@ -51,6 +67,12 @@ class budget extends control
         $this->display();
     }
 
+    /**
+     * Create a budget.
+     *
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if($_POST)
@@ -79,6 +101,12 @@ class budget extends control
         $this->display();
     }
 
+    /**
+     * Edit a budget.
+     *
+     * @access public
+     * @return void
+     */
     public function edit($budgetID)
     {
         if($_POST)
@@ -112,6 +140,13 @@ class budget extends control
         $this->display();
     }
 
+    /**
+     * View a budget.
+     *
+     * @param  int  $budgetID 
+     * @access public
+     * @return void
+     */
     public function view($budgetID)
     {
         $this->view->stages     = $this->budget->getStages();
@@ -123,6 +158,14 @@ class budget extends control
         $this->display();
     }
 
+    /**
+     * Delete a budget.
+     *
+     * @param  int     $budgetID 
+     * @param  varchar $confirm
+     * @access public
+     * @return void
+     */
     public function delete($budgetID = 0, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -138,6 +181,12 @@ class budget extends control
     
     }
 
+    /**
+     * Batch create budgets.
+     *
+     * @access public
+     * @return void
+     */
     public function batchCreate()
     {
         if($_POST)
