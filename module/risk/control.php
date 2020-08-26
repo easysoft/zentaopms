@@ -15,6 +15,9 @@ class risk extends control
      */
     public function browse($browseType = 'all', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
         /* Build the search form. */
         $actionURL = $this->createLink('risk', 'browse', "browseType=bysearch&queryID=myQueryID");
