@@ -483,7 +483,6 @@ $lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|
 $lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
 $lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->scrumproject  = 'project|all|';
