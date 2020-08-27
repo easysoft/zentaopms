@@ -1311,8 +1311,8 @@ class block extends control
                 ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
                 ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
                 ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
-                ->orderBy('id_desc')
-                ->limit(30)
+                ->orderBy('date_desc')
+                ->limit(10)
                 ->fetchAll();
         }
 

@@ -91,7 +91,7 @@ class programModel extends model
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
 
-        $hours = $this->dao->select('program, sum(consumed) as consumed, sum(estimate) as estimate')->from(TABLE_TASK)
+        $hours = $this->dao->select('program, cast(sum(consumed) as decimal(10,2)) as consumed, cast(sum(estimate) as decimal(10,2)) as estimate')->from(TABLE_TASK)
             ->where('program')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
