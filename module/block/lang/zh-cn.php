@@ -59,6 +59,9 @@ $lang->block->doingProject    = '进行中的' . $lang->projectCommon;
 $lang->block->finishProject   = '累积' . $lang->projectCommon;
 $lang->block->estimatedHours  = '预计工时';
 $lang->block->consumedHours   = '已消耗';
+$lang->block->time            = '第';
+$lang->block->week            = '周';
+$lang->block->month           = '月';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';

@@ -19,7 +19,6 @@
           <img class='program-type-img' data-type='scrum' src='<?php echo $config->webRoot . 'theme/default/images/main/scrum.png'?>'>
           <h3><?php echo $lang->program->scrum; ?></h3>
           <p><?php echo $lang->program->scrumTitle; ?></p>
-          <p class='text-left'><?php echo $lang->program->scrumDesc; ?></p>
         </div>
       </div>
       <div class='col-xs-6'>
@@ -27,7 +26,6 @@
           <img class='program-type-img' data-type='cmmi' src='<?php echo $config->webRoot . 'theme/default/images/main/cmmi.png'?>'>
           <h3><?php echo $lang->program->cmmi; ?></h3>
           <p><?php echo $lang->program->cmmiTitle; ?></p>
-          <p class='text-left'><?php echo $lang->program->cmmiDesc; ?></p>
         </div>
       </div>
       </div>
