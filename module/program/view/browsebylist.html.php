@@ -1,5 +1,5 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table'>
+<form class='main-table auto-fade-in fade' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
   <table class='table has-sort-head table-fixed' id='programList'>
     <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
@@ -8,7 +8,7 @@
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
         <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
-        <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
+        <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
         <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
@@ -22,12 +22,12 @@
     </thead>
     <tbody class='sortable' id='programTableList'>
       <?php foreach($programs as $program):?>
-      <tr data-id='<?php echo $program->id ?>' data-order='<?php echo $program->order ?>'>
+      <tr data-id='<?php echo $program->id ?>' data-order='<?php echo $program->order ?>'<?php if($program->isCat) echo " data-nested='true'";?><?php if($program->parent) echo " data-nest-parent='$program->parent' data-nest-path='$program->path'";?>>
         <td class='c-id'>
           <?php printf('%03d', $program->id);?>
         </td>
         <td class='text-left'><?php echo $program->code;?></td>
-        <td class='text-left pgm-title' title='<?php echo $program->name?>'>
+        <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
