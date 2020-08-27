@@ -62,7 +62,6 @@ class issueModel extends model
      * @param  string $owner
      * @param  string $activityID
      * @param  object $pager
-     *
      * @access public
      * @return object
      */
@@ -94,7 +93,7 @@ class issueModel extends model
         $issueQuery = '';
         if($browseType == 'bysearch')
         {
-            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : ''; 
+            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
             if($query)
             {
                 $this->session->set('issueQuery', $query->sql);
@@ -120,11 +119,26 @@ class issueModel extends model
         return $issueList;
     }
 
+    /**
+     * getActivityList
+     *
+     * @access public
+     * @return object
+     */
     public function getActivityList()
     {
         return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
     }
 
+    /**
+     * getBlockIssues
+     *
+     * @param  string $browseType
+     * @param  int    $limit
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
@@ -325,7 +339,7 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return void
+     * @return object
      */
     public function resolve($issueID)
     {
@@ -338,7 +352,7 @@ class issueModel extends model
      * Create task.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function createTask()
     {

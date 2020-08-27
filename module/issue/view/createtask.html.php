@@ -1,3 +1,15 @@
+<?php
+/**
+ * The createtask view of issue module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Congzhi Chen <congzhi@cnezsoft.com>
+ * @package     issue
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
         <tr class='taskTR'>
           <th><?php echo $lang->task->project;?></th>
           <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
@@ -41,7 +53,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
-        <?php if($stories and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if($stories and $project->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
@@ -97,10 +109,8 @@
                   <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
                 </div>
                 <?php echo html::input('name', $task->name, "class='form-control'");?>
-                <?php if($config->global->flow != 'onlyTask'):?>
                 <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
                 <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
-                <?php endif;?>
               </div>
               <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
               <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>

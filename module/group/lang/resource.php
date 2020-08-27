@@ -45,7 +45,6 @@ $lang->moduleOrder[93]  = 'budget';
 
 $lang->moduleOrder[95]  = 'company';
 $lang->moduleOrder[97]  = 'stage';
-$lang->moduleOrder[98]  = 'weekly';
 $lang->moduleOrder[100] = 'dept';
 $lang->moduleOrder[105] = 'group';
 $lang->moduleOrder[110] = 'user';
@@ -1034,12 +1033,6 @@ $lang->git->methodOrder[5]  = 'diff';
 $lang->git->methodOrder[10] = 'cat';
 $lang->git->methodOrder[15] = 'apiSync';
 
-/* Weekly. */
-$lang->resource->weekly = new stdclass();
-$lang->resource->weekly->index = 'index';
-
-$lang->weekly->methodOrder[0]  = 'index';
-
 /* Stage. */
 $lang->resource->stage = new stdclass();
 $lang->resource->stage->browse      = 'browse';
@@ -1698,100 +1691,3 @@ $lang->changelog['12.3'][] = 'testtask-unitCases';
 $lang->changelog['12.3'][] = 'testtask-importUnitResult';
 $lang->changelog['12.3'][] = 'job-view';
 $lang->changelog['12.3'][] = 'ci-commitResult';
-
-global $config;
-if($config->global->flow != 'full')
-{
-    unset($lang->moduleOrder[10]);
-    unset($lang->resource->qa);
-    unset($lang->moduleOrder[50]);
-    unset($lang->resource->report);
-    unset($lang->moduleOrder[90]);
-}
-
-if($config->global->flow == 'onlyStory' || $config->global->flow == 'onlyTask')
-{
-    unset($lang->resource->build);
-    unset($lang->moduleOrder[45]);
-    unset($lang->resource->bug);
-    unset($lang->moduleOrder[55]);
-    unset($lang->resource->testcase);
-    unset($lang->moduleOrder[60]);
-    unset($lang->resource->testtask);
-    unset($lang->moduleOrder[65]);
-
-    unset($lang->resource->my->bug);
-    unset($lang->resource->my->testTask);
-    unset($lang->resource->my->testCase);
-}
-
-if($config->global->flow == 'onlyStory' || $config->global->flow == 'onlyTest')
-{
-    unset($lang->resource->project);
-    unset($lang->moduleOrder[35]);
-    unset($lang->resource->task);
-    unset($lang->moduleOrder[40]);
-
-    unset($lang->resource->my->task);
-    unset($lang->resource->my->project);
-
-    unset($lang->resource->product->project);
-}
-
-if($config->global->flow == 'onlyTask' || $config->global->flow == 'onlyTest')
-{
-    unset($lang->resource->story);
-    unset($lang->moduleOrder[20]);
-    unset($lang->resource->productplan);
-    unset($lang->moduleOrder[25]);
-    unset($lang->resource->release);
-    unset($lang->moduleOrder[30]);
-
-    unset($lang->resource->my->story);
-}
-
-if($config->global->flow == 'onlyStory')
-{
-    unset($lang->resource->svn);
-    unset($lang->moduleOrder[150]);
-    unset($lang->resource->git);
-    unset($lang->moduleOrder[155]);
-
-    unset($lang->resource->story->tasks);
-}
-
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->resource->product);
-    unset($lang->moduleOrder[15]);
-    unset($lang->resource->bug);
-    unset($lang->moduleOrder[55]);
-
-    unset($lang->resource->project->importbug);
-    unset($lang->resource->project->story);
-    unset($lang->resource->project->bug);
-    unset($lang->resource->project->linkStory);
-    unset($lang->resource->project->unlinkStory);
-    unset($lang->resource->project->ajaxGetProducts);
-}
-
-if($config->global->flow == 'onlyTest')
-{
-    unset($lang->resource->product->browse);
-    unset($lang->resource->product->roadmap);
-    unset($lang->resource->product->dynamic);
-    unset($lang->resource->product->ajaxGetProjects);
-    unset($lang->resource->product->ajaxGetPlans);
-
-    unset($lang->resource->build->ajaxGetProjectBuilds);
-    unset($lang->build->methodOrder[30]);
-
-    unset($lang->resource->bug->confirmStoryChange);
-    unset($lang->bug->methodOrder[60]);
-
-    unset($lang->resource->testcase->confirmStoryChange);
-    unset($lang->testcase->methodOrder[40]);
-
-    $lang->resource->product->build = 'build';
-    $lang->product->methodOrder[5]  = 'build';
-}

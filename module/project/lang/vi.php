@@ -354,10 +354,3 @@ $lang->project->treeLevel['all']   = 'Mở tất cả';
 $lang->project->treeLevel['root']  = 'Co lại tất cả';
 $lang->project->treeLevel['task']  = 'Câu chuyện & nhiệm vụ';
 $lang->project->treeLevel['story'] = 'Chỉ câu chuyện';
-
-global $config;
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->project->groups['story']);
-    unset($lang->project->featureBar['task']['needconfirm']);
-}

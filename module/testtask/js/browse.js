@@ -1,11 +1,3 @@
-$(document).ready(function()
-{
-    if(flow == 'onlyTest')
-    {
-        $('#subNavbar > .nav > li[data-id=' + status + ']').addClass('active');
-    }
-});
-
 function changeDate(begin, end, condition)
 {
     if(begin.indexOf('-') != -1)

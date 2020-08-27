@@ -1,3 +1,15 @@
+<?php
+/**
+ * The createbug view of issue module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Congzhi Chen <congzhi@cnezsoft.com>
+ * @package     issue
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
   <tr class='bugTR storyTR'>
     <th class='w-110px'><?php echo $lang->bug->product;?></th>
     <td>
@@ -25,7 +37,7 @@
       </div>
     </td>
   </tr>
-  <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
+  <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
   <tr class='bugTR'>
     <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
 
@@ -76,7 +88,7 @@
     </td>
   </tr>
   <?php endif;?>
-  <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
+  <?php if($showProject):?>
   <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
   <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
   <tr class='bugTR'>
@@ -188,7 +200,7 @@
     $showStory = strpos(",$showFields,", ',story,') !== false;
     $showTask  = strpos(",$showFields,", ',task,')  !== false;
   ?>
-  <?php if(($showStory or $showTask) and $this->config->global->flow != 'onlyTest'):?>
+  <?php if(($showStory or $showTask)):?>
   <tr class='bugTR'>
     <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
     <?php if($showStory):?>
@@ -262,14 +274,14 @@ $(function()
 
 /**
  * Load all fields.
- * 
- * @param  int $productID 
+ *
+ * @param  int $productID
  * @access public
  * @return void
  */
 function loadAll(productID)
 {
-    if(page == 'create') 
+    if(page == 'create')
     {
         loadProjectTeamMembers(productID);
     }
@@ -294,8 +306,8 @@ function loadAll(productID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen();
         loadProductBranches(productID)
-        loadProductModules(productID); 
-        loadProductProjects(productID); 
+        loadProductModules(productID);
+        loadProductProjects(productID);
         loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
@@ -304,7 +316,7 @@ function loadAll(productID)
 
 /**
  * Load by branch.
- * 
+ *
  * @access public
  * @return void
  */
@@ -314,7 +326,7 @@ function loadBranch()
     $('#task').chosen();
     productID = $('#product').val();
     loadProductModules(productID);
-    loadProductProjects(productID); 
+    loadProductProjects(productID);
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
@@ -351,7 +363,7 @@ function loadAllBuilds(that)
     }
 }
 
-/** 
+/**
   * Load all builds of the project.
   *
   * @param  int    $projectID
@@ -391,7 +403,7 @@ function loadAllProjectBuilds(projectID, productID)
     }
 }
 
-/** 
+/**
   * Load all builds of the product.
   *
   * @param  int    $productID
@@ -402,7 +414,7 @@ function loadAllProductBuilds(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(page == 'create') 
+    if(page == 'create')
     {
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
         $.get(link, function(data)
@@ -431,8 +443,8 @@ function loadAllProductBuilds(productID)
 
 /**
  * Load product's modules.
- * 
- * @param  int    $productID 
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -442,16 +454,16 @@ function loadProductModules(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(link, function()
-    {   
+    {
         $(this).find('select').chosen()
         if(typeof(bugModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon' style='border-left-width: 1px;'>" + bugModule + "</span>");
     });
 }
 
 /**
- * Load product stories 
- * 
- * @param  int    $productID 
+ * Load product stories
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -464,9 +476,9 @@ function loadProductStories(productID)
 }
 
 /**
- * Load projects of product. 
- * 
- * @param  int    $productID 
+ * Load projects of product.
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -480,8 +492,8 @@ function loadProductProjects(productID)
 
 /**
  * Load product plans.
- * 
- * @param  productID $productID 
+ *
+ * @param  productID $productID
  * @access public
  * @return void
  */
@@ -494,9 +506,9 @@ function loadProductplans(productID)
 }
 
 /**
- * Load product builds. 
- * 
- * @param  productID $productID 
+ * Load product builds.
+ *
+ * @param  productID $productID
  * @access public
  * @return void
  */
@@ -527,8 +539,8 @@ function loadProductBuilds(productID)
 
 /**
  * Load project related bugs and tasks.
- * 
- * @param  int    $projectID 
+ *
+ * @param  int    $projectID
  * @access public
  * @return void
  */
@@ -551,8 +563,8 @@ function loadProjectRelated(projectID)
 
 /**
  * Load project tasks.
- * 
- * @param  projectID $projectID 
+ *
+ * @param  projectID $projectID
  * @access public
  * @return void
  */
@@ -570,8 +582,8 @@ function loadProjectTasks(projectID)
 
 /**
  * Load project stories.
- * 
- * @param  projectID $projectID 
+ *
+ * @param  projectID $projectID
  * @access public
  * @return void
  */
@@ -585,8 +597,8 @@ function loadProjectStories(projectID)
 
 /**
  * Load builds of a project.
- * 
- * @param  int      $projectID 
+ *
+ * @param  int      $projectID
  * @access public
  * @return void
  */
@@ -613,7 +625,7 @@ function loadProjectBuilds(projectID)
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
         $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
-        
+
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
@@ -622,9 +634,9 @@ function loadProjectBuilds(projectID)
 
 /**
  * Set story field.
- * 
- * @param  moduleID $moduleID 
- * @param  productID $productID 
+ *
+ * @param  moduleID $moduleID
+ * @param  productID $productID
  * @access public
  * @return void
  */
@@ -644,8 +656,8 @@ function setStories(moduleID, productID)
 
 /**
  * Load product branches.
- * 
- * @param  int $productID 
+ *
+ * @param  int $productID
  * @access public
  * @return void
  */
@@ -666,8 +678,8 @@ function loadProductBranches(productID)
 
 /**
  * Load team members of the project as assignedTo list.
- * 
- * @param  int     $projectID 
+ *
+ * @param  int     $projectID
  * @access public
  * @return void
  */
@@ -684,14 +696,14 @@ function loadAssignedTo(projectID)
 
 /**
  * notice for create build.
- * 
+ *
  * @access public
  * @return void
  */
 function notice()
 {
     $('#buildBoxActions').empty().hide();
-    if($('#openedBuild').find('option').length <= 1) 
+    if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
         if($('#project').length == 0 || $('#project').val() == '')
@@ -699,7 +711,6 @@ function notice()
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch); 
-            if(typeof(flow) != 'undefined' && flow == 'onlyTest') link = createLink('build', 'create','projectID=' + $('#product').val());
             html += '<a href="' + link + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }

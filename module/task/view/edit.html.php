@@ -107,7 +107,7 @@
                   </div>
                 </td>
               </tr>
-              <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+              <?php if($project->type != 'ops'):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
                 <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen'");?></span></td>

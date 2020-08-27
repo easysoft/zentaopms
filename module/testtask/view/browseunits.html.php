@@ -41,9 +41,7 @@
       <tr>
         <th class='c-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-300px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-        <?php if($config->global->flow != 'onlyTest'):?>
         <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-        <?php endif;?>
         <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
         <th class='c-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
         <th class='w-90px text-left'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->execTime);?></th>
@@ -58,9 +56,7 @@
     <tr class='text-left'>
       <td><?php printf('%03d', $task->id);?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name);?></td>
-      <?php if($config->global->flow != 'onlyTest'):?>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
-      <?php endif;?>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->end?></td>

@@ -1,12 +1,39 @@
 <?php
+/**
+ * The control file of programplan currentModule of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     programplan
+ * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 class programplan extends control
 {
+    /**
+     * __construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
         $this->app->loadLang('review');
     }
 
+    /**
+     * Common action
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
     public function commonAction($programID, $productID = 0, $extra = '')
     {
         $products  = $this->loadModel('product')->getPairs($programID);
@@ -16,6 +43,17 @@ class programplan extends control
         $this->programplan->setMenu($programID, $productID);
     }
 
+    /**
+     * Browse programplans
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $baselineID
+     * @access public
+     * @return void
+     */
     public function browse($programID = 0, $productID = 0, $type = 'gantt', $orderBy = 'id_asc', $baselineID = 0)
     {
         $this->app->loadLang('stage');
@@ -59,6 +97,15 @@ class programplan extends control
         $this->display();
     }
 
+    /**
+     * Create a programplan
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  int    $planID
+     * @access public
+     * @return void
+     */
     public function create($programID = 0, $productID = 0, $planID = 0)
     {
         $this->commonAction($programID, $productID);
@@ -92,6 +139,13 @@ class programplan extends control
         $this->display();
     }
 
+    /**
+     * Edit a programplan
+     *
+     * @param  int    $planID
+     * @access public
+     * @return void
+     */
     public function edit($planID = 0)
     {
         $plan = $this->programplan->getByID($planID);
@@ -121,6 +175,14 @@ class programplan extends control
         $this->display();
     }
 
+    /**
+     * Delete a programplan
+     *
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
     public function delete($planID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -141,6 +203,12 @@ class programplan extends control
         }
     }
 
+    /**
+     * Ajax custom
+     *
+     * @access public
+     * @return void
+     */
     public function ajaxCustom()
     {
         $data    = fixer::input('post')->get();

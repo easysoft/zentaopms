@@ -324,8 +324,6 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
-                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -338,8 +336,6 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
-                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('id')->in($docIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibs)
@@ -351,8 +347,6 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
-                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -425,8 +419,6 @@ class docModel extends model
             $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t2.doc = t1.id')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
-                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF(!empty($docIdList))->andWhere('t1.id')->in($docIdList)->fi()
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -1034,18 +1026,11 @@ class docModel extends model
 
         $productIdList = array_keys($productLibs);
         $products      = $this->dao->select('id,name,status')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchAll();
-        if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
-        {
-            $hasProject = array();
-        }
-        else
-        {
-            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($productIdList)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('product', 'product');
-        }
+        $hasProject    = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchPairs('product', 'product');
 
         $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
         $hasFilesPriv = common::hasPriv('doc', 'showFiles');
@@ -1099,9 +1084,6 @@ class docModel extends model
      */
     public function getLimitLibs($type, $limit = 0)
     {
-        if($type == 'project' and ($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')) return array();
-        if($type == 'product' and $this->config->global->flow == 'onlyTask')  return array();
-
         if($type == 'product' or $type == 'project')
         {
             $nonzeroLibs = array();
@@ -1157,19 +1139,12 @@ class docModel extends model
         $libGroups = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
-            if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
-            {
-                $hasProject = array();
-            }
-            else
-            {
-                $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t1.product')->in($idList)
-                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->fetchPairs('product', 'product');
-            }
+            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in($idList)
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs('product', 'product');
         }
         $buildGroups = array();
         foreach($libGroups as $objectID => $libs)
@@ -1198,20 +1173,13 @@ class docModel extends model
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
-            if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
-            {
-                $hasProject = array();
-            }
-            else
-            {
-                $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t1.product')->eq($objectID)
-                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->groupBy('product')
-                    ->fetchPairs('product', 'projectCount');
-            }
+            $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($objectID)
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->groupBy('product')
+                ->fetchPairs('product', 'projectCount');
         }
 
         $libs = array();
