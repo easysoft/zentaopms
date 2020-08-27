@@ -46,17 +46,6 @@ $config->bug->custom->createFields      = $config->bug->list->customCreateFields
 $config->bug->custom->batchCreateFields = 'project,deadline,steps,type,severity,os,browser';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
 
-if($config->global->flow == 'onlyTest')
-{
-    $config->bug->list->allFields    = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->allFields);
-    $config->bug->list->exportFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->exportFields);
-
-    $config->bug->list->customCreateFields      = str_replace(array('project,', 'story,', 'task,'), '', $config->bug->list->customCreateFields);
-    $config->bug->list->customBatchCreateFields = str_replace('project,', '', $config->bug->list->customBatchCreateFields);
-
-    $config->bug->custom->batchCreateFields = str_replace('project,', '', $config->bug->custom->batchCreateFields);
-}
-
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->edit       = array('id' => 'steps,comment', 'tools' => 'bugTools');
@@ -112,14 +101,6 @@ $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
 $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
 $config->bug->search['fields']['deadline']       = $lang->bug->deadline;
-
-if($config->global->flow == 'onlyTest')
-{
-    unset($config->bug->search['fields']['project']);
-    unset($config->bug->search['fields']['plan']);
-    unset($config->bug->search['fields']['toTask']);
-    unset($config->bug->search['fields']['toStory']);
-}
 
 $config->bug->search['params']['title']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['keywords']      = array('operator' => 'include', 'control' => 'input',  'values' => '');

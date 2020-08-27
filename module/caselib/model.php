@@ -41,24 +41,6 @@ class caselibModel extends model
             }
         }
 
-        if($this->config->global->flow == 'onlyTest')
-        {
-            $modules    = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
-            $moduleName = ($moduleID && isset($modules[$moduleID])) ? $modules[$moduleID] : $this->lang->tree->all;
-
-            if(!$isMobile)
-            {
-                $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
-                $selectHtml .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $selectHtml .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $selectHtml .= "</div></div>";
-            }
-            else
-            {
-                $selectHtml .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$libID', 'caselib', 'browse', '')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            }
-        }
-
         setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $pageNav     = '';

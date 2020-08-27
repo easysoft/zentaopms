@@ -92,10 +92,6 @@ $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = 'Nhiệm vụ';
 $lang->todo->typeList['story']  = 'Câu chuyện';
 
-global $config;
-if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
-if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
-
 $lang->todo->confirmDelete  = "Bạn có muốn xóa việc này?";
 $lang->todo->thisIsPrivate  = 'Đây là một việc riêng tư';
 $lang->todo->lblDisableDate = 'TBD';

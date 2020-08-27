@@ -79,38 +79,8 @@ class testtaskModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
-            if($this->config->global->flow != 'onlyTest')
-            {
-                $replace = ($key == 'product') ? $selectHtml : $productID;
-            }
-            else
-            {
-                if($key == 'product')
-                {
-                    $replace = $selectHtml;
-                }
-                elseif($key == 'scope')
-                {
-                    $scope = $this->session->testTaskVersionScope;
-                    $status = $this->session->testTaskVersionStatus;
-                    $viewName = $scope == 'local'? $products[$productID] : $this->lang->testtask->all;
-
-                    $replace  = '<li>';
-                    $replace .= "<a href='###' data-toggle='dropdown'>{$viewName} <span class='caret'></span></a>";
-                    $replace .= "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
-                    $replace .= "<li>" . html::a(helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=all,$status"), $this->lang->testtask->all) . "</li>";
-                    $replace .= "<li>" . html::a(helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"), $products[$productID]) . "</li>";
-                    $replace .= "</ul></li>";
-                }
-                else
-                {
-                    $replace = array();
-                    $replace['productID'] = $productID;
-                    $replace['branch']    = $branch;
-                    $replace['scope']     = $this->session->testTaskVersionScope;
-                }
-            }
+            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
     }
@@ -172,15 +142,8 @@ class testtaskModel extends model
         if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
-            if($this->config->global->flow != 'onlyTest')
-            {
-                $replace = ($key == 'product') ? $selectHtml : $productID;
-            }
-            else
-            {
-                if($key == 'product') $replace = $selectHtml;
-            }
+            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
     }
@@ -231,46 +194,26 @@ class testtaskModel extends model
     public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
-        if($this->config->global->flow == 'onlyTest')
-        {
-            return $this->dao->select("t1.*, t2.name AS productName,t4.name AS buildName, t4.branch AS branch")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.auto')->ne('unit')
-                ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
-                ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(('blocked,doing,wait,done'))->fi()
-                ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-                ->beginIF($branch)->andWhere("t4.branch = '$branch'")->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
+        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
 
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.auto')->ne('unit')
-                ->andWhere('t1.project')->in("0,{$this->app->user->view->projects}") //Fix bug #3260.
-                ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
-                ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-                ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-                ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
-                ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
-                ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.auto')->ne('unit')
+            ->andWhere('t1.project')->in("0,{$this->app->user->view->projects}") //Fix bug #3260.
+            ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
+            ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
+            ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
+            ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
+            ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -287,41 +230,21 @@ class testtaskModel extends model
     {
         $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
-        if($this->config->global->flow == 'onlyTest')
-        {
-            $tasks = $this->dao->select("t1.*, t2.name AS productName,t4.name AS buildName")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t1.auto')->eq('unit')
-                ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
-                ->andWhere('t1.end')->ge($beginAndEnd['begin'])
-                ->andWhere('t1.end')->le($beginAndEnd['end'])
-                ->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t1.auto')->eq('unit')
-                ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
-                ->andWhere('t1.end')->ge($beginAndEnd['begin'])
-                ->andWhere('t1.end')->le($beginAndEnd['end'])
-                ->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+        $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName")
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t1.auto')->eq('unit')
+            ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
+            ->andWhere('t1.end')->ge($beginAndEnd['begin'])
+            ->andWhere('t1.end')->le($beginAndEnd['end'])
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')
             ->where('t1.task')->in(array_keys($tasks))
@@ -388,39 +311,27 @@ class testtaskModel extends model
      */
     public function getById($taskID, $setImgSize = false)
     {
-        if($this->config->global->flow == 'onlyTest')
+        $task = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
+        if($task)
         {
-            $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS buildName, t3.branch AS branch")
-                ->from(TABLE_TESTTASK)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-                ->where('t1.id')->eq((int)$taskID)
-                ->fetch();
-        }
-        else
-        {
-            $task = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-            if($task)
+            $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
+            $task->productName = $product->name;
+            $task->productType = $product->type;
+            $task->branch      = 0;
+            $task->projectName = '';
+            $task->buildName   = '';
+
+            if($task->project)
             {
-                $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
-                $task->productName = $product->name;
-                $task->productType = $product->type;
-                $task->branch      = 0;
-                $task->projectName = '';
-                $task->buildName   = '';
+                $task->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('name');
+                $task->branch      = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->project)->andWhere('product')->eq($task->product)->fetch('branch');
+            }
 
-                if($task->project)
-                {
-                    $task->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('name');
-                    $task->branch      = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->project)->andWhere('product')->eq($task->product)->fetch('branch');
-                }
-
-                $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
-                if($build)
-                {
-                    $task->buildName = $build->name;
-                    $task->branch    = $build->branch;
-                }
+            $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+            if($build)
+            {
+                $task->buildName = $build->name;
+                $task->branch    = $build->branch;
             }
         }
 

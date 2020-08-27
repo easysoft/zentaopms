@@ -43,12 +43,10 @@
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
-        <?php if($this->config->global->flow != 'onlyTest'):?>
         <tr>
           <th><?php echo $lang->build->project;?></th>
           <td id='projectsBox'><?php echo html::select('project', $projects, $build->project, "class='form-control chosen' required");?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', $build->name, "class='form-control' required");?></td>

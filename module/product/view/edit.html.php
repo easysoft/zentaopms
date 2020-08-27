@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('noProject', ($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') ? true : false);?>
+<?php js::set('noProject', false);?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
-<?php js::set('toTaskList', $config->global->flow == 'onlyTask' || !empty($task->id));?>
+<?php js::set('toTaskList', !empty($task->id));?>
 <style>.title-group .has-icon-right{min-width:700px}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -70,7 +70,7 @@
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table');?>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -85,7 +85,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($stories and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if($stories and $project->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
@@ -144,10 +144,8 @@
                   <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
                 </div>
                 <?php echo html::input('name', $task->name, "class='form-control' required");?>
-                <?php if($config->global->flow != 'onlyTask'):?>
                 <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
                 <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
-                <?php endif;?>
               </div>
               <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
               <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
@@ -237,9 +235,9 @@
           </td>
         </tr>
         <?php endif;?>
-        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?> id='after-tr'>
+        <tr id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>
-          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
+          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

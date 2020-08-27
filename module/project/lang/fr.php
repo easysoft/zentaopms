@@ -354,10 +354,3 @@ $lang->project->treeLevel['all']   = 'Déplier Tout';
 $lang->project->treeLevel['root']  = 'Masquer Tout';
 $lang->project->treeLevel['task']  = 'Stories&Tâches';
 $lang->project->treeLevel['story'] = 'Seulement Stories';
-
-global $config;
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->project->groups['story']);
-    unset($lang->project->featureBar['task']['needconfirm']);
-}

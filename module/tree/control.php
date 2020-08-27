@@ -83,8 +83,7 @@ class tree extends control
             $this->loadModel('bug')->setMenu($this->product->getPairs(), $rootID);
             $this->lang->tree->menu      = $this->lang->bug->menu;
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
-            if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'bug');
-            if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
+            $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageBug;
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
@@ -107,8 +106,7 @@ class tree extends control
             $this->loadModel('testcase')->setMenu($this->product->getPairs(), $rootID);
             $this->lang->tree->menu      = $this->lang->testcase->menu;
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
-            if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'testcase');
-            if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
+            $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);

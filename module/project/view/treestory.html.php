@@ -15,7 +15,7 @@
       common::printIcon('story', 'review', $vars, $story, 'list', 'glasses', '', 'btn btn-info btn-icon');
       common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
       common::printIcon('story', 'edit',   $vars, $story, 'list', '', '', 'btn btn-info btn-icon');
-      if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');
+      common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');
       ?>
     </div>
   </div>
@@ -197,7 +197,6 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
-        <?php if($config->global->flow != 'onlyStory'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>
           <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
@@ -242,43 +241,42 @@
             <?php endif;?>
           </td>
         </tr>
-      <?php endif;?>
-      <tr class='text-top'>
-        <th><?php echo $lang->story->legendLinkStories;?></th>
-        <td class='pd-0'>
-          <?php $linkStories = explode(',', $story->linkStories);?>
-          <?php if(count($linkStories) < 2):?>
-          <?php echo $lang->noData;?>
-          <?php else:?>
-          <ul class='list-unstyled'>
-            <?php
-            foreach($linkStories as $linkStoryID)
-            {
-                if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
-            }
-            ?>
-          </ul>
-          <?php endif;?>
-        </td>
-      </tr>
-      <tr class='text-top'>
-        <th><?php echo $lang->story->legendChildStories;?></th>
-        <td class='pd-0'>
-          <?php $childStories = explode(',', $story->childStories);?>
-          <?php if(count($childStories) < 2):?>
-          <?php echo $lang->noData;?>
-          <?php else:?>
-          <ul class='list-unstyled'>
-            <?php
-            foreach($childStories as $childStoryID)
-            {
-                if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
-            }
-            ?>
-          </ul>
-          <?php endif;?>
-        </td>
-      </tr>
+        <tr class='text-top'>
+          <th><?php echo $lang->story->legendLinkStories;?></th>
+          <td class='pd-0'>
+            <?php $linkStories = explode(',', $story->linkStories);?>
+            <?php if(count($linkStories) < 2):?>
+            <?php echo $lang->noData;?>
+            <?php else:?>
+            <ul class='list-unstyled'>
+              <?php
+              foreach($linkStories as $linkStoryID)
+              {
+                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+              }
+              ?>
+            </ul>
+            <?php endif;?>
+          </td>
+        </tr>
+        <tr class='text-top'>
+          <th><?php echo $lang->story->legendChildStories;?></th>
+          <td class='pd-0'>
+            <?php $childStories = explode(',', $story->childStories);?>
+            <?php if(count($childStories) < 2):?>
+            <?php echo $lang->noData;?>
+            <?php else:?>
+            <ul class='list-unstyled'>
+              <?php
+              foreach($childStories as $childStoryID)
+              {
+                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
+              }
+              ?>
+            </ul>
+            <?php endif;?>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

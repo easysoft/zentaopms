@@ -19,7 +19,6 @@ $scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', $status);?>
-<?php if($config->global->flow != 'onlyTest'):?>
 <style>
 #action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
 </style>
@@ -50,7 +49,6 @@ $status = $this->session->testTaskVersionStatus;
     <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<?php endif;?>
 <div id='mainContent' class='main-table'>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
@@ -69,9 +67,7 @@ $status = $this->session->testTaskVersionStatus;
         <th class='c-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
         <th class='text-left'>        <?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
-        <?php if($config->global->flow != 'onlyTest'):?>
         <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-        <?php endif;?>
         <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
         <th class='c-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
         <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
@@ -86,9 +82,7 @@ $status = $this->session->testTaskVersionStatus;
       <td><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
-      <?php if($config->global->flow != 'onlyTest'):?>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
-      <?php endif;?>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build", '', true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>

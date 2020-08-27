@@ -59,28 +59,6 @@ tbody tr td:first-child input{display:none;}
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <?php if($config->global->flow == 'onlyTest'):?>
-  <div class='detail'>
-    <div class='detail-title'><?php echo $lang->build->desc;?></div>
-    <div class='detail-content article-content'><?php echo $build->desc;?></div>
-  </div>
-  <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
-  <?php include '../../common/view/action.html.php';?>
-  <div id="mainActions" class='main-actions'>
-    <nav class="container"></nav>
-    <div class="btn-toolbar">
-      <?php
-      common::printBack($browseLink);
-      if(!$build->deleted)
-      {
-          echo "<div class='divider'></div>";
-          common::printIcon('build', 'edit',   "buildID=$build->id", $build);
-          common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
-      }
-      ?>
-    </div>
-  </div>
-  <?php else:?>
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>
     <ul class='nav nav-tabs'>
@@ -360,7 +338,6 @@ tbody tr td:first-child input{display:none;}
                   <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
                 </tr>
                 <?php $this->printExtendFields($build, 'table', 'inForm=0');?>
-                <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
                   <td>
@@ -371,24 +348,18 @@ tbody tr td:first-child input{display:none;}
                     <?php endif;?>
                   </td>
                 </tr>
-                <?php endif;?>
               </table>
             </div>
           </div>
-          <?php if($config->global->flow != 'onlyTest'):?>
           <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
-          <?php endif;?>
           <?php include '../../common/view/action.html.php';?>
         </div>
       </div>
     </div>
   </div>
-  <?php endif;?>
 </div>
-<?php if($config->global->flow != 'onlyTest'):?>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
 <?php js::set('buildID', $build->id)?>
 <?php js::set('type', $type)?>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

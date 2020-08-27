@@ -14,8 +14,6 @@
   <ul class="nav nav-secondary">
     <?php $isFirstTab = true; ?>
     <?php foreach($hasViewPriv as $type => $bool):?>
-    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTask' && $type == 'task') continue;?>
-    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTest' && $type == 'bug') continue;?>
     <li<?php if($isFirstTab) {echo ' class="active"';}?>>
         <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
         <?php echo $lang->block->availableBlocks->$type;?>
@@ -27,8 +25,6 @@
   <div class="tab-content">
     <?php $isFirstTab = true; ?>
     <?php foreach($hasViewPriv as $type => $bool):?>
-    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTask' && $type == 'task') continue;?>
-    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTest' && $type == 'bug') continue;?>
     <div class="tab-pane<?php if($isFirstTab) {echo ' active'; $isFirstTab = false;}?>" id="assigntomeTab-<?php echo $type?>">
       <?php include "{$type}block.html.php";?>
     </div>

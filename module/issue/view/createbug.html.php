@@ -37,7 +37,7 @@
       </div>
     </td>
   </tr>
-  <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
+  <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
   <tr class='bugTR'>
     <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
 
@@ -88,7 +88,7 @@
     </td>
   </tr>
   <?php endif;?>
-  <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
+  <?php if($showProject):?>
   <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
   <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
   <tr class='bugTR'>
@@ -200,7 +200,7 @@
     $showStory = strpos(",$showFields,", ',story,') !== false;
     $showTask  = strpos(",$showFields,", ',task,')  !== false;
   ?>
-  <?php if(($showStory or $showTask) and $this->config->global->flow != 'onlyTest'):?>
+  <?php if(($showStory or $showTask)):?>
   <tr class='bugTR'>
     <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
     <?php if($showStory):?>
@@ -710,8 +710,7 @@ function notice()
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
-            var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
-            if(typeof(flow) != 'undefined' && flow == 'onlyTest') link = createLink('build', 'create','projectID=' + $('#product').val());
+            var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch); 
             html += '<a href="' + link + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }

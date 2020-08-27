@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testsuite->confirmDelete)?>
 <?php js::set('flow', $config->global->flow);?>
-<?php if($config->global->flow != 'onlyTest'):?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <a href class='btn btn-link btn-active-text'>
@@ -25,7 +24,6 @@
     <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'", '');?>
   </div>
 </div>
-<?php endif;?>
 <div id='mainContent' class='main-table' data-ride='table'>
   <?php if(empty($suites)):?>
   <div class="table-empty-tip">

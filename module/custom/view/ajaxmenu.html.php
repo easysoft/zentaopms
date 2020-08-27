@@ -27,11 +27,9 @@
         <nav id='subNavbar'>
           <ul class='nav nav-default'></ul>
         </nav>
-        <?php if($config->global->flow != 'onlyTest'):?>
         <nav id='mainMenu'>
           <ul class='nav nav-default'></ul>
         </nav>
-        <?php endif;?>
       </div>
       <div class='text-left'>
         <?php if(common::hasPriv('custom', 'setPublic')):?>

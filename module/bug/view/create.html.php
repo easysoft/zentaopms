@@ -60,7 +60,7 @@ js::set('flow', $config->global->flow);
               </div>
             </td>
           </tr>
-          <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
+          <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
           <tr>
             <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
 
@@ -111,7 +111,7 @@ js::set('flow', $config->global->flow);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
+          <?php if($showProject):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
@@ -228,7 +228,7 @@ js::set('flow', $config->global->flow);
             $showStory = strpos(",$showFields,", ',story,') !== false;
             $showTask  = strpos(",$showFields,", ',task,')  !== false;
           ?>
-          <?php if(($showStory or $showTask) and $this->config->global->flow != 'onlyTest'):?>
+          <?php if(($showStory or $showTask)):?>
           <tr>
             <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
             <?php if($showStory):?>

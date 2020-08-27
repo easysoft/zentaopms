@@ -33,7 +33,7 @@ include 'chosen.html.php';
       </div>
     </div>
   </div>
-  <?php if(!in_array($app->rawModule, $lang->noMenuModule) || (in_array($app->rawModule, $lang->noMenuModule) && in_array($app->rawMethod, $lang->haveMenuMethod))):?>
+  <?php if(!in_array($app->rawModule, $lang->noMenuModule)):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>

@@ -227,7 +227,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+                <?php if($project->type != 'ops'):?>
                 <tr class='nofixed'>
                   <th><?php echo $lang->task->story;?></th>
                   <td>

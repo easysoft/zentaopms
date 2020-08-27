@@ -122,11 +122,8 @@ $lang->common->common = '公有模块';
 $lang->mainNav = new stdclass();
 $lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|browse|';
-//$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
-//$lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
 $lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
 $lang->mainNav->admin     = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
-//$lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
@@ -138,19 +135,16 @@ $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->doc     = '文档|doc|index|';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->company = new stdclass();
-
-$lang->program = new stdclass();
 
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
-$lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->subject     = array('link' => '科目|subject|browse|');
-$lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
-$lang->system->menu->custom      = array('link' => '自定义|custom|plan|');
-$lang->system->dividerMenu = ',auditcl,subject,';
+$lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
+$lang->system->menu->stage    = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
+$lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+$lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
+$lang->system->menu->custom   = array('link' => '自定义|custom|plan|');
+$lang->system->dividerMenu    = ',auditcl,subject,';
 
 if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
 {
@@ -226,28 +220,20 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index            = '首页|my|index';
-//$lang->my->menu->todo             = '待办|my|todo|';
-//$lang->my->menu->effort           = '日志|my|effort|';
-//$lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->todo             = '待办|my|todo|';
 $lang->my->menu->program          = array('link' => '项目|my|program|');
 $lang->my->menu->task             = array('link' => '任务|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug              = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask         = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story            = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
+$lang->my->menu->requirement      = array('link' => "用户需求|my|requirement|", 'subModule' => 'story');
+$lang->my->menu->story            = array('link' => "软件需求|my|story|", 'subModule' => 'story');
 $lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic          = '动态|my|dynamic|';
-//$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
-//$lang->my->menu->changePassword = '密码|my|changepassword';
-//$lang->my->menu->manageContacts = '联系人|my|managecontacts';
-//$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
-
-$lang->score       = new stdclass();
-$lang->score->menu = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product = new stdclass();
@@ -448,16 +434,12 @@ $lang->company->menu->view        = array('link' => '公司|company|view');
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company   = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-//$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-//$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
-//$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-//$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
-$lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
+$lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
+$lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
+$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -815,247 +797,6 @@ $lang->icons['score']              = 'tint';
 
 include (dirname(__FILE__) . '/menuOrder.php');
 
-global $config;
-if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
-{
-    /* Remove project, report and qa module. */
-    unset($lang->menu->project);
-    unset($lang->menu->report);
-    unset($lang->menu->qa);
-
-    unset($lang->menuOrder[15]);
-    unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[35]);
-
-    /* Adjust sub menu of my dashboard. */
-    unset($lang->my->menu->bug);
-    unset($lang->my->menu->testtask);
-    unset($lang->my->menu->task);
-    unset($lang->my->menu->myProject);
-
-    /* Adjust sub menu of product module. */
-    unset($lang->product->menu->project);
-    unset($lang->product->menu->doc);
-
-    /* Rename product module. */
-    $lang->menu->product = "{$lang->productCommon}|product|index";
-
-    /* Adjust search items. */
-    unset($lang->searchObjects['bug']);
-    unset($lang->searchObjects['task']);
-    unset($lang->searchObjects['testcase']);
-    unset($lang->searchObjects['project']);
-    unset($lang->searchObjects['build']);
-    unset($lang->searchObjects['testtask']);
-    unset($lang->searchObjects['testsuite']);
-    unset($lang->searchObjects['caselib']);
-    unset($lang->searchObjects['testreport']);
-}
-
-if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
-{
-    /* Remove product, report and qa module. */
-    unset($lang->menu->product);
-    unset($lang->menu->report);
-    unset($lang->menu->qa);
-
-    unset($lang->menuOrder[10]);
-    unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[35]);
-
-    /* Adjust sub menu of my dashboard. */
-    unset($lang->my->menu->bug);
-    unset($lang->my->menu->testtask);
-    unset($lang->my->menu->story);
-
-    /* Adjust sub menu of project  module. */
-    unset($lang->project->menu->story);
-    unset($lang->project->menu->build);
-    unset($lang->project->menu->qa);
-    unset($lang->project->menu->product);
-    unset($lang->project->menu->doc);
-
-    /* Remove sub menu of product module. */
-    unset($lang->product->menu);
-    unset($lang->product->menuOrder);
-
-    unset($lang->searchObjects['story']);
-    unset($lang->searchObjects['product']);
-    unset($lang->searchObjects['testcase']);
-    unset($lang->searchObjects['release']);
-    unset($lang->searchObjects['productplan']);
-    unset($lang->searchObjects['testsuite']);
-    unset($lang->searchObjects['caselib']);
-    unset($lang->searchObjects['testreport']);
-}
-
-if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
-{
-    /* Remove project and test module. */
-    unset($lang->menu->project);
-    unset($lang->menu->qa);
-    unset($lang->menu->report);
-
-    unset($lang->menuOrder[15]);
-    unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[35]);
-
-    /* Rename product module. */
-    $lang->menu->product = "{$lang->productCommon}|product|index";
-
-    /* Adjust sub menu of my dashboard. */
-    unset($lang->my->menu->task);
-    unset($lang->my->menu->myProject);
-    unset($lang->my->menu->story);
-
-    /* Remove sub menu of project module. */
-    unset($lang->project->menu);
-    unset($lang->project->menuOrder);
-    $lang->project->menu = new stdclass();
-    $lang->project->menu->list = array('alias' => '');
-
-    /* Add bug, testcase and testtask module. */
-    $lang->menu->bug       = 'Bug|bug|index';
-    $lang->menu->testcase  = '功能测试|testcase|browse';
-    $lang->menu->unit      = '单元测试|testtask|browseUnits';
-    $lang->menu->testsuite = '套件|testsuite|index';
-    $lang->menu->testtask  = '测试单|testtask|index';
-    $lang->menu->caselib   = '用例库|caselib|browse';
-
-    $lang->menuOrder[6]  = 'bug';
-    $lang->menuOrder[7]  = 'testcase';
-    $lang->menuOrder[8]  = 'unit';
-    $lang->menuOrder[9]  = 'testsuite';
-    $lang->menuOrder[10] = 'testtask';
-    $lang->menuOrder[11] = 'caselib';
-    $lang->menuOrder[12] = 'product';
-
-    /* Adjust sub menu of bug module. */
-    $lang->bug->menu = new stdclass();
-    $lang->bug->menu->all           = '所有|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
-    $lang->bug->menu->unclosed      = '未关闭|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
-    $lang->bug->menu->openedbyme    = '由我创建|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
-    $lang->bug->menu->assigntome    = '指派给我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = '由我解决|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
-    $lang->bug->menu->toclosed      = '待关闭|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
-    $lang->bug->menu->unresolved    = '未解决|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
-    $lang->bug->menu->more          = array('link' => '更多|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
-
-    $lang->bug->subMenu = new stdclass();
-    $lang->bug->subMenu->more = new stdclass();
-    $lang->bug->subMenu->more->unconfirmed   = '未确认|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
-    $lang->bug->subMenu->more->assigntonull  = '未指派|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
-    $lang->bug->subMenu->more->longlifebugs  = '久未处理|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
-    $lang->bug->subMenu->more->postponedbugs = '被延期|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
-    $lang->bug->subMenu->more->overduebugs   = '过期Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->subMenu->more->needconfirm   = "{$lang->storyCommon}变动|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s";
-
-    $lang->bug->menuOrder[5]  = 'product';
-    $lang->bug->menuOrder[10] = 'all';
-    $lang->bug->menuOrder[15] = 'unclosed';
-    $lang->bug->menuOrder[20] = 'openedbyme';
-    $lang->bug->menuOrder[25] = 'assigntome';
-    $lang->bug->menuOrder[30] = 'resolvedbyme';
-    $lang->bug->menuOrder[35] = 'toclosed';
-    $lang->bug->menuOrder[40] = 'unresolved';
-    $lang->bug->menuOrder[45] = 'unconfirmed';
-    $lang->bug->menuOrder[50] = 'assigntonull';
-    $lang->bug->menuOrder[55] = 'longlifebugs';
-    $lang->bug->menuOrder[60] = 'postponedbugs';
-    $lang->bug->menuOrder[65] = 'overduebugs';
-    $lang->bug->menuOrder[70] = 'needconfirm';
-
-    /* Adjust sub menu of testcase. */
-    $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait    = '待评审|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->bysuite = array('link' => '套件|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
-
-    $lang->testcase->subMenu = new stdclass();
-    $lang->testcase->subMenu->bysuite = new stdclass();
-    $lang->testcase->subMenu->bysuite = new stdclass();
-    $lang->testcase->subMenu->bysuite->create = '建套件|testsuite|create|productID=%s';
-
-    $lang->testcase->menuOrder[5]  = 'product';
-    $lang->testcase->menuOrder[10] = 'all';
-    $lang->testcase->menuOrder[15] = 'wait';
-    $lang->testcase->menuOrder[20] = 'suite';
-
-    /* Adjust sub menu of bug module. */
-    $lang->testsuite->menu = new stdclass();
-
-    $lang->testsuite->menuOrder[5]  = 'product';
-
-    /* Adjust sub menu of testtask. */
-    $lang->testtask->menu = new stdclass();
-    $lang->testtask->menu->totalStatus = '所有|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
-    $lang->testtask->menu->wait        = '待测版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
-    $lang->testtask->menu->doing       = '测试中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
-    $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
-    $lang->testtask->menu->done        = '已测版本|testtask|browse|productID=%s&branch=%s&type=%s,done';
-    $lang->testtask->menu->report      = array('link' => '报告|testreport|browse', 'alias' => 'view,create,edit');
-
-    $lang->testtask->menuOrder[5]  = 'product';
-    $lang->testtask->menuOrder[10] = 'scope';
-    $lang->testtask->menuOrder[15] = 'totalStatus';
-    $lang->testtask->menuOrder[20] = 'wait';
-    $lang->testtask->menuOrder[25] = 'doing';
-    $lang->testtask->menuOrder[30] = 'blocked';
-    $lang->testtask->menuOrder[35] = 'done';
-    $lang->testtask->menuOrder[40] = 'report';
-
-    $lang->testreport->menu      = $lang->testtask->menu;
-    $lang->testreport->menuOrder = $lang->testtask->menuOrder;
-
-    /* Adjust sub menu of caselib module. */
-    $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->all  = '所有|caselib|browse|libID=%s&browseType=all';
-    $lang->caselib->menu->wait = '待评审|caselib|browse|libID=%s&browseType=wait';
-    $lang->caselib->menu->view = '概况|caselib|view|libID=%s';
-
-    $lang->caselib->menuOrder[5]  = 'lib';
-    $lang->caselib->menuOrder[10] = 'all';
-    $lang->caselib->menuOrder[15] = 'wait';
-    $lang->caselib->menuOrder[20] = 'view';
-
-    /* Adjust sub menu of product module. */
-    unset($lang->product->menu->story);
-    unset($lang->product->menu->project);
-    unset($lang->product->menu->release);
-    unset($lang->product->menu->dynamic);
-    unset($lang->product->menu->plan);
-    unset($lang->product->menu->roadmap);
-    unset($lang->product->menu->doc);
-    unset($lang->product->menu->module);
-    unset($lang->product->menu->index);
-
-    $lang->product->menu->build = array('link' => '版本|product|build', 'subModule' => 'build');
-
-    $lang->product->menuOrder[5]  = 'build';
-    $lang->product->menuOrder[10] = 'view';
-    $lang->product->menuOrder[15] = 'order';
-
-    $lang->build->menu      = $lang->product->menu;
-    $lang->build->menuOrder = $lang->product->menuOrder;
-
-    /* Adjust menu group. */
-    $lang->menugroup->bug        = 'bug';
-    $lang->menugroup->testcase   = 'testcase';
-    $lang->menugroup->case       = 'testcase';
-    $lang->menugroup->testtask   = 'testtask';
-    $lang->menugroup->testsuite  = 'testsuite';
-    $lang->menugroup->caselib    = 'caselib';
-    $lang->menugroup->testreport = 'testtask';
-    $lang->menugroup->build      = 'product';
-
-    /* Adjust search objects. */
-    unset($lang->searchObjects['story']);
-    unset($lang->searchObjects['task']);
-    unset($lang->searchObjects['release']);
-    unset($lang->searchObjects['project']);
-    unset($lang->searchObjects['productplan']);
-}
-
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
 $lang->menu->cmmi->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
@@ -1132,5 +873,4 @@ $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODU
 
 $lang->nc->menu = $lang->auditplan->menu;
 
-$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
-$lang->haveMenuMethod   = array('custom');
+$lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');

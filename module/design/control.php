@@ -268,6 +268,13 @@ class design extends control
         $this->display();
     }
 
+    /**
+     * Revision
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
     public function revision($repoID)
     {
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();

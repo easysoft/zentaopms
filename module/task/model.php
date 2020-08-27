@@ -2001,10 +2001,12 @@ class taskModel extends model
      * @param  string $type     the query type
      * @param  int    $limit
      * @param  object $pager
+     * @param  string $orderBy
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy="id_desc")
+    public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $programID = 0)
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
@@ -2013,6 +2015,7 @@ class taskModel extends model
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($type == 'finishedBy')
             ->andWhere('t1.finishedby', 1)->eq($account)
             ->orWhere('t1.finishedList')->like("%,{$account},%")
