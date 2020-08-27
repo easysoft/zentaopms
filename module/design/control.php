@@ -56,7 +56,7 @@ class design extends control
         $this->view->orderBy    = $orderBy;
         $this->view->productID  = $productID;
         $this->view->pager      = $pager;
-        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -239,7 +239,7 @@ class design extends control
 
         if($_POST)
         {
-            $this->design->linkCommit($designID);
+            $this->design->linkCommit($designID, $repoID);
 
             $result['result']  = 'success';
             $result['message'] = $this->lang->saveSuccess;

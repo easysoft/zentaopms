@@ -1,6 +1,12 @@
 <?php
 class budgetModel extends model
 {
+    /**
+     * Get subject option.
+     *
+     * @access public
+     * @return void
+     */
     public function getSubjectOption()
     {
         $subjects    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
@@ -15,6 +21,13 @@ class budgetModel extends model
         return $subjects;
     }
 
+    /**
+     * Get budget by id.
+     *
+     * @param  int  $budgetID
+     * @access public
+     * @return void
+     */
     public function getByID($budgetID)
     {
         $budget = $this->dao->select('*')->from(TABLE_BUDGET)->where('id')->eq($budgetID)->fetch();
@@ -23,6 +36,14 @@ class budgetModel extends model
         return $budget;
     }
 
+    /**
+     * Get budget list.
+     *
+     * @param  varchar $orderBy
+     * @param  pager   $object
+     * @access public
+     * @return void
+     */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUDGET)
@@ -33,6 +54,12 @@ class budgetModel extends model
             ->fetchAll();
     }
 
+    /**
+     * Get stages.
+     *
+     * @access public
+     * @return void
+     */
     public function getStages()
     {
         return $this->dao->select('stage')->from(TABLE_BUDGET)
@@ -42,6 +69,12 @@ class budgetModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get subjects.
+     *
+     * @access public
+     * @return void
+     */
     public function getSubjects()
     {
         return $this->dao->select('subject')->from(TABLE_BUDGET)
@@ -51,6 +84,12 @@ class budgetModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get subject structure.
+     *
+     * @access public
+     * @return void
+     */
     public function getSubjectStructure()
     {
         $subjects  = $this->getSubjects();
@@ -72,6 +111,12 @@ class budgetModel extends model
         return $structure;
     }
 
+    /**
+     * Get summary.
+     *
+     * @access public
+     * @return void
+     */
     public function getSummary()
     {
         $budgets = $this->dao->select('*')->from(TABLE_BUDGET)
@@ -102,6 +147,12 @@ class budgetModel extends model
         return $summary;
     }
 
+    /**
+     * Create a budget.
+     *
+     * @access public
+     * @return void
+     */
     public function create()
     {
         $budget = fixer::input('post')
@@ -121,6 +172,12 @@ class budgetModel extends model
         return $budgetID;
     }
 
+    /**
+     * Batch create budgets.
+     *
+     * @access public
+     * @return void
+     */
     public function batchCreate()
     {
         $today   = helper::today();
@@ -161,6 +218,13 @@ class budgetModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Update a budget.
+     *
+     * @param  int  $budgetID 
+     * @access public
+     * @return void
+     */
     public function update($budgetID)
     {
         $oldBudget = $this->getByID($budgetID);

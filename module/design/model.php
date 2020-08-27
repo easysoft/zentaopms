@@ -137,10 +137,11 @@ class designModel extends model
      * LinkCommit a design.
      *
      * @param  int    $designID
+     * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function linkCommit($designID)
+    public function linkCommit($designID, $repoID)
     {
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
@@ -156,7 +157,7 @@ class designModel extends model
             $data->BType    = 'commit';
             $data->BID      = $revision;
             $data->relation = 'completedin';
-            $data->extra    = $this->session->repoID;
+            $data->extra    = $repoID;
 
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
 
