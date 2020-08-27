@@ -392,7 +392,7 @@ class issueModel extends model
     public function createRisk()
     {
         $risc = fixer::input('post')->remove('issue,color,estimate')->get();
-j       $this->dao->insert(TABLE_RISK)->data($risc, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        $this->dao->insert(TABLE_RISK)->data($risc, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
         return $this->dao->lastInsertID();
     }
 

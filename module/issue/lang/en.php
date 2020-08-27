@@ -30,6 +30,9 @@ $lang->issue->assignedDate      = 'AssignedDate';
 $lang->issue->resolve           = 'Resolved';
 $lang->issue->id                = 'ID';
 
+$lang->issue->view              = 'Issue Details';
+$lang->issue->close             = 'Closed';
+$lang->issue->cancel            = 'Cancel';
 $lang->issue->delete            = 'Delete';
 $lang->issue->search            = 'Search';
 $lang->issue->basicInfo         = 'Basic Information';
