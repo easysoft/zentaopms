@@ -45,4 +45,17 @@ class weekly extends control
         $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->program, $date);
         $this->display();
     }
+
+    public function computeWeekly()
+    {
+        $programs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+           ->where('deleted')->eq(0) 
+           ->andWhere('isCat')->eq(0) 
+           ->andWhere('template')->ne('') 
+           ->andWhere('program')->eq(0) 
+           ->fetchPairs();
+        $date = helper::today();
+
+        foreach($programs as $programID => $program) $this->weekly->save($programID, $date);
+    }
 }
