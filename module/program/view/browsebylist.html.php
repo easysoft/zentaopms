@@ -1,6 +1,6 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table auto-fade-in fade' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
-  <table class='table has-sort-head table-fixed' id='programList'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
+  <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
@@ -22,13 +22,33 @@
     </thead>
     <tbody class='sortable' id='programTableList'>
       <?php foreach($programs as $program):?>
-      <tr data-id='<?php echo $program->id ?>' data-order='<?php echo $program->order ?>'<?php if($program->isCat) echo " data-nested='true'";?><?php if($program->parent) echo " data-nest-parent='$program->parent' data-nest-path='$program->path'";?>>
+      <?php
+      $trClass = '';
+      $trAttrs = "data-id='$program->id' data-order=$program->order";
+      if($program->isCat)
+      {
+          $trAttrs .= " data-nested='true'";
+          if($program->parent == '0') $trClass .= ' is-top-level table-nest-child-hide';
+          else $trClass .= ' is-top-level table-nest-hide';
+      }
+
+      if($program->parent)
+      {
+          if(!$program->isCat) $trClass .= ' is-nest-child';
+          $trClass .= ' table-nest-hide';
+          $trAttrs .= " data-nest-parent='$program->parent' data-nest-path='$program->path'";
+      }
+      else if(!$program->isCat) $trClass .= ' no-nest';
+      $trAttrs .= " class='$trClass'";
+      ?>
+      <tr <?php echo $trAttrs;?>>
         <td class='c-id'>
           <?php printf('%03d', $program->id);?>
         </td>
         <td class='text-left'><?php echo $program->code;?></td>
         <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
-          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
+          <span class="table-nest-icon icon<?php if($program->isCat) echo ' table-nest-toggle' ?>"></span>
+          <?php echo $program->isCat ? $program->name : html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>
