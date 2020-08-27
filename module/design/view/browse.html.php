@@ -61,7 +61,7 @@
             <td style="overflow:hidden"><?php echo $design->commit;?></td>
             <td><?php echo $design->createdBy;?></td>
             <td><?php echo substr($design->createdDate, 0, 11);?></td>
-            <td><?php echo $design->assignedTo;?></td>
+            <td><?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";

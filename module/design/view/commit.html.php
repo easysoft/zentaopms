@@ -38,7 +38,7 @@
       </tr>
     </table>
   </div>
-  <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('commit', "designID=$designID");?> method='post'>
+  <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('commit', "designID=$designID&repoID=$repoID");?> method='post'>
     <table class='table'>
       <thead>
         <tr>

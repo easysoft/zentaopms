@@ -1126,7 +1126,6 @@ $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
 $lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
-$lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
 $lang->cmmiproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
 $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';

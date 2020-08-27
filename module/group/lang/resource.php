@@ -44,7 +44,6 @@ $lang->moduleOrder[92]  = 'durationestimation';
 $lang->moduleOrder[93]  = 'budget';
 
 $lang->moduleOrder[95]  = 'company';
-$lang->moduleOrder[96]  = 'milestone';
 $lang->moduleOrder[97]  = 'stage';
 $lang->moduleOrder[98]  = 'weekly';
 $lang->moduleOrder[100] = 'dept';
@@ -1032,14 +1031,6 @@ $lang->resource->git->apiSync = 'apiSync';
 $lang->git->methodOrder[5]  = 'diff';
 $lang->git->methodOrder[10] = 'cat';
 $lang->git->methodOrder[15] = 'apiSync';
-
-/* Milestone. */
-$lang->resource->milestone = new stdclass();
-$lang->resource->milestone->index            = 'index';
-$lang->resource->milestone->saveOtherProblem = 'saveOtherProblem';
-
-$lang->milestone->methodOrder[0] = 'index';
-$lang->milestone->methodOrder[5] = 'saveOtherProblem';
 
 /* Weekly. */
 $lang->resource->weekly = new stdclass();

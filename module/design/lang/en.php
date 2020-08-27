@@ -45,6 +45,8 @@ $lang->design->reviewObject  = 'Review Object';
 $lang->design->createdBy     = 'CreatedBy';
 $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
+$lang->design->assignTo      = 'Assign';
+$lang->design->noAssigned    = 'Unassigned';
 
 $lang->design->typeList         = array();
 $lang->design->typeList['']     = '';

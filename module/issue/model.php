@@ -358,6 +358,7 @@ class issueModel extends model
         $story = fixer::input('post')->remove('issue,color')
             ->setIF($this->post->needNotReview or $this->post->projectID > 0, 'status', 'active')
             ->get();
+
         $this->dao->insert(TABLE_STORY)->data($story, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files,spec,story,needNotReview')->exec();
         $id = $this->dao->lastInsertID();
         $this->dao->insert(TABLE_STORYSPEC)

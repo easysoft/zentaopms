@@ -57,7 +57,7 @@ class program extends control
         }
         else
         {
-            $programs = $this->program->getList($status, $orderBy, $pager);
+            $programs = $this->program->getList($status, $orderBy, $pager, true);
         }
 
         $this->view->programs    = $programs;
