@@ -1,8 +1,9 @@
 <?php
 $config->design = new stdclass();
 $config->design->editor = new stdclass();
-$config->design->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->design->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->design->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');
+$config->design->editor->edit     = array('id' => 'desc',    'tools' => 'simpleTools');
+$config->design->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->design->affectedFixedNum = 7; 
 

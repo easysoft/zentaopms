@@ -59,6 +59,9 @@ $lang->block->doingProject    = '进行中的' . $lang->projectCommon;
 $lang->block->finishProject   = '累积' . $lang->projectCommon;
 $lang->block->estimatedHours  = '预计工时';
 $lang->block->consumedHours   = '已消耗';
+$lang->block->time            = '第';
+$lang->block->week            = '周';
+$lang->block->month           = '月';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -119,9 +122,9 @@ $lang->block->default['cmmi']['program']['5']['params']['num']     = '15';
 $lang->block->default['cmmi']['program']['5']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['cmmi']['program']['6']['title']  = '最新动态';
-$lang->block->default['cmmi']['program']['6']['block']  = 'dynamic';
+$lang->block->default['cmmi']['program']['6']['block']  = 'scrumdynamic';
 $lang->block->default['cmmi']['program']['6']['grid']   = 4;
-$lang->block->default['cmmi']['program']['6']['source'] = '';
+$lang->block->default['cmmi']['program']['6']['source'] = 'program';
 
 $lang->block->default['cmmi']['program']['7']['title']  = '项目风险';
 $lang->block->default['cmmi']['program']['7']['block']  = 'cmmirisk';

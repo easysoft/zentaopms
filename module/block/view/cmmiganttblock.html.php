@@ -1,6 +1,8 @@
 <div class="panel-body">
   <div id='cmmiGantt'>
+    <?php if(count($products) >= 2): ?>
     <?php echo html::select('cmmiGanttProductID', $products, $productID, "class='form-control chosen'"); ?>
+    <?php endif;?>
     <?php if(empty($plans['data'])): ?>
     <div class='empty-tip'><?php echo $lang->programplan->noData;?></div>
     <?php else:?>

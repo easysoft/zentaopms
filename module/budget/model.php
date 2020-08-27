@@ -1,6 +1,24 @@
 <?php
+/**
+ * The model file of budget module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     budget
+ * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
+<?php
 class budgetModel extends model
 {
+    /**
+     * Get subject option.
+     *
+     * @access public
+     * @return object
+     */
     public function getSubjectOption()
     {
         $subjects    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
@@ -15,6 +33,13 @@ class budgetModel extends model
         return $subjects;
     }
 
+    /**
+     * Get budget by id.
+     *
+     * @param  int  $budgetID
+     * @access public
+     * @return array
+     */
     public function getByID($budgetID)
     {
         $budget = $this->dao->select('*')->from(TABLE_BUDGET)->where('id')->eq($budgetID)->fetch();
@@ -23,6 +48,14 @@ class budgetModel extends model
         return $budget;
     }
 
+    /**
+     * Get budget list.
+     *
+     * @param  varchar $orderBy
+     * @param  pager   $object
+     * @access public
+     * @return object
+     */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUDGET)
@@ -33,6 +66,12 @@ class budgetModel extends model
             ->fetchAll();
     }
 
+    /**
+     * Get stages.
+     *
+     * @access public
+     * @return array
+     */
     public function getStages()
     {
         return $this->dao->select('stage')->from(TABLE_BUDGET)
@@ -42,6 +81,12 @@ class budgetModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get subjects.
+     *
+     * @access public
+     * @return array
+     */
     public function getSubjects()
     {
         return $this->dao->select('subject')->from(TABLE_BUDGET)
@@ -51,6 +96,12 @@ class budgetModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get subject structure.
+     *
+     * @access public
+     * @return array
+     */
     public function getSubjectStructure()
     {
         $subjects  = $this->getSubjects();
@@ -72,6 +123,12 @@ class budgetModel extends model
         return $structure;
     }
 
+    /**
+     * Get summary.
+     *
+     * @access public
+     * @return array
+     */
     public function getSummary()
     {
         $budgets = $this->dao->select('*')->from(TABLE_BUDGET)
@@ -102,6 +159,12 @@ class budgetModel extends model
         return $summary;
     }
 
+    /**
+     * Create a budget.
+     *
+     * @access public
+     * @return int
+     */
     public function create()
     {
         $budget = fixer::input('post')
@@ -121,6 +184,12 @@ class budgetModel extends model
         return $budgetID;
     }
 
+    /**
+     * Batch create budgets.
+     *
+     * @access public
+     * @return bool
+     */
     public function batchCreate()
     {
         $today   = helper::today();
@@ -161,6 +230,13 @@ class budgetModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Update a budget.
+     *
+     * @param  int  $budgetID 
+     * @access public
+     * @return array
+     */
     public function update($budgetID)
     {
         $oldBudget = $this->getByID($budgetID);

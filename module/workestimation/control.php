@@ -11,6 +11,13 @@
  */
 class workestimation extends control
 {
+    /**
+     * Index
+     *
+     * @param  int    $program
+     * @access public
+     * @return void
+     */
     public function index($program = 0)
     {
         $program = $program ? $program : $this->session->program;
@@ -27,7 +34,7 @@ class workestimation extends control
 
         $budget = $this->workestimation->getBudget($program);
         if(!isset($this->config->project)) $this->config->project = new stdclass();
-        if(empty($budget)) 
+        if(empty($budget))
         {
             $this->app->loadConfig('estimate');
             $budget = new stdclass();

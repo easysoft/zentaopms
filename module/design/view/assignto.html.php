@@ -1,12 +1,12 @@
 <?php
 /**
- * The assignto of risk module of ZenTaoPMS.
+ * The assign of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     risk
- * @version     $Id: assignto.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @package     design
+ * @version     $Id: assign.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -15,16 +15,16 @@
 <div id='mainContent' class='main-content'>
  <div class='main-header'>
     <h2>
-      <span class='prefix label-id'><strong><?php echo $risk->id;?></strong></span>
-      <?php echo "<span title='$risk->name'>" . $risk->name . '</span>';?>
+      <span class='prefix label-id'><strong><?php echo $design->id;?></strong></span>
+      <?php echo "<span title='$design->name'>" . $design->name . '</span>';?>
     </h2>
   </div> 
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-100px'><?php echo $lang->risk->assignedTo;?></th>
-          <td><?php echo html::select('assignedTo', $users, $risk->assignedTo, "class='form-control chosen'");?></td>
+          <th class='w-100px'><?php echo $lang->design->assignedTo;?></th>
+          <td><?php echo html::select('assignedTo', $users, $design->assignedTo, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
         <tr>
@@ -38,4 +38,3 @@
   </form>
 </div>
 <?php include "../../common/view/footer.html.php";?>
-

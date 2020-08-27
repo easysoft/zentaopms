@@ -63,7 +63,7 @@ class projectModel extends model
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
         $program = $this->getByID($this->session->program);
-        if(empty($projects)) 
+        if(empty($projects))
         {
             if($program->template == 'cmmi')
             {
@@ -139,26 +139,26 @@ class projectModel extends model
             common::setMenuVars($this->lang->project->menu, $key, $projectID);
 
             if(isset($this->lang->project->subMenu->$key))
-            {    
+            {
                 $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
-                {    
+                {
                     foreach($subMenu as $menuKey => $menu)
-                    {    
-                        $itemMenu = zget($projectSubMenu, $menuKey, ''); 
+                    {
+                        $itemMenu = zget($projectSubMenu, $menuKey, '');
                         $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                         $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                         $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
                         if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                        {    
+                        {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
-                        }    
-                    }    
+                        }
+                    }
                     $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
-                }    
+                }
             }
         }
 
@@ -848,12 +848,12 @@ class projectModel extends model
     /**
      * Get projects by program.
      *
-     * @param  int  $program 
+     * @param  object  $program
      * @access public
      * @return array
      */
     public function getProjectsByProgram($program)
-    {   
+    {
         $projects = $this->dao->select('t1.*, t3.name as productName')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
@@ -866,13 +866,13 @@ class projectModel extends model
         if($program->template == 'cmmi')
         {
             foreach($projects as $projectID => $project)
-            {   
+            {
                 if($project->parent and isset($projects[$project->id]) and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
-            }   
+            }
             if($program->category == 'multiple')
-            {   
+            {
                 foreach($projects as $projectID => $project) $projects[$projectID]->name = $project->productName . '/' . $project->name;
-            }   
+            }
             foreach($projects as $projectID => $project) unset($projects[$project->parent]);
         }
 
@@ -1110,7 +1110,7 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  bool   $setImgSize
      * @access public
-     * @return void
+     * @return object
      */
     public function getById($projectID, $setImgSize = false)
     {
@@ -1865,10 +1865,10 @@ class projectModel extends model
 
     /**
      * Get team slice.
-     * 
-     * @param  array  $teams 
-     * @param  string $begin 
-     * @param  string $end 
+     *
+     * @param  array  $teams
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return array
      */
@@ -2250,11 +2250,11 @@ class projectModel extends model
     /**
      * Get bugs by search in project.
      *
-     * @param  int    $products
-     * @param  int    $projectID
-     * @param  int    $sql
-     * @param  int    $pager
-     * @param  int    $orderBy
+     * @param  array     $products
+     * @param  int       $projectID
+     * @param  string    $sql
+     * @param  object    $pager
+     * @param  string    $orderBy
      * @access public
      * @return mixed
      */
@@ -2499,9 +2499,9 @@ class projectModel extends model
     /**
      * Build bug search form.
      *
-     * @param  int    $products
-     * @param  int    $queryID
-     * @param  int    $actionURL
+     * @param  array     $products
+     * @param  int       $queryID
+     * @param  string    $actionURL
      * @access public
      * @return void
      */
@@ -2884,6 +2884,23 @@ class projectModel extends model
         $chartData['baseLine'] = $baselineJSON;
 
         return $chartData;
+    }
+
+    /**
+     * Gets the top-level project name.
+     *
+     * @access private
+     * @return void
+     */
+    public function getProjectParentName($parentID = 0)
+    {
+        if($parentID == 0) return '';
+
+        static $parent;
+        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
+        if($parent->parent) $this->getProjectParentName($parent->parent);
+
+        return $parent->name;
     }
 
     /**

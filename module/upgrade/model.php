@@ -782,15 +782,12 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
-<<<<<<< HEAD
-            case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
-=======
             case '12_3':
             case '12_3_1':
             case '12_3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.2'));
             case '12_3_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.3'));
             case '12_4':   $confirmContent .= file_get_contents($this->getUpgradeFile('12.4'));
->>>>>>> master
+            case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

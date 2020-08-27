@@ -56,6 +56,7 @@ class design extends control
         $this->view->orderBy    = $orderBy;
         $this->view->productID  = $productID;
         $this->view->pager      = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -238,7 +239,7 @@ class design extends control
 
         if($_POST)
         {
-            $this->design->linkCommit($designID);
+            $this->design->linkCommit($designID, $repoID);
 
             $result['result']  = 'success';
             $result['message'] = $this->lang->saveSuccess;
@@ -293,5 +294,38 @@ class design extends control
             $this->design->delete(TABLE_DESIGN, $designID);
             die(js::locate($this->session->designList, 'parent'));
         }
+    }
+
+    /**
+     * Update assign of design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return void
+     */
+    public function assignTo($designID)
+    {
+        if($_POST)
+        {
+            $changes = $this->design->assign($designID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action');
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('design', $designID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('design', 'browse'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->design->assignedTo;
+        $this->view->position[] = $this->lang->design->assignedTo;
+
+        $this->view->design = $this->design->getById($designID);
+        $this->view->users  = $this->loadModel('user')->getPairs();
+        $this->display();
     }
 }

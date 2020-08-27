@@ -45,6 +45,8 @@ $lang->design->reviewObject  = '评审对象';
 $lang->design->createdBy     = '由谁创建';
 $lang->design->createdDate   = '创建时间';
 $lang->design->basicInfo     = '基本信息';
+$lang->design->assignTo      = '指派';
+$lang->design->noAssigned    = '未指派';
 
 $lang->design->typeList         = array();
 $lang->design->typeList['']     = '';

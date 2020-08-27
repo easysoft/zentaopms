@@ -1,4 +1,14 @@
 <?php 
+/**
+ * The control file of risk currentModule of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     risk
+ * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 class risk extends control
 {
     /**
@@ -178,7 +188,7 @@ class risk extends control
     public function delete($riskID, $confirm = 'no')
     {
         $risk = $this->risk->getById($riskID);
-                        
+
         if($confirm == 'no')
         {
             echo js::confirm($this->lang->risk->confirmDelete, $this->createLink('risk', 'delete', "risk=$riskID&confirm=yes"), '');

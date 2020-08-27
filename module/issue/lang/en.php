@@ -1,4 +1,14 @@
 <?php
+/**
+ * The issue module English file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     issue
+ * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->issue->common            = 'Issue';
 $lang->issue->browse            = 'List';
 $lang->issue->resolvedBy        = 'Resolved By';
@@ -27,15 +37,18 @@ $lang->issue->closedDate        = 'ClosedDate';
 $lang->issue->assignedTo        = 'AssignedTo';
 $lang->issue->assignedBy        = 'AssignedBy';
 $lang->issue->assignedDate      = 'AssignedDate';
-$lang->issue->resolved          = 'Resolved';
+$lang->issue->resolve           = 'Resolved';
 $lang->issue->id                = 'ID';
 
+$lang->issue->view              = 'Issue Details';
+$lang->issue->close             = 'Closed';
+$lang->issue->cancel            = 'Cancel';
 $lang->issue->delete            = 'Delete';
 $lang->issue->search            = 'Search';
 $lang->issue->basicInfo         = 'Basic Information';
-$lang->issue->active            = 'Activate';
-$lang->issue->assign            = 'Assign';
-$lang->issue->create            = 'Create Issue';
+$lang->issue->activate          = 'Activate';
+$lang->issue->assignTo          = 'Assign';
+$lang->issue->create            = 'Create';
 $lang->issue->edit              = 'Edit';
 $lang->issue->batchCreate       = 'Batch Create';
 

@@ -1,4 +1,14 @@
 <?php
+/**
+ * The issue module zh-cn file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     issue
+ * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->issue->common            = '项目问题';
 $lang->issue->browse            = '问题列表';
 $lang->issue->resolvedBy        = '解决者';
@@ -27,24 +37,20 @@ $lang->issue->closedDate        = '关闭日期';
 $lang->issue->assignedTo        = '指派给';
 $lang->issue->assignedBy        = '由谁指派';
 $lang->issue->assignedDate      = '指派时间';
-$lang->issue->resolved          = '解决';
+$lang->issue->resolve           = '解决';
 $lang->issue->id                = '编号';
 
+$lang->issue->view              = '问题详情';
+$lang->issue->close             = '关闭';
+$lang->issue->cancel            = '取消';
 $lang->issue->delete            = '删除';
 $lang->issue->search            = '搜索';
 $lang->issue->basicInfo         = '基本信息';
-$lang->issue->active            = '激活';
-$lang->issue->assign            = '指派';
-$lang->issue->assignTo          = '指派问题';
-$lang->issue->create            = '新建问题';
-$lang->issue->edit              = '编辑问题';
+$lang->issue->activate          = '激活';
+$lang->issue->assignTo          = '指派';
+$lang->issue->create            = '新建';
+$lang->issue->edit              = '编辑';
 $lang->issue->batchCreate       = '批量新建';
-$lang->issue->close             = '关闭问题';
-$lang->issue->cancel            = '取消问题';
-$lang->issue->activate          = '激活问题';
-$lang->issue->resolve           = '解决问题';
-$lang->issue->resolve           = '解决问题';
-$lang->issue->view              = '问题概况';
 
 $lang->issue->labelList['all']       = '全部';
 $lang->issue->labelList['open']      = '开放';

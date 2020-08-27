@@ -62,7 +62,6 @@ class issueModel extends model
      * @param  string $owner
      * @param  string $activityID
      * @param  object $pager
-     *
      * @access public
      * @return object
      */
@@ -94,7 +93,7 @@ class issueModel extends model
         $issueQuery = '';
         if($browseType == 'bysearch')
         {
-            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : ''; 
+            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
             if($query)
             {
                 $this->session->set('issueQuery', $query->sql);
@@ -120,11 +119,26 @@ class issueModel extends model
         return $issueList;
     }
 
+    /**
+     * getActivityList
+     *
+     * @access public
+     * @return object
+     */
     public function getActivityList()
     {
         return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
     }
 
+    /**
+     * getBlockIssues
+     *
+     * @param  string $browseType
+     * @param  int    $limit
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
@@ -325,7 +339,7 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return void
+     * @return object
      */
     public function resolve($issueID)
     {
@@ -338,7 +352,7 @@ class issueModel extends model
      * Create task.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function createTask()
     {
@@ -358,6 +372,7 @@ class issueModel extends model
         $story = fixer::input('post')->remove('issue,color')
             ->setIF($this->post->needNotReview or $this->post->projectID > 0, 'status', 'active')
             ->get();
+
         $this->dao->insert(TABLE_STORY)->data($story, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files,spec,story,needNotReview')->exec();
         $id = $this->dao->lastInsertID();
         $this->dao->insert(TABLE_STORYSPEC)

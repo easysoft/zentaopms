@@ -1190,29 +1190,26 @@ class block extends control
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $programID = $this->session->program;
+        $program   = $this->loadModel('project')->getByID($programID);
 
         $begin = $program->begin;
         $today = helper::today();
         $end   = date('Y-m-d', strtotime($today));
 
-        $projects = $this->project->getProjectsByProgram($program);
-        $projectIdList = array_keys($projects);
-
         $charts['PV'] = '[';
         $charts['EV'] = '[';
         $charts['AC'] = '[';
         $i = 1;
-        $start = $begin;
-        $longProgram = helper::diffDate($today, $begin) / 7 > 10;
-        while($start < $end)
+        $longProgram = helper::diffDate($today, $begin) / 7 > 12;
+        while($begin < $end)
         {
-            $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
-            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
-            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
-            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
-            $start              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
+            $charts['labels'][] = $longProgram ? $this->lang->block->time . $i . $this->lang->block->month : $this->lang->block->time . $i . $this->lang->block->week;
+            $charts['PV']      .= $this->weekly->getPV($programID, $begin) . ',';
+            $charts['EV']      .= $this->weekly->getEV($programID, $begin) . ',';
+            $charts['AC']      .= $this->weekly->getAC($programID, $begin) . ',';
+            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($begin)) : $this->weekly->getThisSunday($begin);
+            $begin              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
             $i ++;
         }
 
@@ -1296,11 +1293,22 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = $this->loadModel('product')->getPairs();
 
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $actions = array();
+        if(!empty($projects) || !empty($products))
+        {
+            $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
+                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
+                ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
+                ->orderBy('id_desc')
+                ->limit(30)
+                ->fetchAll();
+        }
+
+        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -1652,7 +1660,7 @@ class block extends control
         $num = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', 'id_desc', $num);
+        $this->view->programs = $this->loadModel('program')->getUserPrograms('doing', 'id_desc', $num);
     }
 
     /**

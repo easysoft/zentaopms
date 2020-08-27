@@ -7,16 +7,17 @@ class programModel extends model
      * @param  varchar $status
      * @param  varchar $orderBy
      * @param  object  $pager
+     * @param  bool    $includeCat
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
+            ->where('program')->eq(0)
             ->andWhere('template')->ne('')
-            ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$includeCat)->andWhere('iscat')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF($this->cookie->mine)
@@ -183,6 +184,7 @@ class programModel extends model
         /* Init vars. */
         $this->loadModel('project');
         $programs = $this->getList($status, $orderBy, $pager);
+
         if(empty($programs)) return array();
 
         $programIdList = array_keys($programs);
@@ -207,9 +209,10 @@ class programModel extends model
         foreach($programs as $programID => $program)
         {
             $orderBy = $program->template == 'cmmi' ? 'id_asc' : 'id_desc';
-            $program->projects  = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, $pager, $programID);
-            $program->teamCount = isset($teams[$programID]) ? $teams[$programID]->count : 0;
-            $program->estimate  = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
+            $program->projects   = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, $pager, $programID);
+            $program->teamCount  = isset($teams[$programID]) ? $teams[$programID]->count : 0;
+            $program->estimate   = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
+            $program->parentName = $this->project->getProjectParentName($program->parent);
         }
 
         return $programs;
@@ -246,26 +249,38 @@ class programModel extends model
             ->add('type', 'program')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('end', '')
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans')
+            ->remove('products, workDays, delta, branch, uid, plans, longTime')
             ->get();
 
         if($project->parent)
         {
             $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project->parent)->fetch();
-            if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
-            if($project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-            if(dao::isError()) return false;
+            if($parentProgram)
+            {
+                /* Child project begin cannot less than parent. */
+                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                /* When parent set end then child project end cannot greater than parent. */
+                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                /* When parent set end then child project cannot set longTime. */
+                if(empty($project->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+
+                if(dao::isError()) return false;
+            }
         }
+
+        $requiredFields = $this->config->program->create->requiredFields;
+        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
-            ->batchcheck($this->config->program->create->requiredFields, 'notempty')
+            ->batchcheck($requiredFields, 'notempty')
             ->check('name', 'unique', "deleted='0'")
             ->check('code', 'unique', "deleted='0'")
             ->exec();
@@ -342,15 +357,16 @@ class programModel extends model
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROJECT)->fetch();
 
         $program = fixer::input('post')
+            ->setDefault('team', $this->post->name)
+            ->setDefault('end', '')
+            ->setDefault('isCat', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
-            ->setDefault('team', $this->post->name)
-            ->setDefault('isCat', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans')
+            ->remove('products, branch, uid, plans, longTime')
             ->get();
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
 
@@ -360,23 +376,33 @@ class programModel extends model
         if(!empty($program->isCat))
         {
             $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
-            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('maxEnd');
+            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
             if($maxChildEnd   and $program->end   < $maxChildEnd)   dao::$errors['end']   = sprintf($this->lang->program->endLetterChild,   $maxChildEnd);
+
+            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
+            if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
         }
 
         if($program->parent)
         {
             $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($program->parent)->fetch();
-            if($parentProgram and $program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
-            if($parentProgram and $program->end   > $parentProgram->end)   dao::$errors['end']   = sprintf($this->lang->program->endGreaterParent,  $parentProgram->end);
+            if($parentProgram)
+            {
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+            }
         }
         if(dao::isError()) return false;
 
+        $requiredFields = $this->config->program->edit->requiredFields;
+        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
+            ->batchcheck($requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
@@ -446,6 +472,13 @@ class programModel extends model
 
         if(empty($program)) return true;
 
+        if($program->isCat and $action == 'group')         return false;
+        if($program->isCat and $action == 'managemembers') return false;
+        if($program->isCat and $action == 'start')         return false;
+        if($program->isCat and $action == 'activate')      return false;
+        if($program->isCat and $action == 'suspend')       return false;
+        if($program->isCat and $action == 'close')         return false;
+
         if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'close')    return $program->status != 'closed';
@@ -465,23 +498,8 @@ class programModel extends model
     public function checkHasContent($programID)
     {
         $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_BUDGET)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_BUG)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_CASE)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_DESIGN)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_DOC)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_ISSUE)->where('program')->eq($programID)->fetch('count');
         $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_RELATION)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_RELEASE)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_REPO)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_RISK)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_STORY)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TESTREPORT)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TESTSUITE)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TESTTASK)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_WORKESTIMATION)->where('program')->eq($programID)->fetch('count');
+        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('program')->eq($programID)->fetch('count');
 
         return $count > 0;
     }
