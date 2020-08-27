@@ -40,7 +40,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
