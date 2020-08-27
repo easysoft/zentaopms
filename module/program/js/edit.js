@@ -1,11 +1,12 @@
 $(function()
 {
-    $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
+    var endDate = $('#end').val();
     $('#isCat').change(function()
     {
         if($(this).prop('checked'))
         {
             $('#longTimeBox').removeClass('hidden');
+            $('#longTime').change();
         }
         else
         {
@@ -22,12 +23,9 @@ $(function()
         }
         else
         {
-            $('#end').removeAttr('disabled');
+            $('#end').val(endDate).removeAttr('disabled');
         }
     });
-});
 
-function setCopyProject(copiedProgramID)
-{
-    location.href = createLink('program', 'create', 'template=' + template + '&programID=' + programID + '&copyProgramID=' + copiedProgramID);
-}
+    $('#isCat').change();
+});
