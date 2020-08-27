@@ -2889,6 +2889,23 @@ class projectModel extends model
     }
 
     /**
+     * Gets the top-level project name.
+     *
+     * @access private
+     * @return void
+     */
+    public function getProjectParentName($parentID = 0)
+    {
+        if($parentID == 0) return '';
+
+        static $parent;
+        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
+        if($parent->parent) $this->getProjectParentName($parent->parent);
+
+        return $parent->name;
+    }
+
+    /**
      * Fill tasks in tree.
      * @param  object $tree
      * @param  int    $projectID
