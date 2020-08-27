@@ -45,7 +45,6 @@ $lang->moduleOrder[93]  = 'budget';
 
 $lang->moduleOrder[95]  = 'company';
 $lang->moduleOrder[97]  = 'stage';
-$lang->moduleOrder[98]  = 'weekly';
 $lang->moduleOrder[100] = 'dept';
 $lang->moduleOrder[105] = 'group';
 $lang->moduleOrder[110] = 'user';
@@ -1033,12 +1032,6 @@ $lang->resource->git->apiSync = 'apiSync';
 $lang->git->methodOrder[5]  = 'diff';
 $lang->git->methodOrder[10] = 'cat';
 $lang->git->methodOrder[15] = 'apiSync';
-
-/* Weekly. */
-$lang->resource->weekly = new stdclass();
-$lang->resource->weekly->index = 'index';
-
-$lang->weekly->methodOrder[0]  = 'index';
 
 /* Stage. */
 $lang->resource->stage = new stdclass();
