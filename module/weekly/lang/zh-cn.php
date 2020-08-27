@@ -1,4 +1,14 @@
 <?php
+/**
+ * The weekly module zh-cn file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     weekly
+ * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->weekly->common   = '项目周报';
 $lang->weekly->index    = '周报总览';
 $lang->weekly->progress = '完成百分比';
