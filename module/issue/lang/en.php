@@ -27,15 +27,15 @@ $lang->issue->closedDate        = 'ClosedDate';
 $lang->issue->assignedTo        = 'AssignedTo';
 $lang->issue->assignedBy        = 'AssignedBy';
 $lang->issue->assignedDate      = 'AssignedDate';
-$lang->issue->resolved          = 'Resolved';
+$lang->issue->resolve           = 'Resolved';
 $lang->issue->id                = 'ID';
 
 $lang->issue->delete            = 'Delete';
 $lang->issue->search            = 'Search';
 $lang->issue->basicInfo         = 'Basic Information';
-$lang->issue->active            = 'Activate';
-$lang->issue->assign            = 'Assign';
-$lang->issue->create            = 'Create Issue';
+$lang->issue->activate          = 'Activate';
+$lang->issue->assignTo          = 'Assign';
+$lang->issue->create            = 'Create';
 $lang->issue->edit              = 'Edit';
 $lang->issue->batchCreate       = 'Batch Create';
 

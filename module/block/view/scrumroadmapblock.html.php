@@ -36,36 +36,30 @@
   <?php else:?>
   <div class="release-path">
     <ul class="release-line">
-      <?php foreach($roadmaps as $year => $mapBranches):?>
-        <?php foreach($mapBranches as $plans):?>
-          <?php foreach($plans as $plan):?>
-            <?php if(isset($plan->begin)):?>
-            <li <?php if(date('Y-m-d') < $plan->begin) echo 'class="active"';?>>
-              <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
-                <span class="title" title="<?php echo $plan->title;?>"><?php echo $plan->title;?></span>
-                <?php
-                  $plan->begin = date('Y/m/d', strtotime($plan->begin));
-                  $plan->end   = '-' . date('m/d', strtotime($plan->end));
-                ?>
-                <span class="date" title="<?php echo $plan->begin . $plan->end;?>"><?php echo $plan->begin . $plan->end;?></span>
-                <span class="date"><?php echo $lang->block->estimatedHours;?> <?php echo $plan->hour;?> h</span>
-              </a>
-            </li>
-            <?php else:?>
-            <li>
-              <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
-                <span class="title" title="<?php echo $plan->name;?>"><?php echo $plan->name . "($plan->buildName)";?></span>
-                <?php
-                  $plan->date = date('Y/m/d', strtotime($plan->date));
-                ?>
-                <span class="date" title="<?php echo $plan->date;?>"><?php echo $plan->date;?></span>
-                <?php $estimate = empty($plan->stories) ? 0 : $this->block->getStorysEstimateHours(explode(',', $plan->stories));?>
-                <span class="date"><?php echo $lang->block->consumedHours;?> <?php echo empty($estimate) ? 0 : $estimate;?> h</span>
-              </a>
-            </li>
-            <?php endif;?>
-          <?php endforeach;?>
-        <?php endforeach;?>
+      <?php foreach($roadmaps as $plan):?>
+        <?php if(isset($plan->begin)):?>
+        <li <?php if(date('Y-m-d') < $plan->begin) echo 'class="active"';?>>
+          <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
+            <span class="title" title="<?php echo $plan->title;?>"><?php echo $plan->title;?></span>
+            <?php
+              $plan->begin = date('Y/m/d', strtotime($plan->begin));
+              $plan->end   = '-' . date('m/d', strtotime($plan->end));
+            ?>
+            <span class="date" title="<?php echo $plan->begin . $plan->end;?>"><?php echo $plan->begin . $plan->end;?></span>
+            <span class="date"><?php echo $lang->block->estimatedHours;?> <?php echo $plan->hour;?> h</span>
+          </a>
+        </li>
+        <?php else:?>
+        <li>
+          <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
+            <span class="title" title="<?php echo $plan->name;?>"><?php echo $plan->name . "($plan->buildName)";?></span>
+            <?php $plan->date = date('Y/m/d', strtotime($plan->date));?>
+            <span class="date" title="<?php echo $plan->date;?>"><?php echo $plan->date;?></span>
+            <?php $estimate = empty($plan->stories) ? 0 : $this->block->getStorysEstimateHours(explode(',', $plan->stories));?>
+            <span class="date"><?php echo $lang->block->consumedHours;?> <?php echo empty($estimate) ? 0 : $estimate;?> h</span>
+          </a>
+        </li>
+        <?php endif;?>
       <?php endforeach;?>
     </ul>
   </div>

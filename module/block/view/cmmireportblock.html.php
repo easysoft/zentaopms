@@ -9,7 +9,7 @@
 .block-cmmireport .col-right .tile .tile-title{font-weight: 700;}
 .block-cmmireport .progress {position: absolute; left: 45px; top: 90px; right: 40px;}
 .block-cmmireport .progress-num{font-size: 26px; font-weight: 700}
-.block-cmmireport .col-right .tile-amount{font-size: 26px; font-weight: 700}
+.block-cmmireport .col-right .tile-amount{font-size: 22px; font-weight: 700}
 </style>
 
 <div class="panel-move-handler"><span class='stage text-muted'><?php echo $current;?></span></div>

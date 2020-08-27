@@ -62,11 +62,11 @@
               <td title="<?php echo $issue->createdDate;?>"><?php echo $issue->createdDate;?></td>
               <td class="c-actions">
                 <?php
-                  echo common::printIcon('issue', 'resolve', "issueID=$issue->id", $issue, 'list', 'checked', '', 'iframe', 'yes', '', $lang->issue->resolved);
-                  echo common::printIcon('issue', 'assignTo', "issueID=$issue->id", $issue, 'list', 'hand-right', '', 'iframe', 'yes', '', $lang->issue->assignedTo);
+                  echo common::printIcon('issue', 'resolve', "issueID=$issue->id", $issue, 'list', 'checked', '', 'iframe', 'yes', '', $lang->issue->resolve);
+                  echo common::printIcon('issue', 'assignTo', "issueID=$issue->id", $issue, 'list', 'hand-right', '', 'iframe', 'yes', '', $lang->issue->assignTo);
                   echo common::printIcon('issue', 'close', "issueID=$issue->id", $issue, 'list', 'off', '', 'iframe', 'yes');
                   echo common::printIcon('issue', 'cancel', "issueID=$issue->id", $issue, 'list', 'ban-circle', '', 'iframe', 'yes');
-                  echo common::printIcon('issue', 'activate', "issueID=$issue->id", $issue, 'list', 'magic', '', 'iframe', 'yes', '', $lang->issue->active);
+                  echo common::printIcon('issue', 'activate', "issueID=$issue->id", $issue, 'list', 'magic', '', 'iframe', 'yes', '', $lang->issue->activate);
                   echo common::printIcon('issue', 'edit', "issueID=$issue->id", $issue, 'list', 'edit');
                   $deleteClass = common::hasPriv('issue', 'delete') ? 'btn' : 'btn disabled';
                   echo html::a($this->createLink('issue', 'delete', "issueID=$issue->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->issue->delete}' class='$deleteClass'");

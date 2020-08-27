@@ -178,7 +178,7 @@ class risk extends control
     public function delete($riskID, $confirm = 'no')
     {
         $risk = $this->risk->getById($riskID);
-                        
+
         if($confirm == 'no')
         {
             echo js::confirm($this->lang->risk->confirmDelete, $this->createLink('risk', 'delete', "risk=$riskID&confirm=yes"), '');

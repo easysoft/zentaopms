@@ -117,7 +117,7 @@ class issue extends control
         else
         {
             $this->issue->delete($issueID);
-            die(js::reload('parent'));
+            die(js::locate(inLink('browse'), 'parent'));
         }
     }
 
@@ -306,7 +306,7 @@ class issue extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->issue->resolved;
+        $this->view->title = $this->lang->issue->resolve;
         $this->view->issue = $this->issue->getByID($issue);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
