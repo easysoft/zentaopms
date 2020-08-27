@@ -154,6 +154,12 @@ class repo extends control
             die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&confirm=yes")));
         }
 
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
+        if($relationID)
+        {
+            die(js::alert($this->lang->repo->error->deleted));
+        }
+
         $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();

@@ -239,7 +239,7 @@ class design extends control
 
         if($_POST)
         {
-            $this->design->linkCommit($designID);
+            $this->design->linkCommit($designID, $repoID);
 
             $result['result']  = 'success';
             $result['message'] = $this->lang->saveSuccess;
