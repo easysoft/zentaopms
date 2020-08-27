@@ -1,3 +1,15 @@
+<?php
+/**
+ * The createtask view of issue module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Congzhi Chen <congzhi@cnezsoft.com>
+ * @package     issue
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
         <tr class='taskTR'>
           <th><?php echo $lang->task->project;?></th>
           <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
