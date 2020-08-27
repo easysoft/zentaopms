@@ -1,11 +1,38 @@
 <?php
+/**
+ * The model file of programplan module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     programplan
+ * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
+<?php
 class programplanModel extends model
 {
+    /**
+     * Set menu
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @access public
+     * @return bool
+     */
     public function setMenu($programID, $productID)
     {
         return true;
     }
 
+    /**
+     * Get by id
+     *
+     * @param  int    $planID
+     * @access public
+     * @return object
+     */
     public function getByID($planID)
     {
         $plan = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
@@ -13,6 +40,13 @@ class programplanModel extends model
         return $this->processPlan($plan);
     }
 
+    /**
+     * Get projects by product
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
     public function getProjectsByProduct($productID)
     {
         $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
@@ -20,6 +54,17 @@ class programplanModel extends model
         return $projects;
     }
 
+    /**
+     * Get list
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  int    $planID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getList($programID = 0, $productID = 0, $planID = 0, $type = '', $orderBy = 'id_asc')
     {
         $projects = $this->getProjectsByProduct($productID);
@@ -36,6 +81,13 @@ class programplanModel extends model
         return $this->processPlans($plans);
     }
 
+    /**
+     * Get by list
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
     public function getByList($idList = array())
     {
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -46,6 +98,13 @@ class programplanModel extends model
         return $this->processPlans($plans);
     }
 
+    /**
+     * Get plan pairs for budget
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
     public function getPlanPairsForBudget($programID = 0)
     {
         $pairs   = array();
@@ -67,6 +126,15 @@ class programplanModel extends model
         return $pairs;
     }
 
+    /**
+     * Get plans
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getPlans($programID = 0, $productID = 0, $orderBy = 'id_asc')
     {
         $plans = $this->getList($programID, $productID, 0, 'all', $orderBy);
@@ -82,6 +150,15 @@ class programplanModel extends model
         return $parents;
     }
 
+    /**
+     * Get pairs
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
     public function getPairs($programID, $productID = 0, $type = 'all')
     {
         $plans = $this->getPlans($programID, $productID);
@@ -244,6 +321,13 @@ class programplanModel extends model
         return $returnJson ? json_encode($datas) : $datas;
     }
 
+    /**
+     * Get total percent
+     *
+     * @param  int    $plan
+     * @access public
+     * @return int
+     */
     public function getTotalPercent($plan)
     {
         $plans = $this->getList($plan->program, $plan->product, $plan->parent);
@@ -258,6 +342,13 @@ class programplanModel extends model
         return $totalPercent;
     }
 
+    /**
+     * Process plans
+     *
+     * @param  int    $plans
+     * @access public
+     * @return object
+     */
     public function processPlans($plans)
     {
         foreach($plans as $planID => $plan)
@@ -268,6 +359,13 @@ class programplanModel extends model
         return $plans;
     }
 
+    /**
+     * Process plan
+     *
+     * @param  int    $plan
+     * @access public
+     * @return object
+     */
     public function processPlan($plan)
     {
         $plan->setMilestone = true;
@@ -302,12 +400,29 @@ class programplanModel extends model
         return $plan;
     }
 
+    /**
+     * Get duration
+     *
+     * @param  int    $begin
+     * @param  int    $end
+     * @access public
+     * @return int
+     */
     public function getDuration($begin, $end)
     {
         $duration = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         return count($duration);
     }
 
+    /**
+     * Create a plan
+     *
+     * @param  int    $programID
+     * @param  int    $parentID
+     * @param  int    $productID
+     * @access public
+     * @return bool
+     */
     public function create($programID = 0, $parentID = 0, $productID = 0)
     {
         $data = (array)fixer::input('post')->get();
@@ -482,6 +597,13 @@ class programplanModel extends model
         }
     }
 
+    /**
+     * Update a plan
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool|array
+     */
     public function update($planID = 0)
     {
         $oldPlan = $this->getByID($planID);
@@ -563,6 +685,15 @@ class programplanModel extends model
         return common::createChanges($oldPlan, $plan);
     }
 
+    /**
+     * Print cell
+     *
+     * @param  int    $col
+     * @param  int    $plan
+     * @param  int    $users
+     * @access public
+     * @return string
+     */
     public function printCell($col, $plan, $users)
     {
         $id = $col->id;
@@ -661,12 +792,28 @@ class programplanModel extends model
         }
     }
 
+    /**
+     * Is create task
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
     public function isCreateTask($planID)
     {
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('project')->eq($planID)->limit(1)->fetch();
         return empty($task) ? true : false;
     }
 
+    /**
+     * Is clickable
+     *
+     * @param  int    $plan
+     * @param  int    $action
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function isClickable($plan, $action)
     {
         $action = strtolower($action);
@@ -676,6 +823,13 @@ class programplanModel extends model
         return true;
     }
 
+    /**
+     * Get milestones
+     *
+     * @param  int    $programID
+     * @access public
+     * @return object
+     */
     public function getMilestones($programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -687,6 +841,13 @@ class programplanModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Get milestone by product
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
     public function getMilestoneByProduct($productID)
     {
         return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
@@ -699,12 +860,27 @@ class programplanModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Is parent
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
     public function isParent($planID)
     {
         $children = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetch();
         return empty($children) ? false : true;
     }
 
+    /**
+     * Get parent stage list
+     *
+     * @param  int    $planID
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
     public function getParentStageList($planID, $productID)
     {
         $projects = $this->getProjectsByProduct($productID);
