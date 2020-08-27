@@ -1,6 +1,24 @@
 <?php
+/**
+ * The model file of stage module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     stage
+ * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
+<?php
 class stageModel extends model
 {
+    /**
+     * Create a stage
+     *
+     * @access public
+     * @return int|bool
+     */
     public function create()
     {
         $stage = fixer::input('post')
@@ -14,14 +32,20 @@ class stageModel extends model
         return false;
     }
 
+    /**
+     * Batch create
+     *
+     * @access public
+     * @return bool
+     */
     public function batchCreate()
     {
-        $data = fixer::input('post')->get(); 
+        $data = fixer::input('post')->get();
 
         $this->loadModel('action');
         foreach($data->name as $i => $name)
         {
-            if(!$name) continue; 
+            if(!$name) continue;
 
             $stage = new stdclass();
             $stage->name        = $name;
@@ -39,6 +63,13 @@ class stageModel extends model
         return true;
     }
 
+    /**
+     * Update a stage
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return bool
+     */
     public function update($stageID)
     {
         $oldStage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq((int)$stageID)->fetch();
@@ -54,11 +85,24 @@ class stageModel extends model
         return false;
     }
 
+    /**
+     * Get stages
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getStages($orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
     }
 
+    /**
+     * Get pairs
+     *
+     * @access public
+     * @return array
+     */
     public function getPairs()
     {
         $stages = $this->getStages();
@@ -72,6 +116,13 @@ class stageModel extends model
         return $pairs;
     }
 
+    /**
+     * Get by id
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return object
+     */
     public function getByID($stageID)
     {
         return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('id')->eq((int)$stageID)->fetch();

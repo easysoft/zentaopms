@@ -1,6 +1,23 @@
 <?php
+/**
+ * The control file of stage currentModule of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     stage
+ * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 class stage extends control
 {
+    /**
+     * Browse designs
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
     public function browse($orderBy = "id_desc")
     {
         $this->view->stages      = $this->stage->getStages($orderBy);
@@ -12,11 +29,17 @@ class stage extends control
         $this->display();
     }
 
+    /**
+     * Create a stage
+     *
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if($_POST)
         {
-            $stageID = $this->stage->create(); 
+            $stageID = $this->stage->create();
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -39,11 +62,17 @@ class stage extends control
         $this->display();
     }
 
+    /**
+     * Batch create
+     *
+     * @access public
+     * @return void
+     */
     public function batchCreate()
     {
         if($_POST)
         {
-            $this->stage->batchCreate(); 
+            $this->stage->batchCreate();
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -65,12 +94,19 @@ class stage extends control
         $this->display();
     }
 
+    /**
+     * Edit a stage
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return void
+     */
     public function edit($stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
         if($_POST)
         {
-            $changes = $this->stage->update($stageID); 
+            $changes = $this->stage->update($stageID);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -95,6 +131,12 @@ class stage extends control
         $this->display();
     }
 
+    /**
+     * Set type
+     *
+     * @access public
+     * @return void
+     */
     public function setType()
     {
         $this->loadModel('custom');
@@ -103,9 +145,9 @@ class stage extends control
             $data = fixer::input('post')->get();
             $this->custom->deleteItems("lang=all&module=stage&section=typeList");
             foreach($data->keys as $index => $key)
-            {   
+            {
                 $value = $data->values[$index];
-                if(!$value or !$key) continue; 
+                if(!$value or !$key) continue;
                 $this->custom->setItem("all.stage.typeList.{$key}", $value);
             }
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype')));
@@ -117,6 +159,14 @@ class stage extends control
         $this->display();
     }
 
+    /**
+     * Delete a stage
+     *
+     * @param  int    $stageID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
     public function delete($stageID, $confirm = 'no')
     {
         $stage = $this->stage->getById($stageID);

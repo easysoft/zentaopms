@@ -11,11 +11,25 @@
  */
 class workestimationModel extends model
 {
+    /**
+     * Get a budget
+     *
+     * @param  int    $program
+     * @access public
+     * @return array
+     */
     public function getBudget($program)
     {
         return $this->dao->select('*')->from(TABLE_WORKESTIMATION)->where('program')->eq($program)->fetch();
     }
 
+    /**
+     * Get program scale
+     *
+     * @param  int    $program
+     * @access public
+     * @return int
+     */
     public function getProgramScale($program)
     {
         $products = $this->loadModel('product')->getPairs($program);
@@ -23,13 +37,20 @@ class workestimationModel extends model
         return $this->dao->select('cast(sum(estimate) as decimal(10,2)) as scale')->from(TABLE_STORY)->where('product')->in($productIdList)->andWhere('type')->eq('requirement')->fetch('scale');
     }
 
+    /**
+     * Save a budget
+     *
+     * @param  int    $program
+     * @access public
+     * @return bool
+     */
     public function save($program)
     {
         $budget = $this->getBudget($program);
         $postBudget = fixer::input('post')->get();
         $postBudget->program = $program;
 
-        if(empty($budget)) 
+        if(empty($budget))
         {
             $this->dao->insert(TABLE_WORKESTIMATION)
                 ->batchcheck($this->config->workestimation->index->requiredFields, 'notempty')

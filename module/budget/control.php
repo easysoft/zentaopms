@@ -1,16 +1,34 @@
 <?php
+/**
+ * The control file of budget currentModule of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     budget
+ * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 class budget extends control
 {
+    /**
+     * __construct
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program); 
+        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
     }
 
     /**
      * The budget browse page.
      *
-     * @param  varchar $orderBy 
+     * @param  varchar $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
@@ -80,7 +98,7 @@ class budget extends control
             $budgetID = $this->budget->create();
 
             if(dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
@@ -114,7 +132,7 @@ class budget extends control
             $changes = $this->budget->update($budgetID);
 
             if(dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
@@ -143,7 +161,7 @@ class budget extends control
     /**
      * View a budget.
      *
-     * @param  int  $budgetID 
+     * @param  int  $budgetID
      * @access public
      * @return void
      */
@@ -161,7 +179,7 @@ class budget extends control
     /**
      * Delete a budget.
      *
-     * @param  int     $budgetID 
+     * @param  int     $budgetID
      * @param  varchar $confirm
      * @access public
      * @return void
@@ -169,16 +187,16 @@ class budget extends control
     public function delete($budgetID = 0, $confirm = 'no')
     {
         if($confirm == 'no')
-        {    
-            echo js::confirm($this->lang->budget->confirmDelete, $this->createLink('budget', 'delete', "id=$budgetID&confirm=yes"));            
+        {
+            echo js::confirm($this->lang->budget->confirmDelete, $this->createLink('budget', 'delete', "id=$budgetID&confirm=yes"));
             exit;
-        }    
-        else 
-        {    
+        }
+        else
+        {
             $this->budget->delete(TABLE_BUDGET, $budgetID);
             die(js::locate(inlink('browse'), 'parent'));
         }
-    
+
     }
 
     /**
@@ -194,7 +212,7 @@ class budget extends control
             $this->budget->batchCreate();
 
             if(dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);

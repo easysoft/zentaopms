@@ -513,6 +513,7 @@ $lang->resource->design->commit      = 'commit';
 $lang->resource->design->revision    = 'revision';
 $lang->resource->design->delete      = 'delete';
 $lang->resource->design->view        = 'view';
+$lang->resource->design->assignTo    = 'assignTo';
 
 $lang->design->methodOrder[5]     = 'browse';
 $lang->design->methodOrder[10]    = 'create';
@@ -522,6 +523,7 @@ $lang->design->methodOrder[20]    = 'commit';
 $lang->design->methodOrder[25]    = 'revision';
 $lang->design->methodOrder[30]    = 'delete';
 $lang->design->methodOrder[35]    = 'view';
+$lang->design->methodOrder[40]    = 'assignTo';
 
 /* Program plan. */
 $lang->resource->programplan = new stdclass();

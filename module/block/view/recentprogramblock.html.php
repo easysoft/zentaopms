@@ -35,7 +35,8 @@
   <div class='col' data-id='<?php echo $programID?>'>
     <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id");?>'>
       <div class='panel-heading'>
-        <strong class='program-name' title='<?php echo $program->name;?>'> <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?> </strong>
+        <?php $parentName = $program->parentName ? $program->parentName . '/' : '';?>
+        <strong class='program-name' title='<?php echo $parentName . $program->name;?>'> <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $parentName . $program->name);?> </strong>
         <?php if($program->template === 'cmmi'): ?>
         <span class='program-type-label label label-warning label-outline'><?php echo $lang->program->cmmi; ?></span>
         <?php else: ?>
