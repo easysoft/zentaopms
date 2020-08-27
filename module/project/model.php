@@ -1206,12 +1206,13 @@ class projectModel extends model
      *
      * @param  string $status
      * @param  int    $num
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getOrderedProjects($status, $num = 0)
+    public function getOrderedProjects($status, $num = 0, $programID = 0)
     {
-        $projectList = $this->getList($status);
+        $projectList = $this->getList($status, 0, 0, 0, $programID);
         if(empty($projectList)) return $projectList;
 
         $projects = $mineProjects = $otherProjects = $closedProjects = array();
