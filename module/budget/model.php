@@ -1,11 +1,23 @@
 <?php
+/**
+ * The model file of budget module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     budget
+ * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
+<?php
 class budgetModel extends model
 {
     /**
      * Get subject option.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function getSubjectOption()
     {
@@ -26,7 +38,7 @@ class budgetModel extends model
      *
      * @param  int  $budgetID
      * @access public
-     * @return void
+     * @return array
      */
     public function getByID($budgetID)
     {
@@ -42,7 +54,7 @@ class budgetModel extends model
      * @param  varchar $orderBy
      * @param  pager   $object
      * @access public
-     * @return void
+     * @return object
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
@@ -58,7 +70,7 @@ class budgetModel extends model
      * Get stages.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getStages()
     {
@@ -73,7 +85,7 @@ class budgetModel extends model
      * Get subjects.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getSubjects()
     {
@@ -88,7 +100,7 @@ class budgetModel extends model
      * Get subject structure.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getSubjectStructure()
     {
@@ -115,7 +127,7 @@ class budgetModel extends model
      * Get summary.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getSummary()
     {
@@ -151,7 +163,7 @@ class budgetModel extends model
      * Create a budget.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function create()
     {
@@ -176,7 +188,7 @@ class budgetModel extends model
      * Batch create budgets.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function batchCreate()
     {
@@ -223,7 +235,7 @@ class budgetModel extends model
      *
      * @param  int  $budgetID 
      * @access public
-     * @return void
+     * @return array
      */
     public function update($budgetID)
     {
