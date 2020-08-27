@@ -30,6 +30,9 @@ $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolve           = '解决';
 $lang->issue->id                = '编号';
 
+$lang->issue->view              = '问题详情';
+$lang->issue->close             = '关闭';
+$lang->issue->cancel            = '取消';
 $lang->issue->delete            = '删除';
 $lang->issue->search            = '搜索';
 $lang->issue->basicInfo         = '基本信息';

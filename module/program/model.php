@@ -7,16 +7,17 @@ class programModel extends model
      * @param  varchar $status
      * @param  varchar $orderBy
      * @param  object  $pager
+     * @param  bool    $includeCat
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
+            ->where('program')->eq(0)
             ->andWhere('template')->ne('')
-            ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$includeCat)->andWhere('iscat')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF($this->cookie->mine)
