@@ -19,6 +19,7 @@
     <table class="table table-form">
       <thead>
         <tr class="text-center">
+          <th class="w-50px"><?php echo $lang->issue->id;?></th>
           <th class="required"><?php echo $lang->issue->title;?></th>
           <th class="w-140px required"><?php echo $lang->issue->type;?></th>
           <th class="w-120px required"><?php echo $lang->issue->severity;?></th>
@@ -31,6 +32,7 @@
       <tbody>
         <?php for($i = 1;$i <= 10;$i++):?>
         <tr data-key="<?php echo $i;?>">
+         <td><?php echo $i;?></td>
          <td>
           <?php echo html::input("dataList[$i][title]", '', 'id="dataList'.$i.'title" class="form-control" autocomplete="off"')?>
         </td>
