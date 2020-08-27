@@ -55,15 +55,15 @@ foreach($issue as $field => $value)
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$issue->deleted):?>
         <?php
-        common::printIcon('issue', 'resolve', "issueID=$issue->id", $issue, 'button', 'checked', '', 'showinonlybody');
+        common::printIcon('issue', 'resolve', "issueID=$issue->id", $issue, 'button', 'checked', '', 'iframe showinonlybody', true);
         common::printIcon('issue', 'assignTo', "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('issue', 'cancel', "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('issue', 'close',    "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('issue', 'activate',    "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('issue', 'close', "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('issue', 'activate', "issueID=$issue->id", $issue, 'button', '', '', 'iframe showinonlybody', true);
         echo "<div class='divider'></div>";
         common::printIcon('issue', 'edit', "issueID=$issue->id", $issue);
         common::printIcon('issue', 'delete', "issueID=$issue->id", $issue, 'button', 'trash', 'hiddenwin');
-        ?>  
+        ?>
         <?php endif;?>
       </div>
     </div>
