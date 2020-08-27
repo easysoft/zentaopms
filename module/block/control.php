@@ -1198,29 +1198,26 @@ class block extends control
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $programID = $this->session->program;
+        $program   = $this->loadModel('project')->getByID($programID);
 
         $begin = $program->begin;
         $today = helper::today();
         $end   = date('Y-m-d', strtotime($today));
 
-        $projects = $this->project->getProjectsByProgram($program);
-        $projectIdList = array_keys($projects);
-
         $charts['PV'] = '[';
         $charts['EV'] = '[';
         $charts['AC'] = '[';
         $i = 1;
-        $start = $begin;
-        $longProgram = helper::diffDate($today, $begin) / 7 > 10;
-        while($start < $end)
+        $longProgram = helper::diffDate($today, $begin) / 7 > 12;
+        while($begin < $end)
         {
             $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
-            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($start)) : $this->weekly->getThisSunday($start);
-            $charts['PV']      .= $this->milestone->getPV($projectIdList, $begin, $stageEnd) . ',';
-            $charts['EV']      .= $this->milestone->getEV($projectIdList, $begin, $stageEnd) . ',';
-            $charts['AC']      .= $this->milestone->getAC($projectIdList, $begin, $stageEnd) . ',';
-            $start              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
+            $charts['PV']      .= $this->weekly->getPV($programID, $begin) . ',';
+            $charts['EV']      .= $this->weekly->getEV($programID, $begin) . ',';
+            $charts['AC']      .= $this->weekly->getAC($programID, $begin) . ',';
+            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($begin)) : $this->weekly->getThisSunday($begin);
+            $begin              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
             $i ++;
         }
 
