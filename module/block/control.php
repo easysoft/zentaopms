@@ -1212,7 +1212,7 @@ class block extends control
         $longProgram = helper::diffDate($today, $begin) / 7 > 12;
         while($begin < $end)
         {
-            $charts['labels'][] = $longProgram ? $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->month : $this->lang->milestone->chart->time . $i . $this->lang->milestone->chart->week;
+            $charts['labels'][] = $longProgram ? $this->lang->block->time . $i . $this->lang->block->month : $this->lang->block->time . $i . $this->lang->block->week;
             $charts['PV']      .= $this->weekly->getPV($programID, $begin) . ',';
             $charts['EV']      .= $this->weekly->getEV($programID, $begin) . ',';
             $charts['AC']      .= $this->weekly->getAC($programID, $begin) . ',';

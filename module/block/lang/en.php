@@ -59,6 +59,9 @@ $lang->block->doingProject    = 'Doning ' . $lang->projectCommon;
 $lang->block->finishProject   = 'Finish ' . $lang->projectCommon;
 $lang->block->estimatedHours  = 'Estimated Hours';
 $lang->block->consumedHours   = 'Consumed Hours';
+$lang->block->time            = 'No';
+$lang->block->week            = 'Week';
+$lang->block->month           = 'Month';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
