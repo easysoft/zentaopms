@@ -347,4 +347,57 @@ class designModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->design->search);
     }
+
+    /**
+     * Print assignedTo html
+     *
+     * @param  int    $design
+     * @param  int    $users
+     * @access public
+     * @return string
+     */
+    public function printAssignedHtml($design, $users)
+    {
+        $btnTextClass   = '';
+        $assignedToText = zget($users, $design->assignedTo);
+
+        if(empty($design->assignedTo))
+        {
+            $btnTextClass   = 'text-primary';
+            $assignedToText = $this->lang->design->noAssigned;
+        }
+        if($design->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+
+        $btnClass     = $design->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $assignToLink = helper::createLink('design', 'assignTo', "designID=$design->id", '', true);
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+        echo !common::hasPriv('design', 'assignTo', $design) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+    }
+
+    /**
+     * Assign a design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return array|bool
+     */
+    public function assign($designID)
+    {
+        $oldDesign = $this->getByID($designID);
+
+        $design = fixer::input('post')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::today())
+            ->setDefault('assignedDate', helper::today())
+            ->stripTags($this->config->design->editor->assignto['id'], $this->config->allowedTags)
+            ->remove('uid,comment,files,label')
+            ->get();
+
+        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq((int)$designID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldDesign, $design);
+        return false;
+    }
 }
