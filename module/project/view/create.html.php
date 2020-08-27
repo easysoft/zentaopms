@@ -91,7 +91,7 @@
           <td></td>
         </tr>
         <?php $this->printExtendFields('', 'table');?>
-        <tr <?php if($config->global->flow == 'onlyTask') echo "class='hidden'";?>>
+        <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
@@ -116,7 +116,7 @@
             </div>
           </td>
         </tr>
-        <tr <?php if($config->global->flow == 'onlyTask') echo "class='hidden'";?>>
+        <tr>
           <th><?php echo $lang->project->linkPlan;?></th>
           <td colspan="3" id="plansBox">
             <div class='row'>

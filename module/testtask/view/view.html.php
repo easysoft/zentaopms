@@ -75,12 +75,10 @@
         <div class="detail-content">
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
-            <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th class='w-60px'><?php echo $lang->testtask->project;?></th>
               <td><?php echo $isOnlybody ? $task->projectName : html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName, '', "title='{$task->projectName}'");?></td>
             </tr>
-            <?php endif;?>
             <tr>
               <th><?php echo $lang->testtask->build;?></th>
               <td>

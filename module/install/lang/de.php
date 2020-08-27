@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Volles Development Management';
-$lang->install->workingList['onlyTest']  = 'Nur Test Management';
-$lang->install->workingList['onlyStory'] = 'Nur Story Management';
-$lang->install->workingList['onlyTask']  = 'Nur Task Management';
 
 $lang->install->errorConnectDB      = 'Verbindung zur Datenbank fehlgeschlagen. ';
 $lang->install->errorDBName         = 'Datenbankname darf keinen Punkt enthalten';

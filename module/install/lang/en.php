@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Application Lifecycle Management';
-$lang->install->workingList['onlyTest']  = 'Only Test Management';
-$lang->install->workingList['onlyStory'] = 'Only Story Management';
-$lang->install->workingList['onlyTask']  = 'Only Task Management';
 
 $lang->install->errorConnectDB      = 'Connection to the database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';

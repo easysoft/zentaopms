@@ -22,7 +22,7 @@
       <?php echo $lang->task->batchCreate;?>
       <?php endif;?>
     </h2>
-    <?php if($project->type != 'ops' && $config->global->flow != 'onlyTask'):?>
+    <?php if($project->type != 'ops'):?>
     <a class="checkbox-primary pull-left" id='zeroTaskStory' href='javascript:toggleZeroTaskStory();'>
       <label><?php echo $lang->story->zeroTask;?></label>
     </a>
@@ -49,7 +49,7 @@
       }
   }
   $colspan     = count($visibleFields) + 3;
-  $hiddenStory = ((isonlybody() and $storyID) || $config->global->flow == 'onlyTask') ? ' hidden' : '';
+  $hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
   if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
   <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">

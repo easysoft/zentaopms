@@ -354,10 +354,3 @@ $lang->project->treeLevel['all']   = 'Alle aufklappen';
 $lang->project->treeLevel['root']  = 'Alle zuklappen';
 $lang->project->treeLevel['task']  = 'Aufgabe anzeigen';
 $lang->project->treeLevel['story'] = 'Story anzeigen';
-
-global $config;
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->project->groups['story']);
-    unset($lang->project->featureBar['task']['needconfirm']);
-}

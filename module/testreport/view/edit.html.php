@@ -34,7 +34,7 @@
                 <div class='input-group-btn hidden' id='refresh'>
                   <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
                 </div>
-                <?php echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);?>
+                <?php echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);?>
               </div>
             </td>
             <td>
@@ -55,13 +55,11 @@
             <td colspan='2'><?php echo html::input('title', $report->title, "class='form-control'")?></td>
             <td></td>
           </tr>
-          <?php if($config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->testreport->goal?></th>
             <td colspan='2'><?php echo $project->desc?></td>
             <td></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->testreport->profile?></th>
             <td colspan='2'>

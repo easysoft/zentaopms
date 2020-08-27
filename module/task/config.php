@@ -36,7 +36,6 @@ $config->task->exportFields = '
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate,files
     ';
-if($config->global->flow == 'onlyTask') $config->task->exportFields = str_replace(array(' story,'), '', $config->task->exportFields);
 
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate'; 
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri'; 
@@ -46,13 +45,6 @@ $config->task->custom = new stdclass();
 $config->task->custom->createFields      = $config->task->customCreateFields;
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,finishedBy,closedBy,closedReason';
-
-if($config->global->flow == 'onlyTask')
-{
-    $config->task->customCreateFields        = str_replace(array('story,'), '', $config->task->customCreateFields);
-    $config->task->customBatchCreateFields   = str_replace(array('story,'), '', $config->task->customBatchCreateFields);
-    $config->task->custom->batchCreateFields = str_replace(array('story,'), '', $config->task->custom->batchCreateFields);
-}
 
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');

@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Quản lý vòng đời ứng dụng';
-$lang->install->workingList['onlyTest']  = 'Chỉ Test Management';
-$lang->install->workingList['onlyStory'] = 'Chỉ Story Management';
-$lang->install->workingList['onlyTask']  = 'Chỉ Task Management';
 
 $lang->install->errorConnectDB      = 'Connection to the database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';

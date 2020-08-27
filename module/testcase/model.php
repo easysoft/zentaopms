@@ -112,65 +112,8 @@ class testcaseModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-            if($this->config->global->flow != 'onlyTest')
-            {
-                $replace = $productID;
-            }
-            else
-            {
-                if($key == 'bysuite')
-                {
-                    $subMenu = array();
-                    if(common::hasPriv('testcase', 'browse'))
-                    {
-                        $suiteList      = $this->loadModel('testsuite')->getSuites($productID);
-                        $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
-
-                        if($suiteList)
-                        {
-                            foreach($suiteList as $suiteID => $suite)
-                            {
-                                $suiteName = $suite->name;
-                                if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
-
-                                $link = array();
-                                $link['module'] = 'testcase';
-                                $link['method'] = 'browse';
-                                $link['vars']   = "productID=$productID&branch=$branch&browseType=bysuite&param=$suiteID";
-
-                                $menu = new stdclass();
-                                $menu->name   = $suiteID;
-                                $menu->link   = $link;
-                                $menu->text   = $suiteName;
-                                $menu->hidden = false;
-                                $subMenu[$suiteID] = $menu;
-                            }
-                        }
-                    }
-                    /* Avoid the menu shaking when change it by js. */
-                    if(isset($subMenu[$currentSuiteID]))
-                    {
-                        $currentSubMenu = $subMenu[$currentSuiteID];
-                        $this->lang->testcase->menu->bysuite['link'] = "$currentSubMenu->text|" . implode('|', $currentSubMenu->link);
-                    }
-
-                    /* Replace for dropdown submenu. */
-                    if(isset($this->lang->testcase->subMenu->$key))
-                    {
-                        $subMenu += common::createSubMenu($this->lang->testcase->subMenu->$key, $productID);
-                    }
-                    if(!empty($subMenu)) $this->lang->testcase->menu->{$key}['subMenu'] = $subMenu;
-
-                    if($this->app->getMethodName() != 'view') $this->lang->testcase->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
-                }
-                else
-                {
-                    $replace = array();
-                    $replace['productID'] = $productID;
-                    $replace['branch']    = $branch;
-                }
-            }
+            $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
+            $replace = $productID;
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
     }

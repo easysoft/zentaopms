@@ -109,12 +109,6 @@ $lang->doc->libIconList['custom']  = 'icon-folder-o';
 $lang->doc->systemLibs['product'] = $lang->productCommon . 'Dok Bibliothek';
 $lang->doc->systemLibs['project'] = $lang->projectCommon . 'Dok Bibliothek';
 
-global $config;
-if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
-if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->libTypeList['project']);
-if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
-if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
-
 $lang->doc->aclList['open']    = 'Öffentlich';
 $lang->doc->aclList['custom']  = 'Eigene';
 $lang->doc->aclList['private'] = 'Privat';

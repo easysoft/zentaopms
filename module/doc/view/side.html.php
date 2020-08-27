@@ -19,16 +19,12 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
     <div class="tabs">
       <ul class='nav nav-tabs'>
         <?php foreach($lang->doclib->tabList as $tabValue => $tabName):?>
-        <?php if($this->config->global->flow == 'onlyTask' and $tabValue == 'product') continue;?>
-        <?php if(($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest') and $tabValue == 'project') continue;?>
         <?php $activeClass = $tabValue == $type ? 'active' : '';?>
         <li class='<?php echo $activeClass;?>'><?php echo html::a("#{$tabValue}", $tabName, '', "data-tab");?></li>
         <?php endforeach;?>
       </ul>
       <div class="tab-content">
         <?php foreach($lang->doclib->tabList as $tabValue => $tabName):?>
-        <?php if($this->config->global->flow == 'onlyTask' and $tabValue == 'product') continue;?>
-        <?php if(($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest') and $tabValue == 'project') continue;?>
         <?php $activeClass = $tabValue == $type ? 'active' : '';?>
         <div class="tab-pane <?php echo $activeClass;?>" id="<?php echo "$tabValue";?>">
           <ul data-name="docsTree" data-ride="tree" data-initial-state="preserve" class="tree no-margin">

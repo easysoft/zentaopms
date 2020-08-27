@@ -122,12 +122,11 @@ class project extends control
 
         /* Set browse type. */
         $browseType = strtolower($status);
-        if($this->config->global->flow == 'onlyTask' and $browseType == 'byproduct') $param = 0;
 
         /* Get products by project. */
         $project   = $this->commonAction($projectID, $status);
         $projectID = $project->id;
-        $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
+        $products  = $this->loadModel('product')->getProductsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($this->cookie->preProjectID != $projectID)

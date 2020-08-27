@@ -21,12 +21,10 @@
     </div>
     <form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'>
-        <?php if($config->global->flow != 'onlyTest'):?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->project;?></th>
           <td class='w-p35-f'><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td><td></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'>

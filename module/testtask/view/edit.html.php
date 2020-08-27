@@ -24,7 +24,6 @@
     </div>
     <form method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'> 
-        <?php if($config->global->flow != 'onlyTest'):?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->project;?></th>
           <td class='w-p35-f'>
@@ -35,7 +34,6 @@
           </td>
           <td></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>

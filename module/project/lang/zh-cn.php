@@ -360,10 +360,3 @@ $lang->project->treeLevel['all']   = '全部展开';
 $lang->project->treeLevel['root']  = '全部折叠';
 $lang->project->treeLevel['task']  = '全部显示';
 $lang->project->treeLevel['story'] = "只看{$lang->storyCommon}";
-
-global $config;
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->project->groups['story']);
-    unset($lang->project->featureBar['task']['needconfirm']);
-}

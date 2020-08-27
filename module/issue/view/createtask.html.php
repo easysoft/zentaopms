@@ -41,7 +41,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
-        <?php if($stories and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if($stories and $project->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
@@ -97,10 +97,8 @@
                   <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
                 </div>
                 <?php echo html::input('name', $task->name, "class='form-control'");?>
-                <?php if($config->global->flow != 'onlyTask'):?>
                 <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
                 <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
-                <?php endif;?>
               </div>
               <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
               <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>

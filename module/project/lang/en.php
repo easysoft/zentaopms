@@ -354,10 +354,3 @@ $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
 $lang->project->treeLevel['task']  = 'Stories&Tasks';
 $lang->project->treeLevel['story'] = 'Only Stories';
-
-global $config;
-if($config->global->flow == 'onlyTask')
-{
-    unset($lang->project->groups['story']);
-    unset($lang->project->featureBar['task']['needconfirm']);
-}

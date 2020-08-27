@@ -134,9 +134,6 @@ $lang->custom->productProject->relation['1_2'] = 'Dự án - Sprint';
 $lang->custom->productProject->notice = 'Chọn một mô hình phù hợp với doanh nghiệp của bạn.';
 
 $lang->custom->workingList['full']      = 'Quản lý vòng đời ứng dụng';
-$lang->custom->workingList['onlyTest']  = 'Quản lý kiểm thử';
-$lang->custom->workingList['onlyStory'] = 'Quản lý câu chuyện';
-$lang->custom->workingList['onlyTask']  = 'Quản lý nhiệm vụ';
 
 $lang->custom->menuTip  = 'Click để hiện/ẩn menu. Kéo thả để chuyển vị trí hiển thị.';
 $lang->custom->saveFail = 'Lưu thất bại!';

@@ -92,10 +92,6 @@ $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Task';
 $lang->todo->typeList['story']    = 'Story';
 
-global $config;
-if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
-if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
-
 $lang->todo->confirmDelete  = "Do you want to delete this todo?";
 $lang->todo->thisIsPrivate  = 'This is a private todo';
 $lang->todo->lblDisableDate = 'TBD';
