@@ -1138,7 +1138,7 @@ class block extends control
     {
         $products  = $this->loadModel('product')->getPairs();
         $productID = isset($this->session->product) ? 0 : $this->session->product;
-        if($productID && !array_key_exists($productID, $products)) $productID = 0;
+        if(!$productID || !array_key_exists($productID, $products)) $productID = array_key_first($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
         $this->view->products  = $products;
