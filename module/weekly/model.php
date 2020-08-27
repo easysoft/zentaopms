@@ -11,6 +11,14 @@
  */
 class weeklyModel extends model
 {
+    /**
+     * GetPageNav
+     *
+     * @param  int    $program
+     * @param  int    $date
+     * @access public
+     * @return string
+     */
     public function getPageNav($program, $date)
     {
         $date  = date('Ymd', strtotime($this->getThisMonday($date)));
@@ -34,6 +42,13 @@ class weeklyModel extends model
 
     }
 
+    /**
+     * GetWeekPairs
+     *
+     * @param  int    $begin
+     * @access public
+     * @return array
+     */
     public function getWeekPairs($begin)
     {
         $sn = $this->getWeekSN($begin, date('Y-m-d'));
@@ -50,6 +65,14 @@ class weeklyModel extends model
         return $weeks;
     }
 
+    /**
+     * GetFromDB
+     *
+     * @param  int    $program
+     * @param  int    $date
+     * @access public
+     * @return object
+     */
     public function getFromDB($program, $date)
     {
         $monday = $this->getThisMonday($date);
@@ -60,6 +83,14 @@ class weeklyModel extends model
             ->fetch();
     }
 
+    /**
+     * Save
+     *
+     * @param  int    $program
+     * @param  int    $date
+     * @access public
+     * @return void
+     */
     public function save($program, $date)
     {
         $report = new stdclass;
@@ -75,11 +106,26 @@ class weeklyModel extends model
         $this->dao->replace(TABLE_WEEKLYREPORT)->data($report)->exec();
     }
 
+    /**
+     * GetWeekSN
+     *
+     * @param  int    $begin
+     * @param  int    $date
+     * @access public
+     * @return int
+     */
     public function getWeekSN($begin, $date)
     {
        return ceil((strtotime($date) - strtotime($begin)) / 7 / 86400);
     }
 
+    /**
+     * GetThisMonday
+     *
+     * @param  int    $date
+     * @access public
+     * @return date
+     */
     public function getThisMonday($date)
     {
         $day = date('w', strtotime($date));
@@ -88,12 +134,26 @@ class weeklyModel extends model
         return date('Y-m-d', strtotime("$date - $days days"));
     }
 
+    /**
+     * GetThisSunday
+     *
+     * @param  int    $date
+     * @access public
+     * @return date
+     */
     public function getThisSunday($date)
     {
         $monday = $this->getThisMonday($date);
         return date('Y-m-d', strtotime("$monday +6 days"));
     }
 
+    /**
+     * GetLastDay
+     *
+     * @param  int    $date
+     * @access public
+     * @return string
+     */
     public function getLastDay($date)
     {
         $this->loadModel('project');
@@ -104,6 +164,14 @@ class weeklyModel extends model
         return end($workdays);
     }
 
+    /**
+     * GetStaff
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return array
+     */
     public function getStaff($program, $date = '')
     {
         if(!$date) $date = date('Y-m-d');
@@ -121,6 +189,15 @@ class weeklyModel extends model
             ->fetch('count');
     }
 
+    /**
+     * GetFinished
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @param  int    $pager
+     * @access public
+     * @return void
+     */
     public function getFinished($program, $date = '', $pager = null)
     {
         if(!$date) $date = date('Y-m-d');
@@ -140,6 +217,14 @@ class weeklyModel extends model
         return $this->loadModel('task')->processTasks($tasks);
     }
 
+    /**
+     * GetPostponed
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return void
+     */
     public function getPostponed($program, $date = '')
     {
         if(!$date) $date = date('Y-m-d');
@@ -169,6 +254,14 @@ class weeklyModel extends model
         return $this->loadModel('task')->processTasks($tasks);
     }
 
+    /**
+     * GetTasksOfNextWeek
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return void
+     */
     public function getTasksOfNextWeek($program, $date = '')
     {
         if(!$date) $date = date('Y-m-d');
@@ -188,6 +281,14 @@ class weeklyModel extends model
         return $this->loadModel('task')->processTasks($tasks);
     }
 
+    /**
+     * GetWorkloadByType
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return object
+     */
     public function getWorkloadByType($program, $date = '')
     {
         if(!$date) $date = date('Y-m-d');
@@ -206,6 +307,14 @@ class weeklyModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * GetPlanedTaskByWeek
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return array
+     */
     public function getPlanedTaskByWeek($program, $date = '')
     {
         if(!$date) $date = date('Y-m-d');
@@ -222,6 +331,14 @@ class weeklyModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * GetPV
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return int
+     */
     public function getPV($program, $date = '')
     {
         $report = $this->getFromDB($program, $date);
@@ -235,7 +352,7 @@ class weeklyModel extends model
         $lastDay    = $this->getLastDay($date);
         $nextMonday = date('Y-m-d', strtotime("$sunday +1 days"));
         $workdays   = $this->loadModel('holiday')->getActualWorkingDays($monday, $sunday);
- 
+
         $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program->id);
         $projectIdList = array_keys($projects);
 
@@ -263,11 +380,19 @@ class weeklyModel extends model
         return round($PV, 2);
     }
 
+    /**
+     * GetEV
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return int
+     */
     public function getEV($program, $date = '')
     {
         $report = $this->getFromDB($program, $date);
         if(!empty($report)) return $report->ev;
- 
+
         $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
         $projectIdList = array_keys($projects);
 
@@ -300,11 +425,19 @@ class weeklyModel extends model
         return round($EV, 2);
     }
 
+    /**
+     * GetAC
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return int
+     */
     public function getAC($program, $date = '')
     {
         $report = $this->getFromDB($program, $date);
         if(!empty($report)) return $report->ac;
- 
+
         if(!$date) $date = date('Y-m-d');
 
         $monday        = $this->getThisMonday($date);
@@ -323,6 +456,14 @@ class weeklyModel extends model
         return round($AC, 2);
     }
 
+    /**
+     * GetSV
+     *
+     * @param  int    $ev
+     * @param  int    $pv
+     * @access public
+     * @return int
+     */
     public function getSV($ev, $pv)
     {
         if($pv == 0) return 0;
@@ -330,6 +471,14 @@ class weeklyModel extends model
         return number_format($sv * 100, 2);
     }
 
+    /**
+     * GetCV
+     *
+     * @param  int    $ev
+     * @param  int    $ac
+     * @access public
+     * @return int
+     */
     public function getCV($ev, $ac)
     {
         if($ac == 0) return 0;
@@ -337,6 +486,14 @@ class weeklyModel extends model
         return number_format($cv * 100, 2);
     }
 
+    /**
+     * GetTips
+     *
+     * @param  string $type
+     * @param  int    $data
+     * @access public
+     * @return string
+     */
     public function getTips($type = 'progress', $data = 0)
     {
         $this->app->loadConfig('custom');

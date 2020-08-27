@@ -11,12 +11,27 @@
  */
 class weekly extends control
 {
+    /**
+     * The construct function, load users.
+     *
+     * @access public
+     * @return void
+     */
+
     public function __construct()
     {
         parent::__construct();
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
     }
 
+    /**
+     * Index
+     *
+     * @param  int    $program
+     * @param  string $date
+     * @access public
+     * @return void
+     */
     public function index($program = 0, $date = '')
     {
         $program = $program ? $program : $this->session->program;
@@ -46,13 +61,19 @@ class weekly extends control
         $this->display();
     }
 
+    /**
+     * ComputeWeekly
+     *
+     * @access public
+     * @return void
+     */
     public function computeWeekly()
     {
         $programs = $this->dao->select('id, name')->from(TABLE_PROJECT)
-           ->where('deleted')->eq(0) 
-           ->andWhere('isCat')->eq(0) 
-           ->andWhere('template')->ne('') 
-           ->andWhere('program')->eq(0) 
+           ->where('deleted')->eq(0)
+           ->andWhere('isCat')->eq(0)
+           ->andWhere('template')->ne('')
+           ->andWhere('program')->eq(0)
            ->fetchPairs();
         $date = helper::today();
 
