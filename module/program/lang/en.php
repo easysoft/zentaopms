@@ -65,6 +65,7 @@ $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->pm                 = 'PM';
 $lang->program->teamCount          = 'The Number Of Team';
+$lang->program->longTime           = 'Long-term Project';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = 'Yuan';
@@ -118,3 +119,4 @@ $lang->program->beginLetterParent  = "Begin date of parent project: %s, Begin da
 $lang->program->endGreaterParent   = "End date of parent project: %s, End date cannot be greater than the end date of parent project.";
 $lang->program->beginGreateChild   = "Minimum begin date of child project: %s, the begin date of parent project cannot be greater than the minimum begin date of child project.";
 $lang->program->endLetterChild     = "Maximum end date of child project: %s, the end date of parent project cannot be less than the maximum end date of child project.";
+$lang->program->childLongTime      = "There are long-term projects in the sub project, and the parent project should also be a long-term project";

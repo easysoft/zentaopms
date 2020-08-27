@@ -56,7 +56,7 @@ class design extends control
         $this->view->orderBy    = $orderBy;
         $this->view->productID  = $productID;
         $this->view->pager      = $pager;
-        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

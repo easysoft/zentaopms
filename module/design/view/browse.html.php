@@ -48,7 +48,7 @@
             <th class="text-left w-150px">  <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
             <th class="text-left w-120px">  <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
             <th class="text-left w-150px">  <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
-            <th class="text-left w-120px">  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
+            <th class="c-assignedTo w-120px">  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
             <th class="text-center w-100px"><?php echo $lang->design->actions;?></th>
           </tr>
         </thead>
@@ -61,7 +61,7 @@
             <td style="overflow:hidden"><?php echo $design->commit;?></td>
             <td><?php echo $design->createdBy;?></td>
             <td><?php echo substr($design->createdDate, 0, 11);?></td>
-            <td><?php echo $this->design->printAssignedHtml($design, $users);?></td>
+            <td class="c-assignedTo"><?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";

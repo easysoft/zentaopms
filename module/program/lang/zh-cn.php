@@ -65,6 +65,7 @@ $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->pm                 = '项目负责人';
 $lang->program->teamCount          = '项目成员';
+$lang->program->longTime           = '长期项目';
 
 $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
@@ -118,3 +119,4 @@ $lang->program->beginLetterParent  = "父项目的开始日期：%s，开始日�
 $lang->program->endGreaterParent   = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
 $lang->program->beginGreateChild   = "子项目的最小开始日期：%s，父项目的开始日期不能大于子项目的最小开始日期";
 $lang->program->endLetterChild     = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
+$lang->program->childLongTime      = "子项目中有长期项目，父项目也应该是长期项目";
