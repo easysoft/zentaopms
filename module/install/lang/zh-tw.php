@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '靜態友好方式';
 
 $lang->install->workingList['full']      = '完整研發管理工具';
-$lang->install->workingList['onlyTest']  = '測試管理工具';
-$lang->install->workingList['onlyStory'] = "需求管理工具";
-$lang->install->workingList['onlyTask']  = '任務管理工具';
 
 $lang->install->errorConnectDB      = '資料庫連接失敗 ';
 $lang->install->errorDBName         = '資料庫名不能含有 “.” ';

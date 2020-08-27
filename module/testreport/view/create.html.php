@@ -44,7 +44,7 @@
                     <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
                   </div>
                   <?php
-                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', isset($project->id) ? $project->id : 0) : '') . html::hidden('tasks', $tasks);
+                  echo html::hidden('product', $productIdList) . (html::hidden('project', isset($project->id) ? $project->id : 0)) . html::hidden('tasks', $tasks);
                   echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
                   ?>
                 </div>
@@ -67,13 +67,11 @@
               <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
               <td></td>
             </tr>
-            <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th><?php echo $lang->testreport->goal?></th>
               <td colspan='2'><?php echo isset($project->desc) ? $project->desc : '';?></td>
               <td></td>
             </tr>
-            <?php endif;?>
             <tr>
               <th><?php echo $lang->testreport->profile?></th>
               <td colspan='2'>

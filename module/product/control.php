@@ -49,7 +49,6 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        if($this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
@@ -254,7 +253,6 @@ class product extends control
             $this->executeHooks($productID);
 
             $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
-            if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest') $locate = $this->createLink($this->moduleName, 'build', "productID=$productID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 

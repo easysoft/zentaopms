@@ -618,7 +618,6 @@ class testcase extends control
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->caselib->setLibMenu($libraries, $case->lib);
             $this->lang->testcase->menu = $this->lang->caselib->menu;
-            if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testcase = 'caselib';
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);

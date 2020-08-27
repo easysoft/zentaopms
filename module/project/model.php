@@ -1185,8 +1185,6 @@ class projectModel extends model
      */
     public function getProducts($projectID, $withBranch = true)
     {
-        if($this->config->global->flow == 'onlyTask') return array();
-
         if(defined('TUTORIAL'))
         {
             if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();

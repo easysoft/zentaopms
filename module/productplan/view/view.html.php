@@ -50,9 +50,7 @@
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
       <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
-      <?php if($config->global->flow != 'onlyStory'):?>
       <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
-      <?php endif;?>
       <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a></li>
     </ul>
     <div class='tab-content'>

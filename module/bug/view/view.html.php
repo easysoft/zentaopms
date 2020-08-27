@@ -77,7 +77,7 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', '', $lang->bug->toStory);
+        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', '', $lang->bug->toStory);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
 
         echo $this->buildOperateMenu($bug, 'view');
@@ -96,9 +96,7 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <?php if($config->global->flow != 'onlyTest'):?>
           <li><a href='#legendPrjStoryTask' data-toggle='tab'><?php echo $lang->bug->legendPrjStoryTask;?></a></li>
-          <?php endif;?>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -229,7 +227,6 @@
               </tbody>
             </table>
           </div>
-          <?php if($config->global->flow != 'onlyTest'):?>
           <div class='tab-pane' id='legendPrjStoryTask'>
             <table class='table table-data'>
               <tbody>
@@ -258,7 +255,6 @@
               </tbody>
             </table>
           </div>
-          <?php endif;?>
         </div>
       </div>
     </div>
@@ -356,7 +352,6 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <?php if($config->global->flow != 'onlyTest'):?>
                 <?php if($bug->toStory != 0):?>
                 <tr>
                   <th><?php echo $lang->bug->toStory;?></th>
@@ -368,7 +363,6 @@
                   <th><?php echo $lang->bug->toTask;?></th>
                   <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
-                <?php endif;?>
                 <?php endif;?>
               </tbody>
             </table>

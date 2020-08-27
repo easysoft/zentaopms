@@ -44,30 +44,27 @@ function loadURL(url, type)
 
 $(function()
 {
-    if(flow != 'onlyTest')
+    if(link == 'true') showLink(buildID, type, param);
+    var infoShowed = false;
+    $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
-        if(link == 'true') showLink(buildID, type, param);
-        var infoShowed = false;
-        $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
+        var href = $(e.target).attr('href');
+        var tabPane = $(href + '.tab-pane');
+        if(tabPane.size() == 0) return;
+        var formID = tabPane.find('.linkBox').find('form:last');
+        if(formID.size() == 0) formID = tabPane.find('form:last');
+
+        if(href == '#buildInfo' && !infoShowed)
         {
-            var href = $(e.target).attr('href');
-            var tabPane = $(href + '.tab-pane');
-            if(tabPane.size() == 0) return;
-            var formID = tabPane.find('.linkBox').find('form:last');
-            if(formID.size() == 0) formID = tabPane.find('form:last');
-
-            if(href == '#buildInfo' && !infoShowed)
+            var $tr = $('#buildInfo .detail-content .table-data tbody tr:first');
+            width   = $tr.width() - $tr.find('th').width();
+            $('#buildInfo img').each(function()
             {
-                var $tr = $('#buildInfo .detail-content .table-data tbody tr:first');
-                width   = $tr.width() - $tr.find('th').width();
-                $('#buildInfo img').each(function()
-                {
-                    if($(this).parent().prop('tagName').toLowerCase() == 'a') $(this).unwrap();
-                    setImageSize($(this), width, 0);
-                });
+                if($(this).parent().prop('tagName').toLowerCase() == 'a') $(this).unwrap();
+                setImageSize($(this), width, 0);
+            });
 
-                infoShowed = true;
-            }
-        });
-    }
+            infoShowed = true;
+        }
+    });
 })

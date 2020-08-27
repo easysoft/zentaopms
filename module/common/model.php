@@ -588,15 +588,6 @@ class commonModel extends model
                 }
                 if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
 
-                /* Avoid user thinking the page is shaking when the menu toggle class 'active' */
-                if($config->global->flow == 'onlyTest')
-                {
-                    if($currentModule == 'bug'       && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'testcase'  && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'testtask'  && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'caselib'   && $currentMethod == 'browse') $active = '';
-                }
-
                 $label   = $menuItem->text;
                 $subMenu = '';
                 /* Print sub menus. */
@@ -633,7 +624,7 @@ class commonModel extends model
                             $subProgram .= '</ul>';
                         }
 
-                        if($config->global->flow != 'onlyTest' && $currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
+                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
                     }
@@ -681,12 +672,7 @@ class commonModel extends model
         {
             $searchObject = $methodName;
         }
-        if(empty($lang->searchObjects[$searchObject]))
-        {
-            $searchObject = 'bug';
-            if($config->global->flow == 'onlyStory') $searchObject = 'story';
-            if($config->global->flow == 'onlyTask')  $searchObject = 'task';
-        }
+        if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
 
         echo "<div id='searchbox'>";
         echo "<div class='input-group'>";
@@ -787,15 +773,6 @@ class commonModel extends model
                 }
                 if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
 
-                /* Avoid user thinking the page is shaking when the menu toggle class 'active' */
-                if($config->global->flow == 'onlyTest')
-                {
-                    if($currentModule == 'bug'       && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'testcase'  && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'testtask'  && $currentMethod == 'browse') $active = '';
-                    if($currentModule == 'caselib'   && $currentMethod == 'browse') $active = '';
-                }
-
                 $label   = $menuItem->text;
                 $subMenu = '';
                 /* Print sub menus. */
@@ -816,7 +793,7 @@ class commonModel extends model
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
-                        if($config->global->flow != 'onlyTest' && $currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
+                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
                     }

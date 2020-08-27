@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Application Lifecycle Management';
-$lang->install->workingList['onlyTest']  = 'Seulement Test Management';
-$lang->install->workingList['onlyStory'] = 'Seulement Story Management';
-$lang->install->workingList['onlyTask']  = 'Seulement Task Management';
 
 $lang->install->errorConnectDB      = 'Echec de connexion à la base. ';
 $lang->install->errorDBName         = 'Le nom de la base ne doit pas contenir de “.” ';

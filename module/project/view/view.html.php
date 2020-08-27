@@ -72,7 +72,6 @@
             <div class="panel-body">
               <div class="row row-grid">
                 <?php $i = 9; $j = 0;?>
-                <?php if($config->global->flow != 'onlyTask'):?>
                 <?php if($project->PM):?>
                 <?php $i--;?>
                 <?php unset($teamMembers[$project->PM]);?>
@@ -92,7 +91,6 @@
                 <?php $i--;?>
                 <?php unset($teamMembers[$project->RD]);?>
                 <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->RD);?> <span class="text-muted">（<?php echo $lang->project->RD;?>）</span></div>
-                <?php endif;?>
                 <?php endif;?>
 
                 <?php if(common::hasPriv('project', 'team')):?>
@@ -193,7 +191,6 @@
                 </p>
               </div>
             </div>
-            <?php if($config->global->flow != 'onlyTask'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>
@@ -222,7 +219,6 @@
                 </div>
               </div>
             </div>
-            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->project->lblStats;?></strong></div>
               <div class="detail-content">

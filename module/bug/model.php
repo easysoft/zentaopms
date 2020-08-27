@@ -91,35 +91,8 @@ class bugModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
-            if($this->config->global->flow != 'onlyTest')
-            {
-                $replace = $productID;
-            }
-            else
-            {
-                $replace = array();
-                $replace['productID'] = $productID;
-                $replace['branch']    = $branch;
-                $replace['param']     = $moduleID;
-
-                /* Replace for dropdown submenu. */
-                if(isset($this->lang->bug->subMenu->$key))
-                {
-                    $subMenu = common::createSubMenu($this->lang->bug->subMenu->$key, $replace);
-
-                    /* Avoid the menu shaking when change it by js. */
-                    if(isset($subMenu[$browseType]))
-                    {
-                        $currentSubMenu = $subMenu[$browseType];
-                        $this->lang->bug->menu->more['link'] = "$currentSubMenu->text|" . implode('|', $currentSubMenu->link);
-                    }
-
-                    if(!empty($subMenu)) $this->lang->bug->menu->{$key}['subMenu'] = $subMenu;
-                }
-
-                if($this->app->getMethodName() != 'view') $this->lang->bug->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->bug->byQuery}</a>";
-            }
+            $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
+            $replace = $productID;
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
     }

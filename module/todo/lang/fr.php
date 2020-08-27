@@ -92,10 +92,6 @@ $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Tâche';
 $lang->todo->typeList['story']    = 'Story';
 
-global $config;
-if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
-if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
-
 $lang->todo->confirmDelete  = "Voulez-vous supprimer cette entrée de l'agenda ?";
 $lang->todo->thisIsPrivate  = "Il s'agit d'un rdv privé";
 $lang->todo->lblDisableDate = 'A définir';

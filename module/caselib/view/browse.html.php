@@ -19,7 +19,6 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 js::set('flow',          $config->global->flow);
 ?>
-<?php if($config->global->flow != 'onlyTest'):?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -61,7 +60,6 @@ js::set('flow',          $config->global->flow);
     <?php common::printLink('caselib', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -218,13 +216,6 @@ js::set('flow',          $config->global->flow);
 </div>
 <script>
 $('#module' + moduleID).addClass('active');
-<?php if($config->global->flow == 'full'):?>
 $('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
-<?php endif;?>
-if(flow == 'onlyTest')
-{
-    $('#subNavbar > .nav > li').removeClass('active');
-    $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
-}
 </script>
 <?php include '../../common/view/footer.html.php';?>

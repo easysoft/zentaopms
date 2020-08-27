@@ -190,7 +190,6 @@
               </table>
             </div>
           </div>
-          <?php if($config->global->flow != 'onlyTest'):?>
           <div class="detail">
             <div class="detail-title"><strong><?php echo $lang->product->otherInfo;?></strong></div>
             <div class="detail-content">
@@ -231,7 +230,6 @@
               </table>
             </div>
           </div>
-          <?php endif;?>
           <?php $this->printExtendFields($product, 'div', "position=right&inForm=0&inCell=1");?>
         </div>
       </div>

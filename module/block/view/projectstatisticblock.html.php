@@ -154,7 +154,6 @@ $(function()
                 </div>
               </div>
             </div>
-            <?php if($this->config->global->flow != 'onlyTask'): ?>
             <div class="product-info">
               <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $project->releasedStories;?></strong></div>
               <div class="progress">
@@ -196,7 +195,6 @@ $(function()
                 </div>
               </div>
             </div>
-            <?php endif;?>
           </div>
         </div>
       </div>
