@@ -1087,7 +1087,6 @@ $lang->workestimation = new stdclass();
 $lang->budget         = new stdclass();
 $lang->programplan    = new stdclass();
 $lang->review         = new stdclass();
-$lang->weekly         = new stdclass();
 $lang->milestone      = new stdclass();
 $lang->design         = new stdclass();
 $lang->auditplan      = new stdclass();
@@ -1103,7 +1102,6 @@ $lang->workestimation->menu = new stdclass();
 $lang->budget->menu         = new stdclass();
 $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();
-$lang->weekly->menu         = new stdclass();
 $lang->milestone->menu      = new stdclass();
 $lang->cmmiproduct->menu    = new stdclass();
 $lang->design->menu         = new stdclass();
@@ -1125,15 +1123,12 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
-
 $lang->cmmiproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
 $lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
 $lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-$lang->milestone->menu = $lang->weekly->menu;
-$lang->nc->menu        = $lang->auditplan->menu;
+$lang->nc->menu = $lang->auditplan->menu;
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
