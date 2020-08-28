@@ -38,7 +38,6 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
             <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
@@ -74,7 +73,6 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
             <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>';?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>

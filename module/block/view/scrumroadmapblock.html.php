@@ -10,25 +10,19 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php echo $sync ? '<div id="roadMap">' : '';?>
+<?php
+$blockNavID = empty($blockNavID) ? uniqid() : $blockNavID;
+echo $sync ? '<div id="roadMap' . $blockNavID . '">' : '';
+?>
 <style>
 .release-line>li:nth-child(even)>a{height: 92px;}
 .release-line>li:nth-child(odd){padding-top: 87px;}
 .release-line>li>a .title {overflow: hidden; width:150%; text-overflow: ellipsis;}
 #dashboard .panel-move-handler{right: 30px}
 #productList{width:32%; position: absolute; top: 6px; left: 96px;}
-#createPlan{position: absolute; top: 6px; right: 50px;}
-#createPlan a{padding: 0 5px;line-height: 24px;margin: 3px;color: #3C4353;}
-#roadMapMore{position: absolute; top: 0px; right: 0px;}
 </style>
 <div class="panel-move-handler">
-  <div id="productList"><?php echo html::select('productID', $products, $productID, 'class="form-control chosen" onchange="reloadRoadmap(this.options[this.options.selectedIndex].value)"');?></div>
-  <div id="createPlan"><?php echo html::a($this->createLink('productplan', 'create', 'productID=' . $productID), '<i class="icon icon-sm icon-plus"></i>'. $lang->productplan->create, '', 'class="btn btn-mini" id="createPlanLink"');?></div>
-  <nav class="panel-actions nav nav-default" id="roadMapMore">
-    <li>
-      <?php echo html::a($this->createLink('product', 'roadmap', 'productID=' . $productID), '<i class="icon icon-more"></i>', '', 'title="'. $lang->more .'" id="roadMapMoreLink"');?>
-    </li>
-  </nav>
+  <div id="productList"><?php echo html::select('productID', $products, $productID, 'id="' . $blockNavID .'" class="form-control chosen" onchange="reloadRoadmap(this.options[this.options.selectedIndex].value, this.id)"');?></div>
 </div>
 <div class="panel-body conatiner-fluid">
   <?php if(empty($roadmaps)):?>
