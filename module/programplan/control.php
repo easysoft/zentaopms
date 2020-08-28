@@ -11,14 +11,6 @@
  */
 class programplan extends control
 {
-    /**
-     * __construct
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
@@ -26,7 +18,7 @@ class programplan extends control
     }
 
     /**
-     * Common action
+     * Common action.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -44,7 +36,7 @@ class programplan extends control
     }
 
     /**
-     * Browse programplans
+     * Browse programplans.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -98,7 +90,7 @@ class programplan extends control
     }
 
     /**
-     * Create a programplan
+     * Create a programplan.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -140,7 +132,7 @@ class programplan extends control
     }
 
     /**
-     * Edit a programplan
+     * Edit a programplan.
      *
      * @param  int    $planID
      * @access public
@@ -176,7 +168,7 @@ class programplan extends control
     }
 
     /**
-     * Delete a programplan
+     * Delete a programplan.
      *
      * @param  int    $planID
      * @param  string $confirm
@@ -204,7 +196,7 @@ class programplan extends control
     }
 
     /**
-     * Ajax custom
+     * Ajax custom.
      *
      * @access public
      * @return void

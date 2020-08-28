@@ -11,14 +11,6 @@
  */
 class budget extends control
 {
-    /**
-     * __construct
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return void
-     */
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);

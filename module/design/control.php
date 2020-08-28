@@ -29,8 +29,6 @@ class design extends control
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
 
         $this->design->setProductMenu($productID);
-        $product = $this->loadModel('product')->getById($productID);
-        $program = $this->loadModel('project')->getById($product->program);
 
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         /* Build the search form. */

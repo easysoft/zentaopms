@@ -14,7 +14,7 @@
 class programplanModel extends model
 {
     /**
-     * Set menu
+     * Set menu.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -27,7 +27,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get by id
+     * Get plan by id.
      *
      * @param  int    $planID
      * @access public
@@ -41,7 +41,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get projects by product
+     * Get projects by productID.
      *
      * @param  int    $productID
      * @access public
@@ -55,7 +55,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get list
+     * Get  plans list.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -82,7 +82,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get by list
+     * Get plans by idList.
      *
      * @param  array  $idList
      * @access public
@@ -99,7 +99,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get plan pairs for budget
+     * Get plan pairs for budget.
      *
      * @param  int    $programID
      * @access public
@@ -127,7 +127,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get plans
+     * Get plans.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -151,7 +151,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get pairs
+     * Get pairs.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -177,7 +177,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get gantt data
+     * Get gantt data.
      *
      * @param  int    $programID
      * @param  int    $productID
@@ -322,7 +322,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get total percent
+     * Get total percent.
      *
      * @param  int    $plan
      * @access public
@@ -343,7 +343,7 @@ class programplanModel extends model
     }
 
     /**
-     * Process plans
+     * Process plans.
      *
      * @param  int    $plans
      * @access public
@@ -360,7 +360,7 @@ class programplanModel extends model
     }
 
     /**
-     * Process plan
+     * Process plan.
      *
      * @param  int    $plan
      * @access public
@@ -401,7 +401,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get duration
+     * Get duration.
      *
      * @param  int    $begin
      * @param  int    $end
@@ -415,7 +415,7 @@ class programplanModel extends model
     }
 
     /**
-     * Create a plan
+     * Create a plan.
      *
      * @param  int    $programID
      * @param  int    $parentID
@@ -598,7 +598,7 @@ class programplanModel extends model
     }
 
     /**
-     * Update a plan
+     * Update a plan.
      *
      * @param  int    $planID
      * @access public
@@ -686,7 +686,7 @@ class programplanModel extends model
     }
 
     /**
-     * Print cell
+     * Print cell.
      *
      * @param  int    $col
      * @param  int    $plan
@@ -793,7 +793,7 @@ class programplanModel extends model
     }
 
     /**
-     * Is create task
+     * Is create task.
      *
      * @param  int    $planID
      * @access public
@@ -806,7 +806,7 @@ class programplanModel extends model
     }
 
     /**
-     * Is clickable
+     * Is clickable.
      *
      * @param  int    $plan
      * @param  int    $action
@@ -824,7 +824,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get milestones
+     * Get milestones.
      *
      * @param  int    $programID
      * @access public
@@ -842,7 +842,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get milestone by product
+     * Get milestone by product.
      *
      * @param  int    $productID
      * @access public
@@ -861,7 +861,7 @@ class programplanModel extends model
     }
 
     /**
-     * Is parent
+     * Is parent.
      *
      * @param  int    $planID
      * @access public
@@ -874,7 +874,7 @@ class programplanModel extends model
     }
 
     /**
-     * Get parent stage list
+     * Get parent stage list.
      *
      * @param  int    $planID
      * @param  int    $productID
