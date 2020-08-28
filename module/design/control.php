@@ -64,13 +64,10 @@ class design extends control
      */
     public function create($productID = 0)
     {
-        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
-        $this->design->setProductMenu($productID);
-
         if($_POST)
         {
-            $productID = $this->post->product;
-            $designID  = $this->design->create();
+            $designID = $this->design->create();
+
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -82,16 +79,19 @@ class design extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('design', 'browse', "productID=$productID");
+            $response['locate']  = $this->createLink('design', 'browse', "productID={$this->post->product}");
             $this->send($response);
         }
+
+        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
+        $this->design->setProductMenu($productID);
 
         $this->view->title      = $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products  = $this->loadModel('product')->getPairs($this->session->program);
+        $this->view->products  = $this->loadModel('product')->getPairs();
         $this->view->productID = $productID;
         $this->view->program   = $this->loadModel('project')->getByID($this->session->program);
 
