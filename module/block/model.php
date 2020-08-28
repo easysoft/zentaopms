@@ -250,10 +250,10 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '', $type = '')
+    public function getAvailableBlocks($module = '', $dashboard = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($type == 'program')
+        if($dashboard == 'program')
         {
             $programID = $this->session->program;
             $program   = $this->loadModel('project')->getByID($programID);

@@ -203,6 +203,7 @@ $filter->block->main->get['blockTitle'] = 'reg::any';
 $filter->block->main->get['entry']      = 'code';
 $filter->block->main->get['lang']       = 'reg::lang';
 $filter->block->main->get['mode']       = 'code';
+$filter->block->main->get['dashboard']  = 'code';
 $filter->block->main->get['param']      = 'reg::base64';
 $filter->block->main->get['sso']        = 'reg::base64';
 

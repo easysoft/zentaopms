@@ -64,7 +64,8 @@ class block extends control
         }
         elseif(isset($this->lang->block->moduleList[$module]))
         {
-            $module == 'program' ? $this->get->set('mode', 'getprogramlist') : $this->get->set('mode', 'getblocklist');
+            $this->get->set('mode', 'getblocklist');
+            if($module == 'program') $this->get->set('dashboard', 'program');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -398,10 +399,10 @@ class block extends control
 
         $mode = strtolower($this->get->mode);
 
-        if($mode == 'getblocklist' || $mode == 'getprogramlist')
+        if($mode == 'getblocklist')
         {
-            $type   = $mode == 'getblocklist' ? '' : 'program';
-            $blocks = $this->block->getAvailableBlocks($module, $type);
+            $dashboard = $this->get->dashboard;
+            $blocks    = $this->block->getAvailableBlocks($module, $dashboard);
             if(!$this->selfCall)
             {
                 echo $blocks;
@@ -1126,7 +1127,7 @@ class block extends control
     {
         $products  = $this->loadModel('product')->getPairs();
         $productID = isset($this->session->product) ? 0 : $this->session->product;
-        if(!$productID || !array_key_exists($productID, $products)) $productID = array_key_first($products);
+        if(!$productID || !array_key_exists($productID, $products)) $productID = key($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
         $this->view->products  = $products;
@@ -1284,7 +1285,7 @@ class block extends control
     {
         $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
-            ->where('deleted')->eq('0')
+            ->andWhere('deleted')->eq('0')
             ->fetch();
     }
 
