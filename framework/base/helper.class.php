@@ -65,6 +65,7 @@ class baseHelper
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
         $programID = $programID ? $programID : $app->session->program;
+
         if(strpos($moduleName, '.') !== false) 
         {
             list($appName, $moduleName) = explode('.', $moduleName);

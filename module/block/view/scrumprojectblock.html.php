@@ -1,6 +1,6 @@
 <?php
 /**
- * The testtask block view file of block module of ZenTaoPMS.
+ * The project overview block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -14,31 +14,24 @@
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.status-bars {
-    display: table;
-    width: 60%;
-    height: 140px;
-    padding: 5px;
-    padding-top: 50px;
-    margin: 0;
-    overflow: hidden;
-}
+.status-bars {display: table;width: 60%;height: 140px;padding: 5px;padding-top: 50px;margin: 0;overflow: hidden;}
 </style>
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
     <div class="tile">
       <div class="tile-title"><?php echo $lang->block->allProject;?></div>
-      <div class="tile-amount"><?php echo $summary->total;?></div>
+      <?php $projectLink = $this->createLink('project', 'index', 'locate=no')?>
+      <div class="tile-amount"><?php echo $summary->total ? html::a($projectLink, $summary->total) : 0;?></div>
     </div>
   </div>
   <div class="col-8 text-middle">
     <ul class="status-bars  all-statistics">
       <li>
-        <span class="bar" style="height: <?php echo empty($summary->doing) ? 0 : round(($summary->doing/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->doing;?></span></span>
+        <span class="bar" style="height: <?php echo empty($summary->total) ? 0 : round(($summary->doing/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->doing;?></span></span>
         <span class="title"><?php echo $lang->block->doingProject;?></span>
       </li>
       <li>
-        <span class="bar" style="height: <?php echo empty($summary->finish) ? 0 : round(($summary->finish/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->finish;?></span></span>
+        <span class="bar" style="height: <?php echo empty($summary->total) ? 0 : round(($summary->finish/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->finish;?></span></span>
         <span class="title"><?php echo $lang->block->finishProject;?></span>
       </li>
     </ul>

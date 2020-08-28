@@ -1,6 +1,6 @@
 <?php
 /**
- * The project block view file of block module of ZenTaoPMS.
+ * The scrum overview block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="col-3 total-block">
+    <div class="col-3 total-block hide-in-sm">
       <div><strong><?php echo $lang->block->totalStory;?></strong></div>
       <div class="tile-amount">
       <?php echo $totalData[$programID]->allStories ? html::a($this->createLink('project', 'story', 'projectID=' . $programID), $totalData[$programID]->allStories) : 0;?>
@@ -69,7 +69,7 @@
         <span><?php echo $totalData[$programID]->leftStories;?></span>
       </div>
     </div>
-    <div class="col-3 total-block">
+    <div class="col-3 total-block hide-in-sm">
       <div><strong><?php echo $lang->block->totalBug;?></strong></div>
       <div class="tile-amount">
       <?php echo $totalData[$programID]->allBugs ? html::a($this->createLink('qa', 'index'), $totalData[$programID]->allBugs) : 0;?>

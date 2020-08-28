@@ -12,7 +12,7 @@
 class stage extends control
 {
     /**
-     * Browse designs
+     * Browse stages.
      *
      * @param  string $orderBy
      * @access public
@@ -30,7 +30,7 @@ class stage extends control
     }
 
     /**
-     * Create a stage
+     * Create a stage.
      *
      * @access public
      * @return void
@@ -63,7 +63,7 @@ class stage extends control
     }
 
     /**
-     * Batch create
+     * Batch create stages.
      *
      * @access public
      * @return void
@@ -95,7 +95,7 @@ class stage extends control
     }
 
     /**
-     * Edit a stage
+     * Edit a stage.
      *
      * @param  int    $stageID
      * @access public
@@ -132,7 +132,7 @@ class stage extends control
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @access public
      * @return void
@@ -160,7 +160,7 @@ class stage extends control
     }
 
     /**
-     * Delete a stage
+     * Delete a stage.
      *
      * @param  int    $stageID
      * @param  string $confirm

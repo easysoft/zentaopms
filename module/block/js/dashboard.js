@@ -251,20 +251,19 @@ $(function()
     });
 });
 
-function reloadRoadmap(productID)
+function reloadRoadmap(productID, blockNavID)
 {
     $.ajax(
     {
-        url: createLink('block', 'printScrumroadmapBlock', 'id=' + productID),
+        url: createLink('block', 'printScrumroadmapBlock', 'id=' + productID + '&blockNavID=' + blockNavID),
         dataType: "html",
         async: false,
-        data: {id: productID},
+        data: {id: productID, blockNavID: blockNavID},
         type: 'post',
         success: function(data)
         {
-            $("#roadMap").html('');
-            $("#roadMap").html(data);
-            $('#productID').chosen();
+            $("#roadMap" + blockNavID).html(data);
+            $("#" + blockNavID).chosen();
         }
     })
 }

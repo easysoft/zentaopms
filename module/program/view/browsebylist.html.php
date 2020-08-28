@@ -20,11 +20,11 @@
         <?php endif;?>
       </tr>
     </thead>
-    <tbody class='sortable' id='programTableList'>
+    <tbody id='programTableList'>
       <?php foreach($programs as $program):?>
       <?php
       $trClass = '';
-      $trAttrs = "data-id='$program->id' data-order=$program->order";
+      $trAttrs = "data-id='$program->id' data-order='$program->order' data-parent='$program->parent'";
       if($program->isCat)
       {
           $trAttrs .= " data-nested='true'";
@@ -67,7 +67,7 @@
           <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
         </td>
         <?php if($canOrder):?>
-        <td class='sort-handler'><i class="icon icon-move"></i></td>
+        <td class='sort-handler text-center'><i class="icon icon-move"></i></td>
         <?php endif;?>
       </tr>
       <?php endforeach;?>
@@ -77,3 +77,47 @@
     <?php $pager->show('right', 'pagerjs');?>
   </div>
 </form>
+<style>
+.w-240px {width:240px;}
+#programTableList.sortable-sorting > tr {opacity: 0.7}
+#programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
+#programTableList > tr.drop-not-allowed {opacity: 0.1!important}
+</style>
+<script>
+$(function()
+{
+    var $list = $('#programTableList');
+    $list.addClass('sortable').sortable(
+    {
+        reverse: orderBy === 'order_desc',
+        selector: 'tr',
+        dragCssClass: 'drag-row',
+        trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        canMoveHere: function($ele, $target)
+        {
+            return $ele.data('parent') === $target.data('parent');
+        },
+        start: function(e)
+        {
+            e.targets.filter('[data-parent!="' + e.element.attr('data-parent') + '"]').addClass('drop-not-allowed');
+        },
+        finish: function(e)
+        {
+            var orders = {};
+            e.list.each(function()
+            {
+                orders[$(this.item).data('id')] = this.order;
+            });
+            $.post(createLink('project', 'updateOrder'), {'projects' : orders, 'orderBy' : orderBy});
+
+            var $thead = $list.closest('table').children('thead');
+            $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
+            $thead.find('th.sort-default .header').removeClass('header').addClass('headerSortDown');
+
+            e.element.addClass('drop-success');
+            setTimeout(function(){e.element.removeClass('drop-success');}, 800);
+            $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
+        }
+    });
+});
+</script>

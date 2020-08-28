@@ -1,6 +1,6 @@
 <?php
 /**
- * The project block view file of block module of ZenTaoPMS.
+ * The product overview block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(empty($products)): ?>
-<div class='empty-tip'><?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'")?></div>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
