@@ -5,7 +5,7 @@ $config->programplan->create->requiredFields = 'name,begin,end';
 $config->programplan->edit->requiredFields   = 'name,begin,end';
 
 $config->programplan->datatable = new stdclass();
-$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'milestone', 'begin', 'end', 'realStarted', 'realFinished', 'output', 'openedBy', 'openedDate', 'actions');
+$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'milestone', 'begin', 'end', 'realStarted', 'realFinished', 'openedBy', 'openedDate', 'actions');
 
 $config->programplan->datatable->fieldList['id']['title']    = 'idAB';
 $config->programplan->datatable->fieldList['id']['fixed']    = 'left';
@@ -31,16 +31,6 @@ $config->programplan->datatable->fieldList['milestone']['title']    = 'milestone
 $config->programplan->datatable->fieldList['milestone']['fixed']    = 'no';
 $config->programplan->datatable->fieldList['milestone']['width']    = '100';
 $config->programplan->datatable->fieldList['milestone']['required'] = 'no';
-
-$config->programplan->datatable->fieldList['output']['title']    = 'output';
-$config->programplan->datatable->fieldList['output']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['output']['width']    = '200';
-$config->programplan->datatable->fieldList['output']['required'] = 'no';
-
-//$config->programplan->datatable->fieldList['version']['title']    = 'version';
-//$config->programplan->datatable->fieldList['version']['fixed']    = 'no';
-//$config->programplan->datatable->fieldList['version']['width']    = '70';
-//$config->programplan->datatable->fieldList['version']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['openedBy']['title']    = 'openedBy';
 $config->programplan->datatable->fieldList['openedBy']['fixed']    = 'no';

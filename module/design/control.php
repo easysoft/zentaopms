@@ -11,11 +11,12 @@
  */
 class design extends control
 {
-    /**
+   /**
      * Browse designs.
      *
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type all|HLDS|DDS|DBDS|ADS
+     * @param  string $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -27,14 +28,14 @@ class design extends control
     {
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
 
+        $this->design->setProductMenu($productID);
+        $product = $this->loadModel('product')->getById($productID);
+        $program = $this->loadModel('project')->getById($product->program);
+
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         /* Build the search form. */
         $actionURL = $this->createLink('design', 'browse', "productID=$productID&type=bySearch&queryID=myQueryID");
         $this->design->buildSearchForm($queryID, $actionURL);
-
-        $this->design->setProductMenu($productID);
-        $product = $this->loadModel('product')->getById($productID);
-        $program = $this->loadModel('project')->getById($product->program);
 
         $this->app->session->set('designList', $this->app->getURI(true));
 
@@ -65,8 +66,6 @@ class design extends control
      * Create a design.
      *
      * @param  int    $productID
-     * @param  string $prevModule
-     * @param  int    $prevID
      * @access public
      * @return void
      */
@@ -107,8 +106,9 @@ class design extends control
     }
 
     /**
-     * Batch create
+     * Batch create designs.
      *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -141,6 +141,7 @@ class design extends control
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
+
     /**
      * View a design.
      *
@@ -214,6 +215,7 @@ class design extends control
      * Commit a design.
      *
      * @param  int    $designID
+     * @param  int    $repoID
      * @param  string $begin
      * @param  string $end
      * @param  int    $recTotal
@@ -222,7 +224,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function commit($designID, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function commit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -269,13 +271,13 @@ class design extends control
     }
 
     /**
-     * Revision
+     * A version of the code base.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function revision($repoID)
+    public function revision($repoID = 0)
     {
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
         $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
@@ -290,7 +292,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function delete($designID, $confirm = 'no')
+    public function delete($designID = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -310,7 +312,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function assignTo($designID)
+    public function assignTo($designID = 0)
     {
         if($_POST)
         {

@@ -240,18 +240,6 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
-
-            $block->actionLink = '';
-            if(isset($this->config->block->showAction[$block->block]))
-            {
-                $action = $this->config->block->showAction[$block->block];
-                if(common::hasPriv($action['module'], $action['method']))
-                {
-                    $this->app->loadLang($action['module']);
-                    $block->actionLink = html::a($this->createLink($action['module'], $action['method'], $action['vars']), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->{$action['module']}->create, '', "class='btn btn-mini'");
-                }
-            }
-
             if($this->block->isLongBlock($block))
             {
                 $longBlocks[$key] = $block;
@@ -1139,7 +1127,7 @@ class block extends control
     {
         $products  = $this->loadModel('product')->getPairs();
         $productID = isset($this->session->product) ? 0 : $this->session->product;
-        if($productID && !array_key_exists($productID, $products)) $productID = 0;
+        if(!$productID || !array_key_exists($productID, $products)) $productID = array_key_first($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
         $this->view->products  = $products;
@@ -1297,6 +1285,7 @@ class block extends control
     {
         $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
+            ->andWhere('deleted')->eq('0')
             ->fetch();
     }
 
@@ -1318,8 +1307,8 @@ class block extends control
                 ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
                 ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
                 ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
-                ->orderBy('id_desc')
-                ->limit(30)
+                ->orderBy('date_desc')
+                ->limit(10)
                 ->fetchAll();
         }
 
@@ -1331,10 +1320,11 @@ class block extends control
      * Print srcum road map block.
      *
      * @param  int    $productID
+     * @param  int    $blockNavID
      * @access public
      * @return void
      */
-    public function printScrumroadmapBlock($productID = 0)
+    public function printScrumroadmapBlock($productID = 0, $blockNavID = '')
     {
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
@@ -1344,9 +1334,10 @@ class block extends control
 
         $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
 
-        $this->view->productID = $productID;
-        $this->view->products  = $products;
-        $this->view->sync      = 1;
+        $this->view->productID  = $productID;
+        $this->view->products   = $products;
+        $this->view->sync       = 1;
+        $this->view->blockNavID = $blockNavID;
 
         if($_POST)
         {

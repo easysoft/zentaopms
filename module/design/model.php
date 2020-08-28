@@ -54,8 +54,9 @@ class designModel extends model
     }
 
     /**
-     * Batch create
+     * Batch create designs.
      *
+     * @param  int    $productID
      * @access public
      * @return bool
      */
@@ -93,7 +94,7 @@ class designModel extends model
      * @access public
      * @return bool
      */
-    public function update($designID)
+    public function update($designID = 0)
     {
         $oldDesign = $this->getByID($designID);
         $design = fixer::input('post')
@@ -141,7 +142,7 @@ class designModel extends model
      * @access public
      * @return void
      */
-    public function linkCommit($designID, $repoID)
+    public function linkCommit($designID = 0, $repoID = 0)
     {
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
@@ -177,7 +178,7 @@ class designModel extends model
     }
 
     /**
-     * SetProductMenu
+     * Set product menu.
      *
      * @param  int    $productID
      * @access public
@@ -195,13 +196,13 @@ class designModel extends model
     }
 
     /**
-     * GetByID
+     * Get a design by id.
      *
      * @param  int    $designID
      * @access public
      * @return object
      */
-    public function getByID($designID)
+    public function getByID($designID = 0)
     {
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
@@ -215,14 +216,14 @@ class designModel extends model
     }
 
     /**
-     * GetDesignPairs
+     * Get design pairs.
      *
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type all|HLDS|DDS|DBDS|ADS
      * @access public
      * @return object
      */
-    public function getDesignPairs($productID = 0, $type = 'detailed')
+    public function getDesignPairs($productID = 0, $type = 'all')
     {
         $designs = $this->dao->select('id, name')->from(TABLE_DESIGN)
             ->where('product')->eq($productID)
@@ -235,13 +236,13 @@ class designModel extends model
     }
 
     /**
-     * GetAffectedScope
+     * Get affected scope.
      *
      * @param  int    $design
      * @access public
      * @return object
      */
-    public function getAffectedScope($design)
+    public function getAffectedScope($design = 0)
     {
         /* Get affected tasks. */
         $design->tasks = $this->dao->select('*')->from(TABLE_TASK)
@@ -254,16 +255,17 @@ class designModel extends model
     }
 
     /**
-     * GetList
+     * Get list.
      *
      * @param  int    $productID
-     * @param  int    $type
-     * @param  int    $orderBy
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $pager
      * @access public
      * @return array
      */
-    public function getList($productID, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($type == 'bySearch')
         {
@@ -292,7 +294,7 @@ class designModel extends model
     }
 
     /**
-     * Get designs by search
+     * Get designs by search.
      *
      * @param  string $queryID
      * @param  string $orderBy
@@ -341,7 +343,7 @@ class designModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID, $actionURL)
+    public function buildSearchForm($queryID = 0, $actionURL = '')
     {
         $this->config->design->search['actionURL'] = $actionURL;
         $this->config->design->search['queryID']   = $queryID;
@@ -350,14 +352,14 @@ class designModel extends model
     }
 
     /**
-     * Print assignedTo html
+     * Print assignedTo html.
      *
-     * @param  int    $design
-     * @param  int    $users
+     * @param  object $design
+     * @param  array  $users
      * @access public
      * @return string
      */
-    public function printAssignedHtml($design, $users)
+    public function printAssignedHtml($design = '', $users = '')
     {
         $btnTextClass   = '';
         $assignedToText = zget($users, $design->assignedTo);
@@ -384,7 +386,7 @@ class designModel extends model
      * @access public
      * @return array|bool
      */
-    public function assign($designID)
+    public function assign($designID = 0)
     {
         $oldDesign = $this->getByID($designID);
 
