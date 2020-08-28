@@ -206,10 +206,19 @@ class block extends control
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
-        $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
+        if($module == 'program')
+        {
+            $program = $this->loadModel('project')->getByID($this->app->session->program);
+            $common  = $program->template . 'common';
+            $inited  = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
+        }
+        else
+        {
+            $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
+        }
 
         /* Init block when vist index first. */
-        if((empty($blocks) and !$inited and !defined('TUTORIAL')) || (empty($blocks) and $module == 'program'))
+        if((empty($blocks) and !$inited and !defined('TUTORIAL')))
         {
             if($this->block->initBlock($module, $type)) die(js::reload());
         }
@@ -1127,7 +1136,7 @@ class block extends control
     {
         $products  = $this->loadModel('product')->getPairs();
         $productID = isset($this->session->product) ? 0 : $this->session->product;
-        if(!$productID || !array_key_exists($productID, $products)) $productID = key($products);
+        if(!$productID) $productID = key($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
         $this->view->products  = $products;
@@ -1262,12 +1271,19 @@ class block extends control
      */
     public function printScrumproductBlock()
     {
-        $products  = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
-        $productID = array_keys($products);
+        $stories  = array();
+        $bugs     = array();
+        $releases = array(); 
 
-        $stories  = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_STORY)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
-        $bugs     = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_BUG)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
-        $releases = empty($productID) ? array() : $this->dao->select('count(*) as total, product')->from(TABLE_RELEASE)->where('product')->in($productID)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs('product', 'total');
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $productIdList = array_keys($products);
+        if(!empty($productIdList))
+        {
+            $fields   = 'product, count(*) as total';
+            $stories  = $this->dao->select($fields)->from(TABLE_STORY)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
+            $bugs     = $this->dao->select($fields)->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
+            $releases = $this->dao->select($fields)->from(TABLE_RELEASE)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
+        }
 
         $this->view->products = $products;
         $this->view->stories  = $stories;
@@ -1283,10 +1299,23 @@ class block extends control
      */
     public function printScrumprojectBlock()
     {
-        $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
-            ->where('program')->eq($this->session->program)
-            ->andWhere('deleted')->eq('0')
-            ->fetch();
+        $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('program')->eq($this->session->program)
+            ->groupBy('status')
+            ->fetchPairs();
+
+        $summary = new stdclass();
+        $summary->total  = array_sum($status);
+        $summary->doing  = zget($status, 'doing', 0);
+        $summary->closed = zget($status, 'closed', 0);
+
+        $progress = new stdclass();
+        $progress->doing  = $summary->total == 0 ? 0 : round($summary->doing  / $summary->total, 3);
+        $progress->closed = $summary->total == 0 ? 0 : round($summary->closed / $summary->total, 3);
+
+        $this->view->summary  = $summary;
+        $this->view->progress = $progress;
     }
 
     /**

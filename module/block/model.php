@@ -213,6 +213,31 @@ class blockModel extends model
     }
 
     /**
+     * Get contribute block data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getContributeBlockData()
+    {
+        $account = $this->app->user->account;
+        $count   = 'count(*) AS count';
+
+        $data = array();
+        $data['todos']   = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $data['stories'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $data['bugs']    = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $data['cases']   = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
+        $data['tasks']   = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
+            ->andWhere('finishedBy', true)->eq($account)
+            ->orWhere('finishedList')->like("%,{$account},%")
+            ->markRight(1)
+            ->fetch('count');
+
+        return $data;
+    }
+
+    /**
      * Init block when account use first. 
      * 
      * @param  string    $appName 
@@ -223,11 +248,23 @@ class blockModel extends model
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
-        if($module == 'program') $blocks = $this->lang->block->default[$type]['program'];
-        else $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
+        if($module == 'program') 
+        {
+            $blocks    = $this->lang->block->default[$type]['program'];
+            $programID = $this->session->program;
+            $program   = $this->loadModel('project')->getByID($programID);
 
-        /* Mark this app has init. */
-        $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
+            /* Mark program block has init. */
+            $this->loadModel('setting')->setItem("$account.$module.{$program->template}common.blockInited", true);
+        }
+        else 
+        {
+            $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
+
+            /* Mark this app has init. */
+            $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
+        }
+
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
         foreach($blocks as $index => $block)
         {
@@ -754,42 +791,6 @@ class blockModel extends model
         }
 
         return $blockPairs;
-    }
-
-    /**
-     * Get contribute block data.
-     *
-     * @access public
-     * @return array
-     */
-    public function getContributeBlockData()
-    {
-        $data = array();
-
-        $data['todos']   = $this->dao->select('count(*) AS count')->from(TABLE_TODO)
-            ->where('account')->eq($this->app->user->account)
-            ->fetch('count');
-        $data['stories'] = $this->dao->select('count(*) AS count')->from(TABLE_STORY)
-            ->where('openedBy')->eq($this->app->user->account)
-            ->andWhere('deleted')->eq('0')
-            ->fetch('count');
-        $data['tasks']   = $this->dao->select('count(*) AS count')->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('finishedBy')->eq($this->app->user->account)
-            ->orWhere('finishedList')->like("%,{$this->app->user->account},%")
-            ->fetch('count');
-        $data['bugs']    = $this->dao->select('count(*) AS count')->from(TABLE_BUG)
-            ->where('resolvedBy')->eq($this->app->user->account)
-            ->andWhere('deleted')->eq('0')
-            ->fetch('count');
-        $data['cases']   = $this->dao->select('count(*) AS count')->from(TABLE_CASE)
-            ->where('openedBy')->eq($this->app->user->account)
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('product')->ne(0)
-            ->andWhere('auto')->ne('unit')
-            ->fetch('count');
-
-        return $data;
     }
 
     /**
