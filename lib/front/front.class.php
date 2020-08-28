@@ -156,7 +156,6 @@ class html extends baseHTML
     {
         $options = (array)($options);
         if($append and !isset($options[$selectedItems])) $options[$selectedItems] = $selectedItems;
-        if(!is_array($options) or empty($options)) return false;
 
         /* The begin. */
         $id = $name;
