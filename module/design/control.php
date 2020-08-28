@@ -16,7 +16,7 @@ class design extends control
      *
      * @param  int    $productID
      * @param  string $type all|HLDS|DDS|DBDS|ADS
-     * @param  string $param
+     * @param  string $param myQueryID|queryID(This is a number)
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
