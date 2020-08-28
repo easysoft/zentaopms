@@ -42,13 +42,13 @@
       <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <thead>
           <tr>
-            <th class="text-left w-60px">   <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
-            <th class="text-left w-100px">  <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
-            <th class="text-left">          <?php common::printOrderLink('name',        $orderBy, $vars, $lang->design->name);?></th>
-            <th class="text-left w-150px">  <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
-            <th class="text-left w-120px">  <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
-            <th class="text-left w-150px">  <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
-            <th class="c-assignedTo w-120px">  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
+            <th class="text-left w-60px">    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+            <th class="text-left w-100px">   <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
+            <th class="text-left">           <?php common::printOrderLink('name',        $orderBy, $vars, $lang->design->name);?></th>
+            <th class="text-left w-150px">   <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
+            <th class="text-left w-120px">   <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
+            <th class="text-left w-150px">   <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
+            <th class="c-assignedTo w-120px"><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
             <th class="text-center w-100px"><?php echo $lang->design->actions;?></th>
           </tr>
         </thead>
@@ -57,8 +57,8 @@
           <tr>
             <td><?php printf('%03d', $design->id);?></td>
             <td><?php echo zget($lang->design->typeList, $design->type);?></td>
-            <td title="<?php echo $design->name;?>" style="overflow:hidden"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td style="overflow:hidden"><?php echo $design->commit;?></td>
+            <td title="<?php echo $design->name;?>" class="c-name"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
+            <td class='c-commit'><?php echo $design->commit;?></td>
             <td><?php echo $design->createdBy;?></td>
             <td><?php echo substr($design->createdDate, 0, 11);?></td>
             <td class="c-assignedTo"><?php echo $this->design->printAssignedHtml($design, $users);?></td>
