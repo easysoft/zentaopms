@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(empty($summary)): ?>
+<?php if(!$summary->total): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
@@ -26,11 +26,15 @@
   <div class="col-8 text-middle">
     <ul class="status-bars  all-statistics">
       <li>
-        <span class="bar" style="height: <?php echo empty($summary->total) ? 0 : round(($summary->doing/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->doing;?></span></span>
+        <span class="bar" style="height: <?php echo $progress->doing * 100;?>%">
+          <span class="value"><?php echo $summary->doing;?></span>
+        </span>
         <span class="title"><?php echo $lang->block->doingProject;?></span>
       </li>
       <li>
-        <span class="bar" style="height: <?php echo empty($summary->total) ? 0 : round(($summary->finish/$summary->total) * 100);?>%"><span class="value"><?php echo $summary->finish;?></span></span>
+        <span class="bar" style="height: <?php echo $progress->closed * 100;?>%">
+          <span class="value"><?php echo $summary->closed;?></span>
+        </span>
         <span class="title"><?php echo $lang->block->finishProject;?></span>
       </li>
     </ul>

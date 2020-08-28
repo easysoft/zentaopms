@@ -1,6 +1,6 @@
 <?php
 /**
- * The control file of design currentModule of ZenTaoPMS.
+ * The control file of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -12,37 +12,33 @@
 class design extends control
 {
    /**
-     * Browse designs.
-     *
-     * @param  int    $productID
-     * @param  string $type all|HLDS|DDS|DBDS|ADS
-     * @param  string $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function browse($productID = 0, $type = 'all', $param = '',  $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    * Browse designs.
+    *
+    * @param  int    $productID
+    * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
+    * @param  string $param
+    * @param  string $orderBy
+    * @param  int    $recTotal
+    * @param  int    $recPerPage
+    * @param  int    $pageID
+    * @access public
+    * @return void
+    */
+    public function browse($productID = 0, $type = 'all', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Save session for design list and process product id. */
+        $this->session->set('designList', $this->app->getURI(true));
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
-
         $this->design->setProductMenu($productID);
-        $product = $this->loadModel('product')->getById($productID);
-        $program = $this->loadModel('project')->getById($product->program);
 
-        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         /* Build the search form. */
+        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('design', 'browse', "productID=$productID&type=bySearch&queryID=myQueryID");
         $this->design->buildSearchForm($queryID, $actionURL);
 
-        $this->app->session->set('designList', $this->app->getURI(true));
-
+        /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPager = 10;
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
         $designs = $this->design->getList($productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->browse;
@@ -51,9 +47,6 @@ class design extends control
         $this->view->designs    = $designs;
         $this->view->type       = $type;
         $this->view->param      = $param;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->productID  = $productID;
         $this->view->pager      = $pager;
@@ -154,8 +147,8 @@ class design extends control
         $design = $this->design->getById($designID);
         $this->design->setProductMenu($design->product);
 
-        $this->view->title      = $this->lang->design->designView;
-        $this->view->position[] = $this->lang->design->designView;
+        $this->view->title      = $this->lang->design->view;
+        $this->view->position[] = $this->lang->design->view;
 
         $this->view->design    = $design;
         $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($design->product);
