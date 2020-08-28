@@ -117,6 +117,7 @@ class design extends control
                 $response['message'] = dao::getError();
                 $this->send($response);
             }
+
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
             $response['locate']  = inlink('browse');
@@ -127,11 +128,9 @@ class design extends control
         $this->view->title      = $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;
 
-        $typeList             = (array)$this->lang->design->typeList;
+        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
 
-        $this->view->typeList = $typeList;
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
 
