@@ -27,11 +27,14 @@ class designModel extends model
             ->add('createdDate', helper::now())
             ->add('program', $this->session->program)
             ->add('version', 1)
-            ->remove('file,files,labels,children,toList')
+            ->remove('files,labels')
             ->get();
 
         $design = $this->loadModel('file')->processImgURL($design, 'desc', $this->post->uid);
-        $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck('name,type', 'notempty')->exec();
+        $this->dao->insert(TABLE_DESIGN)->data($design)
+            ->autoCheck()
+            ->batchCheck($this->config->design->create->requiredFields, 'notempty')
+            ->exec();
 
         if(!dao::isError())
         {
@@ -135,6 +138,31 @@ class designModel extends model
     }
 
     /**
+     * Assign a design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return array|bool
+     */
+    public function assign($designID = 0)
+    {
+        $oldDesign = $this->getByID($designID);
+
+        $design = fixer::input('post')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::today())
+            ->setDefault('assignedDate', helper::today())
+            ->stripTags($this->config->design->editor->assignto['id'], $this->config->allowedTags)
+            ->remove('uid,comment,files,label')
+            ->get();
+
+        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq((int)$designID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldDesign, $design);
+        return false;
+    }
+
+    /**
      * LinkCommit a design.
      *
      * @param  int    $designID
@@ -223,7 +251,7 @@ class designModel extends model
      * @access public
      * @return object
      */
-    public function getDesignPairs($productID = 0, $type = 'all')
+    public function getPairs($productID = 0, $type = 'all')
     {
         $designs = $this->dao->select('id, name')->from(TABLE_DESIGN)
             ->where('product')->eq($productID)
@@ -377,30 +405,5 @@ class designModel extends model
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('design', 'assignTo', $design) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
-    }
-
-    /**
-     * Assign a design.
-     *
-     * @param  int    $designID
-     * @access public
-     * @return array|bool
-     */
-    public function assign($designID = 0)
-    {
-        $oldDesign = $this->getByID($designID);
-
-        $design = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::today())
-            ->setDefault('assignedDate', helper::today())
-            ->stripTags($this->config->design->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('uid,comment,files,label')
-            ->get();
-
-        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq((int)$designID)->exec();
-
-        if(!dao::isError()) return common::createChanges($oldDesign, $design);
-        return false;
     }
 }

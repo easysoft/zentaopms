@@ -5,6 +5,11 @@ $config->design->editor->create   = array('id' => 'desc',    'tools' => 'simpleT
 $config->design->editor->edit     = array('id' => 'desc',    'tools' => 'simpleTools');
 $config->design->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 
+$config->design->create = new stdclass();
+$config->design->edit   = new stdclass();
+$config->design->create->requiredFields = 'name,type';
+$config->design->edit->requiredFields   = 'name,type';
+
 $config->design->affectedFixedNum = 7; 
 
 global $lang;
