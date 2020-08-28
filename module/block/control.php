@@ -1284,7 +1284,7 @@ class block extends control
     {
         $this->view->summary = $this->dao->select('count(*) as total, count(if(status="doing", id, null)) as doing, count(if(status="closed", id, null)) as finish')->from(TABLE_PROJECT)
             ->where('program')->eq($this->session->program)
-            ->where('deleted')->eq('0')
+            ->andWhere('deleted')->eq('0')
             ->fetch();
     }
 
