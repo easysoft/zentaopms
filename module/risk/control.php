@@ -12,7 +12,7 @@
 class risk extends control
 {
     /**
-     * Browse risk
+     * Browse risks.
      *
      * @param  string $browseType
      * @param  string $param
@@ -51,7 +51,7 @@ class risk extends control
     }
 
     /**
-     * Create risk
+     * Create a risk.
      *
      * @access public
      * @return void
@@ -84,7 +84,7 @@ class risk extends control
     }
 
     /**
-     * Edit risk
+     * Edit a risk.
      *
      * @param  int    $riskID
      * @access public
@@ -125,7 +125,7 @@ class risk extends control
     }
 
     /**
-     * View a risk
+     * View a risk.
      *
      * @param  int    $riskID
      * @access public
@@ -146,7 +146,7 @@ class risk extends control
     }
 
     /**
-     * Batch create
+     * Batch create risks.
      *
      * @access public
      * @return void

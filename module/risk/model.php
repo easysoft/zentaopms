@@ -14,7 +14,7 @@
 class riskModel extends model
 {
     /**
-     * Create a bug.
+     * Create a risk.
      *
      * @access public
      * @return int|bool
