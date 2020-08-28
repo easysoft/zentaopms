@@ -12,7 +12,7 @@
 class workestimationModel extends model
 {
     /**
-     * Get a budget
+     * Get a budget.
      *
      * @param  int    $program
      * @access public
@@ -24,7 +24,7 @@ class workestimationModel extends model
     }
 
     /**
-     * Get program scale
+     * Get program scale.
      *
      * @param  int    $program
      * @access public
@@ -38,7 +38,7 @@ class workestimationModel extends model
     }
 
     /**
-     * Save a budget
+     * Save a budget.
      *
      * @param  int    $program
      * @access public

@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(empty($products)): ?>
-<div class='empty-tip'><?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'")?></div>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>

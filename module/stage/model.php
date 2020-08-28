@@ -14,7 +14,7 @@
 class stageModel extends model
 {
     /**
-     * Create a stage
+     * Create a stage.
      *
      * @access public
      * @return int|bool
@@ -33,7 +33,7 @@ class stageModel extends model
     }
 
     /**
-     * Batch create
+     * Batch create stages.
      *
      * @access public
      * @return bool
@@ -64,7 +64,7 @@ class stageModel extends model
     }
 
     /**
-     * Update a stage
+     * Update a stage.
      *
      * @param  int    $stageID
      * @access public
@@ -86,7 +86,7 @@ class stageModel extends model
     }
 
     /**
-     * Get stages
+     * Get stages.
      *
      * @param  string $orderBy
      * @access public
@@ -98,7 +98,7 @@ class stageModel extends model
     }
 
     /**
-     * Get pairs
+     * Get pairs of stage.
      *
      * @access public
      * @return array
@@ -117,7 +117,7 @@ class stageModel extends model
     }
 
     /**
-     * Get by id
+     * Get a stage by id.
      *
      * @param  int    $stageID
      * @access public

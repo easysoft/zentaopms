@@ -12,7 +12,7 @@
 class workestimation extends control
 {
     /**
-     * Index
+     * Index.
      *
      * @param  int    $program
      * @access public

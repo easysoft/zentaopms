@@ -255,7 +255,7 @@ class designModel extends model
     }
 
     /**
-     * Get list.
+     * Get design list.
      *
      * @param  int    $productID
      * @param  string $type
