@@ -58,7 +58,7 @@
             <td><?php printf('%03d', $design->id);?></td>
             <td><?php echo zget($lang->design->typeList, $design->type);?></td>
             <td title="<?php echo $design->name;?>" class="c-name"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td class='c-commit'><?php echo $design->commit;?></td>
+            <td><?php echo $design->commit;?></td>
             <td><?php echo $design->createdBy;?></td>
             <td><?php echo substr($design->createdDate, 0, 11);?></td>
             <td class="c-assignedTo"><?php echo $this->design->printAssignedHtml($design, $users);?></td>
@@ -66,7 +66,7 @@
               <?php
               $vars = "design={$design->id}";
               common::printIcon('design', 'edit',   $vars, $design, 'list', 'fork', '', '', '', '', '', $design->program);
-              common::printIcon('design', 'commit', $vars, $design, 'list', 'link', '', 'iframe showinonlybody', true);
+              common::printIcon('design', 'linkCommit', $vars, $design, 'list', 'link', '', 'iframe showinonlybody', true);
               common::printIcon('design', 'delete', $vars, $design, 'list', 'trash', 'hiddenwin', '', '', '', '', $design->program);
               ?>
             </td>

@@ -173,6 +173,7 @@ class design extends control
         if($_POST)
         {
             $changes = $this->design->update($designID);
+
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -196,7 +197,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->products = $this->loadModel('product')->getPairs($this->session->program);
+        $this->view->products = $this->loadModel('product')->getPairs();
         $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 
@@ -204,7 +205,7 @@ class design extends control
     }
 
     /**
-     * Commit a design.
+     * Design link commits.
      *
      * @param  int    $designID
      * @param  int    $repoID
@@ -216,7 +217,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function commit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -225,9 +226,9 @@ class design extends control
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
-        $repos     = $this->loadModel('repo')->getRepoPairs();
-        $repoID    = $repoID ? $repoID : key($repos);
-        $repo      = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
+        $repos  = $this->loadModel('repo')->getRepoPairs();
+        $repoID = $repoID ? $repoID : key($repos);
+        $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
         $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end) : '';
 
@@ -245,8 +246,8 @@ class design extends control
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
 
-        $this->view->title           = $this->lang->design->commit;
-        $this->view->position[]      = $this->lang->design->commit;
+        $this->view->title      = $this->lang->design->linkCommit;
+        $this->view->position[] = $this->lang->design->linkCommit;
 
         $this->view->repos           = $repos;
         $this->view->repoID          = $repoID;
