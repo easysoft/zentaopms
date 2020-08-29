@@ -436,7 +436,7 @@ class commonModel extends model
             if(isset($lang->cmmi->subMenu->$key))
             {    
                 $programSubMenu = $lang->cmmi->subMenu->$key;
-                $subMenu        = common::createSubMenu($lang->cmmi->subMenu->$key, $app->session->program);
+                $subMenu        = common::createSubMenu($programSubMenu, $app->session->program);
 
                 if(!empty($subMenu))
                 {    
@@ -446,6 +446,7 @@ class commonModel extends model
                         $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                         $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                         $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+
                         if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
                         {    
                             $lang->menu->cmmi->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
@@ -2122,31 +2123,8 @@ EOD;
         }
         if($group == 'system')    
         {
-            foreach($lang->system->menu as $key => $menu)
-            {   
-                self::setMenuVars($lang->system->menu, $key, $menu);
-
-                if(isset($lang->system->subMenu->{$key}))
-                {   
-                    $subMenu = self::createSubMenu($lang->system->subMenu->{$key}, $menu);
-
-                    if(!empty($subMenu))
-                    {   
-                        foreach($subMenu as $menu)
-                        {   
-                            if(($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method'])))
-                            {   
-                                $lang->system->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
-                                break;
-                            }   
-                        }   
-                        $lang->system->menu->{$key}['subMenu'] = $subMenu;
-                    }   
-                }   
-            }
-
-            $lang->menu      = $lang->system->menu;
-            $lang->menuOrder = $lang->system->menuOrder;
+            $lang->menu         = $lang->system->menu;
+            $lang->menuOrder    = $lang->system->menuOrder;
             $lang->report->menu = $lang->measurement->menu;
         }
         if($group == 'doclib') return;
