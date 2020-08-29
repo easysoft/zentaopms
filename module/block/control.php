@@ -724,9 +724,9 @@ class block extends control
 
     public function printProgramBlock()
     {
-        $this->loadModel('project');
+        $this->app->loadLang('project');
 
-        $this->view->programs = $this->loadModel('program')->getUserPrograms('all', $this->params->orderBy, $this->params->num);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->num);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -781,25 +781,30 @@ class block extends control
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
+        /* Load models and langs. */
         $this->loadModel('project');
         $this->loadModel('weekly');
         $this->app->loadLang('task');
         $this->app->loadLang('story');
 
+        /* Set program status and count. */
         $status = isset($this->params->type) ? $this->params->type : 'all';
-        $num    = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $count  = isset($this->params->num)  ? (int)$this->params->num : 15;
 
-        /* Get projects. */
-        $programs = $this->loadModel('program')->getUserPrograms($status, 'id_desc', $num);
+        /* Get programs. */
+        $programs = $this->loadModel('program')->getProgramOverview('byStatus', $status, 'id_desc', $count);
         if(empty($programs))
         {
             $this->view->programs = $programs;
             return false;
         }
 
-        $today = date('Y-m-d', strtotime(helper::today()));
-        $date  = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
-        $tasks = $this->dao->select("program, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+        $today  = helper::today();
+        $monday = $this->loadModel('weekly')->getThisMonday($today);
+        $tasks  = $this->dao->select("program, 
+            sum(consumed) as totalConsumed, 
+            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
+            ->from(TABLE_TASK)
             ->where('program')->in(array_keys($programs))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
@@ -813,11 +818,11 @@ class block extends control
                 $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
                 $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
             }
-            else
+            elseif($program->template == 'cmmi')
             {
                 $begin   = $program->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
-                $current = zget($weeks, $date, '');
+                $current = zget($weeks, $monday, '');
                 $current = substr($current, 0, -11) . substr($current, -6);
 
                 $program->pv = $this->weekly->getPV($programID, $today);
@@ -1106,12 +1111,15 @@ class block extends control
     {
         $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
-        $today   = date('Y-m-d', strtotime(helper::today()));
+        $today   = helper::today();
         $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
         $begin   = $program->begin;
         $weeks   = $this->weekly->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
-        $task    = $this->dao->select("sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)->where('program')->eq($this->session->program)
+        $task    = $this->dao->select("
+            sum(consumed) as totalConsumed, 
+            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
+            ->from(TABLE_TASK)->where('program')->eq($this->session->program)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
@@ -1144,7 +1152,7 @@ class block extends control
     }
 
     /**
-     * Print cmmi gantt block.
+     * Print cmmi issue block.
      *
      * @access public
      * @return void
@@ -1152,7 +1160,7 @@ class block extends control
     public function printCmmiIssueBlock()
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('riskList',  $uri);
+        $this->session->set('issueList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
@@ -1241,7 +1249,7 @@ class block extends control
     public function printScrumoverallBlock()
     {
         $programID = $this->session->program;
-        $totalData = $this->loadModel('program')->getUserPrograms('all', 'id_desc', 15, $programID);
+        $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 15);
 
         $this->view->totalData = $totalData;
         $this->view->programID = $programID;
@@ -1703,7 +1711,7 @@ class block extends control
         $num = isset($this->params->num)  ? (int)$this->params->num : 15;
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getUserPrograms('doing', 'id_desc', $num);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', 'id_desc', $num);
     }
 
     /**
