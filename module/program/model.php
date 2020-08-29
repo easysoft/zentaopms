@@ -87,7 +87,7 @@ class programModel extends model
             ->beginIF($queryType == 'byId')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
             ->limit($limit)
-            ->printsql('id');
+            ->fetchAll('id');
 
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
