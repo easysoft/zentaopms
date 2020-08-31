@@ -405,6 +405,7 @@ $lang->action->label->entry       = '应用|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '风险|risk|view|riskID=%s';
+$lang->action->label->issue       = '问题|issue|view|issueID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';

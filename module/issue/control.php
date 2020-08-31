@@ -164,7 +164,7 @@ class issue extends control
             $changes = $this->issue->assignTo($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Assigned', '', $this->post->assignedTo);
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -190,7 +190,7 @@ class issue extends control
             $changes = $this->issue->close($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Closed');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -215,7 +215,7 @@ class issue extends control
             $changes = $this->issue->cancel($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Canceled');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -240,7 +240,7 @@ class issue extends control
             $changes = $this->issue->activate($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Activated');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -273,7 +273,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('task', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             if($resolution == 'tostory')
@@ -282,7 +282,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('story', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
             if($resolution == 'tobug')
             {
@@ -290,7 +290,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('bug', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             if($resolution == 'torisk')
@@ -299,7 +299,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issue)->exec();
