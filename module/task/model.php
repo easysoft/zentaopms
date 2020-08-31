@@ -984,7 +984,7 @@ class taskModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$taskID]);
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
             }
