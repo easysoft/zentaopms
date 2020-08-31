@@ -41,7 +41,7 @@ class design extends control
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
         $designs = $this->design->getList($productID, $type, $queryID, $orderBy, $pager);
 
-        $this->view->title      = $this->lang->design->browse;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
 
         $this->view->designs    = $designs;
@@ -86,7 +86,7 @@ class design extends control
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
         $this->design->setProductMenu($productID);
 
-        $this->view->title      = $this->lang->design->create;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
@@ -125,7 +125,7 @@ class design extends control
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->design->batchCreate;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;
 
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productID);
@@ -146,7 +146,7 @@ class design extends control
         $design = $this->design->getById($designID);
         $this->design->setProductMenu($design->product);
 
-        $this->view->title      = $this->lang->design->view;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
 
         $this->view->design    = $design;
@@ -193,7 +193,8 @@ class design extends control
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->design->edit;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
+        $this->view->position[] = $this->lang->design->view;
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
@@ -246,7 +247,7 @@ class design extends control
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
 
-        $this->view->title      = $this->lang->design->linkCommit;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
 
         $this->view->repos           = $repos;
@@ -323,7 +324,7 @@ class design extends control
             die(js::locate($this->createLink('design', 'browse'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->design->assignedTo;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
         $this->view->position[] = $this->lang->design->assignedTo;
 
         $this->view->design = $this->design->getById($designID);
