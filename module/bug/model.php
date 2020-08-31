@@ -36,7 +36,7 @@ class bugModel extends model
         if($isMobile)
         {
             $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index', ''), $this->lang->qa->index) . $this->lang->colon;
+            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
         }
         else
         {
@@ -2680,7 +2680,7 @@ class bugModel extends model
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '');
+                common::printIcon('bug', 'edit',       $params, $bug, 'list');
                 common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
                 break;
             }

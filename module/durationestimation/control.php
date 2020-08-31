@@ -1,13 +1,13 @@
 <?php
 /**
- * The control file of durationestimation of ChanzhiEPS.
+ * The control file of durationestimation of ZentaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Xiying Guan <guanxiying@xirangit.com>
  * @package     durationestimation
  * @version     $Id$
- * @link        http://www.chanzhi.org
+ * @link        http://www.zentao.net
  */
 class durationestimation extends control
 {
@@ -51,7 +51,9 @@ class durationestimation extends control
             $total = 0;
             foreach($this->post->workload as $value) $total += $value;
             if($total != 100) $this->send(array('result' => 'fail', 'message' => $this->lang->durationestimation->workloadError));
+
             $this->durationestimation->save($programID);
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', "currentProgram={$programID}")));
         }

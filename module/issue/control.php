@@ -26,6 +26,7 @@ class issue extends control
     public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $browseType = strtolower($browseType);
+
         /* Load pager */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -39,9 +40,6 @@ class issue extends control
         $this->view->position[] = $this->lang->issue->browse;
 
         $this->view->pager      = $pager;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
@@ -77,7 +75,7 @@ class issue extends control
     }
 
    /**
-    * batchCreate issues
+    * Batch create issues.
     *
     * @access public
     * @return void
@@ -101,7 +99,7 @@ class issue extends control
     }
 
     /**
-     * Delete a issue.
+     * Delete an issue.
      *
      * @param  int    $issueID
      * @param  string $confirm yes|no
@@ -116,13 +114,13 @@ class issue extends control
         }
         else
         {
-            $this->issue->delete($issueID);
+            $this->issue->delete(TABLE_ISSUE, $issueID);
             die(js::locate(inLink('browse'), 'parent'));
         }
     }
 
     /**
-     * Edit a issue.
+     * Edit an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -151,7 +149,7 @@ class issue extends control
     }
 
     /**
-     * Assign a issue.
+     * Assign an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -164,7 +162,7 @@ class issue extends control
             $changes = $this->issue->assignTo($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Assigned', '', $this->post->assignedTo);
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -177,7 +175,7 @@ class issue extends control
     }
 
     /**
-     * Close a issue.
+     * Close an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -190,7 +188,7 @@ class issue extends control
             $changes = $this->issue->close($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Closed');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -202,7 +200,7 @@ class issue extends control
     }
 
     /**
-     * Cancel a issue.
+     * Cancel an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -215,7 +213,7 @@ class issue extends control
             $changes = $this->issue->cancel($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Canceled');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -227,7 +225,7 @@ class issue extends control
     }
 
     /**
-     * Activate a issue.
+     * Activate an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -240,7 +238,7 @@ class issue extends control
             $changes = $this->issue->activate($issueID);
 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Edited');
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Activated');
 
             $this->action->logHistory($actionID, $changes);
             die(js::closeModal('parent.parent', 'this'));
@@ -273,7 +271,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('task', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             if($resolution == 'tostory')
@@ -282,7 +280,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('story', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
             if($resolution == 'tobug')
             {
@@ -290,7 +288,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('bug', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             if($resolution == 'torisk')
@@ -299,7 +297,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'resolved', $comment);
+                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
             }
 
             $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issue)->exec();
@@ -354,7 +352,6 @@ class issue extends control
         $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
-        /* Fix bug #2737. When moduleID is not story module. */
         $stories = $this->story->getProjectStoryPairs($projectID, 0, 0);
 
         /* Set Custom*/
@@ -384,7 +381,7 @@ class issue extends control
     }
 
     /**
-     *  Get question details.
+     *  View an issue.
      *
      * @param  int    $issueID
      * @access public

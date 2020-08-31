@@ -16,7 +16,7 @@
     <h2>
       <span class='label label-id'><?php echo $design->id;?></span>
       <span title='<?php echo $design->name?>'><?php echo $design->name?></span>
-      <small><?php echo $lang->arrow . $lang->design->commit;?></small>
+      <small><?php echo $lang->arrow . $lang->design->linkCommit;?></small>
     </h2>
   </div>
   <?php if(empty($repoID)):?>
@@ -38,7 +38,7 @@
       </tr>
     </table>
   </div>
-  <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('commit', "designID=$designID&repoID=$repoID");?> method='post'>
+  <form id='logForm' class='main-table form-ajax' data-ride='table' action=<?php echo inlink('linkCommit', "designID=$designID&repoID=$repoID");?> method='post'>
     <table class='table'>
       <thead>
         <tr>

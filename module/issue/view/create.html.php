@@ -63,8 +63,6 @@
             <td></td>
             <td></td>
           </tr>
-          <?php endif;?>
-          <?php if(isset($owner) && $owner):?>
           <tr>
             <th><?php echo $lang->issue->activity;?></th>
             <td><?php echo html::select('activity', $activity, $activityID, 'class="form-control chosen"');?></td>
