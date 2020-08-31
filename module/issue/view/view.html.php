@@ -85,7 +85,7 @@ foreach($issue as $field => $value)
             </tr>
             <tr valign="middle">
               <th class="thWidth w-80px"><?php echo $lang->issue->severity;?></th>
-              <td><?php echo $issue->severity;?></td>
+              <td><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
             </tr>
             <tr valign="middle">
               <th class="thWidth w-80px"><?php echo $lang->issue->pri;?></th>
