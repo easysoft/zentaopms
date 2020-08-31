@@ -433,12 +433,12 @@ class commonModel extends model
         $moduleName = $app->getModuleName();
         $methodName = $app->getMethodName();
 
-        foreach($lang->menu->cmmi as $key => $menu)
+        foreach($lang->menu->waterfall as $key => $menu)
         {
             /* Replace for dropdown submenu. */
-            if(isset($lang->cmmi->subMenu->$key))
+            if(isset($lang->waterfall->subMenu->$key))
             {    
-                $programSubMenu = $lang->cmmi->subMenu->$key;
+                $programSubMenu = $lang->waterfall->subMenu->$key;
                 $subMenu        = common::createSubMenu($programSubMenu, $app->session->program);
 
                 if(!empty($subMenu))
@@ -452,11 +452,11 @@ class commonModel extends model
 
                         if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
                         {    
-                            $lang->menu->cmmi->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                            $lang->menu->waterfall->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
                         }    
                     }    
-                    $lang->menu->cmmi->{$key}['subMenu'] = $subMenu;
+                    $lang->menu->waterfall->{$key}['subMenu'] = $subMenu;
                 }    
             } 
         }
@@ -1713,7 +1713,7 @@ EOD;
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             foreach($rights as $moduleKey => $methods) 
             {
-                if(in_array($moduleKey, $this->config->programPriv->cmmi)) unset($rights[$moduleKey]);
+                if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
             }
             
             $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
@@ -2186,14 +2186,14 @@ EOD;
             $lang->menuOrder = $lang->scrumpgm->menuOrder;
             return $lang->menu;
         }
-        if($program->template == 'cmmi') 
+        if($program->template == 'waterfall') 
         {
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
-            $lang->menuOrder            = $lang->cmmipgm->menuOrder;
+            $lang->menuOrder            = $lang->waterfallpgm->menuOrder;
             $lang->program->dividerMenu = ',product,issue,';
             self::initProgramSubmenu();
-            return self::processMenuVars($lang->menu->cmmi);
+            return self::processMenuVars($lang->menu->waterfall);
         }
     }
 
@@ -2202,11 +2202,11 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'cmmi') 
+        if($program->template == 'waterfall') 
         {
-            $lang->product->menu     = $lang->cmmiproduct->menu;
-            $lang->productplan->menu = $lang->cmmiproduct->menu;
-            $lang->story->menu       = $lang->cmmiproduct->menu;
+            $lang->product->menu     = $lang->waterfallproduct->menu;
+            $lang->productplan->menu = $lang->waterfallproduct->menu;
+            $lang->story->menu       = $lang->waterfallproduct->menu;
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
     }

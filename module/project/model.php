@@ -65,7 +65,7 @@ class projectModel extends model
         $program = $this->getByID($this->session->program);
         if(empty($projects))
         {
-            if($program->template == 'cmmi')
+            if($program->template == 'waterfall')
             {
                 if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'project') die(js::locate(helper::createLink('programplan', 'create', "progarmID=$program->id")));
             }
@@ -863,7 +863,7 @@ class projectModel extends model
             ->orderBy('t1.order desc')
             ->fetchAll('id');
 
-        if($program->template == 'cmmi')
+        if($program->template == 'waterfall')
         {
             foreach($projects as $projectID => $project)
             {

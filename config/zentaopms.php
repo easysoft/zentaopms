@@ -241,5 +241,5 @@ $config->objectTables['issue']       = TABLE_ISSUE;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'job', 'ci', 'branch');
-$config->programPriv->cmmi  = $config->programPriv->scrum + array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'auditplan', 'nc', 'cm', 'pssp');
+$config->programPriv->scrum     = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'job', 'ci', 'branch');
+$config->programPriv->waterfall = $config->programPriv->scrum + array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'auditplan', 'nc', 'cm', 'pssp');

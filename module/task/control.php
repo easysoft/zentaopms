@@ -47,7 +47,7 @@ class task extends control
         }
 
         $program = $this->loadModel('project')->getByID($this->session->program);
-        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        if($program->template == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $task = new stdClass();
         $task->module     = $moduleID;
@@ -233,7 +233,7 @@ class task extends control
         }
 
         $program = $this->loadModel('project')->getByID($this->session->program);
-        if($program->template == 'cmmi') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        if($program->template == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");

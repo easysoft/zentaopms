@@ -890,7 +890,7 @@ class treeModel extends model
     }
 
     /**
-     * Create link of requirement for cmmi.
+     * Create link of requirement for waterfall.
      *
      * @param  string $type
      * @param  object $module

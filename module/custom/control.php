@@ -439,14 +439,14 @@ class custom extends control
     }
 
     /**
-     * Set cmmi model.
+     * Set waterfall model.
      * 
      * @access public
      * @return void
      */
-    public function setcmmi()
+    public function setwaterfall()
     {   
-        setCookie("systemModel", 'cmmi', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("systemModel", 'waterfall', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         die(js::locate($this->createLink('custom', 'estimate')));
     }

@@ -1,7 +1,7 @@
 <div class="panel-body">
 <style>
-.block-cmmiprogress .milestone-chart {box-shadow: none}
-.block-cmmiprogress .milestone-chart.has-scrollbar {margin-bottom: -10px}
+.block-waterfallprogress .milestone-chart {box-shadow: none}
+.block-waterfallprogress .milestone-chart.has-scrollbar {margin-bottom: -10px}
 </style>
 <div class='milestone-chart' id='milestoneChart'>
   <div class='chart-canvas scrollbar-hover'>

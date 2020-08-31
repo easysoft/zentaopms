@@ -71,8 +71,8 @@ $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = 'Yuan';
 $lang->program->unitList['dollar'] = 'Dollars';
 
-$lang->program->templateList['scrum'] = "Scrum";
-$lang->program->templateList['cmmi']  = "CMMI";
+$lang->program->templateList['scrum']     = "Scrum";
+$lang->program->templateList['waterfall'] = "CMMI";
 
 $lang->program->categoryList['single']   = "Single product";
 $lang->program->categoryList['multiple'] = "Multiple products";
@@ -105,8 +105,8 @@ $lang->program->lastIteration      = 'Latest iterations';
 $lang->program->ongoingStage       = 'Ongoing stage';
 $lang->program->scrum              = 'Scrum';
 $lang->program->scrumTitle         = 'Scrum development full process project management';
-$lang->program->cmmi               = 'CMMI';
-$lang->program->cmmiTitle          = 'CMMI management';
+$lang->program->waterfall          = 'CMMI';
+$lang->program->waterfallTitle     = 'CMMI management';
 $lang->program->cannotCreateChild  = 'The project already has actual content and can not add subprojects directly. You can create a parent project for the current project and then add a child project under the new parent project.';
 $lang->program->hasChildren        = 'This project has a subproject and can not be deleted.';
 $lang->program->confirmDelete      = 'Do you want to delete this project?';

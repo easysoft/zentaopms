@@ -797,33 +797,33 @@ $lang->icons['score']              = 'tint';
 
 include (dirname(__FILE__) . '/menuOrder.php');
 
-/* Cmmi menu. */
-$lang->menu->cmmi = new stdclass();
-$lang->menu->cmmi->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
-$lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
-$lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
-$lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
-$lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
-$lang->menu->cmmi->ci             = '代码|repo|browse|';
-$lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
-$lang->menu->cmmi->issue          = '问题|issue|browse|';
-$lang->menu->cmmi->risk           = '风险|risk|browse|';
-$lang->menu->cmmi->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover cmmi-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+/* Waterfall menu. */
+$lang->menu->waterfall = new stdclass();
+$lang->menu->waterfall->programindex = array('link' => '仪表盘|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan  = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly       = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc          = array('link' => '文档|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
+$lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci           = '代码|repo|browse|';
+$lang->menu->waterfall->qa           = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
+$lang->menu->waterfall->issue        = '问题|issue|browse|';
+$lang->menu->waterfall->risk         = '风险|risk|browse|';
+$lang->menu->waterfall->list         = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 /* Srcum menu. */
 $lang->menu->srcum = new stdclass();
 $lang->menu->srcum->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
 
-$lang->cmmi = new stdclass();
-$lang->cmmi->subMenu = new stdclass();
-$lang->cmmi->subMenu->list = new stdclass();
-$lang->cmmi->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->cmmi->subMenu->list->program        = '项目|program|edit|';
+$lang->waterfall = new stdclass();
+$lang->waterfall->subMenu = new stdclass();
+$lang->waterfall->subMenu->list = new stdclass();
+$lang->waterfall->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->list->program        = '项目|program|edit|';
 
-$lang->cmmiproduct    = new stdclass();
+$lang->waterfallproduct    = new stdclass();
 $lang->workestimation = new stdclass();
 $lang->budget         = new stdclass();
 $lang->programplan    = new stdclass();
@@ -846,7 +846,7 @@ $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();
 $lang->weekly->menu         = new stdclass();
 $lang->milestone->menu      = new stdclass();
-$lang->cmmiproduct->menu    = new stdclass();
+$lang->waterfallproduct->menu    = new stdclass();
 $lang->design->menu         = new stdclass();
 $lang->auditplan->menu      = new stdclass();
 $lang->cm->menu             = new stdclass();
@@ -866,10 +866,10 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->cmmiproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
-$lang->cmmiproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
-$lang->cmmiproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
-$lang->cmmiproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+$lang->waterfallproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
+$lang->waterfallproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->waterfallproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
 $lang->nc->menu = $lang->auditplan->menu;
 

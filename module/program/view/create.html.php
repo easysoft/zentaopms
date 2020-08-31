@@ -63,7 +63,7 @@
           <th><?php echo $lang->program->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($template == 'cmmi'):?>
+        <?php if($template == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->category;?></th>
           <td><?php echo html::select('category', $lang->program->categoryList, '', "class='form-control'");?></td><td></td><td></td>
