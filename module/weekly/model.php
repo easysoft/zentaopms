@@ -120,9 +120,9 @@ class weeklyModel extends model
     }
 
     /**
-     * GetThisMonday
+     * Get monday for a date.
      *
-     * @param  int    $date
+     * @param  int $date
      * @access public
      * @return date
      */

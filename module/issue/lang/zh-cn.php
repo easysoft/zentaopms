@@ -57,7 +57,7 @@ $lang->issue->labelList['open']      = '开放';
 $lang->issue->labelList['assignto']  = '指派给我';
 $lang->issue->labelList['closed']    = '已关闭';
 $lang->issue->labelList['suspended'] = '已挂起';
-$lang->issue->labelList['cancelled'] = '已取消';
+$lang->issue->labelList['canceled']  = '已取消';
 
 $lang->issue->priList[''] = '';
 $lang->issue->priList['1'] = 1;

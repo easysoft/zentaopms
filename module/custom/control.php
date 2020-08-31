@@ -348,7 +348,7 @@ class custom extends control
     }
 
     /**
-     * Company estimate.
+     * Init company estimate unit.
      * 
      * @access public
      * @return void
@@ -359,12 +359,13 @@ class custom extends control
         $this->lang->navGroup->custom = 'system';
         if(strtolower($this->server->request_method) == "post")
         {
+            $this->loadModel('setting');
             $data = fixer::input('post')->get();
-            $this->loadModel('setting')->setItem('system.custom.hourPoint', $data->hourPoint);
-            $this->loadModel('setting')->setItem('system.custom.cost', $data->cost);
-            $this->loadModel('setting')->setItem('system.custom.efficiency', $data->efficiency);
-            $this->loadModel('setting')->setItem('system.custom.days', $data->days);
-            $this->loadModel('setting')->setItem('system.project.defaultWorkhours', $data->defaultWorkhours);
+            $this->setting->setItem('system.custom.hourPoint', $data->hourPoint);
+            $this->setting->setItem('system.custom.cost', $data->cost);
+            $this->setting->setItem('system.custom.efficiency', $data->efficiency);
+            $this->setting->setItem('system.custom.days', $data->days);
+            $this->setting->setItem('system.project.defaultWorkhours', $data->defaultWorkhours);
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'estimate')));
@@ -395,7 +396,7 @@ class custom extends control
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
-        if(strtolower($this->server->request_method) == "post")
+        if($_POST)
         {   
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItem('system.custom.planStatus', $data->planStatus);
@@ -438,14 +439,14 @@ class custom extends control
     }
 
     /**
-     * Set cmmi model.
+     * Set waterfall model.
      * 
      * @access public
      * @return void
      */
-    public function setcmmi()
+    public function setwaterfall()
     {   
-        setCookie("systemModel", 'cmmi', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("systemModel", 'waterfall', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         die(js::locate($this->createLink('custom', 'estimate')));
     }

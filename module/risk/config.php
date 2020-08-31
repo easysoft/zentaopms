@@ -52,8 +52,8 @@ $config->risk->search['params']['prevention']        = array('operator' => 'incl
 $config->risk->search['params']['remedy']            = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->risk->search['params']['plannedClosedDate'] = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->risk->search['params']['actualClosedDate']  = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
-$config->risk->search['params']['createdBy']          = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->risk->search['params']['createdDate']        = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->risk->search['params']['createdBy']         = array('operator' => '=', 'control' => 'select',  'values' => 'users');
+$config->risk->search['params']['createdDate']       = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->risk->search['params']['resolution']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->risk->search['params']['resolvedBy']        = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->risk->search['params']['activateBy']        = array('operator' => '=', 'control' => 'select',  'values' => 'users');

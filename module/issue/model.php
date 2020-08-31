@@ -4,59 +4,15 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yong Lei <leiyong@easycorp.ltd>
  * @package     issue
- * @version     $Id: model.php 5145 2013-07-15 06:47:26Z chencongzhi520@gmail.com $
+ * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php
 class issueModel extends model
 {
-    /**
-     * Create a question.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', $now)
-            ->add('program', $this->session->program)
-            ->remove('labels,files')
-            ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
-            ->addIF($this->post->assignedTo, 'assignedDate', $now)
-            ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
-            ->get();
-
-        if(strpos($this->config->issue->create->requiredFields, 'type') !== false and !$this->post->type)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->type);
-            return false;
-        }
-
-        if(strpos($this->config->issue->create->requiredFields, 'title') !== false and !$this->post->title)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->title);
-            return false;
-        }
-
-        if(strpos($this->config->issue->create->requiredFields, 'severity') !== false and !$this->post->severity)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->severity);
-            return false;
-        }
-
-        $this->dao->insert(TABLE_ISSUE)->data($data)->exec();
-        $issueID = $this->dao->lastInsertID();
-        $this->loadModel('file')->saveUpload('issue', $issueID);
-
-        return $issueID;
-    }
-
     /**
      * Get stakeholder issue list data.
      * @param  string $owner
@@ -79,16 +35,28 @@ class issueModel extends model
     }
 
     /**
-     * Get question list data.
+     * Get a issue details.
      *
-     * @param  string    $browseType
+     * @param  int    $issueID
+     * @access public
+     * @return object
+     */
+    public function getByID($issueID)
+    {
+        return $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+    }
+
+    /**
+     * Get issue list data.
+     *
+     * @param  string    $browseType bySearch|open|assignTo|closed|suspended|canceled
      * @param  int       $queryID
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return object
      */
-    public function getIssueList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $issueQuery = '';
         if($browseType == 'bysearch')
@@ -110,7 +78,7 @@ class issueModel extends model
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
             ->beginIF($browseType == 'suspended')->andWhere('status')->eq('suspended')->fi()
-            ->beginIF($browseType == 'cancelled')->andWhere('status')->eq('canceled')->fi()
+            ->beginIF($browseType == 'canceled')->andWhere('status')->eq('canceled')->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($issueQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -120,20 +88,9 @@ class issueModel extends model
     }
 
     /**
-     * getActivityList
+     * Get the issue in the block.
      *
-     * @access public
-     * @return object
-     */
-    public function getActivityList()
-    {
-        return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
-    }
-
-    /**
-     * getBlockIssues
-     *
-     * @param  string $browseType
+     * @param  string $browseType open|assignto|closed|suspended|canceled
      * @param  int    $limit
      * @param  string $orderBy
      * @access public
@@ -148,7 +105,7 @@ class issueModel extends model
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
             ->beginIF($browseType == 'suspended')->andWhere('status')->eq('suspended')->fi()
-            ->beginIF($browseType == 'cancelled')->andWhere('status')->eq('canceled')->fi()
+            ->beginIF($browseType == 'canceled')->andWhere('status')->eq('canceled')->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
@@ -157,32 +114,44 @@ class issueModel extends model
     }
 
     /**
-     * Delete a question.
+     * Get activity list.
      *
-     * @param  int    $issueID
-     * @param  int    $null
      * @access public
      * @return object
      */
-    public function delete($issueID = 0, $null = null)
+    public function getActivityPairs()
     {
-        $this->dao->update(TABLE_ISSUE)->set('deleted')->eq('1')->where('id')->eq($issueID)->exec();
+        return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
     }
 
     /**
-     * Get a issue details.
+     * Create an issue.
      *
-     * @param  int    $issueID
      * @access public
-     * @return object
+     * @return bool
      */
-    public function getByID($issueID)
+    public function create()
     {
-        return $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', $now)
+            ->add('program', $this->session->program)
+            ->remove('labels,files')
+            ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
+            ->addIF($this->post->assignedTo, 'assignedDate', $now)
+            ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
+            ->get();
+
+        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
+        $issueID = $this->dao->lastInsertID();
+        $this->loadModel('file')->saveUpload('issue', $issueID);
+
+        return $issueID;
     }
 
     /**
-     * Update a question.
+     * Update an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -190,6 +159,8 @@ class issueModel extends model
      */
     public function update($issueID)
     {
+        $oldIssue = $this->getByID($issueID);
+
         $now = helper::now();
         $data = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
@@ -199,26 +170,11 @@ class issueModel extends model
             ->stripTags($this->config->issue->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        if(strpos($this->config->issue->edit->requiredFields, 'type') !== false and !$this->post->type)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->type);
-            return false;
-        }
+        $this->dao->update(TABLE_ISSUE)->data($data)
+            ->where('id')->eq($issueID)
+            ->batchCheck($this->config->issue->edit->requiredFields, 'notempty')
+            ->exec();
 
-        if(strpos($this->config->issue->edit->requiredFields, 'title') !== false and !$this->post->title)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->title);
-            return false;
-        }
-
-        if(strpos($this->config->issue->edit->requiredFields, 'severity') !== false and !$this->post->severity)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->issue->severity);
-            return false;
-        }
-        $oldIssue = $this->getByID($issueID);
-
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
         return common::createChanges($oldIssue, $data);
     }
 
@@ -231,19 +187,19 @@ class issueModel extends model
      */
     public function assignTo($issueID)
     {
+        $oldIssue = $this->getByID($issueID);
         $data = fixer::input('post')
             ->add('assignedBy', $this->app->user->account)
             ->add('assignedDate', helper::now())
             ->get();
 
-        $oldIssue = $this->getByID($issueID);
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
 
         return common::createChanges($oldIssue, $data);
     }
 
     /**
-     * Close issue.
+     * Close an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -251,19 +207,19 @@ class issueModel extends model
      */
     public function close($issueID)
     {
+        $oldIssue = $this->getByID($issueID);
         $data = fixer::input('post')
             ->add('closeBy', $this->app->user->account)
             ->add('status', 'closed')
             ->get();
 
-        $oldIssue = $this->getByID($issueID);
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
 
         return common::createChanges($oldIssue, $data);
     }
 
     /**
-     * Cancel issue.
+     * Cancel an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -271,15 +227,15 @@ class issueModel extends model
      */
     public function cancel($issueID)
     {
-        $data     = fixer::input('post')->get();
         $oldIssue = $this->getByID($issueID);
+        $data     = fixer::input('post')->get();
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
 
         return common::createChanges($oldIssue, $data);
     }
 
     /**
-     * Activate issue.
+     * Activate an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -287,10 +243,11 @@ class issueModel extends model
      */
     public function activate($issueID)
     {
+        $oldIssue = $this->getByID($issueID);
         $data = fixer::input('post')
             ->add('status', 'active')
             ->get();
-        $oldIssue = $this->getByID($issueID);
+
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
 
         return common::createChanges($oldIssue, $data);
@@ -321,10 +278,10 @@ class issueModel extends model
                 $issue['assignedDate'] = $now;
             }
 
-            foreach(explode(',',$this->config->issue->create->requiredFields) as $field)
+            foreach(explode(',', $this->config->issue->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($issue["$field"])) return dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->issue->$field);
+                if($field and empty($issue[$field])) return dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->issue->$field);
             }
 
             $issues[] = $issue;
@@ -335,7 +292,7 @@ class issueModel extends model
     }
 
     /**
-     * Resolve issue.
+     * Resolve an issue.
      *
      * @param  int    $issueID
      * @access public
@@ -349,7 +306,7 @@ class issueModel extends model
     }
 
     /**
-     * Create task.
+     * Create an task.
      *
      * @access public
      * @return object
@@ -362,7 +319,7 @@ class issueModel extends model
     }
 
     /**
-     * Create story.
+     * Create a story.
      *
      * @access public
      * @return int
@@ -374,6 +331,7 @@ class issueModel extends model
             ->get();
 
         $this->dao->insert(TABLE_STORY)->data($story, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files,spec,story,needNotReview')->exec();
+
         $id = $this->dao->lastInsertID();
         $this->dao->insert(TABLE_STORYSPEC)
             ->set('story')->eq($id)
@@ -381,11 +339,12 @@ class issueModel extends model
             ->set('spec')->eq($story->spec)
             ->set('version')->eq(1)
             ->exec();
+
         return $id;
     }
 
     /**
-     * Create bug.
+     * Create a bug.
      *
      * @access public
      * @return int
@@ -398,20 +357,20 @@ class issueModel extends model
     }
 
     /**
-     * Create risk.
+     * Create a risk.
      *
      * @access public
      * @return int
      */
     public function createRisk()
     {
-        $risc = fixer::input('post')->remove('issue,color,estimate')->get();
-        $this->dao->insert(TABLE_RISK)->data($risc, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        $risk = fixer::input('post')->remove('issue,color,estimate')->get();
+        $this->dao->insert(TABLE_RISK)->data($risk, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
         return $this->dao->lastInsertID();
     }
 
    /**
-     * Build search form.
+     * Build issue search form.
      *
      * @param  string $actionURL
      * @param  int    $queryID

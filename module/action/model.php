@@ -306,7 +306,7 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            /* Code for cmmi. */
+            /* Code for waterfall. */
             elseif($actionName == 'createrequirements')
             {    
                 $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');
@@ -850,7 +850,6 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectName));
                 $action->objectLabel = $objectLabel;

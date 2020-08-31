@@ -1,23 +1,23 @@
 <?php
 /* Sort of main menu. */
-$lang->cmmipgm = new stdclass();
-$lang->cmmipgm->menuOrder[5]   = 'programindex';
-$lang->cmmipgm->menuOrder[10]  = 'programplan';
-$lang->cmmipgm->menuOrder[15]  = 'project';
-$lang->cmmipgm->menuOrder[20]  = 'weekly';
-$lang->cmmipgm->menuOrder[25]  = 'review';
-$lang->cmmipgm->menuOrder[30]  = 'doc';
-$lang->cmmipgm->menuOrder[35]  = 'product';
-$lang->cmmipgm->menuOrder[40]  = 'design';
-$lang->cmmipgm->menuOrder[45]  = 'ci';
-$lang->cmmipgm->menuOrder[50]  = 'qa';
-$lang->cmmipgm->menuOrder[55]  = 'release';
-$lang->cmmipgm->menuOrder[60]  = 'issue';
-$lang->cmmipgm->menuOrder[65]  = 'risk';
-$lang->cmmipgm->menuOrder[70]  = 'report';
-$lang->cmmipgm->menuOrder[75]  = 'auditplan';
-$lang->cmmipgm->menuOrder[80]  = 'cm';
-$lang->cmmipgm->menuOrder[85]  = 'list';
+$lang->waterfallpgm = new stdclass();
+$lang->waterfallpgm->menuOrder[5]   = 'programindex';
+$lang->waterfallpgm->menuOrder[10]  = 'programplan';
+$lang->waterfallpgm->menuOrder[15]  = 'project';
+$lang->waterfallpgm->menuOrder[20]  = 'weekly';
+$lang->waterfallpgm->menuOrder[25]  = 'review';
+$lang->waterfallpgm->menuOrder[30]  = 'doc';
+$lang->waterfallpgm->menuOrder[35]  = 'product';
+$lang->waterfallpgm->menuOrder[40]  = 'design';
+$lang->waterfallpgm->menuOrder[45]  = 'ci';
+$lang->waterfallpgm->menuOrder[50]  = 'qa';
+$lang->waterfallpgm->menuOrder[55]  = 'release';
+$lang->waterfallpgm->menuOrder[60]  = 'issue';
+$lang->waterfallpgm->menuOrder[65]  = 'risk';
+$lang->waterfallpgm->menuOrder[70]  = 'report';
+$lang->waterfallpgm->menuOrder[75]  = 'auditplan';
+$lang->waterfallpgm->menuOrder[80]  = 'cm';
+$lang->waterfallpgm->menuOrder[85]  = 'list';
 
 $lang->scrumpgm = new stdclass();
 $lang->scrumpgm->menuOrder[5]   = 'program';

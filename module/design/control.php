@@ -41,7 +41,7 @@ class design extends control
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
         $designs = $this->design->getList($productID, $type, $queryID, $orderBy, $pager);
 
-        $this->view->title      = $this->lang->design->browse;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
 
         $this->view->designs    = $designs;
@@ -86,7 +86,7 @@ class design extends control
         $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
         $this->design->setProductMenu($productID);
 
-        $this->view->title      = $this->lang->design->create;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
@@ -125,7 +125,7 @@ class design extends control
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->design->batchCreate;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;
 
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productID);
@@ -146,7 +146,7 @@ class design extends control
         $design = $this->design->getById($designID);
         $this->design->setProductMenu($design->product);
 
-        $this->view->title      = $this->lang->design->view;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
 
         $this->view->design    = $design;
@@ -173,6 +173,7 @@ class design extends control
         if($_POST)
         {
             $changes = $this->design->update($designID);
+
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -192,11 +193,12 @@ class design extends control
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->design->edit;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
+        $this->view->position[] = $this->lang->design->view;
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->products = $this->loadModel('product')->getPairs($this->session->program);
+        $this->view->products = $this->loadModel('product')->getPairs();
         $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 
@@ -204,7 +206,7 @@ class design extends control
     }
 
     /**
-     * Commit a design.
+     * Design link commits.
      *
      * @param  int    $designID
      * @param  int    $repoID
@@ -216,7 +218,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function commit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -225,9 +227,9 @@ class design extends control
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
-        $repos     = $this->loadModel('repo')->getRepoPairs();
-        $repoID    = $repoID ? $repoID : key($repos);
-        $repo      = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
+        $repos  = $this->loadModel('repo')->getRepoPairs();
+        $repoID = $repoID ? $repoID : key($repos);
+        $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
         $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end) : '';
 
@@ -245,8 +247,8 @@ class design extends control
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
 
-        $this->view->title           = $this->lang->design->commit;
-        $this->view->position[]      = $this->lang->design->commit;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
+        $this->view->position[] = $this->lang->design->linkCommit;
 
         $this->view->repos           = $repos;
         $this->view->repoID          = $repoID;
@@ -322,7 +324,7 @@ class design extends control
             die(js::locate($this->createLink('design', 'browse'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->design->assignedTo;
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
         $this->view->position[] = $this->lang->design->assignedTo;
 
         $this->view->design = $this->design->getById($designID);

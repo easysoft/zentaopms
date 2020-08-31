@@ -49,24 +49,24 @@
             <th class="text-left w-120px">   <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
             <th class="text-left w-150px">   <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
             <th class="c-assignedTo w-120px"><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
-            <th class="text-center w-100px"><?php echo $lang->design->actions;?></th>
+            <th class="text-center w-100px"> <?php echo $lang->design->actions;?></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach($designs as $design):?>
           <tr>
-            <td><?php printf('%03d', $design->id);?></td>
-            <td><?php echo zget($lang->design->typeList, $design->type);?></td>
-            <td title="<?php echo $design->name;?>" class="c-name"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td class='c-commit'><?php echo $design->commit;?></td>
-            <td><?php echo $design->createdBy;?></td>
-            <td><?php echo substr($design->createdDate, 0, 11);?></td>
-            <td class="c-assignedTo"><?php echo $this->design->printAssignedHtml($design, $users);?></td>
+            <td calss="c-id">         <?php printf('%03d', $design->id);?></td>
+            <td class="c-type">       <?php echo zget($lang->design->typeList, $design->type);?></td>
+            <td class="c-name" title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
+            <td class="c-commit">     <?php echo $design->commit;?></td>
+            <td class="c-createdBy">  <?php echo $design->createdBy;?></td>
+            <td class="c-createdDate"><?php echo substr($design->createdDate, 0, 11);?></td>
+            <td class="c-assignedTo"> <?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";
               common::printIcon('design', 'edit',   $vars, $design, 'list', 'fork', '', '', '', '', '', $design->program);
-              common::printIcon('design', 'commit', $vars, $design, 'list', 'link', '', 'iframe showinonlybody', true);
+              common::printIcon('design', 'linkCommit', $vars, $design, 'list', 'link', '', 'iframe showinonlybody', true);
               common::printIcon('design', 'delete', $vars, $design, 'list', 'trash', 'hiddenwin', '', '', '', '', $design->program);
               ?>
             </td>

@@ -39,10 +39,10 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
         <?php
-        common::printIcon('design', 'assignTo', "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'commit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'edit',   "designID=$design->id", $design, 'button', 'fork', '', '', true);
-        common::printIcon('design', 'delete', "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
+        common::printIcon('design', 'assignTo',   "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'edit',       "designID=$design->id", $design, 'button', 'fork', '', '', true);
+        common::printIcon('design', 'delete',     "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>
@@ -67,7 +67,7 @@
               <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
             </tr>
             <tr>
-              <th><?php echo $lang->design->commit;?></th>
+              <th><?php echo $lang->design->submission;?></th>
               <td><?php echo $design->commit;?></td>
             </tr>
             <tr>

@@ -57,7 +57,7 @@ $lang->issue->labelList['open']      = 'Open';
 $lang->issue->labelList['assignto']  = 'AssignedToMe';
 $lang->issue->labelList['closed']    = 'Closed';
 $lang->issue->labelList['suspended'] = 'Suspended';
-$lang->issue->labelList['cancelled'] = 'Canceled';
+$lang->issue->labelList['canceled']  = 'Canceled';
 
 $lang->issue->priList[''] = '';
 $lang->issue->priList['1'] = 1;

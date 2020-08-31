@@ -7,7 +7,7 @@ $(function()
     {
         var impact      = $('#impact').val();
         var probability = $('#probability').val();
-        var riskindex = parseInt(impact * probability);
+        var riskindex   = parseInt(impact * probability);
         var pri = ''; 
         if(0 < riskindex && riskindex <= 5)    pri = 'low';
         if(5 < riskindex && riskindex <= 12)   pri = 'middle';

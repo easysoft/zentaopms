@@ -32,37 +32,21 @@
       <tbody>
         <?php for($i = 1;$i <= 10;$i++):?>
         <tr data-key="<?php echo $i;?>">
-         <td><?php echo $i;?></td>
-         <td>
-          <?php echo html::input("dataList[$i][title]", '', 'id="dataList'.$i.'title" class="form-control" autocomplete="off"')?>
-        </td>
-        <td>
-      	 <?php echo html::select("dataList[$i][type]", $lang->issue->typeList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'type"')?>
-        </td>
-        <td>
-       	 <?php echo html::select("dataList[$i][severity]", $lang->issue->severityList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'severity"')?>
-        </td>
-        <td>
-        <?php echo html::textarea("dataList[$i][desc]", '', 'class="form-control" id="dataList'.$i.'desc" rows="1"');?>
-        </td>
-        <td>
-        <?php echo html::select("dataList[$i][pri]", $lang->issue->priList, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'pri"')?>
-        </td>
-        <td>
-        <?php echo html::input("dataList[$i][deadline]", '', 'class="form-control form-date" id="dataList'.$i.'deadline"');?>
-        </td>
-        <td>
-        <?php echo html::select("dataList[$i][assignedTo]", $users, '', 'class="form-control chosen chosen-controled" id="dataList'.$i.'assignedTo"')?>
-        </td>
+          <td><?php echo $i;?></td>
+          <td><?php echo html::input("dataList[$i][title]", '', 'id="dataList' . $i . 'title" class="form-control" autocomplete="off"')?></td>
+          <td><?php echo html::select("dataList[$i][type]", $lang->issue->typeList, '', 'class="form-control chosen" id="dataList' . $i . 'type"')?></td>
+          <td><?php echo html::select("dataList[$i][severity]", $lang->issue->severityList, '', 'class="form-control chosen" id="dataList' . $i . 'severity"')?></td>
+          <td><?php echo html::textarea("dataList[$i][desc]", '', 'class="form-control" id="dataList' . $i . 'desc" rows="1"');?></td>
+          <td><?php echo html::select("dataList[$i][pri]", $lang->issue->priList, '', 'class="form-control chosen" id="dataList' . $i . 'pri"')?></td>
+          <td><?php echo html::input("dataList[$i][deadline]", '', 'class="form-control form-date" id="dataList' . $i . 'deadline"');?></td>
+          <td><?php echo html::select("dataList[$i][assignedTo]", $users, '', 'class="form-control chosen" id="dataList' . $i . 'assignedTo"')?></td>
        </tr>
         <?php endfor;?>
       </tbody>
     </table>
     <div class="form-actions text-center">
-      <?php echo html::submitButton('','id="submit" class="btn btn-primary" data-loading="稍后..."')?>
-      <?php echo html::a('javascript:history.go(-1);', '返回', '', 'class="btn btn-back btn-wide"')?>
+      <?php echo html::submitButton() . html::backButton();?>
     </div>
   </form> 
-  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

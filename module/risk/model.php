@@ -78,7 +78,7 @@ class riskModel extends model
      */
     public function update($riskID)
     {
-        $oldRisk = $this->dao->select('*')->from(TABLE_RISK)->where('id')->eq((int)$riskID)->fetch();
+        $oldRisk = $this->getByID($riskID);
 
         $risk = fixer::input('post')
             ->add('editedBy', $this->app->user->account)

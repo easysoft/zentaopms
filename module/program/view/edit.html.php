@@ -39,7 +39,7 @@
           <th><?php echo $lang->program->code;?></th>
           <td><?php echo html::input('code', $program->code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($program->template == 'cmmi'):?>
+        <?php if($program->template == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->category;?></th>
           <td><?php echo html::select('category', $lang->program->categoryList, $program->category, "class='form-control'");?></td><td></td><td></td>

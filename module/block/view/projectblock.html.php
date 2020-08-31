@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(empty($projectStats)): ?>
-<div class='empty-tip'><?php common::printLink('program', 'createguide', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'")?></div>
+<div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>

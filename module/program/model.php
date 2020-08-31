@@ -65,16 +65,17 @@ class programModel extends model
     }
 
     /**
-     * Get user programs for block.
+     * Get program overview for block.
      *
-     * @param  varchar $status
-     * @param  varchar $orderBy
-     * @param  int     $limit
-     * @param  int     $programID
+     * @param  varchar     $queryType byId|byStatus
+     * @param  varchar|int $param
+     * @param  varchar     $orderBy
+     * @param  int         $limit
+     * @param  int         $programID
      * @access public
      * @return void
      */
-    public function getUserPrograms($status = 'all', $orderBy = 'id_desc', $limit = 15, $programID = 0)
+    public function getProgramOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
@@ -82,8 +83,8 @@ class programModel extends model
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->beginIF($programID)->andWhere('id')->eq($programID)->fi()
+            ->beginIF($queryType == 'byStatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'byId')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll('id');
@@ -91,7 +92,10 @@ class programModel extends model
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
 
-        $hours = $this->dao->select('program, cast(sum(consumed) as decimal(10,2)) as consumed, cast(sum(estimate) as decimal(10,2)) as estimate')->from(TABLE_TASK)
+        $hours = $this->dao->select('program, 
+            cast(sum(consumed) as decimal(10,2)) as consumed, 
+            cast(sum(estimate) as decimal(10,2)) as estimate')
+            ->from(TABLE_TASK)
             ->where('program')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
@@ -154,16 +158,16 @@ class programModel extends model
 
         foreach($programs as $programID => $program)
         {
-            $program->teamCount    = isset($teams[$programID]) ? $teams[$programID]->count : 0;
-            $program->consumed     = isset($hours[$programID]) ? $hours[$programID]->consumed : 0;
-            $program->estimate     = isset($hours[$programID]) ? $hours[$programID]->estimate : 0;
-            $program->leftTasks    = isset($leftTasks[$programID]) ? $leftTasks[$programID]->leftTasks : 0;
-            $program->allStories   = isset($allStories[$programID]) ? $allStories[$programID]->allStories : 0;
-            $program->doneStories  = isset($doneStories[$programID]) ? $doneStories[$programID]->doneStories : 0;
-            $program->leftStories  = isset($leftStories[$programID]) ? $leftStories[$programID]->leftStories : 0;
-            $program->leftBugs     = isset($leftBugs[$programID]) ? $leftBugs[$programID]->leftBugs : 0;
-            $program->allBugs      = isset($allBugs[$programID]) ? $allBugs[$programID]->allBugs : 0;
-            $program->doneBugs     = isset($doneBugs[$programID]) ? $doneBugs[$programID]->doneBugs : 0;
+            $program->teamCount   = isset($teams[$programID]) ? $teams[$programID]->count : 0;
+            $program->consumed    = isset($hours[$programID]) ? $hours[$programID]->consumed : 0;
+            $program->estimate    = isset($hours[$programID]) ? $hours[$programID]->estimate : 0;
+            $program->leftTasks   = isset($leftTasks[$programID]) ? $leftTasks[$programID]->leftTasks : 0;
+            $program->allStories  = isset($allStories[$programID]) ? $allStories[$programID]->allStories : 0;
+            $program->doneStories = isset($doneStories[$programID]) ? $doneStories[$programID]->doneStories : 0;
+            $program->leftStories = isset($leftStories[$programID]) ? $leftStories[$programID]->leftStories : 0;
+            $program->leftBugs    = isset($leftBugs[$programID]) ? $leftBugs[$programID]->leftBugs : 0;
+            $program->allBugs     = isset($allBugs[$programID]) ? $allBugs[$programID]->allBugs : 0;
+            $program->doneBugs    = isset($doneBugs[$programID]) ? $doneBugs[$programID]->doneBugs : 0;
         }
 
         return $programs;
@@ -208,7 +212,7 @@ class programModel extends model
 
         foreach($programs as $programID => $program)
         {
-            $orderBy = $program->template == 'cmmi' ? 'id_asc' : 'id_desc';
+            $orderBy = $program->template == 'waterfall' ? 'id_asc' : 'id_desc';
             $program->projects   = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, $pager, $programID);
             $program->teamCount  = isset($teams[$programID]) ? $teams[$programID]->count : 0;
             $program->estimate   = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
@@ -320,7 +324,7 @@ class programModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
-            if($project->template == 'cmmi')
+            if($project->template == 'waterfall')
             {
                 $product = new stdclass();
                 $product->name        = $project->name;

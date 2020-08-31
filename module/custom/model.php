@@ -371,7 +371,7 @@ class customModel extends model
     public function getSwapper()
     {
         $current = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? 'Scrum' : 'CMMI';
-        $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setcmmi'), 'CMMI') : html::a(helper::createLink('custom', 'setscrum'), 'Scrum');
+        $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setwaterfall'), 'CMMI') : html::a(helper::createLink('custom', 'setscrum'), 'Scrum');
 
         $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' title='{$current}'>{$current} <i class='icon icon-swap'></i></button>";
         $output .= "<ul class='dropdown-menu'><li>" . $link . "</li></ul>";
