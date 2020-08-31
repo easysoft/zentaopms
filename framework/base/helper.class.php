@@ -168,14 +168,7 @@ class baseHelper
     {
         global $config;
         if(!$programID) return $link;
-        if($onlybody)
-        {
-            $link .= $config->requestType != 'GET' ? "&pgm=$programID" : "&pgm=$programID";
-        }
-        else
-        {
-            $link .= $config->requestType != 'GET' ? "?pgm=$programID" : "&pgm=$programID";
-        }
+        $link .= strpos($link, '?') === false ? "?pgm=$programID" : "&pgm=$programID";
 
         return $link;
     }
@@ -197,7 +190,7 @@ class baseHelper
     {
         global $config;
         if(!$onlyBody and !self::inOnlyBodyMode()) return $link;
-        $onlybodyString = $config->requestType != 'GET' ? "?onlybody=yes" : "&onlybody=yes";
+        $onlybodyString = strpos($link, '?') === false ? "?onlybody=yes" : "&onlybody=yes";
         return $link . $onlybodyString;
     }
 
