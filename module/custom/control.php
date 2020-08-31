@@ -395,7 +395,7 @@ class custom extends control
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
-        if(strtolower($this->server->request_method) == "post")
+        if($_POST)
         {   
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItem('system.custom.planStatus', $data->planStatus);
