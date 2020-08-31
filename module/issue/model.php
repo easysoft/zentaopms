@@ -154,32 +154,6 @@ class issueModel extends model
     }
 
     /**
-     * Create an issue.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', $now)
-            ->add('program', $this->session->program)
-            ->remove('labels,files')
-            ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
-            ->addIF($this->post->assignedTo, 'assignedDate', $now)
-            ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
-            ->get();
-
-        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
-        $issueID = $this->dao->lastInsertID();
-        $this->loadModel('file')->saveUpload('issue', $issueID);
-
-        return $issueID;
-    }
-
-    /**
      * Update an issue.
      *
      * @param  int    $issueID
