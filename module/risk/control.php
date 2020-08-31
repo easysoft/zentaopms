@@ -61,7 +61,7 @@ class risk extends control
         if($_POST)
         {
             $riskID = $this->risk->create();
-        
+
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
             if(!$riskID)
