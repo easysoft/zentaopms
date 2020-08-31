@@ -8,8 +8,8 @@
 .block-waterfallreport .col-right .tile { width: 20%;}
 .block-waterfallreport .col-right .tile .tile-title{font-weight: 700;}
 .block-waterfallreport .progress {position: absolute; left: 45px; top: 90px; right: 40px;}
-.block-waterfallreport .progress-num{font-size: 26px; font-weight: 700}
-.block-waterfallreport .col-right .tile-amount{font-size: 22px; font-weight: 700}
+.block-waterfallreport .progress-num{font-size: 20px; font-weight: 700}
+.block-waterfallreport .col-right .tile-amount{font-size: 20px}
 </style>
 
 <div class="panel-move-handler"><span class='stage text-muted'><?php echo $current;?></span></div>
