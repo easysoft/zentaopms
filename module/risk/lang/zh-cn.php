@@ -1,19 +1,4 @@
 <?php
-/* Actions */
-$lang->risk->batchCreate = '批量添加';
-$lang->risk->create      = '添加风险';
-$lang->risk->edit        = '编辑风险';
-$lang->risk->browse      = '浏览列表';
-$lang->risk->view        = '风险详情';
-$lang->risk->activate    = '激活';
-$lang->risk->hangup      = '挂起';
-$lang->risk->close       = '关闭';
-$lang->risk->cancel      = '取消';
-$lang->risk->track       = '跟踪';
-$lang->risk->assignTo    = '指派';
-$lang->risk->delete      = '删除';
-$lang->risk->byQuery     = '搜索';
-
 /* Fields */
 $lang->risk->common            = '风险';
 $lang->risk->source            = '来源';
@@ -51,10 +36,24 @@ $lang->risk->trackedBy         = '由谁跟踪';
 $lang->risk->trackedDate       = '跟踪日期';
 $lang->risk->editedBy          = '由谁编辑';
 $lang->risk->editedDate        = '编辑日期';
-
 $lang->risk->legendBasicInfo   = '基本信息';
 $lang->risk->legendLifeTime    = '风险的一生';
 $lang->risk->confirmDelete     = '您确认删除该风险吗？';
+
+/* Actions */
+$lang->risk->batchCreate = '批量添加';
+$lang->risk->create      = '添加风险';
+$lang->risk->edit        = '编辑风险';
+$lang->risk->browse      = '浏览列表';
+$lang->risk->view        = '风险详情';
+$lang->risk->activate    = '激活';
+$lang->risk->hangup      = '挂起';
+$lang->risk->close       = '关闭';
+$lang->risk->cancel      = '取消';
+$lang->risk->track       = '跟踪';
+$lang->risk->assignTo    = '指派';
+$lang->risk->delete      = '删除';
+$lang->risk->byQuery     = '搜索';
 
 $lang->risk->action = new stdclass();
 $lang->risk->action->hangup  = '$date, 由 <strong>$actor</strong> 挂起。' . "\n";

@@ -1,19 +1,4 @@
 <?php
-/* Actions */
-$lang->risk->batchCreate = 'Batch Create';
-$lang->risk->create      = 'Create Risk';
-$lang->risk->edit        = 'Edit Risk';
-$lang->risk->browse      = 'Risks';
-$lang->risk->view        = 'Details';
-$lang->risk->activate    = 'Active';
-$lang->risk->hangup      = 'Suspend';
-$lang->risk->close       = 'Close';
-$lang->risk->cancel      = 'Cancle';
-$lang->risk->track       = 'Track';
-$lang->risk->assignTo    = 'Assign';
-$lang->risk->delete      = 'Delete';
-$lang->risk->byQuery     = 'Search';
-
 /* Fields */
 $lang->risk->common            = 'Risk';
 $lang->risk->source            = 'Source';
@@ -51,10 +36,24 @@ $lang->risk->trackedBy         = 'TrackedBy';
 $lang->risk->trackedDate       = 'TrackedDate';
 $lang->risk->editedBy          = 'EditedBy';
 $lang->risk->editedDate        = 'EditedDate';
-
 $lang->risk->legendBasicInfo   = 'Basic Info.';
 $lang->risk->legendLifeTime    = 'About Risk';
 $lang->risk->confirmDelete     = 'Do you want to delelte this risk?';
+
+/* Actions */
+$lang->risk->batchCreate = 'Batch Create';
+$lang->risk->create      = 'Create Risk';
+$lang->risk->edit        = 'Edit Risk';
+$lang->risk->browse      = 'Risks';
+$lang->risk->view        = 'Details';
+$lang->risk->activate    = 'Active';
+$lang->risk->hangup      = 'Suspend';
+$lang->risk->close       = 'Close';
+$lang->risk->cancel      = 'Cancle';
+$lang->risk->track       = 'Track';
+$lang->risk->assignTo    = 'Assign';
+$lang->risk->delete      = 'Delete';
+$lang->risk->byQuery     = 'Search';
 
 $lang->risk->action = new stdclass();
 $lang->risk->action->hangup  = '$date, suspended by <strong>$actor</strong>.' . "\n";

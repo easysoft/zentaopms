@@ -1,6 +1,6 @@
 <?php 
 /**
- * The control file of risk currentModule of ZenTaoPMS.
+ * The control file of risk module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -28,8 +28,8 @@ class risk extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
 
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
         /* Build the search form. */
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('risk', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->risk->buildSearchForm($queryID, $actionURL);
 
@@ -187,12 +187,9 @@ class risk extends control
      */
     public function delete($riskID, $confirm = 'no')
     {
-        $risk = $this->risk->getById($riskID);
-
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->risk->confirmDelete, $this->createLink('risk', 'delete', "risk=$riskID&confirm=yes"), '');
-            exit;
+            die(js::confirm($this->lang->risk->confirmDelete, $this->createLink('risk', 'delete', "risk=$riskID&confirm=yes"), ''));
         }
         else
         {
@@ -214,7 +211,7 @@ class risk extends control
         if($_POST)
         {
             $changes = array();
-            if($this->post->isChange == 1) $changes = $this->risk->track($riskID);
+            if($this->post->isChange) $changes = $this->risk->track($riskID);
         
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -258,10 +255,9 @@ class risk extends control
             $changes = $this->risk->assign($riskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action');
             if(!empty($changes))
             {
-                $actionID = $this->action->create('risk', $riskID, 'Assigned', $this->post->comment, $this->post->assignedTo);            
+                $actionID = $this->loadModel('action')->create('risk', $riskID, 'Assigned', $this->post->comment, $this->post->assignedTo);            
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -292,10 +288,9 @@ class risk extends control
             $changes = $this->risk->cancel($riskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action');
             if(!empty($changes))
             {
-                $actionID = $this->action->create('risk', $riskID, 'Canceled', $this->post->comment);            
+                $actionID = $this->loadModel('action')->create('risk', $riskID, 'Canceled', $this->post->comment);            
                 $this->action->logHistory($actionID, $changes);
             }
             
@@ -327,8 +322,7 @@ class risk extends control
 
             if(!empty($changes))
             {
-                $this->loadModel('action');
-                $actionID = $this->action->create('risk', $riskID, 'Closed', $this->post->comment);            
+                $actionID = $this->loadModel('action')->create('risk', $riskID, 'Closed', $this->post->comment);            
                 $this->action->logHistory($actionID, $changes);
             }
             
@@ -360,8 +354,7 @@ class risk extends control
 
             if(!empty($changes))
             {
-                $this->loadModel('action');
-                $actionID = $this->action->create('risk', $riskID, 'Hangup', $this->post->comment);            
+                $actionID = $this->loadModel('action')->create('risk', $riskID, 'Hangup', $this->post->comment);            
                 $this->action->logHistory($actionID, $changes);
             }
             
@@ -393,8 +386,7 @@ class risk extends control
 
             if(!empty($changes))
             {
-                $this->loadModel('action');
-                $actionID = $this->action->create('risk', $riskID, 'Activated', $this->post->comment);            
+                $actionID = $this->loadModel('action')->create('risk', $riskID, 'Activated', $this->post->comment);            
                 $this->action->logHistory($actionID, $changes);
             }
             
