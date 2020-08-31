@@ -175,7 +175,7 @@ $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['user']        = '用户';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
-$lang->searchObjects['productplan'] = $lang->productCommon . '计划';
+$lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
 $lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['caselib']     = '用例库';
@@ -240,7 +240,7 @@ $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
 $lang->product->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -866,7 +866,7 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->waterfallproduct->menu->plan        = array('link' => '排期|productplan|browse|productID={PRODUCT}', 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->plan        = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
 $lang->waterfallproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->waterfallproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';

@@ -1333,20 +1333,17 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $projects  = $this->loadModel('project')->getPairs();
-        $products  = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
 
         $actions = array();
-        if(!empty($projects) || !empty($products))
-        {
-            $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
-                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
-                ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
-                ->orderBy('date_desc')
-                ->limit(10)
-                ->fetchAll();
-        }
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('project')->eq($this->session->program)
+            ->beginIF($projects)->markLeft()->orWhere('project')->in(array_keys($projects))->fi()->markRight()
+            ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->orderBy('date_desc')
+            ->limit(10)
+            ->fetchAll();
 
         $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
