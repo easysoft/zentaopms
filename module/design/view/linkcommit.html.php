@@ -54,10 +54,11 @@
       </thead>
       <tbody>
         <?php foreach($revisions as $log):?>
+        <?php if(in_array($log->id, $linkedRevisions)) continue;?>
         <tr>
           <td>
             <div class='checkbox-primary'>
-            <input type='checkbox' name='revision[]' value="<?php echo $log->id?>" <?php if(in_array($log->revision, $linkedRevisions)) echo 'checked="checked"'?>/>
+            <input type='checkbox' name='revision[]' value="<?php echo $log->id?>"/>
               <label></label>
             </div>
           </td>

@@ -172,8 +172,6 @@ class designModel extends model
      */
     public function linkCommit($designID = 0, $repoID = 0)
     {
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
         $revisions = $_POST['revision'];
 
         foreach($revisions as $revision)
@@ -199,10 +197,38 @@ class designModel extends model
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
             $design = new stdclass();
-            $design->commit     = implode(",", $revisions);
+            $design->commit = $this->dao->select('commit')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch('commit');
+
+            if($design->commit)
+            {
+                $design->commit = implode(",", $revisions) . "," . $design->commit;
+            }
+            else
+            {
+                $design->commit = implode(",", $revisions);
+            }
+
             $design->commitDate = helper::now();
             $design->commitBy   = $this->app->user->account;
             $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
+    }
+
+    /**
+     * Unlink commit.
+     *
+     * @param  int    $designID
+     * @param  int    $commitID
+     * @access public
+     * @return void
+     */
+    public function unlinkCommit($designID = 0, $commitID = 0)
+    {
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andwhere('AID')->eq($designID)->andwhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->andWhere('BID')->eq($commitID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andwhere('BID')->eq($designID)->andwhere('BType')->eq('design')->andwhere('relation')->eq('completedfrom')->andWhere('AID')->eq($commitID)->exec();
+
+        $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->fetchAll('BID');
+        $commit = implode(",", array_keys($commit));
+        $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
     }
 
     /**
@@ -312,14 +338,23 @@ class designModel extends model
                 ->fetchAll('id');
         }
 
-        foreach($designs as $id => $design)
-        {
-            $design->commit = '';
-            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
-            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
-        }
-
         return $designs;
+    }
+
+    /**
+     * Get commit.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return void
+     */
+    public function getCommit($designID = 0)
+    {
+        $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+
+        $design->commit = $design->commit ? explode(",", $design->commit) : '';
+
+        return $design;
     }
 
     /**

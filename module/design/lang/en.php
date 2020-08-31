@@ -38,17 +38,19 @@ $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 
 /* Action list. */
-$lang->design->common        = 'Design';
-$lang->design->create        = 'Create Design';
-$lang->design->batchCreate   = 'Batch Create';
-$lang->design->edit          = 'Edit';
-$lang->design->delete        = 'Delete';
-$lang->design->view          = 'View';
-$lang->design->browse        = 'List';
-$lang->design->commit        = 'Link Commit';
-$lang->design->submit        = 'Submit Review';
-$lang->design->assignTo      = 'Assign';
-$lang->design->revision      = 'Linked Code';
+$lang->design->common       = 'Design';
+$lang->design->create       = 'Create Design';
+$lang->design->batchCreate  = 'Batch Create';
+$lang->design->edit         = 'Edit';
+$lang->design->delete       = 'Delete';
+$lang->design->view         = 'View';
+$lang->design->browse       = 'List';
+$lang->design->viewCommit   = 'View Commit';
+$lang->design->linkCommit   = 'Link Commit';
+$lang->design->unlinkCommit = 'Unlink Commit';
+$lang->design->submit       = 'Submit Review';
+$lang->design->assignTo     = 'Assign';
+$lang->design->revision     = 'Linked Code';
 
 /* Field value. */
 $lang->design->typeList         = array();
@@ -69,4 +71,5 @@ $lang->design->featureBar += $lang->design->typeList;
 $lang->design->errorSelection = 'No record selected!';
 $lang->design->noDesign       = 'No record.';
 $lang->design->noCommit       = 'No record commited.';
-$lang->design->confirmDelete = 'Do you want to delete this design?';
+$lang->design->confirmDelete  = 'Do you want to delete this design?';
+$lang->design->confirmUnlink  = 'Are you sure you want to remove this submission?';

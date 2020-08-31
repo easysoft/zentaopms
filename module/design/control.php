@@ -265,6 +265,28 @@ class design extends control
     }
 
     /**
+     * Unlink commit.
+     *
+     * @param  int    $designID
+     * @param  int    $commitID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function unlinkCommit($designID = 0, $commitID = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->design->confirmUnlink, inlink('unlinkCommit', "designID=$designID&commitID=$commitID&confirm=yes")));
+        }
+        else
+        {
+            $this->design->unlinkCommit($designID, $commitID);
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
      * A version of the code base.
      *
      * @param  int    $repoID
@@ -276,6 +298,23 @@ class design extends control
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
         $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
         header("location:" . $repoURL);
+    }
+
+    /**
+     * View a design's commit.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return void
+     */
+    public function viewCommit($designID = 0)
+    {
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
+        $this->view->position[] = $this->lang->design->submission;
+
+        $this->view->design = $this->design->getCommit($designID);
+
+        $this->display();
     }
 
     /**
