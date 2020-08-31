@@ -29,13 +29,13 @@ $status = $this->session->testTaskVersionStatus;
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
-          echo "<li>" . html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
+          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
+          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
         ?>
       </ul>
     </div>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
-    <?php echo html::a($this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
+    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-300px input-group-sm'>
@@ -79,8 +79,8 @@ $status = $this->session->testTaskVersionStatus;
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='text-left'>
-      <td><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name);?></td>
+      <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build", '', true), $task->buildName);?></td>

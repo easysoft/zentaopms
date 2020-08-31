@@ -21,7 +21,7 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'", '');?>
+    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-table' data-ride='table'>
@@ -54,7 +54,7 @@
       <td class='text-left' title="<?php echo $suite->name?>">
         <?php if($suite->type == 'public') echo "<span class='label label-success label-badge'>{$lang->testsuite->authorList['public']}</span> ";?>
         <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
-        <?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id"), $suite->name);?>
+        <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
       </td>
       <td><?php echo $suite->desc;?></td>
       <td><?php echo zget($users, $suite->addedBy);?></td>

@@ -206,16 +206,14 @@ class block extends control
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
+
+        $common = 'common';
         if($module == 'program')
         {
-            $program = $this->loadModel('project')->getByID($this->app->session->program);
+            $program = $this->loadModel('project')->getByID($this->session->program);
             $common  = $program->template . 'common';
-            $inited  = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
         }
-        else
-        {
-            $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
-        }
+        $inited = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
 
         /* Init block when vist index first. */
         if((empty($blocks) and !$inited and !defined('TUTORIAL')))
@@ -725,6 +723,7 @@ class block extends control
     public function printProgramBlock()
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('task');
 
         $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->num);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');

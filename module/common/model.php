@@ -189,6 +189,9 @@ class commonModel extends model
     /**
      * Deny access.
      *
+     * @param  varchar  $module 
+     * @param  varchar  $method
+     * @param  bool     $reload
      * @access public
      * @return mixed
      */

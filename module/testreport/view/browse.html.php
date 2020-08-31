@@ -20,7 +20,7 @@
     </span>
   </div>
   <div class='pull-right btn-toolbar'>
-    <?php if($objectType == 'product') common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'", '');?>
+    <?php if($objectType == 'product') common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>
@@ -48,7 +48,7 @@
       <?php foreach($reports as $report):?>
       <tr>
         <td><?php echo html::a(helper::createLink('testreport', 'view', "reportID=$report->id"), sprintf('%03d', $report->id));?></td>
-        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(helper::createLink('testreport', 'view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
+        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
         <?php $projectName = $report->project ? '#' . $report->project . $projects[$report->project] : '';?>
