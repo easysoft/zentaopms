@@ -36,7 +36,7 @@ $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
-$lang->block->contribute   = '个人贡献';
+$lang->block->contribute   = '我的贡献';
 
 $lang->block->leftToday       = '今天剩余工作总计';
 $lang->block->myTask          = '我的任务';
@@ -276,7 +276,7 @@ $lang->block->default['full']['my']['4']['block']  = 'statistic';
 $lang->block->default['full']['my']['4']['source'] = 'program';
 $lang->block->default['full']['my']['4']['grid']   = 8;
 
-$lang->block->default['full']['my']['5']['title']  = '个人贡献';
+$lang->block->default['full']['my']['5']['title']  = '我的贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
 $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
