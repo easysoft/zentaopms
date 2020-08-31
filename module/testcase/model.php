@@ -226,6 +226,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
+            $data[$i]->program      = $this->session->program;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
