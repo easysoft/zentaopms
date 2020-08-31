@@ -1108,14 +1108,14 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = helper::today();
-        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $date    = date('Ymd', strtotime('this week Monday'));
         $begin   = $program->begin;
-        $weeks   = $this->weekly->getWeekPairs($begin);
+        $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
-        $task    = $this->dao->select("
+
+        $task = $this->dao->select("
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
             ->from(TABLE_TASK)->where('program')->eq($this->session->program)
@@ -1304,7 +1304,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumprojectBlock()
+    public function printSprintBlock()
     {
         $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
