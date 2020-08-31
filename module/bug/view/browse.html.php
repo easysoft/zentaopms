@@ -60,7 +60,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
             $isBySearch       = $browseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
