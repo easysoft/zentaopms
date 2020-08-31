@@ -1,7 +1,8 @@
 <div class="panel-body">
   <div id='cmmiGantt'>
     <?php if(count($products) >= 2): ?>
-    <?php echo html::select('cmmiGanttProductID', $products, $productID, "class='form-control chosen'"); ?>
+    <?php echo html::select('cmmiGanttProductID', $products, $productID, "class='form-control chosen'");?>
+    <span id="ganttProductTips"><i>* </i><?php echo $lang->block->selectProduct;?></span>
     <?php endif;?>
     <?php if(empty($plans['data'])): ?>
     <div class='empty-tip'><?php echo $lang->programplan->noData;?></div>
@@ -10,19 +11,22 @@
       <div class='gantt-plans pull-left'></div>
       <div class='gantt-container scrollbar-hover'>
         <div class='gantt-canvas'>
-            <div class='gantt-today'><div><?php echo $lang->programplan->today; ?></div></div>
+          <div class='gantt-today'><div><?php echo $lang->programplan->today; ?></div></div>
         </div>
       </div>
     </div>
     <?php endif;?>
   </div>
   <style>
+  #ganttProductTips{position: absolute; top: -32px; left: 240px; opacity: 0.5;}
+  #ganttProductTips i{vertical-align: middle;}
   .block-cmmigantt > .panel-body {overflow: visible!important}
   #cmmiGantt {position: relative}
   #cmmiGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important}
   [lang="zh-cn"] #cmmiGanttProductID_chosen {left: 85px}
   .gantt-plans {padding: 20px 0 22px; max-height: 380px; overflow: hidden;}
-  .gantt-plan {margin-top: 10px; line-height: 20px}
+  .gantt-plan {width: 70px; height: 50px; line-height: 50px}
+  .gantt-plan div {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
   .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow: auto; padding-top: 20px; max-height: 380px;}
   .gantt-canvas {border: 1px solid #dddee4; border-style: solid dotted; position: relative}
   .gantt-row {height: 50px; position: relative; z-index: 1}
@@ -108,8 +112,7 @@
       {
           plan.progress = !plan.tasks.length ? 0 : plan.progress / plan.tasks.length;
           var $plan = $('<div class="gantt-plan"></div>');
-          $plan.append('<div class="strong">' + plan.text + '</div>');
-          $plan.append('<div class="text-muted small"><?php echo $lang->programplan->planPercent?> ' + plan.percent + '%</div>');
+          $plan.append('<div class="strong" title="' + plan.text + '">' + plan.text + '</div>');
           $plans.append($plan);
 
           var $bar = $('<div class="gantt-bar"></div>');

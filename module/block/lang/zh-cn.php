@@ -62,6 +62,7 @@ $lang->block->consumedHours   = '已消耗';
 $lang->block->time            = '第';
 $lang->block->week            = '周';
 $lang->block->month           = '月';
+$lang->block->selectProduct   = '选择产品';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -103,7 +104,7 @@ $lang->block->default['cmmi']['program']['2']['block']  = 'cmmiestimate';
 $lang->block->default['cmmi']['program']['2']['source'] = 'program';
 $lang->block->default['cmmi']['program']['2']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['3']['title']  = '计划甘特图';
+$lang->block->default['cmmi']['program']['3']['title']  = '项目计划';
 $lang->block->default['cmmi']['program']['3']['block']  = 'cmmigantt';
 $lang->block->default['cmmi']['program']['3']['source'] = 'program';
 $lang->block->default['cmmi']['program']['3']['grid']   = 8;
