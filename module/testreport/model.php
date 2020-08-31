@@ -303,7 +303,6 @@ class testreportModel extends model
         return $caseIDList;
     }
 
-
     /**
      * Get task cases.
      * 
