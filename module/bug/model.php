@@ -2494,7 +2494,7 @@ class bugModel extends model
         $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
         $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
 
-        $canBatchAction = $canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo;
+        $canBatchAction = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
 
         $canView = common::hasPriv('bug', 'view');
 
@@ -2600,6 +2600,13 @@ class bugModel extends model
                 if(isset($tasks[$bug->task]))
                 {
                     $task = $tasks[$bug->task];
+                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                }
+                break;
+            case 'toTask':
+                if(isset($tasks[$bug->toTask]))
+                {
+                    $task = $tasks[$bug->toTask];
                     echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
                 }
                 break;

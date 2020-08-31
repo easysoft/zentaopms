@@ -39,7 +39,8 @@
       $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
       $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
       $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-      $hasCheckbox    = ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun);
+
+      $canBatchAction = ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun);
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
@@ -60,7 +61,7 @@
             {
                 if($value->show)
                 {
-                    $this->datatable->printHead($value, $orderBy, $vars);
+                    $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
                     $columns ++;
                 }
             }
@@ -78,7 +79,7 @@
       <?php if(!$useDatatable) echo '</div>';?>
       <?php if($runs):?>
       <div class='table-footer'>
-        <?php if($hasCheckbox):?>
+        <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class='table-actions btn-toolbar'>
           <div class='btn-group dropup'>

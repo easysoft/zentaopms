@@ -66,6 +66,7 @@ function refreshBlock($panel, afterRefresh)
         {
             $panel.children('.panel-move-handler,style,script').remove();
             $panel.find('.panel-body,.empty-tip').replaceWith($data);
+            $panel.find('.iframe').initIframeModal();
         }
         $panel.find('.progress-pie').progressPie();
         if($.isFunction(afterRefresh))

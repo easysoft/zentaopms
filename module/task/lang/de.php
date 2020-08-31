@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "Wenn Sie {$lang->projectCommon} ändern, d
 $lang->task->confirmFinish         = '"Reststunden " sind 0. Möchten Sue den Status auf Erledigt setzen?';
 $lang->task->confirmRecord         = '"Reststunden " sind 0. Möchten Sie den Task auf Erledigt setzen?';
 $lang->task->confirmTransfer       = '"Reststunden " sind 0. Möchten Sie den Task transferieren?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Es wurde keine Story verknüpft. Sie können %s für dieses Projekt, anschließend %s.";
 $lang->task->noticeSaveRecord      = 'Ihre Stunden wurden nicht gespeichrt. Bitte erst speichern.';
 $lang->task->commentActions        = '%s. %s, kommentiert von <strong>%s</strong>.';
@@ -210,7 +211,7 @@ $lang->task->error->work             = '"Bemerkung" muss kleiner als %d Zeichen 
 $lang->task->error->skipClose        = 'Aufgabe: %s ist nicht “Erledigt” oder “Abgebrochen”. Möchten Sie die Aufgabe jetzt schließen?';
 $lang->task->error->consumed         = 'Aufgabe: %s Hour must be more than 0. Ignore changes to this Task.';
 $lang->task->error->assignedTo       = 'Mehere Tasks können nicht zugewisen werden, da die Benutzer nicht teil des Teams sind.';
-$lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
+$lang->task->error->consumedEmpty    = '"Current Cost" should not be 0.';
 $lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
 $lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 

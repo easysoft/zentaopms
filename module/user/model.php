@@ -323,6 +323,18 @@ class userModel extends model
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
 
+                /* Check required fields. */
+                foreach(explode(',', $this->config->user->create->requiredFields) as $field)
+                {
+                    $field = trim($field);
+                    if(empty($field)) continue;
+
+                    if(!isset($data[$i]->$field)) continue;
+                    if(!empty($data[$i]->$field)) continue;
+
+                    die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                }
+
                 /* Change for append field, such as feedback.*/
                 if(!empty($this->config->user->batchAppendFields))
                 {
@@ -519,6 +531,18 @@ class userModel extends model
             $users[$id]['zipcode']  = $data->zipcode[$id];
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
+
+            /* Check required fields. */
+            foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if(empty($field)) continue;
+
+                if(!isset($users[$id][$field])) continue;
+                if(!empty($users[$id][$field])) continue;
+
+                die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+            }
 
             if(!empty($this->config->user->batchAppendFields))
             {

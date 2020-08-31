@@ -189,6 +189,7 @@ $lang->task->confirmChangeProject  = "Nếu bạn thay đổi {$lang->projectCom
 $lang->task->confirmFinish         = '"Còn lại" bằng 0. Bạn có muốn thay đổi tình trạng thành "Kết thúc"?';
 $lang->task->confirmRecord         = '"Còn lại" bằng 0. Bạn có muốn thiết lập nhiệm vụ thành "Kết thúc"?';
 $lang->task->confirmTransfer       = '"Còn lại" bằng 0，Bạn có muốn chuyển thành nhiệm vụ?';
+$lang->task->noticeTaskStart       = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory       = "Không có câu chuyện liên kết. Bạn có thể %s cho dự án này, sau đó %s.";
 $lang->task->noticeSaveRecord      = 'Số giờ làm của bạn chưa được lưu. Vui lòng lưu nó trước.';
 $lang->task->commentActions        = '%s. %s, nhận xét bởi <strong>%s</strong>.';
@@ -210,7 +211,7 @@ $lang->task->error->work             = '"Nhận xét" phải là <  %d ký tự.
 $lang->task->error->skipClose        = 'Nhiệm vụ: %s không là "Kết thúc” hoặc “Đã hủy”. Bạn có muốn đóng nó?';
 $lang->task->error->consumed         = 'Nhiệm vụ: %s giờ phải là < 0. Bỏ qua thay đổi cho nhiệm vụ này.';
 $lang->task->error->assignedTo       = 'Nhiệm vụ nhiều người dùng trong tình trạng hiện tại không thể giao cho một thành viên người không trong Nhóm nhiệm vụ.';
-$lang->task->error->consumedEmpty    = '"Giờ làm" không nên trống.';
+$lang->task->error->consumedEmpty    = '"Giờ làm" không nên 0.';
 $lang->task->error->deadlineSmall    = '"Hạn chót" phải lớn hơn "Ngày bắt đầu".';
 $lang->task->error->alreadyStarted   = 'You cannot start this task, because it is started.';
 

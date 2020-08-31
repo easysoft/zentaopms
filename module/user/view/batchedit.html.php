@@ -21,11 +21,21 @@
     </div>
   </div>
   <?php
-  $visibleFields = array();
+  $visibleFields  = array();
+  $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
       if(strpos(",{$config->user->customBatchEditFields},", ",{$field},") === false) continue;
       if($field)$visibleFields[$field] = '';
+  }
+
+  foreach(explode(',', $config->user->edit->requiredFields) as $field)
+  {
+      if($field)
+      {
+          $requiredFields[$field] = '';
+          if(strpos(",{$config->user->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+      }
   }
   $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
   ?>
@@ -42,14 +52,14 @@
             <th class='<?php echo $minWidth . zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'email', ' hidden')?>'>   <?php echo $lang->user->email;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>         <?php echo $lang->user->join;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'skype', ' hidden')?>'>        <?php echo $lang->user->skype;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'qq', ' hidden')?>'>           <?php echo $lang->user->qq;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'dingding', ' hidden')?>'>     <?php echo $lang->user->dingding;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'weixin', ' hidden')?>'>       <?php echo $lang->user->weixin;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'mobile', ' hidden')?>'>       <?php echo $lang->user->mobile;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'slack', ' hidden')?>'>        <?php echo $lang->user->slack;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'whatsapp', ' hidden')?>'>     <?php echo $lang->user->whatsapp;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden')?>'>        <?php echo $lang->user->phone;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'skype', ' hidden') . zget($requiredFields, 'skype', '', ' required')?>'>      <?php echo $lang->user->skype;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'qq', ' hidden') . zget($requiredFields, 'qq', '', ' required')?>'>            <?php echo $lang->user->qq;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'dingding', ' hidden') . zget($requiredFields, 'dingding', '', ' required')?>'><?php echo $lang->user->dingding;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'weixin', ' hidden') . zget($requiredFields, 'weixin', '', ' required')?>'>    <?php echo $lang->user->weixin;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'mobile', ' hidden') . zget($requiredFields, 'mobile', '', ' required')?>'>    <?php echo $lang->user->mobile;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'slack', ' hidden') . zget($requiredFields, 'slack', '', ' required')?>'>      <?php echo $lang->user->slack;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'whatsapp', ' hidden') . zget($requiredFields, 'whatsapp', '', ' required')?>'><?php echo $lang->user->whatsapp;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden') . zget($requiredFields, 'phone', '', ' required')?>'>      <?php echo $lang->user->phone;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'address', ' hidden')?>'>      <?php echo $lang->user->address;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'>      <?php echo $lang->user->zipcode;?></th>
           </tr>

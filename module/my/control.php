@@ -610,5 +610,4 @@ class my extends control
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
     }
-
 }

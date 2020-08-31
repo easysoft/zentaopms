@@ -52,12 +52,19 @@
   </div>
   <?php else:?>
   <form class="main-table table-todo" data-ride="table" method="post">
+    <?php
+    $canBatchEdit   = common::hasPriv('todo', 'batchEdit');
+    $canBatchFinish = common::hasPriv('todo', 'batchFinish');
+    $canBatchClose  = common::hasPriv('todo', 'batchClose');
+
+    $canbatchAction = ($type != 'cycle' and ($canBatchEdit or $canBatchFinish or $canBatchClose or (common::hasPriv('todo', 'import2Today') and $importFuture)));
+    ?>
     <table class="table has-sort-head" id='todoList'>
       <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
           <th class="w-100px">
-            <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
+            <?php if($canbatchAction):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
@@ -79,7 +86,7 @@
         <?php foreach($todos as $todo):?>
         <tr>
           <td class="c-id">
-            <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
+            <?php if($canbatchAction):?>
             <div class="checkbox-primary">
               <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
               <label></label>
@@ -128,23 +135,22 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($type != 'cycle'):?>
-      <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
+      <?php if($canbatchAction):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
-      if(common::hasPriv('todo', 'batchEdit'))
+      if($canBatchEdit)
       {
           $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
           echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
       }
-      if(common::hasPriv('todo', 'batchFinish'))
+      if($canBatchFinish)
       {
           $actionLink = $this->createLink('todo', 'batchFinish');
           echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
-      if(common::hasPriv('todo', 'batchClose'))
+      if($canBatchClose)
       {
           $actionLink = $this->createLink('todo', 'batchClose');
           echo html::commonButton($lang->todo->close, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
@@ -160,7 +166,6 @@
       }
       ?>
       </div>
-      <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
