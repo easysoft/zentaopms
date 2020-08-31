@@ -54,7 +54,7 @@
               <td class="c-id"><?php printf('%03d', $issue->id);?></td>
               <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
               <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php common::printLink('issue', 'view', "id=$issue->id", $issue->title);?></td>
-              <td title="<?php echo $issue->severity;?>"><?php echo $issue->severity;?></td>
+              <td title="<?php echo $issue->severity;?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
               <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
               <td title="<?php echo zget($users, $issue->assignedTo);?>"><?php echo zget($users, $issue->assignedTo);?></td>
               <td title="<?php echo zget($users, $issue->owner);?>"><?php echo zget($users, $issue->owner);?></td>

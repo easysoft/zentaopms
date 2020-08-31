@@ -52,7 +52,7 @@ $lang->block->openedStories   = '创建的需求数';
 $lang->block->resolvedTasks   = '完成的任务数';
 $lang->block->resolvedBugs    = '解决Bug数';
 $lang->block->openedTestcases = '创建用例数';
-$lang->block->cmmi            = 'CMMI 3';
+$lang->block->waterfall       = 'CMMI 3';
 $lang->block->scrum           = 'Scrum+';
 $lang->block->allProject      = '所有' . $lang->projectCommon;
 $lang->block->doingProject    = '进行中的' . $lang->projectCommon;
@@ -62,6 +62,7 @@ $lang->block->consumedHours   = '已消耗';
 $lang->block->time            = '第';
 $lang->block->week            = '周';
 $lang->block->month           = '月';
+$lang->block->selectProduct   = '选择产品';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -92,48 +93,47 @@ $lang->block->spent              = '已花费';
 $lang->block->budget             = '预算';
 $lang->block->left               = '剩余';
 
+$lang->block->default['waterfall']['program']['1']['title']  = '项目周报';
+$lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
+$lang->block->default['waterfall']['program']['1']['source'] = 'program';
+$lang->block->default['waterfall']['program']['1']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['1']['title']  = '项目周报';
-$lang->block->default['cmmi']['program']['1']['block']  = 'cmmireport';
-$lang->block->default['cmmi']['program']['1']['source'] = 'program';
-$lang->block->default['cmmi']['program']['1']['grid']   = 8;
+$lang->block->default['waterfall']['program']['2']['title']  = '估算';
+$lang->block->default['waterfall']['program']['2']['block']  = 'waterfallestimate';
+$lang->block->default['waterfall']['program']['2']['source'] = 'program';
+$lang->block->default['waterfall']['program']['2']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['2']['title']  = '估算';
-$lang->block->default['cmmi']['program']['2']['block']  = 'cmmiestimate';
-$lang->block->default['cmmi']['program']['2']['source'] = 'program';
-$lang->block->default['cmmi']['program']['2']['grid']   = 4;
+$lang->block->default['waterfall']['program']['3']['title']  = '项目计划';
+$lang->block->default['waterfall']['program']['3']['block']  = 'waterfallgantt';
+$lang->block->default['waterfall']['program']['3']['source'] = 'program';
+$lang->block->default['waterfall']['program']['3']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['3']['title']  = '计划甘特图';
-$lang->block->default['cmmi']['program']['3']['block']  = 'cmmigantt';
-$lang->block->default['cmmi']['program']['3']['source'] = 'program';
-$lang->block->default['cmmi']['program']['3']['grid']   = 8;
+$lang->block->default['waterfall']['program']['4']['title']  = '到目前为止项目进展趋势图';
+$lang->block->default['waterfall']['program']['4']['block']  = 'waterfallprogress';
+$lang->block->default['waterfall']['program']['4']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['4']['title']  = '到目前为止项目进展趋势图';
-$lang->block->default['cmmi']['program']['4']['block']  = 'cmmiprogress';
-$lang->block->default['cmmi']['program']['4']['grid']   = 4;
+$lang->block->default['waterfall']['program']['5']['title']  = '项目问题';
+$lang->block->default['waterfall']['program']['5']['block']  = 'waterfallissue';
+$lang->block->default['waterfall']['program']['5']['source'] = 'program';
+$lang->block->default['waterfall']['program']['5']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['5']['title']  = '项目问题';
-$lang->block->default['cmmi']['program']['5']['block']  = 'cmmiissue';
-$lang->block->default['cmmi']['program']['5']['source'] = 'program';
-$lang->block->default['cmmi']['program']['5']['grid']   = 8;
+$lang->block->default['waterfall']['program']['5']['params']['type']    = 'all';
+$lang->block->default['waterfall']['program']['5']['params']['num']     = '15';
+$lang->block->default['waterfall']['program']['5']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['cmmi']['program']['5']['params']['type']    = 'all';
-$lang->block->default['cmmi']['program']['5']['params']['num']     = '15';
-$lang->block->default['cmmi']['program']['5']['params']['orderBy'] = 'id_desc';
+$lang->block->default['waterfall']['program']['6']['title']  = '最新动态';
+$lang->block->default['waterfall']['program']['6']['block']  = 'scrumdynamic';
+$lang->block->default['waterfall']['program']['6']['grid']   = 4;
+$lang->block->default['waterfall']['program']['6']['source'] = 'program';
 
-$lang->block->default['cmmi']['program']['6']['title']  = '最新动态';
-$lang->block->default['cmmi']['program']['6']['block']  = 'scrumdynamic';
-$lang->block->default['cmmi']['program']['6']['grid']   = 4;
-$lang->block->default['cmmi']['program']['6']['source'] = 'program';
+$lang->block->default['waterfall']['program']['7']['title']  = '项目风险';
+$lang->block->default['waterfall']['program']['7']['block']  = 'waterfallrisk';
+$lang->block->default['waterfall']['program']['7']['source'] = 'program';
+$lang->block->default['waterfall']['program']['7']['grid']   = 8;
 
-$lang->block->default['cmmi']['program']['7']['title']  = '项目风险';
-$lang->block->default['cmmi']['program']['7']['block']  = 'cmmirisk';
-$lang->block->default['cmmi']['program']['7']['source'] = 'program';
-$lang->block->default['cmmi']['program']['7']['grid']   = 8;
-
-$lang->block->default['cmmi']['program']['7']['params']['type']    = 'all';
-$lang->block->default['cmmi']['program']['7']['params']['num']     = '15';
-$lang->block->default['cmmi']['program']['7']['params']['orderBy'] = 'id_desc';
+$lang->block->default['waterfall']['program']['7']['params']['type']    = 'all';
+$lang->block->default['waterfall']['program']['7']['params']['num']     = '15';
+$lang->block->default['waterfall']['program']['7']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['scrum']['program']['1']['title'] =  '项目整体情况';
 $lang->block->default['scrum']['program']['1']['block'] = 'scrumoverall';
@@ -346,14 +346,14 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = $lang-
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
 
-$lang->block->modules['cmmi']['index'] = new stdclass();
-$lang->block->modules['cmmi']['index']->availableBlocks = new stdclass();
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmireport    = '项目周报';
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmiestimate  = '估算';
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmigantt     = '计划甘特图';
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmiprogress  = '到目前为止项目进展趋势图';
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmiissue     = '项目问题';
-$lang->block->modules['cmmi']['index']->availableBlocks->cmmirisk      = '项目风险';
+$lang->block->modules['waterfall']['index'] = new stdclass();
+$lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport    = '项目周报';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate  = '估算';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt     = '计划甘特图';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress  = '到目前为止项目进展趋势图';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue     = '项目问题';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk      = '项目风险';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
@@ -479,18 +479,18 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentprogram = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->statistic     = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->program       = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->cmmireport    = 'weekly|index|';
-$lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|index|';
-$lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
-$lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
-$lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
-$lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
-$lang->block->modules['program']->moreLinkList->scrumproject  = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumdynamic  = 'company|dynamic|';
+$lang->block->modules['program']->moreLinkList->recentprogram     = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->statistic         = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->program           = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->waterfallreport   = 'weekly|index|';
+$lang->block->modules['program']->moreLinkList->waterfallestimate = 'workestimation|index|';
+$lang->block->modules['program']->moreLinkList->waterfallissue    = 'issue|browse|';
+$lang->block->modules['program']->moreLinkList->waterfallrisk     = 'risk|browse|';
+$lang->block->modules['program']->moreLinkList->scrumlist         = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumtest         = 'testtask|browse|';
+$lang->block->modules['program']->moreLinkList->scrumproduct      = 'product|all|';
+$lang->block->modules['program']->moreLinkList->scrumproject      = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumdynamic      = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';

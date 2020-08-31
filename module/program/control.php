@@ -91,7 +91,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function create($template = 'cmmi', $parentProgramID = 0, $copyProgramID = '')
+    public function create($template = 'waterfall', $parentProgramID = 0, $copyProgramID = '')
     {
         if($_POST)
         {
@@ -723,7 +723,7 @@ class program extends control
         $programProjects = $this->project->getPairs('', $this->session->program);
         $programProject  = key($programProjects);
 
-        if($program->template == 'cmmi')
+        if($program->template == 'waterfall')
         {
             $link = $this->createLink('programplan', 'browse', 'programID=' . $programID);
         }

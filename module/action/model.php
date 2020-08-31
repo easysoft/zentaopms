@@ -306,7 +306,7 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            /* Code for cmmi. */
+            /* Code for waterfall. */
             elseif($actionName == 'createrequirements')
             {    
                 $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');

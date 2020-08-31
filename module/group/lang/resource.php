@@ -16,14 +16,10 @@ $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
 
 $lang->moduleOrder[11]  = 'program';
-$lang->moduleOrder[12]  = 'design';
-$lang->moduleOrder[13]  = 'programplan';
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
-$lang->moduleOrder[31]  = 'issue';
-$lang->moduleOrder[32]  = 'risk';
 
 $lang->moduleOrder[35]  = 'project';
 $lang->moduleOrder[40]  = 'task';
@@ -39,20 +35,14 @@ $lang->moduleOrder[80]  = 'caselib';
 
 $lang->moduleOrder[85]  = 'doc';
 $lang->moduleOrder[90]  = 'report';
-$lang->moduleOrder[91]  = 'workestimation';
-$lang->moduleOrder[92]  = 'durationestimation';
-$lang->moduleOrder[93]  = 'budget';
 
 $lang->moduleOrder[95]  = 'company';
-$lang->moduleOrder[97]  = 'stage';
 $lang->moduleOrder[100] = 'dept';
 $lang->moduleOrder[105] = 'group';
 $lang->moduleOrder[110] = 'user';
 
 $lang->moduleOrder[115] = 'admin';
 $lang->moduleOrder[120] = 'extension';
-$lang->moduleOrder[121] = 'subject';
-$lang->moduleOrder[122] = 'holiday';
 $lang->moduleOrder[125] = 'custom';
 $lang->moduleOrder[140] = 'action';
 
@@ -68,6 +58,19 @@ $lang->moduleOrder[185] = 'backup';
 $lang->moduleOrder[190] = 'cron';
 $lang->moduleOrder[195] = 'dev';
 $lang->moduleOrder[200] = 'message';
+
+$lang->moduleOrder[205] = 'design';
+$lang->moduleOrder[210] = 'programplan';
+$lang->moduleOrder[215] = 'issue';
+$lang->moduleOrder[220] = 'risk';
+$lang->moduleOrder[225] = 'stage';
+
+$lang->moduleOrder[230] = 'budget';
+$lang->moduleOrder[235] = 'workestimation';
+$lang->moduleOrder[240] = 'durationestimation';
+
+$lang->moduleOrder[245] = 'subject';
+$lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
 
@@ -982,18 +985,18 @@ $lang->holiday->methodOrder[20] = 'delete';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index     = 'index';
-$lang->resource->custom->set       = 'set';
-$lang->resource->custom->restore   = 'restore';
-$lang->resource->custom->flow      = 'flow';
-$lang->resource->custom->working   = 'working';
-$lang->resource->custom->setPublic = 'setPublic';
-$lang->resource->custom->timezone  = 'timezone';
-$lang->resource->custom->estimate  = 'estimate';
-$lang->resource->custom->plan      = 'plan';
-$lang->resource->custom->concept   = 'concept';
-$lang->resource->custom->setcmmi   = 'setcmmi';
-$lang->resource->custom->setscrum  = 'setscrum';
+$lang->resource->custom->index        = 'index';
+$lang->resource->custom->set          = 'set';
+$lang->resource->custom->restore      = 'restore';
+$lang->resource->custom->flow         = 'flow';
+$lang->resource->custom->working      = 'working';
+$lang->resource->custom->setPublic    = 'setPublic';
+$lang->resource->custom->timezone     = 'timezone';
+$lang->resource->custom->estimate     = 'estimate';
+$lang->resource->custom->plan         = 'plan';
+$lang->resource->custom->concept      = 'concept';
+$lang->resource->custom->setWaterfall = 'setWaterfall';
+$lang->resource->custom->setscrum     = 'setscrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1005,7 +1008,7 @@ $lang->custom->methodOrder[35] = 'timezone';
 $lang->custom->methodOrder[40] = 'estimate';
 $lang->custom->methodOrder[45] = 'plan';
 $lang->custom->methodOrder[50] = 'concept';
-$lang->custom->methodOrder[55] = 'setcmmi';
+$lang->custom->methodOrder[55] = 'setWaterfall';
 $lang->custom->methodOrder[60] = 'setscrum';
 
 $lang->resource->datatable = new stdclass();

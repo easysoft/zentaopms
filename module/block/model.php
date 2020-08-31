@@ -59,7 +59,7 @@ class blockModel extends model
             unset($_SESSION['album'][$uid]);
         }
 
-        if(strpos($data->block, 'cmmi')  !== false) $data->type = 'cmmi';
+        if(strpos($data->block, 'waterfall')  !== false) $data->type = 'waterfall';
         if(strpos($data->block, 'scrum') !== false) $data->type = 'scrum';
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
@@ -628,12 +628,12 @@ class blockModel extends model
     }
 
     /**
-     * Get cmmi program report pararms.
+     * Get waterfall program report pararms.
      *
      * @access public
      * @return string
      */
-    public function getCmmireportParams()
+    public function getWaterfallreportParams()
     {
         return false;
     }
@@ -644,7 +644,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getCmmiestimateParams()
+    public function getWaterfallestimateParams()
     {
         return false;
     }
@@ -655,7 +655,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getCmmiganttParams()
+    public function getWaterfallganttParams()
     {
         return false;
     }
@@ -666,19 +666,19 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getCmmiprogressParams()
+    public function getWaterfallprogressParams()
     {
         return false;
     }
 
     /** 
-     * Get cmmi issue params.
+     * Get waterfall issue params.
      *
      * @param  string $module
      * @access public
      * @return void
      */
-    public function getCmmiissueParams($module = '') 
+    public function getWaterfallissueParams($module = '') 
     {
         $this->app->loadLang('issue');
         $params = new stdclass();
@@ -698,13 +698,13 @@ class blockModel extends model
     }
 
     /** 
-     * Get cmmi risk params.
+     * Get waterfall risk params.
      *
      * @param  string $module▫
      * @access public
      * @return void
      */
-    public function getCmmiriskParams($module = '') 
+    public function getWaterfallriskParams($module = '') 
     {
         $this->app->loadLang('risk');
         $params = new stdclass();

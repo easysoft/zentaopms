@@ -159,7 +159,7 @@ if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
     $lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
 	$lang->system->menu->custom   = array('link' => 'Custom|custom|concept|');
     
-    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+    $lang->system->subMenu->setmodel->waterfall  ='waterfall|custom|setwaterfall|';
     $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|settips|';
     unset($lang->system->dividerMenu);
 }

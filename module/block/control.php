@@ -206,16 +206,14 @@ class block extends control
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
+
+        $common = 'common';
         if($module == 'program')
         {
-            $program = $this->loadModel('project')->getByID($this->app->session->program);
+            $program = $this->loadModel('project')->getByID($this->session->program);
             $common  = $program->template . 'common';
-            $inited  = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
         }
-        else
-        {
-            $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
-        }
+        $inited = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
 
         /* Init block when vist index first. */
         if((empty($blocks) and !$inited and !defined('TUTORIAL')))
@@ -725,6 +723,7 @@ class block extends control
     public function printProgramBlock()
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('task');
 
         $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->num);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
@@ -818,7 +817,7 @@ class block extends control
                 $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
                 $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
             }
-            elseif($program->template == 'cmmi')
+            elseif($program->template == 'waterfall')
             {
                 $begin   = $program->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
@@ -1102,12 +1101,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi report block.
+     * Print waterfall report block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiReportBlock()
+    public function printWaterfallReportBlock()
     {
         $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
@@ -1135,12 +1134,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi gantt block.
+     * Print waterfall gantt block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiGanttBlock()
+    public function printWaterfallGanttBlock()
     {
         $products  = $this->loadModel('product')->getPairs('', $this->session->program);
         $productID = isset($this->session->product) ? 0 : $this->session->product;
@@ -1152,12 +1151,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi issue block.
+     * Print waterfall issue block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiIssueBlock()
+    public function printWaterfallIssueBlock()
     {
         $uri = $this->app->getURI(true);
         $this->session->set('issueList',  $uri);
@@ -1167,12 +1166,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi risk block.
+     * Print waterfall risk block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiRiskBlock()
+    public function printWaterfallRiskBlock()
     {
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
@@ -1181,12 +1180,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi estimate block.
+     * Print waterfall estimate block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiEstimateBlock()
+    public function printWaterfallEstimateBlock()
     {
         $this->app->loadLang('durationestimation');
         $programID = $this->session->program;
@@ -1201,12 +1200,12 @@ class block extends control
     }
 
     /**
-     * Print cmmi progress block.
+     * Print waterfall progress block.
      *
      * @access public
      * @return void
      */
-    public function printCmmiProgressBlock()
+    public function printWaterfallProgressBlock()
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');

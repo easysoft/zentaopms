@@ -1,7 +1,8 @@
 <div class="panel-body">
-  <div id='cmmiGantt'>
+  <div id='waterfallGantt'>
     <?php if(count($products) >= 2): ?>
-    <?php echo html::select('cmmiGanttProductID', $products, $productID, "class='form-control chosen'"); ?>
+    <?php echo html::select('waterfallGanttProductID', $products, $productID, "class='form-control chosen'");?>
+    <span id="ganttProductTips"><i>* </i><?php echo $lang->block->selectProduct;?></span>
     <?php endif;?>
     <?php if(empty($plans['data'])): ?>
     <div class='empty-tip'><?php echo $lang->programplan->noData;?></div>
@@ -10,19 +11,22 @@
       <div class='gantt-plans pull-left'></div>
       <div class='gantt-container scrollbar-hover'>
         <div class='gantt-canvas'>
-            <div class='gantt-today'><div><?php echo $lang->programplan->today; ?></div></div>
+          <div class='gantt-today'><div><?php echo $lang->programplan->today; ?></div></div>
         </div>
       </div>
     </div>
     <?php endif;?>
   </div>
   <style>
-  .block-cmmigantt > .panel-body {overflow: visible!important}
-  #cmmiGantt {position: relative}
-  #cmmiGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important}
-  [lang="zh-cn"] #cmmiGanttProductID_chosen {left: 85px}
+  #ganttProductTips{position: absolute; top: -32px; left: 240px; opacity: 0.5;}
+  #ganttProductTips i{vertical-align: middle;}
+  .block-waterfallgantt > .panel-body {overflow: visible!important}
+  #waterfallGantt {position: relative}
+  #waterfallGanttProductID_chosen {position: absolute; top: -39px; left: 120px; width: 150px!important}
+  [lang="zh-cn"] #waterfallGanttProductID_chosen {left: 85px}
   .gantt-plans {padding: 20px 0 22px; max-height: 380px; overflow: hidden;}
-  .gantt-plan {margin-top: 10px; line-height: 20px}
+  .gantt-plan {width: 70px; height: 50px; line-height: 50px}
+  .gantt-plan div {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
   .gantt-container {position: absolute; left: 100px; top: 0; right: 0; bottom: -10px; overflow: auto; padding-top: 20px; max-height: 380px;}
   .gantt-canvas {border: 1px solid #dddee4; border-style: solid dotted; position: relative}
   .gantt-row {height: 50px; position: relative; z-index: 1}
@@ -36,15 +40,15 @@
   .gantt-today > div {position: absolute; top: 0; left: 0; font-size: 12px; line-height: 14px; padding: 0 3px; background: #00da88; color: #fff; white-space: nowrap; z-index: 10;}
   </style>
   <script>
-  function initCmmiGanttBlock()
+  function initWaterfallGanttBlock()
   {
       /* Init product select control */
-      var $cmmiGanttProductID = $('#cmmiGanttProductID');
-      $cmmiGanttProductID.on('change', function()
+      var $waterfallGanttProductID = $('#waterfallGanttProductID');
+      $waterfallGanttProductID.on('change', function()
       {
-          $.get(createLink('product', 'ajaxSetState', 'productID=' + $cmmiGanttProductID.val()), function()
+          $.get(createLink('product', 'ajaxSetState', 'productID=' + $waterfallGanttProductID.val()), function()
           {
-              refreshBlock($cmmiGanttProductID.closest('.panel'));
+              refreshBlock($waterfallGanttProductID.closest('.panel'));
           });
       });
 
@@ -58,7 +62,7 @@
       var startDatetime = Number.MAX_SAFE_INTEGER;
       var endDatetime   = 0;
       var minTimeGap    = Number.MAX_SAFE_INTEGER;
-      var $gantt        = $('#cmmiGantt');
+      var $gantt        = $('#waterfallGantt');
       var ONE_DAY       = 24 * 3600 * 1000;
       var TIME_GAP_STEP = 7;
       var MIN_COL_WIDTH = 60;
@@ -108,8 +112,7 @@
       {
           plan.progress = !plan.tasks.length ? 0 : plan.progress / plan.tasks.length;
           var $plan = $('<div class="gantt-plan"></div>');
-          $plan.append('<div class="strong">' + plan.text + '</div>');
-          $plan.append('<div class="text-muted small"><?php echo $lang->programplan->planPercent?> ' + plan.percent + '%</div>');
+          $plan.append('<div class="strong" title="' + plan.text + '">' + plan.text + '</div>');
           $plans.append($plan);
 
           var $bar = $('<div class="gantt-bar"></div>');
@@ -197,6 +200,6 @@
       <?php endif;?>
   }
 
-  initCmmiGanttBlock();
+  initWaterfallGanttBlock();
   </script>
 </div>

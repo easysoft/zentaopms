@@ -71,8 +71,8 @@ $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
-$lang->program->templateList['scrum'] = "Scrum";
-$lang->program->templateList['cmmi']  = "瀑布";
+$lang->program->templateList['scrum']     = "Scrum";
+$lang->program->templateList['waterfall'] = "瀑布";
 
 $lang->program->categoryList['single']   = "单产品项目";
 $lang->program->categoryList['multiple'] = "多产品项目";
@@ -105,8 +105,8 @@ $lang->program->lastIteration      = '近期迭代';
 $lang->program->ongoingStage       = '进行中的阶段';
 $lang->program->scrum              = 'Scrum';
 $lang->program->scrumTitle         = '敏捷开发全流程项目管理';
-$lang->program->cmmi               = '瀑布';
-$lang->program->cmmiTitle          = '瀑布式项目管理';
+$lang->program->waterfall          = '瀑布';
+$lang->program->waterfallTitle     = '瀑布式项目管理';
 $lang->program->cannotCreateChild  = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->program->hasChildren        = '该项目有子项目存在，不能删除。';
 $lang->program->confirmDelete      = "您确定删除项目[%s]吗？";

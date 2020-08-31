@@ -166,7 +166,7 @@ class router extends baseRouter
             if($this->session->program)
             {
                 $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
-                if($template->template == 'cmmi') $projectCommon = 2;
+                if($template->template == 'waterfall') $projectCommon = 2;
             }
 
             $config->storyCommon = $storyCommon;

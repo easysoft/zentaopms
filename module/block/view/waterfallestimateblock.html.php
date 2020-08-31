@@ -1,4 +1,4 @@
-<style> .block-cmmiestimate table{margin-bottom: 15px} </style>
+<style> .block-waterfallestimate table{margin-bottom: 15px} </style>
 <table class='table table-data'>
   <tr>
     <th class='w-100px'><?php echo $lang->durationestimation->people;?></th>

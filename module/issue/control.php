@@ -4,9 +4,9 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yong Lei <leiyong@easycorp.ltd>
  * @package     issue
- * @version     $Id: control.php 5145 2013-07-15 06:47:26Z chencongzhi520@gmail.com $
+ * @version     $Id$
  * @link        http://www.zentao.net
  */
 class issue extends control
@@ -14,7 +14,7 @@ class issue extends control
     /**
      * Get issue list data.
      *
-     * @param  string $browseType
+     * @param  string $browseType bySearch|open|assignTo|closed|suspended|canceled
      * @param  int param
      * @param  string orderBy
      * @param  int recTotal
@@ -43,14 +43,14 @@ class issue extends control
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
-        $this->view->issueList  = $this->issue->getIssueList($this->session->program, $browseType, $queryID, $orderBy, $pager);
+        $this->view->issueList  = $this->issue->getList($this->session->program, $browseType, $queryID, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
 
         $this->display();
     }
 
     /**
-     * Create a issue.
+     * Create an issue.
      *
      * @access public
      * @return void
@@ -251,61 +251,61 @@ class issue extends control
     }
 
     /**
-     * Resolve a issue.
+     * Resolve an issue.
      *
-     * @param  int    $issue
+     * @param  int    $issueID
      * @access public
      * @return void
      */
-    public function resolve($issue)
+    public function resolve($issueID)
     {
         if($_POST)
         {
-            $this->issue->resolve($issue);
+            $this->issue->resolve($issueID);
             $resolution = $this->post->issue['resolution'];
 
             $objectID = '';
             if($resolution == 'totask')
             {
-                $objectID   = $this->issue->createTask($issue);
+                $objectID   = $this->issue->createTask($issueID);
                 $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('task', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
+                $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
 
             if($resolution == 'tostory')
             {
-                $objectID   = $this->issue->createStory($issue);
+                $objectID   = $this->issue->createStory($issueID);
                 $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('story', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
+                $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
             if($resolution == 'tobug')
             {
-                $objectID   = $this->issue->createBug($issue);
+                $objectID   = $this->issue->createBug($issueID);
                 $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('bug', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
+                $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
 
             if($resolution == 'torisk')
             {
-                $objectID   = $this->issue->createRisk($issue);
+                $objectID   = $this->issue->createRisk($issueID);
                 $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
                 $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
-                $this->loadModel('action')->create('issue', $issue, 'Resolved', $comment);
+                $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
 
-            $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issue)->exec();
+            $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issueID)->exec();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title = $this->lang->issue->resolve;
-        $this->view->issue = $this->issue->getByID($issue);
+        $this->view->issue = $this->issue->getByID($issueID);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
         $this->prepairParams($this->view->issue);
@@ -313,7 +313,7 @@ class issue extends control
     }
 
     /**
-     * prepairParams
+     * Build page parameters.
      *
      * @param  int    $issue
      * @access public
@@ -401,7 +401,7 @@ class issue extends control
     }
 
     /**
-     * commonAction
+     * Common actions of issue module.
      *
      * @param  int    $issueID
      * @param  int    $object

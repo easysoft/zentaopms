@@ -23,9 +23,9 @@
       </div>
       <div class='col-xs-6'>
         <div class='program-type text-center'>
-          <img class='program-type-img' data-type='cmmi' src='<?php echo $config->webRoot . 'theme/default/images/main/cmmi.png'?>'>
-          <h3><?php echo $lang->program->cmmi; ?></h3>
-          <p><?php echo $lang->program->cmmiTitle; ?></p>
+          <img class='program-type-img' data-type='waterfall' src='<?php echo $config->webRoot . 'theme/default/images/main/waterfall.png'?>'>
+          <h3><?php echo $lang->program->waterfall; ?></h3>
+          <p><?php echo $lang->program->waterfallTitle; ?></p>
         </div>
       </div>
       </div>

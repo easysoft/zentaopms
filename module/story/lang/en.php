@@ -129,6 +129,7 @@ $lang->story->allStories     = 'All Stories';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 $lang->story->released       = 'Released Stories';
+$lang->story->storyChanged   = 'Requirement Changed';
 $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';
