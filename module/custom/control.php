@@ -444,7 +444,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function setwaterfall()
+    public function setWaterfall()
     {   
         setCookie("systemModel", 'waterfall', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
