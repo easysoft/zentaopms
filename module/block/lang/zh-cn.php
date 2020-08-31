@@ -36,7 +36,7 @@ $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
-$lang->block->contribute   = '个人贡献';
+$lang->block->contribute   = '我的贡献';
 
 $lang->block->leftToday       = '今天剩余工作总计';
 $lang->block->myTask          = '我的任务';
@@ -62,6 +62,7 @@ $lang->block->consumedHours   = '已消耗';
 $lang->block->time            = '第';
 $lang->block->week            = '周';
 $lang->block->month           = '月';
+$lang->block->selectProduct   = '选择产品';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -103,7 +104,7 @@ $lang->block->default['cmmi']['program']['2']['block']  = 'cmmiestimate';
 $lang->block->default['cmmi']['program']['2']['source'] = 'program';
 $lang->block->default['cmmi']['program']['2']['grid']   = 4;
 
-$lang->block->default['cmmi']['program']['3']['title']  = '计划甘特图';
+$lang->block->default['cmmi']['program']['3']['title']  = '项目计划';
 $lang->block->default['cmmi']['program']['3']['block']  = 'cmmigantt';
 $lang->block->default['cmmi']['program']['3']['source'] = 'program';
 $lang->block->default['cmmi']['program']['3']['grid']   = 8;
@@ -276,7 +277,7 @@ $lang->block->default['full']['my']['4']['block']  = 'statistic';
 $lang->block->default['full']['my']['4']['source'] = 'program';
 $lang->block->default['full']['my']['4']['grid']   = 8;
 
-$lang->block->default['full']['my']['5']['title']  = '个人贡献';
+$lang->block->default['full']['my']['5']['title']  = '我的贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
 $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;

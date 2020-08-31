@@ -4,41 +4,15 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yong Lei <leiyong@easycorp.ltd>
  * @package     issue
- * @version     $Id: model.php 5145 2013-07-15 06:47:26Z chencongzhi520@gmail.com $
+ * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php
 class issueModel extends model
 {
-    /**
-     * Create an issue.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', $now)
-            ->add('program', $this->session->program)
-            ->remove('labels,files')
-            ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
-            ->addIF($this->post->assignedTo, 'assignedDate', $now)
-            ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
-            ->get();
-
-        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFieldsm, 'notempty')->exec();
-        $issueID = $this->dao->lastInsertID();
-        $this->loadModel('file')->saveUpload('issue', $issueID);
-
-        return $issueID;
-    }
-
     /**
      * Get stakeholder issue list data.
      * @param  string $owner
@@ -73,16 +47,16 @@ class issueModel extends model
     }
 
     /**
-     * Get issue list.
+     * Get issue list data.
      *
-     * @param  string    $browseType
+     * @param  string    $browseType bySearch|open|assignTo|closed|suspended|canceled
      * @param  int       $queryID
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return object
      */
-    public function getIssueList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $issueQuery = '';
         if($browseType == 'bysearch')
@@ -114,9 +88,9 @@ class issueModel extends model
     }
 
     /**
-     * getBlockIssues
+     * Get the issue in the block.
      *
-     * @param  string $browseType
+     * @param  string $browseType open|assignto|closed|suspended|canceled
      * @param  int    $limit
      * @param  string $orderBy
      * @access public
@@ -131,7 +105,7 @@ class issueModel extends model
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
             ->beginIF($browseType == 'suspended')->andWhere('status')->eq('suspended')->fi()
-            ->beginIF($browseType == 'cancelled')->andWhere('status')->eq('canceled')->fi()
+            ->beginIF($browseType == 'canceled')->andWhere('status')->eq('canceled')->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
@@ -148,6 +122,32 @@ class issueModel extends model
     public function getActivityPairs()
     {
         return $this->dao->select('id,name')->from(TABLE_ACTIVITY)->where('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
+    }
+
+    /**
+     * Create an issue.
+     *
+     * @access public
+     * @return bool
+     */
+    public function create()
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', $now)
+            ->add('program', $this->session->program)
+            ->remove('labels,files')
+            ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
+            ->addIF($this->post->assignedTo, 'assignedDate', $now)
+            ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
+            ->get();
+
+        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
+        $issueID = $this->dao->lastInsertID();
+        $this->loadModel('file')->saveUpload('issue', $issueID);
+
+        return $issueID;
     }
 
     /**
@@ -172,7 +172,7 @@ class issueModel extends model
 
         $this->dao->update(TABLE_ISSUE)->data($data)
             ->where('id')->eq($issueID)
-            ->batchCreate($this->config->issue->edit->requiredFields, 'notempty')
+            ->batchCheck($this->config->issue->edit->requiredFields, 'notempty')
             ->exec();
 
         return common::createChanges($oldIssue, $data);
@@ -306,7 +306,7 @@ class issueModel extends model
     }
 
     /**
-     * Create a task.
+     * Create an task.
      *
      * @access public
      * @return object

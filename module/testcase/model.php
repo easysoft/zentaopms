@@ -506,7 +506,7 @@ class testcaseModel extends model
      * @param  string $account
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto  no|unit
+     * @param  string $auto  no|unit|skip
      * @access public
      * @return array
      */
@@ -520,7 +520,7 @@ class testcaseModel extends model
             ->andWhere('t3.status')->ne('done')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -531,7 +531,7 @@ class testcaseModel extends model
      * @param  string $account
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  string $auto   no|unit|skip
      * @access public
      * @return array
      */
@@ -540,7 +540,7 @@ class testcaseModel extends model
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
             ->andWhere('product')->ne(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()
+            ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

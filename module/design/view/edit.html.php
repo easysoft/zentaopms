@@ -62,12 +62,12 @@
                     <table class='table'>
                       <thead>
                         <tr class='text-center'>
-                          <th class='c-id'><?php echo $lang->task->id;?></th>
-                          <th class='text-left'><?php echo $lang->task->name;?></th>
-                          <th class='w-100px'><?php echo $lang->task->assignedTo;?></th>
+                          <th class='c-id'>    <?php echo $lang->task->id;?></th>
+                          <th class='c-name'>  <?php echo $lang->task->name;?></th>
+                          <th class='w-100px'> <?php echo $lang->task->assignedTo;?></th>
                           <th class='c-status'><?php echo $lang->task->status;?></th>
-                          <th class='w-100px'><?php echo $lang->task->consumed;?></th>
-                          <th class='w-90px'><?php echo $lang->task->left;?></th>
+                          <th class='w-100px'> <?php echo $lang->task->consumed;?></th>
+                          <th class='w-90px'>  <?php echo $lang->task->left;?></th>
                         </tr>
                       </thead>
                       <tbody>
