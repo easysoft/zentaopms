@@ -42,30 +42,30 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>' class="text-ellipsis"><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php if($group->role != 'pgmadmin'):?>
+          <?php $isPgmAdmin = $group->role == 'pgmadmin';?>
+          <?php $disabled   = $isPgmAdmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'iframe', true);?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "iframe $disabled", true);?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php if($isPgmAdmin):?>
+          <?php common::printIcon('group', 'managePgmAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
+          <?php else:?>
+          <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
+          <?php endif;?>
+          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
+          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php
-          if(common::hasPriv('group', 'delete'))
+          if(!$isPgmAdmin && common::hasPriv('group', 'delete'))
           {
               $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
               echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
           }
+          elseif($isPgmAdmin)
+          {
+            echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+          }
           ?>
-          <?php else:?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'disabled');?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
-          <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('group', 'managePgmAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
-          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
-          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
-          <?php echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";?>
-          <?php endif;?>
         </td>
       </tr>
       <?php endforeach;?>
