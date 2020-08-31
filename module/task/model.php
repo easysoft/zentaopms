@@ -2479,7 +2479,7 @@ class taskModel extends model
         $children = $this->dao->select('id,parent,project')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
         $datas    = $this->processData4Report($tasks, $children, 'project');
 
-        $projects = $this->loadModel('project')->getPairs('all');
+        $projects = $this->loadModel('project')->getPairs('all', $this->session->program);
         foreach($datas as $projectID => $data)
         {
             $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;

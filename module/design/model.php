@@ -216,7 +216,7 @@ class designModel extends model
     {
         $programID = $this->session->program;
         $program   = $this->loadModel('project')->getByID($programID);
-        $products  = $this->loadModel('product')->getPairs($programID);
+        $products  = $this->loadModel('product')->getPairs('', $programID);
         $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
 
         $productID = $this->loadModel('product')->saveState($productID, $products);
@@ -286,6 +286,7 @@ class designModel extends model
      * Get design list.
      *
      * @param  int    $productID
+     * @param  int    $programID
      * @param  string $type
      * @param  int    $param
      * @param  string $orderBy
@@ -293,17 +294,17 @@ class designModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($programID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($type == 'bySearch')
         {
-            $designs = $this->getBySearch($param, $orderBy, $pager);
+            $designs = $this->getBySearch($programID, $param, $orderBy, $pager);
         }
         else
         {
             $designs = $this->dao->select('*')->from(TABLE_DESIGN)
                 ->where('deleted')->eq(0)
-                ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
                 ->andWhere('product')->eq($productID)
                 ->orderBy($orderBy)
@@ -324,13 +325,14 @@ class designModel extends model
     /**
      * Get designs by search.
      *
+     * @param  int    $programID
      * @param  string $queryID
      * @param  string $orderBy
      * @param  int    $pager
      * @access public
      * @return object
      */
-    public function getBySearch($queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getBySearch($programID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($queryID)
         {
@@ -355,7 +357,7 @@ class designModel extends model
         $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('program')->eq($this->session->program)
+            ->andWhere('program')->eq($programID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

@@ -51,15 +51,16 @@ class budgetModel extends model
     /**
      * Get budget list.
      *
+     * @param  int     $programID
      * @param  varchar $orderBy
      * @param  pager   $object
      * @access public
      * @return object
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($programID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('program')->eq($this->session->program)
+            ->where('program')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -69,13 +70,14 @@ class budgetModel extends model
     /**
      * Get stages.
      *
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getStages()
+    public function getStages($programID)
     {
         return $this->dao->select('stage')->from(TABLE_BUDGET)
-            ->where('program')->eq($this->session->program)
+            ->where('program')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('stage_asc')
             ->fetchPairs();
@@ -84,13 +86,14 @@ class budgetModel extends model
     /**
      * Get subjects.
      *
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getSubjects()
+    public function getSubjects($programID)
     {
         return $this->dao->select('subject')->from(TABLE_BUDGET)
-            ->where('program')->eq($this->session->program)
+            ->where('program')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('subject_asc')
             ->fetchPairs();
@@ -104,7 +107,7 @@ class budgetModel extends model
      */
     public function getSubjectStructure()
     {
-        $subjects  = $this->getSubjects();
+        $subjects  = $this->getSubjects($this->session->program);
 
         $structure = array();
         foreach($subjects as $subjectID)
@@ -126,13 +129,14 @@ class budgetModel extends model
     /**
      * Get summary.
      *
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getSummary()
+    public function getSummary($programID)
     {
         $budgets = $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('program')->eq($this->session->program)
+            ->where('program')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
 

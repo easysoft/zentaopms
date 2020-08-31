@@ -134,16 +134,17 @@ class repoModel extends model
     /**
      * Get repo list.
      *
+     * @param  int    $programID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($programID, $orderBy = 'id_desc', $pager = null)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->andWhere("CONCAT(',', program, ',')")->like("%,{$this->session->program},%")
+            ->andWhere("CONCAT(',', program, ',')")->like("%,{$programID},%")
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
 
@@ -270,14 +271,15 @@ class repoModel extends model
     /**
      * Get repo pairs.
      * 
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getRepoPairs()
+    public function getRepoPairs($programID)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(',', program, ',')")->like("%,{$this->session->program},%")
+            ->andWhere("CONCAT(',', program, ',')")->like("%,{$programID},%")
             ->fetchAll();
 
         $repoPairs = array();

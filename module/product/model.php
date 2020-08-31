@@ -254,17 +254,18 @@ class productModel extends model
     /**
      * Get products.
      *
+     * @param  int    $programID
      * @param  string $status
      * @param  int    $limit
      * @param  int    $line
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0, $line = 0)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
@@ -285,9 +286,10 @@ class productModel extends model
      * Get product pairs.
      *
      * @param  string $mode
+     * @param  string $programID
      * @return array
      */
-    public function getPairs($mode = '')
+    public function getPairs($mode = '', $programID = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
@@ -295,7 +297,7 @@ class productModel extends model
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy($orderBy)
@@ -357,7 +359,7 @@ class productModel extends model
      */
     public function getOrderedProducts($status, $num = 0)
     {
-        $products = $this->getList($status);
+        $products = $this->getList($this->session->program, $status);
         if(empty($products)) return $products;
 
         $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
@@ -903,7 +905,7 @@ class productModel extends model
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($status, $limit = 0, $line);
+        $products = $this->getList($this->session->program, $status, $limit = 0, $line);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in(array_keys($products))
             ->orderBy($orderBy)

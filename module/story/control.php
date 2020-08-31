@@ -337,7 +337,7 @@ class story extends control
 
         /* Set products and module. */
         $product  = $this->product->getById($productID);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', $this->session->program);
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
@@ -425,7 +425,7 @@ class story extends control
         /* Get datas. */
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', $this->session->program);
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
 
         /* Set menu. */
@@ -531,7 +531,7 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID, $branch);
+            $this->product->setMenu($this->product->getPairs('nodeleted', $this->session->program), $productID, $branch);
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
@@ -553,7 +553,7 @@ class story extends control
         elseif($projectID)
         {
             $this->lang->story->menu = $this->lang->project->menu;
-            $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
+            $this->project->setMenu($this->project->getPairs('nodeleted', $this->session->program), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
 
@@ -732,7 +732,7 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        $this->product->setMenu($this->product->getPairs('', $this->session->program), $product->id, $story->branch);
 
         if($from == 'project')
         {
@@ -759,7 +759,7 @@ class story extends control
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $users;
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->projects    = $this->loadModel('project')->getPairs('nocode');
+        $this->view->projects    = $this->loadModel('project')->getPairs('nocode', $this->session->program);
         $this->view->program     = $this->project->getByID($story->program);
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;
@@ -836,7 +836,7 @@ class story extends control
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        $this->product->setMenu($this->product->getPairs('', $this->session->program), $product->id, $story->branch);
 
         /* Set the review result options. */
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
@@ -919,7 +919,7 @@ class story extends control
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        $this->product->setMenu($this->product->getPairs('', $this->session->program), $product->id, $story->branch);
 
         /* Set the closed reason options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
@@ -991,7 +991,7 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+            $this->product->setMenu($this->product->getPairs('nodeleted', $this->session->program), $productID);
             $product = $this->product->getByID($productID);
             $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
             $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
@@ -1001,7 +1001,7 @@ class story extends control
         {
             $this->lang->story->menu      = $this->lang->project->menu;
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
+            $this->project->setMenu($this->project->getPairs('nodeleted', $this->session->program), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $project = $this->project->getByID($projectID);
             $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
@@ -1153,7 +1153,7 @@ class story extends control
 
         /* Get story and product. */
         $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', $this->session->program);
 
         /* Set menu. */
         $this->product->setMenu($products, $story->product, $story->branch);
@@ -1197,7 +1197,7 @@ class story extends control
      */
     public function track($productID)
     {   
-        $products  = $this->loadModel('product')->getPairs($this->session->program);
+        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
         $productID = $this->product->saveState($productID, $products);
         $this->product->setMenu($products, $productID, 0, 0, '');
         $tracks = $this->story->getTracks($productID);
@@ -1268,7 +1268,7 @@ class story extends control
     public function zeroCase($productID, $orderBy = 'id_desc')
     {
         $this->session->set('productList', $this->app->getURI(true));
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('', $this->session->program);
 
         $this->lang->set('menugroup.story', 'qa');
         $this->lang->story->menu      = $this->lang->testcase->menu;
@@ -1322,7 +1322,7 @@ class story extends control
 
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', $this->session->program);
         $queryID  = 0;
 
         /* Build search form. */
@@ -1524,7 +1524,7 @@ class story extends control
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
-        $this->products = $this->product->getPairs();
+        $this->products = $this->product->getPairs('', $this->session->program);
         $this->product->setMenu($this->products, $productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
@@ -1613,7 +1613,7 @@ class story extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode');
+            $products = $this->loadModel('product')->getPairs('nocode', $this->session->program);
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();

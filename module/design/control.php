@@ -28,7 +28,7 @@ class design extends control
     {
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true));
-        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
+        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode', $this->session->program));
         $this->design->setProductMenu($productID);
 
         /* Build the search form. */
@@ -39,7 +39,7 @@ class design extends control
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
-        $designs = $this->design->getList($productID, $type, $queryID, $orderBy, $pager);
+        $designs = $this->design->getList($this->session->program, $productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
@@ -83,7 +83,7 @@ class design extends control
             $this->send($response);
         }
 
-        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode'));
+        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode', $this->session->program));
         $this->design->setProductMenu($productID);
 
         $this->view->title      = $this->lang->design->create;
@@ -91,7 +91,7 @@ class design extends control
 
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products  = $this->loadModel('product')->getPairs();
+        $this->view->products  = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->productID = $productID;
         $this->view->program   = $this->loadModel('project')->getByID($this->session->program);
 
@@ -197,7 +197,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 
@@ -226,7 +226,7 @@ class design extends control
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
-        $repos  = $this->loadModel('repo')->getRepoPairs();
+        $repos  = $this->loadModel('repo')->getRepoPairs($this->session->program);
         $repoID = $repoID ? $repoID : key($repos);
         $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 

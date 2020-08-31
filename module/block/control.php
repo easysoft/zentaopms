@@ -1142,7 +1142,7 @@ class block extends control
      */
     public function printCmmiGanttBlock()
     {
-        $products  = $this->loadModel('product')->getPairs();
+        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
         $productID = isset($this->session->product) ? 0 : $this->session->product;
         if(!$productID) $productID = key($products);
 
@@ -1163,7 +1163,7 @@ class block extends control
         $this->session->set('issueList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1177,7 +1177,7 @@ class block extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1502,7 +1502,7 @@ class block extends control
         $normal = 0;
         $closed = 0;
 
-        $products = $this->loadModel('product')->getList();
+        $products = $this->loadModel('product')->getList($this->session->program);
         foreach($products as $product)
         {
             if(!$this->product->checkPriv($product->id)) continue;

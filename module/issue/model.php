@@ -32,7 +32,7 @@ class issueModel extends model
             ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFieldsm, 'notempty')->exec();
+        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
         $issueID = $this->dao->lastInsertID();
         $this->loadModel('file')->saveUpload('issue', $issueID);
 
@@ -75,6 +75,7 @@ class issueModel extends model
     /**
      * Get issue list.
      *
+     * @param  int       $programID
      * @param  string    $browseType
      * @param  int       $queryID
      * @param  string    $orderBy
@@ -82,7 +83,7 @@ class issueModel extends model
      * @access public
      * @return object
      */
-    public function getIssueList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getIssueList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $issueQuery = '';
         if($browseType == 'bysearch')
@@ -98,8 +99,8 @@ class issueModel extends model
         }
 
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
-            ->where('program')->eq($this->session->program)
-            ->andWhere('deleted')->eq('0')
+            ->where('deleted')->eq('0')
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
@@ -116,17 +117,18 @@ class issueModel extends model
     /**
      * getBlockIssues
      *
+     * @param  int    $programID
      * @param  string $browseType
      * @param  int    $limit
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getBlockIssues($browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    public function getBlockIssues($programID = 0, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
-            ->where('program')->eq($this->session->program)
-            ->andWhere('deleted')->eq('0')
+            ->where('deleted')->eq('0')
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()

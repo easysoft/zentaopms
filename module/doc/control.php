@@ -111,7 +111,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $lib->product);
+            $this->product->setMenu($this->product->getPairs('', $this->session->program), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
@@ -119,7 +119,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
+            $this->project->setMenu($this->project->getPairs('nocode', $this->session->program), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -210,8 +210,8 @@ class doc extends control
             }
         }
         $libTypeList = $this->lang->doc->libTypeList;
-        $products    = $this->product->getPairs('nocode');
-        $projects    = $this->project->getPairs('nocode');
+        $products    = $this->product->getPairs('nocode', $this->session->program);
+        $projects    = $this->project->getPairs('nocode', $this->session->program);
         if(empty($products)) unset($libTypeList['product']);
         if(empty($projects)) unset($libTypeList['project']);
 
@@ -328,7 +328,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $lib->product);
+            $this->product->setMenu($this->product->getPairs('', $this->session->program), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
 
             $this->lang->modulePageActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -338,7 +338,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
+            $this->project->setMenu($this->project->getPairs('nocode', $this->session->program), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
             $this->lang->modulePageActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -749,7 +749,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->product->setMenu($this->product->getPairs('', $this->session->program), $objectID);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
@@ -757,7 +757,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode'), $objectID);
+            $this->project->setMenu($this->project->getPairs('nocode', $this->session->program), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -843,7 +843,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->product->setMenu($this->product->getPairs('', $this->session->program), $objectID);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
@@ -851,7 +851,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode'), $objectID);
+            $this->project->setMenu($this->project->getPairs('nocode', $this->session->program), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else

@@ -94,7 +94,7 @@ class projectModel extends model
 
         $this->session->set('project', $projectID);
 
-        $products = $this->loadModel('product')->getPairs($program->id);
+        $products = $this->loadModel('product')->getPairs('', $program->id);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($project and $project->type == 'ops')
@@ -222,7 +222,7 @@ class projectModel extends model
      */
     public function tree()
     {
-        $products     = $this->loadModel('product')->getPairs('nocode');
+        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->program);
         $productGroup = $this->getProductGroupList();
         $projectTree  = "<ul class='tree tree-lines'>";
         foreach($productGroup as $productID => $projects)
@@ -705,10 +705,11 @@ class projectModel extends model
      * Get project pairs.
      *
      * @param  string $mode     all|noclosed or empty
+     * @param  string $programID
      * @access public
      * @return array
      */
-    public function getPairs($mode = '')
+    public function getPairs($mode = '', $programID = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -717,7 +718,7 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
-            ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
