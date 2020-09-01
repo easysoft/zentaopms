@@ -323,7 +323,7 @@ class design extends control
      */
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* Init pager and get designs. */
+        /* Init pager. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
 
