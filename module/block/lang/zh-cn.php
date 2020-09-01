@@ -82,16 +82,16 @@ $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
-$lang->block->productName        = $lang->productCommon . '名称';
-$lang->block->totalStory         = '总' . $lang->storyCommon;
-$lang->block->totalBug           = '总Bug';
-$lang->block->totalRelease       = '发布次数';
+$lang->block->productName  = $lang->productCommon . '名称';
+$lang->block->totalStory   = '总' . $lang->storyCommon;
+$lang->block->totalBug     = '总Bug';
+$lang->block->totalRelease = '发布次数';
 
-$lang->block->totalInvestment    = '总投入';
-$lang->block->totalPeople        = '总人数';
-$lang->block->spent              = '已花费';
-$lang->block->budget             = '预算';
-$lang->block->left               = '剩余';
+$lang->block->totalInvestment = '总投入';
+$lang->block->totalPeople     = '总人数';
+$lang->block->spent           = '已花费';
+$lang->block->budget          = '预算';
+$lang->block->left            = '剩余';
 
 $lang->block->default['waterfall']['program']['1']['title']  = '项目周报';
 $lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
@@ -487,6 +487,7 @@ $lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|
 $lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
 $lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->sprint        = 'project|all|';
