@@ -11,6 +11,8 @@
  */
 $lang->user->common           = 'Người dùng';
 $lang->user->id               = 'ID';
+$lang->user->inside           = 'Inside Members';
+$lang->user->outside          = 'Outside Members';
 $lang->user->company          = 'Doanh nghiệp';
 $lang->user->dept             = 'Phòng/Ban';
 $lang->user->account          = 'Tài khoản';

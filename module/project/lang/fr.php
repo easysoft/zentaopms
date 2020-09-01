@@ -117,7 +117,13 @@ $lang->project->aclList['open']    = "Défaut (les utilisateurs qui peuvent cons
 $lang->project->aclList['private'] = "Privé (réservé aux membres de l'équipe.)";
 $lang->project->aclList['custom']  = "Liste blanche (seuls les membres de l'équipe et de la Liste Blanche peuvent y accéder.)";
 
-/* 方法列表。 Méthode List */
+$lang->project->storyPoint = 'Story Point';
+
+$lang->project->burnByList['left']       = 'View by remaining hours';
+$lang->project->burnByList['estimate']   = "View by {$lang->planCommon} hours";
+$lang->project->burnByList['storyPoint'] = 'View by story point';
+
+/* Méthode List */
 $lang->project->index             = "Accueil {$lang->projectCommon}";
 $lang->project->task              = 'Liste Tâches';
 $lang->project->groupTask         = 'Vision Groupée';

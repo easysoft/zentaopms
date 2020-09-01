@@ -132,6 +132,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['20.0'][]   = array('title'=>'Add program, reset priv.', 'desc' => '');
 $lang->misc->feature->all['12.4.1'][] = array('title'=>'Fix Bug', 'desc' => '');
 
 $lang->misc->feature->all['12.4.stable'][] = array('title'=>'Fix Bug', 'desc' => '');

@@ -117,7 +117,13 @@ $lang->project->aclList['open']    = "Standard (Benutzer mit Rechten für Projek
 $lang->project->aclList['private'] = "Privat (Nur Teammitglieder)";
 $lang->project->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
 
-/* 方法列表。*/
+$lang->project->storyPoint = 'Story Point';
+
+$lang->project->burnByList['left']       = 'View by remaining hours';
+$lang->project->burnByList['estimate']   = "View by {$lang->planCommon} hours";
+$lang->project->burnByList['storyPoint'] = 'View by story point';
+
+/* Method list. */
 $lang->project->index             = "Home";
 $lang->project->task              = 'Aufgaben';
 $lang->project->groupTask         = 'Nach Gruppen';

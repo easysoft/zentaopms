@@ -117,6 +117,12 @@ $lang->project->aclList['open']    = "Mặc định (Người dùng có thể v�
 $lang->project->aclList['private'] = 'Riêng tư (Chỉ có  thành viên nhóm.)';
 $lang->project->aclList['custom']  = 'Tùy biến (Thành viên nhóm và người dùng dánh sách trắng có thể truy cập nó.)';
 
+$lang->project->storyPoint = 'Story Point';
+
+$lang->project->burnByList['left']       = 'View by remaining hours';
+$lang->project->burnByList['estimate']   = "View by {$lang->planCommon} hours";
+$lang->project->burnByList['storyPoint'] = 'View by story point';
+
 /* Method list. */
 $lang->project->index             = "{$lang->projectCommon} Home";
 $lang->project->task              = 'Danh sách nhiệm vụ';

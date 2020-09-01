@@ -80,9 +80,9 @@ $lang->project->suspend  = "挂起";
 $lang->project->close    = "关闭";
 $lang->project->export   = "导出";
 
-$lang->project->typeList['sprint']    = "短期$lang->projectCommon";
-$lang->project->typeList['waterfall'] = "长期$lang->projectCommon";
-$lang->project->typeList['ops']       = "运维$lang->projectCommon";
+$lang->project->typeList['sprint']    = "短期项目";
+$lang->project->typeList['waterfall'] = "长期项目";
+$lang->project->typeList['ops']       = "运维项目";
 
 $lang->project->endList[7]   = '一星期';
 $lang->project->endList[14]  = '两星期';
