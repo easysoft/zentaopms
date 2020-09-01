@@ -476,12 +476,12 @@ class programModel extends model
 
         if(empty($program)) return true;
 
-        if($program->isCat and $action == 'group')         return false;
-        if($program->isCat and $action == 'managemembers') return false;
-        if($program->isCat and $action == 'start')         return false;
-        if($program->isCat and $action == 'activate')      return false;
-        if($program->isCat and $action == 'suspend')       return false;
-        if($program->isCat and $action == 'close')         return false;
+        if(!empty($program->isCat) and $action == 'group')         return false;
+        if(!empty($program->isCat) and $action == 'managemembers') return false;
+        if(!empty($program->isCat) and $action == 'start')         return false;
+        if(!empty($program->isCat) and $action == 'activate')      return false;
+        if(!empty($program->isCat) and $action == 'suspend')       return false;
+        if(!empty($program->isCat) and $action == 'close')         return false;
 
         if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
