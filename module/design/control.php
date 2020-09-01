@@ -38,7 +38,7 @@ class design extends control
 
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($this->session->program, $productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
@@ -324,7 +324,7 @@ class design extends control
     {
         /* Init pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $pager   = pager::init(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
