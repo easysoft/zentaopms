@@ -44,7 +44,7 @@
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->probability;?></th>
-            <td><?php echo html::select('probability', $lang->risk->probabilityList, $risk->impact, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('probability', $lang->risk->probabilityList, $risk->probability, "class='form-control chosen'");?></td>
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->rate;?></th>
