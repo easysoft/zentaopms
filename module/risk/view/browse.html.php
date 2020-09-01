@@ -52,7 +52,7 @@
         <th class='w-80px'><?php common::printOrderLink('strategy', $orderBy, $vars, $lang->risk->strategy);?></th>
         <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->risk->status);?></th>
         <th class='w-120px'><?php common::printOrderLink('identifiedDate', $orderBy, $vars, $lang->risk->identifiedDate);?></th>
-        <th class='w-80px'><?php common::printOrderLink('riskindex', $orderBy, $vars, $lang->risk->riskindex);?></th>
+        <th class='w-80px'><?php common::printOrderLink('rate', $orderBy, $vars, $lang->risk->rate);?></th>
         <th class='w-80px'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->risk->pri);?></th>
         <th class='w-120px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->risk->assignedTo);?></th>
         <th class='w-120px'><?php common::printOrderLink('category', $orderBy, $vars, $lang->risk->category);?></th>
@@ -67,7 +67,7 @@
         <td><?php echo zget($lang->risk->strategyList, $risk->strategy);?></td>
         <td><?php echo zget($lang->risk->statusList, $risk->status);?></td>
         <td><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
-        <td><?php echo $risk->riskindex;?></td>
+        <td><?php echo $risk->rate;?></td>
         <td><?php echo zget($lang->risk->priList, $risk->pri)?></td>
         <td><?php echo $this->risk->printAssignedHtml($risk, $users);;?></td>
         <td><?php echo zget($lang->risk->categoryList, $risk->category);?></td>

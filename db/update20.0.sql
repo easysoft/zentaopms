@@ -142,7 +142,7 @@ CREATE TABLE `zt_risk` (
   `status` varchar(30) NOT NULL DEFAULT 'active',
   `impact` char(30) NOT NULL,
   `probability` char(30) NOT NULL,
-  `riskindex` char(30) NOT NULL,
+  `rate` char(30) NOT NULL,
   `pri` char(30) NOT NULL,
   `identifiedDate` date NOT NULL,
   `prevention` text NOT NULL,

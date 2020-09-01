@@ -47,8 +47,8 @@
             <td><?php echo html::select('probability', $lang->risk->probabilityList, 3, "class='form-control chosen'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->risk->riskindex;?></th>
-            <td><?php echo html::input('riskindex', '', "class='form-control'");?></td>
+            <th><?php echo $lang->risk->rate;?></th>
+            <td><?php echo html::input('rate', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->risk->pri;?></th>

@@ -21,7 +21,7 @@ $config->risk->search['fields']['strategy']          = $lang->risk->strategy;
 $config->risk->search['fields']['status']            = $lang->risk->status;
 $config->risk->search['fields']['impact']            = $lang->risk->impact;
 $config->risk->search['fields']['probability']       = $lang->risk->probability;
-$config->risk->search['fields']['riskindex']         = $lang->risk->riskindex;
+$config->risk->search['fields']['rate']              = $lang->risk->rate;
 $config->risk->search['fields']['pri']               = $lang->risk->pri;
 $config->risk->search['fields']['identifiedDate']    = $lang->risk->identifiedDate;
 $config->risk->search['fields']['prevention']        = $lang->risk->prevention;
@@ -45,7 +45,7 @@ $config->risk->search['params']['strategy']          = array('operator' => '=', 
 $config->risk->search['params']['status']            = array('operator' => '=', 'control' => 'select',  'values' => $lang->risk->statusList);
 $config->risk->search['params']['impact']            = array('operator' => '=', 'control' => 'select',  'values' => $lang->risk->impactList);
 $config->risk->search['params']['probability']       = array('operator' => '=', 'control' => 'select',  'values' => $lang->risk->probabilityList);
-$config->risk->search['params']['riskindex']         = array('operator' => '=', 'control' => 'input',  'values' => '');
+$config->risk->search['params']['rate']              = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->risk->search['params']['pri']               = array('operator' => '=', 'control' => 'select',  'values' => $lang->risk->priList);
 $config->risk->search['params']['identifiedDate']    = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->risk->search['params']['prevention']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
