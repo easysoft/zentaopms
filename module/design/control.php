@@ -304,15 +304,23 @@ class design extends control
      * View a design's commit.
      *
      * @param  int    $designID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function viewCommit($designID = 0)
+    public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Init pager and get designs. */
+        $this->app->loadClass('pager', $static = true);
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
 
-        $this->view->design = $this->design->getCommit($designID);
+        $this->view->design = $this->design->getCommit($designID, $pager);
+        $this->view->pager  = $pager;
 
         $this->display();
     }

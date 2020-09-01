@@ -345,14 +345,15 @@ class designModel extends model
      * Get commit.
      *
      * @param  int    $designID
+     * @param  int    $pager
      * @access public
-     * @return void
+     * @return object
      */
-    public function getCommit($designID = 0)
+    public function getCommit($designID = 0, $pager = null)
     {
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
 
-        $design->commit = $design->commit ? explode(",", $design->commit) : '';
+        $design->commit = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
 
         return $design;
     }
