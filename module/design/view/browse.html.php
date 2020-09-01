@@ -48,7 +48,7 @@
             <th class="text-left w-120px">   <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
             <th class="text-left w-150px">   <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
             <th class="c-assignedTo w-120px"><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
-            <th class="text-center w-130px"> <?php echo $lang->design->actions;?></th>
+            <th class="text-center w-100px"> <?php echo $lang->design->actions;?></th>
           </tr>
         </thead>
         <tbody>
