@@ -135,8 +135,8 @@ $lang->block->default['waterfall']['program']['7']['params']['type']    = 'all';
 $lang->block->default['waterfall']['program']['7']['params']['count']   = '15';
 $lang->block->default['waterfall']['program']['7']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['program']['1']['title'] =  $lang->projectCommon . ' Overall';
-$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverall';
+$lang->block->default['scrum']['program']['1']['title'] =  $lang->projectCommon . ' Overview';
+$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['program']['1']['grid']  = 8;
 
 $lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . ' List';
@@ -339,7 +339,7 @@ $lang->block->modules['program']->availableBlocks->statistic     = $lang->projec
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = $lang->projectCommon . ' Overall';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . ' List';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . ' Rode Map';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint        = $lang->projectCommon . ' Overview';
@@ -487,7 +487,6 @@ $lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|
 $lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
 $lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->sprint        = 'project|all|';
