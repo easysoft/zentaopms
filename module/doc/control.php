@@ -168,11 +168,24 @@ class doc extends control
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
         }
 
+        $attachLibs = array();
+        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
+        {
+            $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
+            if($count == 1 and $type and isset($lib->$type))
+            {
+                $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
+                if(isset($objectLibs['project'])) $attachLibs['project'] = $objectLibs['project'];
+                if(isset($objectLibs['files']))   $attachLibs['files']   = $objectLibs['files'];
+            }
+        }
+
         $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, '`order`', $browseType);
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
+        $this->view->attachLibs = $attachLibs;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
