@@ -11,6 +11,8 @@
  */
 $lang->user->common           = 'Utilisateur';
 $lang->user->id               = 'ID';
+$lang->user->inside           = 'Inside Members';
+$lang->user->outside          = 'Outside Members';
 $lang->user->company          = 'Entreprise';
 $lang->user->dept             = 'Compartiment';
 $lang->user->account          = 'Compte';
