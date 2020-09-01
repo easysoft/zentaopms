@@ -2,7 +2,7 @@
 /**
  * The model file of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     design
@@ -172,8 +172,6 @@ class designModel extends model
      */
     public function linkCommit($designID = 0, $repoID = 0)
     {
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
         $revisions = $_POST['revision'];
 
         foreach($revisions as $revision)
@@ -199,28 +197,41 @@ class designModel extends model
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
             $design = new stdclass();
-            $design->commit     = implode(",", $revisions);
+            $design->commit = $this->dao->select('commit')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch('commit');
+
+            if($design->commit)
+            {
+                $design->commit = implode(",", $revisions) . "," . $design->commit;
+            }
+            else
+            {
+                $design->commit = implode(",", $revisions);
+            }
+
             $design->commitDate = helper::now();
             $design->commitBy   = $this->app->user->account;
             $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
     }
 
     /**
-     * Set product menu.
+     * Unlink commit.
      *
-     * @param  int    $productID
+     * @param  int    $designID
+     * @param  int    $commitID
      * @access public
      * @return void
      */
-    public function setProductMenu($productID = 0)
+    public function unlinkCommit($designID = 0, $commitID = 0)
     {
-        $programID = $this->session->program;
-        $program   = $this->loadModel('project')->getByID($programID);
-        $products  = $this->loadModel('product')->getPairs('', $programID);
-        $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
+        /* Delete data in the zt_relation.*/
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andwhere('AID')->eq($designID)->andwhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->andWhere('BID')->eq($commitID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andwhere('BID')->eq($designID)->andwhere('BType')->eq('design')->andwhere('relation')->eq('completedfrom')->andWhere('AID')->eq($commitID)->exec();
 
-        $productID = $this->loadModel('product')->saveState($productID, $products);
-        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
+        /* Commit after unlinking. */
+        $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->fetchAll('BID');
+        $commit = implode(",", array_keys($commit));
+
+        $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
     }
 
     /**
@@ -240,6 +251,7 @@ class designModel extends model
         $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID"), "#$relation->BID", '_blank');
+
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
 
@@ -312,14 +324,42 @@ class designModel extends model
                 ->fetchAll('id');
         }
 
-        foreach($designs as $id => $design)
-        {
-            $design->commit = '';
-            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
-            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
-        }
-
         return $designs;
+    }
+
+    /**
+     * Get commit.
+     *
+     * @param  int    $designID
+     * @param  int    $pager
+     * @access public
+     * @return object
+     */
+    public function getCommit($designID = 0, $pager = null)
+    {
+        $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+
+        $design->commit = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
+
+        return $design;
+    }
+
+    /**
+     * Set product menu.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function setProductMenu($productID = 0)
+    {
+        $programID = $this->session->program;
+        $program   = $this->loadModel('project')->getByID($programID);
+        $products  = $this->loadModel('product')->getPairs('', $programID);
+        $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
+
+        $productID = $this->loadModel('product')->saveState($productID, $products);
+        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
     }
 
     /**

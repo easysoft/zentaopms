@@ -82,16 +82,16 @@ $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
-$lang->block->productName        = $lang->productCommon . '名称';
-$lang->block->totalStory         = '总' . $lang->storyCommon;
-$lang->block->totalBug           = '总Bug';
-$lang->block->totalRelease       = '发布次数';
+$lang->block->productName  = $lang->productCommon . '名称';
+$lang->block->totalStory   = '总' . $lang->storyCommon;
+$lang->block->totalBug     = '总Bug';
+$lang->block->totalRelease = '发布次数';
 
-$lang->block->totalInvestment    = '总投入';
-$lang->block->totalPeople        = '总人数';
-$lang->block->spent              = '已花费';
-$lang->block->budget             = '预算';
-$lang->block->left               = '剩余';
+$lang->block->totalInvestment = '总投入';
+$lang->block->totalPeople     = '总人数';
+$lang->block->spent           = '已花费';
+$lang->block->budget          = '预算';
+$lang->block->left            = '剩余';
 
 $lang->block->default['waterfall']['program']['1']['title']  = '项目周报';
 $lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
@@ -160,7 +160,7 @@ $lang->block->default['scrum']['program']['5']['block'] = 'scrumproduct';
 $lang->block->default['scrum']['program']['5']['grid']  = 4;
 
 $lang->block->default['scrum']['program']['6']['title'] = $lang->projectCommon . '总览';
-$lang->block->default['scrum']['program']['6']['block'] = 'scrumproject';
+$lang->block->default['scrum']['program']['6']['block'] = 'sprint';
 $lang->block->default['scrum']['program']['6']['grid']  = 4;
 
 $lang->block->default['scrum']['program']['7']['title'] = '最新动态';
@@ -342,7 +342,7 @@ $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = '项目整体情况';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . '路线图';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumproject  = $lang->projectCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->sprint        = $lang->projectCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
 
@@ -479,18 +479,19 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentprogram     = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->statistic         = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->program           = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->waterfallreport   = 'weekly|index|';
-$lang->block->modules['program']->moreLinkList->waterfallestimate = 'workestimation|index|';
-$lang->block->modules['program']->moreLinkList->waterfallissue    = 'issue|browse|';
-$lang->block->modules['program']->moreLinkList->waterfallrisk     = 'risk|browse|';
-$lang->block->modules['program']->moreLinkList->scrumlist         = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumtest         = 'testtask|browse|';
-$lang->block->modules['program']->moreLinkList->scrumproduct      = 'product|all|';
-$lang->block->modules['program']->moreLinkList->scrumproject      = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumdynamic      = 'company|dynamic|';
+$lang->block->modules['program']->moreLinkList->recentprogram = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->statistic     = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->program       = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->cmmireport    = 'weekly|index|';
+$lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|index|';
+$lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
+$lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
+$lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
+$lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
+$lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
+$lang->block->modules['program']->moreLinkList->sprint        = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumdynamic  = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';

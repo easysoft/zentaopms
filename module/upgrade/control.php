@@ -150,6 +150,13 @@ class upgrade extends control
         $this->display();
     }
 
+    /**
+     * Merge program.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
     public function mergeProgram($type = 'productline')
     {
         if($_POST)

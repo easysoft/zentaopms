@@ -42,10 +42,9 @@
       <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <thead>
           <tr>
-            <th class="text-left w-60px">    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+            <th class="text-left w-60px">    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->design->id);?></th>
             <th class="text-left w-100px">   <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
             <th class="text-left">           <?php common::printOrderLink('name',        $orderBy, $vars, $lang->design->name);?></th>
-            <th class="text-left w-150px">   <?php common::printOrderLink('commit',      $orderBy, $vars, $lang->design->submission);?></th>
             <th class="text-left w-120px">   <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdBy);?></th>
             <th class="text-left w-150px">   <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->design->createdDate);?></th>
             <th class="c-assignedTo w-120px"><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
@@ -58,23 +57,22 @@
             <td calss="c-id">         <?php printf('%03d', $design->id);?></td>
             <td class="c-type">       <?php echo zget($lang->design->typeList, $design->type);?></td>
             <td class="c-name" title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td class="c-commit">     <?php echo $design->commit;?></td>
             <td class="c-createdBy">  <?php echo $design->createdBy;?></td>
             <td class="c-createdDate"><?php echo substr($design->createdDate, 0, 11);?></td>
             <td class="c-assignedTo"> <?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";
-              common::printIcon('design', 'edit',   $vars, $design, 'list', 'fork', '', '', '', '', '', $design->program);
-              common::printIcon('design', 'linkCommit', $vars, $design, 'list', 'link', '', 'iframe showinonlybody', true);
-              common::printIcon('design', 'delete', $vars, $design, 'list', 'trash', 'hiddenwin', '', '', '', '', $design->program);
+              common::printIcon('design', 'edit',       $vars, $design, 'list', 'fork', '', '', '', '', '', $design->program);
+              common::printIcon('design', 'viewCommit', $vars, $design, 'list', 'glasses', '', 'iframe showinonlybody', true);
+              common::printIcon('design', 'delete',     $vars, $design, 'list', 'trash', 'hiddenwin', '', '', '', '', $design->program);
               ?>
             </td>
           </tr>
           <?php endforeach;?>
         </tbody>
       </table>
-      <div class='table-footer'>
+      <div class='table-footer table-statistic''>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
    </form>

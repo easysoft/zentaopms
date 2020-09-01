@@ -22,6 +22,7 @@
 .hours-statistics{position: relative; padding: 0px 5px 5px; display: table-cell;text-align: center;}
 .hours-statistics > small {display: block; color: #A6AAB8;}
 .hours-statistics > span {display: block; color: #3c4353; font-weight: bold;}
+.tile-amount{font-size: 20px;}
 </style>
 <div class="panel-body conatiner-fluid">
   <div class="table-row">

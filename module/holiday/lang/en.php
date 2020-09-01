@@ -6,9 +6,9 @@ $lang->holiday->create = 'Create';
 $lang->holiday->edit   = 'Edit';
 $lang->holiday->delete = 'Delete';
 
-$lang->holiday->createAction  = 'Create Holiday';
-$lang->holiday->editAction    = 'Edit Holiday';
-$lang->holiday->deleteAction  = 'Delete Holiday';
+$lang->holiday->createAction = 'Create Holiday';
+$lang->holiday->editAction   = 'Edit Holiday';
+$lang->holiday->deleteAction = 'Delete Holiday';
 
 $lang->holiday->id    = 'ID';
 $lang->holiday->name  = 'Name';

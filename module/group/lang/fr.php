@@ -21,14 +21,18 @@ $lang->group->managePrivByGroup  = 'Gérer Privilèges par Groupe';
 $lang->group->managePrivByModule = 'Gérer Privilèges par Module';
 $lang->group->byModuleTips       = '<span class="tips">(Shift/Ctrl pour sélection multiple)</span>';
 $lang->group->manageMember       = 'Gérer Membres';
+$lang->group->managePgmAdmin     = 'Manage Program Admins';
 $lang->group->confirmDelete      = "Voulez-vous supprimer ce groupe d'utilisateurs ?";
 $lang->group->successSaved       = 'Sauvé.';
 $lang->group->errorNotSaved      = 'Echec. Veuillez sélectionner actions et groupes.';
+$lang->group->program            = 'Manage Programs';
 $lang->group->viewList           = 'Accès Consultation';
+$lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Accès ' . $lang->productCommon . 's';
 $lang->group->projectList        = 'Accès ' . $lang->projectCommon . 's';
 $lang->group->dynamic            = 'Accès Historique';
 $lang->group->noticeVisit        = "Blanc signifie « pas de limitation d'accès ».";
+$lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneProject        = "No {$lang->projectCommon}";
 
@@ -44,6 +48,7 @@ $lang->group->priv     = 'Groupe de Privilèges';
 $lang->group->option   = 'Option';
 $lang->group->inside   = "Groupe d'utilisateurs";
 $lang->group->outside  = 'Autres utilisateurs';
+$lang->group->limited  = 'Limited Users';
 $lang->group->other    = 'Autres';
 $lang->group->all      = 'Tous les Privilèges';
 

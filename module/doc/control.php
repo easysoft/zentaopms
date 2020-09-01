@@ -302,7 +302,7 @@ class doc extends control
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
-            $files = isset($docResult['files']) ? $docResult['files'] : '';
+            $files = zget($docResult, 'files', '');
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
