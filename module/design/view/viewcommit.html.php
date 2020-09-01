@@ -1,14 +1,14 @@
 <?php
 /**
-* The viewCommit view of design module of ZenTaoPMS.
-*
-* @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
-* @license     ZPL (http://zpl.pub/page/zplv12.html)
-* @author      Chunsheng Wang <chunsheng@cnezsoft.com>
-* @package     design
-* @version     $Id: commit.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
-* @link        http://www.zentao.net
-*/
+ * The viewCommit view of design module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     design
+ * @version     $Id: commit.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainContent" class="main-table">
@@ -49,7 +49,7 @@
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'>
+  <div class='table-footer table-statistic'>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
   <?php endif;?>
