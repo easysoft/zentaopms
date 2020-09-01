@@ -75,8 +75,8 @@ $lang->block->default['product']['1']['title'] = 'Báo cáo '.$lang->productComm
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
-$lang->block->default['product']['1']['params']['type'] = 'all';
-$lang->block->default['product']['1']['params']['num']  = '20';
+$lang->block->default['product']['1']['params']['type']  = 'all';
+$lang->block->default['product']['1']['params']['count'] = '20';
 
 $lang->block->default['product']['2']['title'] = 'Tổng quan '.$lang->productCommon;
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -86,23 +86,23 @@ $lang->block->default['product']['3']['title'] = 'Kích hoạt ' . $lang->produc
 $lang->block->default['product']['3']['block'] = 'list';
 $lang->block->default['product']['3']['grid']  = 8;
 
-$lang->block->default['product']['3']['params']['num']  = 15;
-$lang->block->default['product']['3']['params']['type'] = 'noclosed';
+$lang->block->default['product']['3']['params']['count'] = 15;
+$lang->block->default['product']['3']['params']['type']  = 'noclosed';
 
 $lang->block->default['product']['4']['title'] = 'Câu chuyện của bạn';
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
-$lang->block->default['product']['4']['params']['num']  = 15;
+$lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['4']['params']['type'] = 'assignedTo';
+$lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
 $lang->block->default['project']['1']['title'] = 'Báo cáo '.$lang->projectCommon;
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
-$lang->block->default['project']['1']['params']['type'] = 'all';
-$lang->block->default['project']['1']['params']['num']  = '20';
+$lang->block->default['project']['1']['params']['type']  = 'all';
+$lang->block->default['project']['1']['params']['count'] = '20';
 
 $lang->block->default['project']['2']['title'] = 'Tổng quan '.$lang->projectCommon ;
 $lang->block->default['project']['2']['block'] = 'overview';
@@ -112,7 +112,7 @@ $lang->block->default['project']['3']['title'] = 'Kích hoạt ' . $lang->projec
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
-$lang->block->default['project']['3']['params']['num']  = 15;
+$lang->block->default['project']['3']['params']['count']   = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type'] = 'undone';
 
@@ -120,7 +120,7 @@ $lang->block->default['project']['4']['title'] = 'Nhiệm vụ';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
-$lang->block->default['project']['4']['params']['num']  = 15;
+$lang->block->default['project']['4']['params']['count']   = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type'] = 'assignedTo';
 
@@ -128,8 +128,8 @@ $lang->block->default['qa']['1']['title'] = 'Báo cáo Test';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['type'] = 'noclosed';
-$lang->block->default['qa']['1']['params']['num']  = '20';
+$lang->block->default['qa']['1']['params']['type']  = 'noclosed';
+$lang->block->default['qa']['1']['params']['count'] = '20';
 
 //$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
 //$lang->block->default['qa']['2']['block'] = 'overview';
@@ -139,7 +139,7 @@ $lang->block->default['qa']['2']['title'] = 'Bugs của bạn';
 $lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
-$lang->block->default['qa']['2']['params']['num']     = 15;
+$lang->block->default['qa']['2']['params']['count']   = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
@@ -147,7 +147,7 @@ $lang->block->default['qa']['3']['title'] = 'Tình huống của bạn';
 $lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
-$lang->block->default['qa']['3']['params']['num']     = 15;
+$lang->block->default['qa']['3']['params']['count']   = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
@@ -155,7 +155,7 @@ $lang->block->default['qa']['4']['title'] = 'Đang đợi bản dựng';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
-$lang->block->default['qa']['4']['params']['num']     = 15;
+$lang->block->default['qa']['4']['params']['count']   = 15;
 $lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['4']['params']['type']    = 'wait';
 
@@ -175,7 +175,7 @@ $lang->block->default['full']['my']['4']['title']         = 'Việc của bạn'
 $lang->block->default['full']['my']['4']['block']         = 'list';
 $lang->block->default['full']['my']['4']['grid']          = 4;
 $lang->block->default['full']['my']['4']['source']        = 'todo';
-$lang->block->default['full']['my']['4']['params']['num'] = '20';
+$lang->block->default['full']['my']['4']['params']['count'] = '20';
 $lang->block->default['full']['my']['5']                  = $lang->block->default['project']['1'];
 $lang->block->default['full']['my']['5']['source']        = 'project';
 $lang->block->default['full']['my']['6']                  = $lang->block->default['project']['2'];
@@ -187,7 +187,7 @@ $lang->block->default['full']['my']['8']['source']        = 'product';
 $lang->block->default['full']['my']['9']                  = $lang->block->default['qa']['2'];
 $lang->block->default['full']['my']['9']['source']        = 'qa';
 
-$lang->block->num     = 'Số';
+$lang->block->count     = 'Số';
 $lang->block->type    = 'Loại';
 $lang->block->orderBy = 'Order by';
 

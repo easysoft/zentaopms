@@ -75,8 +75,8 @@ $lang->block->default['product']['1']['title'] = ' Rapport de ' . $lang->product
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
-$lang->block->default['product']['1']['params']['type'] = 'all';
-$lang->block->default['product']['1']['params']['num']  = '20';
+$lang->block->default['product']['1']['params']['type']  = 'all';
+$lang->block->default['product']['1']['params']['count'] = '20';
 
 $lang->block->default['product']['2']['title'] = "Vue d'ensemble du " . $lang->productCommon;
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -86,14 +86,14 @@ $lang->block->default['product']['3']['title'] = $lang->productCommon . 's Actif
 $lang->block->default['product']['3']['block'] = 'list';
 $lang->block->default['product']['3']['grid']  = 8;
 
-$lang->block->default['product']['3']['params']['num']  = 15;
-$lang->block->default['product']['3']['params']['type'] = 'noclosed';
+$lang->block->default['product']['3']['params']['count'] = 15;
+$lang->block->default['product']['3']['params']['type']  = 'noclosed';
 
 $lang->block->default['product']['4']['title'] = 'Mes Stories';
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
-$lang->block->default['product']['4']['params']['num']     = 15;
+$lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
@@ -101,8 +101,8 @@ $lang->block->default['project']['1']['title'] = 'Rapport de ' . $lang->projectC
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
-$lang->block->default['project']['1']['params']['type'] = 'all';
-$lang->block->default['project']['1']['params']['num']  = '20';
+$lang->block->default['project']['1']['params']['type']  = 'all';
+$lang->block->default['project']['1']['params']['count'] = '20';
 
 $lang->block->default['project']['2']['title'] = "Vue d'ensemble du " . $lang->projectCommon;
 $lang->block->default['project']['2']['block'] = 'overview';
@@ -112,7 +112,7 @@ $lang->block->default['project']['3']['title'] = $lang->projectCommon . 's Actif
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
-$lang->block->default['project']['3']['params']['num']     = 15;
+$lang->block->default['project']['3']['params']['count']   = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type']    = 'undone';
 
@@ -120,7 +120,7 @@ $lang->block->default['project']['4']['title'] = 'Mes Tâches';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
-$lang->block->default['project']['4']['params']['num']     = 15;
+$lang->block->default['project']['4']['params']['count']   = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
@@ -128,8 +128,8 @@ $lang->block->default['qa']['1']['title'] = 'Rapport de Tests';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['type'] = 'noclosed';
-$lang->block->default['qa']['1']['params']['num']  = '20';
+$lang->block->default['qa']['1']['params']['type']  = 'noclosed';
+$lang->block->default['qa']['1']['params']['count'] = '20';
 
 //$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
 //$lang->block->default['qa']['2']['block'] = 'overview';
@@ -139,7 +139,7 @@ $lang->block->default['qa']['2']['title'] = 'Mes Bugs';
 $lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
-$lang->block->default['qa']['2']['params']['num']     = 15;
+$lang->block->default['qa']['2']['params']['count']   = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
@@ -147,7 +147,7 @@ $lang->block->default['qa']['3']['title'] = 'Mes CasTests';
 $lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
-$lang->block->default['qa']['3']['params']['num']     = 15;
+$lang->block->default['qa']['3']['params']['count']   = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
@@ -155,7 +155,7 @@ $lang->block->default['qa']['4']['title'] = 'Builds en attente';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
-$lang->block->default['qa']['4']['params']['num']     = 15;
+$lang->block->default['qa']['4']['params']['count']   = 15;
 $lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['4']['params']['type']    = 'wait';
 
@@ -175,7 +175,7 @@ $lang->block->default['full']['my']['4']['title']  = 'Mon Agenda';
 $lang->block->default['full']['my']['4']['block']  = 'list';
 $lang->block->default['full']['my']['4']['grid']   = 4;
 $lang->block->default['full']['my']['4']['source'] = 'todo';
-$lang->block->default['full']['my']['4']['params']['num'] = '20';
+$lang->block->default['full']['my']['4']['params']['count'] = '20';
 $lang->block->default['full']['my']['5'] = $lang->block->default['project']['1'];
 $lang->block->default['full']['my']['5']['source'] = 'project';
 $lang->block->default['full']['my']['6'] = $lang->block->default['project']['2'];
@@ -187,7 +187,7 @@ $lang->block->default['full']['my']['8']['source'] = 'product';
 $lang->block->default['full']['my']['9'] = $lang->block->default['qa']['2'];
 $lang->block->default['full']['my']['9']['source'] = 'qa';
 
-$lang->block->num     = 'Numéro';
+$lang->block->count     = 'Numéro';
 $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Trié par';
 
