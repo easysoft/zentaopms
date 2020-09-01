@@ -19,14 +19,14 @@
       <small><?php echo $lang->arrow . $lang->design->submission;?></small>
     </h2>
   </div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '_blank', "class='btn btn-primary'");?>
+  </div>
   <?php if(empty($design->commit)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->design->noCommit;?></span></p>
   </div>
   <?php else:?>
-  <div class='btn-toolbar pull-right'>
-    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '_blank', "class='btn btn-primary'");?>
-  </div>
   <table class='table table-data'>
     <thead>
       <tr>
@@ -39,16 +39,19 @@
     <tbody>
     <?php foreach($design->commit as $commit):?>
       <tr>
-        <td><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit"), "#$commit", '_blank');?></td>
-        <td><?php echo $design->commitBy;?></td>
-        <td><?php echo substr($design->commitDate, 0, 11);?></td>
+        <td><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
+        <td><?php echo $commit->committer;?></td>
+        <td><?php echo substr($commit->time, 0, 11);?></td>
         <td class="c-actions">
-        <?php common::printIcon('design', 'unlinkCommit', "designID=$design->id&commitID=$commit", $design, 'list', 'unlink', 'hiddenwin', 'iframe showinonlybody', true);?>
+        <?php common::printIcon('design', 'unlinkCommit', "designID=$design->id&commitID=$commit->id", $design, 'list', 'unlink', 'hiddenwin', 'iframe showinonlybody', true);?>
         </td>
       </tr>
     <?php endforeach;?>
     </tbody>
   </table>
+  <div class='table-footer table-statistic'>
+    <?php $pager->show('right', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

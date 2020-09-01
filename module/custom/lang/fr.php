@@ -1,24 +1,67 @@
 <?php
-$lang->custom->common     = 'Personnalisation';
-$lang->custom->index      = 'Accueil';
-$lang->custom->set        = 'Personnaliser';
-$lang->custom->restore    = 'Réinitialiser';
-$lang->custom->key        = 'Clé';
-$lang->custom->value      = 'Valeur';
-$lang->custom->flow       = 'Concept';
-$lang->custom->working    = 'Mode';
-$lang->custom->select     = 'Choix du Concept';
-$lang->custom->branch     = 'Multi-Branches';
-$lang->custom->owner      = 'Propriétaire';
-$lang->custom->module     = 'Module';
-$lang->custom->section    = 'Section';
-$lang->custom->lang       = 'Langue';
-$lang->custom->setPublic  = 'Set Public';
-$lang->custom->required   = 'Champ Obligatoire';
-$lang->custom->score      = 'Point';
-$lang->custom->timezone   = 'Timezone';
-$lang->custom->scoreReset = 'Réinit Points';
-$lang->custom->scoreTitle = 'Fonctionnalité des Points';
+$lang->custom->common             = 'Personnalisation';
+$lang->custom->index              = 'Accueil';
+$lang->custom->set                = 'Personnaliser';
+$lang->custom->restore            = 'Réinitialiser';
+$lang->custom->key                = 'Clé';
+$lang->custom->value              = 'Valeur';
+$lang->custom->flow               = 'Concept';
+$lang->custom->working            = 'Mode';
+$lang->custom->select             = 'Choix du Concept';
+$lang->custom->branch             = 'Multi-Branches';
+$lang->custom->owner              = 'Propriétaire';
+$lang->custom->module             = 'Module';
+$lang->custom->section            = 'Section';
+$lang->custom->lang               = 'Langue';
+$lang->custom->setPublic          = 'Set Public';
+$lang->custom->required           = 'Champ Obligatoire';
+$lang->custom->score              = 'Point';
+$lang->custom->timezone           = 'Timezone';
+$lang->custom->scoreReset         = 'Réinit Points';
+$lang->custom->scoreTitle         = 'Fonctionnalité des Points';
+$lang->custom->setscrum           = 'Interval Hint';
+$lang->custom->setWaterfall       = 'Switch Views';
+$lang->custom->estimate           = 'Estimated configuration';
+$lang->custom->estimateConfig     = 'Estimated configuration';
+$lang->custom->estimateUnit       = 'Estimating Unit';
+$lang->custom->estimateEfficiency = 'Productivity';
+$lang->custom->estimateCost       = 'Unit Labour Cost';
+$lang->custom->estimateHours      = 'Daily Working Hours';
+$lang->custom->estimateDays       = 'Working Days Per Week';
+$lang->custom->region             = 'Interval';
+$lang->custom->tips               = 'Tips';
+$lang->custom->setTips            = 'Set Tips';
+$lang->custom->isRange            = 'Is Target Control';
+$lang->custom->plan               = 'Plan';
+$lang->custom->planStatus         = 'Enable Plan';
+$lang->custom->concept            = 'Concept';
+
+$lang->custom->object['program'] = 'Program';
+$lang->custom->program->fields['unitList'] = 'Unit List';
+
+$lang->custom->unitList['efficiency'] = 'Working Hours/';
+$lang->custom->unitList['manhour']    = 'Man-hour/';
+$lang->custom->unitList['cost']       = 'Yuan/Hour';
+$lang->custom->unitList['hours']      = 'Hours';
+$lang->custom->unitList['days']       = 'Days';
+$lang->custom->unitList['loc']        = 'KLOC';
+
+$lang->custom->tipProgressList['SPI'] = 'Schedule Performance Index(SPI)';
+$lang->custom->tipProgressList['SV']  = 'Schedule Variance(SV%)';
+
+$lang->custom->tipCostList['CPI'] = 'Cost Performed Index(CPI)';
+$lang->custom->tipCostList['CV']  = 'Cost Variance(CV%)';
+
+$lang->custom->planStatusList[0]  = 'No';
+$lang->custom->planStatusList[1]  = 'Yes';
+
+$lang->custom->tipRangeList[0]  = 'No';
+$lang->custom->tipRangeList[1]  = 'Yes';
+
+$lang->custom->regionMustNumber = 'The interval must be a number!';
+$lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
+
+$lang->custom->numberError = 'The interval must be greater than zero!';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Tâche';
@@ -127,9 +170,6 @@ $lang->custom->weekendList[1] = '1-Jour';
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
-$lang->custom->productProject->relation['1_1'] = 'Project - Iteration';
-$lang->custom->productProject->relation['0_2'] = 'Product - Sprint';
-$lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Sélectionnez le concept qui correspond à votre équipe.';
 
@@ -158,6 +198,6 @@ $lang->custom->conceptOptions->story['0'] = 'Exigence';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['0'] = 'Heures';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Points de Story';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Points de Fonction';
+$lang->custom->conceptOptions->hourPoint['3'] = 'Code Line';

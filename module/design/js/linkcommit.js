@@ -17,5 +17,12 @@ $('#begin, #end, #repo').change(function()
         for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
+    if(begin > end)
+    {
+        alert(error);
+        location.href = createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repo);
+        die;
+    }
+
     location.href = createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repo + '&begin=' + begin + '&end=' + end);
 })

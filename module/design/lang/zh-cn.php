@@ -73,3 +73,4 @@ $lang->design->noDesign       = '暂时没有记录';
 $lang->design->noCommit       = '暂时没有提交记录';
 $lang->design->confirmDelete  = '您确定要删除这个设计吗？';
 $lang->design->confirmUnlink  = '您确定要移除这个提交吗？';
+$lang->design->errorDate      = '开始日期不能大于结束日期';

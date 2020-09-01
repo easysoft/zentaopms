@@ -2,7 +2,7 @@
 /**
  * The control file of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     design
@@ -220,13 +220,16 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
+        /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Get program and date. */
         $program = $this->loadModel('project')->getByID($this->session->program);
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
+        /* Get the repository information through the repoID. */
         $repos  = $this->loadModel('repo')->getRepoPairs($this->session->program);
         $repoID = $repoID ? $repoID : key($repos);
         $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
@@ -243,6 +246,7 @@ class design extends control
             $this->send($result);
         }
 
+        /* Linked submission. */
         $linkedRevisions = array();
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
@@ -265,7 +269,7 @@ class design extends control
     }
 
     /**
-     * Unlink commit.
+     * Design unlink commits.
      *
      * @param  int    $designID
      * @param  int    $commitID
@@ -287,7 +291,7 @@ class design extends control
     }
 
     /**
-     * A version of the code base.
+     * A version of the repository.
      *
      * @param  int    $repoID
      * @access public
@@ -304,15 +308,23 @@ class design extends control
      * View a design's commit.
      *
      * @param  int    $designID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function viewCommit($designID = 0)
+    public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Init pager and get designs. */
+        $this->app->loadClass('pager', $static = true);
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
 
-        $this->view->design = $this->design->getCommit($designID);
+        $this->view->design = $this->design->getCommit($designID, $pager);
+        $this->view->pager  = $pager;
 
         $this->display();
     }

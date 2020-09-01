@@ -62,6 +62,7 @@ $lang->block->consumedHours   = 'Consumed Hours';
 $lang->block->time            = 'No';
 $lang->block->week            = 'Week';
 $lang->block->month           = 'Month';
+$lang->block->selectProduct   = 'Product selection';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
@@ -81,10 +82,16 @@ $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
-$lang->block->productName        = $lang->productCommon . ' Name';
-$lang->block->totalStory         = 'The Total ' . $lang->storyCommon;
-$lang->block->totalBug           = 'The Total Bug';
-$lang->block->totalRelease       = 'Release The Number';
+$lang->block->productName  = $lang->productCommon . ' Name';
+$lang->block->totalStory   = 'The Total ' . $lang->storyCommon;
+$lang->block->totalBug     = 'The Total Bug';
+$lang->block->totalRelease = 'Release The Number';
+
+$lang->block->totalInvestment = 'Total investment';
+$lang->block->totalPeople     = 'Total number';
+$lang->block->spent           = 'Has Been Spent';
+$lang->block->budget          = 'Budget';
+$lang->block->left            = 'Residuals';
 
 $lang->block->default['waterfall']['program']['1']['title']  = $lang->projectCommon . 'Weekly';
 $lang->block->default['waterfall']['program']['1']['block']  = 'Pmmireport';
@@ -334,10 +341,10 @@ $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = $lang->projectCommon . ' Overall';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . ' List';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . ' Rode Map';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint        = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = 'Test Version';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . ' Rode Map';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
