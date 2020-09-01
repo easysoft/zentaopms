@@ -321,7 +321,7 @@ class block extends control
      */
     public function contribute()
     {
-        $this->view->data = $this->block->getContributeBlockData();
+        $this->view->data = $this->loadModel('user')->getPersonalData();
         $this->display();
     }
 

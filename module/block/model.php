@@ -213,31 +213,6 @@ class blockModel extends model
     }
 
     /**
-     * Get contribute block data.
-     *
-     * @access public
-     * @return array
-     */
-    public function getContributeBlockData()
-    {
-        $account = $this->app->user->account;
-        $count   = 'count(*) AS count';
-
-        $data = array();
-        $data['todos']   = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
-        $data['stories'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $data['bugs']    = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $data['cases']   = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
-        $data['tasks']   = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
-            ->andWhere('finishedBy', true)->eq($account)
-            ->orWhere('finishedList')->like("%,{$account},%")
-            ->markRight(1)
-            ->fetch('count');
-
-        return $data;
-    }
-
-    /**
      * Init block when account use first. 
      * 
      * @param  string    $appName 

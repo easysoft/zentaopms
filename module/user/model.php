@@ -1853,13 +1853,18 @@ class userModel extends model
     public function getPersonalData($account = '')
     {
         if(empty($account)) $account = $this->app->user->account;
+        $count   = 'count(*) AS count';
 
         $personalData = array();
-        $personalData['createdTodo']  = $this->dao->select('count(*) as count')->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
-        $personalData['createdStory'] = $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('type')->eq('story')->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['finishedTask'] = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['resolvedBug']  = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['createdCase']  = $this->dao->select('count(*) as count')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdTodo']  = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $personalData['createdStory'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['resolvedBug']  = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdCase']  = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
+        $personalData['finishedTask'] = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
+            ->andWhere('finishedBy', true)->eq($account)
+            ->orWhere('finishedList')->like("%,{$account},%")
+            ->markRight(1)
+            ->fetch('count');
 
         return $personalData;
     }
