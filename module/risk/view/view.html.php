@@ -105,8 +105,8 @@
                   <td><?php echo zget($lang->risk->probabilityList, $risk->probability);?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->risk->riskindex;?></th>
-                  <td><?php echo $risk->riskindex;?></td>                
+                  <th><?php echo $lang->risk->rate;?></th>
+                  <td><?php echo $risk->rate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->pri;?></th>

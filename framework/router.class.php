@@ -146,7 +146,7 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $storyCommon = $hourCommon = 0;
+            $productCommon = $storyCommon = $hourCommon = $planCommon = 0;
             $projectCommon = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
@@ -166,16 +166,21 @@ class router extends baseRouter
             if($this->session->program)
             {
                 $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
-                if($template->template == 'waterfall') $projectCommon = 2;
+                if($template->template == 'waterfall')
+                {
+                    $projectCommon = 2;
+                    $planCommon    = 1;
+                }
             }
 
             $config->storyCommon = $storyCommon;
 
-            /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
+            /* Set productCommon, projectCommon, storyCommon, hourCommon and planCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
             $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
+            $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planCommon])       ? $this->config->planCommonList[$this->clientLang][(int)$planCommon]     : $this->config->planCommonList['en'][(int)$planCommon];
 
             if($storyCommon == 0 and isset($URAndSR))
             {

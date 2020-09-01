@@ -850,6 +850,17 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
+                $action->objectLink = '';
+
+                /* Fix bug #2961. */
+                $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
+
+                if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout)
+                {
+                    unset($actions[$i]);
+                    continue;
+                }
+
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectName));
                 $action->objectLabel = $objectLabel;

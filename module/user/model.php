@@ -51,20 +51,24 @@ class userModel extends model
     }
 
     /**
-     * Get users list of current company.
+     * Get inside users list of current company.
      *
      * @access public
      * @return void
      */
     public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('inside')
+            ->orderBy('account')
+            ->fetchAll();
     }
 
     /**
      * Get the account=>realname pairs.
      *
-     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
+     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @param  string $usersToAppended  account1,account2
      * @param  int    $maxCount 
      * @access public
@@ -79,7 +83,7 @@ class userModel extends model
          * thus to make sure users of this role at first.
          */
         $fields = 'account, realname, deleted';
-        $type   = (strpos($params, 'outside') !== false) ? 'outside' : '';
+        $type   = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
         if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,', role) AS roleOrder";
         if(strpos($params, 'pdfirst') !== false) $fields .= ", INSTR(',po,pd,', role) AS roleOrder";
         if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qd,qa,', role) AS roleOrder";
@@ -199,8 +203,10 @@ class userModel extends model
     /**
      * Get users by sql.
      *
-     * @param  int    $query
-     * @param  int    $pager
+     * @param  varchar $browseType inside|outside|all
+     * @param  int     $query
+     * @param  object  $pager
+     * @param  varchar $orderBy
      * @access public
      * @return void
      */
@@ -209,7 +215,7 @@ class userModel extends model
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
             ->beginIF($query)->andWhere($query)->fi()
-            ->beginIF($browseType == 'inside')->andWhere('type')->eq('')->fi()
+            ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -230,6 +236,7 @@ class userModel extends model
 
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00' )
+            ->setDefault('type', 'inside' )
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
@@ -308,6 +315,7 @@ class userModel extends model
                 $data[$i] = new stdclass();
                 $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
                 $data[$i]->account  = $users->account[$i];
+                $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
                 $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];

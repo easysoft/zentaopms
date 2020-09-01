@@ -614,6 +614,7 @@ class commonModel extends model
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
                         if($subMenuItem->name == 'program') 
                         {
+                            /* Print program sub menu.*/
                             global $dbh;
                             $program    = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
                             $subActive .= 'dropdown-submenu';
@@ -2116,6 +2117,16 @@ EOD;
         return $response;
     }
 
+    /**
+     * Set main menu by nav group.
+     *
+     * @param  string  $group
+     * @param  string  $moduleName
+     * @param  string  $methodName
+     * @static
+     * @access public
+     * @return string
+     */
     public static function setMainMenuByGroup($group, $moduleName, $methodName)
     {
         global $lang;
@@ -2149,6 +2160,14 @@ EOD;
         if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
     }
 
+    /**
+     * Replace menu vars.
+     *
+     * @param  object  $menus
+     * @static
+     * @access public
+     * @return string
+     */
     public static function processMenuVars($menus)
     {    
         global $app, $lang;
@@ -2176,6 +2195,14 @@ EOD;
         return $menus;
     }
 
+    /**
+     * Get program main menu by template.
+     *
+     * @param  varchar $moduleName
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getProgramMainMenu($moduleName)
     {
         global $app, $lang, $dbh;
@@ -2197,6 +2224,14 @@ EOD;
         }
     }
 
+    /**
+     * Get program module menu by template.
+     *
+     * @param  varchar $moduleName
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getProgramModuleMenu($moduleName)
     {
         global $app, $lang, $dbh;
@@ -2211,6 +2246,17 @@ EOD;
         }
     }
 
+    /**
+     * Get relations for two object.
+     *
+     * @param  varchar $AType
+     * @param  int     $AID
+     * @param  varchar $BType
+     * @param  int     $BID
+     * @static
+     * @access public
+     * @return string
+     */
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
     {
         return $this->dao->select('*')->from(TABLE_RELATION)

@@ -1116,14 +1116,14 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = helper::today();
-        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $date    = date('Ymd', strtotime('this week Monday'));
         $begin   = $program->begin;
-        $weeks   = $this->weekly->getWeekPairs($begin);
+        $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
-        $task    = $this->dao->select("
+
+        $task = $this->dao->select("
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
             ->from(TABLE_TASK)->where('program')->eq($this->session->program)
@@ -1312,7 +1312,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumprojectBlock()
+    public function printSprintBlock()
     {
         $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -1341,20 +1341,17 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $projects  = $this->loadModel('project')->getPairs();
-        $products  = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
 
         $actions = array();
-        if(!empty($projects) || !empty($products))
-        {
-            $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
-                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
-                ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
-                ->orderBy('date_desc')
-                ->limit(10)
-                ->fetchAll();
-        }
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('project')->eq($this->session->program)
+            ->beginIF($projects)->markLeft()->orWhere('project')->in(array_keys($projects))->fi()->markRight()
+            ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->orderBy('date_desc')
+            ->limit(10)
+            ->fetchAll();
 
         $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');

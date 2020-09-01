@@ -38,17 +38,19 @@ $lang->design->basicInfo     = '基本信息';
 $lang->design->noAssigned    = '未指派';
 
 /* 动作列表. */
-$lang->design->common      = '设计';
-$lang->design->create      = '创建设计';
-$lang->design->batchCreate = '批量创建';
-$lang->design->edit        = '变更';
-$lang->design->delete      = '删除';
-$lang->design->view        = '设计概况';
-$lang->design->browse      = '浏览列表';
-$lang->design->linkCommit  = '关联提交';
-$lang->design->submit      = '提交评审';
-$lang->design->assignTo    = '指派';
-$lang->design->revision    = '查看关联代码';
+$lang->design->common       = '设计';
+$lang->design->create       = '创建设计';
+$lang->design->batchCreate  = '批量创建';
+$lang->design->edit         = '变更';
+$lang->design->delete       = '删除';
+$lang->design->view         = '设计概况';
+$lang->design->browse       = '浏览列表';
+$lang->design->viewCommit   = '查看提交';
+$lang->design->linkCommit   = '关联提交';
+$lang->design->unlinkCommit = '取消关联';
+$lang->design->submit       = '提交评审';
+$lang->design->assignTo     = '指派';
+$lang->design->revision     = '查看关联代码';
 
 /* 字段取值. */
 $lang->design->typeList         = array();
@@ -70,3 +72,5 @@ $lang->design->errorSelection = '还没有选中记录!';
 $lang->design->noDesign       = '暂时没有记录';
 $lang->design->noCommit       = '暂时没有提交记录';
 $lang->design->confirmDelete  = '您确定要删除这个设计吗？';
+$lang->design->confirmUnlink  = '您确定要移除这个提交吗？';
+$lang->design->errorDate      = '开始日期不能大于结束日期';

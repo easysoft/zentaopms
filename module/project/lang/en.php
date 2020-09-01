@@ -117,6 +117,12 @@ $lang->project->aclList['open']    = "Default (Users who can visit {$lang->proje
 $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Custom (Team members and the whitelist users can access it.)';
 
+$lang->project->storyPoint = 'Story Point';
+
+$lang->project->burnByList['left']       = 'View by remaining hours';
+$lang->project->burnByList['estimate']   = "View by {$lang->planCommon} hours";
+$lang->project->burnByList['storyPoint'] = 'View by story point';
+
 /* Method list. */
 $lang->project->index             = "{$lang->projectCommon} Home";
 $lang->project->task              = 'Task List';

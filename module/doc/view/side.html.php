@@ -66,19 +66,19 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                 <?php
                 if($subLibID == 'project')
                 {
-                    $subLibLink  = $this->createLink('doc', 'allLibs', "type=project&product=$tabMenu->id");
+                    $subLibLink  = inlink('allLibs', "type=project&product=$tabMenu->id");
                     $activeClass = ($this->methodName == 'alllibs' && $type == 'project' && $$tabValue == $tabMenu->id) ? "class='active'" : '';
                     $icon        = 'icon-stack';
                 }
                 elseif($subLibID == 'files')
                 {
-                    $subLibLink  = $this->createLink('doc', 'showFiles', "type=$tabValue&objectID=$tabMenu->id");
+                    $subLibLink  = inlink('showFiles', "type=$tabValue&objectID=$tabMenu->id");
                     $activeClass = ($this->methodName == 'showfiles' && $type == $tabValue && $object->id == $tabMenu->id) ? "class='active'" : '';
                     $icon        = 'icon-paper-clip';
                 }
                 else
                 {
-                    $subLibLink  = $this->createLink('doc', 'browse', "libID=$subLibID");
+                    $subLibLink  = inlink('browse', "libID=$subLibID");
                     $activeClass = ($this->methodName == 'browse' && $browseType != 'bymodule' && $subLibID == $libID) ? "class='active'" : '';
                     $icon        = 'icon-folder-outline';
                 }
@@ -181,7 +181,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           <strong><?php echo $lang->doc->customShowLibs;?></strong>
         </div>
         <div class='modal-body'>
-          <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc', '');?>' target='hiddenwin' method='post'>
+          <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc');?>' target='hiddenwin' method='post'>
             <table class='table table-form'>
               <tr>
                 <td><?php echo html::checkbox('showLibs', $lang->doc->customShowLibsList, $config->doc->custom->showLibs);?></td>

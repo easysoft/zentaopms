@@ -16,7 +16,7 @@
         <?php endif;?>
         <th class='w-80px'><?php echo $lang->risk->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'><?php echo $lang->risk->riskindex;?></th>
+        <th class='w-80px'><?php echo $lang->risk->rate;?></th>
         <th class='w-80px'><?php echo $lang->risk->pri;?></th>
         <th class='w-120px'><?php echo $lang->risk->assignedTo;?></th>
         <th class='w-120px'><?php echo $lang->risk->category;?></th>
@@ -38,7 +38,7 @@
           <span class="status-risk status-<?php echo $risk->status?>"><?php echo zget($lang->risk->statusList, $risk->status);?></span>
         </td>
         <?php if($longBlock):?>
-        <td class='c-riskindex'><?php echo $risk->riskindex?></td>
+        <td class='c-rate'><?php echo $risk->rate?></td>
         <td class='c-pri'><?php echo zget($lang->risk->priList, $risk->pri, $risk->pri)?></td>
         <td><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category, $risk->category)?></td>

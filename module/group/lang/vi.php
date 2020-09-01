@@ -21,14 +21,18 @@ $lang->group->managePrivByGroup  = 'Quản lý Privileges by Group';
 $lang->group->managePrivByModule = 'Quản lý Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Quản lý Members';
+$lang->group->managePgmAdmin     = 'Manage Program Admins';
 $lang->group->confirmDelete      = 'Bạn có muốn xóa người dùng này group?';
 $lang->group->successSaved       = 'Đã lưu.';
 $lang->group->errorNotSaved      = 'Thất bại.  Vui lòng select actions and groups.';
+$lang->group->program            = 'Manage Programs';
 $lang->group->viewList           = 'Truy cập Sight';
+$lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Truy cập Product';
 $lang->group->projectList        = 'Truy cập Project';
 $lang->group->dynamic            = 'Truy cập Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
+$lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "Không có {$lang->productCommon}";
 $lang->group->noneProject        = "Không có {$lang->projectCommon}";
 
@@ -44,6 +48,7 @@ $lang->group->priv    = 'Nhóm quyền';
 $lang->group->option  = 'Tùy chọn';
 $lang->group->inside  = 'Nhóm người dùng';
 $lang->group->outside = 'Other người dùng';
+$lang->group->limited  = 'Limited Users';
 $lang->group->other   = 'Khác';
 $lang->group->all     = 'Tất cả Privileges';
 

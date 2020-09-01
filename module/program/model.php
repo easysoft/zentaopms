@@ -441,7 +441,7 @@ class programModel extends model
      * @access private
      * @return void
      */
-    public function getSwapper($programs, $programID, $currentModule, $currentMethod, $extra = '')
+    public function getSwitcher($programs, $programID, $currentModule, $currentMethod, $extra = '')
     {
         $this->loadModel('project');
         $currentProgramName = '';

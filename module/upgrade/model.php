@@ -3175,7 +3175,7 @@ class upgradeModel extends model
         $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
-    
+
     /**
      * Add unique key to team table. 
      * 

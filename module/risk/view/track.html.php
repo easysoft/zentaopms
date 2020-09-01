@@ -44,11 +44,11 @@
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->probability;?></th>
-            <td><?php echo html::select('probability', $lang->risk->probabilityList, $risk->impact, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('probability', $lang->risk->probabilityList, $risk->probability, "class='form-control chosen'");?></td>
           </tr>
           <tr class='track hidden'>
-            <th><?php echo $lang->risk->riskindex;?></th>
-            <td><?php echo html::input('riskindex', $risk->riskindex, "class='form-control'");?></td>
+            <th><?php echo $lang->risk->rate;?></th>
+            <td><?php echo html::input('rate', $risk->rate, "class='form-control'");?></td>
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->pri;?></th>

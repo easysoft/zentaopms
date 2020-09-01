@@ -362,13 +362,13 @@ class customModel extends model
     }
 
     /**
-     * Get system swapper.
+     * Get system mode switcher.
      * @param  string $module
      * @param  string $method
      * @access public
      * @return array
      */
-    public function getSwapper()
+    public function getModeSwitcher()
     {
         $current = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? 'Scrum' : 'CMMI';
         $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setwaterfall'), 'CMMI') : html::a(helper::createLink('custom', 'setscrum'), 'Scrum');

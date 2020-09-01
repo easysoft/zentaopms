@@ -19,8 +19,8 @@ include 'chosen.html.php';
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if($isProgram) echo $this->loadModel('program')->getSwapper($this->program->getPairs(), $this->session->program, $app->rawModule, $app->rawMethod);?>
-        <?php if($isSystem)  echo $this->loadModel('custom')->getSwapper();?>
+        <?php if($isProgram) echo $this->loadModel('program')->getSwitcher($this->program->getPairs(), $this->session->program, $app->rawModule, $app->rawMethod);?>
+        <?php if($isSystem)  echo $this->loadModel('custom')->getModeSwitcher();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
@@ -52,18 +52,24 @@ include 'chosen.html.php';
 </header>
 
 <?php endif;?>
-
-<?php if(isset($this->config->qcVersion)):?>
 <script>
 $("#userMenu").append('<button class="btn btn-mini" type="button" id="showSearchGo" style="padding: 2px 3px;"><i class="icon icon-sm icon-search"></i></button>');
 $("#searchbox").hide();
-$("#showSearchGo").on("click", function(){$("#searchbox").show(); $("#showSearchGo").hide();});
+$("#showSearchGo").on("click", function()
+{
+    $("#searchbox").show();
+    $("#showSearchGo").hide();
+});
+
 $("#searchInput").mouseout(function()
 {
     var searchValue = $("#searchInput").val();
-    if(searchValue == ''){$("#searchbox").hide(); $("#showSearchGo").show()};
+    if(searchValue == '')
+    {
+        $("#searchbox").hide();
+        $("#showSearchGo").show();
+    }
 });
 </script>
-<?php endif;?>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>
