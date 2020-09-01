@@ -96,6 +96,11 @@ class block extends control
 
         $block = $this->block->getByID($id);
         if($block and empty($type)) $type = $block->block;
+        if(isset($block->params->num) and !isset($block->params->count))
+        {
+            $block->params->count = $block->params->num;
+            unset($block->params->num);
+        }
 
         if(isset($this->lang->block->moduleList[$source]))
         {
@@ -232,6 +237,8 @@ class block extends control
             }
 
             $block->params  = json_decode($block->params);
+            if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
+
             $blockID = $block->block;
             $source  = empty($block->source) ? 'common' : $block->source;
 
@@ -439,6 +446,7 @@ class block extends control
 
             $params = $this->get->param;
             $params = json_decode(base64_decode($params));
+            if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
             if(!$this->selfCall)
             {
                 $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
@@ -525,7 +533,7 @@ class block extends control
      */
     public function printTodoBlock()
     {
-        $limit = $this->viewType == 'json' ? 0 : (int)$this->params->num;
+        $limit = $this->viewType == 'json' ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
         $uri   = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
@@ -555,7 +563,7 @@ class block extends control
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
-        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy, $programID);
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy, $programID);
     }
 
     /**
@@ -570,7 +578,7 @@ class block extends control
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
-        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $programID);
+        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $programID);
     }
 
     /**
@@ -598,7 +606,7 @@ class block extends control
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t2.program')->eq((int)$this->session->program)->fi()
                 ->orderBy($this->params->orderBy)
-                ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+                ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
         }
         elseif($this->params->type == 'openedbyme')
@@ -607,7 +615,7 @@ class block extends control
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('program')->eq((int)$this->session->program)->fi()
                 ->orderBy($this->params->orderBy)
-                ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+                ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
         }
         $this->view->cases    = $cases;
@@ -635,7 +643,7 @@ class block extends control
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
     }
 
@@ -650,8 +658,8 @@ class block extends control
         $this->session->set('storyList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadClass('pager', $static = true);
-        $num     = isset($this->params->num) ? (int)$this->params->num : 0;
-        $pager   = pager::init(0, $num , 1);
+        $count   = isset($this->params->count) ? (int)$this->params->count : 0;
+        $pager   = pager::init(0, $count , 1);
         $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
         $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
 
@@ -675,7 +683,7 @@ class block extends control
             ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t2.program')->eq((int)$this->session->program)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.begin desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
     }
 
@@ -696,7 +704,7 @@ class block extends control
             ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t1.program')->eq((int)$this->session->program)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
     }
 
@@ -716,7 +724,7 @@ class block extends control
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t1.program')->eq((int)$this->session->program)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
     }
 
@@ -725,7 +733,7 @@ class block extends control
         $this->app->loadLang('project');
         $this->app->loadLang('task');
 
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->num);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -739,9 +747,9 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
-        $pager = pager::init(0, $num , 1);
+        $pager = pager::init(0, $count , 1);
 
         $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
         $productIdList = array();
@@ -787,8 +795,8 @@ class block extends control
         $this->app->loadLang('story');
 
         /* Set program status and count. */
-        $status = isset($this->params->type) ? $this->params->type : 'all';
-        $count  = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $status = isset($this->params->type)  ? $this->params->type       : 'all';
+        $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get programs. */
         $programs = $this->loadModel('program')->getProgramOverview('byStatus', $status, 'id_desc', $count);
@@ -853,9 +861,9 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $status = isset($this->params->type) ? $this->params->type : '';
-        $num    = isset($this->params->num) ? $this->params->num : '';
+        $count  = isset($this->params->count) ? $this->params->count : '';
 
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -984,12 +992,12 @@ class block extends control
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
 
-        $status  = isset($this->params->type) ? $this->params->type : '';
-        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
+        $status  = isset($this->params->type)  ? $this->params->type : '';
+        $count   = isset($this->params->count) ? (int)$this->params->count : 0;
 
         /* Get projects. */
         $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
-        $projects  = $this->loadModel('project')->getOrderedProjects($status, $num, $programID);
+        $projects  = $this->loadModel('project')->getOrderedProjects($status, $count, $programID);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -1162,7 +1170,7 @@ class block extends control
         $this->session->set('issueList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**
@@ -1176,7 +1184,7 @@ class block extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**
@@ -1264,9 +1272,9 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
+        $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
-        $pager = pager::init(0, $num, 1);
+        $pager = pager::init(0, $count, 1);
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
     }
 
@@ -1401,7 +1409,7 @@ class block extends control
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
     }
 
@@ -1416,10 +1424,10 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $this->app->loadLang('bug');
-        $status  = isset($this->params->type) ? $this->params->type : '';
-        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
+        $status = isset($this->params->type)  ? $this->params->type : '';
+        $count  = isset($this->params->count) ? (int)$this->params->count : 0;
 
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -1589,9 +1597,9 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $num   = isset($this->params->num) ? (int)$this->params->num : 0;
-        $type  = isset($this->params->type) ? $this->params->type : 'all';
-        $pager = pager::init(0, $num, 1);
+        $count = isset($this->params->count) ? (int)$this->params->count : 0;
+        $type  = isset($this->params->type)  ? $this->params->type : 'all';
+        $pager = pager::init(0, $count, 1);
 
         $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $programID);
@@ -1704,10 +1712,10 @@ class block extends control
     {
         $this->loadModel('project');
 
-        $num = isset($this->params->num)  ? (int)$this->params->num : 15;
+        $count = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', 'id_desc', $num);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', 'id_desc', $count);
     }
 
     /**

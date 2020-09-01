@@ -129,6 +129,7 @@ $lang->story->allStories     = 'Tất cả câu chuyện';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
+$lang->story->storyChanged   = 'Requirement Changed';
 $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';

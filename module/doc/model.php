@@ -51,7 +51,12 @@ class docModel extends model
                 $mainLib     = $this->lang->doc->libTypeList[$type];
                 $selectHtml .= "<div class='btn-group angle-btn'>";
                 $selectHtml .= "<div class='btn-group'>";
-                $selectHtml .= "<a class='btn btn-limit' title=$mainLib href=" . helper::createLink('doc', 'allLibs', "type=product") . ">" . $mainLib . "</a>";
+                $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
+                $selectHtml .= "<ul class='dropdown-menu'>";
+                foreach($this->lang->doc->libTypeList as $libType => $libName)
+                {
+                    $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), "<i class='icon {$this->lang->doc->libIconList[$libType]}'></i> {$this->lang->doc->libTypeList[$libType]}") . '</li>';
+                }
                 $selectHtml .='</ul></div></div>';
             }
 

@@ -60,7 +60,8 @@ $status = '';
 if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 10) $status = 'createFile';
 
 $lang = new stdclass();
-$lang->misc = new stdclass();
+$lang->misc        = new stdclass();
+$lang->storyCommon = '';
 include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
 {
