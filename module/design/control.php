@@ -254,9 +254,9 @@ class design extends control
 
         /* Init pager. */
         $recTotal   = count($revisions);
-        $revisions  = array_chunk($revisions, $recPerPage);
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $revisions  = array_chunk($revisions, $pager->recPerPage);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
