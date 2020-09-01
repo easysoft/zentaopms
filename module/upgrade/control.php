@@ -23,20 +23,20 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if(version_compare($this->config->installedVersion, '15', '<')) $this->locate(inlink('to15'));
+        if(version_compare($this->config->installedVersion, '20', '<')) $this->locate(inlink('to20'));
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }
 
     /**
-     * Upgrade to 15 version.
+     * Upgrade to 20 version.
      * 
      * @access public
      * @return void
      */
-    public function to15()
+    public function to20()
     {
-        $this->view->title = $this->lang->upgrade->to15Tips;
+        $this->view->title = $this->lang->upgrade->to20Tips;
         $this->display();
     }
 
@@ -141,7 +141,7 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(version_compare(str_replace('_', '.', $fromVersion), '15', '<') && !isset($this->config->qcVersion)) $this->locate(inlink('mergeProgram'));
+            if(version_compare(str_replace('_', '.', $fromVersion), '20', '<') && !isset($this->config->qcVersion)) $this->locate(inlink('mergeProgram'));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
@@ -304,8 +304,10 @@ class upgrade extends control
             die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type"), 'parent'));
         }
 
+        /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetch('count');
         $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
+        /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
         {
             $this->upgrade->initUserView();
@@ -319,9 +321,11 @@ class upgrade extends control
         $this->app->loadLang('program');
         $this->loadModel('project');
         $this->view->type = $type;
+        /* Get products and projects group by product line. */
         if($type == 'productline')
         {
             $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->fetchAll('id');
+
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('line')->in(array_keys($productlines))->andWhere('deleted')->eq(0)->fetchAll('id');
             if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
 
@@ -333,15 +337,18 @@ class upgrade extends control
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->fetchAll('id');
 
+            /* Remove project than linked more than two products */
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
             foreach($projectProducts as $projectID => $products)
             {
                 if(count($products) > 1) unset($noMergedProjects[$projectID]);
             }
 
+            /* Group product by product line. */
             $lineGroups = array();
             foreach($noMergedProducts as $product) $lineGroups[$product->line][$product->id] = $product;
 
+            /* Group project by product. */
             $productGroups = array();
             foreach($noMergedProjects as $project)
             {
@@ -352,11 +359,11 @@ class upgrade extends control
                 $productGroups[$productID][$project->id] = $project;
             }
 
-            $productlines;
             $this->view->productlines  = $productlines;
             $this->view->lineGroups    = $lineGroups;
             $this->view->productGroups = $productGroups;
         }
+        /* Get projects group by product. */
         if($type == 'product')
         {
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -370,12 +377,14 @@ class upgrade extends control
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->fetchAll('id');
 
+            /* Remove project than linked more than two products */
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
             foreach($projectProducts as $projectID => $products)
             {
                 if(count($products) > 1) unset($noMergedProjects[$projectID]);
             }
 
+            /* Group project by product. */
             $productGroups = array();
             foreach($noMergedProjects as $project)
             {
@@ -388,6 +397,7 @@ class upgrade extends control
             $this->view->noMergedProducts = $noMergedProducts;
             $this->view->productGroups    = $productGroups;
         }
+        /* Get no merged projects than is not linked product. */
         if($type == 'project')
         {
             $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -398,6 +408,7 @@ class upgrade extends control
 
             $this->view->noMergedProjects = $noMergedProjects;
         }
+        /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
         {
             $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
