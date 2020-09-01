@@ -172,8 +172,6 @@ class designModel extends model
      */
     public function linkCommit($designID = 0, $repoID = 0)
     {
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
         $revisions = $_POST['revision'];
 
         foreach($revisions as $revision)
@@ -199,10 +197,38 @@ class designModel extends model
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
             $design = new stdclass();
-            $design->commit     = implode(",", $revisions);
+            $design->commit = $this->dao->select('commit')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch('commit');
+
+            if($design->commit)
+            {
+                $design->commit = implode(",", $revisions) . "," . $design->commit;
+            }
+            else
+            {
+                $design->commit = implode(",", $revisions);
+            }
+
             $design->commitDate = helper::now();
             $design->commitBy   = $this->app->user->account;
             $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
+    }
+
+    /**
+     * Unlink commit.
+     *
+     * @param  int    $designID
+     * @param  int    $commitID
+     * @access public
+     * @return void
+     */
+    public function unlinkCommit($designID = 0, $commitID = 0)
+    {
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andwhere('AID')->eq($designID)->andwhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->andWhere('BID')->eq($commitID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andwhere('BID')->eq($designID)->andwhere('BType')->eq('design')->andwhere('relation')->eq('completedfrom')->andWhere('AID')->eq($commitID)->exec();
+
+        $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->fetchAll('BID');
+        $commit = implode(",", array_keys($commit));
+        $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
     }
 
     /**
@@ -216,7 +242,7 @@ class designModel extends model
     {
         $programID = $this->session->program;
         $program   = $this->loadModel('project')->getByID($programID);
-        $products  = $this->loadModel('product')->getPairs($programID);
+        $products  = $this->loadModel('product')->getPairs('', $programID);
         $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
 
         $productID = $this->loadModel('product')->saveState($productID, $products);
@@ -286,6 +312,7 @@ class designModel extends model
      * Get design list.
      *
      * @param  int    $productID
+     * @param  int    $programID
      * @param  string $type
      * @param  int    $param
      * @param  string $orderBy
@@ -293,17 +320,17 @@ class designModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($programID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($type == 'bySearch')
         {
-            $designs = $this->getBySearch($param, $orderBy, $pager);
+            $designs = $this->getBySearch($programID, $param, $orderBy, $pager);
         }
         else
         {
             $designs = $this->dao->select('*')->from(TABLE_DESIGN)
                 ->where('deleted')->eq(0)
-                ->beginIF($this->session->program)->andWhere('program')->eq($this->session->program)->fi()
+                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
                 ->andWhere('product')->eq($productID)
                 ->orderBy($orderBy)
@@ -311,26 +338,36 @@ class designModel extends model
                 ->fetchAll('id');
         }
 
-        foreach($designs as $id => $design)
-        {
-            $design->commit = '';
-            $relations = $this->loadModel('common')->getRelations('design', $id, 'commit');
-            foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID", '', true), "#$relation->BID", '_blank');
-        }
-
         return $designs;
+    }
+
+    /**
+     * Get commit.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return void
+     */
+    public function getCommit($designID = 0)
+    {
+        $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+
+        $design->commit = $design->commit ? explode(",", $design->commit) : '';
+
+        return $design;
     }
 
     /**
      * Get designs by search.
      *
+     * @param  int    $programID
      * @param  string $queryID
      * @param  string $orderBy
      * @param  int    $pager
      * @access public
      * @return object
      */
-    public function getBySearch($queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getBySearch($programID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($queryID)
         {
@@ -355,7 +392,7 @@ class designModel extends model
         $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('program')->eq($this->session->program)
+            ->andWhere('program')->eq($programID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

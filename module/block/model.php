@@ -936,7 +936,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getScrumprojectParams($module = '')
+    public function getSprintParams($module = '')
     {
         $params->num['name']    = $this->lang->block->num;
         $params->num['control'] = 'input';

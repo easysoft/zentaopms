@@ -32,7 +32,7 @@ class workestimationModel extends model
      */
     public function getProgramScale($program)
     {
-        $products = $this->loadModel('product')->getPairs($program);
+        $products = $this->loadModel('product')->getPairs('', $program);
         $productIdList = array_keys($products);
         return $this->dao->select('cast(sum(estimate) as decimal(10,2)) as scale')->from(TABLE_STORY)->where('product')->in($productIdList)->andWhere('type')->eq('requirement')->fetch('scale');
     }

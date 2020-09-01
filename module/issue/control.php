@@ -43,7 +43,7 @@ class issue extends control
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
-        $this->view->issueList  = $this->issue->getList($browseType, $queryID, $orderBy, $pager);
+        $this->view->issueList  = $this->issue->getList($this->session->program, $browseType, $queryID, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
 
         $this->display();
@@ -368,9 +368,9 @@ class issue extends control
         $this->view->members          = $members;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
 
-        $this->view->projects  = $this->loadModel('project')->getPairs();
-        $this->view->program   = $this->loadModel('project')->getById($this->session->program);
-        $this->view->products  = $this->loadModel('product')->getPairs();
+        $this->view->projects = $this->loadModel('project')->getPairs('', $this->session->program);
+        $this->view->program  = $this->loadModel('project')->getById($this->session->program);
+        $this->view->products = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->productID = $this->session->product;
         $this->view->moduleID  = 0;
         $this->view->branch    = 0;

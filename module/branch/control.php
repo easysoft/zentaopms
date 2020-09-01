@@ -26,7 +26,7 @@ class branch extends control
             die(js::reload('parent'));
         }
 
-        $products = $this->loadModel('product')->getPairs('nocode');
+        $products = $this->loadModel('product')->getPairs('nocode' , $this->session->program);
         $this->product->setMenu($products, $productID);
 
         $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), $products[$productID]);

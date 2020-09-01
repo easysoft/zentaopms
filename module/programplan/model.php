@@ -876,12 +876,13 @@ class programplanModel extends model
     /**
      * Get parent stage list.
      *
+     * @param  int    $programID
      * @param  int    $planID
      * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getParentStageList($planID, $productID)
+    public function getParentStageList($programID, $planID, $productID)
     {
         $projects = $this->getProjectsByProduct($productID);
         unset($projects[$planID]);
@@ -889,7 +890,7 @@ class programplanModel extends model
         $parentStage = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('id')->in($projects)
             ->andWhere('type')->eq('project')
-            ->andWhere('program')->eq($this->session->program)
+            ->andWhere('program')->eq($programID)
             ->andWhere('parent')->eq(0)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs('id');

@@ -1108,14 +1108,14 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $this->loadModel('program');
         $program = $this->loadModel('project')->getByID($this->session->program);
         $today   = helper::today();
-        $date    = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $date    = date('Ymd', strtotime('this week Monday'));
         $begin   = $program->begin;
-        $weeks   = $this->weekly->getWeekPairs($begin);
+        $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
-        $task    = $this->dao->select("
+
+        $task = $this->dao->select("
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
             ->from(TABLE_TASK)->where('program')->eq($this->session->program)
@@ -1141,7 +1141,7 @@ class block extends control
      */
     public function printWaterfallGanttBlock()
     {
-        $products  = $this->loadModel('product')->getPairs();
+        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
         $productID = isset($this->session->product) ? 0 : $this->session->product;
         if(!$productID) $productID = key($products);
 
@@ -1162,7 +1162,7 @@ class block extends control
         $this->session->set('issueList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1176,7 +1176,7 @@ class block extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, $this->params->orderBy);
     }
 
     /**
@@ -1304,7 +1304,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumprojectBlock()
+    public function printSprintBlock()
     {
         $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -1333,20 +1333,17 @@ class block extends control
      */
     public function printScrumdynamicBlock()
     {
-        $projects  = $this->loadModel('project')->getPairs();
-        $products  = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
 
         $actions = array();
-        if(!empty($projects) || !empty($products))
-        {
-            $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                ->beginIF($projects && $products)->where('project')->in(array_keys($projects))->orWhere('product')->in(array_keys($products))->fi()
-                ->beginIF($projects && empty($products))->where('project')->in(array_keys($projects))->fi()
-                ->beginIF(empty($projects) && $products)->where('product')->in(array_keys($products))->fi()
-                ->orderBy('date_desc')
-                ->limit(10)
-                ->fetchAll();
-        }
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('project')->eq($this->session->program)
+            ->beginIF($projects)->markLeft()->orWhere('project')->in(array_keys($projects))->fi()->markRight()
+            ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->orderBy('date_desc')
+            ->limit(10)
+            ->fetchAll();
 
         $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -1501,7 +1498,7 @@ class block extends control
         $normal = 0;
         $closed = 0;
 
-        $products = $this->loadModel('product')->getList();
+        $products = $this->loadModel('product')->getList($this->session->program);
         foreach($products as $product)
         {
             if(!$this->product->checkPriv($product->id)) continue;

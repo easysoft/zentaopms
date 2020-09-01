@@ -840,16 +840,16 @@ class baseRouter
         }
     }
 
-    /**  
-     * 从Get里取progarm id 设置到session中
-     * Set program id into session.
-     * 
+    /**
+     * 从Get里取progarm id 设置到session中。
+     * Get progarm id from Get and set it to session.
+     *
      * @access public
      * @return void
      */
     public function setProgram()
-    {    
-        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']); //Set program into session.
+    {
+        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']); //Set program id into session.
     }
 
     /**

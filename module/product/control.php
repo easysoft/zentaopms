@@ -30,7 +30,7 @@ class product extends control
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
-        $this->products = $this->product->getPairs('nocode');
+        $this->products = $this->product->getPairs('nocode', $this->session->program);
         if(empty($this->products) and strpos(',create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
@@ -834,7 +834,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs();
+        $this->products = $this->product->getPairs('', $this->session->program);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */

@@ -720,7 +720,7 @@ class program extends control
     public function ajaxGetEnterLink($programID = 0)
     {
         $program         = $this->project->getByID($programID);
-        $programProjects = $this->project->getPairs();
+        $programProjects = $this->project->getPairs('', $this->session->program);
         $programProject  = key($programProjects);
 
         if($program->template == 'waterfall')

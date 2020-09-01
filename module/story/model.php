@@ -1937,7 +1937,7 @@ class storyModel extends model
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs();
+            $products = $this->loadModel('product')->getPairs('', $this->session->program);
         }
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -2497,7 +2497,7 @@ class storyModel extends model
             ->where($this->reportCondition())
             ->groupBy('product')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('', $this->session->program);
         foreach($datas as $productID => $data) $data->name = isset($products[$productID]) ? $products[$productID] : $this->lang->report->undefined;
         return $datas;
     }

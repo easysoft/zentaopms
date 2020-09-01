@@ -34,7 +34,7 @@ class budget extends control
 
         $this->view->title      = $this->lang->budget->common . $this->lang->budget->list;
         $this->view->position[] = $this->lang->budget->common . $this->lang->budget->list;
-        $this->view->budgets    = $this->budget->getList($orderBy, $pager);
+        $this->view->budgets    = $this->budget->getList($this->session->program, $orderBy, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
@@ -69,10 +69,10 @@ class budget extends control
         $this->view->position[]       = $this->lang->budget->common . $this->lang->budget->summary;
         $this->view->subjectStructure = $getSubjectStructure;
         $this->view->isChildren       = $isChildren;
-        $this->view->subjects         = $this->budget->getSubjects();
-        $this->view->stages           = $this->budget->getStages();
+        $this->view->subjects         = $this->budget->getSubjects($this->session->program);
+        $this->view->stages           = $this->budget->getStages($this->session->program);
         $this->view->stagePairs       = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
-        $this->view->summary          = $this->budget->getSummary();
+        $this->view->summary          = $this->budget->getSummary($this->session->program);
         $this->view->modules          = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
         $this->display();
     }
@@ -159,7 +159,7 @@ class budget extends control
      */
     public function view($budgetID)
     {
-        $this->view->stages     = $this->budget->getStages();
+        $this->view->stages     = $this->budget->getStages($this->session->program);
         $this->view->subjects   = $this->budget->getSubjectOption();
         $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
         $this->view->budget     = $this->budget->getByID($budgetID);

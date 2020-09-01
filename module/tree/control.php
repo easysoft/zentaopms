@@ -61,12 +61,13 @@ class tree extends control
 
         if($viewType == 'story')
         {
+            $products = $this->product->getPairs('', $this->session->program);
+
             $this->lang->set('menugroup.tree', 'product');
-            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'story', '', 'story');
+            $this->product->setMenu($products, $rootID, $branch, 'story', '', 'story');
             $this->lang->tree->menu      = $this->lang->product->menu;
             $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
 
-            $products = $this->product->getPairs();
             unset($products[$rootID]);
             $currentProduct = key($products);
 
@@ -80,7 +81,7 @@ class tree extends control
         }
         elseif($viewType == 'bug')
         {
-            $this->loadModel('bug')->setMenu($this->product->getPairs(), $rootID);
+            $this->loadModel('bug')->setMenu($this->product->getPairs('', $this->session->program), $rootID);
             $this->lang->tree->menu      = $this->lang->bug->menu;
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
@@ -103,7 +104,7 @@ class tree extends control
         }
         elseif($viewType == 'case')
         {
-            $this->loadModel('testcase')->setMenu($this->product->getPairs(), $rootID);
+            $this->loadModel('testcase')->setMenu($this->product->getPairs('', $this->session->program), $rootID);
             $this->lang->tree->menu      = $this->lang->testcase->menu;
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
@@ -137,12 +138,13 @@ class tree extends control
         }
         elseif($viewType == 'line')
         {
+            $products = $this->product->getPairs('', $this->session->program);
+
             $this->lang->set('menugroup.tree', 'product');
-            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'line', '', 'line');
+            $this->product->setMenu($products, $rootID, $branch, 'line', '', 'line');
             $this->lang->tree->menu      = $this->lang->product->menu;
             $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
 
-            $products = $this->product->getPairs();
             unset($products[$rootID]);
             $currentProduct = key($products);
 
@@ -210,12 +212,12 @@ class tree extends control
         $products = $this->project->getProducts($rootID);
         $this->view->products = $products;
 
+        $projects = $this->project->getPairs('', $this->session->program);
         $this->lang->set('menugroup.tree', 'project');
-        $this->project->setMenu($this->project->getPairs(), $rootID);
+        $this->project->setMenu($projects, $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;
         $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
-        $projects = $this->project->getPairs();
         unset($projects[$rootID]);
         $currentProject = key($projects);
         $parentModules  = $this->tree->getParents($currentModuleID);
@@ -286,7 +288,7 @@ class tree extends control
             $product = $this->loadModel('product')->getById($module->root);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
             $this->view->product  = $product;
-            $this->view->products = $this->product->getPairs();
+            $this->view->products = $this->product->getPairs('', $this->session->program);
         }
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
