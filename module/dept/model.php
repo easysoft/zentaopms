@@ -349,7 +349,10 @@ class deptModel extends model
     /**
      * Get users of a deparment.
      * 
-     * @param  int    $deptID 
+     * @param  varchar $browseType inside|outside|all
+     * @param  int     $deptID 
+     * @param  object  $pager
+     * @param  varchar $orderBy
      * @access public
      * @return array
      */
@@ -357,7 +360,7 @@ class deptModel extends model
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'inside')->andWhere('type')->eq('')->fi()
+            ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
             ->beginIF($deptID)->andWhere('dept')->in($deptID)->fi()
             ->orderBy($orderBy)

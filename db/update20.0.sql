@@ -36,6 +36,7 @@ ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
 ALTER TABLE `zt_userview` ADD `programs` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
 
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL AFTER `account`;
+update zt_user set `type` = 'inside';
 
 CREATE TABLE `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
