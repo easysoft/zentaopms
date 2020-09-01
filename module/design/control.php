@@ -253,8 +253,8 @@ class design extends control
         }
 
         /* Init pager. */
-        $recTotal   = count($revisions);
         $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($revisions);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $revisions  = array_chunk($revisions, $pager->recPerPage);
 
