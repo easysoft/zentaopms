@@ -264,7 +264,6 @@ class design extends control
         $this->view->repos           = $repos;
         $this->view->repoID          = $repoID;
         $this->view->repo            = $repo;
-        $this->view->revisions       = $revisions;
         $this->view->revisions       = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
         $this->view->designID        = $designID;
         $this->view->begin           = $begin;
