@@ -1,24 +1,67 @@
 <?php
-$lang->custom->common     = 'Tùy biến';
-$lang->custom->index      = 'Trang chủ';
-$lang->custom->set        = 'Tùy biến';
-$lang->custom->restore    = 'Thiết lập lại';
-$lang->custom->key        = 'Khóa';
-$lang->custom->value      = 'Giá trị';
-$lang->custom->flow       = 'Mô hình';
-$lang->custom->working    = 'Chế độ';
-$lang->custom->select     = 'Chọn mô hình';
-$lang->custom->branch     = 'Multi-Branch';
-$lang->custom->owner      = 'Sở hữu';
-$lang->custom->module     = 'Module';
-$lang->custom->section    = 'Section';
-$lang->custom->lang       = 'Ngôn ngữ';
-$lang->custom->setPublic  = 'Thiết lập Public';
-$lang->custom->required   = 'Trường bắt buộc';
-$lang->custom->score      = 'Điểm';
-$lang->custom->timezone   = 'Timezone';
-$lang->custom->scoreReset = 'Thiết lập lại điểm';
-$lang->custom->scoreTitle = 'Tính năng điểm';
+$lang->custom->common             = 'Tùy biến';
+$lang->custom->index              = 'Trang chủ';
+$lang->custom->set                = 'Tùy biến';
+$lang->custom->restore            = 'Thiết lập lại';
+$lang->custom->key                = 'Khóa';
+$lang->custom->value              = 'Giá trị';
+$lang->custom->flow               = 'Mô hình';
+$lang->custom->working            = 'Chế độ';
+$lang->custom->select             = 'Chọn mô hình';
+$lang->custom->branch             = 'Multi-Branch';
+$lang->custom->owner              = 'Sở hữu';
+$lang->custom->module             = 'Module';
+$lang->custom->section            = 'Section';
+$lang->custom->lang               = 'Ngôn ngữ';
+$lang->custom->setPublic          = 'Thiết lập Public';
+$lang->custom->required           = 'Trường bắt buộc';
+$lang->custom->score              = 'Điểm';
+$lang->custom->timezone           = 'Timezone';
+$lang->custom->scoreReset         = 'Thiết lập lại điểm';
+$lang->custom->scoreTitle         = 'Tính năng điểm';
+$lang->custom->setscrum           = 'Interval Hint';
+$lang->custom->setWaterfall       = 'Switch Views';
+$lang->custom->estimate           = 'Estimated configuration';
+$lang->custom->estimateConfig     = 'Estimated configuration';
+$lang->custom->estimateUnit       = 'Estimating Unit';
+$lang->custom->estimateEfficiency = 'Productivity';
+$lang->custom->estimateCost       = 'Unit Labour Cost';
+$lang->custom->estimateHours      = 'Daily Working Hours';
+$lang->custom->estimateDays       = 'Working Days Per Week';
+$lang->custom->region             = 'Interval';
+$lang->custom->tips               = 'Tips';
+$lang->custom->setTips            = 'Set Tips';
+$lang->custom->isRange            = 'Is Target Control';
+$lang->custom->plan               = 'Plan';
+$lang->custom->planStatus         = 'Enable Plan';
+$lang->custom->concept            = 'Concept';
+
+$lang->custom->object['program'] = 'Program';
+$lang->custom->program->fields['unitList'] = 'Unit List';
+
+$lang->custom->unitList['efficiency'] = 'Working Hours/';
+$lang->custom->unitList['manhour']    = 'Man-hour/';
+$lang->custom->unitList['cost']       = 'Yuan/Hour';
+$lang->custom->unitList['hours']      = 'Hours';
+$lang->custom->unitList['days']       = 'Days';
+$lang->custom->unitList['loc']        = 'KLOC';
+
+$lang->custom->tipProgressList['SPI'] = 'Schedule Performance Index(SPI)';
+$lang->custom->tipProgressList['SV']  = 'Schedule Variance(SV%)';
+
+$lang->custom->tipCostList['CPI'] = 'Cost Performed Index(CPI)';
+$lang->custom->tipCostList['CV']  = 'Cost Variance(CV%)';
+
+$lang->custom->planStatusList[0]  = 'No';
+$lang->custom->planStatusList[1]  = 'Yes';
+
+$lang->custom->tipRangeList[0]  = 'No';
+$lang->custom->tipRangeList[1]  = 'Yes';
+
+$lang->custom->regionMustNumber = 'The interval must be a number!';
+$lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
+
+$lang->custom->numberError = 'The interval must be greater than zero!';
 
 $lang->custom->object['story']    = 'Câu chuyện';
 $lang->custom->object['task']     = 'Nhiệm vụ';
@@ -127,9 +170,6 @@ $lang->custom->weekendList[1] = '1 ngày nghỉ';
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Sản phẩm - Dự án';
 $lang->custom->productProject->relation['0_1'] = 'Sản phẩm - lặp lại';
-$lang->custom->productProject->relation['1_1'] = 'Dự án - lặp lại';
-$lang->custom->productProject->relation['0_2'] = 'Sản phẩm - Sprint';
-$lang->custom->productProject->relation['1_2'] = 'Dự án - Sprint';
 
 $lang->custom->productProject->notice = 'Chọn một mô hình phù hợp với doanh nghiệp của bạn.';
 
@@ -158,6 +198,6 @@ $lang->custom->conceptOptions->story['0'] = 'Điều kiện';
 $lang->custom->conceptOptions->story['1'] = 'Câu chuyện';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['0'] = 'Giờ';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Điểm';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
+$lang->custom->conceptOptions->hourPoint['3'] = 'Code Line';
