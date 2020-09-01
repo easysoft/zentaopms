@@ -220,10 +220,6 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        /* Init pager and get designs. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         /* Get program and date. */
         $program = $this->loadModel('project')->getByID($this->session->program);
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
@@ -234,7 +230,7 @@ class design extends control
         $repoID = $repoID ? $repoID : key($repos);
         $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
-        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end) : '';
+        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end) : '';
 
         if($_POST)
         {
@@ -249,7 +245,18 @@ class design extends control
         /* Linked submission. */
         $linkedRevisions = array();
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
+        foreach($relations as $relation) $linkedRevisions[$relation->BID] = $relation->BID;
+
+        foreach($revisions as $id => $commit)
+        {
+            if(isset($linkedRevisions[$commit->id])) unset($revisions[$id]);
+        }
+
+        /* Init pager. */
+        $recTotal   = count($revisions);
+        $revisions  = array_chunk($revisions, $recPerPage);
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
@@ -258,7 +265,7 @@ class design extends control
         $this->view->repoID          = $repoID;
         $this->view->repo            = $repo;
         $this->view->revisions       = $revisions;
-        $this->view->linkedRevisions = $linkedRevisions;
+        $this->view->revisions       = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
         $this->view->designID        = $designID;
         $this->view->begin           = $begin;
         $this->view->end             = $end;
