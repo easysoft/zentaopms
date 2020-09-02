@@ -415,8 +415,16 @@ class block extends control
 
         if($mode == 'getblocklist')
         {
+            $program   = '';
             $dashboard = $this->get->dashboard;
-            $blocks    = $this->block->getAvailableBlocks($module, $dashboard);
+
+            if($dashboard == 'program')
+            {
+                $programID = $this->session->program;
+                $program   = $this->loadModel('project')->getByID($programID);
+            }
+
+            $blocks    = $this->block->getAvailableBlocks($module, $dashboard, $program);
             if(!$this->selfCall)
             {
                 echo $blocks;
@@ -431,6 +439,7 @@ class block extends control
             echo '<div class="form-group">';
             echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
             echo '<div class="col-sm-7">';
+            echo html::hidden('type', $program->template);
             echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
             echo '</div></div>';
         }
@@ -1256,7 +1265,7 @@ class block extends control
     public function printScrumOverviewBlock()
     {
         $programID = $this->session->program;
-        $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 15);
+        $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 1);
 
         $this->view->totalData = $totalData;
         $this->view->programID = $programID;
@@ -1272,7 +1281,7 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $count = isset($this->params->count) ? (int)$this->params->count : 0;
+        $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
@@ -1288,7 +1297,8 @@ class block extends control
     {
         $stories  = array();
         $bugs     = array();
-        $releases = array(); 
+        $releases = array();
+        $count    = isset($this->params->count) ? (int)$this->params->count : 15;
 
         $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
@@ -1343,6 +1353,7 @@ class block extends control
     {
         $projects = $this->loadModel('project')->getPairs();
         $products = $this->loadModel('product')->getPairs();
+        $count    = isset($this->params->count) ? (int)$this->params->count : 10;
 
         $actions = array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -1350,7 +1361,7 @@ class block extends control
             ->beginIF($projects)->markLeft()->orWhere('project')->in(array_keys($projects))->fi()->markRight()
             ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
             ->orderBy('date_desc')
-            ->limit(10)
+            ->limit($count)
             ->fetchAll();
 
         $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
@@ -1370,7 +1381,7 @@ class block extends control
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
 
-        $products  = $this->loadModel('product')->getPairs();
+        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
         if(!is_numeric($productID)) $productID = key($products);
 
         $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
@@ -1396,8 +1407,11 @@ class block extends control
     public function printScrumTestBlock()
     {
         $this->session->set('testtaskList', $this->app->getURI(true));
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadLang('testtask');
+
+        $count  = isset($this->params->count) ? (int)$this->params->count : 10;
+        $status = isset($this->params->type)  ? $this->params->type : 'wait';
+
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -1407,9 +1421,9 @@ class block extends control
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.program')->eq($this->session->program)->fi()
             ->andWhere('t1.product = t5.product')
-            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+            ->limit($count)
             ->fetchAll();
     }
 

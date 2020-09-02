@@ -303,9 +303,8 @@ class issueModel extends model
      */
     public function resolve($issueID)
     {
-        $issue = $this->post->issue;
-        $issue['status'] = 'resolved';
-        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
+        $data = fixer::input('post')->get();
+        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
     }
 
     /**
@@ -316,8 +315,13 @@ class issueModel extends model
      */
     public function createTask()
     {
-        $task = fixer::input('post')->remove('issue,spec')->get();
-        $this->dao->insert(TABLE_TASK)->data($task, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        $task = fixer::input('post')
+            ->remove('resolution,resolvedBy,resolvedDate')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', helper::today())
+            ->get();
+
+        $this->dao->insert(TABLE_TASK)->data($task)->exec();
         return $this->dao->lastInsertID();
     }
 
@@ -329,21 +333,24 @@ class issueModel extends model
      */
     public function createStory()
     {
-        $story = fixer::input('post')->remove('issue,color')
-            ->setIF($this->post->needNotReview or $this->post->projectID > 0, 'status', 'active')
+        $story = fixer::input('post')
+            ->remove('spec,resolution,resolvedBy,resolvedDate')
+            ->setIF($this->post->needNotReview, 'status', 'active')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', helper::now())
             ->get();
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files,spec,story,needNotReview')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story)->exec();
 
-        $id = $this->dao->lastInsertID();
+        $stotyID = $this->dao->lastInsertID();
         $this->dao->insert(TABLE_STORYSPEC)
-            ->set('story')->eq($id)
+            ->set('story')->eq($stotyID)
             ->set('title')->eq($story->title)
-            ->set('spec')->eq($story->spec)
+            ->set('spec')->eq($this->post->spec)
             ->set('version')->eq(1)
             ->exec();
 
-        return $id;
+        return $stotyID;
     }
 
     /**
@@ -354,8 +361,14 @@ class issueModel extends model
      */
     public function createBug()
     {
-        $bug = fixer::input('post')->remove('issue,spec,color')->join('openedBuild', ',')->get();
-        $this->dao->insert(TABLE_BUG)->data($bug, 'teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        $bug = fixer::input('post')
+            ->remove('resolution,resolvedBy,resolvedDate')
+            ->join('openedBuild', ',')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', helper::now())
+            ->get();
+
+        $this->dao->insert(TABLE_BUG)->data($bug)->exec();
         return $this->dao->lastInsertID();
     }
 
@@ -367,8 +380,14 @@ class issueModel extends model
      */
     public function createRisk()
     {
-        $risk = fixer::input('post')->remove('issue,color,estimate')->get();
-        $this->dao->insert(TABLE_RISK)->data($risk, 'spec,title,teamMember,storyEstimate,storyDesc,storyPri,labels,files')->exec();
+        $risk = fixer::input('post')
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->remove('resolution,resolvedBy,resolvedDate')
+            ->get();
+
+        $this->dao->insert(TABLE_RISK)->data($risk)->exec();
+
         return $this->dao->lastInsertID();
     }
 

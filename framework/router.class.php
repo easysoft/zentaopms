@@ -126,7 +126,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName', 'planStatus','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception) 
                 {
@@ -146,15 +146,17 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $storyCommon = $hourCommon = $planCommon = 0;
+            $productCommon = $storyCommon = $hourCommon = $planCommon = $URAndSR = $planStatus = 0;
             $projectCommon = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
             {
-                if($setting->key == 'productProject') list($productCommon, $projectCommon) = explode('_',  $setting->value);
+                if($setting->key == 'productProject')   list($productCommon, $projectCommon) = explode('_',  $setting->value);
                 if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
-                if($setting->key == 'hourPoint') $hourCommon    = $setting->value;
-                if($setting->key == 'URAndSR') $URAndSR = $setting->value;
+                if($setting->key == 'hourPoint')        $hourCommon  = $setting->value;
+                if($setting->key == 'URAndSR')          $URAndSR     = $setting->value;
+                if($setting->key == 'planStatus')       $planStatus  = $setting->value;
+
                 if($setting->key == 'URSRName')
                 {
                     $URSRName = json_decode($setting->value, true);
@@ -173,7 +175,9 @@ class router extends baseRouter
                 }
             }
 
+            $config->planStatus  = $planStatus;
             $config->storyCommon = $storyCommon;
+            $config->URAndSR     = $URAndSR;
 
             /* Set productCommon, projectCommon, storyCommon, hourCommon and planCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
@@ -182,10 +186,9 @@ class router extends baseRouter
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
             $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planCommon])       ? $this->config->planCommonList[$this->clientLang][(int)$planCommon]     : $this->config->planCommonList['en'][(int)$planCommon];
 
-            if($storyCommon == 0 and isset($URAndSR))
+            if($storyCommon == 0 and $URAndSR)
             {
-                $config->URAndSR = $URAndSR;
-                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+                if($URAndSR and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
             }
         }
 

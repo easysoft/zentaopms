@@ -440,7 +440,7 @@ $(function()
     // Update table summary text
     <?php
     $storyCommon = $lang->storyCommon;
-    if(!empty($config->URAndSR))
+    if($config->URAndSR)
     {
         if($storyType == 'requirement') $storyCommon = $lang->urCommon;
         if($storyType == 'story') $storyCommon = $lang->srCommon;

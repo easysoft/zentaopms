@@ -10,15 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php 
+<?php
 include '../../common/view/header.html.php';
 include '../../common/view/kindeditor.html.php';
 include '../../common/view/datepicker.html.php';
-js::set('holders', $lang->bug->placeholder);
-js::set('page', 'create');
-js::set('refresh', $lang->refresh);
-js::set('flow', $config->global->flow);
 ?>
+<?php
+echo js::set('issueID', $issue->id);
+echo js::set('resolveLink', $this->createLink('issue', 'ajaxGetResolveForm'));
+;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -28,33 +28,29 @@ js::set('flow', $config->global->flow);
       </div>
     </div>
     <div class="modal-body" style="min-height: 282px; overflow: auto;">
-    <form id='ajaxForm' class="form-ajax" method='post' action="<?php echo inlink('resolve', "issue=$issue->id");?>">
-      <table class="table table-form">
+    <form id='ajaxForm' method='post'>
+      <table class="table table-form" id="solutionTable">
         <tr>
           <th><?php echo $lang->issue->resolution;?></th>
           <td>
-            <?php echo html::select('issue[resolution]', $lang->issue->resolveMethods, 'resolved', "class='form-control chosen'");?>
+            <?php echo html::select('resolution', $lang->issue->resolveMethods, 'resolved', 'class="form-control chosen" onchange="getSolutions()"');?>
           </td>
         </tr>
-        <?php include 'createtask.html.php';?>
-        <?php include 'createbug.html.php';?>
-        <?php include 'createstory.html.php';?>
-        <?php include 'createrisk.html.php';?>
-        <tr class='resolvedTR'>
+        <tr>
           <th><?php echo $lang->issue->resolutionComment;?></th>
-          <td colspan='3'><textarea name='issue[resolutionComment]' class='form-control' rows='5' id='resolutionComment'><?php echo $issue->resolutionComment;?></textarea></td>
+          <td colspan='3'><textarea name='resolutionComment' class='form-control' rows='5' id='resolutionComment'><?php echo $issue->resolutionComment;?></textarea></td>
         </tr>
         <tr>
           <th><?php echo $lang->issue->resolvedBy;?></th>
           <td>
-            <?php echo html::select('issue[resolvedBy]', $users, $this->app->user->account, "class='form-control chosen'");?>
+            <?php echo html::select('resolvedBy', $users, $this->app->user->account, "class='form-control chosen'");?>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->issue->resolvedDate;?></th>
           <td>
              <div class='input-group has-icon-right'>
-               <?php echo html::input('issue[resolvedDate]', date('Y-m-d'), "class='form-control form-date'");?>
+               <?php echo html::input('resolvedDate', date('Y-m-d'), "class='form-control form-date'");?>
                <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
              </div>
           </td>
@@ -66,22 +62,65 @@ js::set('flow', $config->global->flow);
           </td>
         </tr>
       </table>
+      <?php echo html::hidden('program', $this->session->program);?>
     </form>
   </div>
 </div>
 <script>
-$().ready(function()
-{
-    $('.taskTR,.bugTR,.storyTR,.riskTR').hide();
-    $('#issueresolution').change(function()
+    function getSolutions()
     {
-        $('.resolvedTR,.taskTR,.bugTR,.storyTR,.riskTR').hide().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', true);
-        if($(this).val() == 'resolved') $('.resolvedTR').show().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', false);
-        if($(this).val() == 'tobug')  $('.bugTR').show().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', false);
-        if($(this).val() == 'totask') $('.taskTR').show().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', false);
-        if($(this).val() == 'tostory') $('.storyTR').show().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', false);
-        if($(this).val() == 'torisk') $('.riskTR').show().find('input[type=text],input[type=radio],input[type=checkbox],select,textarea').prop('disabled', false);
-    })
-});
+        var mode = $("#resolution").val();
+        $.ajax(
+        {
+            url: resolveLink,
+            dataType: "html",
+            data:{mode: mode, issueID: issueID},
+            type: "post",
+            success:function(data)
+            {
+                $("#solutionTable").html(data);
+                $("#resolution").chosen();
+                $("#resolvedBy").chosen();
+                $("#resolvedDate").fixedDate().datepicker();
+
+                if(mode == 'tostory' || mode == 'tobug' || mode == 'totask')
+                {
+                    $("#module").chosen();
+                    $("#type").chosen();
+                    $("#assignedTo").chosen();
+                    $("#pri").chosen();
+                }
+
+                switch(mode)
+                {
+                    case 'totask':
+                        $("#project").chosen();
+                        $("#desc").kindeditor();
+                        $("#estStarted").fixedDate().datepicker();
+                        $("#deadline").fixedDate().datepicker();
+                        break;
+                    case 'tobug':
+                        $("#product").chosen();
+                        $("#openedBuild").chosen();
+                        $("#steps").kindeditor();
+                        $("#deadline").fixedDate().datepicker();
+                        $("#story").chosen();
+                        break;
+                    case 'tostory':
+                        $("#product").chosen();
+                        $("#spec").kindeditor();
+                        break;
+                    case 'torisk':
+                        $("#source").chosen();
+                        $("#category").chosen();
+                        $("#strategy").chosen();
+                        break;
+                    case 'resolved':
+                        $("#resolutionComment").kindeditor();
+                        break;
+                }
+            }
+        })
+    }
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -14,7 +14,7 @@ $lang->story->create            = "Create Story";
 $lang->story->createStory       = 'Create Story';
 $lang->story->createRequirement = 'Create Requirement';
 
-if(!empty($config->URAndSR))
+if($config->URAndSR)
 {
     $lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
     $lang->story->story             = zget($lang, 'srCommon', "Story");

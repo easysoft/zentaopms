@@ -151,7 +151,7 @@ $lang->block->default['scrum']['program']['4']['title'] = '待测版本';
 $lang->block->default['scrum']['program']['4']['block'] = 'scrumtest';
 $lang->block->default['scrum']['program']['4']['grid']  = 8;
 
-$lang->block->default['scrum']['program']['4']['params']['type']    = 'all';
+$lang->block->default['scrum']['program']['4']['params']['type']    = 'wait';
 $lang->block->default['scrum']['program']['4']['params']['count']   = '15';
 $lang->block->default['scrum']['program']['4']['params']['orderBy'] = 'id_desc';
 
@@ -361,6 +361,7 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前为止项目进展趋势图';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '项目问题';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '项目风险';
+$lang->block->modules['waterfall']['index']->availableBlocks->programdynamic    = '最新动态';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

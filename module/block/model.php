@@ -59,8 +59,6 @@ class blockModel extends model
             unset($_SESSION['album'][$uid]);
         }
 
-        if(strpos($data->block, 'waterfall')  !== false) $data->type = 'waterfall';
-        if(strpos($data->block, 'scrum') !== false) $data->type = 'scrum';
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
         if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
@@ -258,18 +256,20 @@ class blockModel extends model
 
     /**
      * Get block list.
-     * 
+     *
+     * @param  string $module
+     * @param  string $dashboard
+     * @param  object $program
+     *
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '', $dashboard = '')
+    public function getAvailableBlocks($module = '', $dashboard = '', $program = null)
     {
         $blocks = $this->lang->block->availableBlocks;
         if($dashboard == 'program')
         {
-            $programID = $this->session->program;
-            $program   = $this->loadModel('project')->getByID($programID);
-            $blocks    = $this->lang->block->modules[$program->template]['index']->availableBlocks;
+            $blocks = $this->lang->block->modules[$program->template]['index']->availableBlocks;
         }
         else
         {
@@ -844,7 +844,7 @@ class blockModel extends model
      * @return void
      */
     public function getScrumTestParams($module = '')
-    {   
+    {
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->testtask;
@@ -917,7 +917,7 @@ class blockModel extends model
      */
     public function getScrumProductParams($module = '')
     {
-        $params->num['name']    = $this->lang->block->num;
+        $params->num['name']    = $this->lang->block->count;
         $params->num['control'] = 'input';
 
         return json_encode($params);
