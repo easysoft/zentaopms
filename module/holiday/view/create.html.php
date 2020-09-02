@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>form{margin: 30px 0px}</style>
+<style>form{margin: 35px 0px}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
