@@ -257,6 +257,7 @@ $config->objectTables['entry']       = TABLE_ENTRY;
 $config->objectTables['webhook']     = TABLE_WEBHOOK;
 $config->objectTables['risk']        = TABLE_RISK;
 $config->objectTables['issue']       = TABLE_ISSUE;
+$config->objectTables['design']      = TABLE_DESIGN;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

@@ -328,7 +328,7 @@ class block extends control
      */
     public function contribute()
     {
-        $this->view->data = $this->block->getContributeBlockData();
+        $this->view->data = $this->loadModel('user')->getPersonalData();
         $this->display();
     }
 
@@ -1253,7 +1253,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumoverallBlock()
+    public function printScrumOverviewBlock()
     {
         $programID = $this->session->program;
         $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 15);
@@ -1268,7 +1268,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumlistBlock()
+    public function printScrumListBlock()
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
@@ -1284,7 +1284,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumproductBlock()
+    public function printScrumProductBlock()
     {
         $stories  = array();
         $bugs     = array();
@@ -1334,12 +1334,12 @@ class block extends control
     }
 
     /**
-     * Print srcum dynamic block.
+     * Print program dynamic block.
      *
      * @access public
      * @return void
      */
-    public function printScrumdynamicBlock()
+    public function printProgramDynamicBlock()
     {
         $projects = $this->loadModel('project')->getPairs();
         $products = $this->loadModel('product')->getPairs();
@@ -1365,7 +1365,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumroadmapBlock($productID = 0, $blockNavID = '')
+    public function printScrumRoadMapBlock($productID = 0, $blockNavID = '')
     {
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
@@ -1393,7 +1393,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printScrumtestBlock()
+    public function printScrumTestBlock()
     {
         $this->session->set('testtaskList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();

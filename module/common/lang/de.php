@@ -118,21 +118,54 @@ $lang->typeAB       = 'Typ';
 $lang->common = new stdclass();
 $lang->common->common = 'Standard Module';
 
-/* 主导航菜单。*/
+/* Main menu. */
+$lang->mainNav = new stdclass();
+$lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
+$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|index|';
+$lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
+$lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+
+$lang->reporting = new stdclass();
+$lang->dividerMenu = ',admin,';
+
+/* Scrum menu. */
 $lang->menu = new stdclass();
-$lang->menu->my      = '<span>Dashboard</span>|my|index';
+$lang->menu->program = 'Home|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = 'Test|qa|index';
-$lang->menu->ci      = 'CI|repo|browse';
-$lang->menu->doc     = 'Dokumente|doc|index';
-$lang->menu->report  = 'Berichte|report|index';
-$lang->menu->company = 'Unternehmen|company|index';
-$lang->menu->admin   = 'Admin|admin|index';
+$lang->menu->project = 'Iteration|project|index|locate=no';
+$lang->menu->doc     = 'Doc|doc|index|';
+$lang->menu->qa      = 'Qa|qa|index';
 
-$lang->dividerMenu = ',qa,report,';
+/* System menu. */
+$lang->system = new stdclass();
+$lang->system->menu = new stdclass();
+$lang->system->menu->estimate    = array('link' => 'Estimate|custom|estimate|');
+$lang->system->menu->stage       = array('link' => 'Stage|stage|browse|', 'subModule' => 'stage');
+$lang->system->menu->subject     = array('link' => 'Subject|subject|browse|');
+$lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
+$lang->system->menu->custom      = array('link' => 'Custom|custom|plan|');
+$lang->system->dividerMenu = ',auditcl,subject,';
 
-/* 查询条中可以选择的对象列表。*/
+if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
+    $lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
+	$lang->system->menu->custom   = array('link' => 'Custom|custom|concept|');
+
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|settips|';
+    unset($lang->system->dividerMenu);
+}
+
+$lang->stage = new stdclass();
+$lang->stage->menu = new stdclass();
+$lang->stage->menu->browse  = array('link' => 'Stage List|stage|browse|', 'alias' => 'create,edit,batchcreate');
+$lang->stage->menu->settype = 'Stage Type|stage|settype|';
+
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
+
+/* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Aufgaben';
@@ -149,12 +182,12 @@ $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'Test-Bericht';
 $lang->searchTips                   = 'ID (strg+g)';
 
-/* 导入支持的编码格式。*/
+/* Code formats for import. */
 $lang->importEncodeList['gbk']   = 'GBK';
 $lang->importEncodeList['big5']  = 'BIG5';
 $lang->importEncodeList['utf-8'] = 'UTF-8';
 
-/* 导出文件的类型列表。*/
+/* File type list for export. */
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
@@ -162,10 +195,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'Alle';
 $lang->exportTypeList['selected'] = 'Ausgewählte';
 
-/* 语言 */
+/* Language. */
 $lang->lang = 'Sprache';
 
-/* 风格列表。*/
+/* Theme style. */
 $lang->theme                = 'Theme';
 $lang->themes['default']    = 'ZenTao Blau (Standard)';
 $lang->themes['green']      = 'Grün';
@@ -175,39 +208,34 @@ $lang->themes['pink']       = 'Pink';
 $lang->themes['blackberry'] = 'Dunkelblau';
 $lang->themes['classic']    = 'Klassisch';
 
-/* 首页菜单设置。*/
+/* Index menu settings. */
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
 $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
-/* 我的地盘菜单设置。*/
+/* My dashboard menu settings. */
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index          = 'Home|my|index';
-$lang->my->menu->calendar       = array('link' => 'Kalender|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->todo           = 'Todo|my|todo|';
+$lang->my->menu->program        = array('link' => 'Program|my|program|');
 $lang->my->menu->task           = array('link' => 'Aufgaben|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Test Aufgaben|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->requirement    = array('link' => "用户需求|my|requirement|", 'subModule' => 'story');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Verlauf|my|dynamic|';
-$lang->my->menu->profile        = array('link' => 'Profil|my|profile', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = 'Passwort|my|changepassword';
-$lang->my->menu->manageContacts = 'Kontakt|my|managecontacts';
-$lang->my->menu->score          = 'Wertung|my|score';
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->score       = new stdclass();
-$lang->score->menu = $lang->my->menu;
-
-/* 产品视图设置。*/
+/* Product menu settings. */
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
@@ -224,17 +252,17 @@ $lang->product->menu->view     = array('link' => 'Übersicht|product|view|produc
 
 $lang->product->dividerMenu = ',plan,project,doc,';
 
-$lang->story       = new stdclass();
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
+$lang->story       = new stdclass();
 
 $lang->branch->menu      = $lang->product->menu;
 $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
 
-/* 项目视图菜单设置。*/
+/* Project menu settings. */
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
@@ -365,15 +393,14 @@ $lang->jenkins->menu = $lang->ci->menu;
 $lang->compile->menu = $lang->ci->menu;
 $lang->job->menu     = $lang->ci->menu;
 
-/* 文档视图菜单设置。*/
+/* Doc menu settings. */
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Doc Lib|doc|createLib', 'float' => 'right');
 
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
 
-/* 统计视图菜单设置。*/
+/* Report menu settings. */
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
@@ -386,7 +413,16 @@ $lang->report->menu->staff   = array('link' => 'Unternehmen|report|workload');
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = 'Hinweis: Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
 
-/* 组织结构视图菜单设置。*/
+/* Company menu settings. */
+$lang->company = new stdclass();
+$lang->dept    = new stdclass();
+$lang->group   = new stdclass();
+$lang->user    = new stdclass();
+$lang->company->menu = new stdclass();
+$lang->dept->menu    = new stdclass();
+$lang->group->menu   = new stdclass();
+$lang->user->menu    = new stdclass();
+
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'Benutzer|company|browse', 'subModule' => 'user');
@@ -395,27 +431,20 @@ $lang->company->menu->browseGroup = array('link' => 'Gruppen|group|browse', 'sub
 $lang->company->menu->dynamic     = 'Verlauf|company|dynamic|';
 $lang->company->menu->view        = array('link' => 'Unternehmen|company|view');
 
-$lang->dept  = new stdclass();
-$lang->group = new stdclass();
-$lang->user  = new stdclass();
-
-$lang->dept->menu  = $lang->company->menu;
-$lang->group->menu = $lang->company->menu;
-$lang->user->menu  = $lang->company->menu;
-
-/* 后台管理菜单设置。*/
+/* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => 'Company|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
-$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => 'Entwicklung|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-$lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Sicherheit|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
+
+$lang->company->menu = $lang->company->menu;
+$lang->dept->menu    = $lang->company->menu;
+$lang->group->menu   = $lang->company->menu;
+$lang->user->menu    = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -455,20 +484,7 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->backup->menu    = $lang->admin->menu;
-$lang->cron->menu      = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->custom->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->dev->menu       = $lang->admin->menu;
-$lang->entry->menu     = $lang->admin->menu;
-$lang->webhook->menu   = $lang->admin->menu;
-$lang->message->menu   = $lang->admin->menu;
-
-/* 菜单分组。*/
+/* Menu group. */
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
@@ -487,8 +503,8 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->doclib      = 'doc';
-$lang->menugroup->people      = 'company';
+$lang->menugroup->report      = 'reporting';
+$lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->score       = 'my';
@@ -508,7 +524,95 @@ $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
 
-/* 错误提示信息。*/
+/* Nav group.*/
+$lang->navGroup = new stdclass();
+$lang->navGroup->my     = 'my';
+$lang->navGroup->todo   = 'my';
+$lang->navGroup->effort = 'my';
+
+$lang->navGroup->product     = 'program';
+$lang->navGroup->story       = 'program';
+$lang->navGroup->branch      = 'program';
+$lang->navGroup->productplan = 'program';
+$lang->navGroup->release     = 'program';
+$lang->navGroup->tree        = 'program';
+$lang->navGroup->project     = 'program';
+$lang->navGroup->task        = 'program';
+$lang->navGroup->qa          = 'program';
+$lang->navGroup->bug         = 'program';
+$lang->navGroup->doc         = 'program';
+$lang->navGroup->testcase    = 'program';
+$lang->navGroup->testtask    = 'program';
+$lang->navGroup->testreport  = 'program';
+$lang->navGroup->testsuite   = 'program';
+$lang->navGroup->caselib     = 'program';
+$lang->navGroup->feedback    = 'program';
+$lang->navGroup->deploy      = 'program';
+$lang->navGroup->stakeholder = 'program';
+
+$lang->navGroup->programplan    = 'program';
+$lang->navGroup->workestimation = 'program';
+$lang->navGroup->budget         = 'program';
+$lang->navGroup->review         = 'program';
+$lang->navGroup->reviewissue    = 'program';
+$lang->navGroup->weekly         = 'program';
+$lang->navGroup->milestone      = 'program';
+$lang->navGroup->pssp           = 'program';
+$lang->navGroup->design         = 'program';
+$lang->navGroup->repo           = 'program';
+$lang->navGroup->issue          = 'program';
+$lang->navGroup->risk           = 'program';
+$lang->navGroup->auditplan      = 'program';
+$lang->navGroup->cm             = 'program';
+$lang->navGroup->nc             = 'program';
+$lang->navGroup->job            = 'program';
+$lang->navGroup->jenkins        = 'program';
+$lang->navGroup->compile        = 'program';
+$lang->navGroup->build          = 'program';
+
+$lang->navGroup->durationestimation = 'program';
+
+$lang->navGroup->stage         = 'system';
+$lang->navGroup->measurement   = 'system';
+$lang->navGroup->report        = 'system';
+$lang->navGroup->sqlbuilder    = 'system';
+$lang->navGroup->auditcl       = 'system';
+$lang->navGroup->cmcl          = 'system';
+$lang->navGroup->process       = 'system';
+$lang->navGroup->activity      = 'system';
+$lang->navGroup->output        = 'system';
+$lang->navGroup->classify      = 'system';
+$lang->navGroup->subject       = 'system';
+$lang->navGroup->baseline      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->reviewsetting = 'system';
+$lang->navGroup->holiday       = 'system';
+
+$lang->navGroup->attend   = 'attend';
+$lang->navGroup->leave    = 'attend';
+$lang->navGroup->makeup   = 'attend';
+$lang->navGroup->overtime = 'attend';
+$lang->navGroup->lieu     = 'attend';
+
+$lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->webhook   = 'admin';
+$lang->navGroup->sms       = 'admin';
+$lang->navGroup->message   = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->custom    = 'admin';
+$lang->navGroup->cron      = 'admin';
+$lang->navGroup->backup    = 'admin';
+$lang->navGroup->mail      = 'admin';
+$lang->navGroup->dev       = 'admin';
+$lang->navGroup->extension = 'admin';
+$lang->navGroup->action    = 'admin';
+$lang->navGroup->search    = 'admin';
+
+/* Error info. */
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");

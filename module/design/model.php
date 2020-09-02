@@ -299,7 +299,7 @@ class designModel extends model
      *
      * @param  int    $productID
      * @param  int    $programID
-     * @param  string $type
+     * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $pager
@@ -345,24 +345,6 @@ class designModel extends model
     }
 
     /**
-     * Set product menu.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function setProductMenu($productID = 0)
-    {
-        $programID = $this->session->program;
-        $program   = $this->loadModel('project')->getByID($programID);
-        $products  = $this->loadModel('product')->getPairs('', $programID);
-        $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
-
-        $productID = $this->loadModel('product')->saveState($productID, $products);
-        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
-    }
-
-    /**
      * Get designs by search.
      *
      * @param  int    $programID
@@ -403,6 +385,24 @@ class designModel extends model
             ->fetchAll('id');
 
         return $designs;
+    }
+
+    /**
+     * Set product menu.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function setProductMenu($productID = 0)
+    {
+        $programID = $this->session->program;
+        $program   = $this->loadModel('project')->getByID($programID);
+        $products  = $this->loadModel('product')->getPairs('', $programID);
+        $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
+
+        $productID = $this->loadModel('product')->saveState($productID, $products);
+        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
     }
 
     /**
