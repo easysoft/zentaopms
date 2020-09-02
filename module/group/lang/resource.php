@@ -90,6 +90,7 @@ $lang->resource->my->bug            = 'bug';
 $lang->resource->my->testTask       = 'testTask';
 $lang->resource->my->testCase       = 'testCase';
 $lang->resource->my->story          = 'story';
+$lang->resource->my->requirement    = 'requirement';
 $lang->resource->my->program        = 'program';
 $lang->resource->my->project        = 'myProject';
 $lang->resource->my->profile        = 'profile';

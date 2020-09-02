@@ -230,6 +230,15 @@ $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModul
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamics|my|dynamic|';
 
+global $config;
+if(!empty($config->URAndSR))
+{
+    $urCommon = zget($lang, 'urCommon', "Requirement");
+    $srCommon = zget($lang, 'srCommon', "Story");
+    $lang->my->menu->requirement = array('link' => "{$urCommon}|my|requirement|", 'subModule' => 'story');
+    $lang->my->menu->story       = array('link' => "{$srCommon}|my|story|", 'subModule' => 'story');
+}
+
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
@@ -249,6 +258,12 @@ $lang->product->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=produc
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
+
+if(!empty($config->URAndSR))
+{
+    $lang->product->menu->requirement = array('link' => "{$urCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->product->menu->story       = array('link' => "{$srCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+}
 
 $lang->product->dividerMenu = ',plan,project,doc,';
 
@@ -796,3 +811,86 @@ $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
 
 include (dirname(__FILE__) . '/menuOrder.php');
+
+/* Waterfall menu. */
+$lang->menu->waterfall = new stdclass();
+$lang->menu->waterfall->programindex = array('link' => 'Index|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan  = array('link' => 'Plan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly       = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc          = array('link' => 'Doc|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->product      = array('link' => 'Story|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->design       = 'Design|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci           = 'Code|repo|browse|';
+$lang->menu->waterfall->qa           = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->release      = array('link' => 'Release|release|browse|product={PRODUCT}', 'subModule' => 'release');
+$lang->menu->waterfall->issue        = 'Issue|issue|browse|';
+$lang->menu->waterfall->risk         = 'Risk|risk|browse|';
+$lang->menu->waterfall->list         = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+
+/* Srcum menu. */
+$lang->menu->srcum = new stdclass();
+$lang->menu->srcum->programindex   = array('link' => 'Index|program|index|program={PROGRAM}');
+
+$lang->waterfall = new stdclass();
+$lang->waterfall->subMenu = new stdclass();
+$lang->waterfall->subMenu->list = new stdclass();
+$lang->waterfall->subMenu->list->workestimation = array('link' => 'Estimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->list->program        = 'Program|program|edit|';
+
+$lang->waterfallproduct    = new stdclass();
+$lang->workestimation = new stdclass();
+$lang->budget         = new stdclass();
+$lang->programplan    = new stdclass();
+$lang->review         = new stdclass();
+$lang->weekly         = new stdclass();
+$lang->milestone      = new stdclass();
+$lang->design         = new stdclass();
+$lang->auditplan      = new stdclass();
+$lang->cm             = new stdclass();
+$lang->nc             = new stdclass();
+$lang->pssp           = new stdclass();
+$lang->issue          = new stdclass();
+$lang->risk           = new stdclass();
+$lang->stakeholder    = new stdclass();
+$lang->durationestimation = new stdclass();
+
+$lang->workestimation->menu = new stdclass();
+$lang->budget->menu         = new stdclass();
+$lang->programplan->menu    = new stdclass();
+$lang->review->menu         = new stdclass();
+$lang->weekly->menu         = new stdclass();
+$lang->milestone->menu      = new stdclass();
+$lang->waterfallproduct->menu    = new stdclass();
+$lang->design->menu         = new stdclass();
+$lang->auditplan->menu      = new stdclass();
+$lang->cm->menu             = new stdclass();
+$lang->pssp->menu           = new stdclass();
+$lang->issue->menu          = new stdclass();
+$lang->risk->menu           = new stdclass();
+$lang->stakeholder->menu    = new stdclass();
+$lang->durationestimation->menu = new stdclass();
+
+$lang->workestimation->menu->index    = 'Workload|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => 'Duration|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget   = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
+
+$lang->durationestimation->menu = $lang->workestimation->menu;
+$lang->budget->menu = $lang->workestimation->menu;
+
+$lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
+$lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
+
+$lang->waterfallproduct->menu->plan        = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->story       = 'Story|product|browse|product={PRODUCT}';
+$lang->waterfallproduct->menu->track       = 'Track|story|track|product={PRODUCT}';
+
+if(!empty($config->URAndSR))
+{
+    $lang->waterfallproduct->menu->requirement = array('link' => "{$urCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
+    $lang->waterfallproduct->menu->story       = array('link' => "{$srCommon}|product|browse|productID={PRODUCT}");
+}
+
+$lang->nc->menu = $lang->auditplan->menu;
+
+$lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
