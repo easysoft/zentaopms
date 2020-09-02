@@ -361,6 +361,7 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = 'Progress Chart';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = $lang->projectCommon . ' Issue';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = $lang->projectCommon . ' Risk';
+$lang->block->modules['waterfall']['index']->availableBlocks->programdynamic    = 'Dynamics';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
