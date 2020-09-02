@@ -333,13 +333,15 @@ $lang->block->moduleList['todo']    = '待办';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
-$lang->block->modules['program']->availableBlocks->program         = '项目列表';
-$lang->block->modules['program']->availableBlocks->recentprogram   = '近期项目';
-$lang->block->modules['program']->availableBlocks->statistic       = '项目统计';
-$lang->block->modules['program']->availableBlocks->programteam     = '项目人力投入';
-$lang->block->modules['program']->availableBlocks->waterfallreport = '项目周报';
-$lang->block->modules['program']->availableBlocks->waterfallissue  = '项目问题';
-$lang->block->modules['program']->availableBlocks->waterfallrisk   = '项目风险';
+$lang->block->modules['program']->availableBlocks->program           = '项目列表';
+$lang->block->modules['program']->availableBlocks->recentprogram     = '近期项目';
+$lang->block->modules['program']->availableBlocks->statistic         = '项目统计';
+$lang->block->modules['program']->availableBlocks->programteam       = '项目人力投入';
+$lang->block->modules['program']->availableBlocks->waterfallreport   = '项目周报';
+$lang->block->modules['program']->availableBlocks->waterfallestimate = '估算';
+$lang->block->modules['program']->availableBlocks->waterfallprogress = '到目前为止项目进展趋势图';
+$lang->block->modules['program']->availableBlocks->waterfallissue    = '项目问题';
+$lang->block->modules['program']->availableBlocks->waterfallrisk     = '项目风险';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -353,12 +355,12 @@ $lang->block->modules['scrum']['index']->availableBlocks->programdynamic = '最�
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport    = '项目周报';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate  = '估算';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt     = "项目{$lang->planCommon}";
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress  = '到目前为止项目进展趋势图';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue     = '项目问题';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk      = '项目风险';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = '项目周报';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = '估算';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "项目{$lang->planCommon}";
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前为止项目进展趋势图';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '项目问题';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '项目风险';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
