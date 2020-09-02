@@ -225,10 +225,18 @@ $lang->my->menu->program        = array('link' => 'Program|my|program|');
 $lang->my->menu->task           = array('link' => 'Aufgaben|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Test Aufgaben|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->requirement    = array('link' => "用户需求|my|requirement|", 'subModule' => 'story');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Verlauf|my|dynamic|';
+
+global $config;
+if(!empty($config->URAndSR))
+{
+    $urCommon = zget($lang, 'urCommon', "Requirement");
+    $srCommon = zget($lang, 'srCommon', "Story");
+    $lang->my->menu->requirement = array('link' => "{$urCommon}|my|requirement|", 'subModule' => 'story');
+    $lang->my->menu->story       = array('link' => "{$srCommon}|my|story|", 'subModule' => 'story');
+}
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 
@@ -249,6 +257,12 @@ $lang->product->menu->doc      = array('link' => 'Dok|doc|objectLibs|type=produc
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Modul|tree|browse|productID=%s&view=story';
 $lang->product->menu->view     = array('link' => 'Übersicht|product|view|productID=%s', 'alias' => 'edit');
+
+if(!empty($config->URAndSR))
+{
+    $lang->product->menu->requirement = array('link' => "{$urCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->product->menu->story       = array('link' => "{$srCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+}
 
 $lang->product->dividerMenu = ',plan,project,doc,';
 
