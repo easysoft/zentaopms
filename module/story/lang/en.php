@@ -216,6 +216,10 @@ $lang->story->priList[2] = '2';
 $lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
+$lang->story->changeList = array();
+$lang->story->changeList['no']  = 'Cancel';
+$lang->story->changeList['yes'] = 'Confirm';
+
 $lang->story->legendBasicInfo      = 'Basic Info';
 $lang->story->legendLifeTime       = 'Story Life ';
 $lang->story->legendRelated        = 'Related Info';
@@ -254,6 +258,7 @@ $lang->story->noStory               = 'No stories yet. ';
 $lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->changeTips            = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Scope';

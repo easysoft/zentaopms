@@ -503,6 +503,26 @@ class storyModel extends model
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+
+                $story = $this->getById($storyID);
+                /* IF is story and has changed, update its relation version to new. */
+                if($oldStory->type == 'story')
+                {
+                    $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
+                    $this->updateStoryVersion($story);
+                }
+                else
+                {
+                    /* IF is requirement changed, notify its relation. */
+                    $relations = $this->dao->select('BID')->from(TABLE_RELATION)
+                        ->where('AType')->eq('requirement')
+                        ->andWhere('BType')->eq('story') 
+                        ->andWhere('relation')->eq('subdivideinto') 
+                        ->andWhere('AID')->eq($story->id)
+                        ->fetchPairs();
+
+                    foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(1)->where('id')->eq($relationID)->exec();
+                }
             }
             else
             {
@@ -784,6 +804,33 @@ class storyModel extends model
                     $actionID = $this->loadModel('action')->create('story', $parentID, 'Edited', '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
+            }
+        }
+    }
+
+    /**
+     * If story changed, update relation table version filed.
+     *
+     * @param  object $story
+     * @access public
+     * @return void
+     */
+    public function updateStoryVersion($story)
+    {
+        $changedStories = $this->getChangedStories($story);
+
+        if(!empty($changedStories))
+        {
+            foreach($changedStories as $changedStory)
+            {
+                $this->dao->update(TABLE_RELATION)
+                    ->set('AVersion')->eq($changedStory->version)
+                    ->where('AType')->eq('requirement')
+                    ->andWhere('BType')->eq('story')
+                    ->andWhere('relation')->eq('subdivideinto')
+                    ->andWhere('AID')->eq($changedStory->id)
+                    ->andWhere('BID')->eq($story->id)
+                    ->exec();
             }
         }
     }
@@ -2341,6 +2388,36 @@ class storyModel extends model
     }
 
     /**
+     * Get changed stories.
+     *
+     * @param  object $story
+     * @access public
+     * @return void
+     */
+    public function getChangedStories($story)
+    {
+        if($story->type == 'requirement') return array();
+
+        $relations = $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere('BID')->eq($story->id)
+            ->fetchAll('AID');
+
+        if(empty($relations)) return array();
+
+        $stories = $this->getByList(array_keys($relations));
+        foreach($stories as $id => $story)
+        {
+            $version = $relations[$story->id]->AVersion;
+            if($version > $story->version) unset($stories[$id]);
+        }
+
+        return $stories;
+    }
+
+    /**
      * Batch get story stage.
      *
      * @param  array    $stories
@@ -3071,7 +3148,7 @@ class storyModel extends model
                 $vars = "story={$story->id}";
                 if($story->storyChanged)
                 {
-                    common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->story->process);
+                    common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->confirm);
                     break;
                 }
 

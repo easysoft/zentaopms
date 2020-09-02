@@ -214,6 +214,10 @@ $lang->story->priList[2] = '2';
 $lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
+$lang->story->changeList = array();
+$lang->story->changeList['no']  = '不变更';
+$lang->story->changeList['yes'] = '变更';
+
 $lang->story->legendBasicInfo      = '基本信息';
 $lang->story->legendLifeTime       = "{$lang->storyCommon}的一生";
 $lang->story->legendRelated        = '相关信息';
@@ -252,6 +256,7 @@ $lang->story->noStory               = "暂时没有{$lang->storyCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 为草稿状态或已关闭状态，没有修改其阶段。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->storyCommon}的所属产品会将其下的子{$lang->storyCommon}也移动到所选产品下。";
+$lang->story->changeTips            = '该软件需求关联的用户需求有变更，点击“不变更”忽略此条变更，点击“变更”来进行该软件需求的变更。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->storyCommon}所属范围";
