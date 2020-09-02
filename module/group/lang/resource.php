@@ -507,25 +507,29 @@ $lang->project->methodOrder[225] = 'storySort';
 
 /* Design. */
 $lang->resource->design = new stdclass();
-$lang->resource->design->browse      = 'browse';
-$lang->resource->design->create      = 'create';
-$lang->resource->design->batchCreate = 'batchCreate';
-$lang->resource->design->edit        = 'edit';
-$lang->resource->design->linkCommit  = 'linkCommit';
-$lang->resource->design->revision    = 'revision';
-$lang->resource->design->delete      = 'delete';
-$lang->resource->design->view        = 'view';
-$lang->resource->design->assignTo    = 'assignTo';
+$lang->resource->design->browse       = 'browse';
+$lang->resource->design->view         = 'view';
+$lang->resource->design->create       = 'create';
+$lang->resource->design->batchCreate  = 'batchCreate';
+$lang->resource->design->edit         = 'edit';
+$lang->resource->design->assignTo     = 'assignTo';
+$lang->resource->design->delete       = 'delete';
+$lang->resource->design->linkCommit   = 'linkCommit';
+$lang->resource->design->viewCommit   = 'viewCommit';
+$lang->resource->design->unlinkCommit = 'unlinkCommit';
+$lang->resource->design->revision     = 'revision';
 
 $lang->design->methodOrder[5]     = 'browse';
-$lang->design->methodOrder[10]    = 'create';
-$lang->design->methodOrder[11]    = 'batchCreate';
-$lang->design->methodOrder[15]    = 'edit';
-$lang->design->methodOrder[20]    = 'commit';
-$lang->design->methodOrder[25]    = 'revision';
-$lang->design->methodOrder[30]    = 'delete';
-$lang->design->methodOrder[35]    = 'view';
-$lang->design->methodOrder[40]    = 'assignTo';
+$lang->design->methodOrder[10]    = 'view';
+$lang->design->methodOrder[15]    = 'create';
+$lang->design->methodOrder[20]    = 'batchCreate';
+$lang->design->methodOrder[25]    = 'edit';
+$lang->design->methodOrder[30]    = 'assignTo';
+$lang->design->methodOrder[35]    = 'delete';
+$lang->design->methodOrder[40]    = 'linkCommit';
+$lang->design->methodOrder[45]    = 'viewCommit';
+$lang->design->methodOrder[50]    = 'unlinkCommit';
+$lang->design->methodOrder[55]    = 'revision';
 
 /* Program plan. */
 $lang->resource->programplan = new stdclass();
