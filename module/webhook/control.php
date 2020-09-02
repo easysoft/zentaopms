@@ -336,7 +336,7 @@ class webhook extends control
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
             
-            $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq($now)->where('id')->eq($data->id)->exec();
+            $this->webhook->setSentStatus($data->id, 'sended', $now);
         }
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();

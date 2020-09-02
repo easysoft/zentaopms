@@ -683,12 +683,13 @@ class webhookModel extends model
      * 
      * @param  array  $idList 
      * @param  string $status 
+     * @param  string $time 
      * @access public
      * @return void
      */
-    public function setSentStatus($idList, $status)
+    public function setSentStatus($idList, $status, $time = '')
     {
-        $now = helper::now();
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq($status)->set('sendTime')->eq($now)->where('id')->id($idList)->exec();
+        if(empty($time)) $time = helper::now();
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq($status)->set('sendTime')->eq($time)->where('id')->in($idList)->exec();
     }
 }
