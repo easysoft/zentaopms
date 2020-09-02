@@ -824,7 +824,7 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function getScrumtestParams($module = '')
+    public function getScrumTestParams($module = '')
     {   
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
@@ -866,7 +866,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getScrumoverallParams($module = '')
+    public function getScrumOverviewParams($module = '')
     {
         $params->count['name']    = $this->lang->block->count;
         $params->count['control'] = 'input';
@@ -881,7 +881,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getScrumroadmapParams($module = '')
+    public function getScrumRoadMapParams($module = '')
     {
         $params->count['name']    = $this->lang->block->count;
         $params->count['control'] = 'input';
@@ -896,7 +896,23 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getScrumproductParams($module = '')
+    public function getScrumProductParams($module = '')
+    {
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
+        return json_encode($params);
+    }
+
+
+    /**
+     * Get program dynamic params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getProgramDynamicParams($module = '')
     {
         $params->count['name']    = $this->lang->block->count;
         $params->count['control'] = 'input';

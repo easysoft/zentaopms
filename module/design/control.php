@@ -89,11 +89,11 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products  = $this->loadModel('product')->getPairs('', $this->session->program);
-        $this->view->productID = $productID;
-        $this->view->program   = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->products   = $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->productID  = $productID;
+        $this->view->program    = $this->loadModel('project')->getByID($this->session->program);
 
         $this->display();
     }
@@ -149,10 +149,10 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
 
-        $this->view->design    = $design;
-        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($design->product);
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions   = $this->loadModel('action')->getList('design', $design->id);
+        $this->view->design  = $design;
+        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
 
         $this->display();
     }
@@ -194,7 +194,6 @@ class design extends control
         }
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
-        $this->view->position[] = $this->lang->design->view;
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
@@ -261,15 +260,15 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
 
-        $this->view->repos           = $repos;
-        $this->view->repoID          = $repoID;
-        $this->view->repo            = $repo;
-        $this->view->revisions       = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
-        $this->view->designID        = $designID;
-        $this->view->begin           = $begin;
-        $this->view->end             = $end;
-        $this->view->design          = $this->design->getByID($designID);
-        $this->view->pager           = $pager;
+        $this->view->repos      = $repos;
+        $this->view->repoID     = $repoID;
+        $this->view->repo       = $repo;
+        $this->view->revisions  = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
+        $this->view->designID   = $designID;
+        $this->view->begin      = $begin;
+        $this->view->end        = $end;
+        $this->view->design     = $this->design->getByID($designID);
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -352,6 +351,8 @@ class design extends control
         else
         {
             $this->design->delete(TABLE_DESIGN, $designID);
+            $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
             die(js::locate($this->session->designList, 'parent'));
         }
     }

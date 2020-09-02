@@ -406,6 +406,7 @@ $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
+$lang->action->label->design      = '设计|design|view|designID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
