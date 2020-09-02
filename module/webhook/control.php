@@ -317,6 +317,8 @@ class webhook extends control
             return true;
         }
 
+        $this->webhook->setSentStatus(array_keys($dataList), 'senting');
+
         $now  = helper::now();
         $diff = 0;
         foreach($dataList as $data)
