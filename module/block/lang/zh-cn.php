@@ -339,13 +339,13 @@ $lang->block->modules['program']->availableBlocks->statistic     = '项目统计
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview = '项目整体情况';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . '列表';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . '路线图';
-$lang->block->modules['scrum']['index']->availableBlocks->sprint        = $lang->projectCommon . '总览';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct  = $lang->productCommon . '总览';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumtest     = '待测版本';
-$lang->block->modules['scrum']['index']->availableBlocks->programdynamic  = '最新动态';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '项目整体情况';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . '列表';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap   = $lang->productCommon . '路线图';
+$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct   = $lang->productCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待测版本';
+$lang->block->modules['scrum']['index']->availableBlocks->programdynamic = '最新动态';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
