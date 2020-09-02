@@ -32,9 +32,9 @@ $lang->custom->region             = 'Interval';
 $lang->custom->tips               = 'Tips';
 $lang->custom->setTips            = 'Set Tips';
 $lang->custom->isRange            = 'Is Target Control';
-$lang->custom->plan               = 'Plan';
-$lang->custom->planStatus         = 'Enable Plan';
-$lang->custom->concept            = 'Concept';
+$lang->custom->configureScrum     = 'Concept';
+$lang->custom->URStory            = "User requirements";
+$lang->custom->SRStory            = "Software requirements";
 
 $lang->custom->object['program'] = 'Program';
 $lang->custom->program->fields['unitList'] = 'Unit List';
@@ -51,9 +51,6 @@ $lang->custom->tipProgressList['SV']  = 'Schedule Variance(SV%)';
 
 $lang->custom->tipCostList['CPI'] = 'Cost Performed Index(CPI)';
 $lang->custom->tipCostList['CV']  = 'Cost Variance(CV%)';
-
-$lang->custom->planStatusList[0]  = 'No';
-$lang->custom->planStatusList[1]  = 'Yes';
 
 $lang->custom->tipRangeList[0]  = 'No';
 $lang->custom->tipRangeList[1]  = 'Yes';
