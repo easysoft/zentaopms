@@ -22,7 +22,7 @@ js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->project->treeLevel['all']);
 js::set('foldAll',       $lang->project->treeLevel['root']);
 js::set('storyType', $storyType);
-if($program->template == 'waterfall') $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
+$lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">

@@ -9,11 +9,21 @@
  * @version     $Id: zh-cn.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->story->create            = "提{$lang->storyCommon}";
-$lang->story->createStory       = '添加软需';
-$lang->story->createRequirement = '添加用需';
-$lang->story->requirement       = '用户需求';
-$lang->story->story             = '软件需求';
+$lang->story->createStory       = "提{$lang->storyCommon}";
+$lang->story->createRequirement = "提{$lang->storyCommon}";
+
+if(!empty($config->URAndSR))
+{
+    $lang->story->requirement       = zget($lang, 'urCommon', "用户需求");
+    $lang->story->story             = zget($lang, 'srCommon', "软件需求");
+    $lang->story->createStory       = '添加' . $lang->story->story;
+    $lang->story->createRequirement = '添加' . $lang->story->requirement;
+    $lang->story->affectedStories   = "影响的{$lang->story->story}";
+    $lang->storyCommon = '需求';
+}
+
 $lang->story->batchCreate       = "批量创建";
 $lang->story->change            = "变更";
 $lang->story->changeAction      = "变更{$lang->storyCommon}";
