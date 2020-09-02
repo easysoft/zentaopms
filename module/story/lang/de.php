@@ -214,6 +214,10 @@ $lang->story->priList[2] = '2';
 $lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
+$lang->story->changeList = array();
+$lang->story->changeList['no']  = 'Cancel';
+$lang->story->changeList['yes'] = 'Confirm';
+
 $lang->story->legendBasicInfo      = 'Basis Infos';
 $lang->story->legendLifeTime       = 'Story Leben ';
 $lang->story->legendRelated        = 'Weitere Infos';
@@ -240,18 +244,19 @@ $lang->story->affectedProjects     = '' . $lang->projectCommon;
 $lang->story->affectedBugs         = 'Bug';
 $lang->story->affectedCases        = 'Fall';
 
-$lang->story->specTemplate          = "Als ein < type of user >, möchte ich < some goal > dass < some reason >.";
-$lang->story->needNotReview         = 'Keine Prüfung';
-$lang->story->successSaved          = "Story wurde gespeichrt!";
-$lang->story->confirmDelete         = "Möchten Sie diese Story löschen?";
-$lang->story->errorEmptyChildStory  = '『Unterteilte Story』 darf nicht leer sein.';
-$lang->story->errorNotSubdivide     = "If the status is not active, or the stage is not wait, or a sub story, it cannot be subdivided.";
-$lang->story->mustChooseResult      = 'Ergebnis wählen';
-$lang->story->mustChoosePreVersion  = 'Version wählen um es umzukhren.';
-$lang->story->noStory               = 'Keine Storys. ';
-$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
-$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->specTemplate         = "Als ein < type of user >, möchte ich < some goal > dass < some reason >.";
+$lang->story->needNotReview        = 'Keine Prüfung';
+$lang->story->successSaved         = "Story wurde gespeichrt!";
+$lang->story->confirmDelete        = "Möchten Sie diese Story löschen?";
+$lang->story->errorEmptyChildStory = '『Unterteilte Story』 darf nicht leer sein.';
+$lang->story->errorNotSubdivide    = "If the status is not active, or the stage is not wait, or a sub story, it cannot be subdivided.";
+$lang->story->mustChooseResult     = 'Ergebnis wählen';
+$lang->story->mustChoosePreVersion = 'Version wählen um es umzukhren.';
+$lang->story->noStory              = 'Keine Storys. ';
+$lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
+$lang->story->cannotDeleteParent   = "Can not delete parent {$lang->storyCommon}";
+$lang->story->moveChildrenTips     = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Bereich';

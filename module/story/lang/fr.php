@@ -214,6 +214,10 @@ $lang->story->priList[2] = '2';
 $lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
+$lang->story->changeList = array();
+$lang->story->changeList['no']  = 'Cancel';
+$lang->story->changeList['yes'] = 'Confirm';
+
 $lang->story->legendBasicInfo      = 'Infos de Base';
 $lang->story->legendLifeTime       = 'Vie de la Story ';
 $lang->story->legendRelated        = 'Info Connexes';
@@ -240,18 +244,19 @@ $lang->story->affectedProjects     = '' . $lang->projectCommon . 's';
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
 
-$lang->story->specTemplate          = "En tant que < type utilisateur >, je veux < différents objectifs > pour < différentes raisons >.";
-$lang->story->needNotReview         = 'Aucune Validation Requise';
-$lang->story->successSaved          = "Story est sauvegardée !";
-$lang->story->confirmDelete         = "Voulez-vous vraiment supprimer cette story ?";
-$lang->story->errorEmptyChildStory  = '『Decomposed Stories』ne peuvent être vides.';
-$lang->story->errorNotSubdivide     = "Si le statut n'est pas actif, ou l'étape n'est pas en attente, ou si c'est une sous-story, elle ne peut pas être subdivisée.";
-$lang->story->mustChooseResult      = 'Sélect Résultat';
-$lang->story->mustChoosePreVersion  = 'Sélect une version pour revenir en arrière.';
-$lang->story->noStory               = "Aucune story pour l'instant. ";
-$lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent    = "Impossible de supprimer {$lang->storyCommon} parent";
-$lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->specTemplate         = "En tant que < type utilisateur >, je veux < différents objectifs > pour < différentes raisons >.";
+$lang->story->needNotReview        = 'Aucune Validation Requise';
+$lang->story->successSaved         = "Story est sauvegardée !";
+$lang->story->confirmDelete        = "Voulez-vous vraiment supprimer cette story ?";
+$lang->story->errorEmptyChildStory = '『Decomposed Stories』ne peuvent être vides.';
+$lang->story->errorNotSubdivide    = "Si le statut n'est pas actif, ou l'étape n'est pas en attente, ou si c'est une sous-story, elle ne peut pas être subdivisée.";
+$lang->story->mustChooseResult     = 'Sélect Résultat';
+$lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
+$lang->story->noStory              = "Aucune story pour l'instant. ";
+$lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
+$lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->storyCommon} parent";
+$lang->story->moveChildrenTips     = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Périmètre';
