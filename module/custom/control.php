@@ -386,12 +386,12 @@ class custom extends control
     } 
 
     /**
-     * Display plan or not.
+     * Configure waterfall.
      * 
      * @access public
      * @return void
      */
-    public function plan()
+    public function configureWaterfall()
     {   
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
@@ -401,25 +401,26 @@ class custom extends control
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItem('system.custom.planStatus', $data->planStatus);
 
+            $this->custom->setURAndSR();
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'plan')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'configurewaterfall')));
         }   
 
-        $this->view->title      = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->plan;
+        $this->view->title      = $this->lang->custom->common;
         $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->lang->custom->plan;
         $this->view->status     = zget($this->config->custom, 'planStatus', 0); 
 
         $this->display();
     }
 
     /**
-     * QC concept. 
+     * Configure scrum.
      * 
      * @access public
      * @return void
      */
-    public function concept()
+    public function configureScrum()
     {
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
@@ -427,14 +428,14 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept();
+            $this->custom->setURAndSR();
 
-            $this->app->loadLang('common');
-            $locate = inlink('concept');
+            $locate = inlink('configureScrum');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->view->title      = $this->lang->custom->concept;
-        $this->view->position[] = $this->lang->custom->concept;
+        $this->view->title      = $this->lang->custom->configureScrum;
+        $this->view->position[] = $this->lang->custom->configureScrum;
         $this->display();
     }
 
@@ -461,7 +462,7 @@ class custom extends control
     {   
         setCookie("systemModel", 'scrum', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        die(js::locate($this->createLink('custom', 'concept')));
+        die(js::locate($this->createLink('custom', 'configurescrum')));
     }
 
     /**

@@ -550,14 +550,15 @@ class customModel extends model
     }
 
     /**
-     * Set qc concept.
+     * Set product and project concept.
      * 
      * @access public
      * @return void
      */
     public function setConcept()
     {
-        $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
+        $this->loadModel('setting');
+        $this->setting->setItem('system.custom.productProject', $this->post->productProject);
 
         /* Change block title. */
         $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
@@ -574,6 +575,27 @@ class customModel extends model
         foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
+        }
+    }
+
+    /**
+     * Set ur and sr concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setURAndSR()
+    {
+        $data = fixer::input('post')->get();
+
+        $this->loadModel('setting')->setItem('system.custom.URAndSR', $data->URAndSR);
+        if($data->URAndSR)
+        {   
+            $clientLang = $this->app->getClientLang();                
+            $URSRName   = isset($this->config->custom->URSRName) ? json_decode($this->config->custom->URSRName, true) : array();                       
+            $URSRName['urCommon'][$clientLang] = $data->urCommon[$clientLang];
+            $URSRName['srCommon'][$clientLang] = $data->srCommon[$clientLang];
+            $this->setting->setItem('system.custom.URSRName', json_encode($URSRName));
         }
     }
 

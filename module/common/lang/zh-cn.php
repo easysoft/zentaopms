@@ -143,7 +143,7 @@ $lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage    = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
 $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
-$lang->system->menu->custom   = array('link' => '自定义|custom|plan|');
+$lang->system->menu->custom   = array('link' => '自定义|custom|configurewaterfall|');
 $lang->system->dividerMenu    = ',auditcl,subject,';
 
 if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
@@ -151,7 +151,7 @@ if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
     $lang->system->menu = new stdclass();
     $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
     $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
-    $lang->system->menu->custom   = array('link' => '自定义|custom|concept|');
+    $lang->system->menu->custom   = array('link' => '自定义|custom|configurescrum|');
     
     $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
     unset($lang->system->dividerMenu);
@@ -225,10 +225,18 @@ $lang->my->menu->program          = array('link' => '项目|my|program|');
 $lang->my->menu->task             = array('link' => '任务|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug              = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask         = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->requirement      = array('link' => "用户需求|my|requirement|", 'subModule' => 'story');
-$lang->my->menu->story            = array('link' => "软件需求|my|story|", 'subModule' => 'story');
+$lang->my->menu->story            = array('link' => "需求|my|story|", 'subModule' => 'story');
 $lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic          = '动态|my|dynamic|';
+
+global $config;
+if(!empty($config->URAndSR))
+{
+    $urCommon = zget($lang, 'urCommon', "用户需求");
+    $srCommon = zget($lang, 'srCommon', "软件需求");
+    $lang->my->menu->requirement = array('link' => "{$urCommon}|my|requirement|", 'subModule' => 'story');
+    $lang->my->menu->story       = array('link' => "{$srCommon}|my|story|", 'subModule' => 'story');
+}
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
@@ -249,6 +257,12 @@ $lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=prod
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
+if(!empty($config->URAndSR))
+{
+    $lang->product->menu->requirement = array('link' => "{$urCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->product->menu->story       = array('link' => "{$srCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+}
 
 $lang->product->dividerMenu = ',project,doc,';
 
@@ -804,7 +818,7 @@ $lang->menu->waterfall->programplan  = array('link' => '计划|programplan|brows
 $lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly       = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc          = array('link' => '文档|doc|index|program={PROGRAM}');
-$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
+$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
 $lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci           = '代码|repo|browse|';
 $lang->menu->waterfall->qa           = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
@@ -867,9 +881,14 @@ $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
 $lang->waterfallproduct->menu->plan        = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
-$lang->waterfallproduct->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
-$lang->waterfallproduct->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->waterfallproduct->menu->story       = '需求|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+
+if(!empty($config->URAndSR))
+{
+    $lang->waterfallproduct->menu->requirement = array('link' => "{$urCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
+    $lang->waterfallproduct->menu->story       = array('link' => "{$srCommon}|product|browse|productID={PRODUCT}");
+}
 
 $lang->nc->menu = $lang->auditplan->menu;
 

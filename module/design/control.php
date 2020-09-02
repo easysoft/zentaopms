@@ -291,6 +291,7 @@ class design extends control
         else
         {
             $this->design->unlinkCommit($designID, $commitID);
+
             die(js::reload('parent'));
         }
     }
@@ -353,6 +354,7 @@ class design extends control
             $this->design->delete(TABLE_DESIGN, $designID);
             $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
             $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
+
             die(js::locate($this->session->designList, 'parent'));
         }
     }

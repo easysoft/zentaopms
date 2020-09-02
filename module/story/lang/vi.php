@@ -9,11 +9,21 @@
  * @version  $Id: vi.php 5141 2013-07-15 05:57:15Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->story->create            = "Tạo câu chuyện";
+global $config;
+$lang->story->create            = "Create Story";
 $lang->story->createStory       = 'Create Story';
 $lang->story->createRequirement = 'Create Requirement';
-$lang->story->requirement       = 'Requirement';
-$lang->story->story             = 'Story';
+
+if(!empty($config->URAndSR))
+{
+    $lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
+    $lang->story->story             = zget($lang, 'srCommon', "Story");
+    $lang->story->createStory       = 'Create ' . $lang->story->story;
+    $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
+    $lang->story->affectedStories   = "Affected {$lang->story->story}";
+    $lang->storyCommon = 'Story';
+}
+
 $lang->story->batchCreate       = "Tạo hàng loạt";
 $lang->story->change            = "Thay đổi";
 $lang->story->changeAction      = "Thay đổi câu chuyện";

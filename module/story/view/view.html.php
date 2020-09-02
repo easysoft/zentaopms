@@ -62,7 +62,7 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <?php if($story->type == 'requirement'):?>
+      <?php if($program->template == 'waterfall' and $story->type == 'requirement'):?>
         <?php if(!empty($track)):?>
         <div class="detail">
           <div class="detail-title"><?php echo $lang->story->track;?></div>
@@ -382,7 +382,7 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($program->template == 'waterfall'):?>
+          <?php if(!empty($config->URAndSR)):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
@@ -392,7 +392,7 @@
           <?php endif;?>
         </ul>
         <div class='tab-content'>
-          <?php if($program->template == 'waterfall'):?>
+          <?php if(!empty($config->URAndSR)):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
