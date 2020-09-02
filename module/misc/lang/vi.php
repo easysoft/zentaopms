@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Chi tiết';
 
+$lang->misc->releaseDate['20.0']        = '2020-09-01';
 $lang->misc->releaseDate['12.4.1']      = '2020-08-10';
 $lang->misc->releaseDate['12.4.stable'] = '2020-07-28';
 $lang->misc->releaseDate['12.3.3']      = '2020-07-02';

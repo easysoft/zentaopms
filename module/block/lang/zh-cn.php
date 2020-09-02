@@ -336,6 +336,7 @@ $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = '项目列表';
 $lang->block->modules['program']->availableBlocks->recentprogram = '近期项目';
 $lang->block->modules['program']->availableBlocks->statistic     = '项目统计';
+$lang->block->modules['program']->availableBlocks->programteam   = '项目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();

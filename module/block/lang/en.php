@@ -336,6 +336,7 @@ $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = $lang->projectCommon . ' List';
 $lang->block->modules['program']->availableBlocks->recentprogram = 'Recent ' . $lang->projectCommon;
 $lang->block->modules['program']->availableBlocks->statistic     = $lang->projectCommon . ' Statistic';
+$lang->block->modules['program']->availableBlocks->programteam   = $lang->projectCommon . 'Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -345,7 +346,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap    = $lan
 $lang->block->modules['scrum']['index']->availableBlocks->sprint          = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumproduct    = $lang->productCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest       = 'Test Version';
-$lang->block->modules['scrum']['index']->availableBlocks->programdynamic  = '最新动态';
+$lang->block->modules['scrum']['index']->availableBlocks->programdynamic  = 'Dynamics';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
