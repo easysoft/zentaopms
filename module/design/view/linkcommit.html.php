@@ -54,7 +54,6 @@
       </thead>
       <tbody>
         <?php foreach($revisions as $log):?>
-        <?php if(in_array($log->id, $linkedRevisions)) continue;?>
         <tr>
           <td>
             <div class='checkbox-primary'>

@@ -118,7 +118,7 @@ $lang->block->default['waterfall']['program']['5']['source'] = 'program';
 $lang->block->default['waterfall']['program']['5']['grid']   = 8;
 
 $lang->block->default['waterfall']['program']['5']['params']['type']    = 'all';
-$lang->block->default['waterfall']['program']['5']['params']['num']     = '15';
+$lang->block->default['waterfall']['program']['5']['params']['count']   = '15';
 $lang->block->default['waterfall']['program']['5']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['waterfall']['program']['6']['title']  = 'Dynamic';
@@ -132,11 +132,11 @@ $lang->block->default['waterfall']['program']['7']['source'] = 'program';
 $lang->block->default['waterfall']['program']['7']['grid']   = 8;
 
 $lang->block->default['waterfall']['program']['7']['params']['type']    = 'all';
-$lang->block->default['waterfall']['program']['7']['params']['num']     = '15';
+$lang->block->default['waterfall']['program']['7']['params']['count']   = '15';
 $lang->block->default['waterfall']['program']['7']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['program']['1']['title'] =  $lang->projectCommon . ' Overall';
-$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverall';
+$lang->block->default['scrum']['program']['1']['title'] =  $lang->projectCommon . ' Overview';
+$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['program']['1']['grid']  = 8;
 
 $lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . ' List';
@@ -152,7 +152,7 @@ $lang->block->default['scrum']['program']['4']['block'] = 'scrumtest';
 $lang->block->default['scrum']['program']['4']['grid']  = 8;
 
 $lang->block->default['scrum']['program']['4']['params']['type']    = 'all';
-$lang->block->default['scrum']['program']['4']['params']['num']     = '15';
+$lang->block->default['scrum']['program']['4']['params']['count']   = '15';
 $lang->block->default['scrum']['program']['4']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['scrum']['program']['5']['title'] = $lang->productCommon . ' Overview';
@@ -171,8 +171,8 @@ $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
-$lang->block->default['product']['1']['params']['type'] = 'all';
-$lang->block->default['product']['1']['params']['num']  = '20';
+$lang->block->default['product']['1']['params']['type']  = 'all';
+$lang->block->default['product']['1']['params']['count'] = '20';
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . ' Overview';
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -182,14 +182,14 @@ $lang->block->default['product']['3']['title'] = 'Active ' . $lang->productCommo
 $lang->block->default['product']['3']['block'] = 'list';
 $lang->block->default['product']['3']['grid']  = 8;
 
-$lang->block->default['product']['3']['params']['num']  = 15;
-$lang->block->default['product']['3']['params']['type'] = 'noclosed';
+$lang->block->default['product']['3']['params']['count'] = 15;
+$lang->block->default['product']['3']['params']['type']  = 'noclosed';
 
 $lang->block->default['product']['4']['title'] = 'My Stories';
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
-$lang->block->default['product']['4']['params']['num']     = 15;
+$lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
@@ -197,8 +197,8 @@ $lang->block->default['project']['1']['title'] = $lang->projectCommon . ' Report
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
-$lang->block->default['project']['1']['params']['type'] = 'all';
-$lang->block->default['project']['1']['params']['num']  = '20';
+$lang->block->default['project']['1']['params']['type']  = 'all';
+$lang->block->default['project']['1']['params']['count'] = '20';
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . ' Overview';
 $lang->block->default['project']['2']['block'] = 'overview';
@@ -208,7 +208,7 @@ $lang->block->default['project']['3']['title'] = 'Active ' . $lang->projectCommo
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
-$lang->block->default['project']['3']['params']['num']     = 15;
+$lang->block->default['project']['3']['params']['count']   = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type']    = 'undone';
 
@@ -216,7 +216,7 @@ $lang->block->default['project']['4']['title'] = 'My Tasks';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
-$lang->block->default['project']['4']['params']['num']     = 15;
+$lang->block->default['project']['4']['params']['count']   = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
@@ -224,8 +224,8 @@ $lang->block->default['qa']['1']['title'] = 'Test Report';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['type'] = 'noclosed';
-$lang->block->default['qa']['1']['params']['num']  = '20';
+$lang->block->default['qa']['1']['params']['type']  = 'noclosed';
+$lang->block->default['qa']['1']['params']['count'] = '20';
 
 //$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
 //$lang->block->default['qa']['2']['block'] = 'overview';
@@ -235,7 +235,7 @@ $lang->block->default['qa']['2']['title'] = 'My Bugs';
 $lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
-$lang->block->default['qa']['2']['params']['num']     = 15;
+$lang->block->default['qa']['2']['params']['count']   = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
@@ -243,7 +243,7 @@ $lang->block->default['qa']['3']['title'] = 'My Cases';
 $lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
-$lang->block->default['qa']['3']['params']['num']     = 15;
+$lang->block->default['qa']['3']['params']['count']   = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
@@ -251,7 +251,7 @@ $lang->block->default['qa']['4']['title'] = 'Waiting Builds';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
-$lang->block->default['qa']['4']['params']['num']     = 15;
+$lang->block->default['qa']['4']['params']['count']   = 15;
 $lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['4']['params']['type']    = 'wait';
 
@@ -269,7 +269,7 @@ $lang->block->default['full']['my']['3']['title']  = 'My Todos';
 $lang->block->default['full']['my']['3']['block']  = 'list';
 $lang->block->default['full']['my']['3']['grid']   = 4;
 $lang->block->default['full']['my']['3']['source'] = 'todo';
-$lang->block->default['full']['my']['3']['params']['num'] = '20';
+$lang->block->default['full']['my']['3']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['4']['title']  = $lang->projectCommon . ' Statistic';
 $lang->block->default['full']['my']['4']['block']  = 'statistic';
@@ -291,7 +291,7 @@ $lang->block->default['full']['my']['7']['block']  = 'task';
 $lang->block->default['full']['my']['7']['grid']   = 4;
 
 $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['7']['params']['num']     = '15';
+$lang->block->default['full']['my']['7']['params']['count']   = '15';
 $lang->block->default['full']['my']['7']['params']['type']    = 'assignedTo';
 
 $lang->block->default['full']['my']['8']['title'] = 'Human Input';
@@ -304,9 +304,9 @@ $lang->block->default['full']['my']['9']['source'] = 'program';
 $lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['9']['params']['num']     = '15';
+$lang->block->default['full']['my']['9']['params']['count']   = '15';
 
-$lang->block->num     = 'Number';
+$lang->block->count   = 'Count';
 $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
@@ -339,7 +339,7 @@ $lang->block->modules['program']->availableBlocks->statistic     = $lang->projec
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverall  = $lang->projectCommon . ' Overall';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist     = $lang->projectCommon . ' List';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap  = $lang->productCommon . ' Rode Map';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint        = $lang->projectCommon . ' Overview';
@@ -487,7 +487,6 @@ $lang->block->modules['program']->moreLinkList->cmmiestimate  = 'workestimation|
 $lang->block->modules['program']->moreLinkList->cmmiissue     = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk      = 'risk|browse|';
 $lang->block->modules['program']->moreLinkList->scrumlist     = 'project|all|';
-$lang->block->modules['program']->moreLinkList->scrumroadmap  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest     = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct  = 'product|all|';
 $lang->block->modules['program']->moreLinkList->sprint        = 'project|all|';

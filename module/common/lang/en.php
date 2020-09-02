@@ -122,11 +122,8 @@ $lang->common->common = 'Common Module';
 $lang->mainNav = new stdclass();
 $lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
 $lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|index|';
-//$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> Report|report|index|';
-//$lang->mainNav->attend    = '<i class="icon icon-file"></i> Attend|attend|personal|';
 $lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
-//$lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> Recent|recent|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
@@ -138,9 +135,6 @@ $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = 'Iteration|project|index|locate=no';
 $lang->menu->doc     = 'Doc|doc|index|';
 $lang->menu->qa      = 'Qa|qa|index';
-$lang->menu->company = new stdclass();
-
-$lang->program = new stdclass();
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -159,7 +153,6 @@ if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
     $lang->system->menu->holiday     = array('link' => 'Holiday|holiday|browse|');
 	$lang->system->menu->custom   = array('link' => 'Custom|custom|concept|');
     
-    $lang->system->subMenu->setmodel->waterfall  ='waterfall|custom|setwaterfall|';
     $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|settips|';
     unset($lang->system->dividerMenu);
 }
@@ -227,28 +220,20 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index          = 'Home|my|index';
-//$lang->my->menu->todo         = 'Todo|my|todo|';
-$lang->my->menu->effort         = 'Effort|my|effort|';
-//$lang->my->menu->calendar     = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->todo           = 'Todo|my|todo|';
 $lang->my->menu->program        = array('link' => 'Program|my|program|');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Request|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->requirement    = array('link' => "用户需求|my|requirement|", 'subModule' => 'story');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamics|my|dynamic|';
-//$lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
-//$lang->my->menu->changePassword = 'Password|my|changepassword';
-//$lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-//$lang->my->menu->score          = array('link' => 'Points|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
-
-$lang->score       = new stdclass();
-$lang->score->menu = $lang->my->menu;
 
 /* Product menu settings. */
 $lang->product = new stdclass();
@@ -452,10 +437,6 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => 'Company|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
-//$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
-//$lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
-//$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-//$lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');

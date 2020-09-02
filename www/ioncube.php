@@ -1,4 +1,5 @@
 <?php 
+$config = new stdclass();
 include '../config/config.php';
 session_name($config->sessionVar);
 session_start();

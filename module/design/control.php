@@ -38,7 +38,7 @@ class design extends control
 
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($this->session->program, $productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
@@ -220,10 +220,6 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        /* Init pager and get designs. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         /* Get program and date. */
         $program = $this->loadModel('project')->getByID($this->session->program);
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
@@ -234,7 +230,7 @@ class design extends control
         $repoID = $repoID ? $repoID : key($repos);
         $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
-        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', $pager, $begin, $end) : '';
+        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end) : '';
 
         if($_POST)
         {
@@ -249,7 +245,18 @@ class design extends control
         /* Linked submission. */
         $linkedRevisions = array();
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $linkedRevisions[] = $relation->BID;
+        foreach($relations as $relation) $linkedRevisions[$relation->BID] = $relation->BID;
+
+        foreach($revisions as $id => $commit)
+        {
+            if(isset($linkedRevisions[$commit->id])) unset($revisions[$id]);
+        }
+
+        /* Init pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($revisions);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $revisions  = array_chunk($revisions, $pager->recPerPage);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
@@ -257,8 +264,7 @@ class design extends control
         $this->view->repos           = $repos;
         $this->view->repoID          = $repoID;
         $this->view->repo            = $repo;
-        $this->view->revisions       = $revisions;
-        $this->view->linkedRevisions = $linkedRevisions;
+        $this->view->revisions       = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
         $this->view->designID        = $designID;
         $this->view->begin           = $begin;
         $this->view->end             = $end;
@@ -316,9 +322,9 @@ class design extends control
      */
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* Init pager and get designs. */
+        /* Init pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $pager   = pager::init(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;

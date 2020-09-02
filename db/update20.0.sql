@@ -299,4 +299,4 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
 ALTER TABLE `zt_story` ADD `storyChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
 
-ALTER TABLE `zt_design` MODIFY `commit` varchar(255);
+ALTER TABLE `zt_design` MODIFY `commit` text;

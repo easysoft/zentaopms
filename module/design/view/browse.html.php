@@ -72,7 +72,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <div class='table-footer table-statistic''>
+      <div class='table-footer table-statistic'>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
    </form>
