@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>form{margin: 30px 0px}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -21,12 +22,12 @@
     <form class='form-ajax' method='post'>
       <table class='table table-form table-condensed'>
         <tr>
-          <th class='w-80px'><?php echo $lang->holiday->type;?></th>
+          <th class='w-120px'><?php echo $lang->holiday->type;?></th>
           <td><?php echo html::radio('type', $lang->holiday->typeList, $holiday->type);?></td>
           <td></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->holiday->name?></th>
+          <th><?php echo $lang->holiday->name?></th>
           <td><?php echo html::input('name', $holiday->name, "class='form-control'")?></td>
           <td></td>
         </tr>
