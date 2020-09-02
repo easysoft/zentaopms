@@ -9,7 +9,7 @@
  * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-/* Field list. */
+/* 字段列表. */
 $lang->design->id            = 'ID';
 $lang->design->name          = 'Name';
 $lang->design->story         = 'Story';
@@ -37,7 +37,7 @@ $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 
-/* Action list. */
+/* 动作列表. */
 $lang->design->common       = 'Design';
 $lang->design->create       = 'Create Design';
 $lang->design->batchCreate  = 'Batch Create';
@@ -52,7 +52,7 @@ $lang->design->submit       = 'Submit Review';
 $lang->design->assignTo     = 'Assign';
 $lang->design->revision     = 'Linked Code';
 
-/* Field value. */
+/* 字段取值. */
 $lang->design->typeList         = array();
 $lang->design->typeList['']     = '';
 $lang->design->typeList['HLDS'] = 'High-Level';
@@ -67,7 +67,7 @@ $lang->design->rangeList['assign'] = 'Selected';
 $lang->design->featureBar['all'] = 'All';
 $lang->design->featureBar += $lang->design->typeList;
 
-/* Prompt information. */
+/* 提示信息. */
 $lang->design->errorSelection = 'No record selected!';
 $lang->design->noDesign       = 'No record.';
 $lang->design->noCommit       = 'No record commited.';
