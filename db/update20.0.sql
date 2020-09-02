@@ -64,7 +64,7 @@ CREATE TABLE `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `program` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
-  `commit` varchar(30) NOT NULL,
+  `commit` text NOT NULL,
   `project` mediumint(9) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `parent` mediumint(8) unsigned NOT NULL,
@@ -298,5 +298,3 @@ ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `modul
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '0', '*', '*', '*', 'moduleName=weekly&methodName=computeWeekly', '更新项目周报', 'system', 0, 'normal', '2020-08-27 10:07:53');
 
 ALTER TABLE `zt_story` ADD `storyChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
-
-ALTER TABLE `zt_design` MODIFY `commit` text;
