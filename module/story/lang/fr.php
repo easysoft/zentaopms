@@ -9,11 +9,21 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->story->create            = "Créer Story";
+global $config;
+$lang->story->create            = "Create Story";
 $lang->story->createStory       = 'Create Story';
 $lang->story->createRequirement = 'Create Requirement';
-$lang->story->requirement       = 'Requirement';
-$lang->story->story             = 'Story';
+
+if(!empty($config->URAndSR))
+{
+    $lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
+    $lang->story->story             = zget($lang, 'srCommon', "Story");
+    $lang->story->createStory       = 'Create ' . $lang->story->story;
+    $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
+    $lang->story->affectedStories   = "Affected {$lang->story->story}";
+    $lang->storyCommon = 'Story';
+}
+
 $lang->story->batchCreate       = "Créer par Lot";
 $lang->story->change            = "Changer";
 $lang->story->changeAction      = "Changer Story";

@@ -24,8 +24,6 @@ if(!empty($config->URAndSR))
     $lang->storyCommon = 'Story';
 }
 
-$lang->story->requirement       = 'Requirement';
-$lang->story->story             = 'Story';
 $lang->story->batchCreate       = "Batch Create";
 $lang->story->change            = "Change";
 $lang->story->changeAction      = "Change Story";
