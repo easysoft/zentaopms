@@ -338,6 +338,7 @@ $lang->block->modules['program']->availableBlocks->recentprogram  = 'Recent ' . 
 $lang->block->modules['program']->availableBlocks->statistic      = $lang->projectCommon . ' Statistic';
 $lang->block->modules['program']->availableBlocks->programteam    = $lang->projectCommon . 'Human Input';
 $lang->block->modules['program']->availableBlocks->waterfallissue = $lang->projectCommon . 'Issue';
+$lang->block->modules['program']->availableBlocks->waterfallrisk  = $lang->projectCommon . 'Risk';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
