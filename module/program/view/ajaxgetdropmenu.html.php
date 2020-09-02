@@ -21,6 +21,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
 
 foreach($programs as $program)
 {
+    $link = $this->createLink('program', 'index', "programID=$program->id", '', '', $program->id);
     if($program->status != 'done' and $program->status != 'closed' and $program->PM == $this->app->user->account)
     {
         $myProgramsHtml .= html::a($link, "<i class='icon icon-folder-outline'></i> " . $program->name, '', "class='text-important' title='{$program->name}' data-id={$program->id} data-key='" . zget($programsPinYin, $program->name, '') . "'");
