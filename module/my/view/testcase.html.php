@@ -47,7 +47,6 @@
       <thead>
         <tr>
           <th class='w-100px'>
-            <?php if($canBatchAction) echo "<div class='checkbox-primary check-all' title='{$lang->selectAll}'><label></label></div>";?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='w-50px'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
@@ -69,7 +68,7 @@
         ?>
         <tr>
           <td class="c-id">
-            <?php echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID     =$case->id"), sprintf('%03d', $case->id)); ?>
+            <?php echo sprintf('%03d', $case->id); ?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
@@ -95,23 +94,6 @@
       </tbody>
     </table>
     <div class="table-footer">
-        <?php if($canBatchAction):?>
-        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <?php endif;?>
-        <div class='table-actions btn-toolbar'>
-          <div class='btn-group dropup'>
-            <?php
-            $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy");
-            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-            echo html::commonButton($lang->testtask->runCase, $misc);
-
-            $actionLink = $this->createLink('testcase', 'batchEdit');
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-            echo html::commonButton($lang->edit, $misc);
-            ?>
-          </div>
-        </div>
-        <div class="table-statistic"><?php echo $summary;?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

@@ -1857,7 +1857,7 @@ class userModel extends model
 
         $personalData = array();
         $personalData['createdTodo']  = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
-        $personalData['createdStory'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdStory'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('story')->fetch('count');
         $personalData['resolvedBug']  = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['createdCase']  = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
         $personalData['finishedTask'] = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')

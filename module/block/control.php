@@ -1712,10 +1712,11 @@ class block extends control
     {
         $this->loadModel('project');
 
-        $count = isset($this->params->count) ? (int)$this->params->count : 15;
+        $count   = isset($this->params->count) ? (int)$this->params->count : 15;
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', 'id_desc', $count);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', $orderBy, $count);
     }
 
     /**

@@ -1344,6 +1344,31 @@ class story extends control
     }
 
     /**
+     * Process story change.
+     *
+     * @param  int    $storyID
+     * @param  string $result   yes|no
+     * @access public
+     * @return void
+     */
+    public function processStoryChange($storyID, $result = 'yes')
+    {   
+        $this->commonAction($storyID);
+        $story = $this->story->getByID($storyID);
+
+        if($result == 'no')
+        {   
+            $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(0)->where('id')->eq($storyID)->exec();
+            die(js::closeModal('parent.parent', 'this'));
+        }   
+
+        $this->view->changedStories = $this->story->getChangedStories($story);
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyID        = $storyID;
+        $this->display();
+    }
+
+    /**
      * AJAX: get stories of a project in html select.
      *
      * @param  int    $projectID

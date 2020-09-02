@@ -480,6 +480,25 @@ class blockModel extends model
     }
 
     /**
+     * Get programteam params.
+     *
+     * @access public
+     * @return json
+     */
+    public function getProgramteamParams()
+    {
+        $this->app->loadLang('program');
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->program->featureBar;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->project;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($this->onlyCountParams($params));
+    }
+    /**
      * Get Build params.
      * 
      * @access public
