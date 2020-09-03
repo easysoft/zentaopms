@@ -375,7 +375,9 @@ class issue extends control
             $products  = $this->loadModel('product')->getPairs('', $this->session->program);
             $productID = $this->session->product;
             $productID = isset($products[$productID]) ? $productID : key($products);
+            $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');
 
+            $this->view->branches  = $branches;
             $this->view->products  = $products;
             $this->view->productID = $productID;
         }

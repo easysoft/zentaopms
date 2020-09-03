@@ -439,7 +439,7 @@ class block extends control
             echo '<div class="form-group">';
             echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
             echo '<div class="col-sm-7">';
-            echo html::hidden('type', $program->template);
+            if(isset($program->template)) echo html::hidden('type', $program->template);
             echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
             echo '</div></div>';
         }
