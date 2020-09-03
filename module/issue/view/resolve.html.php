@@ -14,6 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/kindeditor.html.php';
 include '../../common/view/datepicker.html.php';
+include '../../common/view/sortable.html.php';
 ?>
 <?php
 echo js::set('issueID', $issue->id);

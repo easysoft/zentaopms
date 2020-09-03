@@ -18,7 +18,7 @@
 </tr>
 <tr>
   <th><?php echo $lang->task->project;?></th>
-  <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
+  <td><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
 </tr>
 <tr>
   <th><?php echo $lang->task->type;?></th>
@@ -31,7 +31,7 @@
 </tr>
 <tr>
   <th><?php echo $lang->task->module;?></th>
-  <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $project->id)'");?></td>
+  <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $projectID)'");?></td>
   <td>
     <div class="checkbox-primary">
       <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
@@ -47,12 +47,6 @@
       <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
     </div>
   </td>
-  <td>
-    <div class="checkbox-primary affair">
-      <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
-    </div>
-    <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
-  </td>
 </tr>
 <tr class='hide'>
   <th><?php echo $lang->task->status;?></th>
@@ -63,51 +57,18 @@
   <td colspan='3'>
     <div class="input-group title-group">
       <div class="input-control has-icon-right">
-        <div class="colorpicker">
-          <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-          <ul class="dropdown-menu clearfix">
-            <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
-          </ul>
-          <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
-        </div>
         <?php echo html::input('name', $task->name, "class='form-control'");?>
       </div>
-      <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
-      <?php
-      $hasCustomPri = false;
-      foreach($lang->task->priList as $priKey => $priValue)
-      {
-          if(!empty($priKey) and (string)$priKey != (string)$priValue)
-          {
-              $hasCustomPri = true;
-              break;
-          }
-      }
-      $priList = $lang->task->priList;
-      if(end($priList)) unset($priList[0]);
-      ?>
-      <?php if($hasCustomPri):?>
-      <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control'");?>
-      <?php else: ?>
       <div class="input-group-btn pri-selector" data-type="pri">
-        <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-          <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($task->pri) ? '0' : $task->pri?>" title="<?php echo $task->pri?>"><?php echo $task->pri?></span></span> &nbsp;<span class="caret"></span>
-        </button>
-        <div class='dropdown-menu pull-right'>
-          <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-        </div>
+        <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control'");?>
       </div>
-      <?php endif; ?>
-      <?php endif; // end print pri selector ?>
-      <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
       <div class='table-col w-120px'>
         <div class="input-group">
           <span class="input-group-addon fix-border br-0"><?php echo $lang->task->estimateAB;?></span>
           <input type="text" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off">
         </div>
       </div>
-      <?php endif;?>
     </div>
   </td>
 </tr>

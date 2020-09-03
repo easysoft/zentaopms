@@ -304,7 +304,14 @@ class issueModel extends model
     public function resolve($issueID)
     {
         $data = fixer::input('post')->get();
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+
+        $issue = new stdClass();
+        $issue->resolution        = $data->resolution;
+        $issue->resolutionComment = $data->resolution;
+        $issue->resolvedBy        = $data->resolution;
+        $issue->resolvedDate      = $data->resolution;
+
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
     }
 
     /**

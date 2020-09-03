@@ -363,6 +363,7 @@ class issue extends control
             $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
             $this->view->projects         = $projects;
+            $this->view->projectID        = $projectID;
             $this->view->showAllModule    = $showAllModule;
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->showFields       = $this->config->task->custom->createFields;

@@ -608,7 +608,6 @@ class programplanModel extends model
     {
         $oldPlan = $this->getByID($planID);
         $plan    = fixer::input('post')
-            ->remove('uid')
             ->setDefault('begin', '0000-00-00')
             ->setDefault('end', '0000-00-00')
             ->setDefault('realStarted', '0000-00-00')
@@ -617,7 +616,7 @@ class programplanModel extends model
             ->get();
 
         if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
-        if($plan->end  == '0000-00-00') dao::$errors['end'][]  = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
+        if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
 
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
@@ -638,9 +637,6 @@ class programplanModel extends model
                 ->andWhere('id')->ne($oldPlan->id)
                 ->andWhere('id')->in($projects)
                 ->fetch('count');
-
-            if(isset($plan->attribute) && $plan->attribute == 'dev') $devCounts += 1;
-            if($devCounts > 1) dao::$errors['attribute'][] = $this->lang->programplan->error->onlyOneDev;
         }
 
         if($plan->parent > 0)

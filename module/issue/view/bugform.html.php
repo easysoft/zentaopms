@@ -130,68 +130,11 @@
     <div class="input-group title-group">
       <div class="input-control has-icon-right">
         <?php echo html::input('title', $issue->title, "class='form-control'");?>
-        <div class="colorpicker">
-          <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-          <ul class="dropdown-menu clearfix">
-            <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
-          </ul>
-          <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
-        </div>
       </div>
-      <?php if(strpos(",$showFields,", ',severity,') !== false): // begin print severity selector ?>
-      <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->severity;?></span>
-      <?php
-      $hasCustomSeverity = false;
-      foreach($lang->bug->severityList as $severityKey => $severityValue)
-      {
-          if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
-          {
-              $hasCustomSeverity = true;
-              break;
-          }
-      }
-      ?>
-      <?php if($hasCustomSeverity):?>
-      <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control'");?>
-      <?php else: ?>
-      <div class="input-group-btn pri-selector" data-type="severity">
-        <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-          <span class="pri-text"><span class="label-severity" data-severity="<?php echo $severity;?>" title="<?php echo $severity;?>"></span></span> &nbsp;<span class="caret"></span>
-        </button>
-        <div class='dropdown-menu pull-right'>
-          <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?>
-        </div>
-      </div>
-      <?php endif; ?>
-      <?php endif; // end print severity selector ?>
-      <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->pri;?></span>
-      <?php
-      $hasCustomPri = false;
-      foreach($lang->bug->priList as $priKey => $priValue)
-      {
-          if(!empty($priKey) and (string)$priKey != (string)$priValue)
-          {
-              $hasCustomPri = true;
-              break;
-          }
-      }
-      $priList = $lang->bug->priList;
-      if(end($priList)) unset($priList[0]);
-      ?>
-      <?php if($hasCustomPri):?>
-      <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control'");?>
-      <?php else: ?>
       <div class="input-group-btn pri-selector" data-type="pri">
-        <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-          <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($issue->pri) ? '0' : $issue->pri?>" title="<?php echo $issue->pri?>"><?php echo $issue->pri?></span></span> &nbsp;<span class="caret"></span>
-        </button>
-        <div class='dropdown-menu pull-right'>
-          <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-        </div>
+        <?php echo html::select('pri', $lang->bug->priList, 3, "class='form-control'");?>
       </div>
-      <?php endif; ?>
-      <?php endif; // end print pri selector ?>
     </div>
   </td>
 </tr>
@@ -202,30 +145,6 @@
     <?php echo html::textarea('steps', $issue->desc, "rows='10' class='form-control'");?>
   </td>
 </tr>
-<?php
-  $showStory = strpos(",$showFields,", ',story,') !== false;
-  $showTask  = strpos(",$showFields,", ',task,')  !== false;
-?>
-<?php if(($showStory or $showTask)):?>
-<tr>
-  <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
-  <?php if($showStory):?>
-  <td>
-    <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
-  </td>
-  <?php endif;?>
-  <?php if($showTask):?>
-  <td>
-    <div class='input-group'>
-      <?php if($showStory):?>
-      <span class='input-group-addon'><?php echo $lang->bug->task?></span>
-      <?php endif;?>
-      <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
-    </div>
-  </td>
-  <?php endif;?>
-</tr>
-<?php endif;?>
 <tr>
   <th><?php echo $lang->issue->resolvedBy;?></th>
   <td>
