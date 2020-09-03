@@ -539,7 +539,7 @@ class testcaseModel extends model
     public function getByOpenedBy($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
-            ->andWhere('product')->ne(0)
+            ->beginIF($auto != 'skip')->andWhere('product')->ne(0)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()

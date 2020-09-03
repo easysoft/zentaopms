@@ -56,14 +56,17 @@
           <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php
-          if(!$isPgmAdmin && common::hasPriv('group', 'delete'))
+          if(common::hasPriv('group', 'delete'))
           {
-              $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
-          }
-          elseif($isPgmAdmin)
-          {
-            echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+              if($isPgmAdmin)
+              {
+                  echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+              }
+              else
+              {
+                  $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
+              }
           }
           ?>
         </td>
