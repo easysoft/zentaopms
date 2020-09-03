@@ -1406,6 +1406,20 @@ EOD;
     }
 
     /**
+     * Check safe file.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function checkSafeFile()
+    {
+        if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
+
+        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+    }
+
+    /**
      * Check upgrade's status file is ok or not.
      *
      * @access public
@@ -1413,7 +1427,7 @@ EOD;
      */
     public function checkUpgradeStatus()
     {
-        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        $statusFile = $this->checkSafeFile();
         if($statusFile)
         {
             $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;

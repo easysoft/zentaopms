@@ -121,7 +121,7 @@ class extension extends control
         $this->view->title       = $installTitle . $extension;
 
         
-        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
             $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
@@ -427,7 +427,7 @@ class extension extends control
      */
     public function upload()
     {
-        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
             $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
