@@ -29,7 +29,7 @@ class branch extends control
         $products = $this->loadModel('product')->getPairs('nocode' , $this->session->program);
         $this->product->setMenu($products, $productID);
 
-        $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), $products[$productID]);
+        $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID));
         $position[] = $this->lang->branch->manage;
 
         $this->view->title    = $this->lang->branch->manage;
