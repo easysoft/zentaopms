@@ -348,7 +348,7 @@ class build extends control
                 {
                     echo html::a($this->createLink('build', 'create', "projectID=$projectID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
+                    die(html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh));
                 }
                 die(html::select('build', $builds, $build, "class='form-control'"));
             }
