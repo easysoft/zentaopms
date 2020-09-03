@@ -958,6 +958,7 @@ class userModel extends model
             ->where('t1.type')->eq('project')
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.program')->ne(0)
             ->orderBy('t2.id_desc')
             ->fetchAll();
 
