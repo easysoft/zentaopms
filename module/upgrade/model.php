@@ -911,16 +911,28 @@ class upgradeModel extends model
     public function deleteFiles()
     {
         $result = array();
+        $zfile  = $this->app->loadClass('zfile');
+
         foreach($this->config->delete as $deleteFiles)
         {
             $basePath = $this->app->getBasePath();
+
             foreach($deleteFiles as $file)
             {
                 if(isset($this->config->excludeFiles[$file])) continue;
+
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
-                if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
+                if(file_exists($fullPath))
+                {
+                    if((is_dir($fullPath)  and !$zfile->removeDir($fullPath)) or
+                       (is_file($fullPath) and !$zfile->removeFile($fullPath)))
+                    {
+                        $result[] = $fullPath;
+                    }
+                }
             }
         }
+
         return $result;
     }
 
