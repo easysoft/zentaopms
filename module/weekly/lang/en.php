@@ -10,30 +10,30 @@
  * @link        http://www.zentao.net
  */
 $lang->weekly->common   = 'Project Weekly';
-$lang->weekly->index    = 'Weekly newspaper overview';
-$lang->weekly->progress = 'Percent Completed';
+$lang->weekly->index    = 'Weekly Overview';
+$lang->weekly->progress = 'Progress';
 $lang->weekly->workload = 'Workload';
 $lang->weekly->total    = 'Total';
 
-$lang->weekly->reportTtitle   = 'ITEM: Weekly Report% s (week% s)';
-$lang->weekly->summary        = 'Project status';
-$lang->weekly->finished       = 'Completion of work this week (100% of work completed)';
-$lang->weekly->postponed      = 'The work is not finished this week';
-$lang->weekly->nextWeek       = 'Schedule of work for next week';
-$lang->weekly->workloadByType = 'Workload statistics';
+$lang->weekly->reportTtitle   = 'Project: % s Weekly (Week % s)';
+$lang->weekly->summary        = 'Project Progress';
+$lang->weekly->finished       = 'Work finished this week (100% completed work)';
+$lang->weekly->postponed      = 'Work unfinished this week';
+$lang->weekly->nextWeek       = 'Work planned for next week';
+$lang->weekly->workloadByType = 'Workload Summary';
 
 $lang->weekly->term    = 'Reporting Cycle';
 $lang->weekly->program = 'Project Name';
 $lang->weekly->master  = 'Project Manager ';
-$lang->weekly->staff   = 'The numbers in this week';
+$lang->weekly->staff   = 'The number of men in this week';
 
-$lang->weekly->weekDesc       = 'Week% s (% s ~% s)';
-$lang->weekly->progress       = 'Current status of the project';
-$lang->weekly->analysisResult = 'Analysis results';
-$lang->weekly->cost           = 'Project cost';
+$lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
+$lang->weekly->progress       = 'Progress of the project';
+$lang->weekly->analysisResult = 'Analysis';
+$lang->weekly->cost           = 'Project Cost';
 
-$lang->weekly->pv = 'The work to be done(PV)';
-$lang->weekly->ev = 'Actual work done(EV)';
-$lang->weekly->ac = 'Actual cost(AC)';
-$lang->weekly->sv = 'Rate of progress deviation(SV%)';
-$lang->weekly->cv = 'Cost deviation rate(CV%)';
+$lang->weekly->pv = 'Planned Value(PV)';
+$lang->weekly->ev = 'Earned Value(EV)';
+$lang->weekly->ac = 'Actual Cost(AC)';
+$lang->weekly->sv = 'Schedule Variance(SV%)';
+$lang->weekly->cv = 'Cost Variance(CV%)';
