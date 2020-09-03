@@ -1160,6 +1160,9 @@ class docModel extends model
             }
         }
 
+        //if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doclib->project;
+        if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
+
         return $buildGroups;
     }
 

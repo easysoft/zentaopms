@@ -208,5 +208,5 @@ $lang->custom->waterfall->URSRName = 'A conceptual definition of requirements an
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();
-$lang->custom->waterfallOptions->URAndSR[0] = 'Yes';
-$lang->custom->waterfallOptions->URAndSR[1] = 'No';
+$lang->custom->waterfallOptions->URAndSR[0] = 'No';
+$lang->custom->waterfallOptions->URAndSR[1] = 'Yes';
