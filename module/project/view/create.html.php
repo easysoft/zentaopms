@@ -90,7 +90,7 @@
           <td></td>
           <td></td>
         </tr>
-        <?php $this->printExtendFields('', 'table');?>
+        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr <?php if($config->global->flow == 'onlyTask') echo "class='hidden'";?>>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
