@@ -353,7 +353,7 @@ class repo extends control
     {
         if($this->get->entry) $entry = $this->get->entry;
         $this->repo->setMenu($this->repos, $repoID);
-        $this->repo->setBackSession('list', $withOtherModule = true);
+        $this->repo->setBackSession('log', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
         $repo  = $this->repo->getRepoByID($repoID);
