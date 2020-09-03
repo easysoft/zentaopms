@@ -264,12 +264,12 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '', $dashboard = '', $program = null)
+    public function getAvailableBlocks($module = '', $dashboard = '', $template = '')
     {
         $blocks = $this->lang->block->availableBlocks;
         if($dashboard == 'program')
         {
-            $blocks = $this->lang->block->modules[$program->template]['index']->availableBlocks;
+            $blocks = $this->lang->block->modules[$template]['index']->availableBlocks;
         }
         else
         {

@@ -415,16 +415,25 @@ class block extends control
 
         if($mode == 'getblocklist')
         {
-            $program   = '';
+            $template  = '';
+            $block     = $this->block->getByID($id);
             $dashboard = $this->get->dashboard;
 
+            /* Create a program block. */
             if($dashboard == 'program')
             {
-                $programID = $this->session->program;
-                $program   = $this->loadModel('project')->getByID($programID);
+                $program  = $this->loadModel('project')->getByID($this->session->program);
+                $template = $program->template;
             }
 
-            $blocks    = $this->block->getAvailableBlocks($module, $dashboard, $program);
+            /* Edit a program block. */
+            if($id and $block->module == 'program')
+            {
+                $template  = $block->type;
+                $dashboard = 'program';
+            }
+
+            $blocks = $this->block->getAvailableBlocks($module, $dashboard, $template);
             if(!$this->selfCall)
             {
                 echo $blocks;
@@ -434,12 +443,10 @@ class block extends control
             $blocks     = json_decode($blocks, true);
             $blockPairs = array('' => '') + $blocks;
 
-            $block = $this->block->getByID($id);
-
             echo '<div class="form-group">';
             echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
             echo '<div class="col-sm-7">';
-            if(isset($program->template)) echo html::hidden('type', $program->template);
+            if($template) echo html::hidden('type', $template);
             echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
             echo '</div></div>';
         }
