@@ -1,20 +1,20 @@
 <?php
-$lang->durationestimation->index        = 'Estimated lead time home';
-$lang->durationestimation->create       = 'Time estimate setting';
-$lang->durationestimation->common       = 'Estimation of project duration';
+$lang->durationestimation->index        = 'Duration Home';
+$lang->durationestimation->create       = 'Settings';
+$lang->durationestimation->common       = 'Estimate Duration';
 $lang->durationestimation->stage        = 'Stage';
-$lang->durationestimation->workloadRate = 'Workload share';
+$lang->durationestimation->workloadRate = 'Workload %';
 $lang->durationestimation->workload     = 'Workload';
-$lang->durationestimation->worktimeRate = 'Full-time rate';
-$lang->durationestimation->people       = 'Estimated number';
-$lang->durationestimation->members      = 'Number of people invested';
-$lang->durationestimation->startDate    = 'Start date';
-$lang->durationestimation->endDate      = 'End Date';
-$lang->durationestimation->setting      = 'Set Up';
+$lang->durationestimation->worktimeRate = 'Full-time %';
+$lang->durationestimation->people       = 'Estimated Man';
+$lang->durationestimation->members      = 'Actual Man';
+$lang->durationestimation->startDate    = 'Begin';
+$lang->durationestimation->endDate      = 'End';
+$lang->durationestimation->setting      = 'Settings';
 
-$lang->durationestimation->setWorkestimation = "Please enter the estimated workload information first";
-$lang->durationestimation->summary           = "Project scale: <strong class='text-danger'> %s {$lang->hourCommon}</strong>, Estimate workload: <strong id='totalWorkload' class='text-danger'>0</strong>, Total number of participants: <strong id='totalStaff' class='text-danger'>0</strong>";
-$lang->durationestimation->workloadError     = "The sum of the workload must be 100%";
+$lang->durationestimation->setWorkestimation = "Enter the estimated workload information first.";
+$lang->durationestimation->summary           = "Project scale: <strong class='text-danger'> %s {$lang->hourCommon}</strong>; Estimated workload: <strong id='totalWorkload' class='text-danger'>0</strong>; Total number of men: <strong id='totalStaff' class='text-danger'>0</strong>";
+$lang->durationestimation->workloadError     = "The sum of the workload % should be 100%.";
 
 $lang->durationestimation->placeholder = new stdclass(); 
 $lang->durationestimation->placeholder->scale          = '';
