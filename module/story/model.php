@@ -2875,7 +2875,7 @@ class storyModel extends model
             ->fetchPairs('id', 'title');
 
         /* For requirement children. */
-        if($type == 'requirement' && !empty($this->config->URAndSR))
+        if($type == 'requirement' && $this->config->URAndSR)
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
               ->where('AID')->in(array_keys($stories))  
@@ -3426,29 +3426,29 @@ class storyModel extends model
     /**
      * Obtain the direct relationship between UR and SR.
      *
-     * @param  int  $storyID
+     * @param  int    $storyID
      * @param  string $storyType
-     * @param  string $storyType
+     * @param  array  $fields
      * @access public
-     * @return int
+     * @return array
      */
     public function getStoryRelation($storyID, $storyType, $fields = array())
     {
-        $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
-        $storyType      = ($storyType == 'story') ? 'AID' : 'BID';
+        $conditionField = $storyType == 'story' ? 'BID' : 'AID';
+        $storyType      = $storyType == 'story' ? 'AID' : 'BID';
 
         $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
             ->andWhere($conditionField)->eq($storyID)
-            ->fetchAll($storyType);
+            ->fetchPairs();
 
         if(empty($relations)) return array();
 
         $fields = empty($fields) ? '*' : implode(',', $fields);
         $story  = $this->dao->select($fields)->from(TABLE_STORY)
-            ->where('id')->in(array_keys($relations))
+            ->where('id')->in($relations)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
             ->fetchAll();
@@ -3521,44 +3521,31 @@ class storyModel extends model
     }
 
     /**
-     * Get story relations.
+     * Get associated requirements.
      *
      * @param  int     $storyID
-     * @param  varchar $storyType
+     * @param  string  $storyType
+     * @param  array   $fields
      * @access public
-     * @return int
+     * @return array
      */
-    public function getRelation($storyID, $storyType, $extraField = array())
+    public function getRelation($storyID, $storyType, $fields = array())
     {
         $BType    = $storyType == 'story' ? 'requirement' : 'story';
         $relation = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
 
         $relations = $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('AType')->eq($storyType)
-            ->andWhere('BType')->eq($BType) 
-            ->andWhere('relation')->eq($relation) 
+            ->andWhere('BType')->eq($BType)
+            ->andWhere('relation')->eq($relation)
             ->andWhere('AID')->eq($storyID)
             ->fetchPairs();
 
-        if(!empty($relations))
-        {   
-            if(empty($extraField))
-            {   
-                return $this->dao->select('id, title')
-                    ->from(TABLE_STORY)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('id')->in($relations)
-                    ->fetchPairs();
-            }   
-            else
-            {   
-                return $this->dao->select(implode($extraField, ','))
-                    ->from(TABLE_STORY)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('id')->in($relations)
-                    ->fetchAll('id');
-            }   
-        }
+        if(empty($relations)) return array();
+
+        $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
+        if(!empty($fields)) return $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($relations)->andWhere('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($relations)->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**

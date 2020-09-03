@@ -382,7 +382,7 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if(!empty($config->URAndSR)):?>
+          <?php if($config->URAndSR):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
@@ -392,18 +392,18 @@
           <?php endif;?>
         </ul>
         <div class='tab-content'>
-          <?php if(!empty($config->URAndSR)):?>
+          <?php if($config->URAndSR):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
               $relation = array();
               foreach($relations as $item) $relation[$item->id] = $item->title;
               foreach($relation as $id => $title)
-              {   
+              {
                   echo "<li title='$title'>" . html::a($this->createLink('story', 'view', "id=$id", '', true), "#$id $title", '', "class='iframe' data-width='80%'"); 
                   echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
-              }   
-              ?>  
+              }
+              ?>
               <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
               <li><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
               <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>

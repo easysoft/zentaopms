@@ -2198,7 +2198,7 @@ EOD;
     /**
      * Get program main menu by template.
      *
-     * @param  varchar $moduleName
+     * @param  string $moduleName
      * @static
      * @access public
      * @return string
@@ -2208,12 +2208,14 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'scrum') 
+
+        if($program->template == 'scrum')
         {
             $lang->menuOrder = $lang->scrumpgm->menuOrder;
             return $lang->menu;
         }
-        if($program->template == 'waterfall') 
+
+        if($program->template == 'waterfall')
         {
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';

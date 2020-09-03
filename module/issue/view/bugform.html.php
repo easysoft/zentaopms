@@ -1,6 +1,6 @@
 <?php
 /**
- * The createbug view of issue module of ZenTaoPMS.
+ * The create bug view of issue module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -10,226 +10,247 @@
  * @link        http://www.zentao.net
  */
 ?>
-  <tr class='bugTR storyTR'>
-    <th class='w-110px'><?php echo $lang->bug->product;?></th>
-    <td>
-      <div class='input-group'>
-        <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-        <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
-        <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
-        <?php endif;?>
-      </div>
-    </td>
-    <td>
-      <div class='input-group' id='moduleIdBox'>
-      <span class="input-group-addon"><?php echo $lang->bug->module?></span>
-        <?php
-        echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
-        if(count($moduleOptionMenu) == 1)
-        {
-            echo "<span class='input-group-addon'>";
-            echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-            echo '&nbsp; ';
-            echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
-            echo '</span>';
-        }
-        ?>
-      </div>
-    </td>
-  </tr>
-  <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
-  <tr class='bugTR'>
-    <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
+<tr>
+  <th><?php echo $lang->issue->resolution;?></th>
+  <td>
+    <?php echo html::select('resolution', $lang->issue->resolveMethods, $resolution, 'class="form-control chosen" onchange="getSolutions()"');?>
+  </td>
+</tr>
+<tr>
+  <th class='w-110px'><?php echo $lang->bug->product;?></th>
+  <td>
+    <div class='input-group'>
+      <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
+      <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
+      <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
+      <?php endif;?>
+    </div>
+  </td>
+  <td>
+    <div class='input-group' id='moduleIdBox'>
+    <span class="input-group-addon"><?php echo $lang->bug->module?></span>
+      <?php
+      echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+      if(count($moduleOptionMenu) == 1)
+      {
+          echo "<span class='input-group-addon'>";
+          echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+          echo '&nbsp; ';
+          echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+          echo '</span>';
+      }
+      ?>
+    </div>
+  </td>
+</tr>
+<?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
+<tr>
+  <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
 
-    <?php if(!$showProject):?>
-    <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
-    <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-    <td>
-      <div class='input-group' id='bugTypeInputGroup'>
-        <?php echo html::select('type', $lang->bug->typeList, '', "class='form-control'");?>
-        <?php if($showOS):?>
-        <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-        <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
-        <?php endif;?>
-        <?php if($showBrowser):?>
-        <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-        <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
-        <?php endif;?>
-      </div>
-    </td>
-    <?php endif;?>
-    <?php if($showProject):?>
-    <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
-    <?php endif;?>
-    <td>
-      <div class='input-group' id='buildBox'>
-        <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
-        <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
-        <span class='input-group-addon fix-border' id='buildBoxActions'></span>
-        <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
-      </div>
-    </td>
-  </tr>
-  <tr class='bugTR'>
-    <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-    <td>
-      <div class='input-group'>
-        <?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?>
-        <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
-      </div>
-    </td>
-  <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
-  <?php if($showDeadline):?>
-    <td id='deadlineTd'>
-      <div class='input-group'>
-        <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
-        <span><?php echo html::input('deadline', $issue->deadline, "class='form-control form-date'");?></span>
-      </div>
-    </td>
-  </tr>
-  <?php endif;?>
-  <?php if($showProject):?>
+  <?php if(!$showProject):?>
   <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
   <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-  <tr class='bugTR'>
-    <th><?php echo $lang->bug->type;?></th>
-    <td>
-      <div class='table-row'>
-        <div class='table-col' id='typeBox'>
-          <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");?>
-        </div>
-        <?php if($showOS):?>
-        <div class='table-col' id='osBox'>
-          <div class='input-group'>
-            <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
-          </div>
-        </div>
-        <?php endif;?>
-        <?php if($showBrowser):?>
-        <div class='table-col'>
-          <div class='input-group'>
-            <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
-          </div>
-        </div>
-        <?php endif;?>
-      </div>
-    </td>
-  </tr>
+  <td>
+    <div class='input-group' id='bugTypeInputGroup'>
+      <?php echo html::select('type', $lang->bug->typeList, '', "class='form-control'");?>
+      <?php if($showOS):?>
+      <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+      <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+      <?php endif;?>
+      <?php if($showBrowser):?>
+      <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+      <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+      <?php endif;?>
+    </div>
+  </td>
   <?php endif;?>
-  <tr class='bugTR'>
-    <th><?php echo $lang->bug->title;?></th>
-    <td colspan='2'>
-      <div class="input-group title-group">
-        <div class="input-control has-icon-right">
-          <?php echo html::input('title', $issue->title, "class='form-control'");?>
-          <div class="colorpicker">
-            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-            <ul class="dropdown-menu clearfix">
-              <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
-            </ul>
-            <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
-          </div>
-        </div>
-        <?php if(strpos(",$showFields,", ',severity,') !== false): // begin print severity selector ?>
-        <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->severity;?></span>
-        <?php
-        $hasCustomSeverity = false;
-        foreach($lang->bug->severityList as $severityKey => $severityValue)
-        {
-            if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
-            {
-                $hasCustomSeverity = true;
-                break;
-            }
-        }
-        ?>
-        <?php if($hasCustomSeverity):?>
-        <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control'");?>
-        <?php else: ?>
-        <div class="input-group-btn pri-selector" data-type="severity">
-          <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-            <span class="pri-text"><span class="label-severity" data-severity="<?php echo $severity;?>" title="<?php echo $severity;?>"></span></span> &nbsp;<span class="caret"></span>
-          </button>
-          <div class='dropdown-menu pull-right'>
-            <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?>
-          </div>
-        </div>
-        <?php endif; ?>
-        <?php endif; // end print severity selector ?>
-        <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
-        <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->pri;?></span>
-        <?php
-        $hasCustomPri = false;
-        foreach($lang->bug->priList as $priKey => $priValue)
-        {
-            if(!empty($priKey) and (string)$priKey != (string)$priValue)
-            {
-                $hasCustomPri = true;
-                break;
-            }
-        }
-        $priList = $lang->bug->priList;
-        if(end($priList)) unset($priList[0]);
-        ?>
-        <?php if($hasCustomPri):?>
-        <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control'");?>
-        <?php else: ?>
-        <div class="input-group-btn pri-selector" data-type="pri">
-          <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-            <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($issue->pri) ? '0' : $issue->pri?>" title="<?php echo $issue->pri?>"><?php echo $issue->pri?></span></span> &nbsp;<span class="caret"></span>
-          </button>
-          <div class='dropdown-menu pull-right'>
-            <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-          </div>
-        </div>
-        <?php endif; ?>
-        <?php endif; // end print pri selector ?>
-      </div>
-    </td>
-  </tr>
-  <tr class='bugTR'>
-    <th><?php echo $lang->bug->steps;?></th>
-    <td colspan='2'>
-      <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
-      <?php echo html::textarea('steps', $issue->desc, "rows='10' class='form-control'");?>
-    </td>
-  </tr>
-  <?php
-    $showStory = strpos(",$showFields,", ',story,') !== false;
-    $showTask  = strpos(",$showFields,", ',task,')  !== false;
-  ?>
-  <?php if(($showStory or $showTask)):?>
-  <tr class='bugTR'>
-    <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
-    <?php if($showStory):?>
-    <td>
-      <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
-    </td>
-    <?php endif;?>
-    <?php if($showTask):?>
-    <td>
-      <div class='input-group'>
-        <?php if($showStory):?>
-        <span class='input-group-addon'><?php echo $lang->bug->task?></span>
-        <?php endif;?>
-        <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
-      </div>
-    </td>
-    <?php endif;?>
-  </tr>
+  <?php if($showProject):?>
+  <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
   <?php endif;?>
-
-  <?php
-  $showMailto   = strpos(",$showFields,", ',mailto,')   !== false;
-  $showKeywords = strpos(",$showFields,", ',keywords,') !== false;
-  ?>
-  <tr class='bugTR'>
-    <th><?php echo $lang->bug->files;?></th>
-    <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>
-  </tr>
-</tbody>
+  <td>
+    <div class='input-group' id='buildBox'>
+      <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
+      <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
+      <span class='input-group-addon fix-border' id='buildBoxActions'></span>
+      <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
+    </div>
+  </td>
+</tr>
+<tr>
+  <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
+  <td>
+    <div class='input-group'>
+      <?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?>
+      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+    </div>
+  </td>
+<?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+<?php if($showDeadline):?>
+  <td id='deadlineTd'>
+    <div class='input-group'>
+      <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
+      <span><?php echo html::input('deadline', $issue->deadline, "class='form-control form-date'");?></span>
+    </div>
+  </td>
+</tr>
+<?php endif;?>
+<?php if($showProject):?>
+<?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
+<?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
+<tr>
+  <th><?php echo $lang->bug->type;?></th>
+  <td>
+    <div class='table-row'>
+      <div class='table-col' id='typeBox'>
+        <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");?>
+      </div>
+      <?php if($showOS):?>
+      <div class='table-col' id='osBox'>
+        <div class='input-group'>
+          <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+          <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
+        </div>
+      </div>
+      <?php endif;?>
+      <?php if($showBrowser):?>
+      <div class='table-col'>
+        <div class='input-group'>
+          <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+          <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
+        </div>
+      </div>
+      <?php endif;?>
+    </div>
+  </td>
+</tr>
+<?php endif;?>
+<tr>
+  <th><?php echo $lang->bug->title;?></th>
+  <td colspan='2'>
+    <div class="input-group title-group">
+      <div class="input-control has-icon-right">
+        <?php echo html::input('title', $issue->title, "class='form-control'");?>
+        <div class="colorpicker">
+          <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+          <ul class="dropdown-menu clearfix">
+            <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+          </ul>
+          <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+        </div>
+      </div>
+      <?php if(strpos(",$showFields,", ',severity,') !== false): // begin print severity selector ?>
+      <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->severity;?></span>
+      <?php
+      $hasCustomSeverity = false;
+      foreach($lang->bug->severityList as $severityKey => $severityValue)
+      {
+          if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+          {
+              $hasCustomSeverity = true;
+              break;
+          }
+      }
+      ?>
+      <?php if($hasCustomSeverity):?>
+      <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control'");?>
+      <?php else: ?>
+      <div class="input-group-btn pri-selector" data-type="severity">
+        <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+          <span class="pri-text"><span class="label-severity" data-severity="<?php echo $severity;?>" title="<?php echo $severity;?>"></span></span> &nbsp;<span class="caret"></span>
+        </button>
+        <div class='dropdown-menu pull-right'>
+          <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?>
+        </div>
+      </div>
+      <?php endif; ?>
+      <?php endif; // end print severity selector ?>
+      <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+      <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->pri;?></span>
+      <?php
+      $hasCustomPri = false;
+      foreach($lang->bug->priList as $priKey => $priValue)
+      {
+          if(!empty($priKey) and (string)$priKey != (string)$priValue)
+          {
+              $hasCustomPri = true;
+              break;
+          }
+      }
+      $priList = $lang->bug->priList;
+      if(end($priList)) unset($priList[0]);
+      ?>
+      <?php if($hasCustomPri):?>
+      <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control'");?>
+      <?php else: ?>
+      <div class="input-group-btn pri-selector" data-type="pri">
+        <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+          <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($issue->pri) ? '0' : $issue->pri?>" title="<?php echo $issue->pri?>"><?php echo $issue->pri?></span></span> &nbsp;<span class="caret"></span>
+        </button>
+        <div class='dropdown-menu pull-right'>
+          <?php echo html::select('pri', (array)$priList, $issue->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+        </div>
+      </div>
+      <?php endif; ?>
+      <?php endif; // end print pri selector ?>
+    </div>
+  </td>
+</tr>
+<tr>
+  <th><?php echo $lang->bug->steps;?></th>
+  <td colspan='2'>
+    <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
+    <?php echo html::textarea('steps', $issue->desc, "rows='10' class='form-control'");?>
+  </td>
+</tr>
+<?php
+  $showStory = strpos(",$showFields,", ',story,') !== false;
+  $showTask  = strpos(",$showFields,", ',task,')  !== false;
+?>
+<?php if(($showStory or $showTask)):?>
+<tr>
+  <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
+  <?php if($showStory):?>
+  <td>
+    <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
+  </td>
+  <?php endif;?>
+  <?php if($showTask):?>
+  <td>
+    <div class='input-group'>
+      <?php if($showStory):?>
+      <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+      <?php endif;?>
+      <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
+    </div>
+  </td>
+  <?php endif;?>
+</tr>
+<?php endif;?>
+<tr>
+  <th><?php echo $lang->issue->resolvedBy;?></th>
+  <td>
+    <?php echo html::select('resolvedBy', $users, $this->app->user->account, "class='form-control chosen'");?>
+  </td>
+</tr>
+<tr>
+  <th><?php echo $lang->issue->resolvedDate;?></th>
+  <td>
+     <div class='input-group has-icon-right'>
+       <?php echo html::input('resolvedDate', date('Y-m-d'), "class='form-control form-date'");?>
+       <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+     </div>
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td>
+    <div class='form-action'><?php echo html::submitButton();?></div>
+  </td>
+</tr>
+<?php
+$showMailto   = strpos(",$showFields,", ',mailto,')   !== false;
+$showKeywords = strpos(",$showFields,", ',keywords,') !== false;
+?>
 <?php
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');

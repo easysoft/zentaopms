@@ -1043,11 +1043,12 @@ class productModel extends model
         $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
         $storyCommon = $this->lang->storyCommon;
-        if(!empty($this->config->URAndSR))
+        if($this->config->URAndSR)
         {
             if($storyType == 'requirement') $storyCommon = $this->lang->urCommon;
-            if($storyType == 'story') $storyCommon = $this->lang->srCommon;
+            if($storyType == 'story')       $storyCommon = $this->lang->srCommon;
         }
+
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
 

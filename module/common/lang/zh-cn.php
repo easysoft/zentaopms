@@ -230,7 +230,7 @@ $lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic          = '动态|my|dynamic|';
 
 global $config;
-if(!empty($config->URAndSR))
+if($config->URAndSR)
 {
     $urCommon = zget($lang, 'urCommon', "用户需求");
     $srCommon = zget($lang, 'srCommon', "软件需求");
@@ -258,7 +258,7 @@ $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 
-if(!empty($config->URAndSR))
+if($config->URAndSR)
 {
     $lang->product->menu->requirement = array('link' => "{$urCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
     $lang->product->menu->story       = array('link' => "{$srCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
@@ -880,11 +880,11 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->waterfallproduct->menu->plan        = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+if($config->planStatus) $lang->waterfallproduct->menu->plan = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story       = '需求|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-if(!empty($config->URAndSR))
+if($config->URAndSR)
 {
     $lang->waterfallproduct->menu->requirement = array('link' => "{$urCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
     $lang->waterfallproduct->menu->story       = array('link' => "{$srCommon}|product|browse|productID={PRODUCT}");
