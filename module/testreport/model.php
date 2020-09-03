@@ -295,12 +295,15 @@ class testreportModel extends model
      * @access public
      * @return void
      */
-    public function getCaseIDList($reportID)
+    public function getCaseIdList($reportID)
     {
-        $task       = $this->dao->select('tasks')->from(TABLE_TESTREPORT)->where('id')->eq($reportID)->andWhere('deleted')->eq(0)->fetch('tasks');
-        $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($task)->fetchAll('case');
+        $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTREPORT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.tasks=t2.task')
+            ->where('t1.id')->eq($reportID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchPairs('case');
 
-        return $caseIDList;
+        return $caseIdList;
     }
 
     /**

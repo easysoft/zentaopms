@@ -11,5 +11,6 @@ function addItem(obj)
 
 function deleteItem(obj)
 {
+    if($('#planForm .table tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 }

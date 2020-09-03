@@ -63,5 +63,4 @@ $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload Ration" must be number';
 $lang->programplan->error->planFinishSmall = '"Finish" must greater than "Begin"';
 $lang->programplan->error->percentOver     = 'The "Workload Ration" total cannot exceed 100%';
-$lang->programplan->error->onlyOneDev      = 'Only one development type of phase plan can be set per phase plan';
 $lang->programplan->error->createdTask     = 'The task has been decompose. Subphases cannot be added';
