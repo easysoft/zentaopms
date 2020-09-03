@@ -399,6 +399,7 @@ class designModel extends model
         $programID = $this->session->program;
         $program   = $this->loadModel('project')->getByID($programID);
         $products  = $this->loadModel('product')->getPairs('', $programID);
+        if(empty($products))  die(js::locate(helper::createLink('product', 'create')));
         $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
 
         $productID = $this->loadModel('product')->saveState($productID, $products);

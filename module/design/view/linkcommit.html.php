@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2>
@@ -85,4 +85,4 @@
 </div>
 <?php js::set('designID', $designID);?>
 <?php js::set('error', $lang->design->errorDate);?>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

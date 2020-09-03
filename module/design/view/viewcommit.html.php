@@ -11,7 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="mainContent" class="main-table">
+<style>
+#mainContent .pull-right{margin-bottom: 10px}
+.table{border: 1px solid #ddd;}
+</style>
+<div id="mainContent">
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $design->id;?></span>
@@ -27,12 +31,12 @@
     <p><span class="text-muted"><?php echo $lang->design->noCommit;?></span></p>
   </div>
   <?php else:?>
-  <table class='table table-data'>
+  <table class='table'>
     <thead>
       <tr>
-        <th class="text-left"><?php echo $lang->design->submission;?></th>
-        <th class="text-left"><?php echo $lang->design->commitBy;?></th>
-        <th class="text-left"><?php echo $lang->design->commitDate;?></th>
+        <th><?php echo $lang->design->submission;?></th>
+        <th class='w-120px'><?php echo $lang->design->commitBy;?></th>
+        <th class='w-120px'><?php echo $lang->design->commitDate;?></th>
         <th class="text-center w-50px"> <?php echo $lang->design->actions;?></th>
       </tr>
     </thead>
@@ -42,7 +46,7 @@
         <td><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
         <td><?php echo $commit->committer;?></td>
         <td><?php echo substr($commit->time, 0, 11);?></td>
-        <td class="c-actions">
+        <td class="c-actions text-center">
         <?php common::printIcon('design', 'unlinkCommit', "designID=$design->id&commitID=$commit->id", $design, 'list', 'unlink', 'hiddenwin', 'iframe showinonlybody', true);?>
         </td>
       </tr>

@@ -28,7 +28,6 @@ class design extends control
     {
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true));
-        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode', $this->session->program));
         $this->design->setProductMenu($productID);
 
         /* Build the search form. */
@@ -83,7 +82,6 @@ class design extends control
             $this->send($response);
         }
 
-        $productID = $this->loadModel('product')->saveState($productID, $this->product->getPairs('nocode', $this->session->program));
         $this->design->setProductMenu($productID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
@@ -253,9 +251,9 @@ class design extends control
 
         /* Init pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($revisions);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $revisions  = array_chunk($revisions, $pager->recPerPage);
+        $recTotal  = count($revisions);
+        $pager     = new pager($recTotal, $recPerPage, $pageID);
+        $revisions = array_chunk($revisions, $pager->recPerPage);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->position[] = $this->lang->design->linkCommit;
@@ -263,7 +261,7 @@ class design extends control
         $this->view->repos      = $repos;
         $this->view->repoID     = $repoID;
         $this->view->repo       = $repo;
-        $this->view->revisions  = empty($revisions) ? $revisions : $revisions[$pageID - 1];;
+        $this->view->revisions  = empty($revisions) ? $revisions : $revisions[$pageID - 1];
         $this->view->designID   = $designID;
         $this->view->begin      = $begin;
         $this->view->end        = $end;

@@ -64,7 +64,7 @@
               <?php
               $vars = "design={$design->id}";
               common::printIcon('design', 'edit',       $vars, $design, 'list', 'fork', '', '', '', '', '', $design->program);
-              common::printIcon('design', 'viewCommit', $vars, $design, 'list', 'glasses', '', 'iframe showinonlybody', true);
+              common::printIcon('design', 'viewCommit', $vars, $design, 'list', 'list-alt', '', 'iframe showinonlybody', true);
               common::printIcon('design', 'delete',     $vars, $design, 'list', 'trash', 'hiddenwin', '', '', '', '', $design->program);
               ?>
             </td>
