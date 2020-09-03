@@ -145,6 +145,7 @@ class actionModel extends model
 
         /* If objectType is product or project, return the objectID. */
         if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0);
+        if($objectType == 'program') return array('product' => "", 'project' => $objectID);
         if($objectType == 'project') 
         {
             $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');

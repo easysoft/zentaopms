@@ -1358,13 +1358,15 @@ class block extends control
      */
     public function printProgramDynamicBlock()
     {
-        $projects = $this->loadModel('project')->getPairs();
-        $products = $this->loadModel('product')->getPairs();
+        $programID = $this->session->program;
+
+        $projects = $this->loadModel('project')->getPairs('', $programID);
+        $products = $this->loadModel('product')->getPairs('', $programID);
         $count    = isset($this->params->count) ? (int)$this->params->count : 10;
 
         $actions = array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('project')->eq($this->session->program)
+            ->where('project')->eq($programID)
             ->beginIF($projects)->markLeft()->orWhere('project')->in(array_keys($projects))->fi()->markRight()
             ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
             ->orderBy('date_desc')

@@ -22,7 +22,9 @@ echo $sync ? '<div id="roadMap' . $blockNavID . '">' : '';
 #productList{width:32%; position: absolute; top: 6px; left: 96px;}
 </style>
 <div class="panel-move-handler">
-  <div id="productList"><?php echo html::select('productID', $products, $productID, 'id="' . $blockNavID .'" class="form-control chosen" onchange="reloadRoadmap(this.options[this.options.selectedIndex].value, this.id)"');?></div>
+  <div id="productList">
+  <?php if(!empty($products)) echo html::select('productID', $products, $productID, 'id="' . $blockNavID .'" class="form-control chosen" onchange="reloadRoadmap(this.options[this.options.selectedIndex].value, this.id)"');?>
+  </div>
 </div>
 <div class="panel-body conatiner-fluid">
   <?php if(empty($roadmaps)):?>

@@ -48,7 +48,7 @@ $lang->issue->search            = 'Search';
 $lang->issue->basicInfo         = 'Basic Information';
 $lang->issue->activate          = 'Activate';
 $lang->issue->assignTo          = 'Assign';
-$lang->issue->create            = 'Create';
+$lang->issue->create            = 'Create Issue';
 $lang->issue->edit              = 'Edit';
 $lang->issue->batchCreate       = 'Batch Create';
 

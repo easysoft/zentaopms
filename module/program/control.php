@@ -98,7 +98,7 @@ class program extends control
             $projectID = $this->program->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
-            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $this->loadModel('action')->create('program', $projectID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', array('status' => 'wait', 'orderBy' => 'order_desc'))));
         }
 
@@ -472,7 +472,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
+                $actionID = $this->action->create('program', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -528,7 +528,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
+                $actionID = $this->action->create('program', $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -562,7 +562,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
+                $actionID = $this->action->create('program', $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -603,7 +603,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
+                $actionID = $this->action->create('program', $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);

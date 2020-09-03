@@ -23,8 +23,8 @@
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->issue->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('issue', 'create', '', "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
     <?php common::printLink('issue', 'batchCreate', '', "<i class='icon icon-plus'></i>" . $lang->issue->batchCreate, '', "class='btn btn-primary'");?>
+    <?php common::printLink('issue', 'create', '', "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row">
@@ -54,7 +54,7 @@
               <td class="c-id"><?php printf('%03d', $issue->id);?></td>
               <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
               <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php common::printLink('issue', 'view', "id=$issue->id", $issue->title);?></td>
-              <td title="<?php echo $issue->severity;?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
+              <td title="<?php echo zget($lang->issue->severityList, $issue->severity);?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
               <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
               <td title="<?php echo zget($users, $issue->assignedTo);?>"><?php echo zget($users, $issue->assignedTo);?></td>
               <td title="<?php echo zget($users, $issue->owner);?>"><?php echo zget($users, $issue->owner);?></td>
@@ -83,7 +83,10 @@
       <?php endif;?>
       </form>
     <?php else:?>
-      <div class="table-empty-tip"><?php echo $lang->noData;?></div>
+      <div class="table-empty-tip">
+        <?php echo $lang->noData;?>
+        <?php echo html::a($this->createLink('issue', 'create'), '<i class="icon icon-plus"></i> ' . $lang->issue->create, '', 'class="btn btn-info"')?>
+      </div>
     <?php endif;?>
   </div>
 </div>

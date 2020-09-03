@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->issue->common            = '项目问题';
+$lang->issue->common            = '问题';
 $lang->issue->browse            = '问题列表';
 $lang->issue->resolvedBy        = '解决者';
 $lang->issue->program           = '所属项目';
@@ -48,7 +48,7 @@ $lang->issue->search            = '搜索';
 $lang->issue->basicInfo         = '基本信息';
 $lang->issue->activate          = '激活';
 $lang->issue->assignTo          = '指派';
-$lang->issue->create            = '新建';
+$lang->issue->create            = '新建问题';
 $lang->issue->edit              = '编辑';
 $lang->issue->batchCreate       = '批量新建';
 
