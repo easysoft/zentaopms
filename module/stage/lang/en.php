@@ -10,20 +10,20 @@
  * @link        http://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse       = 'Stage List';
-$lang->stage->create       = 'Create Stage';
-$lang->stage->batchCreate  = 'Batch Create';
-$lang->stage->edit         = 'Edit';
-$lang->stage->delete       = 'Delete';
-$lang->stage->view         = 'Details';
+$lang->stage->browse      = 'Stage List';
+$lang->stage->create      = 'Create Stage';
+$lang->stage->batchCreate = 'Batch Create';
+$lang->stage->edit        = 'Edit';
+$lang->stage->delete      = 'Delete';
+$lang->stage->view        = 'Details';
 
 /* Fields. */
-$lang->stage->common       = 'Stage';
-$lang->stage->id           = 'ID';
-$lang->stage->name         = 'Name';
-$lang->stage->type         = 'Type';
-$lang->stage->percent      = 'Workload %';
-$lang->stage->setType      = 'Set Type';
+$lang->stage->common  = 'Stage';
+$lang->stage->id      = 'ID';
+$lang->stage->name    = 'Name';
+$lang->stage->type    = 'Type';
+$lang->stage->percent = 'Workload %';
+$lang->stage->setType = 'Set Type';
 
 $lang->stage->typeList['request'] = 'Story';
 $lang->stage->typeList['design']  = 'Design';
