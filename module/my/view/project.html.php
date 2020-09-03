@@ -15,9 +15,6 @@
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProject;?></span></span>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('program', 'createguide')) echo html::a(helper::createLink('program', 'createguide'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'") ?>
-  </div>
 </div>
 <div id="mainContent" class='main-table'>
   <?php if(empty($projects)):?>
