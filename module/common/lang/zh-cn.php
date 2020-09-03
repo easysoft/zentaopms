@@ -880,9 +880,9 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-if($config->planStatus) $lang->waterfallproduct->menu->plan = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
-$lang->waterfallproduct->menu->story       = '需求|product|browse|product={PRODUCT}';
-$lang->waterfallproduct->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
+$lang->waterfallproduct->menu->track = '跟踪矩阵|story|track|product={PRODUCT}';
 
 if($config->URAndSR)
 {

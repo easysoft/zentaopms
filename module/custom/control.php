@@ -398,9 +398,6 @@ class custom extends control
 
         if($_POST)
         {   
-            $data = fixer::input('post')->get();
-            $this->loadModel('setting')->setItem('system.custom.planStatus', $data->planStatus);
-
             $this->custom->setURAndSR();
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -409,7 +406,6 @@ class custom extends control
 
         $this->view->title      = $this->lang->custom->common;
         $this->view->position[] = $this->lang->custom->common;
-        $this->view->status     = zget($this->config->custom, 'planStatus', 0); 
 
         $this->display();
     }

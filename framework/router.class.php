@@ -126,7 +126,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName', 'planStatus','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception) 
                 {
@@ -155,7 +155,6 @@ class router extends baseRouter
                 if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
                 if($setting->key == 'hourPoint')        $hourCommon  = $setting->value;
                 if($setting->key == 'URAndSR')          $URAndSR     = $setting->value;
-                if($setting->key == 'planStatus')       $planStatus  = $setting->value;
 
                 if($setting->key == 'URSRName')
                 {
@@ -175,7 +174,6 @@ class router extends baseRouter
                 }
             }
 
-            $config->planStatus  = $planStatus;
             $config->storyCommon = $storyCommon;
             $config->URAndSR     = $URAndSR;
 

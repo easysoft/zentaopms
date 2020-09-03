@@ -990,18 +990,18 @@ $lang->holiday->methodOrder[20] = 'delete';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index        = 'index';
-$lang->resource->custom->set          = 'set';
-$lang->resource->custom->restore      = 'restore';
-$lang->resource->custom->flow         = 'flow';
-$lang->resource->custom->working      = 'working';
-$lang->resource->custom->setPublic    = 'setPublic';
-$lang->resource->custom->timezone     = 'timezone';
-$lang->resource->custom->estimate     = 'estimate';
-$lang->resource->custom->plan         = 'plan';
-$lang->resource->custom->concept      = 'concept';
-$lang->resource->custom->setWaterfall = 'setWaterfall';
-$lang->resource->custom->setscrum     = 'setscrum';
+$lang->resource->custom->index              = 'index';
+$lang->resource->custom->set                = 'set';
+$lang->resource->custom->restore            = 'restore';
+$lang->resource->custom->flow               = 'flow';
+$lang->resource->custom->working            = 'working';
+$lang->resource->custom->setPublic          = 'setPublic';
+$lang->resource->custom->timezone           = 'timezone';
+$lang->resource->custom->estimate           = 'estimate';
+$lang->resource->custom->configureWaterfall = 'configureWaterfall';
+$lang->resource->custom->configureScrum     = 'configureScrum';
+$lang->resource->custom->setWaterfall       = 'setWaterfall';
+$lang->resource->custom->setscrum           = 'setscrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1011,8 +1011,8 @@ $lang->custom->methodOrder[25] = 'working';
 $lang->custom->methodOrder[30] = 'setPublic';
 $lang->custom->methodOrder[35] = 'timezone';
 $lang->custom->methodOrder[40] = 'estimate';
-$lang->custom->methodOrder[45] = 'plan';
-$lang->custom->methodOrder[50] = 'concept';
+$lang->custom->methodOrder[45] = 'configureWaterfall';
+$lang->custom->methodOrder[50] = 'configureScrum';
 $lang->custom->methodOrder[55] = 'setWaterfall';
 $lang->custom->methodOrder[60] = 'setscrum';
 

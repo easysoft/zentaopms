@@ -35,6 +35,9 @@ $lang->custom->isRange            = '是否目标控制范围';
 $lang->custom->configureScrum     = '概念';
 $lang->custom->URStory            = "用户需求";
 $lang->custom->SRStory            = "软件需求";
+$lang->custom->waterfallCommon    = "瀑布";
+$lang->custom->configureWaterfall = "瀑布自定义";
+$lang->custom->configureScrum     = "敏捷自定义";
 
 $lang->custom->object['program'] = '项目';
 $lang->custom->program->fields['unitList'] = '预算单位';
@@ -200,15 +203,10 @@ $lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['3'] = '代码行';
 
 $lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->plan     = '1.是否启用排期？';
-$lang->custom->waterfall->URAndSR  = '2.是否启用用户需求和软件需求概念？';
-$lang->custom->waterfall->URSRName = '3.用户需求和软件需求的概念定义？';
+$lang->custom->waterfall->URAndSR  = '是否启用用户需求和软件需求概念？';
+$lang->custom->waterfall->URSRName = '用户需求和软件需求的概念定义？';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();
 $lang->custom->waterfallOptions->URAndSR[0] = '否';
 $lang->custom->waterfallOptions->URAndSR[1] = '是';
-
-$lang->custom->waterfallOptions->planStatus = array();
-$lang->custom->waterfallOptions->planStatus[0] = '否';
-$lang->custom->waterfallOptions->planStatus[1] = '是';
