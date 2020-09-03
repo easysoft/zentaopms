@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>form{margin: 35px 0px}</style>
+<style>form{margin: 40px 0px}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -27,11 +27,6 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->holiday->name;?></th>
-          <td><?php echo html::input('name', '', "class='form-control'");?></td>
-          <td></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->holiday->begin;?></th>
           <td><?php echo html::input('begin', '', "class='form-control form-date'");?></td>
           <td></td>
@@ -39,6 +34,11 @@
         <tr>
           <th><?php echo $lang->holiday->end;?></th>
           <td><?php echo html::input('end', '', "class='form-control form-date'");?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->holiday->name;?></th>
+          <td><?php echo html::input('name', '', "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>
