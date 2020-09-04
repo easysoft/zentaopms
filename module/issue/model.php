@@ -307,9 +307,10 @@ class issueModel extends model
 
         $issue = new stdClass();
         $issue->resolution        = $data->resolution;
-        $issue->resolutionComment = $data->resolution;
-        $issue->resolvedBy        = $data->resolution;
-        $issue->resolvedDate      = $data->resolution;
+        $issue->resolutionComment = isset($data->resolutionComment) ? $data->resolutionComment : '';
+        $issue->resolvedBy        = $data->resolvedBy;
+        $issue->resolvedDate      = $data->resolvedDate;
+        $issue->status            = 'resolved';
 
         $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
     }

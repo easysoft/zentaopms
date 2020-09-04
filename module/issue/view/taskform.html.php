@@ -24,14 +24,11 @@
   <th><?php echo $lang->task->type;?></th>
   <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen'");?></td>
   <td>
-    <div class="checkbox-primary hidden" id='selectTestStoryBox'>
-      <input type="checkbox" name='selectTestStory' id="selectTestStory" value='1' onchange='toggleSelectTestStory()' /><label for="selectTestStory" class="no-margin"><?php echo $lang->task->selectTestStory;?></label>
-    </div>
   </td>
 </tr>
 <tr>
   <th><?php echo $lang->task->module;?></th>
-  <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $projectID)'");?></td>
+  <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen'");?></td>
   <td>
     <div class="checkbox-primary">
       <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
@@ -48,10 +45,6 @@
     </div>
   </td>
 </tr>
-<tr class='hide'>
-  <th><?php echo $lang->task->status;?></th>
-  <td><?php echo html::hidden('status', 'wait');?></td>
-</tr>
 <tr>
   <th><?php echo $lang->task->name;?></th>
   <td colspan='3'>
@@ -61,7 +54,7 @@
       </div>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
       <div class="input-group-btn pri-selector" data-type="pri">
-        <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control'");?>
+        <?php echo html::select('pri', $lang->task->priList, $issue->pri, "class='form-control'");?>
       </div>
       <div class='table-col w-120px'>
         <div class="input-group">
@@ -119,6 +112,18 @@ $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
 <tr>
   <td></td>
   <td>
+    <?php echo html::hidden('status', 'wait');?>
     <div class='form-action'><?php echo html::submitButton();?></div>
   </td>
 </tr>
+<script>
+    function loadAll(projectID)
+    {
+        var moduleID = $('#moduleIdBox #module').val();
+        var extra    = $(this).prop('checked') ? 'allModule' : '';
+        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + projectID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
+        {
+            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + projectID + ")").chosen();
+        });
+    }
+</script>

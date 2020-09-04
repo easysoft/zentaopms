@@ -334,15 +334,11 @@ class issue extends control
         $task->module     = 0;
         $task->assignedTo = '';
         $task->name       = $issue->title;
-        $task->story      = 0;
         $task->type       = '';
-        $task->pri        = '3';
         $task->estimate   = '';
         $task->desc       = $issue->desc;
         $task->estStarted = '';
         $task->deadline   = '';
-        $task->mailto     = '';
-        $task->color      = '';
 
         $this->view->resolution = $data->mode;
         $this->view->issue      = $issue;
@@ -359,13 +355,13 @@ class issue extends control
             $projectID = $this->session->project;
             $projectID = isset($projects[$projectID]) ? $projectID : key($projects);
 
-            $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
-            $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+            $moduleOptionMenu = array('' => '/');
+            if($data->mode == 'totask') $moduleOptionMenu = $this->tree->getOptionMenu($projectID, 'task');
 
+            $this->view->moduleOptionMenu = $moduleOptionMenu;
+            $this->view->showAllModule    = 'allModule';;
             $this->view->projects         = $projects;
             $this->view->projectID        = $projectID;
-            $this->view->showAllModule    = $showAllModule;
-            $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->showFields       = $this->config->task->custom->createFields;
             $this->view->moduleID         = 0;
             $this->view->branch           = 0;
@@ -378,9 +374,13 @@ class issue extends control
             $productID = isset($products[$productID]) ? $productID : key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');
 
-            $this->view->branches  = $branches;
-            $this->view->products  = $products;
-            $this->view->productID = $productID;
+            $module = $data->mode == 'tostory' ? 'story' : 'bug';
+            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $module);
+
+            $this->view->moduleOptionMenu = $moduleOptionMenu;
+            $this->view->branches         = $branches;
+            $this->view->products         = $products;
+            $this->view->productID        = $productID;
         }
 
         switch($data->mode)
@@ -413,7 +413,6 @@ class issue extends control
                 break;
             case 'torisk':
                 $this->app->loadLang('risk');
-
                 $this->display('issue', 'riskform');
                 break;
             case 'resolved':

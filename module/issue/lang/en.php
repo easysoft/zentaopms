@@ -101,7 +101,7 @@ $lang->issue->resolveMethods['resolved'] = 'Resolved';
 $lang->issue->resolveMethods['totask']   = 'To Task';
 $lang->issue->resolveMethods['tobug']    = 'To Bug';
 $lang->issue->resolveMethods['tostory']  = 'To Story';
-$lang->issue->resolveMethods['torisk']   = 'To Risk'; 
+$lang->issue->resolveMethods['torisk']   = 'To Risk';
 
 $lang->issue->confirmDelete = 'Do you want to delete this issue?';
 

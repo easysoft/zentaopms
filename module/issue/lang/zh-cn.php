@@ -101,7 +101,7 @@ $lang->issue->resolveMethods['resolved'] = '已解决';
 $lang->issue->resolveMethods['totask']   = '转任务';
 $lang->issue->resolveMethods['tobug']    = '转BUG';
 $lang->issue->resolveMethods['tostory']  = '转需求';
-$lang->issue->resolveMethods['torisk']   = '转风险'; 
+$lang->issue->resolveMethods['torisk']   = '转风险';
 
 $lang->issue->confirmDelete = '您确认删除该问题？';
 

@@ -133,7 +133,7 @@
       </div>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->bug->pri;?></span>
       <div class="input-group-btn pri-selector" data-type="pri">
-        <?php echo html::select('pri', $lang->bug->priList, 3, "class='form-control'");?>
+        <?php echo html::select('pri', $lang->bug->priList, $issue->pri, "class='form-control'");?>
       </div>
     </div>
   </td>
