@@ -151,7 +151,7 @@
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
+              <td><?php if(!common::printLink('product', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
             </tr>
             <?php if($this->session->currentProductType != 'normal'):?>
             <tr>
