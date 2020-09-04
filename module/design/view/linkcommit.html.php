@@ -84,5 +84,5 @@
   <?php endif;?>
 </div>
 <?php js::set('designID', $designID);?>
-<?php js::set('error', $lang->design->errorDate);?>
+<?php js::set('errorDate', $lang->design->errorDate);?>
 <?php include '../../common/view/footer.html.php';?>

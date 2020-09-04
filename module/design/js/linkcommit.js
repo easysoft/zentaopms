@@ -19,7 +19,7 @@ $('#begin, #end, #repo').change(function()
 
     if(begin > end)
     {
-        alert(error);
+        alert(errorDate);
         location.href = createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repo);
         die;
     }
