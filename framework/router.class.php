@@ -146,7 +146,7 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $storyCommon = $hourCommon = $planCommon = $URAndSR = $planStatus = 0;
+            $productCommon = $storyCommon = $hourCommon = $planCommon = $URAndSR = 0;
             $projectCommon = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
@@ -184,9 +184,10 @@ class router extends baseRouter
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
             $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planCommon])       ? $this->config->planCommonList[$this->clientLang][(int)$planCommon]     : $this->config->planCommonList['en'][(int)$planCommon];
 
-            if($storyCommon == 0 and $URAndSR)
+            if($storyCommon == 0 and isset($URAndSR))
             {
-                if($URAndSR and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+                $config->URAndSR = $URAndSR;
+                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
             }
         }
 

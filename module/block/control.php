@@ -212,13 +212,13 @@ class block extends control
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
 
-        $common = 'common';
+        $commonField = 'common';
         if($module == 'program')
         {
-            $program = $this->loadModel('project')->getByID($this->session->program);
-            $common  = $program->template . 'common';
+            $program     = $this->loadModel('project')->getByID($this->session->program);
+            $commonField = $program->template . 'common';
         }
-        $inited = empty($this->config->$module->$common->blockInited) ? '' : $this->config->$module->$common->blockInited;
+        $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
 
         /* Init block when vist index first. */
         if((empty($blocks) and !$inited and !defined('TUTORIAL')))
