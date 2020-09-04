@@ -2,11 +2,11 @@
 /**
  * The control file of risk module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Shujie Tian <tianshujie@esaycorp.ltd>
  * @package     risk
- * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
+ * @version     $Id: control.php 5107 2020-09-04 09:06:12Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class risk extends control
