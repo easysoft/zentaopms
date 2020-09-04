@@ -295,20 +295,6 @@ class design extends control
     }
 
     /**
-     * A version of the repository.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return void
-     */
-    public function revision($repoID = 0)
-    {
-        $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
-        header("location:" . $repoURL);
-    }
-
-    /**
      * View a design's commit.
      *
      * @param  int    $designID
@@ -331,6 +317,20 @@ class design extends control
         $this->view->pager  = $pager;
 
         $this->display();
+    }
+
+    /**
+     * A version of the repository.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function revision($repoID = 0)
+    {
+        $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
+        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&revistion=$repo->revision");
+        header("location:" . $repoURL);
     }
 
     /**
