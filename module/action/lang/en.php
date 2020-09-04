@@ -130,6 +130,7 @@ $lang->action->desc->diff1          = '<strong><i>%s</i></strong> is changed. It
 $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

@@ -303,7 +303,7 @@ class issueModel extends model
      */
     public function resolve($issueID)
     {
-        $data = fixer::input('post')->get();
+        $data = fixer::input('post')->stripTags('steps', $this->config->allowedTags)->get();
 
         $issue = new stdClass();
         $issue->resolution        = $data->resolution;
@@ -327,6 +327,7 @@ class issueModel extends model
             ->remove('resolution,resolvedBy,resolvedDate')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', helper::today())
+            ->stripTags('desc', $this->config->allowedTags)
             ->get();
 
         $this->dao->insert(TABLE_TASK)->data($task)->exec();
@@ -342,13 +343,14 @@ class issueModel extends model
     public function createStory()
     {
         $story = fixer::input('post')
-            ->remove('spec,resolution,resolvedBy,resolvedDate')
-            ->setIF($this->post->needNotReview, 'status', 'active')
+            ->remove('resolution,resolvedBy,resolvedDate')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', helper::now())
+            ->setIF($this->post->needNotReview, 'status', 'active')
+            ->stripTags('spec', $this->config->allowedTags)
             ->get();
 
-        $this->dao->insert(TABLE_STORY)->data($story)->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec')->exec();
 
         $stotyID = $this->dao->lastInsertID();
         $this->dao->insert(TABLE_STORYSPEC)
@@ -374,6 +376,7 @@ class issueModel extends model
             ->join('openedBuild', ',')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', helper::now())
+            ->stripTags('steps', $this->config->allowedTags)
             ->get();
 
         $this->dao->insert(TABLE_BUG)->data($bug)->exec();
@@ -395,7 +398,6 @@ class issueModel extends model
             ->get();
 
         $this->dao->insert(TABLE_RISK)->data($risk)->exec();
-
         return $this->dao->lastInsertID();
     }
 

@@ -130,6 +130,7 @@ $lang->action->desc->diff1          = '<strong><i>%s</i></strong> wurde geänder
 $lang->action->desc->diff2          = '<strong><i>%s</i></strong> wurde geändert. Die Differenz ist ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = 'Dateiname %s wurde geändert zu %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Verknüpft mit <strong>$extra</strong> von <strong>$actor</strong>';
+$lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

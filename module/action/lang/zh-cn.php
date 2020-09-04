@@ -130,6 +130,7 @@ $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
+$lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解决。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
