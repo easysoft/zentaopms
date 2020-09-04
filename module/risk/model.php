@@ -4,9 +4,9 @@
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Shujie Tian <tianshujie@esaycorp.ltd>
+ * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     risk
- * @version     $Id: model.php 5079 2020-09-04 09:08:34Z chencongzhi520@gmail.com $
+ * @version     $Id: model.php 5079 2020-09-04 09:08:34Z lyc $
  * @link        http://www.zentao.net
  */
 ?>

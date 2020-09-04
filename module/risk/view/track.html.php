@@ -2,11 +2,11 @@
 /**
  * The track of risk module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     risk
- * @version     $Id: track.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @version     $Id: track.html.php 4903 2020-09-04 09:32:59Z lyc $
  * @link        http://www.zentao.net
  */
 ?>
