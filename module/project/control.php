@@ -1920,13 +1920,20 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
         $teams2Import   = array('' => '') + $teams2Import;
+
+        /* Append users for get users. */
+        $appendUsers = array();
+        foreach($currentMembers as $member) $appendUsers[$member->account] = $member->account;
+        foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
+        foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
+
+        $users = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', $appendUsers, $this->config->maxCount);
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
