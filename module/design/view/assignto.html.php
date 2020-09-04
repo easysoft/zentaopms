@@ -1,12 +1,12 @@
 <?php
 /**
- * The assign of design module of ZenTaoPMS.
+ * The assignTo of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
- * @version     $Id: assign.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
+ * @version     $Id: assignto.html.php 4903 2020-09-02 09:32:59Z tianshujie@easycorp.ltd $
  * @link        http://www.zentao.net
  */
 ?>
