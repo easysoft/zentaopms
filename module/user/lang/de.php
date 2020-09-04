@@ -142,11 +142,11 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Stark</span>";
 $lang->user->statusList['active'] = 'Aktiviert';
 $lang->user->statusList['delete'] = 'Gelöscht';
 
-$lang->user->personalData['createdTodo']  = 'Todos Created';
-$lang->user->personalData['createdStory'] = 'Stories Created';
-$lang->user->personalData['finishedTask'] = 'Tasks Finished';
-$lang->user->personalData['resolvedBug']  = 'Bugs Resolved';
-$lang->user->personalData['createdCase']  = 'Cases Created';
+$lang->user->personalData['createdTodos']   = 'Todos Created';
+$lang->user->personalData['createdStories'] = 'Stories Created';
+$lang->user->personalData['finishedTasks']  = 'Tasks Finished';
+$lang->user->personalData['resolvedBugs']   = 'Bugs Resolved';
+$lang->user->personalData['createdCases']   = 'Cases Created';
 
 $lang->user->keepLogin['on']      = 'Angemeldet bleiben';
 $lang->user->loginWithDemoUser    = 'Login als Demo User:';

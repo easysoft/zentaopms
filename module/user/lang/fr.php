@@ -142,11 +142,11 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Fort</span>";
 $lang->user->statusList['active'] = 'Actif';
 $lang->user->statusList['delete'] = 'Supprimé';
 
-$lang->user->personalData['createdTodo']  = 'Entrées Agenda Créées';
-$lang->user->personalData['createdStory'] = 'Stories Créées';
-$lang->user->personalData['finishedTask'] = 'Tâches Terminées';
-$lang->user->personalData['resolvedBug']  = 'Bugs Résolus';
-$lang->user->personalData['createdCase']  = 'CasTests Créés';
+$lang->user->personalData['createdTodos']   = 'Entrées Agenda Créées';
+$lang->user->personalData['createdStories'] = 'Stories Créées';
+$lang->user->personalData['finishedTasks']  = 'Tâches Terminées';
+$lang->user->personalData['resolvedBugs']   = 'Bugs Résolus';
+$lang->user->personalData['createdCases']   = 'CasTests Créés';
 
 $lang->user->keepLogin['on']      = 'Rester connecté';
 $lang->user->loginWithDemoUser    = "Se connecté en tant qu'invité :";

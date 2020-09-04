@@ -1857,11 +1857,11 @@ class userModel extends model
         $count   = 'count(*) AS count';
 
         $personalData = array();
-        $personalData['createdTodo']  = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
-        $personalData['createdStory'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('story')->fetch('count');
-        $personalData['resolvedBug']  = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['createdCase']  = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
-        $personalData['finishedTask'] = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
+        $personalData['createdTodos']   = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $personalData['createdStories'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('story')->fetch('count');
+        $personalData['resolvedBugs']   = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdCases']   = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
+        $personalData['finishedTasks']  = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
             ->andWhere('finishedBy', true)->eq($account)
             ->orWhere('finishedList')->like("%,{$account},%")
             ->markRight(1)

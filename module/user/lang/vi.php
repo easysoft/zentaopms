@@ -142,11 +142,11 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Mạnh</span>"
 $lang->user->statusList['active'] = 'Kích hoạt';
 $lang->user->statusList['delete'] = 'Đã xóa';
 
-$lang->user->personalData['createdTodo']  = 'Việc đã tạo';
-$lang->user->personalData['createdStory'] = 'Chuyện đã tạo';
-$lang->user->personalData['finishedTask'] = 'Nhiệm vụ đã kết thúc';
-$lang->user->personalData['resolvedBug']  = 'Bugs đã giải quyết';
-$lang->user->personalData['createdCase']  = 'Tình huống đã tạo';
+$lang->user->personalData['createdTodos']   = 'Việc đã tạo';
+$lang->user->personalData['createdStories'] = 'Chuyện đã tạo';
+$lang->user->personalData['finishedTasks']  = 'Nhiệm vụ đã kết thúc';
+$lang->user->personalData['resolvedBugs']   = 'Bugs đã giải quyết';
+$lang->user->personalData['createdCases']   = 'Tình huống đã tạo';
 
 $lang->user->keepLogin['on']   = 'Duy trì đăng nhập';
 $lang->user->loginWithDemoUser = 'Đăng nhập Demo:';

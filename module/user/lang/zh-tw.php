@@ -140,11 +140,11 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>強</span>";
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 
-$lang->user->personalData['createdTodo']  = '創建的待辦數';
-$lang->user->personalData['createdStory'] = "創建的{$lang->storyCommon}數";
-$lang->user->personalData['finishedTask'] = '完成的任務數';
-$lang->user->personalData['resolvedBug']  = '解決的Bug數';
-$lang->user->personalData['createdCase']  = '創建的用例數';
+$lang->user->personalData['createdTodos']   = '創建的待辦數';
+$lang->user->personalData['createdStories'] = "創建的{$lang->storyCommon}數";
+$lang->user->personalData['finishedTasks']  = '完成的任務數';
+$lang->user->personalData['resolvedBugs']   = '解決的Bug數';
+$lang->user->personalData['createdCases']   = '創建的用例數';
 
 $lang->user->keepLogin['on']      = '保持登錄';
 $lang->user->loginWithDemoUser    = '使用demo帳號登錄：';
