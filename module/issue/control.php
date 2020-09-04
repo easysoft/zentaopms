@@ -271,6 +271,7 @@ class issue extends control
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+
                 $this->loadModel('action')->create('task', $objectID, 'Opened', '');
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
@@ -281,6 +282,7 @@ class issue extends control
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+
                 $this->loadModel('action')->create('story', $objectID, 'Opened', '');
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
@@ -292,6 +294,7 @@ class issue extends control
                 $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+
                 $this->loadModel('action')->create('bug', $objectID, 'Opened', '');
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
@@ -300,9 +303,10 @@ class issue extends control
             {
                 $objectID   = $this->issue->createRisk($issueID);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
-                $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
+                $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
+                $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+
                 $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
