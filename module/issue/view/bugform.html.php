@@ -141,7 +141,6 @@
 <tr>
   <th><?php echo $lang->bug->steps;?></th>
   <td colspan='2'>
-    <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
     <?php echo html::textarea('steps', $issue->desc, "rows='10' class='form-control'");?>
   </td>
 </tr>

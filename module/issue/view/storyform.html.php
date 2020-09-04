@@ -78,7 +78,6 @@
 <tr>
   <th><?php echo $lang->story->spec;?></th>
   <td colspan="2">
-    <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=story&link=spec');?>
     <?php echo html::textarea('spec', $issue->desc, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate . "\n" . $lang->noticePasteImg) . "'");?>
   </td>
 </tr>
