@@ -195,9 +195,9 @@ $lang->custom->conceptOptions->story['0'] = 'Requiremenet';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['1'] = 'Story Point';
-$lang->custom->conceptOptions->hourPoint['2'] = 'Function Ponit';
-$lang->custom->conceptOptions->hourPoint['3'] = 'Code Line';
+$lang->custom->conceptOptions->hourPoint['0'] = 'Story Point';
+$lang->custom->conceptOptions->hourPoint['1'] = 'Function Ponit';
+$lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
 
 $lang->custom->waterfall = new stdclass();
 $lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enabled?';

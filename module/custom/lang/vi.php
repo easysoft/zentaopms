@@ -195,6 +195,6 @@ $lang->custom->conceptOptions->story['0'] = 'Điều kiện';
 $lang->custom->conceptOptions->story['1'] = 'Câu chuyện';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['1'] = 'Điểm';
-$lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
-$lang->custom->conceptOptions->hourPoint['3'] = 'Code Line';
+$lang->custom->conceptOptions->hourPoint['0'] = 'Điểm';
+$lang->custom->conceptOptions->hourPoint['1'] = 'Function Point';
+$lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';

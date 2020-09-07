@@ -197,9 +197,9 @@ $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['1'] = '故事点';
-$lang->custom->conceptOptions->hourPoint['2'] = '功能点';
-$lang->custom->conceptOptions->hourPoint['3'] = '代码行';
+$lang->custom->conceptOptions->hourPoint['0'] = '故事点';
+$lang->custom->conceptOptions->hourPoint['1'] = '功能点';
+$lang->custom->conceptOptions->hourPoint['2'] = '代码行';
 
 $lang->custom->waterfall = new stdclass();
 $lang->custom->waterfall->URAndSR  = '是否启用用户需求概念？';

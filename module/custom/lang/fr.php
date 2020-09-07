@@ -195,6 +195,6 @@ $lang->custom->conceptOptions->story['0'] = 'Exigence';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['1'] = 'Points de Story';
-$lang->custom->conceptOptions->hourPoint['2'] = 'Points de Fonction';
-$lang->custom->conceptOptions->hourPoint['3'] = 'Code Line';
+$lang->custom->conceptOptions->hourPoint['0'] = 'Points de Story';
+$lang->custom->conceptOptions->hourPoint['1'] = 'Points de Fonction';
+$lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
