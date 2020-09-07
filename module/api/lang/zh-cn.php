@@ -28,3 +28,4 @@ $lang->api->post      = 'POST方式调试请参照页面表单';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
+$lang->api->error->disabled   = '因为安全原因，该功能被禁用。可以到config目录，修改配置项 %s，打开此功能。';
