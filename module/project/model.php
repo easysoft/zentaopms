@@ -552,6 +552,7 @@ class projectModel extends model
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
         $project = fixer::input('post')
+            ->add('realStarted', $now)
             ->setDefault('status', 'doing')
             ->remove('comment')->get();
 
