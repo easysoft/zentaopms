@@ -53,6 +53,14 @@ function resizeBlock(blockID, width, callback)
     });
 }
 
+/**
+ * refreshBlock
+ *
+ * @param  object   $panel
+ * @param  function afterRefresh
+ * @access public
+ * @return void
+ */
 function refreshBlock($panel, afterRefresh)
 {
     var url = $panel.data('url');
@@ -251,6 +259,14 @@ $(function()
     });
 });
 
+/**
+ * reload roadmap.
+ *
+ * @param  int    productID
+ * @param  int    blockNavID
+ * @access public
+ * @return void
+ */
 function reloadRoadmap(productID, blockNavID)
 {
     $.ajax(
