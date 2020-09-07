@@ -1418,7 +1418,7 @@ class block extends control
         $this->session->set('testtaskList', $this->app->getURI(true));
         $this->app->loadLang('testtask');
 
-        $count  = isset($this->params->count) ? (int)$this->params->count : 10;
+        $count  = zget($this->params, 'count', 10);
         $status = isset($this->params->type)  ? $this->params->type : 'wait';
 
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
