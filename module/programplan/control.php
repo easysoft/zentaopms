@@ -11,6 +11,14 @@
  */
 class programplan extends control
 {
+    /**
+     * __construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
