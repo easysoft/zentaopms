@@ -225,9 +225,11 @@ class design extends control
         /* Get the repository information through the repoID. */
         $repos  = $this->loadModel('repo')->getRepoPairs($this->session->program);
         $repoID = $repoID ? $repoID : key($repos);
-        $repo   = $repoID ? $this->loadModel('repo')->getRepoByID($repoID) : '';
 
-        $revisions = $repo ? $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end) : '';
+        if(empty($repoID)) die(js::locate(helper::createLink('repo', 'create')));
+
+        $repo      = $this->loadModel('repo')->getRepoByID($repoID);
+        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end);
 
         if($_POST)
         {
