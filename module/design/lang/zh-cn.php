@@ -36,6 +36,7 @@ $lang->design->createdBy     = '由谁创建';
 $lang->design->createdDate   = '创建时间';
 $lang->design->basicInfo     = '基本信息';
 $lang->design->noAssigned    = '未指派';
+$lang->design->comment       = '注释';
 
 /* 动作列表. */
 $lang->design->common       = '设计';

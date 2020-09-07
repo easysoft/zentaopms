@@ -34,18 +34,20 @@
   <table class='table'>
     <thead>
       <tr>
-        <th><?php echo $lang->design->submission;?></th>
+        <th class="w-100px"><?php echo $lang->design->submission;?></th>
         <th class='w-120px'><?php echo $lang->design->commitBy;?></th>
-        <th class='w-120px'><?php echo $lang->design->commitDate;?></th>
+        <th class='w-100px'><?php echo $lang->design->commitDate;?></th>
+        <th><?php echo $lang->design->comment;?></th>
         <th class="text-center w-50px"> <?php echo $lang->design->actions;?></th>
       </tr>
     </thead>
     <tbody>
     <?php foreach($design->commit as $commit):?>
       <tr>
-        <td><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
+        <td title="<?php echo $commit->id;?>"><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
         <td><?php echo $commit->committer;?></td>
         <td><?php echo substr($commit->time, 0, 11);?></td>
+        <td title="<?php echo $commit->comment;?>"><?php echo $commit->comment;?></td>
         <td class="c-actions text-center">
         <?php common::printIcon('design', 'unlinkCommit', "designID=$design->id&commitID=$commit->id", $design, 'list', 'unlink', 'hiddenwin', 'iframe showinonlybody', true);?>
         </td>
