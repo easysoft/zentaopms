@@ -196,21 +196,16 @@ class designModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
-            $design = new stdclass();
-            $design->commit = $this->dao->select('commit')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch('commit');
 
-            if($design->commit)
-            {
-                $design->commit = implode(",", $revisions) . "," . $design->commit;
-            }
-            else
-            {
-                $design->commit = implode(",", $revisions);
-            }
+        $oldCommit = $this->dao->findByID($designID)->from(TABLE_DESIGN)->fetch('commit');
+        $revisions = join(',', $revisions);
+        $commit    = $oldCommit ? $oldCommit . ',' . $revisions : $revisions;
 
-            $design->commitDate = helper::now();
-            $design->commitBy   = $this->app->user->account;
-            $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
+        $design = new stdclass();
+        $design->commit     = $commit;
+        $design->commitDate = helper::now();
+        $design->commitBy   = $this->app->user->account;
+        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
     }
 
     /**
