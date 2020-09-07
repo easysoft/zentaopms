@@ -744,6 +744,12 @@ class block extends control
             ->fetchAll();
     }
 
+    /**
+     * Print program block.
+     *
+     * @access public
+     * @return void
+     */
     public function printProgramBlock()
     {
         $this->app->loadLang('project');
