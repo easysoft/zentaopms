@@ -208,8 +208,8 @@ $lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enab
 $lang->custom->waterfall->URSRName = 'A conceptual definition of requirements and stories?';
 
 $lang->custom->scrum = new stdclass();
-$lang->custom->scrum->URAndSR  = 'Is it going to be epic?';
-$lang->custom->scrum->URSRName = 'A conceptual definition of requirements?';
+$lang->custom->scrum->URAndSR  = 'Are epic concept enabled?';
+$lang->custom->scrum->URSRName = 'A conceptual definition of epic?';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();
