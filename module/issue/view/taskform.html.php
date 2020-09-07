@@ -116,13 +116,48 @@ $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
   </td>
 </tr>
 <script>
-    function loadAll(projectID)
+/**
+ * Load module and members.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function loadAll(projectID)
+{
+    var moduleID = $('#moduleIdBox #module').val();
+    var extra    = $(this).prop('checked') ? 'allModule' : '';
+    $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + projectID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
     {
-        var moduleID = $('#moduleIdBox #module').val();
-        var extra    = $(this).prop('checked') ? 'allModule' : '';
-        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + projectID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
+        $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + projectID + ")").chosen();
+    });
+
+    loadProjectMembers(projectID);
+}
+
+/**
+ * Load team members of the project.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function loadProjectMembers(projectID)
+{
+    $.get(createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + $('#assignedTo').val()), function(data)
+    {
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').next('.picker').remove();
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo').attr('name', 'assignedTo[]').chosen();
+
+        $('.modal-dialog #taskTeamEditor tr').each(function()
         {
-            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + projectID + ")").chosen();
+            $(this).find('#team_chosen').remove();
+            $(this).find('#team').next('.picker').remove();
+            $(this).find('#team').replaceWith(data);
+            $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
         });
-    }
+    });
+}
 </script>
