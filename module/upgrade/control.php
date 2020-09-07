@@ -307,6 +307,7 @@ class upgrade extends control
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetch('count');
         $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
+
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
         {
@@ -321,6 +322,7 @@ class upgrade extends control
         $this->app->loadLang('program');
         $this->loadModel('project');
         $this->view->type = $type;
+
         /* Get products and projects group by product line. */
         if($type == 'productline')
         {
