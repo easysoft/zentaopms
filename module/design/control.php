@@ -267,6 +267,7 @@ class design extends control
         $this->view->end        = $end;
         $this->view->design     = $this->design->getByID($designID);
         $this->view->pager      = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -315,6 +316,7 @@ class design extends control
 
         $this->view->design = $this->design->getCommit($designID, $pager);
         $this->view->pager  = $pager;
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

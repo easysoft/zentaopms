@@ -45,7 +45,7 @@
     <?php foreach($design->commit as $commit):?>
       <tr>
         <td title="<?php echo $commit->id;?>"><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
-        <td><?php echo $commit->committer;?></td>
+        <td><?php echo zget($users, $commit->committer, $commit->committer);?></td>
         <td><?php echo substr($commit->time, 0, 11);?></td>
         <td title="<?php echo $commit->comment;?>"><?php echo $commit->comment;?></td>
         <td class="c-actions text-center">
