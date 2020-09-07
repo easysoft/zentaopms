@@ -809,8 +809,6 @@ $lang->icons['unlock']             = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
 
-include (dirname(__FILE__) . '/menuOrder.php');
-
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex = array('link' => 'Index|program|index|program={PROGRAM}');
@@ -893,3 +891,6 @@ if($config->URAndSR)
 $lang->nc->menu = $lang->auditplan->menu;
 
 $lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+
+include (dirname(__FILE__) . '/menuOrder.php');
+
