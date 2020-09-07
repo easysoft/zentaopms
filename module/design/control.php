@@ -118,7 +118,7 @@ class design extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('browse');
+            $response['locate']  = inlink('browse', "productID=$productID");
 
             $this->send($response);
         }

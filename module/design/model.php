@@ -70,7 +70,7 @@ class designModel extends model
         $this->loadModel('action');
         foreach($data->name as $i => $name)
         {
-            if(!$name) continue;
+            if(!trim($name)) continue;
 
             $design = new stdclass();
             $design->story       = $data->story[$i];
@@ -81,7 +81,7 @@ class designModel extends model
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
-            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->exec();
+            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->create->requiredFields, 'notempty')->exec();
 
             $designID = $this->dao->lastInsertID();
             $this->action->create('design', $designID, 'Opened');
