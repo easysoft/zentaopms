@@ -312,8 +312,9 @@ class issue extends control
             }
 
             if($resolution == 'resolved') $this->loadModel('action')->create('issue', $issueID, 'Resolved');
-
             $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issueID)->exec();
+
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate(inLink('browse'), 'parent'));
         }
 
