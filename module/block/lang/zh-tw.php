@@ -50,8 +50,6 @@ $lang->block->createdStories = '創建的需求數';
 $lang->block->finishedTasks  = '完成的任務數';
 $lang->block->resolvedBugs   = '解決Bug數';
 $lang->block->createdCases   = '創建用例數';
-$lang->block->waterfall      = 'CMMI 3';
-$lang->block->scrum          = 'Scrum+';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '參數名稱';

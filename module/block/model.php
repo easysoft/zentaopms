@@ -299,7 +299,7 @@ class blockModel extends model
         if($module == 'project') return $this->getProjectParams($module);
 
         $params = new stdclass();
-        $params = $this->onlyCountParams($params);
+        $params = $this->appendCountParams($params);
         return json_encode($params);
     }
 
@@ -443,7 +443,7 @@ class blockModel extends model
      */
     public function getPlanParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         return json_encode($params);
     }
 
@@ -455,7 +455,7 @@ class blockModel extends model
      */
     public function getReleaseParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         return json_encode($params);
     }
 
@@ -476,7 +476,7 @@ class blockModel extends model
         $params->orderBy['options'] = $this->lang->block->orderByList->product;
         $params->orderBy['control'] = 'select';
 
-        return json_encode($this->onlyCountParams($params));
+        return json_encode($this->appendCountParams($params));
     }
 
     /**
@@ -496,7 +496,7 @@ class blockModel extends model
         $params->orderBy['options'] = $this->lang->block->orderByList->project;
         $params->orderBy['control'] = 'select';
 
-        return json_encode($this->onlyCountParams($params));
+        return json_encode($this->appendCountParams($params));
     }
     /**
      * Get Build params.
@@ -506,7 +506,7 @@ class blockModel extends model
      */
     public function getBuildParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         return json_encode($params);
     }
 
@@ -522,7 +522,7 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
 
-        return json_encode($this->onlyCountParams($params));
+        return json_encode($this->appendCountParams($params));
     }
 
     /**
@@ -538,7 +538,7 @@ class blockModel extends model
         if($module == 'qa')      return $this->getQaStatisticParams($module);
 
         $params = new stdclass();
-        $params = $this->onlyCountParams($params);
+        $params = $this->appendCountParams($params);
         return json_encode($params);
     }
 
@@ -729,7 +729,7 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
 
-        return json_encode($this->onlyCountParams($params));
+        return json_encode($this->appendCountParams($params));
     }
 
     public function getAssignToMeParams()
@@ -788,18 +788,21 @@ class blockModel extends model
     }
 
     /**
-     * Build count params.
+     * Append count params.
      * 
      * @param  object $params 
      * @access public
      * @return object
      */
-    public function onlyCountParams($params = '')
+    public function appendCountParams($params = '')
     {
         if(empty($params)) $params = new stdclass();
+
+        $params->count = array();
         $params->count['name']    = $this->lang->block->count;
         $params->count['default'] = 20; 
         $params->count['control'] = 'input';
+
         return $params;
     }
 

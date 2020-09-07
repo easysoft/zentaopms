@@ -645,7 +645,7 @@ class actionModel extends model
         $docs = $this->doc->getPrivDocs(array_keys($libs));
         
         $actionCondition = $this->getActionCondition();
-        if(is_array($actionCondition)) return array();
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -660,7 +660,7 @@ class actionModel extends model
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
             ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
-            ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
+            ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

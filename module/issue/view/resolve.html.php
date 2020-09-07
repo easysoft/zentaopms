@@ -68,60 +68,60 @@ echo js::set('resolveLink', $this->createLink('issue', 'ajaxGetResolveForm'));
   </div>
 </div>
 <script>
-    function getSolutions()
+function getSolutions()
+{
+    var mode = $("#resolution").val();
+    $.ajax(
     {
-        var mode = $("#resolution").val();
-        $.ajax(
+        url: resolveLink,
+        dataType: "html",
+        data:{mode: mode, issueID: issueID},
+        type: "post",
+        success:function(data)
         {
-            url: resolveLink,
-            dataType: "html",
-            data:{mode: mode, issueID: issueID},
-            type: "post",
-            success:function(data)
+            $("#solutionTable").html(data);
+            $("#resolution").chosen();
+            $("#resolvedBy").chosen();
+            $("#resolvedDate").fixedDate().datepicker();
+
+            if(mode == 'tostory' || mode == 'tobug' || mode == 'totask')
             {
-                $("#solutionTable").html(data);
-                $("#resolution").chosen();
-                $("#resolvedBy").chosen();
-                $("#resolvedDate").fixedDate().datepicker();
-
-                if(mode == 'tostory' || mode == 'tobug' || mode == 'totask')
-                {
-                    $("#module").chosen();
-                    $("#type").chosen();
-                    $("#assignedTo").chosen();
-                    $("#pri").chosen();
-                }
-
-                switch(mode)
-                {
-                    case 'totask':
-                        $("#project").chosen();
-                        $("#desc").kindeditor();
-                        $("#estStarted").fixedDate().datepicker();
-                        $("#deadline").fixedDate().datepicker();
-                        break;
-                    case 'tobug':
-                        $("#product").chosen();
-                        $("#openedBuild").chosen();
-                        $("#steps").kindeditor();
-                        $("#deadline").fixedDate().datepicker();
-                        $("#story").chosen();
-                        break;
-                    case 'tostory':
-                        $("#product").chosen();
-                        $("#spec").kindeditor();
-                        break;
-                    case 'torisk':
-                        $("#source").chosen();
-                        $("#category").chosen();
-                        $("#strategy").chosen();
-                        break;
-                    case 'resolved':
-                        $("#resolutionComment").kindeditor();
-                        break;
-                }
+                $("#module").chosen();
+                $("#type").chosen();
+                $("#assignedTo").chosen();
+                $("#pri").chosen();
             }
-        })
-    }
+
+            switch(mode)
+            {
+                case 'totask':
+                    $("#project").chosen();
+                    $("#desc").kindeditor();
+                    $("#estStarted").fixedDate().datepicker();
+                    $("#deadline").fixedDate().datepicker();
+                    break;
+                case 'tobug':
+                    $("#product").chosen();
+                    $("#openedBuild").chosen();
+                    $("#steps").kindeditor();
+                    $("#deadline").fixedDate().datepicker();
+                    $("#story").chosen();
+                    break;
+                case 'tostory':
+                    $("#product").chosen();
+                    $("#spec").kindeditor();
+                    break;
+                case 'torisk':
+                    $("#source").chosen();
+                    $("#category").chosen();
+                    $("#strategy").chosen();
+                    break;
+                case 'resolved':
+                    $("#resolutionComment").kindeditor();
+                    break;
+            }
+        }
+    })
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>
