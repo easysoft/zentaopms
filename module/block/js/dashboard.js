@@ -251,19 +251,19 @@ $(function()
     });
 });
 
-function reloadRoadmap(productID, blockNavID)
+function reloadRoadmap(productID, roadMapID)
 {
     $.ajax(
     {
-        url: createLink('block', 'printScrumroadmapBlock', 'id=' + productID + '&blockNavID=' + blockNavID),
+        url: createLink('block', 'printScrumroadmapBlock', 'productID=' + productID + '&roadMapID=' + roadMapID),
         dataType: "html",
         async: false,
-        data: {id: productID, blockNavID: blockNavID},
+        data: {productID: productID, roadMapID: roadMapID},
         type: 'post',
         success: function(data)
         {
-            $("#roadMap" + blockNavID).html(data);
-            $("#" + blockNavID).chosen();
+            $("#roadMap" + roadMapID).html(data);
+            $("#" + roadMapID).chosen();
         }
     })
 }
