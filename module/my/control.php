@@ -400,24 +400,32 @@ class my extends control
     /**
      * My programs.
      *
-     * @param  int     $recTotal 
-     * @param  varchar $date
-     * @param  varchar $direction
+     * @param  string  $status
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
      * @access public
      * @return void
      */
-    public function program($recTotal = 0, $date = '', $direction = 'next')
-    {   
-        $this->app->loadLang('program');
+    public function program($status = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->loadModel('program');
         $this->app->loadLang('project');
+
+        $this->app->session->set('programList', $this->app->getURI(true));
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1); 
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->position[] = $this->lang->my->myProgram;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
-        $this->view->programs   = $this->loadModel('program')->getList($status = 'all', $orderBy = 'id_desc', $pager);
+        $this->view->position[] = $this->lang->my->myProgram;
+        $this->view->programs   = $this->program->getList($status, $orderBy, $pager, true);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
+        $this->view->status     = $status;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
