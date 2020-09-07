@@ -12,6 +12,26 @@
 class extension extends control
 {
     /**
+     * Construct function.
+     * 
+     * @param  string $moduleName 
+     * @param  string $methodName 
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace('\\', '/', $statusFile));
+            die($this->display('extension', 'safe'));
+        }
+    }
+
+    /**
      * Browse extensions.
      *
      * @param  string   $status
