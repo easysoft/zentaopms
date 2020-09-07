@@ -32,6 +32,8 @@ $lang->custom->setTips            = 'Set Tips';
 $lang->custom->isRange            = 'Is Target Control';
 $lang->custom->URStory            = "User requirements";
 $lang->custom->SRStory            = "Software requirements";
+$lang->custom->epic               = "Epic";
+$lang->custom->scrumStory         = "Story";
 $lang->custom->waterfallCommon    = "Waterfall";
 $lang->custom->configureWaterfall = "Waterfall Configure";
 $lang->custom->configureScrum     = "Scrum Configure";
@@ -202,6 +204,10 @@ $lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
 $lang->custom->waterfall = new stdclass();
 $lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enabled?';
 $lang->custom->waterfall->URSRName = 'A conceptual definition of requirements and stories?';
+
+$lang->custom->scrum = new stdclass();
+$lang->custom->scrum->URAndSR  = 'Is it going to be epic?';
+$lang->custom->scrum->URSRName = 'A conceptual definition of requirements?';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();
