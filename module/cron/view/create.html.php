@@ -59,7 +59,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->cron->type;?></th>
-          <td><?php echo html::select('type', $lang->cron->typeList, 'system', "class='form-control'")?></td>
+          <td><?php echo html::select('type', $lang->cron->typeList, 'zentao', "class='form-control'")?></td>
         </tr>
         <tr>
           <td colspan='3' class='text-center'><?php echo html::submitButton()?></td>
