@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->story->dittoNotice);?>
+<?php js::set('storyType', $storyType);?>
 <div class='main-content' id='mainContent'>
 <div class='main-header'>
   <h2>

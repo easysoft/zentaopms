@@ -398,14 +398,21 @@ class custom extends control
 
         if($_POST)
         {   
-            $this->custom->setURAndSR();
+            $this->custom->setURAndSR('waterfall');
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'configurewaterfall')));
         }   
 
+        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
+            ->where('module')->eq('custom')
+            ->andWhere('section')->eq('waterfall')
+            ->andWhere('`key`')->eq('URSRName')
+            ->fetch('value');
+
         $this->view->title      = $this->lang->custom->common;
         $this->view->position[] = $this->lang->custom->common;
+        $this->view->URSRName   = json_decode($URSRName);
 
         $this->display();
     }
@@ -424,14 +431,22 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept();
-            $this->custom->setURAndSR();
+            $this->custom->setURAndSR('scrum');
 
             $locate = inlink('configureScrum');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
+            ->where('module')->eq('custom')
+            ->andWhere('section')->eq('scrum')
+            ->andWhere('`key`')->eq('URSRName')
+            ->fetch('value');
+
         $this->view->title      = $this->lang->custom->configureScrum;
         $this->view->position[] = $this->lang->custom->configureScrum;
+        $this->view->URSRName   = json_decode($URSRName);
+
         $this->display();
     }
 

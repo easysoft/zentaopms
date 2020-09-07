@@ -16,12 +16,11 @@ $lang->story->createRequirement = "提{$lang->storyCommon}";
 
 if($config->URAndSR)
 {
-    $lang->story->requirement       = zget($lang, 'urCommon', "用户需求");
-    $lang->story->story             = zget($lang, 'srCommon', "软件需求");
+    $lang->story->requirement       = zget($lang, 'SRCommon', "用户需求");
+    $lang->story->story             = zget($lang, 'SRCommon', "软件需求");
     $lang->story->createStory       = '添加' . $lang->story->story;
     $lang->story->createRequirement = '添加' . $lang->story->requirement;
     $lang->story->affectedStories   = "影响的{$lang->story->story}";
-    $lang->storyCommon = '需求';
 }
 
 $lang->story->batchCreate       = "批量创建";

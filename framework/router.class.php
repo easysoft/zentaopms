@@ -126,7 +126,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception)
                 {
@@ -150,6 +150,16 @@ class router extends baseRouter
             $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
             $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
+            if($this->session->program)
+            {
+                $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
+                if($template->template == 'waterfall')
+                {
+                    $projectIndex = 2;
+                    $planIndex    = 1;
+                }
+            }
+
             foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
@@ -159,19 +169,12 @@ class router extends baseRouter
 
                 if($setting->key == 'URSRName')
                 {
-                    $URSRName = json_decode($setting->value, true);
-                    if(isset($URSRName['urCommon'][$this->clientLang])) $lang->urCommon = $URSRName['urCommon'][$this->clientLang];
-                    if(isset($URSRName['srCommon'][$this->clientLang])) $lang->srCommon = $URSRName['srCommon'][$this->clientLang];
-                }
-            }
-
-            if($this->session->program)
-            {
-                $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
-                if($template->template == 'waterfall')
-                {
-                    $projectIndex = 2;
-                    $planIndex    = 1;
+                    if(isset($template->template) && $setting->section == $template->template)
+                    {
+                        $URSRName = json_decode($setting->value, true);
+                        if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
+                        if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
+                    }
                 }
             }
 
@@ -188,15 +191,8 @@ class router extends baseRouter
             if($storyIndex == 0 and isset($URAndSR))
             {
                 $config->URAndSR = $URAndSR;
-                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+                if(!empty($URAndSR) and !empty($lang->SRCommon)) $lang->storyCommon = $lang->SRCommon;
             }
-        }
-
-        /* When module is custom then reset storyCommon. */
-        if($moduleName == 'custom')
-        {
-            global $config;
-            $lang->storyCommon = isset($this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon]) ? $this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon] : $this->config->storyCommonList['en'][(int)$config->storyCommon];
         }
 
         parent::loadLang($moduleName, $appName);

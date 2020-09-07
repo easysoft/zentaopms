@@ -35,6 +35,8 @@ $lang->custom->isRange            = '是否目标控制范围';
 $lang->custom->configureScrum     = '概念';
 $lang->custom->URStory            = "用户需求";
 $lang->custom->SRStory            = "软件需求";
+$lang->custom->epic               = "史诗";
+$lang->custom->scrumStory         = "故事";
 $lang->custom->waterfallCommon    = "瀑布";
 $lang->custom->configureWaterfall = "瀑布自定义";
 $lang->custom->configureScrum     = "敏捷自定义";
@@ -203,8 +205,12 @@ $lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['3'] = '代码行';
 
 $lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->URAndSR  = '是否启用用户需求和软件需求概念？';
+$lang->custom->waterfall->URAndSR  = '是否启用用户需求概念？';
 $lang->custom->waterfall->URSRName = '用户需求和软件需求的概念定义？';
+
+$lang->custom->scrum = new stdclass();
+$lang->custom->scrum->URAndSR  = '是否启用epic概念？';
+$lang->custom->scrum->URSRName = '需求的概念定义？';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();

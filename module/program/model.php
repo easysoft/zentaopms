@@ -77,14 +77,15 @@ class programModel extends model
      */
     public function getProgramOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
     {
+        $queryType = strtolower($queryType);
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('template')->ne('')
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF($queryType == 'byStatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
-            ->beginIF($queryType == 'byId')->andWhere('id')->eq($param)->fi()
+            ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll('id');
