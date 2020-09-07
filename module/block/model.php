@@ -465,7 +465,7 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProgramteamParams()
+    public function getProgramTeamParams()
     {
         $this->app->loadLang('program');
         $params->type['name']    = $this->lang->block->type;
@@ -576,7 +576,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getRecentprogramParams()
+    public function getRecentProgramParams()
     {
         return false;
     }
@@ -598,7 +598,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getWaterfallreportParams()
+    public function getWaterfallReportParams()
     {
         return false;
     }
@@ -609,7 +609,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getWaterfallestimateParams()
+    public function getWaterfallEstimateParams()
     {
         return false;
     }
@@ -620,7 +620,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getWaterfallganttParams()
+    public function getWaterfallGanttParams()
     {
         return false;
     }
@@ -631,7 +631,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getWaterfallprogressParams()
+    public function getWaterfallProgressParams()
     {
         return false;
     }
@@ -643,7 +643,7 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function getWaterfallissueParams($module = '') 
+    public function getWaterfallIssueParams($module = '')
     {
         $this->app->loadLang('issue');
 
@@ -666,7 +666,7 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function getWaterfallriskParams($module = '') 
+    public function getWaterfallRiskParams($module = '')
     {
         $this->app->loadLang('risk');
         $params = $this->onlyCountParams();
