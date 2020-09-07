@@ -322,14 +322,10 @@ class blockModel extends model
      */
     public function getTaskParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->task;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['default'] = 'id_desc';
@@ -347,14 +343,10 @@ class blockModel extends model
      */
     public function getBugParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->bug;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['default'] = 'id_desc';
@@ -372,14 +364,10 @@ class blockModel extends model
      */
     public function getCaseParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->case;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['default'] = 'id_desc';
@@ -398,14 +386,10 @@ class blockModel extends model
      */
     public function getTesttaskParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->testtask;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -418,14 +402,10 @@ class blockModel extends model
      */
     public function getStoryParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->story;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['default'] = 'id_desc';
@@ -550,13 +530,10 @@ class blockModel extends model
      */
     public function getProductStatisticParams()
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -569,13 +546,10 @@ class blockModel extends model
      */
     public function getProjectStatisticParams()
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -588,13 +562,10 @@ class blockModel extends model
      */
     public function getQaStatisticParams()
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -675,14 +646,11 @@ class blockModel extends model
     public function getWaterfallissueParams($module = '') 
     {
         $this->app->loadLang('issue');
-        $params = new stdclass();
+
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->issue->labelList;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20;
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['options'] = $this->lang->block->orderByList->product;
@@ -701,14 +669,10 @@ class blockModel extends model
     public function getWaterfallriskParams($module = '') 
     {
         $this->app->loadLang('risk');
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->risk->featureBar['browse'];
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20;
-        $params->count['control'] = 'input';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['options'] = $this->lang->block->orderByList->product;
@@ -848,14 +812,10 @@ class blockModel extends model
      */
     public function getScrumTestParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->testtask;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20;
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -869,14 +829,10 @@ class blockModel extends model
      */
     public function getScrumListParams($module = '')
     {
-        $params = new stdclass();
+        $params = $this->onlyCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->scrum;
         $params->type['control'] = 'select';
-
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20;
-        $params->count['control'] = 'input';
 
         return json_encode($params);
     }
@@ -890,8 +846,7 @@ class blockModel extends model
      */
     public function getScrumOverviewParams($module = '')
     {
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
+        $params = $this->onlyCountParams();
 
         return json_encode($params);
     }
@@ -905,8 +860,7 @@ class blockModel extends model
      */
     public function getScrumRoadMapParams($module = '')
     {
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
+        $params = $this->onlyCountParams();
 
         return json_encode($params);
     }
@@ -920,8 +874,7 @@ class blockModel extends model
      */
     public function getScrumProductParams($module = '')
     {
-        $params->num['name']    = $this->lang->block->count;
-        $params->num['control'] = 'input';
+        $params = $this->onlyCountParams();
 
         return json_encode($params);
     }
@@ -936,8 +889,7 @@ class blockModel extends model
      */
     public function getProgramDynamicParams($module = '')
     {
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
+        $params = $this->onlyCountParams();
 
         return json_encode($params);
     }
@@ -951,8 +903,7 @@ class blockModel extends model
      */
     public function getSprintParams($module = '')
     {
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['control'] = 'input';
+        $params = $this->onlyCountParams();
 
         return json_encode($params);
     }
