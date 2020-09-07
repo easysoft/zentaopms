@@ -21,7 +21,6 @@ if(!empty($config->URAndSR))
     $lang->story->createStory       = 'Create ' . $lang->story->story;
     $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
     $lang->story->affectedStories   = "Affected {$lang->story->story}";
-    $lang->storyCommon = 'Story';
 }
 
 $lang->story->batchCreate       = "Tạo hàng loạt";
@@ -139,7 +138,7 @@ $lang->story->allStories     = 'Tất cả câu chuyện';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
-$lang->story->storyChanged   = 'Requirement Changed';
+$lang->story->URChanged      = 'Requirement Changed';
 $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';

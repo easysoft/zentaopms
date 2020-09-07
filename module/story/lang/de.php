@@ -21,7 +21,6 @@ if(!empty($config->URAndSR))
     $lang->story->createStory       = 'Create ' . $lang->story->story;
     $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
     $lang->story->affectedStories   = "Affected {$lang->story->story}";
-    $lang->storyCommon = 'Story';
 }
 
 $lang->story->batchCreate       = "Mehere hinzufügen";
@@ -139,7 +138,7 @@ $lang->story->allStories     = 'Alle';
 $lang->story->unclosed       = 'Nicht geschlossen';
 $lang->story->deleted        = 'Gelöscht';
 $lang->story->released       = 'Released Linked Stories';
-$lang->story->storyChanged   = 'Requirement Changed';
+$lang->story->URChanged      = 'Requirement Changed';
 $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';
