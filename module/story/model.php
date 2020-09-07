@@ -2255,7 +2255,7 @@ class storyModel extends model
      */
     public function getVersion($storyID)
     {
-        return $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
+        return (int)$this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
     }
 
     /**
