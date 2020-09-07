@@ -15,6 +15,9 @@
   <div class='main-header'>
     <h2><?php echo $lang->backup->setting;?></h2>
   </div>
+  <?php if(!empty($error)):?>
+  <div id='error'><?php echo $error;?></div>
+  <?php else:?>
   <form method='post' target='hiddenwin'>
     <table class='w-p100'>
       <tr>
@@ -46,6 +49,7 @@
       <tr><td><?php echo html::submitButton('', '', 'btn btn-primary');?></td></tr>
     </table>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
 

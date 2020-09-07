@@ -147,6 +147,11 @@ class backup extends control
             $zfile = $this->app->loadClass('zfile');
             foreach($backupFiles as $file)
             {
+                /* Only delete backup file. */
+                $fileName = basename($file);
+                if(!preg_match('/[0-9]+\.(sql|file|code)/', $fileName)) continue;
+
+                /* Remove before holdDays file. */
                 if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600)
                 {
                     $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
@@ -323,6 +328,15 @@ class backup extends control
      */
     public function setting()
     {
+        /* Check safe file. */
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->app->loadLang('extension');
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace(dirname($this->app->getBasePath()) . DS, '', $statusFile));
+            die($this->display());
+        }
+
         if(strtolower($this->server->request_method) == "post")
         {
             $data    = fixer::input('post')->join('setting', ',')->get();
