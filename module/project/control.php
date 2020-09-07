@@ -1920,7 +1920,6 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
@@ -1934,6 +1933,7 @@ class project extends control
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
 
         $users = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', $appendUsers, $this->config->maxCount);
+        $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
