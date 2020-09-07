@@ -1619,7 +1619,7 @@ class testcaseModel extends model
             $stepChanged = false;
             $steps       = array();
 
-            //---------------- Judge steps changed or not.-------------------- */
+            /* ---------------- Judge steps changed or not.-------------------- */
 
             /* Remove the empty setps in post. */
             if($this->post->steps)
