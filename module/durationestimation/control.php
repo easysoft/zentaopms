@@ -50,7 +50,9 @@ class durationestimation extends control
         {
             $total = 0;
             foreach($this->post->workload as $value) $total += $value;
-            if($total != 100) $this->send(array('result' => 'fail', 'message' => $this->lang->durationestimation->workloadError));
+
+            $workloadTotal = $this->config->durationestimation->workloadTotal;
+            if($total != $workloadTotal) $this->send(array('result' => 'fail', 'message' => $this->lang->durationestimation->workloadError));
 
             $this->durationestimation->save($programID);
 
