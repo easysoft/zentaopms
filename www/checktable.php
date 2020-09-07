@@ -61,6 +61,8 @@ if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 1
 
 $lang = new stdclass();
 $lang->misc = new stdclass();
+$lang->storyCommon = '';
+$lang->urCommon    = '';
 include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
 {
@@ -117,10 +119,7 @@ else
   <div class='panel-body' style='margin-left:25%;'>
     <?php
     $checkFileName = $_SESSION['checkFileName'];
-    if(!($_SERVER['SERVER_ADDR'] == '127.0.0.1' or filter_var($_SERVER['SERVER_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
-    {
-        $checkFileName = str_replace(dirname(dirname(__FILE__)) . DS, '', $checkFileName);
-    }
+    $checkFileName = str_replace(dirname(dirname(dirname(__FILE__))) . DS, '', $checkFileName);
     printf($lang->misc->noticeRepair, $checkFileName);
     ?>
   <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn'><i class='icon-refresh'></i></a></p>
