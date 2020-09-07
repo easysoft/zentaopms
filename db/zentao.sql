@@ -919,7 +919,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `linkStories` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
-  `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
+  `URChanged` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`),
@@ -1182,7 +1182,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `type` char(30) NOT NULL,
+  `type` char(30) NOT NULL default 'inside',
   `dept` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
   `password` char(32) NOT NULL default '',
@@ -4008,4 +4008,8 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','storyPoint','1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
+('system','custom','','hourPoint','1');
+('system','custom','','URAndSR','1'),
+('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),
+('system','custom','scrum','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u53f2\\u8bd7\"},\"SRCommon\":{\"zh-cn\":\"\\u6545\\u4e8b\"}}');

@@ -508,7 +508,7 @@ class storyModel extends model
                 /* IF is story and has changed, update its relation version to new. */
                 if($oldStory->type == 'story')
                 {
-                    $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
+                    $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
                     $this->updateStoryVersion($story);
                 }
                 else
@@ -521,7 +521,7 @@ class storyModel extends model
                         ->andWhere('AID')->eq($story->id)
                         ->fetchPairs();
 
-                    foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(1)->where('id')->eq($relationID)->exec();
+                    foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->eq($relationID)->exec();
                 }
             }
             else
@@ -3056,9 +3056,9 @@ class storyModel extends model
                 echo $story->sourceNote;
                 break;
             case 'status':
-                if($story->storyChanged)
+                if($story->URChanged)
                 {
-                    print("<span class='status-story status-changed'>{$this->lang->story->storyChanged}</span>");
+                    print("<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>");
                     break;
                 }
                 echo "<span class='status-{$story->status}'>";
@@ -3146,7 +3146,7 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                if($story->storyChanged)
+                if($story->URChanged)
                 {
                     common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->confirm);
                     break;

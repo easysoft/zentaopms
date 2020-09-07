@@ -1427,7 +1427,7 @@ class story extends control
 
         if($result == 'no')
         {   
-            $this->dao->update(TABLE_STORY)->set('storyChanged')->eq(0)->where('id')->eq($storyID)->exec();
+            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($storyID)->exec();
             die(js::closeModal('parent.parent', 'this'));
         }   
 

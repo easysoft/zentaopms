@@ -10,7 +10,7 @@
       <h2>
         <span class='label label-id'><?php echo $story->id;?></span>
         <?php echo '<span title="' . $story->title . '">' . $story->title . '</span>';?>
-        <small><?php echo $lang->arrow . $lang->story->storyChanged;?></small>
+        <small><?php echo $lang->arrow . $lang->story->URChanged;?></small>
       </h2>
     </div>
     <table class='table table-fixed'>

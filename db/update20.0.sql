@@ -290,7 +290,7 @@ ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
-('system','custom','','storyPoint','1');
+('system','custom','','hourPoint','1');
 ('system','custom','','URAndSR','1'),
 ('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),
 ('system','custom','scrum','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u53f2\\u8bd7\"},\"SRCommon\":{\"zh-cn\":\"\\u6545\\u4e8b\"}}');
@@ -300,4 +300,4 @@ ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `modul
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '0', '*', '*', '*', 'moduleName=weekly&methodName=computeWeekly', '更新项目周报', 'system', 0, 'normal', '2020-08-27 10:07:53');
 
-ALTER TABLE `zt_story` ADD `storyChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
+ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
