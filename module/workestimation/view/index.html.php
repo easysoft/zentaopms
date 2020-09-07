@@ -38,7 +38,11 @@
               <div class='input-group'>
                 <?php echo html::input('productivity', zget($budget, 'productivity', ''), "class='form-control'");?>
                 <span class='input-group-addon unify-padding'>
-                <?php echo $hourPoint == 3 ? $lang->custom->unitList['manhour'] . $lang->custom->unitList['loc'] : $lang->custom->unitList['efficiency'] . $lang->hourCommon;?>
+                <?php
+                  if($hourPoint == 0) echo $lang->custom->unitList['efficiency'] . $lang->hourCommon;
+                  if($hourPoint == 1) echo $lang->custom->unitList['efficiency'] . $lang->hourCommon;
+                  if($hourPoint == 2) echo $lang->custom->unitList['manhour'] . $lang->custom->unitList['loc'];
+                ?>
                 </span>
               </div>
             </td>

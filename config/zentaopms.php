@@ -85,29 +85,29 @@ $config->storyCommonList['vi'][0] = 'Câu chuyện';
 $config->storyCommonList['vi'][1] = 'Câu chuyện';
 
 /* Story common list. */
-$config->hourPointCommonList['zh-cn'][0] = '工时';
-$config->hourPointCommonList['zh-cn'][1] = '故事点';
-$config->hourPointCommonList['zh-cn'][2] = '功能点';
+$config->hourPointCommonList['zh-cn'][0] = '故事点';
+$config->hourPointCommonList['zh-cn'][1] = '功能点';
+$config->hourPointCommonList['zh-cn'][2] = '代码行';
 
-$config->hourPointCommonList['zh-tw'][0] = '工时';
-$config->hourPointCommonList['zh-tw'][1] = '故事点';
-$config->hourPointCommonList['zh-tw'][2] = '功能点';
+$config->hourPointCommonList['zh-tw'][0] = '故事点';
+$config->hourPointCommonList['zh-tw'][1] = '功能点';
+$config->hourPointCommonList['zh-tw'][2] = '代碼行';
 
-$config->hourPointCommonList['en'][0] = 'hour';
-$config->hourPointCommonList['en'][1] = 'story point';
-$config->hourPointCommonList['en'][2] = 'function point';
+$config->hourPointCommonList['en'][0] = 'story point';
+$config->hourPointCommonList['en'][1] = 'function point';
+$config->hourPointCommonList['en'][2] = 'loc point';
 
-$config->hourPointCommonList['de'][0] = 'hour';
-$config->hourPointCommonList['de'][1] = 'story point';
-$config->hourPointCommonList['de'][2] = 'function point';
+$config->hourPointCommonList['de'][0] = 'story point';
+$config->hourPointCommonList['de'][1] = 'function point';
+$config->hourPointCommonList['de'][2] = 'loc point';
 
-$config->hourPointCommonList['fr'][0] = 'hour';
-$config->hourPointCommonList['fr'][1] = 'story point';
-$config->hourPointCommonList['fr'][2] = 'function point';
+$config->hourPointCommonList['fr'][0] = 'story point';
+$config->hourPointCommonList['fr'][1] = 'function point';
+$config->hourPointCommonList['fr'][2] = 'loc point';
 
-$config->hourPointCommonList['vi'][0] = 'giờ';
-$config->hourPointCommonList['vi'][1] = 'điểm';
-$config->hourPointCommonList['vi'][2] = 'function point';
+$config->hourPointCommonList['vi'][0] = 'điểm';
+$config->hourPointCommonList['vi'][1] = 'function point';
+$config->hourPointCommonList['vi'][2] = 'loc point';
 
 /* Plan common list. */
 $config->planCommonList['zh-cn'][0] = '计划';
