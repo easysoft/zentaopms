@@ -1250,14 +1250,13 @@ class block extends control
         $charts['EV'] = '[';
         $charts['AC'] = '[';
         $i = 1;
-        $longProgram = helper::diffDate($today, $begin) / 7 > 12;
         while($begin < $end)
         {
-            $charts['labels'][] = $longProgram ? $this->lang->block->time . $i . $this->lang->block->month : $this->lang->block->time . $i . $this->lang->block->week;
+            $charts['labels'][] = $this->lang->block->time . $i . $this->lang->block->week;
             $charts['PV']      .= $this->weekly->getPV($programID, $begin) . ',';
             $charts['EV']      .= $this->weekly->getEV($programID, $begin) . ',';
             $charts['AC']      .= $this->weekly->getAC($programID, $begin) . ',';
-            $stageEnd           = $longProgram ? date('Y-m-t', strtotime($begin)) : $this->weekly->getThisSunday($begin);
+            $stageEnd           = $this->weekly->getThisSunday($begin);
             $begin              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
             $i ++;
         }
