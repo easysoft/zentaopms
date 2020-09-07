@@ -16,7 +16,7 @@ $lang->story->createRequirement = "提{$lang->storyCommon}";
 
 if($config->URAndSR)
 {
-    $lang->story->requirement       = zget($lang, 'SRCommon', "用户需求");
+    $lang->story->requirement       = zget($lang, 'URCommon', "用户需求");
     $lang->story->story             = zget($lang, 'SRCommon', "软件需求");
     $lang->story->createStory       = '添加' . $lang->story->story;
     $lang->story->createRequirement = '添加' . $lang->story->requirement;

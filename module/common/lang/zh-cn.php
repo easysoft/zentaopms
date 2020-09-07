@@ -232,10 +232,10 @@ $lang->my->menu->dynamic          = '动态|my|dynamic|';
 global $config;
 if($config->URAndSR)
 {
-    $urCommon = zget($lang, 'urCommon', "用户需求");
-    $srCommon = zget($lang, 'srCommon', "软件需求");
-    $lang->my->menu->requirement = array('link' => "{$urCommon}|my|requirement|", 'subModule' => 'story');
-    $lang->my->menu->story       = array('link' => "{$srCommon}|my|story|", 'subModule' => 'story');
+    $URCommon = zget($lang, 'URCommon', "用户需求");
+    $SRCommon = zget($lang, 'SRCommon', "软件需求");
+    $lang->my->menu->requirement = array('link' => "{$URCommon}|my|requirement|", 'subModule' => 'story');
+    $lang->my->menu->story       = array('link' => "{$SRCommon}|my|story|", 'subModule' => 'story');
 }
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
@@ -260,8 +260,8 @@ $lang->product->menu->view    = array('link' => '概况|product|view|productID=%
 
 if($config->URAndSR)
 {
-    $lang->product->menu->requirement = array('link' => "{$urCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-    $lang->product->menu->story       = array('link' => "{$srCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->product->menu->requirement = array('link' => "{$URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->product->menu->story       = array('link' => "{$SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 }
 
 $lang->product->dividerMenu = ',project,doc,';
@@ -809,8 +809,6 @@ $lang->icons['unlock']             = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
 
-include (dirname(__FILE__) . '/menuOrder.php');
-
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex = array('link' => '仪表盘|program|index|program={PROGRAM}');
@@ -886,10 +884,11 @@ $lang->waterfallproduct->menu->track = '跟踪矩阵|story|track|product={PRODUC
 
 if($config->URAndSR)
 {
-    $lang->waterfallproduct->menu->requirement = array('link' => "{$urCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
-    $lang->waterfallproduct->menu->story       = array('link' => "{$srCommon}|product|browse|productID={PRODUCT}");
+    $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
+    $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 }
 
 $lang->nc->menu = $lang->auditplan->menu;
-
 $lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+
+include (dirname(__FILE__) . '/menuOrder.php');

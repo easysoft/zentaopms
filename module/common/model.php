@@ -2211,7 +2211,7 @@ EOD;
 
         if($program->template == 'scrum')
         {
-            $lang->menuOrder = $lang->scrumpgm->menuOrder;
+            $lang->menuOrder = $lang->scrum->menuOrder;
             return $lang->menu;
         }
 
@@ -2219,7 +2219,7 @@ EOD;
         {
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
-            $lang->menuOrder            = $lang->waterfallpgm->menuOrder;
+            $lang->menuOrder            = $lang->waterfall->menuOrder;
             $lang->program->dividerMenu = ',product,issue,';
             self::initProgramSubmenu();
             return self::processMenuVars($lang->menu->waterfall);

@@ -289,7 +289,11 @@ CREATE TABLE `zt_weeklyreport`(
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','storyPoint','1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
+('system','custom','','storyPoint','1');
+('system','custom','','URAndSR','1'),
+('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),
+('system','custom','scrum','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u53f2\\u8bd7\"},\"SRCommon\":{\"zh-cn\":\"\\u6545\\u4e8b\"}}');
 
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
 ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;

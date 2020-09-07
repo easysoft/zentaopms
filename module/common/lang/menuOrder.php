@@ -1,30 +1,28 @@
 <?php
 /* Sort of main menu. */
-$lang->waterfallpgm = new stdclass();
-$lang->waterfallpgm->menuOrder[5]   = 'programindex';
-$lang->waterfallpgm->menuOrder[10]  = 'programplan';
-$lang->waterfallpgm->menuOrder[15]  = 'project';
-$lang->waterfallpgm->menuOrder[20]  = 'weekly';
-$lang->waterfallpgm->menuOrder[25]  = 'review';
-$lang->waterfallpgm->menuOrder[30]  = 'doc';
-$lang->waterfallpgm->menuOrder[35]  = 'product';
-$lang->waterfallpgm->menuOrder[40]  = 'design';
-$lang->waterfallpgm->menuOrder[45]  = 'ci';
-$lang->waterfallpgm->menuOrder[50]  = 'qa';
-$lang->waterfallpgm->menuOrder[55]  = 'release';
-$lang->waterfallpgm->menuOrder[60]  = 'issue';
-$lang->waterfallpgm->menuOrder[65]  = 'risk';
-$lang->waterfallpgm->menuOrder[70]  = 'report';
-$lang->waterfallpgm->menuOrder[75]  = 'auditplan';
-$lang->waterfallpgm->menuOrder[80]  = 'cm';
-$lang->waterfallpgm->menuOrder[85]  = 'list';
+$lang->waterfall->menuOrder[5]   = 'programindex';
+$lang->waterfall->menuOrder[10]  = 'programplan';
+$lang->waterfall->menuOrder[15]  = 'project';
+$lang->waterfall->menuOrder[20]  = 'weekly';
+$lang->waterfall->menuOrder[25]  = 'review';
+$lang->waterfall->menuOrder[30]  = 'doc';
+$lang->waterfall->menuOrder[35]  = 'product';
+$lang->waterfall->menuOrder[40]  = 'design';
+$lang->waterfall->menuOrder[45]  = 'ci';
+$lang->waterfall->menuOrder[50]  = 'qa';
+$lang->waterfall->menuOrder[55]  = 'release';
+$lang->waterfall->menuOrder[60]  = 'issue';
+$lang->waterfall->menuOrder[65]  = 'risk';
+$lang->waterfall->menuOrder[70]  = 'report';
+$lang->waterfall->menuOrder[75]  = 'auditplan';
+$lang->waterfall->menuOrder[80]  = 'cm';
+$lang->waterfall->menuOrder[85]  = 'list';
 
-$lang->scrumpgm = new stdclass();
-$lang->scrumpgm->menuOrder[5]   = 'program';
-$lang->scrumpgm->menuOrder[10]  = 'product';
-$lang->scrumpgm->menuOrder[15]  = 'project';
-$lang->scrumpgm->menuOrder[20]  = 'qa';
-$lang->scrumpgm->menuOrder[25]  = 'doc';
+$lang->scrum->menuOrder[5]   = 'program';
+$lang->scrum->menuOrder[10]  = 'product';
+$lang->scrum->menuOrder[15]  = 'project';
+$lang->scrum->menuOrder[20]  = 'qa';
+$lang->scrum->menuOrder[25]  = 'doc';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
