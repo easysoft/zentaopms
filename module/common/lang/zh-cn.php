@@ -152,7 +152,7 @@ if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
     $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
     $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
     $lang->system->menu->custom   = array('link' => '自定义|custom|configurescrum|');
-    
+
     $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
     unset($lang->system->dividerMenu);
 }
