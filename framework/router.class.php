@@ -100,7 +100,7 @@ class router extends baseRouter
      * Some codes merged from ranzhi called the function loadLang with a non-empty appName which causes an error in zentao.
      * Set the value of appName to empty to avoid this error.
      *
-     * @param   string $moduleName     the module name
+     * @param   string $moduleName  the module name
      * @param   string $appName     the app name
      * @access  public
      * @return  bool|object the lang object or false.
@@ -128,13 +128,14 @@ class router extends baseRouter
                 {
                     $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
                 }
-                catch (PDOException $exception) 
+                catch (PDOException $exception)
                 {
                     $repairCode = '|1034|1035|1194|1195|1459|';
-                    $errorInfo = $exception->errorInfo;
-                    $errorCode = $errorInfo[1];
-                    $errorMsg  = $errorInfo[2];
-                    $message   = $exception->getMessage();
+                    $errorInfo  = $exception->errorInfo;
+                    $errorCode  = $errorInfo[1];
+                    $errorMsg   = $errorInfo[2];
+                    $message    = $exception->getMessage();
+
                     if(strpos($repairCode, "|$errorCode|") !== false or ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false) or strpos($message, 'repair') !== false)
                     {
                         if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
@@ -146,15 +147,15 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $storyCommon = $hourCommon = $planCommon = $URAndSR = 0;
-            $projectCommon = empty($this->config->isINT) ? 0 : 1;
+            $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
+            $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
             {
-                if($setting->key == 'productProject')   list($productCommon, $projectCommon) = explode('_',  $setting->value);
-                if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
-                if($setting->key == 'hourPoint')        $hourCommon  = $setting->value;
-                if($setting->key == 'URAndSR')          $URAndSR     = $setting->value;
+                if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
+                if($setting->key == 'storyRequirement') $storyIndex = $setting->value;
+                if($setting->key == 'hourPoint')        $hourIndex  = $setting->value;
+                if($setting->key == 'URAndSR')          $URAndSR    = $setting->value;
 
                 if($setting->key == 'URSRName')
                 {
@@ -169,22 +170,22 @@ class router extends baseRouter
                 $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
                 if($template->template == 'waterfall')
                 {
-                    $projectCommon = 2;
-                    $planCommon    = 1;
+                    $projectIndex = 2;
+                    $planIndex    = 1;
                 }
             }
 
-            $config->storyCommon = $storyCommon;
+            $config->storyCommon = $storyIndex;
             $config->URAndSR     = $URAndSR;
 
             /* Set productCommon, projectCommon, storyCommon, hourCommon and planCommon. Default english lang. */
-            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
-            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
-            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];
-            $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
-            $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planCommon])       ? $this->config->planCommonList[$this->clientLang][(int)$planCommon]     : $this->config->planCommonList['en'][(int)$planCommon];
+            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productIndex]) ? $this->config->productCommonList[$this->clientLang][(int)$productIndex] : $this->config->productCommonList['en'][(int)$productIndex];
+            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectIndex]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectIndex] : $this->config->projectCommonList['en'][(int)$$projectIndex];
+            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyIndex])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyIndex]     : $this->config->storyCommonList['en'][(int)$storyIndex];
+            $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex]  : $this->config->hourPointCommonList['en'][(int)$hourIndex];
+            $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planIndex])       ? $this->config->planCommonList[$this->clientLang][(int)$planIndex]       : $this->config->planCommonList['en'][(int)$planIndex];
 
-            if($storyCommon == 0 and isset($URAndSR))
+            if($storyIndex == 0 and isset($URAndSR))
             {
                 $config->URAndSR = $URAndSR;
                 if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
@@ -195,7 +196,7 @@ class router extends baseRouter
         if($moduleName == 'custom')
         {
             global $config;
-            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon]     : $this->config->storyCommonList['en'][(int)$config->storyCommon];
+            $lang->storyCommon = isset($this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon]) ? $this->config->storyCommonList[$this->clientLang][(int)$config->storyCommon] : $this->config->storyCommonList['en'][(int)$config->storyCommon];
         }
 
         parent::loadLang($moduleName, $appName);
@@ -208,12 +209,12 @@ class router extends baseRouter
                 if(isset($lang->{$moduleName}->{$section}['']))
                 {
                     $nullKey   = '';
-                    $nullValue = $lang->{$moduleName}->{$section}[$nullKey]; 
+                    $nullValue = $lang->{$moduleName}->{$section}[$nullKey];
                 }
                 elseif(isset($lang->{$moduleName}->{$section}[0]))
                 {
                     $nullKey   = 0;
-                    $nullValue = $lang->{$moduleName}->{$section}[0]; 
+                    $nullValue = $lang->{$moduleName}->{$section}[0];
                 }
                 unset($lang->{$moduleName}->{$section});
 

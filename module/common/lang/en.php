@@ -121,7 +121,7 @@ $lang->common->common = 'Common Module';
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|index|';
+$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|browse|';
 $lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
