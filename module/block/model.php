@@ -322,7 +322,7 @@ class blockModel extends model
      */
     public function getTaskParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->task;
         $params->type['control'] = 'select';
@@ -343,7 +343,7 @@ class blockModel extends model
      */
     public function getBugParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->bug;
         $params->type['control'] = 'select';
@@ -364,7 +364,7 @@ class blockModel extends model
      */
     public function getCaseParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->case;
         $params->type['control'] = 'select';
@@ -386,7 +386,7 @@ class blockModel extends model
      */
     public function getTesttaskParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->testtask;
         $params->type['control'] = 'select';
@@ -402,7 +402,7 @@ class blockModel extends model
      */
     public function getStoryParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->story;
         $params->type['control'] = 'select';
@@ -530,7 +530,7 @@ class blockModel extends model
      */
     public function getProductStatisticParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
@@ -546,7 +546,7 @@ class blockModel extends model
      */
     public function getProjectStatisticParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
@@ -562,7 +562,7 @@ class blockModel extends model
      */
     public function getQaStatisticParams()
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
@@ -647,7 +647,7 @@ class blockModel extends model
     {
         $this->app->loadLang('issue');
 
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->issue->labelList;
         $params->type['control'] = 'select';
@@ -669,7 +669,7 @@ class blockModel extends model
     public function getWaterfallRiskParams($module = '')
     {
         $this->app->loadLang('risk');
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->risk->featureBar['browse'];
         $params->type['control'] = 'select';
@@ -812,7 +812,7 @@ class blockModel extends model
      */
     public function getScrumTestParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->testtask;
         $params->type['control'] = 'select';
@@ -829,7 +829,7 @@ class blockModel extends model
      */
     public function getScrumListParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->scrum;
         $params->type['control'] = 'select';
@@ -846,7 +846,7 @@ class blockModel extends model
      */
     public function getScrumOverviewParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
 
         return json_encode($params);
     }
@@ -860,7 +860,7 @@ class blockModel extends model
      */
     public function getScrumRoadMapParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
 
         return json_encode($params);
     }
@@ -874,7 +874,7 @@ class blockModel extends model
      */
     public function getScrumProductParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
 
         return json_encode($params);
     }
@@ -889,7 +889,7 @@ class blockModel extends model
      */
     public function getProgramDynamicParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
 
         return json_encode($params);
     }
@@ -903,7 +903,7 @@ class blockModel extends model
      */
     public function getSprintParams($module = '')
     {
-        $params = $this->onlyCountParams();
+        $params = $this->appendCountParams();
 
         return json_encode($params);
     }
