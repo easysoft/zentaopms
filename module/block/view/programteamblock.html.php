@@ -10,8 +10,8 @@ $maxConsumed  = 0;
     <div class='table-col chart-titles'>
       <?php foreach($programs as $program):?>
       <?php
-      $maxTeamCount = max($program->teamCount, $maxTeamCount);
-      $maxConsumed  = max($program->consumed, $maxConsumed);
+      $maxTeamCount = max($maxTeamCount, $program->teamCount);
+      $maxConsumed  = max($maxConsumed, $program->consumed);
       ?>
       <div class='chart-title text-ellipsis'><span><?php echo $program->name;?></span></div>
       <?php endforeach;?>
