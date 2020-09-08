@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php js::set('parentStory', false);?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
