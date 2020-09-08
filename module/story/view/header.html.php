@@ -3,7 +3,7 @@
 <script>
 function loadProduct(productID)
 {
-    if(parentStory)
+    if(typeof parentStory != 'undefined' && parentStory)
     {
         confirmLoadProduct = confirm(moveChildrenTips);
         if(!confirmLoadProduct)
