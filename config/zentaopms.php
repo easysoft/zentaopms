@@ -140,6 +140,7 @@ $config->features = new stdclass();
 $config->features->apiGetModel    = false;
 $config->features->apiSQL         = false;
 $config->features->cronSystemCall = false;
+$config->features->checkClient    = true;
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');

@@ -536,7 +536,8 @@ class fileModel extends model
     public function parseCSV($fileName)
     {
         /* Parse file only in zentao. */
-        if(strpos(realpath($fileName), $this->app->getBasePath()) !== 0) return array();
+        if(strpos($fileName, $this->app->getBasePath()) !== 0) return array();
+
         $content = file_get_contents($fileName);
         /* Fix bug #890. */
         $content = str_replace(array("\r\n","\r"), "\n", $content);
