@@ -290,7 +290,7 @@ ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
-('system','custom','','hourPoint','1');
+('system','custom','','hourPoint','1'),
 ('system','custom','','URAndSR','1'),
 ('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),
 ('system','custom','scrum','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u53f2\\u8bd7\"},\"SRCommon\":{\"zh-cn\":\"\\u6545\\u4e8b\"}}');
