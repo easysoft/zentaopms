@@ -73,7 +73,7 @@ class designModel extends model
             if(!trim($name)) continue;
 
             $design = new stdclass();
-            $design->story       = $data->story[$i];
+            $design->story       = isset($data->story[$i]) ? $data->story[$i] : '';
             $design->type        = $data->type[$i];
             $design->name        = $name;
             $design->product     = $productID;
