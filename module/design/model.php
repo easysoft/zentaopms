@@ -305,7 +305,7 @@ class designModel extends model
     {
         if($type == 'bySearch')
         {
-            $designs = $this->getBySearch($programID, $param, $orderBy, $pager);
+            $designs = $this->getBySearch($programID, $productID, $param, $orderBy, $pager);
         }
         else
         {
@@ -343,13 +343,14 @@ class designModel extends model
      * Get designs by search.
      *
      * @param  int    $programID
-     * @param  string $queryID
+     * @param  int    $productID
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $pager
      * @access public
      * @return object
      */
-    public function getBySearch($programID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getBySearch($programID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($queryID)
         {
@@ -375,6 +376,7 @@ class designModel extends model
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('program')->eq($programID)
+            ->andWhere('product')->eq($productID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
