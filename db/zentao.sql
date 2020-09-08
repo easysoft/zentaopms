@@ -4006,7 +4006,7 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
-('system','custom','','hourPoint','1');
+('system','custom','','hourPoint','1'),
 ('system','custom','','URAndSR','1'),
 ('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),
 ('system','custom','scrum','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u53f2\\u8bd7\"},\"SRCommon\":{\"zh-cn\":\"\\u6545\\u4e8b\"}}');
