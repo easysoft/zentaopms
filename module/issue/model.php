@@ -343,11 +343,11 @@ class issueModel extends model
     public function createStory()
     {
         $story = fixer::input('post')
-            ->remove('resolution,resolvedBy,resolvedDate')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', helper::now())
-            ->setIF($this->post->needNotReview, 'status', 'active')
+            ->setIF($this->post->needNotReview or $this->post->product > 0, 'status', 'active')
             ->stripTags('spec', $this->config->allowedTags)
+            ->remove('resolution,resolvedBy,resolvedDate,needNotReview')
             ->get();
 
         $this->dao->insert(TABLE_STORY)->data($story, 'spec')->exec();

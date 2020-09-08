@@ -19,8 +19,8 @@ $lang->custom->score              = 'Point';
 $lang->custom->timezone           = 'Timezone';
 $lang->custom->scoreReset         = 'Réinit Points';
 $lang->custom->scoreTitle         = 'Fonctionnalité des Points';
-$lang->custom->setscrum           = 'Interval Hint';
-$lang->custom->setWaterfall       = 'Switch Views';
+$lang->custom->setscrum           = 'Switch the scrum view';
+$lang->custom->setWaterfall       = 'Switch the waterfall view';
 $lang->custom->estimate           = 'Estimated configuration';
 $lang->custom->estimateConfig     = 'Estimated configuration';
 $lang->custom->estimateUnit       = 'Estimating Unit';
@@ -32,9 +32,13 @@ $lang->custom->region             = 'Interval';
 $lang->custom->tips               = 'Tips';
 $lang->custom->setTips            = 'Set Tips';
 $lang->custom->isRange            = 'Is Target Control';
-$lang->custom->configureScrum     = 'Concept';
 $lang->custom->URStory            = "User requirements";
 $lang->custom->SRStory            = "Software requirements";
+$lang->custom->epic               = "Epic";
+$lang->custom->scrumStory         = "Story";
+$lang->custom->waterfallCommon    = "Waterfall";
+$lang->custom->configureWaterfall = "Waterfall Configure";
+$lang->custom->configureScrum     = "Scrum Configure";
 
 $lang->custom->object['program'] = 'Program';
 $lang->custom->program->fields['unitList'] = 'Unit List';
@@ -198,3 +202,16 @@ $lang->custom->conceptOptions->hourPoint = array();
 $lang->custom->conceptOptions->hourPoint['0'] = 'Points de Story';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Points de Fonction';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
+
+$lang->custom->waterfall = new stdclass();
+$lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enabled?';
+$lang->custom->waterfall->URSRName = 'A conceptual definition of requirements and stories?';
+
+$lang->custom->scrum = new stdclass();
+$lang->custom->scrum->URAndSR  = 'Is it going to be epic?';
+$lang->custom->scrum->URSRName = 'A conceptual definition of requirements?';
+
+$lang->custom->waterfallOptions = new stdclass();
+$lang->custom->waterfallOptions->URAndSR = array();
+$lang->custom->waterfallOptions->URAndSR[0] = 'No';
+$lang->custom->waterfallOptions->URAndSR[1] = 'Yes';

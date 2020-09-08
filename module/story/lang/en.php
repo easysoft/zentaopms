@@ -21,7 +21,6 @@ if($config->URAndSR)
     $lang->story->createStory       = 'Create ' . $lang->story->story;
     $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
     $lang->story->affectedStories   = "Affected {$lang->story->story}";
-    $lang->storyCommon = 'Story';
 }
 
 $lang->story->batchCreate       = "Batch Create";

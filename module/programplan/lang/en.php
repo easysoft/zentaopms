@@ -63,5 +63,4 @@ $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
-$lang->programplan->error->onlyOneDev      = 'Only one stage plan can be set for a first-level stage plan.';
 $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub phases cannot be added.';
