@@ -8,10 +8,11 @@ class programModel extends model
      * @param  varchar $orderBy
      * @param  object  $pager
      * @param  bool    $includeCat
+     * @param  bool    $mine
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false)
+    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false, $mine = false)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('program')->eq(0)
@@ -20,7 +21,7 @@ class programModel extends model
             ->beginIF(!$includeCat)->andWhere('iscat')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->beginIF($this->cookie->mine)
+            ->beginIF($this->cookie->mine or $mine)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
             ->markRight(1)

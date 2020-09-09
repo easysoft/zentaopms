@@ -421,7 +421,7 @@ class my extends control
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
         $this->view->position[] = $this->lang->my->myProgram;
-        $this->view->programs   = $this->program->getList($status, $orderBy, $pager, true);
+        $this->view->programs   = $this->program->getList($status, $orderBy, $pager, true, true);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->status     = $status;
