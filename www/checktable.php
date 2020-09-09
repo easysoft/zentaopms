@@ -61,13 +61,16 @@ if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 1
 
 $lang = new stdclass();
 $lang->misc = new stdclass();
-$lang->storyCommon = '';
-$lang->urCommon    = '';
+$lang->storyCommon   = '';
+$lang->productCommon = '';
+$lang->projectCommon = '';
+$lang->urCommon      = '';
+$lang->srCommon      = '';
+include "../module/common/lang/{$clientLang}.php";
 include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
 {
     $lang->user = new stdclass();
-    $lang->projectCommon = '';
     include "../module/user/lang/{$clientLang}.php";
 }
 else
@@ -111,48 +114,48 @@ else
   <link rel='stylesheet' href='<?php echo $themeRoot . 'zui/css/min.css'?>' type='text/css' media='screen' />
 </head>
 <body>
-<div class='alert alert-info'><strong><?php echo $lang->misc->repairTable;?></strong></div>
-<div class='container mw-700px'>
-<?php if(!empty($error)):?>
-<?php echo $error;?>
-<?php elseif($status == 'createFile'):?>
-  <div class='panel-body' style='margin-left:25%;'>
-    <?php
-    $checkFileName = $_SESSION['checkFileName'];
-    $checkFileName = str_replace(dirname(dirname(dirname(__FILE__))) . DS, '', $checkFileName);
-    printf($lang->misc->noticeRepair, $checkFileName);
-    ?>
-  <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn'><i class='icon-refresh'></i></a></p>
-  </div>
-<?php elseif($status == 'check'):?>
-  <div class='panel'>
-    <table class='table table-form'>
-      <thead>
-        <tr>
-          <th><?php echo $lang->misc->tableName?></th>
-          <th><?php echo $lang->misc->tableStatus?></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      <?php $needRepair = false;?>
-      <?php foreach($tables as $tableName => $tableStatus):?>
-      <?php if($tableStatus != 'ok') $needRepair = true;?>
-        <tr>
-          <td><?php echo $tableName;?></td>
-          <td><span style='color:<?php echo $tableStatus == 'ok' ? 'green' : 'red'?>'><?php echo $tableStatus;?></span></td>
-          <td><?php if($type == 'repair' and $tableStatus != 'ok') printf($lang->misc->repairFail, $tableName)?></td>
-        </tr>
-      </tbody>
-      <?php endforeach;?>
-      <?php if($needRepair):?>
-      <tfoot>
-        <tr><td class='text-center' colspan='3'><a href='<?php echo $config->webRoot . 'checktable.php?type=repair'?>' class='btn btn-primary'><?php echo $lang->misc->needRepair?></a></td></tr>
-      </tfoot>
+  <div class='alert alert-info' style='margin-bottom:0px;'><strong><?php echo $lang->misc->repairTable;?></strong></div>
+  <div class='container mw-700px'>
+    <div class='panel'>
+      <?php if(!empty($error)):?>
+      <?php echo $error;?>
+      <?php elseif($status == 'createFile'):?>
+      <div class='panel-body'>
+        <?php
+        $checkFileName = $_SESSION['checkFileName'];
+        $checkFileName = str_replace(dirname(dirname(dirname(__FILE__))) . DS, '', $checkFileName);
+        printf($lang->misc->noticeRepair, $checkFileName);
+        ?>
+        <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn btn-sm'><i class='icon-refresh'></i> <?php echo $lang->refresh;?></a></p>
+      </div>
+      <?php elseif($status == 'check'):?>
+      <table class='table table-form'>
+        <thead>
+          <tr>
+            <th><?php echo $lang->misc->tableName?></th>
+            <th><?php echo $lang->misc->tableStatus?></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php $needRepair = false;?>
+        <?php foreach($tables as $tableName => $tableStatus):?>
+        <?php if($tableStatus != 'ok') $needRepair = true;?>
+          <tr>
+            <td><?php echo $tableName;?></td>
+            <td><span style='color:<?php echo $tableStatus == 'ok' ? 'green' : 'red'?>'><?php echo $tableStatus;?></span></td>
+            <td><?php if($type == 'repair' and $tableStatus != 'ok') printf($lang->misc->repairFail, $tableName)?></td>
+          </tr>
+        </tbody>
+        <?php endforeach;?>
+        <?php if($needRepair):?>
+        <tfoot>
+          <tr><td class='text-center' colspan='3'><a href='<?php echo $config->webRoot . 'checktable.php?type=repair'?>' class='btn btn-primary'><?php echo $lang->misc->needRepair?></a></td></tr>
+        </tfoot>
+        <?php endif;?>
+      </table>
       <?php endif;?>
-    </table>
+    </div>
   </div>
-<?php endif;?>
-</div>
 </body>
 </html>
