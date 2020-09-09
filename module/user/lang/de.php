@@ -167,6 +167,7 @@ $lang->user->placeholder->role      = "Rolle betrifft Inhalt und die Benutzerrei
 $lang->user->placeholder->group     = "Die Gruppe bestimmt die Benutzerrechte.";
 $lang->user->placeholder->commiter  = 'SVN/Git Konto';
 $lang->user->placeholder->verify    = 'Bitte geben Sie Ihr Login Passwort ein.';
+$lang->user->placeholder->password  = '>= 6 letters and numbers';
 
 $lang->user->placeholder->passwordStrength[1] = 'Buchstaben und Ziffern. Mindestens 6 Zeichen';
 $lang->user->placeholder->passwordStrength[2] = 'Buchstaben, Ziffern und Sonderzeichen. Mindestens 10 Zeichen';

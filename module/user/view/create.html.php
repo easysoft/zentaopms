@@ -41,6 +41,7 @@
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
+          <td><?php echo $lang->user->placeholder->password;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password2;?></th>

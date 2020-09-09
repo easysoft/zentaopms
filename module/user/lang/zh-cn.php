@@ -167,6 +167,7 @@ $lang->user->placeholder->role        = '职位影响内容和用户列表的顺
 $lang->user->placeholder->group       = '分组决定用户的权限列表。';
 $lang->user->placeholder->commiter    = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify      = '请输入您的系统登录密码';
+$lang->user->placeholder->password    = '请设置您的密码。数字和字母的组合，六位以上。';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
