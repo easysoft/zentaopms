@@ -31,9 +31,14 @@
 <script>
 function initMilestoneChart()
 {
+    var testLabels = [];
+    for (var i = 1; i <= 30; ++i) {
+        testLabels.push('No' + (i < 9 ? `0${i}` : i) + 'Week');
+    }
+
     var data =
     {
-        labels: <?php echo json_encode($charts['labels'])?>,
+        labels: <?php echo isset($charts['labels']) ? json_encode($charts['labels']) : '[]'?>,
         datasets: [
         {
             label: 'PV',
@@ -67,7 +72,7 @@ function initMilestoneChart()
         }]
     };
 
-    var betterWidth = data.labels.length * 15;
+    var betterWidth = data.labels.length * Math.min(40, Math.max(20, 5 * data.labels[data.labels.length - 1].length));
     var renderChart = function()
     {
         var $chart       = $('#milestoneChart');

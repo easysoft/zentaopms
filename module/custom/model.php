@@ -51,10 +51,10 @@ class customModel extends model
     }
 
     /**
-     * Set value of an item. 
-     * 
+     * Set value of an item.
+     *
      * @param  string      $path     zh-cn.story.soucreList.customer.1
-     * @param  string      $value 
+     * @param  string      $value
      * @access public
      * @return void
      */
@@ -81,8 +81,8 @@ class customModel extends model
     }
 
     /**
-     * Get some items 
-     * 
+     * Get some items
+     *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return void
@@ -94,7 +94,7 @@ class customModel extends model
 
     /**
      * Delete items.
-     * 
+     *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return void
@@ -106,7 +106,7 @@ class customModel extends model
 
     /**
      * Parse the param string for select or delete items.
-     * 
+     *
      * @param  string    $paramString     lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
@@ -114,7 +114,7 @@ class customModel extends model
     public function parseItemParam($paramString)
     {
         /* Parse the param string into array. */
-        parse_str($paramString, $params); 
+        parse_str($paramString, $params);
 
         /* Init fields not set in the param string. */
         $fields = 'lang,module,section,key';
@@ -126,7 +126,7 @@ class customModel extends model
 
     /**
      * Create a DAO object to select or delete one or more records.
-     * 
+     *
      * @param  array  $params     the params parsed by parseItemParam() method.
      * @param  string $method     select|delete.
      * @access public
@@ -382,9 +382,9 @@ class customModel extends model
 
     /**
      * Merge shortcut query in featureBar.
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return void
      */
@@ -436,8 +436,8 @@ class customModel extends model
 
     /**
      * Get required fields by config.
-     * 
-     * @param  object    $moduleConfig 
+     *
+     * @param  object    $moduleConfig
      * @access public
      * @return array
      */
@@ -454,9 +454,9 @@ class customModel extends model
 
     /**
      * Get module fields.
-     * 
-     * @param  string $moduleName 
-     * @param  string $method 
+     *
+     * @param  string $moduleName
+     * @param  string $method
      * @access public
      * @return array
      */
@@ -483,8 +483,8 @@ class customModel extends model
 
     /**
      * Save required fields.
-     * 
-     * @param  int    $moduleName 
+     *
+     * @param  int    $moduleName
      * @access public
      * @return void
      */
@@ -523,7 +523,7 @@ class customModel extends model
 
     /**
      * Set flow function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -551,7 +551,7 @@ class customModel extends model
 
     /**
      * Set product and project concept.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -580,7 +580,7 @@ class customModel extends model
 
     /**
      * Set ur and SR concept.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -590,9 +590,9 @@ class customModel extends model
 
         $this->loadModel('setting')->setItem("system.custom.URAndSR", $data->URAndSR);
         if($data->URAndSR)
-        {   
-            $clientLang = $this->app->getClientLang();                
-            $URSRName   = isset($this->config->custom->URSRName) ? json_decode($this->config->custom->URSRName, true) : array();                       
+        {
+            $clientLang = $this->app->getClientLang();
+            $URSRName   = isset($this->config->custom->URSRName) ? json_decode($this->config->custom->URSRName, true) : array();
             $URSRName['URCommon'][$clientLang] = $data->URCommon[$clientLang];
             $URSRName['SRCommon'][$clientLang] = $data->SRCommon[$clientLang];
             $this->setting->setItem("system.custom.$template.URSRName", json_encode($URSRName));
@@ -601,7 +601,7 @@ class customModel extends model
 
     /**
      * Set story or requirement.
-     * 
+     *
      * @access public
      * @return void
      */
