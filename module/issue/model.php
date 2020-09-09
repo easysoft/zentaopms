@@ -416,4 +416,25 @@ class issueModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->issue->search);
     }
+
+    /**
+     * Adjust the action is clickable.
+     *
+     * @param  int    $issue
+     * @param  int    $action
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($issue, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'resolve')  return $issue->status != 'resolved';
+        if($action == 'close')    return $issue->status != 'closed';
+        if($action == 'activate') return $issue->status != 'active';
+        if($action == 'cancel')   return $issue->status != 'canceled';
+
+        return true;
+    }
 }
