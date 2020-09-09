@@ -219,6 +219,9 @@ function hiddenBlock(index)
     })
 }
 
+/**
+ * Block initialization.
+ */
 $(function()
 {
     initTableHeader();
