@@ -91,7 +91,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Residuals';
 
 $lang->block->default['waterfall']['program']['1']['title']  = $lang->projectCommon . 'Weekly';
-$lang->block->default['waterfall']['program']['1']['block']  = 'Pmmireport';
+$lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
 $lang->block->default['waterfall']['program']['1']['source'] = 'Program';
 $lang->block->default['waterfall']['program']['1']['grid']   = 8;
 
