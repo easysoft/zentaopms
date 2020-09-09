@@ -27,8 +27,6 @@ class design extends control
         $products = array();
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->program);
-
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=design")));
     }
 
     /**
