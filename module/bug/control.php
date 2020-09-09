@@ -16,6 +16,8 @@ class bug extends control
     /**
      * Construct function, load some modules auto.
      *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */

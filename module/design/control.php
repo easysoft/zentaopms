@@ -11,23 +11,42 @@
  */
 class design extends control
 {
-   /**
-    * Browse designs.
-    *
-    * @param  int    $productID
-    * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
-    * @param  string $param
-    * @param  string $orderBy
-    * @param  int    $recTotal
-    * @param  int    $recPerPage
-    * @param  int    $pageID
-    * @access public
-    * @return void
-    */
+    public $products = array();
+
+    /**
+     * Construct function, load module auto.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+        $products = array();
+        $this->loadModel('product');
+        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->program);
+    }
+
+    /**
+     * Browse designs.
+     *
+     * @param  int    $productID
+     * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function browse($productID = 0, $type = 'all', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true));
+        $productID = $this->product->saveState($productID, $this->products);
         $this->design->setProductMenu($productID);
 
         /* Build the search form. */
@@ -89,7 +108,6 @@ class design extends control
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products   = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->productID  = $productID;
         $this->view->program    = $this->loadModel('project')->getByID($this->session->program);
 
@@ -195,7 +213,6 @@ class design extends control
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->products = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 

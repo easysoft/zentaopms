@@ -7,7 +7,11 @@
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
       <?php foreach($story->projects as $projectID => $project):?>
-        <h6><?php echo $project->name ?> &nbsp; <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account) . ' ';?></small></h6>
+        <h6><?php echo $project->name ?> &nbsp;
+            <?php if(!empty($story->teams[$projectID])):?>
+            <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account) . ' ';?></small>
+            <?php endif;?>
+        </h6>
           <table class='table'>
             <thead>
               <tr class='text-center'>
