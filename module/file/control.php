@@ -331,10 +331,7 @@ class file extends control
      */
     public function ajaxPasteImage($uid = '')
     {
-        if($_POST)
-        {
-            echo $this->file->pasteImage($this->post->editor, $uid);
-        }
+        if($_POST) die($this->file->pasteImage($this->post->editor, $uid));
     }
 
     /**
