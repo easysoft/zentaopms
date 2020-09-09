@@ -48,8 +48,8 @@
           <th class='c-project'>          <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-name'>             <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-user w-90px'>      <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px'>             <?php common::printOrderLink('estStarted',  $orderBy, $vars, $lang->task->estStarted);?></th>
-          <th class='w-80px'>             <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadline);?></th>
+          <th class='w-80px'>             <?php echo $lang->task->start;?></th>
+          <th class='w-80px'>             <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
           <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <th class='c-user w-100px'>     <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
@@ -79,8 +79,15 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-          <td><?php echo $task->estStarted;?></td>
-          <td><?php echo $task->deadline;?></td>
+          <td>
+            <?php
+            $startedDate = '';
+            if($task->estStarted != '0000-00-00')  $startedDate = $task->estStarted;
+            if($task->realStarted != '0000-00-00') $startedDate = $task->realStarted;
+            echo $startedDate;
+            ?>
+          </td>
+          <td <?php if(!empty($task->delay)) echo "class='delayed'";?>><?php if($task->deadline != '0000-00-00') echo $task->deadline;?></td>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>
