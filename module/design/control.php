@@ -108,7 +108,6 @@ class design extends control
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
-        $this->view->products   = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->productID  = $productID;
         $this->view->program    = $this->loadModel('project')->getByID($this->session->program);
 
@@ -214,7 +213,6 @@ class design extends control
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->products = $this->loadModel('product')->getPairs('', $this->session->program);
         $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 
