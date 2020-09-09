@@ -183,7 +183,7 @@ class task extends control
             $moduleID     = $this->tree->getStoryModule($task->module);
             $moduleIdList = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList, 'full', 'unclosed');
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);

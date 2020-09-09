@@ -2181,12 +2181,14 @@ class storyModel extends model
      *
      * @param  int           $projectID
      * @param  int           $productID
+     * @param  int           $branch
      * @param  array|string  $moduleIdList
-     * @param  string        $type
+     * @param  string        $type full|short
+     * @param  string        $status all|unclosed
      * @access public
      * @return array
      */
-    public function getProjectStoryPairs($projectID = 0, $productID = 0, $branch = 0, $moduleIdList = 0, $type = 'full')
+    public function getProjectStoryPairs($projectID = 0, $productID = 0, $branch = 0, $moduleIdList = 0, $type = 'full', $status = 'all')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStoryPairs();
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
@@ -2198,6 +2200,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
+            ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
             ->fetchAll();
         if(!$stories) return array();
