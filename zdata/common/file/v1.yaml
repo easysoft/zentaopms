@@ -2,6 +2,7 @@ title: file
 desc: 文件上传相关
 author: ly
 version: 1.0
+
 instances:
   - instance: pathname
     note: 文件路径名称

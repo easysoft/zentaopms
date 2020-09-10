@@ -8,7 +8,7 @@ instances:
   - instance: dateA
     fields:
      - field: year
-       range: 2019-2022
+       range: 2019-2020
        postfix: "-"
      - field: month
        range: 1-12
@@ -33,7 +33,7 @@ instances:
   - instance: dateB
     fields:
      - field: year
-       range: 2019-2022
+       range: 2019-2020
        postfix: "-"
      - field: month
        range: 1-12

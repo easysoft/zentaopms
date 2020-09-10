@@ -12,7 +12,7 @@ fields:
     format: ""
   - field: product
     note: "产品"
-    range: 1-10000
+    range: 1-100{5}
     prefix: ""
     postfix: ""
     loop: 0
@@ -34,7 +34,7 @@ fields:
   - field: title
     note: "名称"
     range: 1-10000
-    prefix: "这里是名称"
+    prefix: "产品计划"
     postfix: ""
     loop: 0
     format: ""

@@ -40,14 +40,14 @@ fields:
     format: ""
   - field: type
     note: "产品类型"
-    range: normal,branch,platform
+    range: normal
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: status
     note: "状态"
-    range: normal,closed
+    range: normal
     prefix: ""
     postfix: ""
     loop: 0
@@ -92,7 +92,7 @@ fields:
     format: ""
   - field: acl
     note: "访问控制"
-    range: open,private,custom
+    range: open
     prefix: ""
     postfix: ""
     loop: 0

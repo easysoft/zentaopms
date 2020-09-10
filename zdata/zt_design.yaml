@@ -1,5 +1,5 @@
-title: table zt_product
-desc: "产品"
+title: table zt_flow_design
+desc: "项目设计"
 author: automated export
 version: "1.0"
 fields:
@@ -17,37 +17,44 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: name
-    note: "产品名称"
+  - field: product
+    note: "所属产品"
     range: 1-10000
-    prefix: "这是一个产品名称"
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""
-  - field: code
-    note: "产品代号"
-    range: 1-10000
-    prefix: "code"
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: line
-    note: "产品线"
+  - field: commit
+    note: "相关提交"
     range: 0
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
-  - field: type
-    note: "产品类型"
-    range: normal,branch,platform
+  - field: project
+    note: "项目ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "设计名称"
+    range: 1-10000
+    prefix: "这是一个设计"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: parent
+    note: "父流程ID"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: status
     note: "状态"
-    range: normal,closed
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
@@ -59,53 +66,8 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: desc
-    note: "产品描述"
-    range: 1-10000
-    prefix: "这里是产品描述"
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: PO
-    note: "产品负责人"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: QD
-    note: "测试负责人"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: RD
-    note: "发布负责人"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: acl
-    note: "访问控制"
-    range: open,private,custom
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: whitelist
-    note: "分组白名单"
-    range: 1-10
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: createdBy
-    note: "创建者"
+    note: "由谁创建"
     from: common.user.v1.yaml
     use: user
     prefix: ""
@@ -120,16 +82,58 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: createdVersion
-    note: "创建版本"
-    range: 20.0
+  - field: editedBy
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
-  - field: order
-    note: "排序"
-    range: 5-10000:5
+  - field: editedDate
+    note: "编辑者"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: commitBy
+    note: "由谁关联提交"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: commitDate
+    note: "关联提交日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedBy
+    note: "由谁指派"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
@@ -137,6 +141,34 @@ fields:
   - field: deleted
     note: "是否删除"
     range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: story
+    note: "相关需求"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是设计描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    note: "版本号"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: HLDS,DDS,DBDS,ADS
     prefix: ""
     postfix: ""
     loop: 0

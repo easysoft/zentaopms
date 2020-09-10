@@ -18,7 +18,7 @@ fields:
     loop: 0
     format: ""
   - field: title
-    note: "需求标题"
+    note: "标题"
     fields:
       - field: field1
         range: 用户需求,软件需求
@@ -31,14 +31,14 @@ fields:
   - field: spec
     note: "需求描述"
     range: 1-10000
-    prefix: "这时一个软件需求描述"
+    prefix: "这是一个软件需求描述"
     postfix: ""
     loop: 0
     format: ""
   - field: verify
     note: "验收标准"
     range: 1-10000
-    prefix: "这时一个需求验收"
+    prefix: "这是一个需求验收"
     postfix: ""
     loop: 0
     format: ""

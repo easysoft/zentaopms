@@ -1,0 +1,14 @@
+说明:
+  生成多个产品,为其添加计划、模块和需求。
+
+数据:
+  生成100个产品,每个产品生成5个计划和10个模块,每个计划关联20个软件需求,每个模块分配5个用户需求,5个软件需求。
+
+调用yaml:
+  zd -c demo/story/zt_product.yaml -d zt_product.yaml -n 100 -o demo/story/sql/zt_product.sql -table zt_product
+  zd -c demo/story/zt_productplan.yaml -n 500 -d zt_productplan.yaml -o demo/story/sql/zt_productplan.sql -table zt_productplan
+  zd -c demo/story/zt_project.yaml -d zt_project.yaml -n 100 -o demo/story/sql/zt_project.sql -table zt_project
+  zd -c demo/story/zt_module.yaml -d zt_module.yaml -n 1000 -o demo/story/sql/zt_module.sql -table zt_module
+  zd -c demo/story/zt_story.yaml -d zt_story.yaml -n 10000 -o demo/story/sql/zt_story.sql -table zt_story
+  zd -c demo/story/zt_storyspec.yaml -n 10000 -d zt_storyspec.yaml -o demo/story/sql/zt_storyspec.sql -table zt_storyspec
+  zd -c demo/story/zt_action.yaml -n 11700 -o demo/story/sql/zt_action.sql -table zt_action

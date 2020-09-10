@@ -32,6 +32,7 @@ instances:
        postfix: ","
      - field: user7
        range: test3
+
   - instance: userC
     note: 前后逗号拼接用户
     fields:
@@ -57,4 +58,3 @@ instances:
      - field: user7
        range: test3
        postfix: ","
-

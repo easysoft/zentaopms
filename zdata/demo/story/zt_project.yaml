@@ -33,14 +33,14 @@ fields:
     format: ""
   - field: category
     note: "项目分类"
-    range: multiple,single
+    range: multiple
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: program
     note: "所属项目"
-    range: 1-10000
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
@@ -54,7 +54,7 @@ fields:
     format: ""
   - field: budgetUnit
     note: "预算单位"
-    range: yuan,Dollars
+    range: yuan
     prefix: ""
     postfix: ""
     loop: 0
@@ -96,7 +96,7 @@ fields:
     format: ""
   - field: type
     note: "项目类型"
-    range: waterfall,project
+    range: sprint
     prefix: ""
     postfix: ""
     loop: 0
@@ -335,7 +335,7 @@ fields:
     format: ""
   - field: acl
     note: "访问权限"
-    range: open,private,custom
+    range: open
     prefix: ""
     postfix: ""
     loop: 0

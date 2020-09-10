@@ -1,0 +1,215 @@
+title: table zt_flow_issue
+desc: "项目问题"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolvedBy
+    note: "解决者"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: program
+    note: "所属项目"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "标题"
+    range: 1-10000
+    prefix: "问题标题"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "问题描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 1-4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: severity
+    note: "严重程度"
+    range: 1-4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类别"
+    range: design,code,performance,version,storyadd,storychanged,storyremoved
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: activity
+    note: "活动ID"
+    range: 1-10000
+    prefix: "相关活动ID"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deadline
+    note: "计划解决日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolution
+    note: "解决方式"
+    range: resolved,totask,tobug,tostory,torisk
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolutionComment
+    note: "解决方案"
+    range: 1-10000
+    prefix: "解决方案"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "转化对象"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolvedDate
+    note: "实际解决日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "结果"
+    range: unconfirmed,confirmed,unresolved,resolved,canceled,closed
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: owner
+    note: "由谁提出"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "由谁创建"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedBy
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: activateBy
+    note: "由谁激活"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: activateDate
+    note: "激活日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closeBy
+    note: "由谁关闭"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedDate
+    note: "关闭日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedBy
+    note: "由谁指派"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

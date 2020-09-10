@@ -10,6 +10,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: program
+    note: "项目ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
   - field: parent
     note: "父需求ID"
     range: 0
@@ -55,7 +62,7 @@ fields:
   - field: sourceNote
     note: "来源备注"
     range: 1-10000
-    prefix: "这里是来源备注"
+    prefix: "这里是需求来源备注"
     postfix: ""
     loop: 0
     format: ""
@@ -66,17 +73,14 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: feedback
-    note: "反馈"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: title
     note: "需求名称"
-    range: 1-10000
-    prefix: "这是需求名称"
+    fields:
+      - field: field1
+        range: [用户需求,软件需求]
+      - field: field2
+        range: 1-10000
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""
@@ -103,7 +107,7 @@ fields:
     format: ""
   - field: estimate
     note: "预计工时"
-    range: 0-100:R
+    range: 0-20:R
     prefix: ""
     postfix: ""
     loop: 0
@@ -275,8 +279,8 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: storyChanged
-    note: "需求变更"
+  - field: URChanged
+    note: "用户需求变更"
     range: 0
     prefix: ""
     postfix: ""

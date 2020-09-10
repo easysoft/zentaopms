@@ -5,52 +5,50 @@ version: "1.0"
 fields:
   - field: objectType
     note: "对象类型"
-    range: product,story,productplan,release,project,task,build,bug,testcase,case,testtask,user,doc,doclib,todo,branch,module,testsuite,caselib,testreport,entry,webhook,review
+    range: product{100},project{100},module{1000},story{10000},productplan{500}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: objectID
     note: "对象ID"
-    range: "1-10000"
+    range: 1-100,1-100,1-1000,1-10000,1-500
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: product
     note: "产品"
-    range: "1-10000"
+    range: 1-100
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: project
     note: "项目"
-    range: "1-10000"
+    range: 1-100
     prefix: ","
     postfix: ","
     loop: 0
     format: ""
   - field: actor
     note: "操作者"
-    from: common.user.v1.yaml
-    use: user
+    range: "admin"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: action
     note: "动作"
-    range: common,extra,opened,created,changed,edited,assigned,closed,deleted,deletedfile,editfile,erased,undeleted,hidden,commented,activated,blocked,moved,confirmed,caseconfirmed,bugconfirmed,frombug,started,restarted,delayed,suspended,recordestimate,editestimate,deleteestimate,canceled,svncommited,gitcommited,finished,paused,verified,diff1,diff2,diff3,linked2bug
+    range: opened
     postfix: ""
     loop: 0
     format: ""
   - field: date
     note: "日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
+    range: 10-22
+    prefix: "2020-09-09 "
+    postfix: ":11:24"
     loop: 0
     format: ""
   - field: comment
@@ -68,7 +66,7 @@ fields:
     loop: 0
   - field: read
     note: ""
-    range: "0,1"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0

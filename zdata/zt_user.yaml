@@ -10,6 +10,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: type
+    note: "内外部人员"
+    range: [inside,outside]
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
   - field: dept
     note: "所属部门"
     range: 1-10000
@@ -196,28 +203,13 @@ fields:
     format: ""
   - field: locked
     note: "锁定时间"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: feedback
-    note: "反馈[非研发]"
     range: 0
-    prefix: ""
-    postfix: ""
+    prefix: "0000-00-00 "
+    postfix: "0:00:00"
     loop: 0
     format: ""
   - field: ranzhi
     note: "ZDOO账号"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: ldap
-    note: ""
     range: 0
     prefix: ""
     postfix: ""
@@ -240,20 +232,6 @@ fields:
   - field: deleted
     note: "是否删除"
     range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: clientStatus
-    note: "连接状态"
-    range: offline
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: clientLang
-    note: "连接语言"
-    range: en
     prefix: ""
     postfix: ""
     loop: 0

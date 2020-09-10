@@ -1,0 +1,261 @@
+title: table zt_flow_risk
+desc: "项目风险"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: program
+    note: "所属项目"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "风险名称"
+    range: 1-10000
+    prefix: "风险名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: source
+    note: "来源"
+    range: business,team,logistic,manage,sourcing,outsourcing,customer,others
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: category
+    note: "类型"
+    range: technical,manage,business,requirement,resource,others
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: strategy
+    note: "策略"
+    range: avoidance,mitigation,transference,acceptance
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: active,closed,hangup,canceled
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: impact
+    note: "影响程度"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: probability
+    note: "发生概率"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: rate
+    note: "风险系数"
+    range: 1-25
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: high,middle,low
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: identifiedDate
+    note: "识别日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: prevention
+    note: "处理措施"
+    range: 1-10000
+    prefix: "这是处理措施"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: remedy
+    note: "应急措施"
+    range: 1-10000
+    prefix: "这是应急措施"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: plannedClosedDate
+    note: "计划关闭日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: actualClosedDate
+    note: "实际关闭日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "由谁创建"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedBy
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolution
+    note: "解决措施"
+    range: 1-10000
+    prefix: "这是解决措施"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: resolvedBy
+    note: "解决者"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: activateBy
+    note: "由谁激活"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: activateDate
+    note: "激活日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: cancelBy
+    note: "由谁取消"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: cancelDate
+    note: "取消日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: cancelReason
+    note: "取消原因"
+    range: disappeared,mistake
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: hangupBy
+    note: "由谁挂起"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: hangupDate
+    note: "挂起日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: trackedBy
+    note: "由谁关闭"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: trackedDate
+    note: "关闭日期"
+    from: common.date.v1.yaml
+    use: dateB
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
