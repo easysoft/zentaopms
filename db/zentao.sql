@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `estimate` float NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
+  `storyPoint` float NOT NULL,
   PRIMARY KEY  (`project`,`date`,`task`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_case`;
