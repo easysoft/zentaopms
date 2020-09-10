@@ -30,7 +30,7 @@ $lang->index->menuOrder[10] = 'project';
 
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
-$lang->my->menuOrder[10] = 'todo';
+$lang->my->menuOrder[10] = 'calendar';
 $lang->my->menuOrder[12] = 'program';
 $lang->my->menuOrder[20] = 'myProject';
 $lang->my->menuOrder[25] = 'review';

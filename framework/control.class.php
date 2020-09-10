@@ -33,7 +33,7 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setConcept();
+        //if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setConcept();
 
         if(!isset($this->config->bizVersion)) return false;
 
