@@ -167,7 +167,6 @@ $lang->user->placeholder->role      = "Vai trò được liên kết đến nộ
 $lang->user->placeholder->group     = "Nhóm được liên kết tới phân quyền người dùng.";
 $lang->user->placeholder->commiter  = 'Tài khoản SVN/Git';
 $lang->user->placeholder->verify    = 'Vui lòng nhập mật khẩu đăng nhập của bạn.';
-$lang->user->placeholder->password  = '>= 6 letters and numbers';
 
 $lang->user->placeholder->passwordStrength[1] = '>= 6 chữ và số';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 chữ, sood và ký tự đặc biệt';

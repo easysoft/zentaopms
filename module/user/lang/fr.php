@@ -167,7 +167,6 @@ $lang->user->placeholder->role      = "Rôle affecte le contenu et l'ordre dans 
 $lang->user->placeholder->group     = "Groupe correspond aux privilèges utilisateurs.";
 $lang->user->placeholder->commiter  = 'Compte SVN/Git';
 $lang->user->placeholder->verify    = 'Entrez votre Mot de passe.';
-$lang->user->placeholder->password  = '>= 6 letters and numbers';
 
 $lang->user->placeholder->passwordStrength[1] = '>= 6 lettres et chiffres';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 lettres, chiffres et caractères spéciaux';
