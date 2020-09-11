@@ -385,7 +385,7 @@ class programModel extends model
             $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd)   dao::$errors['end']   = sprintf($this->lang->program->endLetterChild,   $maxChildEnd);
+            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild,   $maxChildEnd);
 
             $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
             if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
