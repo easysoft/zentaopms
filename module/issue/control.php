@@ -74,19 +74,20 @@ class issue extends control
         $this->display();
     }
 
-   /**
-    * Batch create issues.
-    *
-    * @access public
-    * @return void
-    */
+    /**
+     * Batch create issues.
+     *
+     * @access public
+     * @return void
+     */
     public function batchCreate()
     {
         if($_POST)
         {
-            $results = $this->issue->batchCreate();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse', 'browseType=all')));
+            $issues = $this->issue->batchCreate();
+            foreach($issues as $issue) $this->loadModel('action')->create('issue', $issue, 'Opened');
+
+            die(js::locate($this->inLink('browse'), 'parent'));
         }
 
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $this->lang->issue->batchCreate;
@@ -439,6 +440,7 @@ class issue extends control
     {
         $this->commonAction($issueID, 'issue');
         $issue = $this->issue->getByID($issueID);
+
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $issue->title;
         $this->view->position[] = $this->lang->issue->common;
         $this->view->position[] = $this->lang->issue->basicInfo;

@@ -46,6 +46,9 @@ foreach($issue as $field => $value)
           <?php echo !empty($issue->desc) ? $issue->desc : '<div class="text-center text-muted">' . $lang->noData . '</div>';?>
         </div>
       </div>
+      <?php if($issue->files):?>
+      <div class="detail"><?php echo $this->fetch('file', 'printFiles', array('files' => $issue->files, 'fieldset' => 'true'));?></div>
+      <?php endif;?>
     </div>
     <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=issue&objectID=$issue->id");?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>

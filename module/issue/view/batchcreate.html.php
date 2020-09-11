@@ -14,8 +14,8 @@
 <div id = "mainContent" class="main-content fade in">
   <div class="main-header">
     <h2><?php echo $lang->issue->batchCreate;?></h2>
-  </div> 
-  <form id="batchCreateForm" class="form-ajax" method="post">
+  </div>
+  <form id="batchCreateForm" target="hiddenwin" method="post">
     <table class="table table-form">
       <thead>
         <tr class="text-center">

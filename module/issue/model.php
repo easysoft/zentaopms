@@ -70,7 +70,9 @@ class issueModel extends model
      */
     public function getByID($issueID)
     {
-        return $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+        $issue        = $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+        $issue->files = $this->loadModel('file')->getByObject('issue', $issue->id);
+        return $issue;
     }
 
     /**
@@ -168,6 +170,7 @@ class issueModel extends model
         $data = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
+            ->remove('labels,files')
             ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
             ->addIF($this->post->assignedTo, 'assignedDate', $now)
             ->stripTags($this->config->issue->editor->edit['id'], $this->config->allowedTags)
@@ -177,6 +180,8 @@ class issueModel extends model
             ->where('id')->eq($issueID)
             ->batchCheck($this->config->issue->edit->requiredFields, 'notempty')
             ->exec();
+
+        $this->loadModel('file')->saveUpload('issue', $issueID);
 
         return common::createChanges($oldIssue, $data);
     }
@@ -260,7 +265,7 @@ class issueModel extends model
      * Batch create issue.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -268,30 +273,35 @@ class issueModel extends model
         $data = fixer::input('post')->get();
 
         $issues = array();
-        foreach($data->dataList as $issue)
+        foreach($data->dataList as $index => $issue)
         {
             if(!trim($issue['title'])) continue;
 
             $issue['createdBy']   = $this->app->user->account;
             $issue['createdDate'] = $now;
             $issue['program']     = $this->session->program;
+
             if($issue['assignedTo'])
             {
                 $issue['assignedBy']   = $this->app->user->account;
                 $issue['assignedDate'] = $now;
             }
 
-            foreach(explode(',', $this->config->issue->create->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if($field and empty($issue[$field])) return dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->issue->$field);
-            }
+            if(empty($issue['title']))    die(js::error(sprintf($this->lang->issue->titleEmpty, $index)));
+            if(empty($issue['type']))     die(js::error(sprintf($this->lang->issue->typeEmpty, $index)));
+            if(empty($issue['severity'])) die(js::error(sprintf($this->lang->issue->severityEmpty, $index)));
 
             $issues[] = $issue;
         }
-        foreach($issues as $issue) $this->dao->insert(TABLE_ISSUE)->data($issue)->exec();
 
-        return true;
+        $issueIdList = array();
+        foreach($issues as $issue)
+        {
+            $this->dao->insert(TABLE_ISSUE)->data($issue)->exec();
+            $issueIdList[] = $this->dao->lastInsertId();
+        }
+
+        return $issueIdList;
     }
 
     /**

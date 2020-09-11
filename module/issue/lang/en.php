@@ -104,6 +104,9 @@ $lang->issue->resolveMethods['tostory']  = 'To Story';
 $lang->issue->resolveMethods['torisk']   = 'To Risk';
 
 $lang->issue->confirmDelete = 'Do you want to delete this issue?';
+$lang->issue->typeEmpty     = 'ID: %s Type cannot be empty.';
+$lang->issue->titleEmpty    = 'ID: %s Title cannot be empty.';
+$lang->issue->severityEmpty = 'ID: %s Severity cannot be empty.';
 
 $lang->issue->logComments = array();
 $lang->issue->logComments['totask']  = " created Task %s";

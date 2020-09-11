@@ -61,6 +61,10 @@
             <td colspan="3"><?php echo html::textarea('desc', $issue->desc, 'row="6"');?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->files;?></th>
+            <td><?php echo $this->fetch('file', 'buildform');?></td>
+          </tr>
+          <tr>
             <td colspan='3' class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></td>
           </tr>
         </tbody>

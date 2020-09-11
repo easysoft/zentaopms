@@ -104,6 +104,9 @@ $lang->issue->resolveMethods['tostory']  = '转需求';
 $lang->issue->resolveMethods['torisk']   = '转风险';
 
 $lang->issue->confirmDelete = '您确认删除该问题？';
+$lang->issue->typeEmpty     = 'ID：%s的类别不能为空。';
+$lang->issue->titleEmpty    = 'ID：%s的标题不能为空。';
+$lang->issue->severityEmpty = 'ID：%s的严重程度不能为空。';
 
 $lang->issue->logComments = array();
 $lang->issue->logComments['totask']  = "创建了任务：%s。";
