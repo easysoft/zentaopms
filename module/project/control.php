@@ -2076,9 +2076,10 @@ class project extends control
         }
 
         /* Pager. */
-        $recTotal   = count($allStories);
-        $allStories = array_chunk($allStories, $recPerPage);
         $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($allStories);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $allStories = array_chunk($allStories, $pager->recPerPage);
 
         /* Assign. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
@@ -2090,7 +2091,7 @@ class project extends control
         $this->view->project      = $project;
         $this->view->products     = $products;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
-        $this->view->pager        = pager::init($recTotal, $recPerPage, $pageID);
+        $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
         $this->view->modules      = $modules;
