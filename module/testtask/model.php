@@ -515,6 +515,7 @@ class testtaskModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
                 ->andWhere('status')->ne('wait')
+                ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
