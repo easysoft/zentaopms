@@ -70,19 +70,19 @@ class build extends control
             $products      = array();
             foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-            $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->create;
-            $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
-            $this->view->position[]    = $this->lang->build->create;
-            $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-            $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
-            $this->view->projectID     = $projectID;
-            $this->view->orderBy       = $orderBy;
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->create;
+            $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
+            $this->view->position[] = $this->lang->build->create;
+            $this->view->product    = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
+            $this->view->branches   = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->projectID  = $projectID;
+            $this->view->orderBy    = $orderBy;
         }
 
         $this->view->products      = $products;
         $this->view->lastBuild     = $this->build->getLast($projectID);
         $this->view->productGroups = $productGroups;
-        $this->view->users         = $this->user->getPairs('nodeleted');
+        $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
         $this->display();
     }
 
