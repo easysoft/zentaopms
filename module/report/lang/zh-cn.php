@@ -33,7 +33,7 @@ $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
 $lang->report->assign['noassign'] = '未指派';
-$lang->report->assign['assign'] = '已指派';
+$lang->report->assign['assign']   = '已指派';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
