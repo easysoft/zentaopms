@@ -309,7 +309,7 @@ $lang->testtask->menu = new stdclass();
 $lang->testtask->subMenu = $lang->qa->subMenu;
 $lang->testtask->menu->bug = array('link' => 'バグ|bug|browse|productID=%s');
 $lang->testtask->menu->testcase = array('link' => 'ケース|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testtask->menu->testtask = array('link' => 'テストタスク|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testtask->menu->testtask = array('link' => 'テストタスク|testtask|browse|productID=%s', 'subModule' => 'testtask', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testtask->menu->testsuite = array('link' => 'スイート|testsuite|browse|productID=%s');
 $lang->testtask->menu->report = array('link' => 'レポート|testreport|browse|productID=%s');
 $lang->testtask->menu->caselib = array('link' => 'ケースライブラリ|caselib|browse');
@@ -341,7 +341,7 @@ $lang->caselib->menu->testcase = array('link' => 'ケース|testcase|browse|', '
 $lang->caselib->menu->testtask = array('link' => 'テストタスク|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'スイート|testsuite|browse|');
 $lang->caselib->menu->report = array('link' => 'レポート|testreport|browse|');
-$lang->caselib->menu->caselib = array('link' => 'ケースライブラリ|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib = array('link' => 'ケースライブラリ|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 $lang->caselib->subMenu = new stdclass();
 $lang->caselib->subMenu->testcase = new stdclass();
@@ -409,10 +409,10 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index = array('link' => 'ホーム|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message = array('link' => 'メッセージ|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom = array('link' => 'カスタマイズ|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso = array('link' => 'インテグレーション|admin|sso');
+$lang->admin->menu->sso = array('link' => 'インテグレーション|admin|sso', 'subModule' => '');
 $lang->admin->menu->extension = array('link' => 'プラグイン|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->dev = array('link' => '二次開発|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->translate = array('link' => '翻訳|translate|index', 'subModule' => 'translate');
+$lang->admin->menu->dev = array('link' => '二次開発|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->translate = array('link' => '翻訳|dev|translate');
 $lang->admin->menu->data = array('link' => 'データ|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe = array('link' => 'セキュリティ|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system = array('link' => 'システム|cron|index', 'subModule' => 'cron');
@@ -696,35 +696,78 @@ include (dirname(__FILE__) . '/menuOrder.php');
 global $config;
 if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 {
-unset($lang->menu->project);
-unset($lang->menu->report);
-unset($lang->menu->qa);
+    /* Remove project, report and qa module. */
+    unset($lang->menu->project);
+    unset($lang->menu->report);
+    unset($lang->menu->qa);
 
-unset($lang->menuOrder[15]);
-unset($lang->menuOrder[20]);
-unset($lang->menuOrder[30]);
+    unset($lang->menuOrder[15]);
+    unset($lang->menuOrder[20]);
+    unset($lang->menuOrder[35]);
 
-unset($lang->my->menu->bug);
-unset($lang->my->menu->testtask);
-unset($lang->my->menu->task);
-unset($lang->my->menu->myProject);
+    /* Adjust sub menu of my dashboard. */
+    unset($lang->my->menu->bug);
+    unset($lang->my->menu->testtask);
+    unset($lang->my->menu->task);
+    unset($lang->my->menu->myProject);
 
-unset($lang->product->menu->project);
-unset($lang->product->menu->doc);
+    /* Adjust sub menu of product module. */
+    unset($lang->product->menu->project);
+    unset($lang->product->menu->doc);
 
-$lang->menu->product = "{$lang->productCommon}|product|index";
+    /* Rename product module. */
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
-unset($lang->searchObjects['bug']);
-unset($lang->searchObjects['task']);
-unset($lang->searchObjects['testcase']);
-unset($lang->searchObjects['project']);
-unset($lang->searchObjects['build']);
-unset($lang->searchObjects['testtask']);
-unset($lang->searchObjects['testsuite']);
-unset($lang->searchObjects['testreport']);
+    /* Adjust search items. */
+    unset($lang->searchObjects['bug']);
+    unset($lang->searchObjects['task']);
+    unset($lang->searchObjects['testcase']);
+    unset($lang->searchObjects['project']);
+    unset($lang->searchObjects['build']);
+    unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['caselib']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
+{
+    /* Remove product, report and qa module. */
+    unset($lang->menu->product);
+    unset($lang->menu->report);
+    unset($lang->menu->qa);
+
+    unset($lang->menuOrder[10]);
+    unset($lang->menuOrder[20]);
+    unset($lang->menuOrder[35]);
+
+    /* Adjust sub menu of my dashboard. */
+    unset($lang->my->menu->bug);
+    unset($lang->my->menu->testtask);
+    unset($lang->my->menu->story);
+
+    /* Adjust sub menu of project  module. */
+    unset($lang->project->menu->story);
+    unset($lang->project->menu->build);
+    unset($lang->project->menu->qa);
+    unset($lang->project->menu->product);
+    unset($lang->project->menu->doc);
+
+    /* Remove sub menu of product module. */
+    unset($lang->product->menu);
+    unset($lang->product->menuOrder);
+
+    unset($lang->searchObjects['story']);
+    unset($lang->searchObjects['product']);
+    unset($lang->searchObjects['testcase']);
+    unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['productplan']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['caselib']);
+    unset($lang->searchObjects['testreport']);
+}
+
+if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 {
     /* Remove project and test module. */
     unset($lang->menu->project);
