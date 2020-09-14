@@ -754,8 +754,11 @@ class block extends control
     {
         $this->app->loadLang('project');
         $this->app->loadLang('task');
+        $count   = isset($this->params->count)   ? $this->params->count   : 15;
+        $type    = isset($this->params->type)    ? $this->params->type    : 'all';
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'all', $this->params->orderBy, $this->params->count);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', $type, $orderBy, $count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -1399,11 +1402,10 @@ class block extends control
         if(!is_numeric($productID)) $productID = key($products);
 
         $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
-
-        $this->view->productID  = $productID;
-        $this->view->roadMapID  = $roadMapID;
-        $this->view->products   = $products;
-        $this->view->sync       = 1;
+        $this->view->productID = $productID;
+        $this->view->roadMapID = $roadMapID;
+        $this->view->products  = $products;
+        $this->view->sync      = 1;
 
         if($_POST)
         {
@@ -1740,11 +1742,12 @@ class block extends control
     {
         $this->loadModel('project');
 
-        $count   = isset($this->params->count) ? (int)$this->params->count : 15;
+        $count   = isset($this->params->count) ? $this->params->count : 15;
+        $status  = isset($this->params->type) ? $this->params->type : 'doing';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', 'doing', $orderBy, $count);
+        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', $status, $orderBy, $count);
     }
 
     /**

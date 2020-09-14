@@ -846,9 +846,7 @@ class blockModel extends model
      */
     public function getScrumOverviewParams($module = '')
     {
-        $params = $this->appendCountParams();
-
-        return json_encode($params);
+        return false;
     }
 
     /**
@@ -860,9 +858,7 @@ class blockModel extends model
      */
     public function getScrumRoadMapParams($module = '')
     {
-        $params = $this->appendCountParams();
-
-        return json_encode($params);
+        return false;
     }
 
     /**
@@ -903,9 +899,7 @@ class blockModel extends model
      */
     public function getSprintParams($module = '')
     {
-        $params = $this->appendCountParams();
-
-        return json_encode($params);
+        return false;
     }
 
     /**
