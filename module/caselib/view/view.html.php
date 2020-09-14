@@ -26,26 +26,28 @@
   </div>
 </div>
 <div id='mainContent'>
-  <div class='cell'>
-    <div class='detail'>
-      <div class='detail-title'><?php echo $lang->caselib->legendDesc;?></div>
-      <div class='detail-content article-content'><?php echo $lib->desc;?></div>
+  <div class="main-col">
+    <div class='cell'>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->caselib->legendDesc;?></div>
+        <div class='detail-content article-content'><?php echo $lib->desc;?></div>
+      </div>
+      <?php include '../../common/view/action.html.php';?>
     </div>
-    <?php include '../../common/view/action.html.php';?>
-  </div>
-</div>
-<div id="mainActions" class='main-actions'>
-  <nav class="container"></nav>
-  <div class="btn-toolbar">
-    <?php
-    common::printBack($browseLink);
-    if(!$lib->deleted)
-    {
-        echo "<div class='divider'></div>";
-        common::printIcon('caselib', 'edit',   "libID=$lib->id");
-        common::printIcon('caselib', 'delete', "libID=$lib->id", '', 'button', 'trash', 'hiddenwin');
-    }
-    ?>
+    <div class='main-actions'>
+      <nav class="container"></nav>
+      <div class="btn-toolbar">
+        <?php
+        common::printBack($browseLink);
+        if(!$lib->deleted)
+        {
+            echo "<div class='divider'></div>";
+            common::printIcon('caselib', 'edit',   "libID=$lib->id");
+            common::printIcon('caselib', 'delete', "libID=$lib->id", '', 'button', 'trash', 'hiddenwin');
+        }
+        ?>
+      </div>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
