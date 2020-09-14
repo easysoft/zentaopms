@@ -125,7 +125,7 @@ fields:
   - field: name
     note: "项目名称"
     range: 1-10000
-    prefix: "这是一个项目名称"
+    prefix: "项目"
     postfix: ""
     loop: 0
     format: ""

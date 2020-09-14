@@ -18,14 +18,6 @@ No set yet ZDATA:
     zt_flow_reviewlist.yaml
     zt_flow_workloadbudget.yaml
     zt_host.yaml
-    zt_im_chatuser.yaml
-    zt_im_chat.yaml
-    zt_im_client.yaml
-    zt_im_conferenceaction.yaml
-    zt_im_conference.yaml
-    zt_im_messagestatus.yaml
-    zt_im_message.yaml
-    zt_im_queue.yaml
     zt_leave.yaml
     zt_lieu.yaml
     zt_measqueue.yaml
