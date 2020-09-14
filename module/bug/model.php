@@ -1182,9 +1182,9 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
         $openedBuilds = $this->post->openedBuild;
-        foreach($openedBuilds as $openedBuild)
+        if($openedBuilds)
         {
-            if(is_numeric($openedBuild)) $this->loadModel('build')->unlinkBug($openedBuild, $bugID);
+            foreach($openedBuilds as $openedBuild) $this->loadModel('build')->unlinkBug($openedBuild, $bugID);
         }
 
         $bug->activatedCount += 1;
