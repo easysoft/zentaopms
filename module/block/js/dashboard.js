@@ -221,6 +221,9 @@ function hiddenBlock(index)
 
 /**
  * Block initialization.
+ *
+ * @access public
+ * @return void
  */
 $(function()
 {
@@ -263,7 +266,7 @@ $(function()
 });
 
 /**
- * reload roadmap.
+ * Reload roadmap.
  *
  * @param  int    productID
  * @param  int    roadMapID
