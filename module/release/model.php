@@ -167,13 +167,13 @@ class releaseModel extends model
             }
         }
 
-        if($release->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('branch');
+        if($release->build) $release->branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('branch');
         
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$release->product} AND branch = $branch AND deleted = '0'");
+            ->check('name', 'unique', "product = {$release->product} AND branch = {$release->branch} AND deleted = '0'");
 
         if(dao::isError())
         {
