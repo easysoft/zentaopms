@@ -21,7 +21,7 @@ $config->testcase->exportFields = '
     id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, real, keywords,
     pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunResult, openedBy, openedDate,
-    lastEditedBy, lastEditedDate, version, linkCase';
+    lastEditedBy, lastEditedDate, version, linkCase, files';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords,review';
