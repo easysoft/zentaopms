@@ -556,7 +556,7 @@ class commonModel extends model
         $currentMethod = $app->rawMethod;
 
         /* Set main menu by group. */
-        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
+        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : $moduleName;
         self::setMainMenuByGroup($group, $moduleName, $methodName);
 
         /* Print all main menus. */
@@ -2156,6 +2156,10 @@ EOD;
         {
             $lang->menu      = $lang->admin->menu;
             $lang->menuOrder = $lang->admin->menuOrder;
+        }
+        if($group == 'programset')     
+        {
+            $lang->menu = $lang->programset->menu;
         }
         if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
     }

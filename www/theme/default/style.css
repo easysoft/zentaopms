@@ -44,3 +44,5 @@ a.showMoreImage:hover {opacity: 1;}
 .color-darkblue:hover{background:rgb(0,0,139)}
 .color-darkblue:focus{background:rgb(0,0,139)}
 .margin-l-50px{margin-left:50px;}
+
+#menu{width: 96px}
