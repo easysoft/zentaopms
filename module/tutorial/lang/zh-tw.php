@@ -38,30 +38,46 @@ $lang->tutorial->tasks['createAccount']         = array('title' => '創建帳號
 $lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => '添加用戶');
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>在系統創建一個新的用戶帳號：</p><ul><li data-target='nav'>打開 <span class='task-nav'>組織 <i class='icon icon-angle-right'></i> 用戶 <i class='icon icon-angle-right'></i> 添加用戶</span> 頁面；</li><li data-target='form'>在添加用戶表單中填寫新用戶信息；</li><li data-target='submit'>保存用戶信息。</li></ul>";
 
-$lang->tutorial->tasks['createProduct']         = array('title' => '創建' . $lang->productCommon);
-$lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-product-btn', 'targetPageName' => '添加' . $lang->productCommon);
-$lang->tutorial->tasks['createProduct']['desc'] = "<p>在系統創建一個新的{$lang->productCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> 添加{$lang->productCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->productCommon}信息；</li><li data-target='submit'>保存{$lang->productCommon}信息。</li></ul>";
+global $config;
+if($config->global->flow == 'full' or $config->global->flow != 'onlyTask')
+{
+    $lang->tutorial->tasks['createProduct']         = array('title' => '創建' . $lang->productCommon);
+    $lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-product-btn', 'targetPageName' => '添加' . $lang->productCommon);
+    $lang->tutorial->tasks['createProduct']['desc'] = "<p>在系統創建一個新的{$lang->productCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> 添加{$lang->productCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->productCommon}信息；</li><li data-target='submit'>保存{$lang->productCommon}信息。</li></ul>";
+}
 
-$lang->tutorial->tasks['createStory']         = array('title' => "創建{$lang->storyCommon}");
-$lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'story', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->storyCommon}");
-$lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的{$lang->storyCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 添加{$lang->storyCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->storyCommon}信息；</li><li data-target='submit'>保存{$lang->storyCommon}信息。</li></ul>";
+if($config->global->flow == 'full' or $config->global->flow == 'onlyStory')
+{
+    $lang->tutorial->tasks['createStory']         = array('title' => "創建{$lang->storyCommon}");
+    $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'story', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->storyCommon}");
+    $lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的{$lang->storyCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 添加{$lang->storyCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->storyCommon}信息；</li><li data-target='submit'>保存{$lang->storyCommon}信息。</li></ul>";
+}
 
-$lang->tutorial->tasks['createProject']         = array('title' => '創建' . $lang->projectCommon);
-$lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => '添加' . $lang->projectCommon);
-$lang->tutorial->tasks['createProject']['desc'] = "<p>在系統創建一個新的{$lang->projectCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 添加{$lang->projectCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->projectCommon}信息；</li><li data-target='submit'>保存{$lang->projectCommon}信息。</li></ul>";
+if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
+{
+    $lang->tutorial->tasks['createProject']         = array('title' => '創建' . $lang->projectCommon);
+    $lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => '添加' . $lang->projectCommon);
+    $lang->tutorial->tasks['createProject']['desc'] = "<p>在系統創建一個新的{$lang->projectCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 添加{$lang->projectCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->projectCommon}信息；</li><li data-target='submit'>保存{$lang->projectCommon}信息。</li></ul>";
 
-$lang->tutorial->tasks['manageTeam']         = array('title' => '管理團隊');
-$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '團隊管理');
-$lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}團隊成員：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 團隊 <i class='icon icon-angle-right'></i> 團隊管理</span> 頁面；</li><li data-target='form'>選擇要加入團隊的成員；</li><li data-target='submit'>保存團隊成員信息。</li></ul>";
+    $lang->tutorial->tasks['manageTeam']         = array('title' => '管理團隊');
+    $lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '團隊管理');
+    $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}團隊成員：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 團隊 <i class='icon icon-angle-right'></i> 團隊管理</span> 頁面；</li><li data-target='form'>選擇要加入團隊的成員；</li><li data-target='submit'>保存團隊成員信息。</li></ul>";
 
-$lang->tutorial->tasks['linkStory']         = array('title' => "關聯{$lang->storyCommon}");
-$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->storyCommon}");
-$lang->tutorial->tasks['linkStory']['desc'] = "<p>將{$lang->storyCommon}關聯到{$lang->projectCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->storyCommon}</span> 頁面；</li><li data-target='form'>在{$lang->storyCommon}列表中勾選要關聯的{$lang->storyCommon}；</li><li data-target='submit'>保存關聯的{$lang->storyCommon}信息。</li></ul>";
+    if($config->global->flow == 'full')
+    {
+        $lang->tutorial->tasks['linkStory']         = array('title' => "關聯{$lang->storyCommon}");
+        $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->storyCommon}");
+        $lang->tutorial->tasks['linkStory']['desc'] = "<p>將{$lang->storyCommon}關聯到{$lang->projectCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->storyCommon}</span> 頁面；</li><li data-target='form'>在{$lang->storyCommon}列表中勾選要關聯的{$lang->storyCommon}；</li><li data-target='submit'>保存關聯的{$lang->storyCommon}信息。</li></ul>";
+    }
 
-$lang->tutorial->tasks['createTask']         = array('title' => '分解任務');
-$lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'project', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任務');
-$lang->tutorial->tasks['createTask']['desc'] = "<p>將{$lang->projectCommon}{$lang->storyCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
+    $lang->tutorial->tasks['createTask']         = array('title' => '分解任務');
+    $lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'project', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任務');
+    $lang->tutorial->tasks['createTask']['desc'] = "<p>將{$lang->projectCommon}{$lang->storyCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
+}
 
-$lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
-$lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
-$lang->tutorial->tasks['createBug']['desc'] = "<p>在系統中提交一個Bug：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 測試 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表單中填寫Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
+if($config->global->flow == 'full' or $config->global->flow == 'onlyTest')
+{
+    $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
+    $lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
+    $lang->tutorial->tasks['createBug']['desc'] = "<p>在系統中提交一個Bug：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 測試 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表單中填寫Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
+}

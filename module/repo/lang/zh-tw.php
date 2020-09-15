@@ -147,6 +147,7 @@ $lang->repo->error->version       = "https和svn協議需要1.8及以上版本�
 $lang->repo->error->path          = '版本庫地址直接填寫檔案路徑，如：/home/test。';
 $lang->repo->error->cmd           = '客戶端錯誤！';
 $lang->repo->error->diff          = '必須選擇兩個版本';
+$lang->repo->error->safe          = '因為安全原因，需要檢測客戶端版本，請將版本號寫入檔案 %s <br /> 可以執行命令：%s';
 $lang->repo->error->product       = "請選擇{$lang->productCommon}！";
 $lang->repo->error->commentText   = '請填寫評審內容';
 $lang->repo->error->comment       = '請填寫內容';

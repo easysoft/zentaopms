@@ -147,6 +147,7 @@ $lang->repo->error->version       = 'Phiên bản 1.8+ of https and svn protocol
 $lang->repo->error->path          = 'Repo address is the file path, ví dụ:  /home/test.';
 $lang->repo->error->cmd           = 'Client Error!';
 $lang->repo->error->diff          = 'Two versions phải là selected.';
+$lang->repo->error->safe          = 'For security reasons, the client version needs to be detected. Please write the version to the file %s. <br /> Execute command: %s';
 $lang->repo->error->product       = "Please select {$lang->productCommon}!";
 $lang->repo->error->commentText   = 'Vui lòng nhập nội dung để duyệt!';
 $lang->repo->error->comment       = 'Vui lòng nhập content!';

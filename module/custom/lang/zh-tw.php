@@ -135,7 +135,7 @@ $lang->custom->productProject->notice = '請根據實際情況選擇適合自己
 
 $lang->custom->workingList['full']      = '完整研發管理工具';
 $lang->custom->workingList['onlyTest']  = '測試管理工具';
-$lang->custom->workingList['onlyStory'] = "{$lang->storyCommon}管理工具";
+$lang->custom->workingList['onlyStory'] = "需求管理工具";
 $lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';

@@ -335,7 +335,7 @@ $lang->bug->report->bugsPerResolution->graph     = new stdclass();
 $lang->bug->report->bugsPerStatus->graph         = new stdclass();
 $lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
 $lang->bug->report->bugsPerType->graph           = new stdclass();
-$lang->bug->report->bugsPerPri->graph           = new stdclass();
+$lang->bug->report->bugsPerPri->graph            = new stdclass();
 $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
@@ -370,7 +370,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong> ' .$lang->storyCommon. '</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong> ' . $lang->storyCommon . '</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');

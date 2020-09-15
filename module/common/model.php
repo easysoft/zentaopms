@@ -1431,6 +1431,7 @@ EOD;
         $statusFile = $this->checkSafeFile();
         if($statusFile)
         {
+            $this->app->loadLang('upgrade');
             $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
             $cmd = sprintf($cmd, $statusFile);
 

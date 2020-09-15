@@ -32,8 +32,8 @@ $lang->extension->agreeLicense     = '我同意該授權';
 $lang->extension->structure       = '目錄結構';
 $lang->extension->structureAction = '目錄結構';
 $lang->extension->installed       = '已安裝';
-$lang->extension->deactivated  = '被禁用';
-$lang->extension->available    = '已下載';
+$lang->extension->deactivated     = '被禁用';
+$lang->extension->available       = '已下載';
 
 $lang->extension->name        = '插件名稱';
 $lang->extension->code        = '代號';
