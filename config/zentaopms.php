@@ -46,9 +46,6 @@ $config->productCommonList['fr'][1] = 'Projet';
 $config->productCommonList['vi'][0] = 'Sản phẩm';
 $config->productCommonList['vi'][1] = 'Dự án';
 
-$config->productCommonList['ja'][0] = 'プロダクト';
-$config->productCommonList['ja'][1] = 'プロジェクト';
-
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '项目';
 $config->projectCommonList['zh-cn'][1] = '迭代';
@@ -74,10 +71,6 @@ $config->projectCommonList['vi'][0] = 'Dự án';
 $config->projectCommonList['vi'][1] = 'Lặp lại';
 $config->projectCommonList['vi'][2] = 'Sprint';
 
-$config->projectCommonList['ja'][0] = 'プロジェクト';
-$config->projectCommonList['ja'][1] = 'スプリント';
-$config->projectCommonList['ja'][2] = '冲刺';
-
 /* Story common list. */
 $config->storyCommonList['zh-cn'][0] = '需求';
 $config->storyCommonList['zh-cn'][1] = '故事';
@@ -96,9 +89,6 @@ $config->storyCommonList['fr'][1] = 'Story';
 
 $config->storyCommonList['vi'][0] = 'Câu chuyện';
 $config->storyCommonList['vi'][1] = 'Câu chuyện';
-
-$config->storyCommonList['ja'][0] = '要件';
-$config->storyCommonList['ja'][1] = '要件';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
@@ -141,8 +131,6 @@ $config->charsets['fr']['utf-8']    = 'UTF-8';
 $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
-$config->charsets['ja']['utf-8']    = 'UTF-8';
-$config->charsets['ja']['gbk']      = 'GBK';
 
 /* IP white list settings.*/
 $config->ipWhiteList = '*';
