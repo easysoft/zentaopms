@@ -411,9 +411,11 @@ class taskModel extends model
         }
 
         $newTask = new stdClass();
-        $newTask->estimate = $estimate;
-        $newTask->consumed = $consumed;
-        $newTask->left     = $left;
+        $newTask->estimate       = $estimate;
+        $newTask->consumed       = $consumed;
+        $newTask->left           = $left;
+        $newTask->lastEditedBy   = $this->app->user->account;
+        $newTask->lastEditedDate = helper::now();
 
         $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
         return !dao::isError();
