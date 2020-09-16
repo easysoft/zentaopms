@@ -1239,6 +1239,7 @@ class storyModel extends model
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->parent < 0) continue;
+            if($oldStory->status == 'closed') continue;
 
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
