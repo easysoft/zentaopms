@@ -2064,15 +2064,13 @@ class project extends control
         {
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
-        foreach($allStories as $id => $story)
-        {
-            if(isset($prjStories[$story->id])) unset($allStories[$id]);
-        }
-        $prjStories = $this->story->getProjectStoryPairs($projectID);
 
+        $prjStories = $this->story->getProjectStoryPairs($projectID);
         foreach($allStories as $id => $story)
         {
             if(isset($prjStories[$story->id])) unset($allStories[$id]);
+
+            if($story->parent < 0) unset($allStories[$id]);
         }
 
         /* Pager. */
