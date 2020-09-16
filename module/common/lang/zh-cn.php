@@ -124,7 +124,7 @@ $lang->mainNav = new stdclass();
 $lang->mainNav->my         = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program    = '<i class="icon icon-menu-project"></i> 项目集|program|pgmindex|';
 $lang->mainNav->product    = '<i class="icon icon-menu-project"></i> 产品|product|productlist|';
-$lang->mainNav->project    = '<i class="icon icon-menu-doc"></i> 项目|project|projectlist|';
+$lang->mainNav->project    = '<i class="icon icon-menu-doc"></i> 项目|program|prjbrowse|';
 $lang->mainNav->system     = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
 $lang->mainNav->admin      = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 

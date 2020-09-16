@@ -731,6 +731,7 @@ class program extends control
      */
     public function ajaxGetEnterLink($programID = 0)
     {
+        $this->lang->navGroup->program = 'project';
         $program         = $this->project->getByID($programID);
         $programProjects = $this->project->getPairs('', $this->session->PRJ);
         $programProject  = key($programProjects);
@@ -745,5 +746,34 @@ class program extends control
         }
 
         die($link);
+    }
+
+    /**
+     * Projects list.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PRJBrowse($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->lang->navGroup->program = 'project';
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->projectStats = array();
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->stack        = '';
+        $this->display();
     }
 }
