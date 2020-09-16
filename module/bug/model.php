@@ -2357,7 +2357,6 @@ class bugModel extends model
             $bugQuery = $bugQuery . ' AND `project` ' . helper::dbIN($projects);
         }
 
-
         $allBranch = "`branch` = 'all'";
         if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
