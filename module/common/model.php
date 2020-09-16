@@ -2200,7 +2200,7 @@ EOD;
     }
 
     /**
-     * Get program main menu by template.
+     * Get program main menu by model.
      *
      * @param  string $moduleName
      * @static
@@ -2213,13 +2213,13 @@ EOD;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
 
-        if($program->template == 'scrum')
+        if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
             return $lang->menu;
         }
 
-        if($program->template == 'waterfall')
+        if($program->model == 'waterfall')
         {
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
@@ -2231,7 +2231,7 @@ EOD;
     }
 
     /**
-     * Get program module menu by template.
+     * Get program module menu by model.
      *
      * @param  varchar $moduleName
      * @static
@@ -2243,7 +2243,7 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
-        if($program->template == 'waterfall') 
+        if($program->model == 'waterfall') 
         {
             $lang->product->menu     = $lang->waterfallproduct->menu;
             $lang->productplan->menu = $lang->waterfallproduct->menu;

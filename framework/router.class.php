@@ -150,7 +150,7 @@ class router extends baseRouter
             $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
             $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
-            if($this->session->program) $template = $this->dbh->query('SELECT template FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
+            if($this->session->program) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
 
             foreach($commonSettings as $setting)
             {
@@ -161,7 +161,7 @@ class router extends baseRouter
 
                 if($setting->key == 'URSRName')
                 {
-                    if(isset($template->template) && $setting->section == $template->template)
+                    if(isset($model->model) && $setting->section == $model->model)
                     {
                         $URSRName = json_decode($setting->value, true);
                         if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
@@ -170,7 +170,7 @@ class router extends baseRouter
                 }
             }
 
-            if(isset($template->template) && $template->template == 'waterfall')
+            if(isset($model->model) && $model->model == 'waterfall')
             {
                 $projectIndex = 2;
                 $planIndex    = 1;
