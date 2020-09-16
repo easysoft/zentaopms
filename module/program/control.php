@@ -10,6 +10,18 @@ class program extends control
     }
 
     /**
+     * Program home page.
+     *
+     * @access public
+     * @return void
+     */
+    public function PGMIndex()
+    {
+        $this->lang->navGroup->program = 'program';
+        $this->display();
+    }
+
+    /**
      * Program index view.
      *
      * @param  int    $programID
@@ -30,7 +42,7 @@ class program extends control
     }
 
     /**
-     * Program list.
+     * Project list.
      *
      * @param  varchar $status
      * @param  varchar $orderBy
@@ -40,8 +52,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function PGMBrowse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
+        $this->lang->navGroup->program = 'program';
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
         $this->app->session->set('programList', $this->app->getURI(true));

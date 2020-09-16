@@ -525,7 +525,7 @@ class commonModel extends model
         {
             $active = '';
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($moduleName == $group) $active = 'active';
+            if($moduleName != 'program' && $moduleName == $group) $active = 'active';
             if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
             if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
             if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
@@ -548,7 +548,7 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* If program, return.*/
-        if($moduleName == 'program' and $methodName != 'index') return;
+        if($moduleName == 'program' and strpos($methodName, 'prj') !== false) return;
 
         /* Set the main main menu. */
         $mainMenu      = $moduleName;
@@ -2157,11 +2157,17 @@ EOD;
             $lang->menu      = $lang->admin->menu;
             $lang->menuOrder = $lang->admin->menuOrder;
         }
-        if($group == 'programset')     
+        if($group == 'program') 
         {
-            $lang->menu = $lang->programset->menu;
+            if($moduleName == 'program')
+            {
+                $lang->menu = $lang->program->menu;
+            }
+            else
+            {
+                $lang->menu = self::getProgramMainMenu($moduleName);
+            }
         }
-        if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
     }
 
     /**
