@@ -1238,6 +1238,7 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->parent < 0) continue;
 
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
