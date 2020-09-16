@@ -22,7 +22,7 @@ class budget extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        $this->view->program = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->program = $this->loadModel('project')->getByID($this->session->PRJ);
     }
 
     /**
@@ -42,11 +42,11 @@ class budget extends control
 
         $this->view->title      = $this->lang->budget->common . $this->lang->budget->list;
         $this->view->position[] = $this->lang->budget->common . $this->lang->budget->list;
-        $this->view->budgets    = $this->budget->getList($this->session->program, $orderBy, $pager);
+        $this->view->budgets    = $this->budget->getList($this->session->PRJ, $orderBy, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
+        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
@@ -77,10 +77,10 @@ class budget extends control
         $this->view->position[]       = $this->lang->budget->common . $this->lang->budget->summary;
         $this->view->subjectStructure = $getSubjectStructure;
         $this->view->isChildren       = $isChildren;
-        $this->view->subjects         = $this->budget->getSubjects($this->session->program);
-        $this->view->stages           = $this->budget->getStages($this->session->program);
-        $this->view->stagePairs       = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
-        $this->view->summary          = $this->budget->getSummary($this->session->program);
+        $this->view->subjects         = $this->budget->getSubjects($this->session->PRJ);
+        $this->view->stages           = $this->budget->getStages($this->session->PRJ);
+        $this->view->stagePairs       = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->summary          = $this->budget->getSummary($this->session->PRJ);
         $this->view->modules          = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
         $this->display();
     }
@@ -115,7 +115,7 @@ class budget extends control
         $this->view->title      = $this->lang->budget->create . $this->lang->budget->common;
         $this->view->position[] = $this->lang->budget->create . $this->lang->budget->common;
         $this->view->subjects   = array(0 => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
+        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->display();
     }
 
@@ -153,7 +153,7 @@ class budget extends control
         $this->view->title      = $this->lang->budget->edit . $this->lang->budget->common;
         $this->view->position[] = $this->lang->budget->edit . $this->lang->budget->common;
         $this->view->subjects   = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
+        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->view->budget     = $this->budget->getByID($budgetID);
         $this->display();
     }
@@ -167,9 +167,9 @@ class budget extends control
      */
     public function view($budgetID)
     {
-        $this->view->stages     = $this->budget->getStages($this->session->program);
+        $this->view->stages     = $this->budget->getStages($this->session->PRJ);
         $this->view->subjects   = $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
+        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->view->budget     = $this->budget->getByID($budgetID);
         $this->view->actions    = $this->loadModel('action')->getList('budget', $budgetID);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -227,7 +227,7 @@ class budget extends control
         $this->view->title      = $this->lang->budget->batchCreate . $this->lang->budget->common;
         $this->view->position[] = $this->lang->budget->batchCreate . $this->lang->budget->common;
         $this->view->subjects   = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->program);
+        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->display();
     }
 }

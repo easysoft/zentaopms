@@ -31,7 +31,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->program);
+        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
 
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
@@ -124,7 +124,7 @@ class bug extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getPairs('empty|withdelete', $this->session->program);
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete', $this->session->PRJ);
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
@@ -590,7 +590,7 @@ class bug extends control
         {
             session_write_close();
             $this->lang->set('menugroup.bug', 'repo');
-            $repos = $this->loadModel('repo')->getRepoPairs($this->session->program);
+            $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu      = $this->lang->repo->menu;
         }
@@ -1516,8 +1516,8 @@ class bug extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode', $this->session->program);
-            $projects = $this->loadModel('project')->getPairs('all|nocode', $this->session->program);
+            $products = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
+            $projects = $this->loadModel('project')->getPairs('all|nocode', $this->session->PRJ);
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();

@@ -23,7 +23,7 @@ class project extends control
         parent::__construct($moduleName, $methodName);
         if($this->methodName != 'computeburn')
         {
-            $this->projects = $this->project->getPairs('nocode', $this->session->program);
+            $this->projects = $this->project->getPairs('nocode', $this->session->PRJ);
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() == 'mhtml') $this->locate($this->createLink('project', 'index'));
         }
@@ -506,7 +506,7 @@ class project extends control
         $this->app->session->set('projectList', $uri);
 
         $this->loadModel('bug');
-        $projects = $this->project->getPairs('nocode', $this->session->program);
+        $projects = $this->project->getPairs('nocode', $this->session->PRJ);
         $this->project->setMenu($projects, $projectID);
 
         /* Load pager. */
@@ -925,7 +925,7 @@ class project extends control
         $this->view->orderBy     = $orderBy;
         $this->view->tasks       = $productTasks;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products    = $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->products    = $this->loadModel('product')->getPairs('', $this->session->PRJ);
 
         $this->display();
     }
@@ -1149,7 +1149,7 @@ class project extends control
         $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->program);
+        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->PRJ);
         $this->view->acl           = $acl;
         $this->view->plan          = $plan;
         $this->view->name          = $name;
@@ -1222,7 +1222,7 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->edit;
 
-        $allProducts    = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->program);
+        $allProducts    = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->PRJ);
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedBranches = array();
         foreach($linkedProducts as $product)
@@ -1881,7 +1881,7 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->manageProducts;
 
-        $allProducts     = $this->product->getPairs('noclosed|nocode', $this->session->program);
+        $allProducts     = $this->product->getPairs('noclosed|nocode', $this->session->PRJ);
         $linkedProducts  = $this->project->getProducts($project->id);
         $linkedBranches  = array();
         // Merge allProducts and linkedProducts for closed product.
@@ -2387,7 +2387,7 @@ class project extends control
         $this->view->title         = $this->lang->project->allProject;
         $this->view->position[]    = $this->lang->project->allProject;
         $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
         $this->view->pager         = $pager;
@@ -2586,7 +2586,7 @@ class project extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->projects   = $this->loadModel('project')->getPairs('nocode', $this->session->program);
+        $this->view->projects   = $this->loadModel('project')->getPairs('nocode', $this->session->PRJ);
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;

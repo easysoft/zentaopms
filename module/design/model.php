@@ -25,7 +25,7 @@ class designModel extends model
             ->stripTags('desc', $this->config->allowedTags)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->add('program', $this->session->program)
+            ->add('program', $this->session->PRJ)
             ->add('version', 1)
             ->remove('files,labels')
             ->get();
@@ -77,7 +77,7 @@ class designModel extends model
             $design->type        = $data->type[$i];
             $design->name        = $name;
             $design->product     = $productID;
-            $design->program     = $this->session->program;
+            $design->program     = $this->session->PRJ;
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
@@ -177,7 +177,7 @@ class designModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
-            $data->program  = $this->session->program;
+            $data->program  = $this->session->PRJ;
             $data->product  = $this->session->product;
             $data->AType    = 'design';
             $data->AID      = $designID;
@@ -393,7 +393,7 @@ class designModel extends model
      */
     public function setProductMenu($productID = 0)
     {
-        $programID = $this->session->program;
+        $programID = $this->session->PRJ;
         $program   = $this->loadModel('project')->getByID($programID);
         $products  = $this->loadModel('product')->getPairs('', $programID);
         if(empty($products))  die(js::locate(helper::createLink('product', 'create')));

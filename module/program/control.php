@@ -19,7 +19,7 @@ class program extends control
     public function index($programID = 0)
     {
         $this->lang->navGroup->program = 'program';
-        if(!$programID) $programID = $this->session->program;
+        if(!$programID) $programID = $this->session->PRJ;
         $this->session->set('program', $programID);
 
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
@@ -171,7 +171,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $url = $this->session->programList ? $this->session->programList : inlink('browse');
+            $url = $this->session->PRJList ? $this->session->PRJList : inlink('browse');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
@@ -719,7 +719,7 @@ class program extends control
     public function ajaxGetEnterLink($programID = 0)
     {
         $program         = $this->project->getByID($programID);
-        $programProjects = $this->project->getPairs('', $this->session->program);
+        $programProjects = $this->project->getPairs('', $this->session->PRJ);
         $programProject  = key($programProjects);
 
         if($program->template == 'waterfall')

@@ -172,7 +172,7 @@ class storyModel extends model
             ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
-            ->setDefault('program', $this->session->program)
+            ->setDefault('program', $this->session->PRJ)
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
@@ -334,7 +334,7 @@ class storyModel extends model
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
-            $story->program    = $this->session->program;
+            $story->program    = $this->session->PRJ;
             $story->openedBy   = $this->app->user->account;
             $story->openedDate = $now;
             $story->version    = 1;
@@ -1984,7 +1984,7 @@ class storyModel extends model
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs('', $this->session->program);
+            $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
         }
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -2577,7 +2577,7 @@ class storyModel extends model
             ->where($this->reportCondition())
             ->groupBy('product')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $products = $this->loadModel('product')->getPairs('', $this->session->program);
+        $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
         foreach($datas as $productID => $data) $data->name = isset($products[$productID]) ? $products[$productID] : $this->lang->report->undefined;
         return $datas;
     }
@@ -3476,7 +3476,7 @@ class storyModel extends model
         {
             $requirement = $this->getByID($id);
             $data = new stdclass();
-            $data->program  = $this->session->program;
+            $data->program  = $this->session->PRJ;
             $data->product  = $this->session->product;
             $data->AType    = 'requirement';
             $data->BType    = 'story';

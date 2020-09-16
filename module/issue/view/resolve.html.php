@@ -63,7 +63,7 @@ echo js::set('resolveLink', $this->createLink('issue', 'ajaxGetResolveForm'));
           </td>
         </tr>
       </table>
-      <?php echo html::hidden('program', $this->session->program);?>
+      <?php echo html::hidden('program', $this->session->PRJ);?>
     </form>
   </div>
 </div>

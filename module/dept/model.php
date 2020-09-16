@@ -240,9 +240,9 @@ class deptModel extends model
      * @access public
      * @return string 
      */
-    public function createManagePgmAdminLink($dept, $groupID)
+    public function createManagePRJadminLink($dept, $groupID)
     {
-        return html::a(helper::createLink('group', 'managePgmAdmin', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return html::a(helper::createLink('group', 'managePRJadmin', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
     }
 
     /**

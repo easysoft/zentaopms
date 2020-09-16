@@ -108,7 +108,7 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
-            ->setDefault('program', $this->session->program)
+            ->setDefault('program', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
@@ -269,7 +269,7 @@ class bugModel extends model
                 }
             }
 
-            $bug->program = $this->session->program;
+            $bug->program = $this->session->PRJ;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -1698,7 +1698,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('project')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $projects = $this->loadModel('project')->getPairs('', $this->session->program);
+        $projects = $this->loadModel('project')->getPairs('', $this->session->PRJ);
 
         $maxLength = 12;
         if(common::checkNotCN()) $maxLength = 22;

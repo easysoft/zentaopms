@@ -43,7 +43,7 @@ class issue extends control
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
-        $this->view->issueList  = $this->issue->getList($this->session->program, $browseType, $queryID, $orderBy, $pager);
+        $this->view->issueList  = $this->issue->getList($this->session->PRJ, $browseType, $queryID, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
 
         $this->display();
@@ -358,7 +358,7 @@ class issue extends control
             $this->loadModel('task');
             $this->loadModel('tree');
             $this->loadModel('project')->getLimitedProject();
-            $projects = $this->project->getPairs('', $this->session->program);
+            $projects = $this->project->getPairs('', $this->session->PRJ);
 
             $projectID = $this->session->project;
             $projectID = isset($projects[$projectID]) ? $projectID : key($projects);
@@ -377,7 +377,7 @@ class issue extends control
 
         if(in_array($data->mode, array('tostory', 'tobug')))
         {
-            $products  = $this->loadModel('product')->getPairs('', $this->session->program);
+            $products  = $this->loadModel('product')->getPairs('', $this->session->PRJ);
             $productID = $this->session->product;
             $productID = isset($products[$productID]) ? $productID : key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');

@@ -114,7 +114,7 @@ class programplan extends control
             $this->programplan->create($programID, $planID, $this->productID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locate = $this->session->programplanList ? $this->session->programplanList : $this->createLink('programplan', 'browse', "program=$programID");
+            $locate = $this->session->PRJplanList ? $this->session->PRJplanList : $this->createLink('programplan', 'browse', "program=$programID");
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
@@ -167,7 +167,7 @@ class programplan extends control
         $this->app->loadLang('stage');
         $this->view->title        = $this->lang->programplan->edit;
         $this->view->position[]   = $this->lang->programplan->edit;
-        $this->view->parentStage  = $this->programplan->getParentStageList($this->session->program, $planID, $plan->product);
+        $this->view->parentStage  = $this->programplan->getParentStageList($this->session->PRJ, $planID, $plan->product);
         $this->view->plan         = $plan;
         $this->view->isParent     = $this->programplan->isParent($planID);
         $this->view->isCreateTask = $this->programplan->isCreateTask($planID);

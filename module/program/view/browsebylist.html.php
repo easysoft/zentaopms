@@ -25,7 +25,7 @@
       <?php
       $trClass = '';
       $trAttrs = "data-id='$program->id' data-order='$program->order' data-parent='$program->parent'";
-      if($program->isCat)
+      if($program->type == 'program')
       {
           $trAttrs .= " data-nested='true'";
           if($program->parent == '0') $trClass .= ' is-top-level table-nest-child-hide';
@@ -34,11 +34,14 @@
 
       if($program->parent)
       {
-          if(!$program->isCat) $trClass .= ' is-nest-child';
+          if($program->type != 'program') $trClass .= ' is-nest-child';
           $trClass .= ' table-nest-hide';
           $trAttrs .= " data-nest-parent='$program->parent' data-nest-path='$program->path'";
       }
-      else if(!$program->isCat) $trClass .= ' no-nest';
+      elseif($program->type != 'program') 
+      {
+          $trClass .= ' no-nest';
+      }
       $trAttrs .= " class='$trClass'";
       ?>
       <tr <?php echo $trAttrs;?>>
@@ -48,7 +51,7 @@
         <td class='text-left'><?php echo $program->code;?></td>
         <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon<?php if($program->isCat) echo ' table-nest-toggle' ?>"></span>
-          <?php echo $program->isCat ? $program->name : html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
+          <?php echo $program->type == 'program' ? $program->name : html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>

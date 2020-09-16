@@ -15,10 +15,8 @@ class programModel extends model
     public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false, $mine = false)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('program')->eq(0)
-            ->andWhere('template')->ne('')
+            ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$includeCat)->andWhere('iscat')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF($this->cookie->mine or $mine)
@@ -40,8 +38,7 @@ class programModel extends model
     public function getPairs()
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
-            ->andWhere('program')->eq(0)
+            ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
@@ -54,12 +51,11 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function getPairsByTemplate($template)
+    public function getPairsByTemplate($model)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
-            ->andWhere('template')->eq($template)
-            ->andWhere('program')->eq(0)
+            ->where('type')->eq('program')
+            ->andWhere('model')->eq($model)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
@@ -80,9 +76,7 @@ class programModel extends model
     {
         $queryType = strtolower($queryType);
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
-            ->andWhere('template')->ne('')
-            ->andWhere('program')->eq(0)
+            ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
@@ -309,7 +303,7 @@ class programModel extends model
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                 ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('pgmadmin')
+                ->andWhere('t2.role')->eq('PRJadmin')
                 ->fetch();
             if(!empty($groupPriv))
             {
@@ -318,10 +312,10 @@ class programModel extends model
             }
             else
             {
-                $pgmAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+                $PRJadminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
                 $groupPriv  = new stdclass();
                 $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $pgmAdminID;
+                $groupPriv->group   = $PRJadminID;
                 $groupPriv->program = $programID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }

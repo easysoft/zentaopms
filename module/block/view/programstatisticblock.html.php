@@ -104,7 +104,7 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['program']) ? key($programs) : $this->session->program;?>
+        <?php $selected = empty($_SESSION['program']) ? key($programs) : $this->session->PRJ;?>
         <?php foreach($programs as $program):?>
         <li <?php if($program->id == $selected) echo "class='active' id='activeProject'";?> programID='<?php echo $program->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $program->id;?>" data-toggle="tab"><?php echo $program->name;?></a>

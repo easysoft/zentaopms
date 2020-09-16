@@ -30,7 +30,7 @@ class productplan extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
-        $this->product->setMenu($this->product->getPairs('', $this->session->program), $productID, $branch);
+        $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $productID, $branch);
     }
 
     /**
@@ -214,7 +214,7 @@ class productplan extends control
 
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($productID, $branch);
-        $products               = $this->product->getPairs('', $this->session->program);
+        $products               = $this->product->getPairs('', $this->session->PRJ);
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
@@ -264,7 +264,7 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getPairs('', $this->session->program);
+        $products = $this->product->getPairs('', $this->session->PRJ);
 
         $bugPager    = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $storyPager  = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
@@ -377,7 +377,7 @@ class productplan extends control
         $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getPairs('', $this->session->program);
+        $products = $this->product->getPairs('', $this->session->PRJ);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -515,7 +515,7 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products  = $this->product->getPairs('nocode', $this->session->program);
+        $products  = $this->product->getPairs('nocode', $this->session->PRJ);
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 

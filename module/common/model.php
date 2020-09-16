@@ -1618,7 +1618,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProgram)
             {
                 /* Check program priv. */
-                if(strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
+                if(strpos(",{$this->app->user->view->programs},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }

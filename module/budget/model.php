@@ -107,7 +107,7 @@ class budgetModel extends model
      */
     public function getSubjectStructure()
     {
-        $subjects  = $this->getSubjects($this->session->program);
+        $subjects  = $this->getSubjects($this->session->PRJ);
 
         $structure = array();
         foreach($subjects as $subjectID)
@@ -174,7 +174,7 @@ class budgetModel extends model
         $budget = fixer::input('post')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())
-            ->setDefault('program', $this->session->program)
+            ->setDefault('program', $this->session->PRJ)
             ->cleanFloat('amount')
             ->remove('uid')
             ->get();
@@ -204,7 +204,7 @@ class budgetModel extends model
             if(!$name) continue;
             $data = new stdclass();
             $data->name        = $name;
-            $data->program     = $this->session->program;
+            $data->program     = $this->session->PRJ;
             $data->stage       = $budgets->stage[$i];
             $data->subject     = $budgets->subject[$i];
             $data->amount      = (float)$budgets->amount[$i];

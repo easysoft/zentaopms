@@ -60,11 +60,11 @@ class baseHelper
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $programID = 0)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
-        $programID = $programID ? $programID : $app->session->program;
+        $PRJID = $PRJID ? $PRJID : $app->session->PRJ;
 
         if(strpos($moduleName, '.') !== false) 
         {
@@ -97,7 +97,7 @@ class baseHelper
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProgramParam($link, $programID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody);
         }
 
         /**
@@ -113,7 +113,7 @@ class baseHelper
             $link .= '.' . $viewType;
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProgramParam($link, $programID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody);
         }
 
         /**
@@ -125,7 +125,7 @@ class baseHelper
         {
             $link .= $config->default->method . '.' . $viewType; 
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProgramParam($link, $programID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody);
         }
 
         /**
@@ -137,7 +137,7 @@ class baseHelper
         {
             $link .= $moduleName . '/';
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProgramParam($link, $programID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody);
         }
 
         /**
@@ -147,28 +147,28 @@ class baseHelper
          */
         $link .= $moduleName . '.' . $viewType;
         $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processProgramParam($link, $programID, $onlyBody);
+        return self::processPRJParam($link, $PRJID, $onlyBody);
     }
 
     /**
-     *  处理program 参数。
-     *  Process the programID param in url.
+     *  处理PRJ 参数。
+     *  Process the PRJID param in url.
      * 
-     *  如果传参的时候设定了$programID，在生成链接的时候继续追加。
+     *  如果传参的时候设定了$PRJID，在生成链接的时候继续追加。
      *  If $progrmID in the url, append it to the link.
      *  
      *  @param  string  $link 
-     *  @param  int     $programID
+     *  @param  int     $PRJID
      *  @param  bool    $onlybody
      *  @static
      *  @access public
      *  @return string
      */
-    public static function processProgramParam($link, $programID = '', $onlybody = false)
+    public static function processPRJParam($link, $PRJID = '', $onlybody = false)
     {
         global $config;
-        if(!$programID) return $link;
-        $link .= strpos($link, '?') === false ? "?pgm=$programID" : "&pgm=$programID";
+        if(!$PRJID) return $link;
+        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
 
         return $link;
     }

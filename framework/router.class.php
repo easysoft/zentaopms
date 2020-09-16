@@ -150,7 +150,7 @@ class router extends baseRouter
             $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
             $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
-            if($this->session->program) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->program}")->fetch();
+            if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
             foreach($commonSettings as $setting)
             {

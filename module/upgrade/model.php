@@ -3851,7 +3851,7 @@ class upgradeModel extends model
      * @access public
      * @return int
      */
-    public function createProgram($productIdList = array(), $projectIdList = array(), $pgmAdmins = '')
+    public function createProgram($productIdList = array(), $projectIdList = array(), $PRJadmins = '')
     {
         $data    = fixer::input('post')->get();
         $program = new stdclass();
@@ -3892,18 +3892,18 @@ class upgradeModel extends model
         $programID = $this->dao->lastInsertId();
         $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
 
-        if($pgmAdmins)
+        if($PRJadmins)
         {
-            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
             if($groupID)
             {
-                foreach($pgmAdmins as $pgmAdmin)
+                foreach($PRJadmins as $PRJadmin)
                 {
-                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($pgmAdmin)->andWhere('`group`')->eq($groupID)->fetch();
+                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($PRJadmin)->andWhere('`group`')->eq($groupID)->fetch();
                     if(empty($userGroup))
                     {
                         $userGroup = new stdclass();
-                        $userGroup->account = $pgmAdmin;
+                        $userGroup->account = $PRJadmin;
                         $userGroup->group   = $groupID;
                         $userGroup->program = '';
                     }
@@ -4058,7 +4058,7 @@ class upgradeModel extends model
      */
     public function setDefaultPriv()
     {
-        $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('role')->ne('pgmadmin')->fetchPairs();
+        $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('role')->ne('PRJadmin')->fetchPairs();
         foreach($groups as $groupID)
         {
             $data = new stdclass();
@@ -4071,11 +4071,11 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
 
-        $pgmAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
+        $PRJadminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
         foreach($this->lang->resource->program as $method => $methodLang)
         {
             $data = new stdclass();
-            $data->group  = $pgmAdminGroupID;
+            $data->group  = $PRJadminGroupID;
             $data->module = 'program';
             $data->method = $method;
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();

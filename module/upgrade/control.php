@@ -192,10 +192,10 @@ class upgrade extends control
 
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    if(empty($_POST['pgmAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
+                    if(empty($_POST['PRJadmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJadmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->pgmAdmins);
+                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->PRJadmins);
                     if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else
@@ -237,10 +237,10 @@ class upgrade extends control
 
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    if(empty($_POST['pgmAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
+                    if(empty($_POST['PRJadmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJadmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->pgmAdmins);
+                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->PRJadmins);
                     if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else
@@ -264,10 +264,10 @@ class upgrade extends control
                 $linkedProjects = $this->post->projects;
                 if(isset($_POST['newProgram']) or !isset($_POST['programs']))
                 {
-                    if(empty($_POST['pgmAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->pgmAdmin)));
+                    if(empty($_POST['PRJadmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJadmin)));
 
                     /* Create Program. */
-                    $programID = $this->upgrade->createProgram(array(), $linkedProjects, $this->post->pgmAdmins);
+                    $programID = $this->upgrade->createProgram(array(), $linkedProjects, $this->post->PRJadmins);
                     if(dao::isError()) die(js::error(dao::getError()));
                 }
                 else

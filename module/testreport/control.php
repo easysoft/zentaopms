@@ -519,14 +519,14 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $this->products = $this->product->getPairs('nocode', $this->session->program);
+            $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
             return $productID;
         }
         elseif($objectType == 'project')
         {
-            $this->projects = $this->project->getPairs('nocode', $this->session->program);
+            $this->projects = $this->project->getPairs('nocode', $this->session->PRJ);
             $projectID      = $this->project->saveState($objectID, $this->projects);
             $this->project->setMenu($this->projects, $projectID);
             $this->lang->testreport->menu = $this->lang->project->menu;

@@ -73,7 +73,7 @@ class job extends control
         $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->job->create;
 
-        $repoList  = $this->loadModel('repo')->getList($this->session->program);
+        $repoList  = $this->loadModel('repo')->getList($this->session->PRJ);
         $repoPairs = array(0 => '');
         $repoTypes = array();
         foreach($repoList as $repo)
@@ -84,7 +84,7 @@ class job extends control
         }
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
@@ -114,7 +114,7 @@ class job extends control
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        $repoList  = $this->repo->getList($this->session->program);
+        $repoList  = $this->repo->getList($this->session->PRJ);
         $repoPairs = array(0 => '', $repo->id => $repo->name);
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
@@ -128,7 +128,7 @@ class job extends control
         $this->view->repoTypes  = $repoTypes;
         $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
         $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
 

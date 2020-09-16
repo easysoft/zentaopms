@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Manage Privileges by Group';
 $lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Manage Members';
-$lang->group->managePgmAdmin     = 'Manage Program Admins';
+$lang->group->managePRJadmin     = 'Manage Program Admins';
 $lang->group->confirmDelete      = 'Do you want to delete this user group?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';

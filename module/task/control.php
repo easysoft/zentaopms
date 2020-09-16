@@ -46,7 +46,7 @@ class task extends control
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
 
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $program = $this->loadModel('project')->getByID($this->session->PRJ);
         if($program->template == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $task = new stdClass();
@@ -82,7 +82,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->program), $project->id);
+        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
 
         if(!empty($_POST))
         {
@@ -201,7 +201,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
-        $this->view->projects         = $this->loadModel('project')->getPairs('', $this->session->program);
+        $this->view->projects         = $this->loadModel('project')->getPairs('', $this->session->PRJ);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
@@ -232,7 +232,7 @@ class task extends control
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
 
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $program = $this->loadModel('project')->getByID($this->session->PRJ);
         if($program->template == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $project   = $this->project->getById($projectID);
@@ -240,7 +240,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->program), $project->id);
+        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
 
         if(!empty($_POST))
         {
@@ -300,7 +300,7 @@ class task extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->program), $this->view->project->id);
+        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $this->view->project->id);
         $this->view->position[] = html::a($this->createLink('project', 'browse', "project={$this->view->task->project}"), $this->view->project->name);
     }
 
@@ -360,7 +360,7 @@ class task extends control
             }
         }
 
-        $noclosedProjects = $this->project->getPairs('noclosed,nocode', $this->session->program);
+        $noclosedProjects = $this->project->getPairs('noclosed,nocode', $this->session->PRJ);
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
         $tasks = $this->task->getParentTaskPairs($this->view->project->id, $this->view->task->parent);
@@ -429,7 +429,7 @@ class task extends control
         if($projectID)
         {
             $project = $this->project->getById($projectID);
-            $this->project->setMenu($this->project->getPairs('', $this->session->program), $project->id);
+            $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
@@ -635,7 +635,7 @@ class task extends control
 
         /* Set menu. */
         $project = $this->project->getById($task->project);
-        $this->project->setMenu($this->project->getPairs('', $this->session->program), $project->id);
+        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
 
         $this->executeHooks($taskID);
 
@@ -1291,7 +1291,7 @@ class task extends control
             }
         }
 
-        $projects = $this->project->getPairs('', $this->session->program);
+        $projects = $this->project->getPairs('', $this->session->PRJ);
 
         $this->project->setMenu($projects, $projectID);
         $this->projects            = $projects;
@@ -1369,7 +1369,7 @@ class task extends control
 
             /* Get users and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $projects = $this->loadModel('project')->getPairs('all|nocode', $this->session->program);
+            $projects = $this->loadModel('project')->getPairs('all|nocode', $this->session->PRJ);
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();

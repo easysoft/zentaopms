@@ -19,7 +19,7 @@ include 'chosen.html.php';
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if($isProgram) echo $this->loadModel('program')->getSwitcher($this->program->getPairs(), $this->session->program, $app->rawModule, $app->rawMethod);?>
+        <?php if($isProgram) echo $this->loadModel('program')->getSwitcher($this->program->getPairs(), $this->session->PRJ, $app->rawModule, $app->rawMethod);?>
         <?php if($isSystem)  echo $this->loadModel('custom')->getModeSwitcher();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>

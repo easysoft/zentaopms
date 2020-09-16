@@ -77,7 +77,7 @@ EOD;
 $lang->upgrade->line     = '产品线';
 $lang->upgrade->program  = '归并项目';
 $lang->upgrade->existPGM = '已有项目';
-$lang->upgrade->pgmAdmin = '项目管理员';
+$lang->upgrade->PRJadmin = '项目管理员';
 $lang->upgrade->product  = $lang->productCommon;
 $lang->upgrade->project  = $lang->projectCommon;
 

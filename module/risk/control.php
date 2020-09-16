@@ -40,7 +40,7 @@ class risk extends control
 
         $this->view->title      = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->browse;
         $this->view->position[] = $this->lang->risk->browse;
-        $this->view->risks      = $this->risk->getList($this->session->program, $browseType, $param, $orderBy, $pager);
+        $this->view->risks      = $this->risk->getList($this->session->PRJ, $browseType, $param, $orderBy, $pager);
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
