@@ -7,8 +7,8 @@
         <th class='c-id w-80px'>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
-        <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
+        <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PGMCode);?></th>
+        <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PGMName);?></th>
         <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>

@@ -78,8 +78,8 @@ class program extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = $this->lang->program->browse;
-        $this->view->position[]  = $this->lang->program->browse;
+        $this->view->title       = $this->lang->program->PGMBrowse;
+        $this->view->position[]  = $this->lang->program->PGMBrowse;
         $this->view->programType = $programType;
         $this->display();
     }

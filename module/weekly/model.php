@@ -79,7 +79,7 @@ class weeklyModel extends model
         return $this->dao->select('*')
             ->from(TABLE_WEEKLYREPORT)
             ->where('weekStart')->eq($monday)
-            ->andWhere('program')->eq($program)
+            ->andWhere('PRJ')->eq($program)
             ->fetch();
     }
 
