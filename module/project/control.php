@@ -2544,9 +2544,6 @@ class project extends control
                     unset($planStory[$id]);
                     continue;
                 }
-
-                if($story->parent < 0) unset($planStory[$id]);
-
                 $planProducts[$story->id] = $story->product;
             }
             $planStories = array_keys($planStory);
