@@ -63,7 +63,7 @@
       <?php endif;?>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
-      <td><?php echo $task->end?></td>
+      <td><?php echo $task->begin?></td>
       <td class='text-center'><?php echo $task->caseCount?></td>
       <td class='text-center pass'><?php echo $task->passCount?></td>
       <td class='text-center fail'><?php echo $task->failCount?></td>
