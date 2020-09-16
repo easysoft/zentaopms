@@ -35,7 +35,7 @@
           <th class='w-150px'> <?php common::printOrderLink('sendTime',    $orderBy, $vars, $lang->mail->sendTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->mail->status);?></th>
           <th>                 <?php echo $lang->mail->failReason;?></th>
-          <th class='c-actions-2'>  <?php echo $lang->actions;?></th>
+          <th class='c-actions'>  <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

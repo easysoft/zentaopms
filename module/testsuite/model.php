@@ -111,7 +111,7 @@ class testsuiteModel extends model
     {
         $suite = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
-            ->add('program', $this->session->program)
+            ->add('program', $this->session->PRJ)
             ->add('product', (int)$productID)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())

@@ -823,7 +823,7 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl, t1.program')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.role')->ne('pgmadmin')
+                ->andWhere('t1.role')->ne('PRJadmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
             $acls = array();
@@ -901,8 +901,8 @@ class userModel extends model
         }
 
         /* Get can manage programs by user. */
-        $pgmAdminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('pgmadmin')->fetch('id');
-        $canManagePrograms = $this->dao->select('program')->from(TABLE_USERGROUP)->where('`group`')->eq($pgmAdminGroupID)->andWhere('account')->eq($account)->fetch('program');
+        $PRJadminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
+        $canManagePrograms = $this->dao->select('program')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('program');
         return array('rights' => $rights, 'acls' => $acls, 'programs' => $canManagePrograms);
     }
 
@@ -955,10 +955,9 @@ class userModel extends model
     {
         $projects = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
-            ->where('t1.type')->eq('project')
+            ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.program')->ne(0)
             ->orderBy('t2.id_desc')
             ->fetchAll();
 
@@ -1371,7 +1370,7 @@ class userModel extends model
             $groups  = ',' . join(',', $groups) . ',';
 
             static $allProducts, $allPrograms, $allProjects, $projectProducts, $teams;
-            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('template')->ne('')->andWhere('program')->eq(0)->fetchAll('id');
+            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
             if($teams === null)
             {
                 $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->query();
@@ -1397,7 +1396,7 @@ class userModel extends model
             }
 
             $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
-            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('program')->in($programs)->fetchAll('id');
+            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('parent')->in($programs)->fetchAll('id');
             if($projectProducts === null)
             {
                 $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
@@ -1457,8 +1456,7 @@ class userModel extends model
 
         $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
-            ->andWhere('program')->eq(0)
-            ->andWhere('template')->ne('')
+            ->andWhere('type')->eq('project')
             ->fetchAll('id');
 
         $openedPrograms     = join(',', array_keys($openedPrograms));
@@ -1480,11 +1478,7 @@ class userModel extends model
         $programIds = explode(',', $userView->programs);
 
         $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->andWhere('program')->in($programIds)->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('acl')->eq('open')
-            ->andWhere('program')->in($programIds)
-            ->andWhere('template')->eq('')
-            ->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('parent')->in($programIds)->fetchAll('id');
 
         $openedProducts = join(',', array_keys($openedProducts));
         $openedProjects = join(',', array_keys($openedProjects));

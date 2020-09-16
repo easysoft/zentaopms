@@ -1,9 +1,9 @@
-title: date
+title: moreDate
 desc: 系统可用日期类型
 author: ly
 version: 1.0
 
-field: date
+field: moreDate
 instances:
   - instance: dateA
     fields:

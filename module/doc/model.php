@@ -176,8 +176,8 @@ class docModel extends model
 
         if(strpos($extra, 'withObject') !== false)
         {
-            $products = $this->loadModel('product')->getPairs('', $this->session->program);
-            $projects = $this->loadModel('project')->getPairs('', $this->session->program);
+            $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+            $projects = $this->loadModel('project')->getPairs('', $this->session->PRJ);
         }
 
         $libPairs = array();
@@ -757,8 +757,8 @@ class docModel extends model
     {
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->program) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode', $this->session->program) + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProduct);
+        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */

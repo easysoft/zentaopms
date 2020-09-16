@@ -20,7 +20,7 @@ class workestimation extends control
      */
     public function index($program = 0)
     {
-        $program = $program ? $program : $this->session->program;
+        $program = $program ? $program : $this->session->PRJ;
         if($_POST)
         {
             $result = $this->workestimation->save($program);

@@ -19,24 +19,24 @@ ADD `planDuration` int(11) NOT NULL AFTER `parentVersion`,
 ADD `realDuration` int(11) NOT NULL AFTER `planDuration`,
 ADD `output` text NOT NULL AFTER `milestone`;
 
-ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_task` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_doc` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_story` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_repo` ADD `program` varchar(255) NOT NULL AFTER `id`;
-ALTER TABLE `zt_bug` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_case` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testtask` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testreport` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testsuite` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_build` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_release` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_product` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_task` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_doc` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_story` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_repo` ADD `PRJ` varchar(255) NOT NULL AFTER `id`;
+ALTER TABLE `zt_bug` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_case` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testtask` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testreport` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testsuite` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_build` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_release` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 
-INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'pgmadmin', '项目管理员可以维护项目的权限');
+INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJadmin', '项目管理员可以维护项目的权限');
 
-ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;
+ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
 
-ALTER TABLE `zt_userview` ADD `programs` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
+ALTER TABLE `zt_userview` ADD `PRJ` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
 
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
 
@@ -64,7 +64,7 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
   `commit` text NOT NULL,
   `project` mediumint(9) NOT NULL DEFAULT '0',
@@ -102,7 +102,7 @@ CREATE TABLE `zt_designspec` (
 CREATE TABLE `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `desc` text NOT NULL,
   `pri` char(30) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `zt_issue` (
 
 CREATE TABLE `zt_risk` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `source` char(30) NOT NULL,
   `category` char(30) NOT NULL,
@@ -183,7 +183,7 @@ CREATE TABLE `zt_projectspec` (
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE `zt_budget` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) NOT NULL,
+  `PRJ` mediumint(8) NOT NULL,
   `stage` char(30) NOT NULL,
   `subject` mediumint(8) NOT NULL,
   `amount` char(30) NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE `zt_budget` (
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE `zt_durationestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `stage` mediumint(9) NOT NULL,
   `workload` varchar(255) NOT NULL,
   `worktimeRate` varchar(255) NOT NULL,
@@ -218,7 +218,7 @@ CREATE TABLE `zt_durationestimation` (
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE `zt_workestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `scale` mediumint(8) unsigned NOT NULL,
   `productivity` smallint(3) unsigned NOT NULL,
   `duration` mediumint(8) unsigned NOT NULL,
@@ -272,7 +272,7 @@ CREATE TABLE `zt_taskspec` (
 
 CREATE TABLE `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `weekStart` date NOT NULL,
   `pv` float(9,2) NOT NULL,
   `ev` float(9,2) NOT NULL,
@@ -283,7 +283,7 @@ CREATE TABLE `zt_weeklyreport`(
   `progress` varchar(255) NOT NULL,
   `workload` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`program`,`weekStart`)
+  UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;

@@ -372,7 +372,7 @@ class baseRouter
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
-        $this->setProgram();
+        $this->setPRJ();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -847,9 +847,9 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function setProgram()
+    public function setPRJ()
     {
-        if(isset($_GET['pgm'])) $this->session->set('program', $_GET['pgm']); //Set program id into session.
+        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set PRJ id into session.
     }
 
     /**

@@ -34,7 +34,7 @@ class weekly extends control
      */
     public function index($program = 0, $date = '')
     {
-        $program = $program ? $program : $this->session->program;
+        $program = $program ? $program : $this->session->PRJ;
         if(!$date) $date = helper::today();
         $date = date('Y-m-d', strtotime($date));
 

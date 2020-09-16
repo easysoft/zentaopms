@@ -366,7 +366,7 @@ class productModel extends model
      */
     public function getOrderedProducts($status, $num = 0)
     {
-        $products = $this->getList($this->session->program, $status);
+        $products = $this->getList($this->session->PRJ, $status);
         if(empty($products)) return $products;
 
         $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
@@ -418,7 +418,7 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setDefault('program', $this->session->program)
+            ->setDefault('program', $this->session->PRJ)
             ->setDefault('status', 'normal')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
@@ -912,7 +912,7 @@ class productModel extends model
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($this->session->program, $status, $limit = 0, $line);
+        $products = $this->getList($this->session->PRJ, $status, $limit = 0, $line);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in(array_keys($products))
             ->orderBy($orderBy)

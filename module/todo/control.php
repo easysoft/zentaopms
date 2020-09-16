@@ -376,8 +376,8 @@ class todo extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from       = $from;
-        $this->view->projects   = $this->loadModel('project')->getPairs('', $this->session->program);
-        $this->view->products   = $this->loadModel('product')->getPairs('', $this->session->program);
+        $this->view->projects   = $this->loadModel('project')->getPairs('', $this->session->PRJ);
+        $this->view->products   = $this->loadModel('product')->getPairs('', $this->session->PRJ);
 
         $this->display();
     }

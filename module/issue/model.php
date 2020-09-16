@@ -25,7 +25,7 @@ class issueModel extends model
         $data = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
-            ->add('program', $this->session->program)
+            ->add('program', $this->session->PRJ)
             ->remove('labels,files')
             ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
             ->addIF($this->post->assignedTo, 'assignedDate', $now)
@@ -279,7 +279,7 @@ class issueModel extends model
 
             $issue['createdBy']   = $this->app->user->account;
             $issue['createdDate'] = $now;
-            $issue['program']     = $this->session->program;
+            $issue['program']     = $this->session->PRJ;
 
             if($issue['assignedTo'])
             {

@@ -25,7 +25,7 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->program);
+        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
     }
 
@@ -1173,7 +1173,7 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode', $this->session->program);
+            $products = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */

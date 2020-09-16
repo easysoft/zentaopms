@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE `zt_budget` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) NOT NULL,
+  `PRJ` mediumint(8) NOT NULL,
   `stage` char(30) NOT NULL,
   `subject` mediumint(8) NOT NULL,
   `amount` char(30) NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE `zt_budget` (
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `lib` mediumint(8) unsigned NOT NULL default '0',
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
   `commit` varchar(30) NOT NULL,
   `project` mediumint(9) NOT NULL DEFAULT '0',
@@ -348,7 +348,7 @@ CREATE TABLE `zt_designspec` (
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `lib` varchar(30) NOT NULL,
@@ -406,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE `zt_durationestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `stage` mediumint(9) NOT NULL,
   `workload` varchar(255) NOT NULL,
   `worktimeRate` varchar(255) NOT NULL,
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `PRJ` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` char(30) NOT NULL,
   `role` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
@@ -521,7 +521,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
 CREATE TABLE `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `desc` text NOT NULL,
   `pri` char(30) NOT NULL,
@@ -637,7 +637,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
   `line` mediumint(8) NOT NULL,
@@ -762,7 +762,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `build` mediumint(8) unsigned NOT NULL,
@@ -783,7 +783,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
   `prefix` varchar(100) NOT NULL,
@@ -841,7 +841,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
 -- DROP TABLE IF EXISTS `zt_risk`;
 CREATE TABLE `zt_risk` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` varchar(255) NOT NULL,
+  `PRJ` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `source` char(30) NOT NULL,
   `category` char(30) NOT NULL,
@@ -879,7 +879,7 @@ CREATE TABLE `zt_risk` (
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(9) NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
@@ -964,7 +964,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
@@ -1053,7 +1053,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `tasks` varchar(255) NOT NULL,
@@ -1110,7 +1110,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
 -- DROP TABLE IF EXISTS `zt_testsuite`;
 CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `desc` text NOT NULL,
@@ -1126,7 +1126,7 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `name` char(90) NOT NULL,
   `project` mediumint(8) unsigned NOT NULL default '0',
@@ -1229,7 +1229,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
-  `program` text NOT NULL,
+  `PRJ` text NOT NULL,
   UNIQUE KEY `account` (`account`,`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userquery`;
@@ -1259,7 +1259,7 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
-  `programs` mediumtext NOT NULL,
+  `PRJ` mediumtext NOT NULL,
   `products` mediumtext NOT NULL,
   `projects` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
@@ -1307,7 +1307,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
 CREATE TABLE `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `weekStart` date NOT NULL,
   `pv` float(9,2) NOT NULL,
   `ev` float(9,2) NOT NULL,
@@ -1318,12 +1318,12 @@ CREATE TABLE `zt_weeklyreport`(
   `progress` varchar(255) NOT NULL,
   `workload` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`program`,`weekStart`)
+  UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE `zt_workestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `program` mediumint(8) unsigned NOT NULL,
+  `PRJ` mediumint(8) unsigned NOT NULL,
   `scale` mediumint(8) unsigned NOT NULL,
   `productivity` smallint(3) unsigned NOT NULL,
   `duration` mediumint(8) unsigned NOT NULL,
@@ -1374,7 +1374,7 @@ CREATE TABLE `zt_score` (
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-  `program` mediumint(8) NOT NULL,
+  `PRJ` mediumint(8) NOT NULL,
   `product` mediumint(8) NOT NULL,
   `project` mediumint(8) NOT NULL,
   `AType` char(30) NOT NULL,

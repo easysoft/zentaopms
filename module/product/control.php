@@ -30,9 +30,39 @@ class product extends control
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
-        $this->products = $this->product->getPairs('nocode', $this->session->program);
+        $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
         if(empty($this->products) and strpos(',create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
+    }
+
+    /**
+     * Products under project set.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function productList($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title        = $this->lang->product->common;
+        $this->view->program      = '';
+        $this->view->stack        = '';
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->programID    = $programID;
+        $this->view->productStats = array();
+        $this->view->pager        = $pager;
+        $this->display();
     }
 
     /**
@@ -207,7 +237,7 @@ class product extends control
         $this->view->position[]    = $this->products[$productID];
         $this->view->position[]    = $this->lang->product->browse;
         $this->view->productID     = $productID;
-        $this->view->program       = $this->loadModel('project')->getById($this->session->program);
+        $this->view->program       = $this->loadModel('project')->getById($this->session->PRJ);
         $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
@@ -834,7 +864,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs('', $this->session->program);
+        $this->products = $this->product->getPairs('', $this->session->PRJ);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */

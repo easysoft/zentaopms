@@ -525,11 +525,21 @@ class commonModel extends model
         {
             $active = '';
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($moduleName == $group) $active = 'active';
+            if($moduleName != 'program' && $moduleName == $group) $active = 'active';
             if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
             if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
             if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
         }
+
+        echo '<li><hr></li>';
+        echo '<li><span><i class="icon icon-menu-doc"></i>' . $lang->recent . '</span></li>';
+        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
+        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
+        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
+        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'an') . '</li>';
+        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao') . '</li>';
+        echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $lang->more . '</span></li>';
+
         echo "</ul>\n";
     }
 
@@ -548,7 +558,7 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* If program, return.*/
-        if($moduleName == 'program' and $methodName != 'index') return;
+        if($moduleName == 'program' and strpos($methodName, 'prj') !== false) return;
 
         /* Set the main main menu. */
         $mainMenu      = $moduleName;
@@ -1618,7 +1628,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProgram)
             {
                 /* Check program priv. */
-                if(strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
+                if(strpos(",{$this->app->user->view->programs},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -2130,38 +2140,44 @@ EOD;
     public static function setMainMenuByGroup($group, $moduleName, $methodName)
     {
         global $lang;
-        if($group == 'my')        
+        if($group == 'my')
         {
             $lang->menu      = $lang->my->menu;
             $lang->menuOrder = $lang->my->menuOrder;
         }
-        if($group == 'system')    
+        if($group == 'system')
         {
             $lang->menu         = $lang->system->menu;
             $lang->menuOrder    = $lang->system->menuOrder;
             $lang->report->menu = $lang->measurement->menu;
         }
         if($group == 'doclib') return;
-        if($group == 'reporting') 
+        if($group == 'reporting')
         {
             $lang->menu      = $lang->report->menu;
             $lang->menuOrder = $lang->report->menuOrder;
         }
-        if($group == 'attend')     
+        if($group == 'attend')
         {
             $lang->menu      = $lang->attend->menu;
             $lang->menuOrder = $lang->attend->menuOrder;
         }
-        if($group == 'admin')     
+        if($group == 'admin')
         {
             $lang->menu      = $lang->admin->menu;
             $lang->menuOrder = $lang->admin->menuOrder;
         }
-        if($group == 'programset')     
+        if($group == 'program') 
         {
-            $lang->menu = $lang->programset->menu;
+            if($moduleName == 'program')
+            {
+                $lang->menu = $lang->program->menu;
+            }
+            else
+            {
+                $lang->menu = self::getProgramMainMenu($moduleName);
+            }
         }
-        if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
     }
 
     /**

@@ -28,7 +28,7 @@ class repo extends control
         }
 
         $this->scm = $this->app->loadClass('scm');
-        $this->repos = $this->repo->getRepoPairs($this->session->program);
+        $this->repos = $this->repo->getRepoPairs($this->session->PRJ);
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
@@ -54,7 +54,7 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->repoList   = $this->repo->getList($this->session->program, $orderBy, $pager);
+        $this->view->repoList   = $this->repo->getList($this->session->PRJ, $orderBy, $pager);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;

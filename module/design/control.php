@@ -26,7 +26,7 @@ class design extends control
         parent::__construct($moduleName, $methodName);
         $products = array();
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->program);
+        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
     }
 
     /**
@@ -57,7 +57,7 @@ class design extends control
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);
-        $designs = $this->design->getList($this->session->program, $productID, $type, $queryID, $orderBy, $pager);
+        $designs = $this->design->getList($this->session->PRJ, $productID, $type, $queryID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
@@ -109,7 +109,7 @@ class design extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
         $this->view->productID  = $productID;
-        $this->view->program    = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->program    = $this->loadModel('project')->getByID($this->session->PRJ);
 
         $this->display();
     }
@@ -213,7 +213,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design   = $design;
-        $this->view->program  = $this->loadModel('project')->getByID($this->session->program);
+        $this->view->program  = $this->loadModel('project')->getByID($this->session->PRJ);
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
 
         $this->display();
@@ -235,12 +235,12 @@ class design extends control
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Get program and date. */
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $program = $this->loadModel('project')->getByID($this->session->PRJ);
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
         /* Get the repository information through the repoID. */
-        $repos  = $this->loadModel('repo')->getRepoPairs($this->session->program);
+        $repos  = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
         $repoID = $repoID ? $repoID : key($repos);
 
         if(empty($repoID)) die(js::locate(helper::createLink('repo', 'create')));

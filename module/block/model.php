@@ -224,7 +224,7 @@ class blockModel extends model
         if($module == 'program') 
         {
             $blocks    = $this->lang->block->default[$type]['program'];
-            $programID = $this->session->program;
+            $programID = $this->session->PRJ;
             $program   = $this->loadModel('project')->getByID($programID);
 
             /* Mark program block has init. */

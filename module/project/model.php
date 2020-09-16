@@ -62,10 +62,10 @@ class projectModel extends model
      */
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
-        $program = $this->getByID($this->session->program);
+        $program = $this->getByID($this->session->PRJ);
         if(empty($projects))
         {
-            if($program->template == 'waterfall')
+            if($program->model == 'waterfall')
             {
                 if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'project') die(js::locate(helper::createLink('programplan', 'create', "progarmID=$program->id")));
             }
@@ -82,7 +82,7 @@ class projectModel extends model
         $isProgram = false;
         if(!empty($project))
         {
-            $isProgram = $project->template;
+            $isProgram = $project->model;
             $program   = $isProgram ? $project : $this->getByID($project->program);
         }
 
@@ -222,7 +222,7 @@ class projectModel extends model
      */
     public function tree()
     {
-        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->program);
+        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
         $productGroup = $this->getProductGroupList();
         $projectTree  = "<ul class='tree tree-lines'>";
         foreach($productGroup as $productID => $projects)
@@ -306,7 +306,7 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setDefault('program', $this->session->program)
+            ->setDefault('program', $this->session->PRJ)
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
@@ -718,8 +718,8 @@ class projectModel extends model
         $mode    .= $this->cookie->projectMode;
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
-            ->where('iscat')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->where('deleted')->eq(0)
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -765,7 +765,7 @@ class projectModel extends model
      */
     public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $programID = 0)
     {
-        $programID = $programID ? $programID : $this->session->programID;
+        $programID = $programID ? $programID : $this->session->PRJID;
         if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
 
         if($productID != 0)
@@ -773,10 +773,9 @@ class projectModel extends model
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($productID)
+                ->andWhere('type')->in('sprint,stage')
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.iscat')->eq(0)
-                ->beginIF($programID)->andWhere('t2.program')->eq($programID)->fi()
-                ->andWhere('t2.template')->eq('')
+                ->beginIF($programID)->andWhere('t2.parent')->eq($programID)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
@@ -787,13 +786,13 @@ class projectModel extends model
         }
         else
         {
-            return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->where('iscat')->eq(0)
+            return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->in('sprint,stage')
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
-                ->andWhere('template')->eq('')
+                ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -819,7 +818,6 @@ class projectModel extends model
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.root=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
@@ -834,12 +832,11 @@ class projectModel extends model
         {
             return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
-                ->where('t1.iscat')->eq(0)
+                ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.type')->eq('project')
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -859,13 +856,12 @@ class projectModel extends model
         $projects = $this->dao->select('t1.*, t3.name as productName')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-            ->where('t1.program')->eq((int)$program->id)
-            ->andWhere('t1.template')->eq('')
+            ->where('t1.parent')->eq((int)$program->id)
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('t1.order desc')
             ->fetchAll('id');
 
-        if($program->template == 'waterfall')
+        if($program->model == 'waterfall')
         {
             foreach($projects as $projectID => $project)
             {
@@ -1972,7 +1968,7 @@ class projectModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $objectType = $project->template ? 'program' : 'project';
+        $objectType = $project->model ? 'program' : 'project';
         $this->loadModel('user')->updateUserView($projectID, $objectType, $changedAccounts);
 
         $products = $this->getProducts($projectID, false);

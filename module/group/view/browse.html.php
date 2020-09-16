@@ -42,14 +42,14 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>' class="text-ellipsis"><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php $isPgmAdmin = $group->role == 'pgmadmin';?>
-          <?php $disabled   = $isPgmAdmin ? 'disabled' : '';?>
+          <?php $isPRJadmin = $group->role == 'PRJadmin';?>
+          <?php $disabled   = $isPRJadmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "iframe $disabled", true);?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php if($isPgmAdmin):?>
-          <?php common::printIcon('group', 'managePgmAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
+          <?php if($isPRJadmin):?>
+          <?php common::printIcon('group', 'managePRJadmin', "groupID=$group->id", $group, 'list', 'persons');?>
           <?php else:?>
           <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
           <?php endif;?>
@@ -58,7 +58,7 @@
           <?php
           if(common::hasPriv('group', 'delete'))
           {
-              if($isPgmAdmin)
+              if($isPRJadmin)
               {
                   echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
               }

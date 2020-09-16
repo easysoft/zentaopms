@@ -20,15 +20,15 @@ fields:
   - field: product
     note: "产品"
     range: 1-100
-    prefix: ""
-    postfix: ""
+    prefix: ","
+    postfix: ","
     loop: 0
     format: ""
   - field: project
     note: "项目"
     range: 1-100
-    prefix: ","
-    postfix: ","
+    prefix: ""
+    postfix: ""
     loop: 0
     format: ""
   - field: actor
@@ -42,13 +42,6 @@ fields:
     note: "动作"
     range: opened
     postfix: ""
-    loop: 0
-    format: ""
-  - field: date
-    note: "日期"
-    range: 10-22
-    prefix: "2020-09-09 "
-    postfix: ":11:24"
     loop: 0
     format: ""
   - field: comment

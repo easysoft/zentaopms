@@ -22,7 +22,7 @@ class riskModel extends model
     public function create()
     {
         $risk = fixer::input('post')
-            ->add('program', $this->session->program)
+            ->add('program', $this->session->PRJ)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::today())
             ->stripTags($this->config->risk->editor->create['id'], $this->config->allowedTags)
@@ -56,7 +56,7 @@ class riskModel extends model
             $risk->source      = $data->source[$i];
             $risk->category    = $data->category[$i];
             $risk->strategy    = $data->strategy[$i];
-            $risk->program     = $this->session->program;
+            $risk->program     = $this->session->PRJ;
             $risk->createdBy   = $this->app->user->account;
             $risk->createdDate = helper::today();
 

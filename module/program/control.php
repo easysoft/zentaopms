@@ -10,6 +10,18 @@ class program extends control
     }
 
     /**
+     * Program home page.
+     *
+     * @access public
+     * @return void
+     */
+    public function PGMIndex()
+    {
+        $this->lang->navGroup->program = 'program';
+        $this->display();
+    }
+
+    /**
      * Program index view.
      *
      * @param  int    $programID
@@ -19,7 +31,7 @@ class program extends control
     public function index($programID = 0)
     {
         $this->lang->navGroup->program = 'program';
-        if(!$programID) $programID = $this->session->program;
+        if(!$programID) $programID = $this->session->PRJ;
         $this->session->set('program', $programID);
 
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
@@ -30,7 +42,7 @@ class program extends control
     }
 
     /**
-     * Program list.
+     * Project list.
      *
      * @param  varchar $status
      * @param  varchar $orderBy
@@ -40,8 +52,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function PGMBrowse($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
+        $this->lang->navGroup->program = 'program';
         if(common::hasPriv('program', 'createGuide')) $this->lang->pageActions = html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle=modal");
 
         $this->app->session->set('programList', $this->app->getURI(true));
@@ -171,7 +184,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $url = $this->session->programList ? $this->session->programList : inlink('browse');
+            $url = $this->session->PRJList ? $this->session->PRJList : inlink('browse');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
@@ -718,8 +731,9 @@ class program extends control
      */
     public function ajaxGetEnterLink($programID = 0)
     {
+        $this->lang->navGroup->program = 'project';
         $program         = $this->project->getByID($programID);
-        $programProjects = $this->project->getPairs('', $this->session->program);
+        $programProjects = $this->project->getPairs('', $this->session->PRJ);
         $programProject  = key($programProjects);
 
         if($program->template == 'waterfall')
@@ -732,5 +746,34 @@ class program extends control
         }
 
         die($link);
+    }
+
+    /**
+     * Projects list.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PRJBrowse($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->lang->navGroup->program = 'project';
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->projectStats = array();
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->stack        = '';
+        $this->display();
     }
 }

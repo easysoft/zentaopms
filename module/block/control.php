@@ -215,7 +215,7 @@ class block extends control
         $commonField = 'common';
         if($module == 'program')
         {
-            $program     = $this->loadModel('project')->getByID($this->session->program);
+            $program     = $this->loadModel('project')->getByID($this->session->PRJ);
             $commonField = $program->template . 'common';
         }
         $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
@@ -422,7 +422,7 @@ class block extends control
             /* Create a program block. */
             if($dashboard == 'program')
             {
-                $program  = $this->loadModel('project')->getByID($this->session->program);
+                $program  = $this->loadModel('project')->getByID($this->session->PRJ);
                 $template = $program->template;
             }
 
@@ -578,7 +578,7 @@ class block extends control
         $this->session->set('storyList', $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy, $programID);
     }
 
@@ -593,7 +593,7 @@ class block extends control
         $this->session->set('bugList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $programID);
     }
 
@@ -620,7 +620,7 @@ class block extends control
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t2.program')->eq((int)$this->session->program)->fi()
+                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.program')->eq((int)$this->session->PRJ)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
@@ -629,7 +629,7 @@ class block extends control
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('program')->eq((int)$this->session->program)->fi()
+                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('program')->eq((int)$this->session->PRJ)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
@@ -654,7 +654,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t1.program')->eq((int)$this->session->program)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
@@ -679,7 +679,7 @@ class block extends control
         $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
         $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story', $programID);
     }
 
@@ -696,7 +696,7 @@ class block extends control
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t2.program')->eq((int)$this->session->program)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.program')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.begin desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
@@ -717,7 +717,7 @@ class block extends control
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t1.program')->eq((int)$this->session->program)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
@@ -738,7 +738,7 @@ class block extends control
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('t1.program')->eq((int)$this->session->program)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
@@ -845,12 +845,12 @@ class block extends control
 
         foreach($programs as $programID => $program)
         {
-            if($program->template == 'scrum')
+            if($program->model == 'scrum')
             {
                 $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
                 $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
             }
-            elseif($program->template == 'waterfall')
+            elseif($program->model == 'waterfall')
             {
                 $begin   = $program->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
@@ -1021,7 +1021,7 @@ class block extends control
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
 
         /* Get projects. */
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $projects  = $this->loadModel('project')->getOrderedProjects($status, $count, $programID);
         if(empty($projects))
         {
@@ -1141,7 +1141,7 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $program = $this->loadModel('project')->getByID($this->session->program);
+        $program = $this->loadModel('project')->getByID($this->session->PRJ);
         $today   = helper::today();
         $date    = date('Ymd', strtotime('this week Monday'));
         $begin   = $program->begin;
@@ -1151,14 +1151,14 @@ class block extends control
         $task = $this->dao->select("
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)->where('program')->eq($this->session->program)
+            ->from(TABLE_TASK)->where('program')->eq($this->session->PRJ)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
 
-        $this->view->pv = $this->weekly->getPV($this->session->program, $today);
-        $this->view->ev = $this->weekly->getEV($this->session->program, $today);
-        $this->view->ac = $this->weekly->getAC($this->session->program, $today);
+        $this->view->pv = $this->weekly->getPV($this->session->PRJ, $today);
+        $this->view->ev = $this->weekly->getEV($this->session->PRJ, $today);
+        $this->view->ac = $this->weekly->getAC($this->session->PRJ, $today);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
@@ -1174,11 +1174,11 @@ class block extends control
      */
     public function printWaterfallGanttBlock()
     {
-        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
+        $products  = $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $productID = isset($this->session->product) ? 0 : $this->session->product;
         if(!$productID) $productID = key($products);
 
-        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->program, $productID, 0, 'task', false);
+        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->PRJ, $productID, 0, 'task', false);
         $this->view->products  = $products;
         $this->view->productID = $productID;
     }
@@ -1195,7 +1195,7 @@ class block extends control
         $this->session->set('issueList',  $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->PRJ, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**
@@ -1209,7 +1209,7 @@ class block extends control
         $uri = $this->app->getURI(true);
         $this->session->set('riskList',  $uri);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->program, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->PRJ, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**
@@ -1221,12 +1221,12 @@ class block extends control
     public function printWaterfallEstimateBlock()
     {
         $this->app->loadLang('durationestimation');
-        $programID = $this->session->program;
+        $programID = $this->session->PRJ;
         $members   = $this->loadModel('project')->getTeamMemberPairs($programID);
         $budget    = $this->loadModel('workestimation')->getBudget($programID);
         if(empty($budget)) $budget = new stdclass();
 
-        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->program)->fetch('people');
+        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->PRJ)->fetch('people');
         $this->view->members  = count($members) ? count($members) - 1 : 0;
         $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
         $this->view->budget   = $budget;
@@ -1242,7 +1242,7 @@ class block extends control
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
-        $programID = $this->session->program;
+        $programID = $this->session->PRJ;
         $program   = $this->loadModel('project')->getByID($programID);
 
         $begin = $program->begin;
@@ -1279,7 +1279,7 @@ class block extends control
      */
     public function printScrumOverviewBlock()
     {
-        $programID = $this->session->program;
+        $programID = $this->session->PRJ;
         $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 1);
 
         $this->view->totalData = $totalData;
@@ -1299,7 +1299,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->program);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $this->session->PRJ);
     }
 
     /**
@@ -1315,7 +1315,7 @@ class block extends control
         $releases = array();
         $count    = isset($this->params->count) ? (int)$this->params->count : 15;
 
-        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->PRJ)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {
@@ -1341,7 +1341,7 @@ class block extends control
     {
         $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($this->session->program)
+            ->andWhere('program')->eq($this->session->PRJ)
             ->groupBy('status')
             ->fetchPairs();
 
@@ -1366,7 +1366,7 @@ class block extends control
      */
     public function printProgramDynamicBlock()
     {
-        $programID = $this->session->program;
+        $programID = $this->session->PRJ;
 
         $projects = $this->loadModel('project')->getPairs('', $programID);
         $products = $this->loadModel('product')->getPairs('', $programID);
@@ -1398,7 +1398,7 @@ class block extends control
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
 
-        $products  = $this->loadModel('product')->getPairs('', $this->session->program);
+        $products  = $this->loadModel('product')->getPairs('', $this->session->PRJ);
         if(!is_numeric($productID)) $productID = key($products);
 
         $this->view->roadmaps  = $this->product->getRoadmap($productID, 0, 6);
@@ -1435,7 +1435,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.program')->eq($this->session->program)->fi()
+            ->andWhere('t1.program')->eq($this->session->PRJ)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->orderBy('t1.id desc')
@@ -1536,7 +1536,7 @@ class block extends control
         $normal = 0;
         $closed = 0;
 
-        $products = $this->loadModel('product')->getList($this->session->program);
+        $products = $this->loadModel('product')->getList($this->session->PRJ);
         foreach($products as $product)
         {
             if(!$this->product->checkPriv($product->id)) continue;
@@ -1561,7 +1561,7 @@ class block extends control
      */
     public function printProjectOverviewBlock()
     {
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $projects  = $this->loadModel('project')->getList('all', 0, 0, 0, $programID);
 
         $total = 0;
@@ -1594,7 +1594,7 @@ class block extends control
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
-            ->beginIF($this->view->block->module != 'my' and $this->session->program)->andWhere('program')->eq((int)$this->session->program)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('program')->eq((int)$this->session->PRJ)->fi()
             ->groupBy('lastRunResult')
             ->fetchPairs();
 
@@ -1631,7 +1631,7 @@ class block extends control
         $type  = isset($this->params->type)  ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->program;
+        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $programID);
     }
 
