@@ -66,12 +66,12 @@ js::set('parentID', $plan->parent);
             <td><?php echo html::input('end', $plan->end, "class='form-control form-date'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->programplan->realStarted;?> </th>
-            <td><?php echo html::input('realStarted', $plan->realStarted, "class='form-control form-date'");?></td>
+            <th><?php echo $lang->programplan->realBegan;?> </th>
+            <td><?php echo html::input('realBegan', $plan->realBegan, "class='form-control form-date'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->programplan->realFinished;?> </th>
-            <td><?php echo html::input('realFinished', $plan->realFinished, "class='form-control form-date'");?></td>
+            <th><?php echo $lang->programplan->realEnd;?> </th>
+            <td><?php echo html::input('realEnd', $plan->realEnd, "class='form-control form-date'");?></td>
           </tr>
           <tr>
             <td colspan='4' class='form-actions text-center'><?php echo html::submitButton() . html::backButton()?></td>

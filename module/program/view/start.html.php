@@ -14,8 +14,8 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-100px'><?php echo $lang->program->realStarted;?></th>
-          <td><?php echo html::input('realStarted', helper::today(), "class='form-control form-date'");?></td>
+          <th class='w-100px'><?php echo $lang->program->realBegan;?></th>
+          <td><?php echo html::input('realBegan', helper::today(), "class='form-control form-date'");?></td>
           <td></td>
         </tr>
         <tr>

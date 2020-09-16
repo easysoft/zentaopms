@@ -262,8 +262,8 @@ $(function()
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realStarted',  align: 'center', resize: true, width: 80},
-    {name: 'realFinished', align: 'center', width: 80}
+    {name: 'realBegan',  align: 'center', resize: true, width: 80},
+    {name: 'realEnd', align: 'center', width: 80}
     ];
 
     gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
@@ -271,8 +271,8 @@ $(function()
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
     gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->begin;?>";
     gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
-    gantt.locale.labels.column_realStarted  = "<?php echo $lang->programplan->realStarted;?>";
-    gantt.locale.labels.column_realFinished = "<?php echo $lang->programplan->realFinished;?>";
+    gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
+    gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
 
     if(dateDetails)

@@ -5,7 +5,7 @@ $config->programplan->create->requiredFields = 'name,begin,end';
 $config->programplan->edit->requiredFields   = 'name,begin,end';
 
 $config->programplan->datatable = new stdclass();
-$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'milestone', 'begin', 'end', 'realStarted', 'realFinished', 'openedBy', 'openedDate', 'actions');
+$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'milestone', 'begin', 'end', 'realBegan', 'realEnd', 'openedBy', 'openedDate', 'actions');
 
 $config->programplan->datatable->fieldList['id']['title']    = 'idAB';
 $config->programplan->datatable->fieldList['id']['fixed']    = 'left';
@@ -52,15 +52,15 @@ $config->programplan->datatable->fieldList['end']['fixed']    = 'no';
 $config->programplan->datatable->fieldList['end']['width']    = '90';
 $config->programplan->datatable->fieldList['end']['required'] = 'no';
 
-$config->programplan->datatable->fieldList['realStarted']['title']    = 'realStarted';
-$config->programplan->datatable->fieldList['realStarted']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['realStarted']['width']    = '90';
-$config->programplan->datatable->fieldList['realStarted']['required'] = 'no';
+$config->programplan->datatable->fieldList['realBegan']['title']    = 'realBegan';
+$config->programplan->datatable->fieldList['realBegan']['fixed']    = 'no';
+$config->programplan->datatable->fieldList['realBegan']['width']    = '90';
+$config->programplan->datatable->fieldList['realBegan']['required'] = 'no';
 
-$config->programplan->datatable->fieldList['realFinished']['title']    = 'realFinished';
-$config->programplan->datatable->fieldList['realFinished']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['realFinished']['width']    = '90';
-$config->programplan->datatable->fieldList['realFinished']['required'] = 'no';
+$config->programplan->datatable->fieldList['realEnd']['title']    = 'realEnd';
+$config->programplan->datatable->fieldList['realEnd']['fixed']    = 'no';
+$config->programplan->datatable->fieldList['realEnd']['width']    = '90';
+$config->programplan->datatable->fieldList['realEnd']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['actions']['title']    = 'actions';
 $config->programplan->datatable->fieldList['actions']['fixed']    = 'right';

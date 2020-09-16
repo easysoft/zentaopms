@@ -31,8 +31,8 @@
           <th class='w-110px'><?php echo $lang->programplan->milestone;?></th>
           <th class='w-110px required'><?php echo $lang->programplan->begin;?></th>
           <th class='w-110px required'><?php echo $lang->programplan->end;?></th>
-          <th class='w-110px'><?php echo $lang->programplan->realStarted;?></th>
-          <th class='w-110px'><?php echo $lang->programplan->realFinished;?></th>
+          <th class='w-110px'><?php echo $lang->programplan->realBegan;?></th>
+          <th class='w-110px'><?php echo $lang->programplan->realEnd;?></th>
           <th class="w-90px"> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -52,8 +52,8 @@
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
             <td><input type='text' name='begin[]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <td><input type='text' name='realStarted[]' id='realStarted<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <td><input type='text' name='realFinished[]' id='realFinished<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='realBegan[]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -79,8 +79,8 @@
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
             <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
-            <td><input type='text' name='realStarted[] ' id='realStarted<?php echo $i;?>' value='<?php echo $plan->realStarted;?>' class='form-control form-date' /></td>
-            <td><input type='text' name='realFinished[]' id='realFinished<?php echo $i;?>' value='<?php echo $plan->realFinished;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
             <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
@@ -103,8 +103,8 @@
           <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
           <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
-          <td><input type='text' name='realStarted[] ' id='realStarted<?php echo $i;?>' value='' class='form-control form-date' /></td>
-          <td><input type='text' name='realFinished[]' id='realFinished<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -138,8 +138,8 @@
       <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
       <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='end[]' id='end<?php echo $i;?>' class='form-control form-date' /></td>
-      <td><input type='text' name='realStarted[] ' id='realStarted<?php echo $i;?>' class='form-control form-date' /></td>
-      <td><input type='text' name='realFinished[]' id='realFinished<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

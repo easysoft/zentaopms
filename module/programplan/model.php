@@ -228,8 +228,8 @@ class programplanModel extends model
             $data->milestone    = zget($this->lang->programplan->milestoneList, $plan->milestone);
             $data->start_date   = $start;
             $data->deadline     = $end;
-            $data->realStarted  = $plan->realStarted == '0000-00-00' ? '' : $plan->realStarted;
-            $data->realFinished = $plan->realFinished  == '0000-00-00' ? '' : $plan->realFinished;
+            $data->realBegan    = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
+            $data->realEnd      = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
             $data->duration     = helper::diffDate($plan->end, $plan->begin) + 1;;
             $data->parent       = $plan->parent;
             $data->open         = true;
@@ -276,8 +276,8 @@ class programplanModel extends model
             $start = $task->estStarted == '0000-00-00' ? '' : date('d-m-Y', strtotime($task->estStarted));
             $end   = $task->deadline   == '0000-00-00' ? '' : $task->deadline;
 
-            $realStarted  = $task->realStarted  == '0000-00-00' ? '' : $task->realStarted;
-            $realFinished = $task->finishedDate == '0000-00-00 00:00:00' ? '' : substr($task->finishedDate, 5, 11);
+            $realBegan    = $task->realBegan == '0000-00-00' ? '' : $task->realBegan;
+            $realEnd      = $task->finishedDate == '0000-00-00 00:00:00' ? '' : substr($task->finishedDate, 5, 11);
             $priIcon      = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
             $data = new stdclass();
@@ -289,8 +289,8 @@ class programplanModel extends model
             $data->milestone    = '';
             $data->start_date   = $start;
             $data->deadline     = $end;
-            $data->realStarted  = $realStarted;
-            $data->realFinished = $realFinished;
+            $data->realBegan    = $realBegan;
+            $data->realEnd      = $realEnd;
             $data->duration     = helper::diffDate($task->deadline, $task->estStarted) + 1;
             $data->parent       = $task->parent > 0 ? $task->project . '-' . $task->parent : $task->project;
             $data->open         = true;
@@ -390,9 +390,9 @@ class programplanModel extends model
         }
 
         $plan->begin = $plan->begin == '0000-00-00' ? '' : $plan->begin;
-        $plan->end  = $plan->end  == '0000-00-00' ? '' : $plan->end;
-        $plan->realStarted = $plan->realStarted == '0000-00-00' ? '' : $plan->realStarted;
-        $plan->realFinished  = $plan->realFinished  == '0000-00-00' ? '' : $plan->realFinished;
+        $plan->end   = $plan->end  == '0000-00-00' ? '' : $plan->end;
+        $plan->realBegan = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
+        $plan->realEnd   = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
 
         $plan->product     = $this->loadModel('product')->getProductIDByProject($plan->id);
         $plan->productName = $this->dao->findByID($plan->product)->from(TABLE_PRODUCT)->fetch('name');
@@ -454,8 +454,8 @@ class programplanModel extends model
             $plan->milestone    = $milestone[$key];
             $plan->begin        = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
             $plan->end          = empty($end[$key]) ? '0000-00-00' : $end[$key];
-            $plan->realStarted  = empty($realStarted[$key]) ? '0000-00-00' : $realStarted[$key];
-            $plan->realFinished = empty($realFinished[$key]) ? '0000-00-00' : $realFinished[$key];
+            $plan->realBegan    = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
+            $plan->realEnd      = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
             $plan->output       = empty($output[$key]) ? '' : implode(',', $output[$key]);
 
             $datas[] = $plan;
@@ -523,7 +523,7 @@ class programplanModel extends model
         {
             /* Set planDuration and realDuration. */
             $data->planDuration = $this->getDuration($data->begin, $data->end);
-            $data->realDuration = $this->getDuration($data->realStarted, $data->realFinished);
+            $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
 
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
@@ -610,8 +610,8 @@ class programplanModel extends model
         $plan    = fixer::input('post')
             ->setDefault('begin', '0000-00-00')
             ->setDefault('end', '0000-00-00')
-            ->setDefault('realStarted', '0000-00-00')
-            ->setDefault('realFinished', '0000-00-00')
+            ->setDefault('realBegan', '0000-00-00')
+            ->setDefault('realEnd', '0000-00-00')
             ->join('output', ',')
             ->get();
 
@@ -650,7 +650,7 @@ class programplanModel extends model
 
         /* Set planDuration and realDuration. */
         $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
-        $plan->realDuration = $this->getDuration($plan->realStarted, $plan->realFinished);
+        $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
 
         if($plan->parent) $plan->attribute = $parentPlan->attribute;
 
@@ -697,7 +697,7 @@ class programplanModel extends model
         {
             $class  = 'c-' . $id;
             $title  = '';
-            $idList = array('id','name','output','percent','attribute','milestone','version','openedBy','openedDate','begin','end','realStarted','realFinished');
+            $idList = array('id','name','output','percent','attribute','milestone','version','openedBy','openedDate','begin','end','realBegan','realEnd');
             if(in_array($id,$idList))
             {
                 $class .= ' text-left';
@@ -738,11 +738,11 @@ class programplanModel extends model
             case 'end':
                 echo $plan->end;
                 break;
-            case 'realStarted':
-                echo $plan->realStarted;
+            case 'realBegan':
+                echo $plan->realBegan;
                 break;
-            case 'realFinished':
-                echo $plan->realFinished;
+            case 'realEnd':
+                echo $plan->realEnd;
                 break;
             case 'output':
                 echo $plan->output;

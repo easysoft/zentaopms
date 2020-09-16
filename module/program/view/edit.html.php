@@ -83,8 +83,8 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->program->realStarted;?></th>
-          <td><?php echo html::input('realStarted', $program->realStarted, "class='form-control form-date'");?></td><td></td><td></td>
+          <th><?php echo $lang->program->realBegan;?></th>
+          <td><?php echo html::input('realBegan', $program->realBegan, "class='form-control form-date'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
