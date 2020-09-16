@@ -1002,6 +1002,13 @@ class actionModel extends model
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
+        /* Revert userView products when undelete project. */
+        if($action->objectType == 'project')
+        {
+            $products = $this->loadModel('project')->getProducts($project->id, $withBranch = false);
+            if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
+        }
+
         /* Revert doclib when undelete product or project. */
         if($action->objectType == 'project' or $action->objectType == 'product')
         {
