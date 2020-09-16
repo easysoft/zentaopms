@@ -96,10 +96,12 @@ function loadBranch()
 /**
   *Load all builds of one project or product.
   *
+  * @param  that $that
+  * @param  bool $resolvedBuildBox
   * @access public
   * @return void
   */
-function loadAllBuilds(that)
+function loadAllBuilds(that, resolvedBuildBox = false)
 {
     if(page == 'resolve')
     {
@@ -113,13 +115,15 @@ function loadAllBuilds(that)
         projectID = $('#project').val();
         if(page == 'edit') buildBox = $(that).closest('.input-group').attr('id');
 
+        if(resolvedBuildBox) loadAllProductBuilds(productID, 'resolvedBuildBox');
+
         if(projectID)
         {
             loadAllProjectBuilds(projectID, productID);
         }
         else
         {
-            loadAllProductBuilds(productID);
+            loadAllProductBuilds(productID, 'openedBuildBox');
         }
     }
 }
@@ -169,10 +173,11 @@ function loadAllProjectBuilds(projectID, productID)
   * Load all builds of the product.
   *
   * @param  int    $productID
+  * @param  string $buildBox
   * @access public
   * @return void
   */
-function loadAllProductBuilds(productID)
+function loadAllProductBuilds(productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -198,7 +203,7 @@ function loadAllProductBuilds(productID)
         }
         if(buildBox == 'resolvedBuildBox')
         {
-            link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=0&index=0&type=all');
+            link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch' + branch);
             $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
         }
     }
@@ -400,7 +405,7 @@ function loadProjectBuilds(projectID)
         $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
         
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
+        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
 }
