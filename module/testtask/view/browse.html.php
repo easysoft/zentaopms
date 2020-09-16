@@ -84,7 +84,7 @@ $status = $this->session->testTaskVersionStatus;
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build", '', true), $task->buildName);?></td>
-      <td><?php echo zget($users, $task->owner);?></td>
+      <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <?php $status = $this->processStatus('testtask', $task);?>
