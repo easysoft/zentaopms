@@ -502,9 +502,9 @@ class productplanModel extends model
 
                 $this->dao->update(TABLE_STORY)->set("plan")->eq(join(',', $plans))->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
             }
+
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
-
         }
 
         $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($currentOrder)->where('id')->eq((int)$planID)->exec();
