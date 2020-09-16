@@ -1110,6 +1110,7 @@ class testcase extends control
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
         if($_POST)
         {
+            $this->loadModel('file');
             $this->app->loadLang('testtask');
             $caseLang   = $this->lang->testcase;
             $caseConfig = $this->config->testcase;
@@ -1197,6 +1198,7 @@ class testcase extends control
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
+            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in(@array_keys($cases))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
 
             $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
@@ -1282,6 +1284,16 @@ class testcase extends control
                         $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
                     }
                     $case->linkCase = join("; \n", $tmpLinkCases);
+                }
+
+                /* Set related files. */
+                $case->files = '';
+                if(isset($relatedFiles[$case->id]))
+                {
+                    foreach($relatedFiles[$case->id] as $file)
+                    {
+                        $case->files .= $file->title . '<br />';
+                    }
                 }
             }
             if(isset($this->config->bizVersion)) list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
