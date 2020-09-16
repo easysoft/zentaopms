@@ -131,6 +131,7 @@ $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->storyCommon}变动";
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
+$lang->bug->allProject         = '所有' . $lang->prodjetCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解决Bug数';
 $lang->bug->yesterdayConfirmed = '昨天确认';
