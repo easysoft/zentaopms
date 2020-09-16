@@ -12,23 +12,23 @@ fields:
     format: ""
   - field: objectID
     note: "对象ID"
-    range: "1-10000"
+    range: "1-100000"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: product
     note: "产品"
-    range: "1-10000"
-    prefix: ""
-    postfix: ""
+    range: "1-100000"
+    prefix: ","
+    postfix: ","
     loop: 0
     format: ""
   - field: project
     note: "项目"
-    range: "1-10000"
-    prefix: ","
-    postfix: ","
+    range: "1-100000"
+    prefix: ""
+    postfix: ""
     loop: 0
     format: ""
   - field: actor
@@ -55,7 +55,7 @@ fields:
     format: ""
   - field: comment
     note: "备注"
-    range: "1-10000"
+    range: "1-100000"
     prefix: "这是一个系统日志测试备注"
     postfix: ""
     loop: 0

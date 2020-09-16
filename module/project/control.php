@@ -30,6 +30,34 @@ class project extends control
     }
 
     /**
+     * Projects under project set.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function projectList($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->projectStats = array();
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->stack        = '';
+        $this->display();
+    }
+
+    /**
      * The index page.
      *
      * @param  string $locate     yes|no locate to the browse page or not.

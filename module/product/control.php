@@ -36,6 +36,36 @@ class product extends control
     }
 
     /**
+     * Products under project set.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function productList($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title        = $this->lang->product->common;
+        $this->view->program      = '';
+        $this->view->stack        = '';
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->programID    = $programID;
+        $this->view->productStats = array();
+        $this->view->pager        = $pager;
+        $this->display();
+    }
+
+    /**
      * Index page, to browse.
      *
      * @param  string $locate     locate to browse page or not. If not, display all products.

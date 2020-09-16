@@ -23,7 +23,7 @@
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->issue->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('issue', 'batchCreate', '', "<i class='icon icon-plus'></i>" . $lang->issue->batchCreate, '', "class='btn btn-primary'");?>
+    <?php common::printLink('issue', 'batchCreate', '', "<i class='icon icon-plus'></i>" . $lang->issue->batchCreate, '', "class='btn btn-secondary'");?>
     <?php common::printLink('issue', 'create', '', "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
   </div>
 </div>

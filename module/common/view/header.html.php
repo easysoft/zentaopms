@@ -14,6 +14,30 @@ include 'chosen.html.php';
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
   </div>
+  <div class="table-col col-right" id="morePRJ">
+    <div class="list-group">
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
+    </div>
+  </div>
 </div>
 <header id='header'>
   <div id='mainHeader'>
@@ -70,6 +94,11 @@ $("#searchInput").mouseout(function()
         $("#showSearchGo").show();
     }
 });
+function getMorePRJ()
+{
+    console.log(123);
+    $("#morePRJ").toggle();
+}
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>
