@@ -135,7 +135,7 @@ $lang->dividerMenu = ',admin,';
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
 $lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = '项目集|program|pgmbrowse|';
+$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit');
 
 /* Product menu. */
 $lang->productlist = new stdclass();

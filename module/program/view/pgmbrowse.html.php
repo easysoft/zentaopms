@@ -20,38 +20,33 @@
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->program->featureBar as $key => $label):?>
+    <?php foreach($lang->program->PGMFeatureBar as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('pgmbrowse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('mine', array('1' => $lang->program->mine), '', $this->cookie->mine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
   </div>
   <div class='pull-right'>
-    <div class='btn-group'>
-      <?php echo html::a('javascript:setProgramType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title={$lang->program->bygrid} class='btn btn-icon " . ($programType == 'bygrid' ? 'text-primary' : '') . "'");?>
-      <?php echo html::a('javascript:setProgramType("bylist")', "<i class='icon icon-bars'></i>", '', "title={$lang->program->bylist} class='btn btn-icon " . ($programType == 'bylist' ? 'text-primary' : '') . "'");?>
-    </div>
-    <?php common::printLink('program', 'export', "status=$status&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
   <?php if(empty($programs)):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->program->noPGM;?></span> <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info' data-toggle=modal");?></p>
+    <p><span class="text-muted"><?php echo $lang->program->noPGM;?></span> <?php common::printLink('program', 'pgmcreate', '', "<i class='icon icon-plus'></i> " . $lang->program->PGMCreate, '', "class='btn btn-info'");?></p>
   </div>
   <?php else:?>
   <div class='main-col'>
     <?php 
     if($programType == 'bygrid')
     {
-        include 'browsebygrid.html.php';
+        include 'pgmbrowsebygrid.html.php';
     }
     else
     {
-        include 'browsebylist.html.php';
+        include 'pgmbrowsebylist.html.php';
     }
     ?>
   </div>

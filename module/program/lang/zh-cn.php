@@ -22,7 +22,7 @@ $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
 
 /* Fields. */
-$lang->program->PRJCommon          = '项目';
+$lang->program->common             = '项目';
 $lang->program->stage              = '阶段';
 $lang->program->PRJName            = '项目名称';
 $lang->program->PRJTemplate        = '项目模板';
@@ -43,7 +43,7 @@ $lang->program->bygrid             = '看板';
 $lang->program->bylist             = '列表';
 $lang->program->mine               = '我参与的';
 $lang->program->setPlanduration    = '设置工期';
-$lang->program->privway            = '权限控制';
+$lang->program->auth               = '权限控制';
 $lang->program->durationEstimation = '工作量估算';
 $lang->program->PRJProgress        = '项目进度';
 $lang->program->teamCount          = '投入人数';
@@ -86,8 +86,8 @@ $lang->program->PRJAclList['open']    = "默认设置(有项目视图权限，�
 $lang->program->PRJAclList['private'] = "私有项目(只有项目团队成员才能访问)";
 $lang->program->PRJAclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
 
-$lang->program->PRJPrivwayList['extend'] = '继承(取项目权限与组织权限的并集)';
-$lang->program->PRJPrivwayList['reset']  = '重新定义(只取项目权限)';
+$lang->program->PRJAuthList['extend'] = '继承(取项目权限与组织权限的并集)';
+$lang->program->PRJAuthList['reset']  = '重新定义(只取项目权限)';
 
 $lang->program->statusList['wait']      = '未开始';
 $lang->program->statusList['doing']     = '进行中';
@@ -160,4 +160,14 @@ $lang->program->PGMAllInput  = '项目集总投入';
 $lang->program->PGMTeamCount = '项目集成员';
 $lang->program->PGMLongTime  = '长期项目';
 
-$lang->program->noPGM = '暂时没有项目集';
+$lang->program->noPGM         = '暂时没有项目集';
+$lang->program->PGMShowClosed = '显示已关闭';
+
+$lang->program->PGMAclList['open']    = "默认设置(有项目视图权限，即可访问)";
+$lang->program->PGMAclList['private'] = "私有项目(只有项目团队成员才能访问)";
+$lang->program->PGMAclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
+
+$lang->program->PGMAuthList['extend'] = '继承(取项目权限与组织权限的并集)';
+$lang->program->PGMAuthList['reset']  = '重新定义(只取项目权限)';
+
+$lang->program->PGMFeatureBar['all']    = '所有';

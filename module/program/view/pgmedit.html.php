@@ -46,15 +46,9 @@
           <th><?php echo $lang->program->dateRange;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('begin', $program->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
+              <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', $program->end == '0000-00-00' ? '' : $program->end, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
-              <span class='input-group-addon hidden' id='longTimeBox'>
-                <div class="checkbox-primary">
-                  <input type="checkbox" name="longTime" value="1" id="longTime" <?php if($program->end == '0000-00-00') echo "checked";?>>
-                  <label for="longTime"><?php echo $lang->program->longTime;?></label>
-                </div>
-              </span>
+              <?php echo html::input('end', $program->end == '0000-00-00' ? '' : $program->end, "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
           <td colspan='2'></td>
@@ -76,7 +70,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('privway', $lang->program->PGMAuthList, $program->auth, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PGMAuthList, $program->auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
@@ -93,7 +87,6 @@
           </td>
         </tr>
       </table>
-      <?php echo html::hidden('products[]') . html::hidden('plans[]');?>
     </form>
   </div>
 </div>

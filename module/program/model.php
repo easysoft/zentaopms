@@ -14,7 +14,7 @@ class programModel extends model
      */
     public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false, $mine = false)
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
+        return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
@@ -37,7 +37,7 @@ class programModel extends model
      */
     public function getPairs()
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
@@ -53,7 +53,7 @@ class programModel extends model
      */
     public function getPairsByTemplate($model)
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('model')->eq($model)
             ->andWhere('deleted')->eq(0)
@@ -75,7 +75,7 @@ class programModel extends model
     public function getProgramOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
     {
         $queryType = strtolower($queryType);
-        $programs = $this->dao->select('*')->from(TABLE_PROJECT)
+        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
@@ -188,7 +188,7 @@ class programModel extends model
         if(empty($programs)) return array();
 
         $programIdList = array_keys($programs);
-        $programs = $this->dao->select('*')->from(TABLE_PROJECT)
+        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('id')->in($programIdList)
             ->orderBy($orderBy)
             ->limit($itemCounts)
@@ -219,6 +219,18 @@ class programModel extends model
     }
 
     /**
+     * Get children by program id.
+     *
+     * @param  int     $programID 
+     * @access private
+     * @return void
+     */
+    public function getChildren($programID = 0)
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
+    }
+
+    /**
      * Show accessDenied response.
      *
      * @access private
@@ -234,6 +246,167 @@ class programModel extends model
         if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('program', 'browse')));
 
         die(js::locate('back'));
+    }
+
+    /**
+     * Create a program.
+     *
+     * @access private
+     * @return void
+     */
+    public function PGMCreate()
+    {
+        $program = fixer::input('post')
+            ->setDefault('status', 'wait')
+            ->add('type', 'program')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('end', '')
+            ->setDefault('parent', 0)
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->join('whitelist', ',')
+            ->cleanInt('budget')
+            ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
+            ->remove('workDays, delta, branch, uid')
+            ->get();
+
+        if($program->parent)
+        {
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
+            if($parentProgram)
+            {
+                /* Child program begin cannot less than parent. */
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                /* When parent set end then child program end cannot greater than parent. */
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                /* When parent set end then child program cannot set longTime. */
+                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+
+                if(dao::isError()) return false;
+            }
+        }
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
+        $this->dao->insert(TABLE_PROGRAM)->data($program)
+            ->autoCheck()
+            ->batchcheck($this->config->program->PGMCreate->requiredFields, 'notempty')
+            ->check('name', 'unique', "deleted='0'")
+            ->check('code', 'unique', "deleted='0'")
+            ->exec();
+
+        /* Add the creater to the team. */
+        if(!dao::isError())
+        {
+            $programID = $this->dao->lastInsertId();
+            $today     = helper::today();
+            //if($project->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+
+            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
+            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+
+            $this->setTreePath($programID);
+
+            /* Add program admin.*/
+            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
+                ->where('t1.account')->eq($this->app->user->account)
+                ->andWhere('t2.role')->eq('PRJadmin')
+                ->fetch();
+            if(!empty($groupPriv))
+            {
+                $newProgram = $groupPriv->program . ",$programID";
+                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+            }
+            else
+            {
+                $PRJadminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
+                $groupPriv  = new stdclass();
+                $groupPriv->account = $this->app->user->account;
+                $groupPriv->group   = $PRJadminID;
+                $groupPriv->program = $programID;
+                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+            }
+
+            return $programID;
+        }
+    }
+
+    /**
+     * Update program.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function PGMUpdate($programID)
+    {
+        $programID  = (int)$programID;
+        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
+
+        $program = fixer::input('post')
+            ->setDefault('team', $this->post->name)
+            ->setDefault('end', '')
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
+            ->join('whitelist', ',')
+            ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
+            ->remove('uid')
+            ->get();
+
+        $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
+        $children = $this->getChildren($programID);
+
+        if($children > 0)
+        {
+            $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
+            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
+
+            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
+            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
+
+            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
+            if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
+        }
+
+        if($program->parent)
+        {
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
+            if($parentProgram)
+            {
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+            }
+        }
+        if(dao::isError()) return false;
+
+        $this->dao->update(TABLE_PROGRAM)->data($program)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($this->config->program->PGMEdit->requiredFields, 'notempty')
+            ->checkIF($program->begin != '', 'begin', 'date')
+            ->checkIF($program->end != '', 'end', 'date')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+            ->check('name', 'unique', "id!=$programID and deleted='0'")
+            ->check('code', 'unique', "id!=$programID and deleted='0'")
+            ->where('id')->eq($programID)
+            ->limit(1)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            if($program->acl != 'open' and ($program->acl != $oldProgram->acl or $program->whitelist != $oldProgram->whitelist))
+            {
+                $this->loadModel('user')->updateUserView($programID, 'program');
+            }
+
+            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->parent, $oldProgram->path, $oldProgram->grade);
+
+            return common::createChanges($oldProgram, $program);
+        }
     }
 
     /**
@@ -260,7 +433,7 @@ class programModel extends model
 
         if($project->parent)
         {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project->parent)->fetch();
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
             if($parentProgram)
             {
                 /* Child project begin cannot less than parent. */
@@ -278,7 +451,7 @@ class programModel extends model
         if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PROJECT)->data($project)
+        $this->dao->insert(TABLE_PROGRAM)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
             ->check('name', 'unique', "deleted='0'")
@@ -293,10 +466,10 @@ class programModel extends model
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             /* Save order. */
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
 
-            if($project->parent > 0) $this->dao->update(TABLE_PROJECT)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
+            if($project->parent > 0) $this->dao->update(TABLE_PROGRAM)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
             $this->setTreePath($programID);
 
             /* Add program admin.*/
@@ -337,7 +510,7 @@ class programModel extends model
                 $data = new stdclass();
                 $data->project = $programID;
                 $data->product = $productID;
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $this->dao->insert(TABLE_PROGRAMPRODUCT)->data($data)->exec();
             }
 
             return $programID;
@@ -354,7 +527,7 @@ class programModel extends model
     public function update($programID)
     {
         $programID  = (int)$programID;
-        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROJECT)->fetch();
+        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
 
         $program = fixer::input('post')
             ->setDefault('team', $this->post->name)
@@ -375,19 +548,19 @@ class programModel extends model
 
         if(!empty($program->isCat))
         {
-            $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
-            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
+            $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
+            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
             if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild,   $maxChildEnd);
 
-            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
+            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
             if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
         }
 
         if($program->parent)
         {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($program->parent)->fetch();
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
                 if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
@@ -400,7 +573,7 @@ class programModel extends model
         $requiredFields = $this->config->program->edit->requiredFields;
         if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
-        $this->dao->update(TABLE_PROJECT)->data($program)
+        $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
@@ -420,7 +593,7 @@ class programModel extends model
                 $this->loadModel('user')->updateUserView($programID, 'program');
             }
 
-            if($oldProgram->parent != $program->parent) $this->moveNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
+            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
             return common::createChanges($oldProgram, $program);
         }
@@ -472,18 +645,18 @@ class programModel extends model
 
         if(empty($program)) return true;
 
-        if(!empty($program->isCat) and $action == 'group')         return false;
-        if(!empty($program->isCat) and $action == 'managemembers') return false;
-        if(!empty($program->isCat) and $action == 'start')         return false;
-        if(!empty($program->isCat) and $action == 'activate')      return false;
-        if(!empty($program->isCat) and $action == 'suspend')       return false;
-        if(!empty($program->isCat) and $action == 'close')         return false;
+        if($program->type == 'program' and $action == 'pgmgroup')         return false;
+        if($program->type == 'program' and $action == 'pgmmanagemembers') return false;
+        if($program->type == 'program' and $action == 'pgmstart')         return false;
+        if($program->type == 'program' and $action == 'pgmactivate')      return false;
+        if($program->type == 'program' and $action == 'pgmsuspend')       return false;
+        if($program->type == 'program' and $action == 'pgmclose')         return false;
 
-        if($action == 'start')    return $program->status == 'wait' or $program->status == 'suspended';
-        if($action == 'finish')   return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'close')    return $program->status != 'closed';
-        if($action == 'suspend')  return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'activate') return $program->status == 'done';
+        if($action == 'pgmstart')    return $program->status == 'wait' or $program->status == 'suspended';
+        if($action == 'pgmfinish')   return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'pgmclose')    return $program->status != 'closed';
+        if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'pgmactivate') return $program->status == 'done';
 
         return true;
     }
@@ -498,8 +671,8 @@ class programModel extends model
     public function checkHasContent($programID)
     {
         $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('program')->eq($programID)->fetch('count');
+        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
+        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('PRJ')->eq($programID)->fetch('count');
 
         return $count > 0;
     }
@@ -513,7 +686,7 @@ class programModel extends model
      */
     public function checkHasChildren($programID)
     {
-        $count = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($programID)->fetch('count');
+        $count = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
         return $count > 0;
     }
 
@@ -526,35 +699,35 @@ class programModel extends model
      */
     public function setTreePath($programID)
     {
-        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
 
         $path['path']  = ",{$program->id},";
         $path['grade'] = 1;
 
         if($program->parent)
         {
-            $parent = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($program->parent)->fetch();
+            $parent = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
 
             $path['path']  = $parent->path . "{$program->id},";
             $path['grade'] = $parent->grade + 1;
         }
-        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
         return !dao::isError();
     }
 
     /**
      * Get program parent pairs
      *
+     * @param  string $model 
      * @access public
      * @return array
      */
-    public function getParentPairs($template = '')
+    public function getParentPairs($model = '')
     {
-        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROJECT)
-            ->where('isCat')->eq(1)
+        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('template')->ne('')
-            ->beginIF($template)->andWhere('template')->eq($template)->fi()
+            ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');
 
@@ -602,16 +775,25 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public function moveNode($programID, $parentID, $oldPath, $oldGrade)
+    public function processNode($programID, $parentID, $oldParentID, $oldPath, $oldGrade)
     {
-        $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
+        $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
 
-        $childNodes = $this->dao->select('id,parent,path,grade')->from(TABLE_PROJECT)
+        $childNodes = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('path')->like("{$oldPath}%")
             ->andWhere('deleted')->eq(0)
-            ->andWhere('template')->ne('')
             ->orderBy('grade')
             ->fetchAll();
+
+        /* Process old and new program parent field.*/
+        $newChildren = $this->getChildren($parentID);
+        $oldChildren = $this->getChildren($oldParentID);
+        $newParent   = $newChildren > 0 ? -1 : 0;
+        $oldParent   = $oldChildren > 0 ? -1 : 0;
+
+        $this->dao->update(TABLE_PROGRAM)->set('parent')->eq($newParent)->where('id')->eq($parentID)->exec();
+        $this->dao->update(TABLE_PROGRAM)->set('parent')->eq($oldParent)->where('id')->eq($oldParentID)->exec();
+
         /* Process child node path and grade field. */
         foreach($childNodes as $childNode)
         {
@@ -622,7 +804,7 @@ class programModel extends model
                 $path  = rtrim($parent->path, ',') . $path;
                 $grade = $parent->grade + $grade;
             }
-            $this->dao->update(TABLE_PROJECT)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
+            $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
         }
 
         return !dao::isError();
