@@ -1257,8 +1257,8 @@ class storyModel extends model
             if($planID) $story->stage = 'planned';
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($story->stage)->autoCheck()->where('story')->eq((int)$storyID)->exec();
+
             if(!$planID) $this->setStage($storyID);
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
