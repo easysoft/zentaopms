@@ -317,7 +317,7 @@ class repo extends control
 
         $logType   = 'dir';
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
-        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&branch={$this->cookie->repoBranch}"));
+        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&branch=" . base64_encode($this->cookie->repoBranch)));
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
         foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
@@ -695,6 +695,7 @@ class repo extends control
     {
         $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
+        if($branch) $branch = base64_decode($branch);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
         $this->view->position[] = $this->lang->repo->showSyncCommit;
@@ -811,6 +812,7 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
         if($repo->SCM != 'Git') die('finish');
+        if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
 
