@@ -9,18 +9,19 @@
  * @version  $Id: vi.php 4460 2013-02-26 02:28:02Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->admin->common        = 'Quản trị';
-$lang->admin->index         = 'Trang quản trị';
-$lang->admin->checkDB       = 'Kiểm tra CSDL';
-$lang->admin->sso           = 'Zdoo';
-$lang->admin->ssoAction     = 'Liên kết Zdoo';
-$lang->admin->safeIndex     = 'Bảo mật';
-$lang->admin->checkWeak     = 'Kiểm tra độ yếu mật khẩu';
-$lang->admin->certifyMobile = 'Xác thực di động của bạn';
-$lang->admin->certifyEmail  = 'Xác thực email của bạn';
-$lang->admin->ztCompany     = 'Xác thực doanh nghiệp của bạn';
-$lang->admin->captcha       = 'Mã xác thực';
-$lang->admin->getCaptcha    = 'Gửi Mã xác thực';
+$lang->admin->common         = 'Quản trị';
+$lang->admin->index          = 'Trang quản trị';
+$lang->admin->checkDB        = 'Kiểm tra CSDL';
+$lang->admin->sso            = 'Zdoo';
+$lang->admin->ssoAction      = 'Liên kết Zdoo';
+$lang->admin->safeIndex      = 'Bảo mật';
+$lang->admin->checkWeak      = 'Kiểm tra độ yếu mật khẩu';
+$lang->admin->certifyMobile  = 'Xác thực di động của bạn';
+$lang->admin->certifyEmail   = 'Xác thực email của bạn';
+$lang->admin->ztCompany      = 'Xác thực doanh nghiệp của bạn';
+$lang->admin->captcha        = 'Mã xác thực';
+$lang->admin->getCaptcha     = 'Gửi Mã xác thực';
+$lang->admin->registerAction = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Nhật ký';

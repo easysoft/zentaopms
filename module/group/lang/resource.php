@@ -805,6 +805,7 @@ $lang->resource->mail->resend = 'resendAction';
 $lang->resource->mail->batchDelete   = 'batchDelete';
 $lang->resource->mail->sendCloud     = 'sendCloud';
 $lang->resource->mail->sendcloudUser = 'sendcloudUser';
+$lang->resource->mail->ztCloud       = 'ztCloud';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';
@@ -818,6 +819,7 @@ $lang->mail->methodOrder[45] = 'batchDelete';
 $lang->mail->methodOrder[50] = 'resend';
 $lang->mail->methodOrder[55] = 'sendCloud';
 $lang->mail->methodOrder[60] = 'sendcloudUser';
+$lang->mail->methodOrder[65] = 'ztCloud';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
@@ -998,12 +1000,15 @@ $lang->resource->admin->checkDB   = 'checkDB';
 $lang->resource->admin->safe      = 'safeIndex';
 $lang->resource->admin->checkWeak = 'checkWeak';
 $lang->resource->admin->sso       = 'ssoAction';
+$lang->resource->admin->sso       = 'ssoAction';
+$lang->resource->admin->register  = 'registerAction';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
 $lang->admin->methodOrder[10] = 'safeIndex';
 $lang->admin->methodOrder[15] = 'checkWeak';
 $lang->admin->methodOrder[20] = 'sso';
+$lang->admin->methodOrder[25] = 'register';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();
