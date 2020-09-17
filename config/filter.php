@@ -161,8 +161,9 @@ $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'int';
 $filter->qa->default->cookie['preProductID'] = 'int';
 
-$filter->story->create->cookie['lastStoryModule'] = 'int';
-$filter->story->export->cookie['checkedItem'] = 'reg::checked';
+$filter->story->create->cookie['lastStoryModule']   = 'int';
+$filter->story->batchcreate->cookie['preProductID'] = 'int';
+$filter->story->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
