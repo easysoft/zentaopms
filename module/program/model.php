@@ -658,6 +658,12 @@ class programModel extends model
         if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'pgmactivate') return $program->status == 'done';
 
+        if($action == 'prjstart')    return $program->status == 'wait' or $program->status == 'suspended';
+        if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'prjclose')    return $program->status != 'closed';
+        if($action == 'prjsuspend')  return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'prjactivate') return $program->status == 'done';
+
         return true;
     }
 
@@ -808,5 +814,152 @@ class programModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Get project list data.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $moduleStatus
+     * @access public
+     * @return bool
+     */
+    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $moduleStatus = 0)
+    {
+        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        /* Determine whether the program name is displayed. */
+        if($moduleStatus)
+        {
+            $programList = array();
+            foreach($projectList as $id => $project)
+            {
+                $path = explode(',', $project->path);
+                $path = array_filter($path);
+                array_pop($path);
+                $programID = $moduleStatus == 'base' ? current($path) : end($path);
+                if(empty($path) || $programID == $id) continue;
+
+                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJParams($programID);
+                $programList[$programID] = $program;
+
+                $projectList[$id]->name = $program->name . '/' . $projectList[$id]->name;
+            }
+        }
+        return $projectList;
+    }
+
+    /**
+     * Get a project by id.
+     * 
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getPRJByID($projectID)
+    {
+        return $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+    }
+
+    /**
+     * Get project name.
+     * 
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getPRJParams($projectID = 0)
+    {
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+    }
+
+    /**
+     * Build the query.
+     * 
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function buildPRJMenuQuery($projectID)
+    {
+        $rootProject = $this->getPRJByID($projectID);
+        if(!$rootProject)
+        {
+            $rootProject = new stdclass();
+            $rootProject->path = '';
+        }
+
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->beginIF($projectID > 0)->where('path')->like($rootProject->path . '%')->fi()
+            ->orderBy('grade desc, `order`')
+            ->get();
+    }
+
+    /**
+     * Get the treemenu of project.
+     *
+     * @param  int        $projectID
+     * @param  string     $userFunc
+     * @param  int        $param
+     * @access public
+     * @return string
+     */
+    public function getPRJTreeMenu($projectID = 0, $userFunc, $param = 0)
+    {
+        $projectMenu = array();
+        $stmt        = $this->dbh->query($this->buildPRJMenuQuery($projectID));
+        while($project = $stmt->fetch())
+        {
+            $linkHtml = call_user_func($userFunc, $project, $param);
+
+            if(isset($projectMenu[$project->id]) and !empty($projectMenu[$project->id]))
+            {
+                if(!isset($projectMenu[$project->parent])) $projectMenu[$project->parent] = '';
+                $projectMenu[$project->parent] .= "<li>$linkHtml";
+                $projectMenu[$project->parent] .= "<ul>".$projectMenu[$project->id]."</ul>\n";
+            }
+            else
+            {
+                if(isset($projectMenu[$project->parent]) and !empty($projectMenu[$project->parent]))
+                {
+                    $projectMenu[$project->parent] .= "<li>$linkHtml\n";
+                }
+                else
+                {
+                    $projectMenu[$project->parent] = "<li>$linkHtml\n";
+                }
+            }
+            $projectMenu[$project->parent] .= "</li>\n";
+        }
+
+        krsort($projectMenu);
+        $projectMenu = array_pop($projectMenu);
+        $lastMenu = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
+        return $lastMenu;
+    }
+
+    /**
+     * Create the manage link.
+     *
+     * @param  int    $project
+     * @access public
+     * @return string
+     */
+    public function createPRJManageLink($project)
+    {
+        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('project', 'browse', "projectID={$project->id}");
+        $icon = $project->type == 'program' ? '<i class="icon icon-stack"></i> ' : '<i class="icon icon-menu-doc"></i> ';
+        return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 }

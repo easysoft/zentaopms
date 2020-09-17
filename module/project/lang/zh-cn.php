@@ -72,8 +72,6 @@ $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
 $lang->project->watermark     = '由禅道导出';
 $lang->project->viewByUser    = '按用户查看';
-$lang->project->stack         = '项目集';
-$lang->project->createstack   = '创建项目集';
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";

@@ -532,7 +532,7 @@ class commonModel extends model
         }
 
         echo '<li><hr></li>';
-        echo '<li><span><i class="icon icon-menu-doc"></i>' . $lang->recent . '</span></li>';
+        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
         echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
         echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
         echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';

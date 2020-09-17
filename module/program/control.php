@@ -96,7 +96,7 @@ class program extends control
     }
 
     /**
-     * Create a program.
+     * Create a project.
      *
      * @param  string $template
      * @param  int    $parentProgramID
@@ -498,7 +498,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function start($projectID)
+    public function PRJStart($projectID)
     {
         $project   = $this->project->getByID($projectID);
         $projectID = $project->id;
@@ -549,13 +549,13 @@ class program extends control
     }
 
     /**
-     * Suspend a program.
+     * Suspend a project.
      *
      * @param  int     $projectID
      * @access public
      * @return void
      */
-    public function suspend($projectID)
+    public function PRJSuspend($projectID)
     {
         $project = $this->project->getByID($projectID);
 
@@ -624,13 +624,13 @@ class program extends control
     }
 
     /**
-     * Close a program.
+     * Close a project.
      *
      * @param  int     $projectID
      * @access public
      * @return void
      */
-    public function close($projectID)
+    public function PRJClose($projectID)
     {
         $project = $this->project->getByID($projectID);
 
@@ -787,19 +787,64 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJBrowse($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function PRJBrowse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->program = 'project';
+
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projectStats = array();
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleStatus = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJModuleStatus');
+        $projectStats = $this->program->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $moduleStatus);
+
+        $this->view->title      = $this->lang->program->PRJBrowse;
+        $this->view->position[] = $this->lang->program->PRJBrowse;
+
+        $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
+        $this->view->program      = $this->program->getPRJByID($programID);
+        $this->view->PRJTree      = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'));
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
-        $this->view->stack        = '';
         $this->display();
+    }
+
+    /**
+     * Set module display mode.
+     *
+     * @access public
+     * @return void
+     */
+    public function setPRJModule()
+    {
+        $this->loadModel('setting');
+        if($_POST)
+        {
+            $PRJModuleStatus = $this->post->PRJModuleStatus;
+            $this->setting->setItem($this->app->user->account . '.program.PRJModuleStatus', $PRJModuleStatus);
+            die(js::reload('parent.parent'));
+        }
+
+        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJModuleStatus');
+        $this->view->status = empty($status) ? '0' : $status;
+        $this->display();
+    }
+
+    /**
+     * Delete a project.
+     *
+     * @param  int     $projectID
+     * @param  varchar $confirm
+     * @access public
+     * @return void
+     */
+    public function PRJDelete($projectID, $confirm = 'no')
+    {
+        die(js::reload('parent'));
     }
 }

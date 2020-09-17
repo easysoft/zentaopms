@@ -10,122 +10,94 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
+<?php
+js::set('projectID', $programID);
+js::set('browseType', $browseType);
+?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($program) ? $lang->project->stack : $program->name;?>
-      <?php if($programID) echo html::a(inLink('productlist', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+      <?php echo empty($program) ? $lang->program->PGMList : $program->name;?>
+      <?php if($programID) echo html::a(inLink('PRJBrowse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
-  <div class="btn-toolbar pull-left">
-    <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "programID=$programID&browseType=$browseType&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+  <div class="btn-toolBar pull-left">
+    <?php foreach($lang->program->featureBar as $key => $label):?>
+    <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('PRJBrowse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <a id="bysearchTab" class="btn btn-link querybox-toggle"><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
+    <?php echo html::checkbox('mine', array('1' => $lang->program->mine), '', $this->cookie->mine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('', '', "", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('program', 'PRJCreate', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $stack;?>
+      <?php echo $PRJTree;?>
       <div class="text-center">
-        <?php common::printLink('program', 'create', '', $lang->project->createstack, '', 'class="btn btn-info btn-wide"');?>
+        <?php common::printLink('program', 'setPRJModule', '', $lang->program->PRJModuleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
     </div>
   </div>
   <div class="main-col">
-    <div id="queryBox" class="cell" data-module="projectlist"></div>
-    <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
     <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
     <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "programID=$programID");?>' data-ride='table'>
       <table class='table has-sort-head table-fixed' id='projectList'>
-        <?php $vars = "programID=$programID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
-            <th class='c-id'>
-              <?php if($canBatchEdit):?>
-              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                <label></label>
-              </div>
-              <?php endif;?>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-            </th>
-            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
-            <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
-            <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
-            <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
-            <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
-            <th class='w-70px'><?php echo $lang->project->totalEstimate;?></th>
-            <th class='w-70px'><?php echo $lang->project->totalConsumed;?></th>
-            <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
-            <th class='w-150px'><?php echo $lang->project->progress;?></th>
-            <th class='w-100px'><?php echo $lang->project->burn;?></th>
-            <?php if($canOrder):?>
-            <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
-            <?php endif;?>
+            <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+            <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
+            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PRJName);?></th>
+            <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
+            <th class='w-120px'><?php echo $lang->program->begin;?></th>
+            <th class='w-120px'><?php echo $lang->program->end;?></th>
+            <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
+            <th class='w-80px'><?php echo $lang->program->PRJPM;?></th>
+            <th class='w-200px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
-        <tbody class='sortable' id='projectTableList'>
+        <tbody>
           <?php foreach($projectStats as $project):?>
-          <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->order ?>'>
-            <td class='c-id'>
-              <?php if($canBatchEdit):?>
-              <div class="checkbox-primary">
-                <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' />
-                <label></label>
-              </div>
-              <?php endif;?>
-              <?php printf('%03d', $project->id);?>
-            </td>
-            <td class='text-left' title='<?php echo $project->name?>'>
-              <?php
-              if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
-              echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);
-              ?>
-            </td>
+          <tr>
+            <td><?php printf('%03d', $project->id);?></td>
             <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
-            <td><?php echo zget($users, $project->PM);?></td>
+            <td class='text-left' title='<?php echo $project->name?>'>
+              <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?>
+            </td>
+            <td><?php echo zget($lang->program->statusList, $project->status);?></td>
+            <td><?php echo $project->begin;?></td>
             <td><?php echo $project->end;?></td>
-            <?php $projectStatus = $this->processStatus('project', $project);?>
-            <td class='c-status' title='<?php echo $projectStatus;?>'>
-              <span class="status-project status-<?php echo $project->status?>"><?php echo $projectStatus;?></span>
+            <td><?php echo $project->budget;?></td>
+            <td><?php echo zget($users, $project->PM);?></td>
+            <td class='text-center c-actions'>
+              <?php common::printIcon('program', 'PRJGroup', "programID=$project->id", $project, 'list', 'group');?>
+              <?php common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');?>
+              <?php common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
+              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "edit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
             </td>
-            <td><?php echo $project->hours->totalEstimate;?></td>
-            <td><?php echo $project->hours->totalConsumed;?></td>
-            <td><?php echo $project->hours->totalLeft;?></td>
-            <td class="c-progress">
-              <div class="progress progress-text-left">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-                <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
-                </div>
-              </div>
-            </td>
-            <td id='spark-<?php echo $project->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $project->burns);?>'></td>
-            <?php if($canOrder):?>
-            <td class='sort-handler'><i class="icon icon-move"></i></td>
-            <?php endif;?>
           </tr>
           <?php endforeach;?>
         </tbody>
       </table>
       <?php if($projectStats):?>
       <div class='table-footer'>
-        <?php if($canBatchEdit):?>
-        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn');?></div>
-        <?php endif;?>
-        <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>
   </div>
 </div>
-<script>$("#<?php echo $browseType;?>Tab").addClass('btn-active-text');</script>
-<?php js::set('orderBy', $orderBy)?>
+<script>
+$('#project<?php echo $programID;?>').addClass('active');
+$(".tree .active").parent('li').addClass('active');
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -37,40 +37,40 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->program->create;?></h2>
+      <h2><?php echo $lang->program->PRJCreate;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->program->copy;?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->program->PRJCopy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->template;?></th>
+          <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
           <td><?php echo zget($lang->program->templateList, $template, '');?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->name;?></th>
+          <th><?php echo $lang->program->PRJName;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td>
             <div class="checkbox-primary">
               <input type="checkbox" name="isCat" value="1" id="isCat">
-              <label for="isCat"><?php echo $lang->program->parent;?></label>
+              <label for="isCat"><?php echo $lang->program->PRJParent;?></label>
             </div>
           </td>
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->code;?></th>
+          <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <?php if($template == 'waterfall'):?>
         <tr>
-          <th><?php echo $lang->program->category;?></th>
+          <th><?php echo $lang->program->PRJCategory;?></th>
           <td><?php echo html::select('category', $lang->program->categoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->program->PM;?></th>
+          <th><?php echo $lang->program->PRJPM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
         </tr>
         <tr>

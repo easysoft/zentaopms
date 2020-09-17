@@ -1,8 +1,10 @@
 <?php
 /* Actions. */
 $lang->program->index                = '仪表盘';
+$lang->program->PRJCreate            = '创建项目';
 $lang->program->PRJCreateGuide       = '选择项目模板';
 $lang->program->PRJEdit              = '编辑项目';
+$lang->program->PRJBatchEdit         = '批量编辑';
 $lang->program->PRJBrowse            = '项目列表';
 $lang->program->PRJAll               = '所有项目';
 $lang->program->PRJStart             = '启动项目';
@@ -20,6 +22,10 @@ $lang->program->PRJManagePriv        = '维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
+$lang->program->PGMList              = '项目集';
+$lang->program->PGMCreate            = '创建项目集';
+$lang->program->PRJModuleSetting     = '模块设置';
+$lang->program->PRJModuleOpen        = '列表页是否显示模块名';
 
 /* Fields. */
 $lang->program->common             = '项目';
@@ -119,6 +125,36 @@ $lang->program->endGreaterParent  = "父项目的完成日期：%s，完成日�
 $lang->program->beginGreateChild  = "子项目的最小开始日期：%s，父项目的开始日期不能大于子项目的最小开始日期";
 $lang->program->endLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 $lang->program->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
+
+$lang->program->PRJModuleStatus['0']    = '不显示';
+$lang->program->PRJModuleStatus['base'] = '只显示一级模块';
+$lang->program->PRJModuleStatus['end']  = '只显示最后一级模块';
+
+$lang->program->PRJNoProgram         = '暂时没有项目';
+$lang->program->PRJAccessDenied      = '您无权访问该项目！';
+$lang->program->PRJChooseProgramType = '选择项目管理方式';
+$lang->program->nextStep             = '下一步';
+$lang->program->hoursUnit            = '%s工时';
+$lang->program->membersUnit          = '%s人';
+$lang->program->lastIteration        = '近期迭代';
+$lang->program->ongoingStage         = '进行中的阶段';
+$lang->program->scrum                = 'Scrum';
+$lang->program->scrumTitle           = '敏捷开发全流程项目管理';
+$lang->program->waterfall            = '瀑布';
+$lang->program->waterfallTitle       = '瀑布式项目管理';
+$lang->program->PRJCannotCreateChild = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->program->PRJHasChildren       = '该项目有子项目存在，不能删除。';
+$lang->program->PRJConfirmDelete     = "您确定删除项目[%s]吗？";
+$lang->program->emptyPM              = '暂无';
+$lang->program->PRJCannotChangeToCat = "该项目已经有实际的内容，无法修改为父项目";
+$lang->program->PRJCannotCancelCat   = "该项目下已经有子项目，无法取消父项目标记";
+$lang->program->PRJParentBeginEnd    = "父项目起止时间：%s ~ %s";
+$lang->program->PRJParentBudget      = "父项目预算：%s";
+$lang->program->PRJBeginLetterParent = "父项目的开始日期：%s，开始日期不能小于父项目的开始日期";
+$lang->program->PRJEndGreaterParent  = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
+$lang->program->PRJBeginGreateChild  = "子项目的最小开始日期：%s，父项目的开始日期不能大于子项目的最小开始日期";
+$lang->program->PRJEndLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
+$lang->program->PRJChildLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
 
 /* Actions. */
 $lang->program->PGMIndex             = '仪表盘';

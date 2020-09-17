@@ -122,7 +122,7 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my         = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program    = '<i class="icon icon-menu-project"></i> 项目集|program|pgmindex|';
+$lang->mainNav->program    = '<i class="icon icon-stack"></i> 项目集|program|pgmindex|';
 $lang->mainNav->product    = '<i class="icon icon-menu-project"></i> 产品|product|productlist|';
 $lang->mainNav->project    = '<i class="icon icon-menu-doc"></i> 项目|program|prjbrowse|';
 $lang->mainNav->system     = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
