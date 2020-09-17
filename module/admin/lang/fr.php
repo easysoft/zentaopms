@@ -9,18 +9,19 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->admin->common        = 'Admin';
-$lang->admin->index         = 'Admin Home';
-$lang->admin->checkDB       = 'Check Database';
-$lang->admin->sso           = 'Zdoo';
-$lang->admin->ssoAction     = 'Link Zdoo';
-$lang->admin->safeIndex     = 'Sécurité';
-$lang->admin->checkWeak     = 'Contrôle niveau de sécurité des mots de passe';
-$lang->admin->certifyMobile = 'Vérifier votre smartphone';
-$lang->admin->certifyEmail  = 'Vérifier votre Email';
-$lang->admin->ztCompany     = 'Vérifier votre entreprise';
-$lang->admin->captcha       = 'Code de vérification';
-$lang->admin->getCaptcha    = 'Obtenir le Code de vérification';
+$lang->admin->common         = 'Admin';
+$lang->admin->index          = 'Admin Home';
+$lang->admin->checkDB        = 'Check Database';
+$lang->admin->sso            = 'Zdoo';
+$lang->admin->ssoAction      = 'Link Zdoo';
+$lang->admin->safeIndex      = 'Sécurité';
+$lang->admin->checkWeak      = 'Contrôle niveau de sécurité des mots de passe';
+$lang->admin->certifyMobile  = 'Vérifier votre smartphone';
+$lang->admin->certifyEmail   = 'Vérifier votre Email';
+$lang->admin->ztCompany      = 'Vérifier votre entreprise';
+$lang->admin->captcha        = 'Code de vérification';
+$lang->admin->getCaptcha     = 'Obtenir le Code de vérification';
+$lang->admin->registerAction = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Log';

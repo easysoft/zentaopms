@@ -9,18 +9,19 @@
  * @version     $Id: zh-cn.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = '后台管理';
-$lang->admin->index         = '后台管理首页';
-$lang->admin->checkDB       = '检查数据库';
-$lang->admin->sso           = 'ZDOO集成';
-$lang->admin->ssoAction     = 'ZDOO集成';
-$lang->admin->safeIndex     = '安全';
-$lang->admin->checkWeak     = '弱口令检查';
-$lang->admin->certifyMobile = '认证手机';
-$lang->admin->certifyEmail  = '认证邮箱';
-$lang->admin->ztCompany     = '认证公司';
-$lang->admin->captcha       = '验证码';
-$lang->admin->getCaptcha    = '获取验证码';
+$lang->admin->common         = '后台管理';
+$lang->admin->index          = '后台管理首页';
+$lang->admin->checkDB        = '检查数据库';
+$lang->admin->sso            = 'ZDOO集成';
+$lang->admin->ssoAction      = 'ZDOO集成';
+$lang->admin->safeIndex      = '安全';
+$lang->admin->checkWeak      = '弱口令检查';
+$lang->admin->certifyMobile  = '认证手机';
+$lang->admin->certifyEmail   = '认证邮箱';
+$lang->admin->ztCompany      = '认证公司';
+$lang->admin->captcha        = '验证码';
+$lang->admin->getCaptcha     = '获取验证码';
+$lang->admin->registerAction = '登记';
 
 $lang->admin->api     = '接口';
 $lang->admin->log     = '日志';

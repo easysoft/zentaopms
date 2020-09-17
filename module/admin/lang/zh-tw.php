@@ -9,18 +9,19 @@
  * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = '後台管理';
-$lang->admin->index         = '後台管理首頁';
-$lang->admin->checkDB       = '檢查資料庫';
-$lang->admin->sso           = 'ZDOO整合';
-$lang->admin->ssoAction     = 'ZDOO整合';
-$lang->admin->safeIndex     = '安全';
-$lang->admin->checkWeak     = '弱口令檢查';
-$lang->admin->certifyMobile = '認證手機';
-$lang->admin->certifyEmail  = '認證郵箱';
-$lang->admin->ztCompany     = '認證公司';
-$lang->admin->captcha       = '驗證碼';
-$lang->admin->getCaptcha    = '獲取驗證碼';
+$lang->admin->common         = '後台管理';
+$lang->admin->index          = '後台管理首頁';
+$lang->admin->checkDB        = '檢查資料庫';
+$lang->admin->sso            = 'ZDOO整合';
+$lang->admin->ssoAction      = 'ZDOO整合';
+$lang->admin->safeIndex      = '安全';
+$lang->admin->checkWeak      = '弱口令檢查';
+$lang->admin->certifyMobile  = '認證手機';
+$lang->admin->certifyEmail   = '認證郵箱';
+$lang->admin->ztCompany      = '認證公司';
+$lang->admin->captcha        = '驗證碼';
+$lang->admin->getCaptcha     = '獲取驗證碼';
+$lang->admin->registerAction = '登記';
 
 $lang->admin->api     = '介面';
 $lang->admin->log     = '日誌';
