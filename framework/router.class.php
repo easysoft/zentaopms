@@ -568,6 +568,12 @@ class router extends baseRouter
             $passedParams = array_reverse($passedParams);
         }
 
+        /* Fix bug #3267. Param 'words' is not validated when searching. */
+        if($this->rawModule == 'search' and $this->rawMethod == 'index')
+        {
+            unset($passedParams['words']);
+        }
+
         /* display参数用来标记请求是否来自禅道客户端的卡片展示页面，此处应该删掉以避免对方法调用产生影响。 */
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
