@@ -42,8 +42,9 @@ function loadModuleRelated()
 {
     var moduleID  = $('#module').val();
     var productID = $('#product').val();
+    var storyID   = $('#story').val();
     setAssignedTo(moduleID, productID);
-    setStories(moduleID, productID);
+    setStories(moduleID, productID, storyID);
 }
 
 /**

@@ -52,5 +52,6 @@ function loadModuleRelated()
 {
     moduleID  = $('#module').val();
     productID = $('#product').val();
-    setStories(moduleID, productID);
+    storyID   = $('#story').val();
+    setStories(moduleID, productID, storyID);
 }
