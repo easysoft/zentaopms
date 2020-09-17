@@ -1098,9 +1098,9 @@ class user extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMore($params)
+    public function ajaxGetMore()
     {
-        $params = base64_decode($params);
+        $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
         $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
 

@@ -245,6 +245,7 @@ $filter->user->login->get['password']     = 'reg::any';
 $filter->user->edit->get['from']          = 'reg::word';
 $filter->user->ajaxgetmore->get['search'] = 'reg::any';
 $filter->user->ajaxgetmore->get['limit']  = 'int';
+$filter->user->ajaxgetmore->get['params'] = 'reg::base64';
 
 $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';
