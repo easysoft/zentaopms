@@ -1475,7 +1475,11 @@ class userModel extends model
         $linkedProjectProducts = array();
         if($objectType == 'product')
         {
-            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->in($objectIdList)->query();
+            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in($objectIdList)
+                ->andWhere('t2.deleted')->eq(0)
+                ->query();
             while($projectProduct = $stmt->fetch())
             {
                 $linkedProductProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;

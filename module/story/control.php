@@ -294,6 +294,9 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
+        if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         /* Check can subdivide or not. */
         if($storyID)
         {

@@ -1238,6 +1238,8 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->parent < 0) continue;
+            if($oldStory->status == 'closed') continue;
 
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
@@ -1255,6 +1257,8 @@ class storyModel extends model
             if($planID) $story->stage = 'planned';
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($story->stage)->autoCheck()->where('story')->eq((int)$storyID)->exec();
+
             if(!$planID) $this->setStage($storyID);
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }

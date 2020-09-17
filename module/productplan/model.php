@@ -488,13 +488,23 @@ class productplanModel extends model
             }
             else
             {
-                $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('branch', 'id');
-                $plans[$plan->branch] = $planID;
+                /* Fix bug #3065. */
+                if($story->branch)
+                {
+                    $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('branch', 'id');
+                    $plans[$plan->branch] = $planID;
+                }
+                else
+                {
+                    $oldplans = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('id');
+                    $plans    = $oldplans + array($planID => $planID);
+                }
+
                 $this->dao->update(TABLE_STORY)->set("plan")->eq(join(',', $plans))->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
             }
+
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
-
         }
 
         $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($currentOrder)->where('id')->eq((int)$planID)->exec();

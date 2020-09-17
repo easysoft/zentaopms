@@ -177,7 +177,16 @@ class task extends control
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
-        $task->module     = $task->module ? $task->module : (int)$this->cookie->lastTaskModule;
+
+        /* Fix bug #3381. When the story module is the root module. */
+        if($storyID)
+        {
+           $task->module = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch('module');
+        }
+        else
+        {
+            $task->module = $task->module ? $task->module : (int)$this->cookie->lastTaskModule;
+        }
 
         /* Fix bug #2737. When moduleID is not story module. */
         $moduleIdList = array();
