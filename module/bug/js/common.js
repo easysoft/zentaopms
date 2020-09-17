@@ -415,14 +415,15 @@ function loadProjectBuilds(projectID)
  * 
  * @param  moduleID $moduleID 
  * @param  productID $productID 
+ * @param  storyID $storyID
  * @access public
  * @return void
  */
-function setStories(moduleID, productID)
+function setStories(moduleID, productID, storyID)
 {
     var branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID);
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID);
     $.get(link, function(stories)
     {
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
