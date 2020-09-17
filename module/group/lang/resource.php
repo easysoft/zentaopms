@@ -1000,7 +1000,6 @@ $lang->resource->admin->checkDB   = 'checkDB';
 $lang->resource->admin->safe      = 'safeIndex';
 $lang->resource->admin->checkWeak = 'checkWeak';
 $lang->resource->admin->sso       = 'ssoAction';
-$lang->resource->admin->sso       = 'ssoAction';
 $lang->resource->admin->register  = 'registerAction';
 
 $lang->admin->methodOrder[0]  = 'index';
