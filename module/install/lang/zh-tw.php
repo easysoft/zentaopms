@@ -180,7 +180,7 @@ $lang->install->promotion      = "為您推薦易軟天創旗下其他產品："
 $lang->install->chanzhi        = new stdclass();
 $lang->install->chanzhi->name  = '蟬知門戶';
 $lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url   = 'http://www.chanzhi.org';
+$lang->install->chanzhi->url   = 'http://www.zsite.com';
 $lang->install->chanzhi->desc  = <<<EOD
 <ul>
   <li>專業的企業營銷門戶系統</li>
@@ -206,7 +206,7 @@ EOD;
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name  = '喧喧聊天';
 $lang->install->xuanxuan->logo  = 'images/main/xuanxuan.ico';
-$lang->install->xuanxuan->url   = 'http://www.xuan.im';
+$lang->install->xuanxuan->url   = 'http://www.xuanim.com';
 $lang->install->xuanxuan->desc  = <<<EOD
 <ul>
   <li>輕：輕量級架構，容易部署</li>
