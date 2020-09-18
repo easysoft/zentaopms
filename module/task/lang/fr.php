@@ -199,6 +199,7 @@ $lang->task->deniedNotice          = 'Seulement le %s peut %s la tâche.';
 $lang->task->noTask                = "Pas de tâche pour l'instant. ";
 $lang->task->createDenied          = 'La création de tâches est interdite dans ce projet';
 $lang->task->cannotDeleteParent    = 'Impossible de supprimer la tâche parente';
+$lang->task->addChildTask          = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Coût Total" doit être numérique.';
@@ -219,6 +220,7 @@ $lang->task->error->deadlineSmall     = '"Date Limite" doit être supérieur à 
 $lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
+$lang->task->error->chooseOtherParent = 'the currently selected parent task has been consumed, please select another parent task.';
 
 /* Report. */
 $lang->task->report = new stdclass();

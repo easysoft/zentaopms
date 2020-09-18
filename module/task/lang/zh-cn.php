@@ -199,6 +199,7 @@ $lang->task->deniedNotice          = '当前任务只有%s才可以%s。';
 $lang->task->noTask                = '暂时没有任务。';
 $lang->task->createDenied          = '你不能在该项目添加任务';
 $lang->task->cannotDeleteParent    = '不能删除父任务。';
+$lang->task->addChildTask          = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"总计消耗"必须为数字';
@@ -219,6 +220,7 @@ $lang->task->error->deadlineSmall     = '"截止日期"必须大于"预计开始
 $lang->task->error->alreadyStarted    = '此任务已被启动，不能重复启动！';
 $lang->task->error->realStartedEmpty  = '实际开始不能为空';
 $lang->task->error->finishedDateEmpty = '实际完成不能为空';
+$lang->task->error->chooseOtherParent = '当前选中的父任务已有消耗，请选择其他父任务。';
 
 /* Report. */
 $lang->task->report         = new stdclass();

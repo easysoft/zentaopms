@@ -251,6 +251,10 @@ class task extends control
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
 
+        /* When common task are child tasks, query whether common task are consumed. */
+        $taskConsumed = 0;
+        if($taskID) $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($taskID)->andWhere('parent')->eq(0)->fetch('consumed');
+
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($projectID);
@@ -280,17 +284,18 @@ class task extends control
 
         if($taskID) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->project    = $project;
-        $this->view->stories    = $stories;
-        $this->view->modules    = $modules;
-        $this->view->parent     = $taskID;
-        $this->view->storyID    = $storyID;
-        $this->view->story      = $this->story->getByID($storyID);
-        $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
-        $this->view->members    = $members;
-        $this->view->moduleID   = $moduleID;
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->project      = $project;
+        $this->view->stories      = $stories;
+        $this->view->modules      = $modules;
+        $this->view->parent       = $taskID;
+        $this->view->storyID      = $storyID;
+        $this->view->story        = $this->story->getByID($storyID);
+        $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
+        $this->view->members      = $members;
+        $this->view->moduleID     = $moduleID;
+        $this->view->taskConsumed = $taskConsumed;
         $this->display();
     }
 

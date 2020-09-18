@@ -199,6 +199,7 @@ $lang->task->deniedNotice          = 'Chỉ có %s này có thể %s nhiệm v�
 $lang->task->noTask                = 'Không có nhiệm vụ nào';
 $lang->task->createDenied          = 'Tạo nhiệm vụ bị từ chối trong dự án này';
 $lang->task->cannotDeleteParent    = 'Không thể xóa nhiệm vụ cha';
+$lang->task->addChildTask          = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
@@ -219,6 +220,7 @@ $lang->task->error->deadlineSmall     = '"Hạn chót" phải lớn hơn "Ngày 
 $lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
+$lang->task->error->chooseOtherParent = 'the currently selected parent task has been consumed, please select another parent task.';
 
 /* Report. */
 $lang->task->report = new stdclass();

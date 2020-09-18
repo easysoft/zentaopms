@@ -401,6 +401,16 @@ class taskModel extends model
         if($parentID > 0 && !empty($taskID))
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
+
+            /* When common task are child tasks and the common task has consumption, create a child task. */
+            if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
+            {
+                $childTask = $oldParentTask;
+                unset($childTask->id);
+                $childTask->parent = $parentID;
+                $this->dao->insert(TABLE_TASK)->data($childTask)->autoCheck()->exec();
+            }
+
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
 
@@ -762,6 +772,14 @@ class taskModel extends model
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
+        }
+
+        /* When the selected parent task is a common task and has consumption, select other parent tasks. */
+        if($this->post->parent > 0)
+        {
+            $taskConsumed = 0;
+            $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
+            if($taskConsumed > 0) die(js::error($this->lang->task->error->chooseOtherParent));
         }
 
         $now  = helper::now();
