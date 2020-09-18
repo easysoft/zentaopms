@@ -139,10 +139,12 @@ $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 
-$filter->program->browse->cookie['programType']  = 'code';
-$filter->program->browse->cookie['mine']         = 'code';
-$filter->program->prjbrowse->cookie['PRJMine']   = 'code';
-$filter->program->export->cookie['checkedItem']  = 'reg::checked';
+$filter->program->prjbrowse->cookie['programType']         = 'code';
+$filter->program->prjbrowse->cookie['PRJMine']             = 'code';
+$filter->program->prjbrowse->cookie['mine']                = 'code';
+$filter->program->pgmbrowse->cookie['showClosed']          = 'code';
+$filter->program->export->cookie['checkedItem']            = 'reg::checked';
+$filter->program->ajaxgetpgmdropmenu->cookie['showClosed'] = 'code';
 
 $filter->project->default->cookie['lastProject']     = 'int';
 $filter->project->default->cookie['projectMode']     = 'code';
