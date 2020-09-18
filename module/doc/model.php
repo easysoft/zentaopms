@@ -1271,6 +1271,7 @@ class docModel extends model
             $releaseIdList    = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $planIdList       = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $testReportIdList = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $caseIdList       = $this->dao->select('id')->from(TABLE_CASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
@@ -1280,6 +1281,7 @@ class docModel extends model
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
                 ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
                 ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
+                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->orderBy($orderBy)
