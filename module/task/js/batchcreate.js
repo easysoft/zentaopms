@@ -3,6 +3,7 @@ $(function()
 {
     removeDitto();
     if($('#batchCreateForm table thead tr th.c-name').width() < 200) $('#batchCreateForm table thead tr th.c-name').width(200);
+    if(taskConsumed > 0) alert(addChildTask);
 });
 
 /* Get select of stories.*/

@@ -183,7 +183,7 @@ $lang->install->promotion      = "为您推荐易软天创旗下其他产品："
 $lang->install->chanzhi        = new stdclass();
 $lang->install->chanzhi->name  = '蝉知门户';
 $lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url   = 'http://www.chanzhi.org';
+$lang->install->chanzhi->url   = 'http://www.zsite.com';
 $lang->install->chanzhi->desc  = <<<EOD
 <ul>
   <li>专业的企业营销门户系统</li>
@@ -209,7 +209,7 @@ EOD;
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name  = '喧喧聊天';
 $lang->install->xuanxuan->logo  = 'images/main/xuanxuan.ico';
-$lang->install->xuanxuan->url   = 'http://www.xuan.im';
+$lang->install->xuanxuan->url   = 'http://www.xuanim.com';
 $lang->install->xuanxuan->desc  = <<<EOD
 <ul>
   <li>轻：轻量级架构，容易部署</li>
