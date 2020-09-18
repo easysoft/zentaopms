@@ -821,7 +821,7 @@ class userModel extends model
         }
         else
         {
-            $groups = $this->dao->select('t1.acl, t1.program')->from(TABLE_GROUP)->alias('t1')
+            $groups = $this->dao->select('t1.acl, t1.PRJ')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.role')->ne('PRJadmin')
@@ -836,7 +836,7 @@ class userModel extends model
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
-                if($group->program)
+                if($group->PRJ)
                 {
                     if(empty($group->acl))
                     {
@@ -891,7 +891,7 @@ class userModel extends model
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group = t3.group')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.program')->eq(0);
+                ->andWhere('t1.PRJ')->eq(0);
         }
 
         $stmt = $sql->query();
@@ -903,7 +903,7 @@ class userModel extends model
 
         /* Get can manage programs by user. */
         $PRJadminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
-        $canManagePrograms = $this->dao->select('program')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('program');
+        $canManagePrograms = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('program');
         return array('rights' => $rights, 'acls' => $acls, 'programs' => $canManagePrograms);
     }
 
@@ -1461,7 +1461,7 @@ class userModel extends model
             ->fetchAll('id');
 
         $openedPrograms     = join(',', array_keys($openedPrograms));
-        $userView->programs = rtrim($userView->programs, ',') . ',' . $openedPrograms;
+        $userView->programs = rtrim($userView->PRJ, ',') . ',' . $openedPrograms;
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
@@ -1533,7 +1533,7 @@ class userModel extends model
         if(!is_array($objectIdList)) return false;
 
         $allGroups      = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
-        $managePrograms = $this->dao->select('account, program')->from(TABLE_USERGROUP)->where('program')->ne('')->fetchPairs();
+        $managePrograms = $this->dao->select('account, PRJ')->from(TABLE_USERGROUP)->where('program')->ne('')->fetchPairs();
         $userGroups = array();
         $groupUsers = array();
         foreach($allGroups as $group)

@@ -141,7 +141,8 @@ $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->program->browse->cookie['programType']  = 'code';
 $filter->program->browse->cookie['mine']         = 'code';
-$filter->program->export->cookie['checkedItem'] = 'reg::checked';
+$filter->program->prjbrowse->cookie['PRJMine']   = 'code';
+$filter->program->export->cookie['checkedItem']  = 'reg::checked';
 
 $filter->project->default->cookie['lastProject']     = 'int';
 $filter->project->default->cookie['projectMode']     = 'code';

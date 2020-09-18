@@ -828,12 +828,25 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $moduleStatus = 0)
+    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $moduleStatus = 0, $PRJMine = 0)
     {
+        $path = '';
+        if($programID)
+        {
+            $program = $this->getPRJByID($programID);
+            $path    = $program->path;
+        }
+
         $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF($this->cookie->PRJMine or $PRJMine)
+            ->andWhere('openedBy', true)->eq($this->app->user->account)
+            ->orWhere('PM')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -961,5 +974,107 @@ class programModel extends model
         $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('project', 'browse', "projectID={$project->id}");
         $icon = $project->type == 'program' ? '<i class="icon icon-stack"></i> ' : '<i class="icon icon-menu-doc"></i> ';
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
+    }
+
+    /**
+     * Create a project.
+     *
+     * @access public
+     * @return void
+     */
+    public function PRJCreate()
+    {
+        $project = fixer::input('post')
+            ->setDefault('status', 'wait')
+            ->add('type', 'project')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('end', '')
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->join('whitelist', ',')
+            ->cleanInt('budget')
+            ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
+            ->get();
+
+        if($project->parent)
+        {
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project->parent)->fetch();
+            if($parentProgram)
+            {
+                /* Child project begin cannot less than parent. */
+                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
+
+                /* When parent set end then child project end cannot greater than parent. */
+                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
+
+                if(dao::isError()) return false;
+            }
+        }
+
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
+        $this->dao->insert(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->batchcheck($this->config->program->PRJCreate->requiredFields, 'notempty')
+            ->check('name', 'unique', "deleted='0'")
+            ->check('code', 'unique', "deleted='0'")
+            ->exec();
+
+        /* Add the creater to the team. */
+        if(!dao::isError())
+        {
+            $projectID = $this->dao->lastInsertId();
+            $today     = helper::today();
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+
+            /* Save order. */
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
+            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            $this->setTreePath($projectID);
+
+            /* Add project admin. */
+            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
+                ->where('t1.account')->eq($this->app->user->account)
+                ->andWhere('t2.role')->eq('PRJadmin')
+                ->fetch();
+
+            if(!empty($groupPriv))
+            {
+                $newProject = $groupPriv->PRJ . ",$projectID";
+                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+            }
+            else
+            {
+                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
+                $groupPriv  = new stdclass();
+                $groupPriv->account   = $this->app->user->account;
+                $groupPriv->group     = $PRJAdminID;
+                $groupPriv->PRJ       = $projectID;
+                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+            }
+
+            if($project->template == 'waterfall')
+            {
+                $product = new stdclass();
+                $product->name        = $project->name;
+                $product->PRJ         = $projectID;
+                $product->status      = 'normal';
+                $product->createdBy   = $this->app->user->account;
+                $product->createdDate = helper::now();
+
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+
+                $productID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $productID;
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
+
+            return $projectID;
+        }
     }
 }

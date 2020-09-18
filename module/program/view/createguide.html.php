@@ -1,4 +1,4 @@
-<div class='modal-dialog' id='guideDialog'>
+<div class='modal fade modal-dialog' id='guideDialog'>
   <style>
   #guideDialog {width: 780px}
   #guideDialog h2 {margin: 10px 0 30px 0; font-size: 16px; font-weight: normal}

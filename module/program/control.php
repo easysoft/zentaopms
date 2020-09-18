@@ -836,15 +836,74 @@ class program extends control
     }
 
     /**
-     * Delete a project.
+     * Create a project.
      *
-     * @param  int     $projectID
-     * @param  varchar $confirm
+     * @param  string $template
+     * @param  int    $programID
+     * @param  int    $parentProgramID
+     * @param  int    $copyProgramID
      * @access public
      * @return void
      */
-    public function PRJDelete($projectID, $confirm = 'no')
+    public function PRJCreate($template = 'waterfall', $programID = 0, $parentProgramID = 0, $copyProgramID = '')
     {
-        die(js::reload('parent'));
+        if($_POST)
+        {
+            $projectID = $this->program->PRJCreate();
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+
+            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJBrowse', array('programID' => $programID, 'browseType' => 'doing'))));
+        }
+
+        $name         = '';
+        $code         = '';
+        $team         = '';
+        $whitelist    = '';
+        $acl          = 'open';
+        $privway      = 'extend';
+
+        if($parentProgramID)
+        {
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parentProgramID)->fetch();
+            if($this->program->checkHasContent($parentProgramID))
+            {
+                echo js::alert($this->lang->program->cannotCreateChild);
+                die(js::locate('back'));
+            }
+
+            if(empty($template)) $template = $parentProgram->template;
+        }
+
+        if($copyProgramID)
+        {
+            $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
+            $name        = $copyProgram->name;
+            $code        = $copyProgram->code;
+            $team        = $copyProgram->team;
+            $acl         = $copyProgram->acl;
+            $privway     = $copyProgram->privway;
+            $whitelist   = $copyProgram->whitelist;
+            if(empty($template)) $template = $copyProgram->template;
+        }
+
+
+        $this->view->title         = $this->lang->program->PRJCreate;
+        $this->view->position[]    = $this->lang->program->PRJCreate;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->programs      = array('' => '') + $this->program->getPairsByTemplate($template);
+        $this->view->template      = $template;
+        $this->view->name          = $name;
+        $this->view->code          = $code;
+        $this->view->team          = $team;
+        $this->view->acl           = $acl;
+        $this->view->privway       = $privway;
+        $this->view->whitelist     = $whitelist;
+        $this->view->parentProgram = $parentProgramID ? $parentProgram : '';
+        $this->view->copyProgramID = $copyProgramID;
+        $this->view->programID     = $programID;
+        $this->view->programList   = $this->program->getParentPairs();
+        $this->display();
     }
 }

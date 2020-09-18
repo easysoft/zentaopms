@@ -33,3 +33,12 @@
 #projectTree ul > li.item-meas a.selected{color: #0c64eb;}
 .side-col {padding-right: 20px; width: 18%}
 #sidebar>.cell {width: 100%;}
+
+#guideDialog h2 {margin: 10px 0 30px 0; font-size: 16px; font-weight: normal}
+#guideDialog h3 {margin: 5px 0; font-size: 20px;}
+#guideDialog .modal-footer {border-top: none; text-align: center; padding-top: 10px; padding-bottom: 40px;}
+#guideDialog .modal-footer .btn + .btn {margin-left: 20px}
+#guideDialog .program-type {padding: 0 40px}
+#guideDialog .program-type-img {width: 280px; border: 1px solid #CBD0DB; border-radius: 2px; margin-bottom: 10px; cursor: pointer; margin-top: 1px}
+#guideDialog .program-type-img:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,0,.25);}
+#guideDialog .program-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}

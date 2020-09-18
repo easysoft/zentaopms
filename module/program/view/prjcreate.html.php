@@ -1,13 +1,12 @@
 <?php
 /**
- * The create view of project module of ZenTaoPMS.
+ * The html template file of PRJCreate method of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
- * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     program
+ * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
  */
 ?>
 <?php if(isset($tips)):?>
@@ -46,18 +45,16 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
-          <td><?php echo zget($lang->program->templateList, $template, '');?></td><td></td><td></td>
+          <td><?php echo zget($lang->program->templateList, $template, '');?></td><td></td><td>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->program->PGMParent;?></th>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
-          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
-          <td>
-            <div class="checkbox-primary">
-              <input type="checkbox" name="isCat" value="1" id="isCat">
-              <label for="isCat"><?php echo $lang->program->PRJParent;?></label>
-            </div>
-          </td>
-          <td></td>
+          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJCode;?></th>
@@ -66,7 +63,7 @@
         <?php if($template == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('category', $lang->program->categoryList, '', "class='form-control'");?></td><td></td><td></td>
+          <td><?php echo html::select('category', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -74,7 +71,7 @@
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->budget;?></th>
+          <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('budget', '', "class='form-control'");?>
@@ -127,19 +124,19 @@
         </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
-          <th><?php echo $lang->program->desc;?></th>
+          <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->privway;?></th>
-          <td colspan='3'><?php echo html::radio('privway', $lang->program->privwayList, $privway, '', 'block');?></td>
+          <th><?php echo $lang->program->auth;?></th>
+          <td colspan='3'><?php echo html::radio('privway', $lang->program->PRJAuthList, $privway, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr id='whitelistBox' class='hidden'>
           <th><?php echo $lang->project->whitelist;?></th>
@@ -147,16 +144,14 @@
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton();?>
             <?php
-            echo html::hidden('template', $template);
-            echo html::hidden('parent', isset($parentProgram->id) ? $parentProgram->id : 0);
+              echo html::hidden('template', $template);
+              echo html::submitButton();
+              echo html::backButton();
             ?>
           </td>
         </tr>
       </table>
-      <?php echo html::hidden('products[]') . html::hidden('plans[]');?>
     </form>
   </div>
 </div>

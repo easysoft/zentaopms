@@ -1,17 +1,17 @@
 <?php
 /**
- * The html template file of projectlist method of project module of ZenTaoPMS.
+ * The html template file of PRJBrowse method of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     project
+ * @package     program
  * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php
-js::set('projectID', $programID);
+js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <div id="mainMenu" class="clearfix">
@@ -28,10 +28,10 @@ js::set('browseType', $browseType);
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('PRJBrowse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('mine', array('1' => $lang->program->mine), '', $this->cookie->mine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('program', 'PRJCreate', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php echo html::commonButton('<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, 'data-toggle="modal" data-target="#guideDialog"', 'btn btn-primary');?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
@@ -96,8 +96,5 @@ js::set('browseType', $browseType);
     </form>
   </div>
 </div>
-<script>
-$('#project<?php echo $programID;?>').addClass('active');
-$(".tree .active").parent('li').addClass('active');
-</script>
+<?php include 'prjcreateguide.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
