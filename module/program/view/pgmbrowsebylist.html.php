@@ -14,7 +14,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
-        <th class='text-center w-200px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-240px'><?php echo $lang->actions;?></th>
         <?php if($canOrder):?>
         <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
         <?php endif;?>
@@ -51,7 +51,8 @@
         <td class='text-left'><?php echo $program->code;?></td>
         <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon<?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
-          <?php echo $program->type == 'program' ? $program->name : html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
+          <?php $link = $program->type == 'program' ? $this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : $this->createLink('program', 'prjindex', "programID=$program->id", '', '', $program->id);?>
+          <?php echo html::a($link, "<i class='icon icon-stack'></i> " . $program->name);?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>
@@ -61,7 +62,9 @@
         <td class='text-center c-actions'>
           <?php common::printIcon('program', 'pgmgroup', "programID=$program->id", $program, 'list', 'group');?>
           <?php common::printIcon('program', 'pgmmanageMembers', "programID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'prjstart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php common::printIcon('program', 'pgmactivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'prjsuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
           <?php common::printIcon('program', 'pgmclose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
           <?php if(common::hasPriv('program', 'pgmedit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'pgmcreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>

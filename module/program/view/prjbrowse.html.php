@@ -17,7 +17,7 @@ js::set('browseType', $browseType);
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($program) ? $lang->program->PGMList : $program->name;?>
+      <?php echo empty($program) ? $lang->program->PGMCommon : $program->name;?>
       <?php if($programID) echo html::a(inLink('PRJBrowse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>

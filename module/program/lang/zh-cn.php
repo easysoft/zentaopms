@@ -22,8 +22,6 @@ $lang->program->PRJManagePriv        = '维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
-$lang->program->PGMList              = '项目集';
-$lang->program->PGMCreate            = '创建项目集';
 $lang->program->PRJModuleSetting     = '模块设置';
 $lang->program->PRJModuleOpen        = '列表页是否显示模块名';
 
@@ -61,8 +59,8 @@ $lang->program->PRJParent          = '父项目';
 $lang->program->allStories         = '总需求';
 $lang->program->doneStories        = '已完成';
 $lang->program->leftStories        = '剩余需求';
-$lang->program->PRJAllInput        = '项目总投入';
-$lang->program->PRJWeekly          = '项目周报';
+$lang->program->allInput           = '项目总投入';
+$lang->program->weekly             = '项目周报';
 $lang->program->pv                 = 'PV';
 $lang->program->ev                 = 'EV';
 $lang->program->sv                 = 'SV%';
@@ -125,6 +123,7 @@ $lang->program->endGreaterParent  = "父项目的完成日期：%s，完成日�
 $lang->program->beginGreateChild  = "子项目的最小开始日期：%s，父项目的开始日期不能大于子项目的最小开始日期";
 $lang->program->endLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 $lang->program->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
+$lang->program->readjustTime      = '重新调整项目起止时间';
 
 $lang->program->PRJModuleStatus['0']    = '不显示';
 $lang->program->PRJModuleStatus['base'] = '只显示一级模块';
@@ -157,7 +156,8 @@ $lang->program->PRJEndLetterChild    = "项目的最大完成日期：%s，项�
 $lang->program->PRJChildLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
 
 /* Actions. */
-$lang->program->PGMIndex             = '仪表盘';
+$lang->program->PGMCommon            = '项目集';
+$lang->program->PGMHome              = '项目集主页';
 $lang->program->PGMCreate            = '添加项目集';
 $lang->program->PGMCreateGuide       = '选择项目模板';
 $lang->program->PGMEdit              = '编辑项目集';
@@ -168,6 +168,7 @@ $lang->program->PGMFinish            = '完成项目集';
 $lang->program->PGMSuspend           = '挂起项目集';
 $lang->program->PGMDelete            = '删除项目集';
 $lang->program->PGMClose             = '关闭项目集';
+$lang->program->PGMView              = '项目集概况';
 $lang->program->PGMActivate          = '激活项目集';
 $lang->program->PGMGroup             = '权限分组';
 $lang->program->PGMCreateGroup       = '创建分组';

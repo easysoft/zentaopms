@@ -833,15 +833,15 @@ class block extends control
 
         $today  = helper::today();
         $monday = $this->loadModel('weekly')->getThisMonday($today);
-        $tasks  = $this->dao->select("program, 
+        $tasks  = $this->dao->select("PRJ, 
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
             ->from(TABLE_TASK)
-            ->where('program')->in(array_keys($programs))
+            ->where('PRJ')->in(array_keys($programs))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
         foreach($programs as $programID => $program)
         {

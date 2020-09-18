@@ -1,7 +1,3 @@
-#whitelistBox .checkbox-inline, #whitelistBox .radio-inline 
-{
-    margin-left: 10px;
-    display: inline-block;
-    padding-left: 0px;
-    padding-right: 10px;
-}
+#whitelistBox .checkbox-inline, #whitelistBox .radio-inline { margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px; }
+#pgmCommonAction>.btn { height: 50px; padding: 10px 15px; margin: 0; font-size: 14px; font-weight: 700; line-height: 30px; color: #fff; background: 0 0; border: none; }
+#pgmCommonAction>.btn>.icon{ position: relative; top: -4px; display: inline-block; font-size: 18px; font-weight: 400; vertical-align: middle; }

@@ -137,6 +137,11 @@ $lang->program->menu = new stdclass();
 $lang->program->menu->index   = '主页|program|pgmindex|';
 $lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit');
 
+$lang->program->viewMenu = new stdclass();
+$lang->program->viewMenu->view    = '概况|program|pgmview|program=%s';
+$lang->program->viewMenu->product = array('link' => '产品|program|pgmproduct|program=%s');
+$lang->program->viewMenu->project = array('link' => "$lang->projectCommon|program|pgmproject|program=%s");
+
 /* Product menu. */
 $lang->productlist = new stdclass();
 $lang->productlist->menu = new stdclass();

@@ -2198,7 +2198,7 @@ EOD;
 
             if(strpos($link, "{PRODUCT}") !== false) $link = str_replace('{PRODUCT}', $app->session->product, $link);
             if(strpos($link, "{PROJECT}") !== false) $link = str_replace('{PROJECT}', $app->session->project, $link);
-            if(strpos($link, "{PROGRAM}") !== false) $link = str_replace('{PROGRAM}', $app->session->program, $link);
+            if(strpos($link, "{PROGRAM}") !== false) $link = str_replace('{PROGRAM}', $app->session->PRJ, $link);
 
             if(is_array($setting)) 
             {    

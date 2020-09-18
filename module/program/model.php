@@ -35,6 +35,21 @@ class programModel extends model
      * @access public
      * @return void
      */
+    public function getPGMPairs()
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->fetchPairs();
+    }
+
+    /**
+     * Get program pairs.
+     *
+     * @access public
+     * @return void
+     */
     public function getPairs()
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
@@ -249,6 +264,42 @@ class programModel extends model
     }
 
     /**
+     * Get program by id.
+     *
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getPGMByID($programID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+    }
+
+    /**
+     * Get program list.
+     *
+     * @param  varchar $status
+     * @param  varchar $orderBy
+     * @param  object  $pager
+     * @param  bool    $includeCat
+     * @param  bool    $mine
+     * @access public
+     * @return array
+     */
+    public function getPGMList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
+    {
+        return $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Create a program.
      *
      * @access private
@@ -403,7 +454,7 @@ class programModel extends model
                 $this->loadModel('user')->updateUserView($programID, 'program');
             }
 
-            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->parent, $oldProgram->path, $oldProgram->grade);
+            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
             return common::createChanges($oldProgram, $program);
         }
@@ -610,7 +661,112 @@ class programModel extends model
      * @access private
      * @return void
      */
-    public function getSwitcher($programs, $programID, $currentModule, $currentMethod, $extra = '')
+    public function getPGMCommonAction($programID = 0)
+    {
+        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
+        $output .= '<ul class="dropdown-menu">';
+        $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMHome) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'pgmcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PGMCreate) . '</li>';
+        $output .= '</ul>';
+        $output .= "</div>";
+
+        return $output;
+    }
+
+    /*
+     * Get program swapper.
+     *
+     * @param  object  $programs
+     * @param  int     $programID
+     * @param  varchar $currentModule
+     * @param  varchar $currentMethod
+     * @param  varchar $extra
+     * @access private
+     * @return void
+     */
+    public function getPGMSwitcher($programID = 0)
+    {
+        $currentProgramName = '';
+        $currentModule = $this->app->moduleName;
+        $currentMethod = $this->app->methodName;
+        if($programID)
+        {
+            setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            $currentProgram     = $this->getPGMById($programID);
+            $currentProgramName = $currentProgram->name;
+        }
+        else
+        {
+            $currentProgramName = $this->lang->program->PGMAll;
+        }
+
+        $dropMenuLink = helper::createLink('program', 'ajaxGetPGMDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
+    }
+
+    /**
+     * Get the treemenu of program.
+     *
+     * @param  int        $programID
+     * @access public
+     * @return string
+     */
+    public function getPGMTreeMenu($programID = 0)
+    {
+        $programMenu = array();
+        $query = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('program')
+            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->orderBy('grade desc, `order`')->get();
+        $stmt  = $this->dbh->query($query);
+
+        while($program = $stmt->fetch())
+        {
+            $linkHtml = html::a(helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), "<i class='icon icon-stack'></i> " . $program->name);
+
+            if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
+            {
+                if(!isset($programMenu[$program->parent])) $programMenu[$program->parent] = '';
+                $programMenu[$program->parent] .= "<li>$linkHtml";
+                $programMenu[$program->parent] .= "<ul>".$programMenu[$program->id]."</ul>\n";
+            }
+            else
+            {
+                if(isset($programMenu[$program->parent]) and !empty($programMenu[$program->parent]))
+                {
+                    $programMenu[$program->parent] .= "<li>$linkHtml\n";
+                }
+                else
+                {
+                    $programMenu[$program->parent] = "<li>$linkHtml\n";
+                }
+            }
+            $programMenu[$program->parent] .= "</li>\n";
+        }
+
+        krsort($programMenu);
+        $programMenu = array_pop($programMenu);
+        $lastMenu = "<ul class='tree' data-ride='tree' id='programTree' data-name='tree-program'>{$programMenu}</ul>\n";
+        return $lastMenu;
+    }
+
+    /*
+     * Get project swapper.
+     *
+     * @param  object  $programs
+     * @param  int     $programID
+     * @param  varchar $currentModule
+     * @param  varchar $currentMethod
+     * @param  varchar $extra
+     * @access private
+     * @return void
+     */
+    public function getPRJSwitcher($programs, $programID, $currentModule, $currentMethod, $extra = '')
     {
         $this->loadModel('project');
         $currentProgramName = '';
@@ -644,19 +800,10 @@ class programModel extends model
         $action = strtolower($action);
 
         if(empty($program)) return true;
+        if($program->type == 'program' && ($action == 'prjstart' || $action == 'prjsuspend')) return false;
 
-        if($program->type == 'program' and $action == 'pgmgroup')         return false;
-        if($program->type == 'program' and $action == 'pgmmanagemembers') return false;
-        if($program->type == 'program' and $action == 'pgmstart')         return false;
-        if($program->type == 'program' and $action == 'pgmactivate')      return false;
-        if($program->type == 'program' and $action == 'pgmsuspend')       return false;
-        if($program->type == 'program' and $action == 'pgmclose')         return false;
-
-        if($action == 'pgmstart')    return $program->status == 'wait' or $program->status == 'suspended';
-        if($action == 'pgmfinish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'pgmclose')    return $program->status != 'closed';
-        if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'pgmactivate') return $program->status == 'done';
+        if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
 
         if($action == 'prjstart')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
@@ -781,7 +928,7 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public function processNode($programID, $parentID, $oldParentID, $oldPath, $oldGrade)
+    public function processNode($programID, $parentID, $oldPath, $oldGrade)
     {
         $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
 
@@ -790,15 +937,6 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade')
             ->fetchAll();
-
-        /* Process old and new program parent field.*/
-        $newChildren = $this->getChildren($parentID);
-        $oldChildren = $this->getChildren($oldParentID);
-        $newParent   = $newChildren > 0 ? -1 : 0;
-        $oldParent   = $oldChildren > 0 ? -1 : 0;
-
-        $this->dao->update(TABLE_PROGRAM)->set('parent')->eq($newParent)->where('id')->eq($parentID)->exec();
-        $this->dao->update(TABLE_PROGRAM)->set('parent')->eq($oldParent)->where('id')->eq($oldParentID)->exec();
 
         /* Process child node path and grade field. */
         foreach($childNodes as $childNode)

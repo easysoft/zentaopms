@@ -118,7 +118,7 @@ $(function()
       <?php foreach($programs as $program):?>
       <div class="tab-pane fade<?php if($program->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $program->id;?>">
         <div class="table-row">
-        <?php if($program->template == 'scrum'):?>
+        <?php if($program->model == 'scrum'):?>
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space" data-value="<?php echo $program->progress;?>" data-doughnut-size="84">
               <canvas width="120" height="120"></canvas>
@@ -178,7 +178,7 @@ $(function()
             </div>
             <div class='progress-group col-10 center-block'>
               <div class='progress-num text-center'>
-                <div class='weekly-title'><?php echo $lang->program->progress;?></div>
+                <div class='weekly-title'><?php echo $lang->program->PRJProgress;?></div>
                 <div class='weekly-progress'><?php echo $program->progress . '%';?></div>
               </div>
               <div class='progress'>
@@ -210,7 +210,7 @@ $(function()
             <div class='progress-group'>
               <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
-                  <div class='weekly-name'><?php echo $lang->program->pm;?></div>
+                  <div class='weekly-name'><?php echo $lang->program->PRJPM;?></div>
                   <div class='weekly-value'><?php echo $program->PM ? zget($users, $program->PM) : $lang->program->emptyPM;?></div>
                 </div>
                 <div class="col-4">
@@ -218,7 +218,7 @@ $(function()
                   <div class='weekly-value'><?php echo $program->teamCount;?></div>
                 </div>
                 <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->budget;?></div>
+                  <div class='weekly-name'><?php echo $lang->program->PRJBudget;?></div>
                   <div class='weekly-value'><?php echo $program->budget;?></div>
                 </div>
               </div>
