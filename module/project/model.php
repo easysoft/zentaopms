@@ -2955,7 +2955,7 @@ class projectModel extends model
             $taskItem->estimate     = $task->estimate;
             $taskItem->consumed     = $task->consumed;
             $taskItem->left         = $task->left;
-            $taskItem->openedBy     = $users[$task->openedBy];
+            $taskItem->openedBy     = zget($users, $task->openedBy);
             $taskItem->assignedTo   = zget($users, $task->assignedTo);
             $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
             $taskItem->storyChanged = $story and $story->status == 'active' and $story->version > $story->taskVersion;
