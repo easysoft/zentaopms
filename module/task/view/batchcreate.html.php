@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('taskConsumed', $taskConsumed);?>
+<?php js::set('addChildTask', $lang->task->addChildTask);?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header clearfix">
     <h2 class="pull-left">
