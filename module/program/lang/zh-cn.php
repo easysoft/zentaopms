@@ -22,8 +22,8 @@ $lang->program->PRJManagePriv        = '维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
-$lang->program->PRJModuleSetting     = '模块设置';
-$lang->program->PRJModuleOpen        = '列表页是否显示模块名';
+$lang->program->PRJModuleSetting     = '项目集设置';
+$lang->program->PRJModuleOpen        = '列表页是否显示项目集名';
 
 /* Fields. */
 $lang->program->common             = '项目';

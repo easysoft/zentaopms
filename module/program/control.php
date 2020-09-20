@@ -1074,59 +1074,20 @@ class program extends control
      */
     public function PRJCreateGroup($projectID = 0, $programID = 0)
     {
+        $this->lang->navGroup->program = 'project';
+        $this->session->set('project', $projectID);
+
         if(!empty($_POST))
         {
             $_POST['PRJ'] = $projectID;
             $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inLink('PRJBrowse', 'programID=' . $programID), 'parent.parent'));
+            die(js::locate(inLink('PRJGroup', "projectID=$projectID&programID=$programID"), 'parent.parent'));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
         $this->view->position[] = $this->lang->group->create;
         $this->display('group', 'create');
-    }
-
-    /**
-     * Manage project members.
-     *
-     * @param  int    $projectID
-     * @param  int    $dept
-     * @access public
-     * @return void
-     */
-    public function PRJManageMembers($projectID, $dept = '')
-    {
-        $this->session->set('project', $projectID);
-        if(!empty($_POST))
-        {
-            $this->project->manageMembers($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        /* Load model. */
-        $this->loadModel('user');
-        $this->loadModel('dept');
-
-        $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
-        $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-        $currentMembers = $this->project->getTeamMembers($projectID);
-
-        $title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
-        $position[] = $this->lang->program->PRJManageMembers;
-
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->project        = $project;
-        $this->view->users          = $users;
-        $this->view->deptUsers      = $deptUsers;
-        $this->view->roles          = $roles;
-        $this->view->dept           = $dept;
-        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
-        $this->display();
     }
 
     /**
@@ -1140,6 +1101,9 @@ class program extends control
      */
     public function PRJManageView($groupID, $projectID, $programID)
     {
+        $this->lang->navGroup->program = 'project';
+        $this->session->set('project', $projectID);
+
         if($_POST)
         {
             $this->group->updateView($groupID);
@@ -1222,5 +1186,97 @@ class program extends control
         }
 
         $this->display('group', 'managePriv');
+    }
+
+    /**
+     * Manage project members.
+     *
+     * @param  int    $projectID
+     * @param  int    $dept
+     * @access public
+     * @return void
+     */
+    public function PRJManageMembers($projectID, $dept = '')
+    {
+        $this->lang->navGroup->program = 'project';
+        $this->session->set('project', $projectID);
+
+        if(!empty($_POST))
+        {
+            $this->project->manageMembers($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        /* Load model. */
+        $this->loadModel('user');
+        $this->loadModel('dept');
+
+        $project        = $this->project->getById($projectID);
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $roles          = $this->user->getUserRoles(array_keys($users));
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $currentMembers = $this->project->getTeamMembers($projectID);
+
+        $title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
+        $position[] = $this->lang->program->PRJManageMembers;
+
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->project        = $project;
+        $this->view->users          = $users;
+        $this->view->deptUsers      = $deptUsers;
+        $this->view->roles          = $roles;
+        $this->view->dept           = $dept;
+        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
+        $this->view->currentMembers = $currentMembers;
+        $this->display();
+    }
+
+    /**
+     * Project copy a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function PRJCopyGroup($groupID)
+    {
+       if(!empty($_POST))
+        {
+            $group = $this->group->getByID($groupID);
+            $_POST['PRJ'] = $group->PRJ;
+            $this->group->copy($groupID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::closeModal('parent.parent', 'this'));
+        }
+
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->position[] = $this->lang->group->copy;
+        $this->view->group      = $this->group->getById($groupID);
+        $this->display('group', 'copy');
+    }
+
+    /**
+     * Project edit a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function PRJEditGroup($groupID)
+    {
+       if(!empty($_POST))
+        {
+            $this->group->update($groupID);
+            die(js::closeModal('parent.parent', 'this'));
+        }
+
+        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $position[] = $this->lang->group->edit;
+        $this->view->title    = $title;
+        $this->view->position = $position;
+        $this->view->group    = $this->group->getById($groupID);
+
+        $this->display('group', 'edit');
     }
 }

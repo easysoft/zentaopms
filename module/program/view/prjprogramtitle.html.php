@@ -19,7 +19,7 @@
     <table class="table table-form">
       <tbody>
         <tr>
-          <td class="w-150px"><?php echo $lang->program->PRJModuleOpen;?></td>
+          <td class="w-180px"><?php echo $lang->program->PRJModuleOpen;?></td>
           <td><?php echo html::radio('PRJProgramTitle', $lang->program->PRJProgramTitle, $status);?></td>
         </tr>
         <tr>

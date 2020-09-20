@@ -15,6 +15,7 @@
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php echo html::a(inLink('PRJBrowse', "programID=$programID"), $lang->goback, '', 'class="btn btn-secondary"');?>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -47,8 +48,8 @@
           <?php common::printIcon('program', 'PRJManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('program', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('program', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('program', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'PRJEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'PRJCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
