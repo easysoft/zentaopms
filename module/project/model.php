@@ -79,11 +79,12 @@ class projectModel extends model
 
         /* Get project and program */
         $project   = $this->getById($projectID);
+
         $isProgram = false;
         if(!empty($project))
         {
             $isProgram = $project->model;
-            $program   = $isProgram ? $project : $this->getByID($project->program);
+            $program   = $isProgram ? $project : $this->getByID($project->parent);
         }
 
         if($isProgram)

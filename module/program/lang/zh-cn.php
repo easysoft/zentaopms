@@ -125,9 +125,9 @@ $lang->program->endLetterChild    = "子项目的最大完成日期：%s，父�
 $lang->program->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->program->readjustTime      = '重新调整项目起止时间';
 
-$lang->program->PRJModuleStatus['0']    = '不显示';
-$lang->program->PRJModuleStatus['base'] = '只显示一级模块';
-$lang->program->PRJModuleStatus['end']  = '只显示最后一级模块';
+$lang->program->PRJProgramTitle['0']    = '不显示';
+$lang->program->PRJProgramTitle['base'] = '只显示一级模块';
+$lang->program->PRJProgramTitle['end']  = '只显示最后一级模块';
 
 $lang->program->PRJNoProgram         = '暂时没有项目';
 $lang->program->PRJAccessDenied      = '您无权访问该项目！';

@@ -108,7 +108,7 @@ class groupModel extends model
      */
     public function getList($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->where('PRJ')->eq($programID)->orderBy('id')->fetchAll();
     }
 
     /**
@@ -119,7 +119,7 @@ class groupModel extends model
      */
     public function getPairs($programID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('program')->eq($programID)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('PRJ')->eq($programID)->orderBy('id')->fetchPairs();
     }
 
     /**

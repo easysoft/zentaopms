@@ -30,7 +30,7 @@ function deleteItem(obj)
 
 function setDeptUsers(obj)
 {
-    dept = $(obj).val();//Get dept ID.
-    link = createLink('program', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept);//Create manageMembers link.
+    dept = $(obj).val(); // Get dept ID.
+    link = createLink('program', 'PRJManageMembers', 'projectID=' + projectID + '&dept=' + dept); // Create manageMembers link.
     location.href=link;
 }

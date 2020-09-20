@@ -800,6 +800,8 @@ class programModel extends model
         $action = strtolower($action);
 
         if(empty($program)) return true;
+        if(!isset($program->type)) return true;
+
         if($program->type == 'program' && ($action == 'prjstart' || $action == 'prjsuspend')) return false;
 
         if($action == 'pgmclose')    return $program->status != 'closed';
@@ -962,11 +964,12 @@ class programModel extends model
      * @param  string $queryID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  int    $moduleStatus
+     * @param  int    $programTitle
+     * @param  int    $PRJMine
      * @access public
      * @return bool
      */
-    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $moduleStatus = 0, $PRJMine = 0)
+    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
     {
         $path = '';
         if($programID)
@@ -991,7 +994,7 @@ class programModel extends model
             ->fetchAll('id');
 
         /* Determine whether the program name is displayed. */
-        if($moduleStatus)
+        if($programTitle)
         {
             $programList = array();
             foreach($projectList as $id => $project)
@@ -999,7 +1002,7 @@ class programModel extends model
                 $path = explode(',', $project->path);
                 $path = array_filter($path);
                 array_pop($path);
-                $programID = $moduleStatus == 'base' ? current($path) : end($path);
+                $programID = $programTitle == 'base' ? current($path) : end($path);
                 if(empty($path) || $programID == $id) continue;
 
                 $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJParams($programID);

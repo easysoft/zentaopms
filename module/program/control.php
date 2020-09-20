@@ -925,8 +925,8 @@ class program extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleStatus = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJModuleStatus');
-        $projectStats = $this->program->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $moduleStatus);
+        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
+        $projectStats = $this->program->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title      = $this->lang->program->PRJBrowse;
         $this->view->position[] = $this->lang->program->PRJBrowse;
@@ -949,17 +949,17 @@ class program extends control
      * @access public
      * @return void
      */
-    public function setPRJModule()
+    public function PRJProgramTitle()
     {
         $this->loadModel('setting');
         if($_POST)
         {
-            $PRJModuleStatus = $this->post->PRJModuleStatus;
-            $this->setting->setItem($this->app->user->account . '.program.PRJModuleStatus', $PRJModuleStatus);
+            $PRJProgramTitle = $this->post->PRJProgramTitle;
+            $this->setting->setItem($this->app->user->account . '.program.PRJProgramTitle', $PRJProgramTitle);
             die(js::reload('parent.parent'));
         }
 
-        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJModuleStatus');
+        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
         $this->view->status = empty($status) ? '0' : $status;
         $this->display();
     }
@@ -1034,5 +1034,193 @@ class program extends control
         $this->view->programID     = $programID;
         $this->view->programList   = $this->program->getParentPairs();
         $this->display();
+    }
+
+    /**
+     * Project browse groups.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJGroup($projectID = 0, $programID = 0)
+    {
+        $this->lang->navGroup->program = 'project';
+        $this->session->set('project', $projectID);
+        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $position[] = $this->lang->group->browse;
+
+        $groups     = $this->group->getList($projectID);
+        $groupUsers = array();
+        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->groups     = $groups;
+        $this->view->projectID  = $projectID;
+        $this->view->programID  = $programID;
+        $this->view->groupUsers = $groupUsers;
+
+        $this->display();
+    }
+
+    /**
+     * Project create a group.
+     *
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function PRJCreateGroup($projectID = 0, $programID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $_POST['PRJ'] = $projectID;
+            $this->group->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate(inLink('PRJBrowse', 'programID=' . $programID), 'parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->position[] = $this->lang->group->create;
+        $this->display('group', 'create');
+    }
+
+    /**
+     * Manage project members.
+     *
+     * @param  int    $projectID
+     * @param  int    $dept
+     * @access public
+     * @return void
+     */
+    public function PRJManageMembers($projectID, $dept = '')
+    {
+        $this->session->set('project', $projectID);
+        if(!empty($_POST))
+        {
+            $this->project->manageMembers($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        /* Load model. */
+        $this->loadModel('user');
+        $this->loadModel('dept');
+
+        $project        = $this->project->getById($projectID);
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $roles          = $this->user->getUserRoles(array_keys($users));
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $currentMembers = $this->project->getTeamMembers($projectID);
+
+        $title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
+        $position[] = $this->lang->program->PRJManageMembers;
+
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->project        = $project;
+        $this->view->users          = $users;
+        $this->view->deptUsers      = $deptUsers;
+        $this->view->roles          = $roles;
+        $this->view->dept           = $dept;
+        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
+        $this->view->currentMembers = $currentMembers;
+        $this->display();
+    }
+
+    /**
+     * Project manage view.
+     *
+     * @param  int    $groupID
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function PRJManageView($groupID, $projectID, $programID)
+    {
+        if($_POST)
+        {
+            $this->group->updateView($groupID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJGroup', "projectID=$projectID&programID=$programID")));
+        }
+
+        $group = $this->group->getById($groupID);
+
+        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
+        $this->view->position[] = $group->name;
+        $this->view->position[] = $this->lang->group->manageView;
+
+        $this->view->group      = $group;
+        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('PRJ')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+
+        $this->display();
+    }
+
+    /**
+     * Manage privleges of a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
+    {
+        if($type == 'byGroup')
+        {
+            $groupID = $param;
+            $group   = $this->group->getById($groupID);
+        }
+        $this->view->type = $type;
+        foreach($this->lang->resource as $moduleName => $action)
+        {
+            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
+        }
+
+        if(!empty($_POST))
+        {
+            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJGroup', "projectID=$group->PRJ")));
+        }
+
+        if($type == 'byGroup')
+        {
+            $this->group->sortResource();
+            $groupPrivs = $this->group->getPrivs($groupID);
+
+            $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[] = $group->name;
+            $this->view->position[] = $this->lang->group->managePriv;
+
+            /* Join changelog when be equal or greater than this version.*/
+            $realVersion = str_replace('_', '.', $version);
+            $changelog = array();
+            foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
+            {
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
+            }
+
+            $this->view->group      = $group;
+            $this->view->changelogs = ',' . join($changelog, ',') . ',';
+            $this->view->groupPrivs = $groupPrivs;
+            $this->view->groupID    = $groupID;
+            $this->view->menu       = $menu;
+            $this->view->version    = $version;
+            $program = $this->project->getByID($group->PRJ);
+
+            /* Unset not program privs. */
+            foreach($this->lang->resource as $method => $label)
+            {
+                if(!in_array($method, $this->config->programPriv->{$program->model})) unset($this->lang->resource->$method);
+            }
+        }
+
+        $this->display('group', 'managePriv');
     }
 }

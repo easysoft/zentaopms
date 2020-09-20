@@ -1,12 +1,13 @@
 <?php
 /**
- * The html template file of PRJBrowse method of program module of ZenTaoPMS.
+ * The prjbrowse view file of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
- * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
+ * @version     $Id: prjbrowse.html.php 4769 2013-05-05 07:24:21Z wwccss $
+ * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
@@ -40,7 +41,7 @@ js::set('browseType', $browseType);
     <div class="cell">
       <?php echo $PRJTree;?>
       <div class="text-center">
-        <?php common::printLink('program', 'setPRJModule', '', $lang->program->PRJModuleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+        <?php common::printLink('program', 'PRJProgramTitle', '', $lang->program->PRJModuleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
     </div>
   </div>
@@ -76,7 +77,7 @@ js::set('browseType', $browseType);
             <td><?php echo $project->budget;?></td>
             <td><?php echo zget($users, $project->PM);?></td>
             <td class='text-center c-actions'>
-              <?php common::printIcon('program', 'PRJGroup', "programID=$project->id", $project, 'list', 'group');?>
+              <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');?>
               <?php common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');?>
               <?php common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>

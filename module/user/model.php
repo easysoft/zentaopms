@@ -1380,11 +1380,11 @@ class userModel extends model
 
             $userView = new stdclass();
             $userView->account  = $account;
-            $userView->programs = array();
+            $userView->PRJ = array();
             $programs = array();
             if($isAdmin)
             {
-                $userView->programs = join(',', array_keys($allPrograms));
+                $userView->PRJ = join(',', array_keys($allPrograms));
             }
             else
             {
@@ -1393,7 +1393,7 @@ class userModel extends model
                     $programTeams = isset($teams[$id]) ? $teams[$id] : array();
                     if($this->checkProjectPriv($program, $account, $groups, $programTeams)) $programs[$id] = $id;
                 }
-                $userView->programs = join(',', $programs);
+                $userView->PRJ = join(',', $programs);
             }
 
             $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
@@ -1533,7 +1533,7 @@ class userModel extends model
         if(!is_array($objectIdList)) return false;
 
         $allGroups      = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
-        $managePrograms = $this->dao->select('account, PRJ')->from(TABLE_USERGROUP)->where('program')->ne('')->fetchPairs();
+        $managePrograms = $this->dao->select('account, PRJ')->from(TABLE_USERGROUP)->where('PRJ')->ne('')->fetchPairs();
         $userGroups = array();
         $groupUsers = array();
         foreach($allGroups as $group)

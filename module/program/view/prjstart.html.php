@@ -1,12 +1,13 @@
 <?php
 /**
- * The html template file of PRJStart method of program module of ZenTaoPMS.
+ * The prjstart view file of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
- * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
+ * @version     $Id: prjstart.html.php 4769 2013-05-05 07:24:21Z wwccss $
+ * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

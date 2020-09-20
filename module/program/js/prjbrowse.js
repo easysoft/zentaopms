@@ -8,5 +8,5 @@ $(function()
     });
 });
 
-$('#project<?php echo $programID;?>').addClass('active');
+$('#project' + programID).addClass('active');
 $(".tree .active").parent('li').addClass('active');
