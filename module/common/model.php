@@ -2188,14 +2188,11 @@ EOD;
         }
         if($group == 'program') 
         {
-            if($moduleName == 'program')
-            {
-                $lang->menu = $lang->program->menu;
-            }
-            else
-            {
-                $lang->menu = self::getProgramMainMenu($moduleName);
-            }
+            $lang->menu = $lang->program->menu;
+        }
+        if($group == 'project') 
+        {
+            $lang->menu = self::getProgramMainMenu($moduleName);
         }
     }
 
@@ -2245,7 +2242,7 @@ EOD;
     public static function getProgramMainMenu($moduleName)
     {
         global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->program}'")->fetch();
         if(empty($program)) return;
 
         if($program->model == 'scrum')

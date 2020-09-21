@@ -18,7 +18,7 @@ class program extends control
      */
     public function index($programID = 0)
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program = 'project';
         if(!$programID) $programID = $this->session->PRJ;
         $this->session->set('program', $programID);
 
