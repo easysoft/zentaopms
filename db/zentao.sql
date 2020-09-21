@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `linkCase` varchar(255) NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL,
   `fromCaseID` mediumint(8) unsigned NOT NULL,
-  `fromCaseVersion` mediumint(8) unsigned NOT NULL,
+  `fromCaseVersion` mediumint(8) unsigned NOT NULL default '1',
   `deleted` enum('0','1') NOT NULL default '0',
   `lastRunner` varchar(30) NOT NULL,
   `lastRunDate` datetime NOT NULL,
