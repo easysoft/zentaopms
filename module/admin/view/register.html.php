@@ -19,20 +19,20 @@
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->admin->register->caption;?></span></span>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->admin->registerNotice->caption;?></span></span>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
   <div class='col-md-6'>
     <div class='panel'>
-      <div class='panel-heading'><strong><?php echo $lang->admin->register->common?></strong></div>
+      <div class='panel-heading'><strong><?php echo $lang->admin->registerNotice->common?></strong></div>
       <form class='mw-600px' method="post" target="hiddenwin">
         <table align='center' class='table table-form'>
           <tr>
             <th class='w-100px'><?php echo $lang->user->account;?></th>
             <td>
               <div class="required required-wrapper"></div>
-              <?php echo html::input('account', '', "class='form-control' placeholder='{$lang->admin->register->lblAccount}'");?>
+              <?php echo html::input('account', '', "class='form-control' placeholder='{$lang->admin->registerNotice->lblAccount}'");?>
             </td>
           </tr>
           <tr>
@@ -75,7 +75,7 @@
             <th><?php echo $lang->user->password;?></th>
             <td>
               <div class="required required-wrapper"></div>
-              <?php echo html::password('password1', '', "class='form-control' placeholder='{$lang->admin->register->lblPasswd}'");?>
+              <?php echo html::password('password1', '', "class='form-control' placeholder='{$lang->admin->registerNotice->lblPasswd}'");?>
             </td>
           </tr>
           <tr>
@@ -87,7 +87,7 @@
           </tr>
           <tr>
             <td colspan='2' class='text-center'>
-              <?php echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
+              <?php echo html::submitButton($lang->admin->registerNotice->submit) . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
             </td>
           </tr>
         </table>
@@ -96,7 +96,7 @@
   </div>
   <div class='col-md-6'>
     <div class='panel'>
-      <div class='panel-heading'><strong><?php echo $lang->admin->register->bind?></strong></div>
+      <div class='panel-heading'><strong><?php echo $lang->admin->registerNotice->bind?></strong></div>
       <form class='mw-400px' method="post" target="hiddenwin" action='<?php echo inlink('bind', "from=$from")?>'>
         <table align='center' class='table table-form'>
           <tr>
