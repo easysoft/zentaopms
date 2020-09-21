@@ -49,7 +49,7 @@
           <?php printf('%03d', $program->id);?>
         </td>
         <td class='text-left'><?php echo $program->code;?></td>
-        <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
+        <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon<?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
           <?php $link = $program->type == 'program' ? $this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : $this->createLink('program', 'prjindex', "programID=$program->id", '', '', $program->id);?>
           <?php echo html::a($link, "<i class='icon icon-stack'></i> " . $program->name);?>
