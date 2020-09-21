@@ -531,14 +531,33 @@ class commonModel extends model
             if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
         }
 
+    }
+
+    /**
+     * Gets the most recently created project.
+     *
+     * @access public
+     * @return string
+     */
+    public function getRecentProjects()
+    {
         echo '<li><hr></li>';
-        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
-        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
-        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
-        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao001') . '</li>';
-        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'an') . '</li>';
-        echo '<li>' . html::a(helper::createLink('project', 'view', 'project=1'), 'zentao') . '</li>';
-        echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $lang->more . '</span></li>';
+        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $this->lang->recent . '</span></li>';
+
+        $recentProjects = $this->dao->select('id,code')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('status')->ne('close')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->limit(5)
+            ->fetchAll();
+
+        if(!empty($recentProjects))
+        {
+            foreach($recentProjects as $project) echo '<li>' . html::a(helper::createLink('project', 'view', 'projectID=' . $project->id), $project->code) . '</li>';
+
+            if(count($recentProjects) >= 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $this->lang->more . '</span></li>';
+        }
 
         echo "</ul>\n";
     }
@@ -2271,23 +2290,24 @@ EOD;
     /**
      * Get relations for two object.
      *
-     * @param  varchar $AType
-     * @param  int     $AID
-     * @param  varchar $BType
-     * @param  int     $BID
-     * @static
+     * @param  varchar $atype
+     * @param  int     $aid
+     * @param  varchar $btype
+     * @param  int     $bid
+     *
      * @access public
      * @return string
      */
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($AType)
-            ->andWhere('AID')->eq($AID)
-            ->andWhere('BType')->eq($BType)
-            ->beginIF($BID)->andWhere('BID')->eq($BID)->fi()
+        return $this->dao->select('*')->from(table_relation)
+            ->where('atype')->eq($atype)
+            ->andwhere('aid')->eq($aid)
+            ->andwhere('btype')->eq($btype)
+            ->beginif($bid)->andwhere('bid')->eq($bid)->fi()
             ->fetchAll();
     }
+
 }
 
 class common extends commonModel

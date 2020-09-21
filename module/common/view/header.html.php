@@ -11,33 +11,15 @@ include 'chosen.html.php';
 <?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
 <?php $isSystem  = (zget($lang->navGroup, $app->rawModule) == 'system');?>
 <div id='menu'>
-  <nav id='menuNav'><?php commonModel::printMainNav($app->rawModule);?></nav>
+  <nav id='menuNav'>
+    <?php commonModel::printMainNav($app->rawModule);?>
+    <?php $this->loadModel('common')->getRecentProjects();?>
+  </nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
   </div>
   <div class="table-col col-right" id="morePRJ">
-    <div class="list-group">
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-      <a href="/product-browse-40.html" title="部门管理/916测试" class="closed" data-key="bumenguanli/916ceshi bmgl9cs"><i class="icon icon-cube"></i> 部门管理/916测试</a>
-    </div>
+    <div class="list-group" id="morePRJList"></div>
   </div>
 </div>
 <header id='header'>
@@ -98,8 +80,21 @@ $("#searchInput").mouseout(function()
 });
 function getMorePRJ()
 {
-    console.log(123);
     $("#morePRJ").toggle();
+    if(!$("#morePRJ").is(':hidden'))
+    {
+        $.ajax(
+        {
+            url: createLink('program', 'ajaxGetRecentProjects'),
+            dataType: 'html',
+            type: 'post',
+            success: function(data)
+            {
+                console.log(data);
+                $("#morePRJList").html(data);
+            }
+        })
+    }
 }
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >

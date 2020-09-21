@@ -969,7 +969,7 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'order_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
     {
         $path = '';
         if($programID)
@@ -1033,9 +1033,22 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJParams($projectID = 0)
+    public function getPRJParams($projectID = 0, $limit = 0)
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if($limit)
+        {
+            return $this->dao->select('id,name')->from(TABLE_PROJECT)
+                ->where('type')->eq('project')
+                ->andWhere('status')->ne('status')
+                ->andWhere('deleted')->eq('0')
+                ->orderBy('id_desc')
+                ->limit('5,' . $limit)
+                ->fetchAll();
+        }
+        else
+        {
+            return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        }
     }
 
     /**
