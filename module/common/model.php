@@ -746,7 +746,7 @@ class commonModel extends model
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
         if($group == 'my' || $group == 'reporting' || $group == 'attend') return;
-        if($group == 'program') self::getProgramModuleMenu($moduleName);
+        if($group == 'project') self::getProgramModuleMenu($moduleName);
 
         if(!isset($lang->$moduleName->menu))
         {
@@ -2241,7 +2241,7 @@ EOD;
     public static function getProgramMainMenu($moduleName)
     {
         global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->program}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
 
         if($program->model == 'scrum')
@@ -2272,10 +2272,11 @@ EOD;
     public static function getProgramModuleMenu($moduleName)
     {
         global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
         if($program->model == 'waterfall') 
         {
+            $lang->navGroup->product = 'project';
             $lang->product->menu     = $lang->waterfallproduct->menu;
             $lang->productplan->menu = $lang->waterfallproduct->menu;
             $lang->story->menu       = $lang->waterfallproduct->menu;

@@ -1,6 +1,6 @@
 <?php
 /* Actions. */
-$lang->program->index                = '仪表盘';
+$lang->program->PRJIndex             = '仪表盘';
 $lang->program->PRJCreate            = '创建项目';
 $lang->program->PRJCreateGuide       = '选择项目模板';
 $lang->program->PRJEdit              = '编辑项目';

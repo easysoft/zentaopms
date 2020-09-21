@@ -69,7 +69,7 @@ js::set('browseType', $browseType);
             <td><?php printf('%03d', $project->id);?></td>
             <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
             <td class='text-left' title='<?php echo $project->name?>'>
-              <?php echo html::a($this->createLink('project', 'index', 'locate=no'), $project->name);?>
+              <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
             </td>
             <td><?php echo zget($lang->program->statusList, $project->status);?></td>
             <td><?php echo $project->begin;?></td>

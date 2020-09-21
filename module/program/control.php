@@ -10,26 +10,6 @@ class program extends control
     }
 
     /**
-     * Program index view.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function index($programID = 0)
-    {
-        $this->lang->navGroup->program = 'project';
-        if(!$programID) $programID = $this->session->PRJ;
-        $this->session->set('program', $programID);
-
-        $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->index;
-        $this->view->position[] = $this->lang->program->index;
-        $this->view->program    = $this->program->getPGMByID($programID);
-
-        $this->display();
-    }
-
-    /**
      * Program home page.
      *
      * @access public
@@ -906,6 +886,26 @@ class program extends control
         }
 
         die($link);
+    }
+
+    /**
+     * Project index view.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function index($projectID = 0)
+    {
+        $this->lang->navGroup->program = 'project';
+        if(!$projectID) $projectID = $this->session->PRJ;
+        $this->session->set('PRJ', $projectID);
+
+        $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->PRJIndex;
+        $this->view->position[] = $this->lang->program->PRJIndex;
+        $this->view->project    = $this->program->getPRJByID($projectID);
+
+        $this->display();
     }
 
     /**

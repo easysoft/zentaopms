@@ -142,23 +142,10 @@ $lang->program->viewMenu->view    = '概况|program|pgmview|program=%s';
 $lang->program->viewMenu->product = array('link' => '产品|program|pgmproduct|program=%s');
 $lang->program->viewMenu->project = array('link' => "$lang->projectCommon|program|pgmproject|program=%s");
 
-/* Product menu. */
-$lang->productlist = new stdclass();
-$lang->productlist->menu = new stdclass();
-$lang->productlist->menu->productlist = '产品|product|productlist|';
-
-/* Project menu. */
-$lang->projectlist = new stdclass();
-$lang->projectlist->menu = new stdclass();
-$lang->projectlist->menu->projectlist = '项目|project|projectlist|';
-
 /* Scrum menu. */
 $lang->menu = new stdclass();
-$lang->menu->program = '仪表盘|program|index|';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = "$lang->projectCommon|project|index|locate=no";
-$lang->menu->doc     = '文档|doc|index|';
-$lang->menu->qa      = '测试|qa|index';
+$lang->menu->productindex = '主页|product|index|';
+$lang->menu->product      = $lang->productCommon . '|product|productlist|';
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -567,9 +554,6 @@ $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
-
-$lang->navGroup->product     = 'product';
-$lang->navGroup->project     = 'project';
 
 $lang->navGroup->story       = 'project';
 $lang->navGroup->branch      = 'project';
