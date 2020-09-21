@@ -94,6 +94,8 @@ class program extends control
     /**
      * Program create guide.
      *
+     * @param  int $programID
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -998,12 +1000,12 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJBrowse', array('programID' => $programID, 'browseType' => 'doing'))));
         }
 
-        $name         = '';
-        $code         = '';
-        $team         = '';
-        $whitelist    = '';
-        $acl          = 'open';
-        $privway      = 'extend';
+        $name      = '';
+        $code      = '';
+        $team      = '';
+        $whitelist = '';
+        $acl       = 'open';
+        $privway   = 'extend';
 
         if($parentProgramID)
         {
