@@ -27,7 +27,7 @@ include 'chosen.html.php';
     <div class='container'>
       <div id='heading'>
         <?php if($isProgram) echo $this->lang->program->switcherMenu;?>
-        <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->program->getPairs(), $this->session->PRJ, $app->rawModule, $app->rawMethod);?>
+        <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
         <?php if($isSystem)  echo $this->loadModel('custom')->getModeSwitcher();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>

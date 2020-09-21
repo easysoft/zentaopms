@@ -70,8 +70,8 @@ class programplanModel extends model
         $projects = $this->getProjectsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('program')->eq($programID)
-            ->andWhere('template')->eq('')
+            ->where('type')->eq('stage')
+            ->andWhere('parent')->eq($programID)
             ->beginIF($type != 'all')->andWhere('parent')->eq($planID)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()

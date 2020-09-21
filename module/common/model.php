@@ -649,12 +649,12 @@ class commonModel extends model
                             $subActive .= 'dropdown-submenu';
                             $subLink = 'javascript:;';
                             $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->program}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->edit}</span>", '', "class='btn btn-link'") . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->group) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->manageMembers) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->start) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->activate) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->suspend) . '</li>';
+                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'prjedit', "programID={$app->session->program}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjgroup', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjmanageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjstart', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjactivate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjsuspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
                             $subProgram .= '</ul>';
                         }
 
@@ -1737,8 +1737,8 @@ EOD;
         /* Reset priv by program privway. */
         $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
-        if($program->privway == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-        if($program->privway == 'reset')  
+        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->auth == 'reset')  
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             foreach($rights as $moduleKey => $methods) 
