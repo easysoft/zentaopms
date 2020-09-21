@@ -56,7 +56,7 @@ class storyModel extends model
             foreach($plans as $planID => $plan)
             {
                 $story->planTitle[$planID] = $plan->title;
-                if($plan->branch and !isset($story->stages[$plan->branch])) $story->stages[$plan->branch] = 'planned';
+                if($plan->branch and !isset($story->stages[$plan->branch]) and empty($story->branch)) $story->stages[$plan->branch] = 'planned';
             }
         }
         $extraStories = array();
