@@ -1208,7 +1208,7 @@ class programModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
-            if($project->template == 'waterfall')
+            if($project->model == 'waterfall')
             {
                 $product = new stdclass();
                 $product->name        = $project->name;

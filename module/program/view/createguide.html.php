@@ -35,13 +35,14 @@
       <button type='button' class='btn btn-default btn-wide' data-dismiss='modal'><?php echo $lang->cancel; ?></button>
     </div>
   </div>
+  <?php echo js::set('programID', $programID)?>
   <script>
   $('#guideDialog').on('click', '.program-type-img', function()
   {
       var $this = $(this);
       $('#guideDialog .program-type.active').removeClass('active');
       $this.parent().addClass('active');
-      $('#guideBtn').removeClass('disabled').attr('href', createLink('program', 'create', 'type=' + $this.data('type')));
+      $('#guideBtn').removeClass('disabled').attr('href', createLink('program', 'PRJCreate', 'type=' + $this.data('type') + '&programID=' + programID));
   });
   </script>
 </div>

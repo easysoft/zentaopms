@@ -32,10 +32,10 @@ js::set('browseType', $browseType);
     <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::commonButton('<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, 'data-toggle="modal" data-target="#guideDialog"', 'btn btn-primary');?>
+    <?php common::printLink('program', 'createGuide', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
   </div>
 </div>
-<div id='mainContent' class="main-row fade">
+<div id='mainContent' class="main-row">
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -83,7 +83,7 @@ js::set('browseType', $browseType);
               <?php common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
-              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "edit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
             </td>
           </tr>
           <?php endforeach;?>
@@ -97,5 +97,4 @@ js::set('browseType', $browseType);
     </form>
   </div>
 </div>
-<?php include 'prjcreateguide.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

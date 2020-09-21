@@ -79,13 +79,14 @@ class program extends control
             $programs = $this->program->getPGMList($status, $orderBy, $pager, true);
         }
 
+        $this->view->title       = $this->lang->program->PGMBrowse;
+        $this->view->position[]  = $this->lang->program->PGMBrowse;
+
         $this->view->programs    = $programs;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = $this->lang->program->PGMBrowse;
-        $this->view->position[]  = $this->lang->program->PGMBrowse;
         $this->view->programType = $programType;
         $this->display();
     }
@@ -96,8 +97,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function createGuide()
+    public function createGuide($programID = 0)
     {
+        $this->view->programID = $programID;
         $this->display();
     }
 
@@ -1017,8 +1019,8 @@ class program extends control
             if(empty($template)) $template = $copyProgram->template;
         }
 
-        $this->view->title         = $this->lang->program->PRJCreate;
-        $this->view->position[]    = $this->lang->program->PRJCreate;
+        $this->view->title      = $this->lang->program->PRJCreate;
+        $this->view->position[] = $this->lang->program->PRJCreate;
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
@@ -1034,6 +1036,45 @@ class program extends control
         $this->view->copyProgramID = $copyProgramID;
         $this->view->programID     = $programID;
         $this->view->programList   = $this->program->getParentPairs();
+        $this->display();
+    }
+
+    /**
+     * Edit a project.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJEdit($projectID = 0)
+    {
+        $this->lang->navGroup->program = 'project';
+        $project = $this->program->getPRJByID($projectID);
+
+        if($_POST)
+        {
+            $changes = $this->program->update($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('program', $projectID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            $url = $this->session->PRJList ? $this->session->PRJList : inlink('browse');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
+        }
+
+        $parents = $this->program->getParentPairs();
+        unset($parents[$projectID]);
+
+        $this->view->title       = $this->lang->program->PRJEdit;
+        $this->view->position[]  = $this->lang->program->PRJEdit;
+
+        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->project     = $project;
+        $this->view->parents     = $parents;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
