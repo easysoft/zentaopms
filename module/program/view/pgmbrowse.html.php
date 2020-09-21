@@ -14,9 +14,7 @@
 <?php js::set('status', $status);?>
 <?php js::set('orderBy', $orderBy);?>
 <?php if($programType == 'bygrid'):?>
-<style>
-#mainMenu{padding-left: 10px; padding-right: 10px;}
-</style>
+<style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
@@ -30,6 +28,7 @@
   </div>
   <div class='pull-right'>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
+    <?php if(common::hasPriv('program', 'createguide')) echo html::a($this->createLink('program', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PRJCreate, '', "class='btn btn-primary' data-toggle='modal'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
