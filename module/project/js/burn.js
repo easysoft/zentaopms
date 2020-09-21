@@ -27,14 +27,14 @@ function downloadBurn()
         cans.fillStyle = '#fff';
         cans.fillRect(0, 0, canvas.width, canvas.height);
 
-        cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 20);
+        cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 25);
         cans.font = "16px Microsoft JhengHei";
         cans.fillStyle = "rgba(17, 17, 17, 0.50)";
         cans.textAlign = 'left';
         cans.textBaseline = 'Middle';
         cans.fillText(watermark, 50, canvas.height - 50);
         cans.fillText(burnYUnit, 0, 20);
-        cans.fillText(burnXUnit, canvas.width - 50, canvas.height);
+        cans.fillText(burnXUnit, canvas.width - 50, canvas.height - 15);
 
         var type     = 'png';
         var $canvas  = $('#cloneCanvas #burnCanvas');

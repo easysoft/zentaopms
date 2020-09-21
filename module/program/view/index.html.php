@@ -10,5 +10,5 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php echo $this->fetch('block', 'dashboard', "module=program&type={$program->template}");?>
+<?php echo $this->fetch('block', 'dashboard', "module=program&type={$program->model}");?>
 <?php include '../../common/view/footer.html.php';?>

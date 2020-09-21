@@ -655,7 +655,6 @@ class commonModel extends model
                             $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
-                            $subProgram .= '</ul>';
                         }
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
@@ -1737,8 +1736,8 @@ EOD;
         /* Reset priv by program privway. */
         $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
-        if($program->privway == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-        if($program->privway == 'reset')  
+        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->auth == 'reset')  
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             foreach($rights as $moduleKey => $methods) 
