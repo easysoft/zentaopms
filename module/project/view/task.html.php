@@ -210,11 +210,12 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       $widths  = $this->datatable->setFixedFieldWidth($customFields);
       $columns = 0;
 
-      $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty(reset($tasks)) ? reset($tasks) : null);
-      $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty(reset($tasks)) ? reset($tasks) : null) and strtolower($browseType) != 'closed');
-      $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty(reset($tasks)) ? reset($tasks) : null);
-      $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty(reset($tasks)) ? reset($tasks) : null);
-      $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty(reset($tasks)) ? reset($tasks) : null);
+      $task = reset($tasks);
+      $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+      $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
+      $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+      $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+      $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
 
       $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
       ?>

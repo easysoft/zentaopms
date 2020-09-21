@@ -195,7 +195,7 @@
               <?php if(!$isLibCase and $config->global->flow != 'onlyTest'):?>
               <tr>
                 <th><?php echo $lang->testcase->story;?></th>
-                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control chosen');?></div>
+                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control chosen"');?></div>
                 </td>
               </tr>
               <?php endif;?>
