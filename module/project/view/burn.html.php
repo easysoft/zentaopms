@@ -15,6 +15,8 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('projectName', $project->name);?>
 <?php js::set('watermark', $lang->project->watermark);?>
+<?php js::set('burnXUnit', $lang->project->burnXUnit);?>
+<?php js::set('burnYUnit', $lang->project->burnYUnit);?>
 <?php js::set('type', $type);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

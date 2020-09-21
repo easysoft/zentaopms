@@ -20,17 +20,21 @@ function downloadBurn()
         /* Add watermark */
         var canvas = document.querySelector('#cloneCanvas #burnCanvas');
         var cans = canvas.getContext('2d');
+        canvas.height = 525;
+        canvas.width  = 1050;
 
         // Set background color to white
         cans.fillStyle = '#fff';
         cans.fillRect(0, 0, canvas.width, canvas.height);
 
-        cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 0);
+        cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 20);
         cans.font = "16px Microsoft JhengHei";
         cans.fillStyle = "rgba(17, 17, 17, 0.50)";
         cans.textAlign = 'left';
         cans.textBaseline = 'Middle';
         cans.fillText(watermark, 50, canvas.height - 50);
+        cans.fillText(burnYUnit, 0, 20);
+        cans.fillText(burnXUnit, canvas.width - 50, canvas.height);
 
         var type     = 'png';
         var $canvas  = $('#cloneCanvas #burnCanvas');
