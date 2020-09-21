@@ -28,7 +28,7 @@
   </div>
   <div class='pull-right'>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
-    <?php if(common::hasPriv('program', 'createguide')) echo html::a($this->createLink('program', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PRJCreate, '', "class='btn btn-primary' data-toggle='modal'");?>
+    <?php if(common::hasPriv('program', 'createguide')) echo html::a($this->createLink('program', 'createguide', 'program=0&from=PGM'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PRJCreate, '', "class='btn btn-primary' data-toggle='modal'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>

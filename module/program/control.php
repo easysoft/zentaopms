@@ -97,8 +97,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function createGuide($programID = 0)
+    public function createGuide($programID = 0, $from = 'PRJ')
     {
+        $this->view->from      = $from;
         $this->view->programID = $programID;
         $this->display();
     }
@@ -976,9 +977,18 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJCreate($template = 'waterfall', $programID = 0, $parentProgramID = 0, $copyProgramID = '')
+    public function PRJCreate($template = 'waterfall', $programID = 0, $from = 'PRJ', $parentProgramID = 0, $copyProgramID = '')
     {
-        $this->lang->navGroup->program = 'project';
+        if($from == 'PRJ')
+        {
+            $this->lang->navGroup->program = 'project';
+        }
+        else
+        {
+            $this->lang->navGroup->program = 'program';
+            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+        }
+
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
