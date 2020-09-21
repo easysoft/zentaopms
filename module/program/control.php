@@ -976,6 +976,7 @@ class program extends control
      */
     public function PRJCreate($template = 'waterfall', $programID = 0, $parentProgramID = 0, $copyProgramID = '')
     {
+        $this->lang->navGroup->program = 'project';
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
@@ -1016,9 +1017,9 @@ class program extends control
             if(empty($template)) $template = $copyProgram->template;
         }
 
-
         $this->view->title         = $this->lang->program->PRJCreate;
         $this->view->position[]    = $this->lang->program->PRJCreate;
+
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->programs      = array('' => '') + $this->program->getPairsByTemplate($template);
