@@ -43,7 +43,7 @@ class productModel extends model
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+        $selectHtml = $this->app->getMethodName() == 'all' ? '' : $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
         $label = $this->lang->product->index;
         if($this->config->global->flow != 'full') $label = $this->lang->product->all;
