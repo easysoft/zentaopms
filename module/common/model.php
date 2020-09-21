@@ -649,12 +649,12 @@ class commonModel extends model
                             $subActive .= 'dropdown-submenu';
                             $subLink = 'javascript:;';
                             $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->program}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->edit}</span>", '', "class='btn btn-link'") . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->group) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->manageMembers) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->start) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->activate) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->suspend) . '</li>';
+                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->program}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
                             $subProgram .= '</ul>';
                         }
 
