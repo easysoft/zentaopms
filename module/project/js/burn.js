@@ -34,7 +34,7 @@ function downloadBurn()
         cans.textBaseline = 'Middle';
         cans.fillText(watermark, 50, canvas.height - 50);
         cans.fillText(burnYUnit, 0, 20)
-        cans.fillText(burnXUnit, canvas.width - 50, canvas.height);
+        cans.fillText(burnXUnit, canvas.width - 50, canvas.height - 15);
 
         var type     = 'png';
         var $canvas  = $('#cloneCanvas #burnCanvas');
