@@ -195,7 +195,7 @@ class groupModel extends model
      */
     public function getUserPrograms($groupID)
     {
-        return $this->dao->select('t1.account, t1.program')
+        return $this->dao->select('t1.account, t1.PRJ')
             ->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('`group`')->eq((int)$groupID)

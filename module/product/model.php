@@ -92,7 +92,7 @@ class productModel extends model
         }
         else
         {
-            if($project->category == 'multiple')
+            if($project->product == 'multiple')
             {
                 $label = $this->lang->product->index;
                 $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';

@@ -903,7 +903,7 @@ class userModel extends model
 
         /* Get can manage programs by user. */
         $PRJadminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
-        $canManagePrograms = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('program');
+        $canManagePrograms = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
         return array('rights' => $rights, 'acls' => $acls, 'programs' => $canManagePrograms);
     }
 
