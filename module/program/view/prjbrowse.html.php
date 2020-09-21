@@ -32,7 +32,7 @@ js::set('browseType', $browseType);
     <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('program', 'createGuide', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
   </div>
 </div>
 <div id='mainContent' class="main-row">

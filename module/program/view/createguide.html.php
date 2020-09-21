@@ -36,13 +36,14 @@
     </div>
   </div>
   <?php echo js::set('programID', $programID)?>
+  <?php echo js::set('from', $from)?>
   <script>
   $('#guideDialog').on('click', '.program-type-img', function()
   {
       var $this = $(this);
       $('#guideDialog .program-type.active').removeClass('active');
       $this.parent().addClass('active');
-      $('#guideBtn').removeClass('disabled').attr('href', createLink('program', 'PRJCreate', 'type=' + $this.data('type') + '&programID=' + programID));
+      $('#guideBtn').removeClass('disabled').attr('href', createLink('program', 'PRJCreate', 'type=' + $this.data('type') + '&programID=' + programID + '&from=' + from));
   });
   </script>
 </div>
