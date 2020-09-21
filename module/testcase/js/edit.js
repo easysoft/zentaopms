@@ -15,8 +15,6 @@ function getList()
 
 $(document).ready(function()
 {
-    $("#story").chosen();
-
     $(document).on('change', '[name^=steps], [name^=expects]', function()
     {
         var steps   = [];

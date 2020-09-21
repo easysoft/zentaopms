@@ -71,6 +71,8 @@ $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
 $lang->project->watermark     = '由禅道导出';
+$lang->project->burnXUnit     = '(日期)';
+$lang->project->burnYUnit     = '(工时)';
 $lang->project->viewByUser    = '按用户查看';
 
 $lang->project->start    = "开始";

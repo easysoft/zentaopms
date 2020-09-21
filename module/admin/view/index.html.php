@@ -15,7 +15,7 @@
   <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
   <div id="notice" class='alert alert-success'>
     <?php echo html::a(inlink('ignore'), '<i class="icon-close icon-sm"></i> ' . $lang->admin->notice->ignore, 'hiddenwin', 'class="close" data-dismiss="alert" style="font-size: 12px"');?>
-    <div class="content"><i class='icon-exclamation-sign'></i> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->register->click, '', 'class="alert-link"'));?></div>
+    <div class="content"><i class='icon-exclamation-sign'></i> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->click, '', 'class="alert-link"'));?></div>
   </div>
   <?php endif;?>
 

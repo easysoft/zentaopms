@@ -9,19 +9,19 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->admin->common         = 'Admin';
-$lang->admin->index          = 'Admin Home';
-$lang->admin->checkDB        = 'Check Database';
-$lang->admin->sso            = 'Zdoo';
-$lang->admin->ssoAction      = 'Link Zdoo';
-$lang->admin->safeIndex      = 'Sécurité';
-$lang->admin->checkWeak      = 'Contrôle niveau de sécurité des mots de passe';
-$lang->admin->certifyMobile  = 'Vérifier votre smartphone';
-$lang->admin->certifyEmail   = 'Vérifier votre Email';
-$lang->admin->ztCompany      = 'Vérifier votre entreprise';
-$lang->admin->captcha        = 'Code de vérification';
-$lang->admin->getCaptcha     = 'Obtenir le Code de vérification';
-$lang->admin->registerAction = 'Register';
+$lang->admin->common        = 'Admin';
+$lang->admin->index         = 'Admin Home';
+$lang->admin->checkDB       = 'Check Database';
+$lang->admin->sso           = 'Zdoo';
+$lang->admin->ssoAction     = 'Link Zdoo';
+$lang->admin->safeIndex     = 'Sécurité';
+$lang->admin->checkWeak     = 'Contrôle niveau de sécurité des mots de passe';
+$lang->admin->certifyMobile = 'Vérifier votre smartphone';
+$lang->admin->certifyEmail  = 'Vérifier votre Email';
+$lang->admin->ztCompany     = 'Vérifier votre entreprise';
+$lang->admin->captcha       = 'Code de vérification';
+$lang->admin->getCaptcha    = 'Obtenir le Code de vérification';
+$lang->admin->register      = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Log';
@@ -39,15 +39,15 @@ $lang->admin->notice->register = "Note: Vous n'êtes pas enregistré sur le site
 $lang->admin->notice->ignore   = "Ignorer";
 $lang->admin->notice->int      = "『 %s 』 devrait être un entier positif.";
 
-$lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Connectez-vous avec votre nouveau compte';
-$lang->admin->register->caption    = "S'enregistrer sur la communauté Zentao";
-$lang->admin->register->click      = "S'enregistrer ici";
-$lang->admin->register->lblAccount = '>= 3 lettres et chiffres';
-$lang->admin->register->lblPasswd  = '>= 6 lettres et chiffres';
-$lang->admin->register->submit     = "S'enregistrer";
-$lang->admin->register->bind       = "S'associer à un compte existant";
-$lang->admin->register->success    = "Vous êtes enregistré !";
+$lang->admin->registerNotice = new stdclass();
+$lang->admin->registerNotice->common     = 'Connectez-vous avec votre nouveau compte';
+$lang->admin->registerNotice->caption    = "S'enregistrer sur la communauté Zentao";
+$lang->admin->registerNotice->click      = "S'enregistrer ici";
+$lang->admin->registerNotice->lblAccount = '>= 3 lettres et chiffres';
+$lang->admin->registerNotice->lblPasswd  = '>= 6 lettres et chiffres';
+$lang->admin->registerNotice->submit     = "S'enregistrer";
+$lang->admin->registerNotice->bind       = "S'associer à un compte existant";
+$lang->admin->registerNotice->success    = "Vous êtes enregistré !";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Lier au compte';
