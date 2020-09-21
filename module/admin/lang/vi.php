@@ -9,19 +9,19 @@
  * @version  $Id: vi.php 4460 2013-02-26 02:28:02Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->admin->common         = 'Quản trị';
-$lang->admin->index          = 'Trang quản trị';
-$lang->admin->checkDB        = 'Kiểm tra CSDL';
-$lang->admin->sso            = 'Zdoo';
-$lang->admin->ssoAction      = 'Liên kết Zdoo';
-$lang->admin->safeIndex      = 'Bảo mật';
-$lang->admin->checkWeak      = 'Kiểm tra độ yếu mật khẩu';
-$lang->admin->certifyMobile  = 'Xác thực di động của bạn';
-$lang->admin->certifyEmail   = 'Xác thực email của bạn';
-$lang->admin->ztCompany      = 'Xác thực doanh nghiệp của bạn';
-$lang->admin->captcha        = 'Mã xác thực';
-$lang->admin->getCaptcha     = 'Gửi Mã xác thực';
-$lang->admin->registerAction = 'Register';
+$lang->admin->common        = 'Quản trị';
+$lang->admin->index         = 'Trang quản trị';
+$lang->admin->checkDB       = 'Kiểm tra CSDL';
+$lang->admin->sso           = 'Zdoo';
+$lang->admin->ssoAction     = 'Liên kết Zdoo';
+$lang->admin->safeIndex     = 'Bảo mật';
+$lang->admin->checkWeak     = 'Kiểm tra độ yếu mật khẩu';
+$lang->admin->certifyMobile = 'Xác thực di động của bạn';
+$lang->admin->certifyEmail  = 'Xác thực email của bạn';
+$lang->admin->ztCompany     = 'Xác thực doanh nghiệp của bạn';
+$lang->admin->captcha       = 'Mã xác thực';
+$lang->admin->getCaptcha    = 'Gửi Mã xác thực';
+$lang->admin->register      = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Nhật ký';
@@ -39,15 +39,15 @@ $lang->admin->notice->register = "Chú ý: Bạn chưa đăng ký trên trang we
 $lang->admin->notice->ignore   = "Bỏ qua";
 $lang->admin->notice->int      = "『%s』 nên là số nguyên dương.";
 
-$lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Kết nối tài khoản';
-$lang->admin->register->caption    = 'Đăng ký cộng đồng ZenTao';
-$lang->admin->register->click      = 'Đăng ký';
-$lang->admin->register->lblAccount = '>= 3 chữ và số';
-$lang->admin->register->lblPasswd  = '>= 6 chữ và số';
-$lang->admin->register->submit     = 'Gửi';
-$lang->admin->register->bind       = "Kết nối với tài khoản đang tồn tại";
-$lang->admin->register->success    = "Bạn đã đăng ký!";
+$lang->admin->registerNotice = new stdclass();
+$lang->admin->registerNotice->common     = 'Kết nối tài khoản';
+$lang->admin->registerNotice->caption    = 'Đăng ký cộng đồng ZenTao';
+$lang->admin->registerNotice->click      = 'Đăng ký';
+$lang->admin->registerNotice->lblAccount = '>= 3 chữ và số';
+$lang->admin->registerNotice->lblPasswd  = '>= 6 chữ và số';
+$lang->admin->registerNotice->submit     = 'Gửi';
+$lang->admin->registerNotice->bind       = "Kết nối với tài khoản đang tồn tại";
+$lang->admin->registerNotice->success    = "Bạn đã đăng ký!";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Liên kết tài khoản';

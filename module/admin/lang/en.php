@@ -9,19 +9,19 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->common         = 'Admin';
-$lang->admin->index          = 'Admin Home';
-$lang->admin->checkDB        = 'Check Database';
-$lang->admin->sso            = 'Zdoo';
-$lang->admin->ssoAction      = 'Link Zdoo';
-$lang->admin->safeIndex      = 'Security';
-$lang->admin->checkWeak      = 'Check Weak Password';
-$lang->admin->certifyMobile  = 'Verify your cellphone';
-$lang->admin->certifyEmail   = 'Verify your Email';
-$lang->admin->ztCompany      = 'Verify your company';
-$lang->admin->captcha        = 'Verification Code';
-$lang->admin->getCaptcha     = 'Send Verification Code';
-$lang->admin->registerAction = 'Register';
+$lang->admin->common        = 'Admin';
+$lang->admin->index         = 'Admin Home';
+$lang->admin->checkDB       = 'Check Database';
+$lang->admin->sso           = 'Zdoo';
+$lang->admin->ssoAction     = 'Link Zdoo';
+$lang->admin->safeIndex     = 'Security';
+$lang->admin->checkWeak     = 'Check Weak Password';
+$lang->admin->certifyMobile = 'Verify your cellphone';
+$lang->admin->certifyEmail  = 'Verify your Email';
+$lang->admin->ztCompany     = 'Verify your company';
+$lang->admin->captcha       = 'Verification Code';
+$lang->admin->getCaptcha    = 'Send Verification Code';
+$lang->admin->register      = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Log';
@@ -39,15 +39,15 @@ $lang->admin->notice->register = "Note: You haven't registered in ZenTao officia
 $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
-$lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Bind Account';
-$lang->admin->register->caption    = 'ZenTao Community Signup';
-$lang->admin->register->click      = 'Sign Up';
-$lang->admin->register->lblAccount = '>= 3 letters and numbers';
-$lang->admin->register->lblPasswd  = '>= 6 letters and numbers';
-$lang->admin->register->submit     = 'Submit';
-$lang->admin->register->bind       = "Bind Exsiting Account";
-$lang->admin->register->success    = "You have signed up!";
+$lang->admin->registerNotice = new stdclass();
+$lang->admin->registerNotice->common     = 'Bind Account';
+$lang->admin->registerNotice->caption    = 'ZenTao Community Signup';
+$lang->admin->registerNotice->click      = 'Sign Up';
+$lang->admin->registerNotice->lblAccount = '>= 3 letters and numbers';
+$lang->admin->registerNotice->lblPasswd  = '>= 6 letters and numbers';
+$lang->admin->registerNotice->submit     = 'Submit';
+$lang->admin->registerNotice->bind       = "Bind Exsiting Account";
+$lang->admin->registerNotice->success    = "You have signed up!";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Link Account';

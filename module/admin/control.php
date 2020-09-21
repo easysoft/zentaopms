@@ -77,7 +77,7 @@ class admin extends control
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
                 $this->setting->setItems('system.common.global', $data);
 
-                echo js::alert($this->lang->admin->register->success);
+                echo js::alert($this->lang->admin->registerNotice->success);
                 if($from == 'admin') die(js::locate(inlink('index'), 'parent'));
                 if($from == 'mail') die(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
             }
@@ -95,8 +95,8 @@ class admin extends control
             die(js::alert($alertMessage));
         }
 
-        $this->view->title      = $this->lang->admin->register->caption;
-        $this->view->position[] = $this->lang->admin->register->caption;
+        $this->view->title      = $this->lang->admin->registerNotice->caption;
+        $this->view->position[] = $this->lang->admin->registerNotice->caption;
         $this->view->register   = $this->admin->getRegisterInfo();
         $this->view->sn         = $this->config->global->sn;
         $this->view->from       = $from;

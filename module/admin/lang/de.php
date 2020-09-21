@@ -9,19 +9,19 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->common         = 'Admin';
-$lang->admin->index          = 'Admin Home';
-$lang->admin->checkDB        = 'Datenbank prüfen';
-$lang->admin->sso            = 'SSO';
-$lang->admin->ssoAction      = 'Link Zdoo';
-$lang->admin->safeIndex      = 'Sicherheit';
-$lang->admin->checkWeak      = 'Schwache Passwörter prüfen';
-$lang->admin->certifyMobile  = 'Prüfen Sie die Mobilnummer';
-$lang->admin->certifyEmail   = 'Prüfen Sie die Emailadresse';
-$lang->admin->ztCompany      = 'Prüfen Sie das Unternehmen';
-$lang->admin->captcha        = 'Bestätigungscode';
-$lang->admin->getCaptcha     = 'Bestätigungscode anfordern';
-$lang->admin->registerAction = 'Register';
+$lang->admin->common        = 'Admin';
+$lang->admin->index         = 'Admin Home';
+$lang->admin->checkDB       = 'Datenbank prüfen';
+$lang->admin->sso           = 'SSO';
+$lang->admin->ssoAction     = 'Link Zdoo';
+$lang->admin->safeIndex     = 'Sicherheit';
+$lang->admin->checkWeak     = 'Schwache Passwörter prüfen';
+$lang->admin->certifyMobile = 'Prüfen Sie die Mobilnummer';
+$lang->admin->certifyEmail  = 'Prüfen Sie die Emailadresse';
+$lang->admin->ztCompany     = 'Prüfen Sie das Unternehmen';
+$lang->admin->captcha       = 'Bestätigungscode';
+$lang->admin->getCaptcha    = 'Bestätigungscode anfordern';
+$lang->admin->register      = 'Register';
 
 $lang->admin->api     = 'API';
 $lang->admin->log     = 'Log';
@@ -39,15 +39,15 @@ $lang->admin->notice->register = "Hinweiß: Sie haben sich nicht bei ZenTao (www
 $lang->admin->notice->ignore   = "Ignorieren";
 $lang->admin->notice->int      = "『%s』sollte eine positive Zahl sein.";
 
-$lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Verbinde neues Konto';
-$lang->admin->register->caption    = 'In der Zentao Community registieren';
-$lang->admin->register->click      = 'Bitte registieren Sie sich hier';
-$lang->admin->register->lblAccount = 'mindestens 3 Zeichen bitte; mit Buchsten und Ziffern.';
-$lang->admin->register->lblPasswd  = 'mindestens 6 Zeichen bitte; mit Buchsten und Ziffern.';
-$lang->admin->register->submit     = 'Registieren';
-$lang->admin->register->bind       = "Verbinde bestehendes Konto";
-$lang->admin->register->success    = "Sie haben sich erfolgreich registriert!";
+$lang->admin->registerNotice = new stdclass();
+$lang->admin->registerNotice->common     = 'Verbinde neues Konto';
+$lang->admin->registerNotice->caption    = 'In der Zentao Community registieren';
+$lang->admin->registerNotice->click      = 'Bitte registieren Sie sich hier';
+$lang->admin->registerNotice->lblAccount = 'mindestens 3 Zeichen bitte; mit Buchsten und Ziffern.';
+$lang->admin->registerNotice->lblPasswd  = 'mindestens 6 Zeichen bitte; mit Buchsten und Ziffern.';
+$lang->admin->registerNotice->submit     = 'Registieren';
+$lang->admin->registerNotice->bind       = "Verbinde bestehendes Konto";
+$lang->admin->registerNotice->success    = "Sie haben sich erfolgreich registriert!";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Konto verknüpfen';
