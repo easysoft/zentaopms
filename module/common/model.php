@@ -2247,7 +2247,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
-            return $lang->menu;
+            return $lang->menu->scrum;
         }
 
         if($program->model == 'waterfall')

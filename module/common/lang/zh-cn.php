@@ -143,9 +143,10 @@ $lang->program->viewMenu->product = array('link' => '产品|program|pgmproduct|p
 $lang->program->viewMenu->project = array('link' => "$lang->projectCommon|program|pgmproject|program=%s");
 
 /* Scrum menu. */
-$lang->menu = new stdclass();
-$lang->menu->productindex = '主页|product|index|';
-$lang->menu->product      = $lang->productCommon . '|product|productlist|';
+$lang->product = new stdclass();
+$lang->product->menu = new stdclass();
+$lang->product->menu->productindex = '主页|product|index|';
+$lang->product->menu->product      = $lang->productCommon . '|product|productlist|';
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -255,24 +256,24 @@ $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
 /* 产品视图设置。*/
-$lang->product = new stdclass();
-$lang->product->menu = new stdclass();
+$lang->scrumproduct = new stdclass();
+$lang->scrumproduct->menu = new stdclass();
 
-$lang->product->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
-$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
-$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
-$lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
-$lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+$lang->scrumproduct->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
+$lang->scrumproduct->menu->roadmap = '路线图|product|roadmap|productID=%s';
+$lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->scrumproduct->menu->dynamic = '动态|product|dynamic|productID=%s';
+$lang->scrumproduct->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->scrumproduct->menu->branch  = '@branch@|branch|manage|productID=%s';
+$lang->scrumproduct->menu->module  = '模块|tree|browse|productID=%s&view=story';
+$lang->scrumproduct->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 
 if($config->URAndSR)
 {
-    $lang->product->menu->requirement = array('link' => "{$URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-    $lang->product->menu->story       = array('link' => "{$SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->scrumproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->scrumproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 }
 
 $lang->product->dividerMenu = ',project,doc,';
@@ -818,6 +819,15 @@ $lang->icons['unlock']             = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
 
+/* Scrum menu. */
+$lang->menu = new stdclass();
+$lang->menu->scrum = new stdclass();
+$lang->menu->scrum->program = '仪表盘|program|index|';
+$lang->menu->scrum->product = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->scrum->project = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->doc     = '文档|doc|index|';
+$lang->menu->scrum->qa      = '测试|qa|index';
+
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex = array('link' => '仪表盘|program|index|program={PROGRAM}');
@@ -833,10 +843,6 @@ $lang->menu->waterfall->release      = array('link' => '发布|release|browse|pr
 $lang->menu->waterfall->issue        = '问题|issue|browse|';
 $lang->menu->waterfall->risk         = '风险|risk|browse|';
 $lang->menu->waterfall->list         = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
-
-/* Srcum menu. */
-$lang->menu->srcum = new stdclass();
-$lang->menu->srcum->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
