@@ -365,7 +365,7 @@ class commonModel extends model
             {
                 if($group == 'program')
                 {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->program);
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->PRJ);
                 }
                 else
                 {
@@ -439,7 +439,7 @@ class commonModel extends model
             if(isset($lang->waterfall->subMenu->$key))
             {    
                 $programSubMenu = $lang->waterfall->subMenu->$key;
-                $subMenu        = common::createSubMenu($programSubMenu, $app->session->program);
+                $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
 
                 if(!empty($subMenu))
                 {    
@@ -645,16 +645,16 @@ class commonModel extends model
                         {
                             /* Print program sub menu.*/
                             global $dbh;
-                            $program    = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+                            $program    = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
                             $subActive .= 'dropdown-submenu';
                             $subLink = 'javascript:;';
                             $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->program}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->program}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->program}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->program}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->program}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->program}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
+                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->PRJ}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->PRJ}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->PRJ}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->PRJ}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->PRJ}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
                         }
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
@@ -1680,7 +1680,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
-        if($inProgram && strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false) return true; 
+        if($inProgram && strpos(",{$app->user->rights['programs']},", ",{$app->session->PRJ},") !== false) return true; 
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1720,8 +1720,8 @@ EOD;
     public function resetProgramPriv($module, $method)
     {
         /* Get user program priv. */
-        if(!$this->app->session->program) return;
-        $program       = $this->dao->findByID($this->app->session->program)->from(TABLE_PROJECT)->fetch();
+        if(!$this->app->session->PRJ) return;
+        $program       = $this->dao->findByID($this->app->session->PRJ)->from(TABLE_PROJECT)->fetch();
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
