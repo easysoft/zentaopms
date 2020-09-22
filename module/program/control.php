@@ -588,41 +588,6 @@ class program extends control
     }
 
     /**
-     * Start project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function PRJStart($projectID)
-    {
-        $project   = $this->program->getPGMByID($projectID);
-        $projectID = $project->id;
-
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->project->start($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('program', $projectID, 'Started', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
-        $this->display();
-    }
-
-    /**
      * Delete a program.
      *
      * @param  int     $projectID
@@ -642,40 +607,6 @@ class program extends control
         $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         die(js::reload('parent'));
-    }
-
-    /**
-     * Suspend a project.
-     *
-     * @param  int     $projectID
-     * @access public
-     * @return void
-     */
-    public function PRJSuspend($projectID)
-    {
-        $project = $this->program->getPGMByID($projectID);
-
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->project->suspend($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('program', $projectID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->project    = $project;
-        $this->display('project', 'suspend');
     }
 
     /**
@@ -717,40 +648,6 @@ class program extends control
         $this->view->newEnd     = $newEnd;
         $this->view->project    = $project;
         $this->display('project', 'activate');
-    }
-
-    /**
-     * Close a project.
-     *
-     * @param  int     $projectID
-     * @access public
-     * @return void
-     */
-    public function PRJClose($projectID)
-    {
-        $project = $this->program->getPGMByID($projectID);
-
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->project->close($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('program', $projectID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->close;
-        $this->view->position[] = $this->lang->project->close;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
-        $this->display('project', 'close');
     }
 
     /**
@@ -826,7 +723,7 @@ class program extends control
      *
      * @param  int     $programID
      * @param  string  $module
-     * @param  string  $module
+     * @param  string  $method
      * @access public
      * @return void
      */
@@ -836,6 +733,35 @@ class program extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->programs  = $this->program->getPGMList('all');
+        $this->display();
+    }
+
+    /**
+     * Ajax get project drop menu.
+     *
+     * @param  int     $projectID
+     * @param  string  $module
+     * @param  string  $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPRJDropMenu($projectID, $module, $method)
+    {
+        $closedProjects = $this->program->getPRJList(0, 'closed', 0, 'id_desc', null, 0, 0);
+
+        $closedProjectNames = array();
+        foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
+
+        $closedProjectsHtml = '';
+        foreach($closedProjects as $project) $closedProjectsHtml .= html::a(inLink('index'), '<i class="icon icon-menu-doc"></i>' . $project->name);
+
+        $this->view->projectID = $projectID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+
+        $this->view->normalProjectsHtml = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'));
+        $this->view->closedProjectsHtml = $closedProjectsHtml;
+
         $this->display();
     }
 
@@ -886,6 +812,21 @@ class program extends control
         }
 
         die($link);
+    }
+
+    /**
+     * Gets the most recently created project.
+     *
+     * @access public
+     * @return string
+     */
+    public function ajaxGetRecentProjects()
+    {
+        $recentProjects = $this->program->getPRJParams(0, 15);
+        if(!empty($recentProjects))
+        {
+            foreach($recentProjects as $project) echo html::a(helper::createLink('project', 'view', 'projectID=' . $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
+        }
     }
 
     /**
@@ -1104,7 +1045,7 @@ class program extends control
     public function PRJGroup($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('project', $projectID);
+        $this->session->set('PRJ', $projectID);
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
@@ -1133,7 +1074,7 @@ class program extends control
     public function PRJCreateGroup($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('project', $projectID);
+        $this->session->set('PRJ', $projectID);
 
         if(!empty($_POST))
         {
@@ -1160,7 +1101,7 @@ class program extends control
     public function PRJManageView($groupID, $projectID, $programID)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('project', $projectID);
+        $this->session->set('PRJ', $projectID);
 
         if($_POST)
         {
@@ -1192,11 +1133,14 @@ class program extends control
      */
     public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
+        $this->lang->navGroup->program = 'project';
+
         if($type == 'byGroup')
         {
             $groupID = $param;
             $group   = $this->group->getById($groupID);
         }
+
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
@@ -1257,7 +1201,7 @@ class program extends control
     public function PRJManageMembers($projectID, $dept = '')
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('project', $projectID);
+        $this->session->set('PRJ', $projectID);
 
         if(!empty($_POST))
         {
@@ -1299,19 +1243,19 @@ class program extends control
      */
     public function PRJCopyGroup($groupID)
     {
-       if(!empty($_POST))
-        {
-            $group = $this->group->getByID($groupID);
-            $_POST['PRJ'] = $group->PRJ;
-            $this->group->copy($groupID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::closeModal('parent.parent', 'this'));
-        }
+        if(!empty($_POST))
+         {
+             $group = $this->group->getByID($groupID);
+             $_POST['PRJ'] = $group->PRJ;
+             $this->group->copy($groupID);
+             if(dao::isError()) die(js::error(dao::getError()));
+             die(js::closeModal('parent.parent', 'this'));
+         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-        $this->view->position[] = $this->lang->group->copy;
-        $this->view->group      = $this->group->getById($groupID);
-        $this->display('group', 'copy');
+         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+         $this->view->position[] = $this->lang->group->copy;
+         $this->view->group      = $this->group->getById($groupID);
+         $this->display('group', 'copy');
     }
 
     /**
@@ -1339,18 +1283,105 @@ class program extends control
     }
 
     /**
-     * Gets the most recently created project.
+     * Start project.
      *
+     * @param  int    $projectID
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxGetRecentProjects()
+    public function PRJStart($projectID)
     {
-        $recentProjects = $this->program->getPRJParams(0, 15);
-        if(!empty($recentProjects))
+        $project   = $this->program->getPGMByID($projectID);
+        $projectID = $project->id;
+
+        if(!empty($_POST))
         {
-            foreach($recentProjects as $project) echo html::a(helper::createLink('project', 'view', 'projectID=' . $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
+            $this->loadModel('action');
+            $changes = $this->project->start($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $projectID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($projectID);
+            die(js::reload('parent.parent'));
         }
+
+        $this->view->title      = $this->lang->project->start;
+        $this->view->position[] = $this->lang->project->start;
+        $this->view->project    = $project;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->display();
     }
 
+    /**
+     * Suspend a project.
+     *
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJSuspend($projectID)
+    {
+        $project = $this->program->getPGMByID($projectID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->suspend($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $projectID, 'Suspended', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->project->suspend;
+        $this->view->position[] = $this->lang->project->suspend;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->project    = $project;
+        $this->display('project', 'suspend');
+    }
+
+    /**
+     * Close a project.
+     *
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJClose($projectID)
+    {
+        $project = $this->program->getPGMByID($projectID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->close($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $projectID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->project->close;
+        $this->view->position[] = $this->lang->project->close;
+        $this->view->project    = $project;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->display('project', 'close');
+    }
 }
