@@ -148,6 +148,16 @@ $lang->product->menu = new stdclass();
 $lang->product->menu->home = '主页|product|index|';
 $lang->product->menu->list = $lang->productCommon . '|product|all|';
 
+$lang->product->viewMenu = new stdclass();
+$lang->product->viewMenu->requirement = array('link' => "用户需求|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "软件需求|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
+$lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
+$lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
@@ -556,9 +566,10 @@ $lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 
+$lang->navGroup->productplan = 'product';
+
 $lang->navGroup->story       = 'project';
 $lang->navGroup->branch      = 'project';
-$lang->navGroup->productplan = 'project';
 $lang->navGroup->release     = 'project';
 $lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';

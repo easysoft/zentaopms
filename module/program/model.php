@@ -730,7 +730,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link = $from == 'program' ? helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : helper::createLink('product', 'all', "programID=$program->id", '', '', $program->id);
-            $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id'");
+            $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {

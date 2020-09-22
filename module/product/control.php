@@ -102,7 +102,8 @@ class product extends control
      */
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->navGroup->product = 'project';
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
