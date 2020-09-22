@@ -52,10 +52,12 @@ $("input:checkbox[name='revision[]']").click(function(){
     if (checkNum >= 2) 
     {
         $("input:checkbox[name='revision[]']").each(function(){ if(!$(this).is(':checked')) $(this).attr("disabled","disabled")});
+        $('#submit').removeAttr('disabled');
     }
     else
     {
         $("input:checkbox[name='revision[]']").each(function(){$(this).attr("disabled", false)});
+        $('#submit').attr('disabled', 'disabled');
     }
 });
 
