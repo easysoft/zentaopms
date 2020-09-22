@@ -1315,7 +1315,7 @@ class block extends control
         $releases = array();
         $count    = isset($this->params->count) ? (int)$this->params->count : 15;
 
-        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('PRJ')->eq($this->session->PRJ)->limit(15)->fetchPairs();
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->PRJ)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {

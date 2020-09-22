@@ -19,7 +19,7 @@ ADD `planDuration` int(11) NOT NULL AFTER `parentVersion`,
 ADD `realDuration` int(11) NOT NULL AFTER `planDuration`,
 ADD `output` text NOT NULL AFTER `milestone`;
 
-ALTER TABLE `zt_product` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_task` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doc` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_story` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;

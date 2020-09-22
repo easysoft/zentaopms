@@ -32,7 +32,7 @@
           else $trClass .= ' is-top-level table-nest-hide';
       }
 
-      if($program->parent)
+      if($program->parent and isset($programs[$program->parent]))
       {
           if($program->type != 'program') $trClass .= ' is-nest-child';
           $trClass .= ' table-nest-hide';
@@ -64,25 +64,25 @@
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-center c-actions'>
           <?php if($program->type == 'program'):?>
-          <?php common::printIcon('program', 'pgmgroup', "programID=$program->id", $program, 'list', 'group');?>
-          <?php common::printIcon('program', 'pgmmanageMembers', "programID=$program->id", $program, 'list', 'persons');?>
-          <?php common::printIcon('program', 'prjstart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'pgmactivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'prjsuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'pgmclose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
-          <?php if(common::hasPriv('program', 'pgmedit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-          <?php common::printIcon('program', 'pgmcreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
-          <?php if(common::hasPriv('program', 'pgmdelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+          <?php common::printIcon('program', 'PGMGroup', "programID=$program->id", $program, 'list', 'group');?>
+          <?php common::printIcon('program', 'PGMManageMembers', "programID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PGMClose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
+          <?php if(common::hasPriv('program', 'PGMEdit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+          <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
+          <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
           <?php else:?>
-          <?php common::printIcon('program', 'prjgroup', "programID=$program->id", $program, 'list', 'group');?>
-          <?php common::printIcon('program', 'prjmanageMembers', "programID=$program->id", $program, 'list', 'persons');?>
-          <?php common::printIcon('program', 'prjstart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'prjactivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'prjsuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
-          <?php common::printIcon('program', 'prjclose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
-          <?php if(common::hasPriv('program', 'prjedit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-          <?php common::printIcon('program', 'prjcreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
-          <?php if(common::hasPriv('program', 'prjdelete')) echo html::a($this->createLink("program", "prjdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+          <?php common::printIcon('program', 'PRJGroup', "programID=$program->id", $program, 'list', 'group');?>
+          <?php common::printIcon('program', 'PRJManageMembers', "programID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PRJActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'PRJClose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
+          <?php if(common::hasPriv('program','PRJEdit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+          <?php common::printIcon('program', 'PRJCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
+          <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "prjdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
           <?php endif;?>
         </td>
         <?php if($canOrder):?>
