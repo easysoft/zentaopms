@@ -546,6 +546,7 @@ class commonModel extends model
 
         $recentProjects = $this->dao->select('id,code')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('close')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
@@ -2188,6 +2189,10 @@ EOD;
         if($group == 'program') 
         {
             $lang->menu = $lang->program->menu;
+        }
+        if($group == 'product') 
+        {
+            $lang->menu = $lang->product->menu;
         }
         if($group == 'project') 
         {

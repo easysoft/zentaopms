@@ -74,8 +74,8 @@ $lang->program->unitList['dollar'] = 'Dollars';
 $lang->program->templateList['scrum']     = "Scrum";
 $lang->program->templateList['waterfall'] = "CMMI";
 
-$lang->program->categoryList['single']   = "Single product";
-$lang->program->categoryList['multiple'] = "Multiple products";
+$lang->program->productList['single']   = "Single product";
+$lang->program->productList['multiple'] = "Multiple products";
 
 $lang->program->featureBar['all']       = 'All';
 $lang->program->featureBar['doing']     = 'Going';

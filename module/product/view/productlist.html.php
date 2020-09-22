@@ -1,12 +1,12 @@
 <?php
 /**
- * The html template file of productlist method of product module of ZenTaoPMS.
+ * The html productlist file of productlist method of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id$
+ * @version     $Id
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
@@ -14,33 +14,28 @@
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($program) ? $lang->product->stack : $program->name;?>
+      <?php echo empty($program) ? $lang->program->PGMCommon : $program->name;?>
       <?php if($programID) echo html::a(inLink('productlist', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "programID=$programID&browseType=$browseType&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("productlist", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <a id="bysearchTab" class="btn btn-link querybox-toggle"><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('', '', "", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('product', 'create', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $stack;?>
-      <div class="text-center">
-        <?php common::printLink('program', 'create', '', $lang->product->createstack, '', 'class="btn btn-info btn-wide"');?>
-      </div>
+      <?php echo $programTree;?>
     </div>
   </div>
   <div class="main-col">
-    <div id="queryBox" class="cell" data-module="productlist"></div>
-    <form class="main-table table-user" action="" id="productListForm" action='<?php echo inLink('batchEdit', "programID=$programID");?>'>
+    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo inLink('batchEdit', "programID=$programID");?>'>
       <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-fixed">
@@ -112,5 +107,6 @@
   </div>
 </div>
 <?php js::set('orderBy', $orderBy)?>
-<script>$("#<?php echo $browseType;?>Tab").addClass('btn-active-text');</script>
+<?php js::set('programID', $programID)?>
+<?php js::set('browseType', $browseType)?>
 <?php include '../../common/view/footer.html.php';?>

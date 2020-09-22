@@ -62,7 +62,7 @@ class programModel extends model
     /**
      * Get program pairs by template.
      *
-     * @param  varchar $template
+     * @param  string $model
      * @access public
      * @return void
      */
@@ -289,7 +289,7 @@ class programModel extends model
     public function getPGMList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
+            ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
@@ -665,7 +665,7 @@ class programModel extends model
     {
         $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
         $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMHome) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PGMCreate) . '</li>';
         $output .= '</ul>';
@@ -712,11 +712,12 @@ class programModel extends model
     /**
      * Get the treemenu of program.
      *
-     * @param  int        $programID
+     * @param  int $programID
+     * @param  int $productList
      * @access public
      * @return string
      */
-    public function getPGMTreeMenu($programID = 0)
+    public function getPGMTreeMenu($programID = 0, $productList = false)
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -727,7 +728,9 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $linkHtml = html::a(helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), "<i class='icon icon-stack'></i> " . $program->name);
+            $link = helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id);
+            if($productList) $link = helper::createLink('product', 'productlist', "programID=$program->id", '', '', $program->id);
+            $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id'");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -758,28 +761,47 @@ class programModel extends model
     /*
      * Get project swapper.
      *
-     * @param  object  $programs
-     * @param  int     $programID
+     * @access private
+     * @return void
+     */
+    public function printPRJCommonAction()
+    {
+        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->common}'>{$this->lang->program->common} <i class='icon icon-sort-down'></i></button>";
+        $output .= '<ul class="dropdown-menu">';
+        $output .= '<li>' . html::a(helper::createLink('program', 'index'), "<i class='icon icon-home'></i> " . $this->lang->program->PRJHome) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJBrowse) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
+        $output .= '</ul>';
+        $output .= "</div>";
+        echo $output;
+    }
+
+    /*
+     * Get project swapper.
+     *
+     * @param  int     $projectID
      * @param  varchar $currentModule
      * @param  varchar $currentMethod
      * @param  varchar $extra
      * @access private
      * @return void
      */
-    public function getPRJSwitcher($programID, $currentModule, $currentMethod)
+    public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        $this->loadModel('project');
-        $currentProgramName = '';
-        if($programID)
-        {
-            setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            $currentProgram     = $this->project->getById($programID);
-            $currentProgramName = $currentProgram->name;
-        }
-        if($currentModule == 'program' && $currentMethod == 'browse') $currentProgramName = $this->lang->program->all;
+        $this->printPRJCommonAction();
+        if($currentModule == 'program' && $currentMethod != 'index') return;
 
-        $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $this->loadModel('project');
+        $currentProjectName = $this->lang->program->common;
+        if($projectID)
+        {
+            setCookie("lastproject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            $currentProject     = $this->project->getById($projectID);
+            $currentProjectName = $currentProject->name;
+        }
+
+        $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -810,7 +832,7 @@ class programModel extends model
         if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'prjclose')    return $program->status != 'closed';
         if($action == 'prjsuspend')  return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'prjactivate') return $program->status == 'done';
+        if($action == 'prjactivate') return $program->status == 'done' or $program->status == 'closed';
 
         return true;
     }
@@ -968,7 +990,7 @@ class programModel extends model
      * @access public
      * @return bool
      */
-    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'order_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
     {
         $path = '';
         if($programID)
@@ -981,7 +1003,7 @@ class programModel extends model
             ->where('type')->eq('project')
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->PRJMine or $PRJMine)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
@@ -1038,6 +1060,7 @@ class programModel extends model
         {
             return $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('status')->ne('status')
                 ->andWhere('deleted')->eq('0')
                 ->orderBy('id_desc')
@@ -1057,19 +1080,37 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function buildPRJMenuQuery($projectID)
+    public function buildPRJMenuQuery($projectID = 0)
     {
-        $rootProject = $this->getPRJByID($projectID);
-        if(!$rootProject)
-        {
-            $rootProject = new stdclass();
-            $rootProject->path = '';
-        }
+        $path    = '';
+        $program = $this->getPRJByID($projectID);
+        if($program) $path = $program->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->beginIF($projectID > 0)->where('path')->like($rootProject->path . '%')->fi()
+            ->where('type')->in('project,program')
+            ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
+    }
+
+    /**
+     * Get project pairs by template.
+     *
+     * @param  string $model
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function getPRJPairsByTemplate($model, $programID = 0)
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('project')
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->andWhere('model')->eq($model)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs();
     }
 
     /**
@@ -1085,6 +1126,7 @@ class programModel extends model
     {
         $projectMenu = array();
         $stmt        = $this->dbh->query($this->buildPRJMenuQuery($projectID));
+
         while($project = $stmt->fetch())
         {
             $linkHtml = call_user_func($userFunc, $project, $param);
@@ -1124,7 +1166,7 @@ class programModel extends model
      */
     public function createPRJManageLink($project)
     {
-        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('project', 'browse', "projectID={$project->id}");
+        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('program', 'index', "projectID={$project->id}");
         $icon = $project->type == 'program' ? '<i class="icon icon-stack"></i> ' : '<i class="icon icon-menu-doc"></i> ';
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
@@ -1140,6 +1182,7 @@ class programModel extends model
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->add('type', 'project')
+            ->add('lifetime', 'short')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')

@@ -113,7 +113,7 @@ class programplanModel extends model
         foreach($plans as $planID => $plan)
         {
             $name = $plan->name;
-            if($program->category == 'multiple') $name = $plan->productName . '/' . $name;
+            if($program->product == 'multiple') $name = $plan->productName . '/' . $name;
             $pairs[$planID] = '/'.$name;
 
             foreach($plan->children as $childID => $child)
@@ -445,9 +445,8 @@ class programplanModel extends model
 
             $plan = new stdclass();
             $plan->id           = isset($planIDs[$key]) ? $planIDs[$key] : '';
-            $plan->type         = 'project';
-            $plan->program      = (int)$programID;
-            $plan->parent       = $parentID;
+            $plan->type         = 'stage';
+            $plan->parent       = $parentID ? $parentID : (int)$programID;
             $plan->name         = $names[$key];
             $plan->percent      = $percents[$key];
             $plan->attribute    = empty($parentID) ? $attributes[$key] : $parentStage;
@@ -630,9 +629,9 @@ class programplanModel extends model
         {
             $projects  = $this->getProjectsByProduct($oldPlan->product);
             $devCounts = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-                ->where('program')->eq($oldPlan->program)
+                ->where('parent')->eq($oldPlan->program)
+                ->andWhere('type')->eq('stage')
                 ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->eq(0)
                 ->andWhere('attribute')->eq('dev')
                 ->andWhere('id')->ne($oldPlan->id)
                 ->andWhere('id')->in($projects)
@@ -829,8 +828,8 @@ class programplanModel extends model
     public function getMilestones($programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('program')->eq($programID)
-            ->andWhere('type')->eq('project')
+            ->where('parent')->eq($programID)
+            ->andWhere('type')->eq('stage')
             ->andWhere('milestone')->eq(1)
             ->andWhere('deleted')->eq(0)
             ->orderBy('begin asc')
@@ -885,9 +884,8 @@ class programplanModel extends model
 
         $parentStage = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('id')->in($projects)
-            ->andWhere('type')->eq('project')
-            ->andWhere('program')->eq($programID)
-            ->andWhere('parent')->eq(0)
+            ->andWhere('type')->eq('stage')
+            ->andWhere('parent')->eq($programID)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs('id');
 

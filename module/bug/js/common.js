@@ -103,6 +103,9 @@ function loadBranch()
   */
 function loadAllBuilds(that, resolvedBuildBox)
 {
+    that             = (typeof that == undefined) ? undefined : that;
+    resolvedBuildBox = (typeof resolvedBuildBox == undefined) ? false : resolvedBuildBox;
+
     if(page == 'resolve')
     {
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
@@ -468,9 +471,9 @@ var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
  * @access public
  * @return void
  */
-function loadAssignedTo(projectID, selectedUser = '')
+function loadAssignedTo(projectID, selectedUser)
 {
-    selectedUser = selectedUser ? selectedUser : $('#assignedTo').val();
+    selectedUser = (typeof selectedUser == undefined) ? '' : $('#assignedTo').val();
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + selectedUser);
     $.get(link, function(data)
     {

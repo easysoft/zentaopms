@@ -1,6 +1,7 @@
 <?php
 /* Actions. */
 $lang->program->PRJIndex             = '仪表盘';
+$lang->program->PRJHome              = '项目主页';
 $lang->program->PRJCreate            = '创建项目';
 $lang->program->PRJCreateGuide       = '选择项目模板';
 $lang->program->PRJEdit              = '编辑项目';
@@ -157,7 +158,7 @@ $lang->program->PRJChildLongTime     = "子项目中有长期项目，父项目�
 
 /* Actions. */
 $lang->program->PGMCommon            = '项目集';
-$lang->program->PGMHome              = '项目集主页';
+$lang->program->PGMIndex             = '项目集主页';
 $lang->program->PGMCreate            = '添加项目集';
 $lang->program->PGMCreateGuide       = '选择项目模板';
 $lang->program->PGMEdit              = '编辑项目集';

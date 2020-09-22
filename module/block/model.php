@@ -228,7 +228,7 @@ class blockModel extends model
             $program   = $this->loadModel('project')->getByID($programID);
 
             /* Mark program block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$program->template}common.blockInited", true);
+            $this->loadModel('setting')->setItem("$account.$module.{$program->model}common.blockInited", true);
         }
         else 
         {
@@ -264,12 +264,12 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '', $dashboard = '', $template = '')
+    public function getAvailableBlocks($module = '', $dashboard = '', $model = '')
     {
         $blocks = $this->lang->block->availableBlocks;
         if($dashboard == 'program')
         {
-            $blocks = $this->lang->block->modules[$template]['index']->availableBlocks;
+            $blocks = $this->lang->block->modules[$model]['index']->availableBlocks;
         }
         else
         {

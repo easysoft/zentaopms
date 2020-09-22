@@ -41,7 +41,7 @@
         <?php if($project->model == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('category', $lang->program->PRJCategoryList, $project->category, "class='form-control'");?></td><td></td><td></td>
+          <td><?php echo html::select('product', $lang->program->PRJCategoryList, $project->product, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -102,7 +102,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('privway', $lang->program->PRJAuthList, $project->privway, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $project->auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>

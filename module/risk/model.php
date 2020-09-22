@@ -22,7 +22,7 @@ class riskModel extends model
     public function create()
     {
         $risk = fixer::input('post')
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::today())
             ->stripTags($this->config->risk->editor->create['id'], $this->config->allowedTags)
@@ -56,7 +56,7 @@ class riskModel extends model
             $risk->source      = $data->source[$i];
             $risk->category    = $data->category[$i];
             $risk->strategy    = $data->strategy[$i];
-            $risk->program     = $this->session->PRJ;
+            $risk->PRJ         = $this->session->PRJ;
             $risk->createdBy   = $this->app->user->account;
             $risk->createdDate = helper::today();
 
@@ -136,7 +136,7 @@ class riskModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->andWhere('program')->eq($programID)
+            ->andWhere('PRJ')->eq($programID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -177,7 +177,7 @@ class riskModel extends model
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where($riskQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('program')->eq($programID)
+            ->andWhere('PRJ')->eq($programID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -194,7 +194,7 @@ class riskModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_RISK)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($programID)
+            ->andWhere('PRJ')->eq($programID)
             ->fetchPairs();
     }
 
@@ -223,7 +223,7 @@ class riskModel extends model
     public function getBlockRisks($programID, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_RISK)
-            ->where('program')->eq($programID)
+            ->where('PRJ')->eq($programID)
             ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->andWhere('deleted')->eq('0')

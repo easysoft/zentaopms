@@ -637,7 +637,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `PRJ` mediumint(8) unsigned NOT NULL,
+  `program` mediumint(8) unsigned NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
   `line` mediumint(8) NOT NULL,

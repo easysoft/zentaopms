@@ -20,8 +20,8 @@ function downloadBurn()
         /* Add watermark */
         var canvas = document.querySelector('#cloneCanvas #burnCanvas');
         var cans = canvas.getContext('2d');
-        canvas.height = 525;
-        canvas.width  = 1050;
+        canvas.height = canvas.height + 25;
+        canvas.width  = canvas.width  + 50;
 
         // Set background color to white
         cans.fillStyle = '#fff';

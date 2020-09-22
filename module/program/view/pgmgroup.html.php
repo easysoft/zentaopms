@@ -18,7 +18,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('program', 'createGroup')) echo html::a($this->createLink('program', 'createGroup', "program=$programID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
+    <?php if(common::hasPriv('program', 'pgmcreategroup')) echo html::a($this->createLink('program', 'pgmcreategroup', "program=$programID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
@@ -43,12 +43,12 @@
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
-          <?php common::printIcon('program', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('program', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('program', 'pgmmanageview', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('program', 'pgmmanagepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('program', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('program', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('program', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'pgmmanagegroupmember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('program', 'pgmeditgroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'pgmcopygroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {

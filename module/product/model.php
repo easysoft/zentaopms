@@ -672,7 +672,7 @@ class productModel extends model
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('t2.program')->gt(0)
+            ->andWhere('t2.type')->in('sprint,stage')
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t1.project desc')
             ->fetchAll();
@@ -912,7 +912,7 @@ class productModel extends model
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($this->session->PRJ, $status, $limit = 0, $line);
+        $products = $this->getList($this->session->program, $status, $limit = 0, $line);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in(array_keys($products))
             ->orderBy($orderBy)
@@ -965,6 +965,7 @@ class productModel extends model
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -972,6 +973,7 @@ class productModel extends model
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)

@@ -20,7 +20,7 @@ class workestimationModel extends model
      */
     public function getBudget($program)
     {
-        return $this->dao->select('*')->from(TABLE_WORKESTIMATION)->where('program')->eq($program)->fetch();
+        return $this->dao->select('*')->from(TABLE_WORKESTIMATION)->where('PRJ')->eq($program)->fetch();
     }
 
     /**
@@ -48,7 +48,7 @@ class workestimationModel extends model
     {
         $budget = $this->getBudget($program);
         $postBudget = fixer::input('post')->get();
-        $postBudget->program = $program;
+        $postBudget->PRJ = $program;
 
         if(empty($budget))
         {

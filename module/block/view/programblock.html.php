@@ -9,13 +9,13 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-programs <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-name'><?php echo $lang->program->name;?></th>
-        <th class='w-100px'> <?php echo $lang->program->PM;?></th>
-        <th class='w-80px'><?php echo $lang->program->status;?></th>
+        <th class='c-name'><?php echo $lang->program->PGMName;?></th>
+        <th class='w-100px'> <?php echo $lang->program->PGMPM;?></th>
+        <th class='w-80px'><?php echo $lang->program->PGMStatus;?></th>
         <?php if($longBlock):?>
         <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
         <th class='w-80px'><?php echo $lang->task->consumed;?></th>
-        <th class='w-100px'><?php echo $lang->program->budget;?></th>
+        <th class='w-100px'><?php echo $lang->program->PGMBudget;?></th>
         <th class='w-80px'><?php echo $lang->program->leftStories;?></th>
         <th class='w-80px'><?php echo $lang->program->leftTasks;?></th>
         <th class='w-80px'><?php echo $lang->program->leftBugs;?></th>

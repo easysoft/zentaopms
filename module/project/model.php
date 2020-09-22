@@ -191,7 +191,7 @@ class projectModel extends model
 
         if(isset($currentProject->program)) $program = $this->getByID($currentProject->program);
 
-        if(isset($program->category) and $program->category == 'multiple')
+        if(isset($program->product) and $program->product == 'multiple')
         {
             $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
             $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
@@ -307,7 +307,8 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('type', 'sprint')
+            ->setDefault('parent', $this->session->PRJ)
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
@@ -766,7 +767,7 @@ class projectModel extends model
      */
     public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $programID = 0)
     {
-        $programID = $programID ? $programID : $this->session->PRJID;
+        $programID = $programID ? $programID : $this->session->PRJ;
         if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
 
         if($productID != 0)
@@ -868,7 +869,7 @@ class projectModel extends model
             {
                 if($project->parent and isset($projects[$project->id]) and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
             }
-            if($program->category == 'multiple')
+            if($program->product == 'multiple')
             {
                 foreach($projects as $projectID => $project) $projects[$projectID]->name = $project->productName . '/' . $project->name;
             }

@@ -77,17 +77,8 @@
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
-              <?php if(empty($parentProgram) or $parentProgram->end == '0000-00-00'):?>
-              <span class='input-group-addon hidden' id='longTimeBox'>
-                <div class="checkbox-primary">
-                  <input type="checkbox" name="longTime" value="1" id="longTime">
-                  <label for="longTime"><?php echo $lang->program->longTime;?></label>
-                </div>
-              </span>
-              <?php endif;?>
             </div>
           </td>
-          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBeginEnd, $parentProgram->begin, $parentProgram->end == '0000-00-00' ? '' : $parentProgram->end);?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>

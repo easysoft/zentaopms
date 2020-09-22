@@ -99,7 +99,7 @@ class weeklyModel extends model
         $report->ac        = $this->getAC($program, $date);
         $report->sv        = $this->getSV($report->ev, $report->pv);
         $report->cv        = $this->getCV($report->ev, $report->ac);
-        $report->program   = $program;
+        $report->PRJ       = $program;
         $report->weekStart = $this->getThisMonday($date);
         $report->staff     = $this->getStaff($program);
         $report->workload  = json_encode($this->getWorkloadByType($program, $date));

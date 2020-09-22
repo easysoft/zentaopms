@@ -25,7 +25,7 @@ class issueModel extends model
         $data = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->remove('labels,files')
             ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
             ->addIF($this->post->assignedTo, 'assignedDate', $now)
@@ -103,7 +103,7 @@ class issueModel extends model
 
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
@@ -131,7 +131,7 @@ class issueModel extends model
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()

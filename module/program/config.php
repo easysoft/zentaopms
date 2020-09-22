@@ -9,8 +9,12 @@ $config->program->editor->pgmactivate = array('id' => 'comment', 'tools' => 'sim
 $config->program->editor->pgmfinish   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->program->editor->pgmsuspend  = array('id' => 'comment', 'tools' => 'simpleTools');
 
-$config->program->editor->prjcreate  = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->program->editor->prjedit    = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->program->editor->prjcreate   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->program->editor->prjedit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->program->editor->prjclose    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->program->editor->prjsuspend  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->program->editor->prjstart    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->program->editor->prjactivate = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->program->list = new stdclass();
 $config->program->list->exportFields = 'id,name,code,template,category,status,begin,end,budget,PM,end,desc';
