@@ -44,7 +44,8 @@
     <div id="burnChart">
       <canvas id="burnCanvas"></canvas>
     </div>
-    <div id="burnYUnit"><?php echo "({$lang->project->workHour})";?></div>
+    <div id="burnYUnit"><?php echo $lang->project->burnYUnit;?></div>
+    <div id="burnXUnit"><?php echo $lang->project->burnXUnit;?></div>
     <div id="burnLegend">
       <div class="line-ref"><div class='barline'></div><?php echo $lang->project->charts->burn->graph->reference;?></div>
       <div class="line-real"><div class='barline bg-primary'></div><?php echo $lang->project->charts->burn->graph->actuality;?></div>

@@ -442,8 +442,8 @@ $(function()
     $storyCommon = $lang->storyCommon;
     if(!empty($config->URAndSR))
     {
-        if($storyType == 'requirement') $storyCommon = $lang->urCommon;
-        if($storyType == 'story') $storyCommon = $lang->srCommon;
+        if($storyType == 'requirement') $storyCommon = $lang->URCommon;
+        if($storyType == 'story') $storyCommon = $lang->SRCommon;
     }
     ?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';

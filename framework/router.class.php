@@ -158,8 +158,8 @@ class router extends baseRouter
                 if($setting->key == 'URSRName')
                 {
                     $URSRName = json_decode($setting->value, true);
-                    if(isset($URSRName['urCommon'][$this->clientLang])) $lang->urCommon = $URSRName['urCommon'][$this->clientLang];
-                    if(isset($URSRName['srCommon'][$this->clientLang])) $lang->srCommon = $URSRName['srCommon'][$this->clientLang];
+                    if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
+                    if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
                 }
             }
 
@@ -174,7 +174,7 @@ class router extends baseRouter
             if($storyCommon == 0 and isset($URAndSR))
             {
                 $config->URAndSR = $URAndSR;
-                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+                if(!empty($URAndSR) and !empty($lang->SRCommon)) $lang->storyCommon = $lang->SRCommon;
             }
         }
 
