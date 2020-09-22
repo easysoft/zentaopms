@@ -400,7 +400,7 @@ class designModel extends model
         $productID = in_array($productID, array_keys($products)) ? $productID : key($products);
 
         $productID = $this->loadModel('product')->saveState($productID, $products);
-        if($program->category == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
+        if($program->product == 'multiple') $this->loadModel('product')->setMenu($products, $productID);
     }
 
     /**

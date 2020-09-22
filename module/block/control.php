@@ -620,7 +620,7 @@ class block extends control
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.program')->eq((int)$this->session->PRJ)->fi()
+                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.PRJ')->eq((int)$this->session->PRJ)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
@@ -629,7 +629,7 @@ class block extends control
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('program')->eq((int)$this->session->PRJ)->fi()
+                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('PRJ')->eq((int)$this->session->PRJ)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
@@ -654,7 +654,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.PRJ')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
@@ -696,7 +696,7 @@ class block extends control
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.program')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.PRJ')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.begin desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
@@ -717,7 +717,7 @@ class block extends control
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.PRJ')->eq((int)$this->session->PRJ)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
@@ -738,7 +738,7 @@ class block extends control
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.program')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.PRJ')->eq((int)$this->session->PRJ)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
@@ -1151,7 +1151,7 @@ class block extends control
         $task = $this->dao->select("
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)->where('program')->eq($this->session->PRJ)
+            ->from(TABLE_TASK)->where('PRJ')->eq($this->session->PRJ)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
@@ -1226,9 +1226,9 @@ class block extends control
         $budget    = $this->loadModel('workestimation')->getBudget($programID);
         if(empty($budget)) $budget = new stdclass();
 
-        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($this->session->PRJ)->fetch('people');
+        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('PRJ')->eq($this->session->PRJ)->fetch('people');
         $this->view->members  = count($members) ? count($members) - 1 : 0;
-        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('PRJ')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
         $this->view->budget   = $budget;
     }
 
@@ -1315,7 +1315,7 @@ class block extends control
         $releases = array();
         $count    = isset($this->params->count) ? (int)$this->params->count : 15;
 
-        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->PRJ)->limit(15)->fetchPairs();
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('PRJ')->eq($this->session->PRJ)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {
@@ -1341,7 +1341,8 @@ class block extends control
     {
         $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($this->session->PRJ)
+            ->andWhere('type')->eq('sprint')
+            ->andWhere('parent')->eq($this->session->PRJ)
             ->groupBy('status')
             ->fetchPairs();
 
@@ -1594,7 +1595,7 @@ class block extends control
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('program')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('PRJ')->eq((int)$this->session->PRJ)->fi()
             ->groupBy('lastRunResult')
             ->fetchPairs();
 

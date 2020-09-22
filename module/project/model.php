@@ -191,7 +191,7 @@ class projectModel extends model
 
         if(isset($currentProject->program)) $program = $this->getByID($currentProject->program);
 
-        if(isset($program->category) and $program->category == 'multiple')
+        if(isset($program->product) and $program->product == 'multiple')
         {
             $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
             $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
@@ -868,7 +868,7 @@ class projectModel extends model
             {
                 if($project->parent and isset($projects[$project->id]) and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
             }
-            if($program->category == 'multiple')
+            if($program->product == 'multiple')
             {
                 foreach($projects as $projectID => $project) $projects[$projectID]->name = $project->productName . '/' . $project->name;
             }

@@ -681,7 +681,7 @@ class program extends control
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
                 $program->template = zget($programLang->templateList, $program->template);
-                $program->category = zget($programLang->categoryList, $program->category);
+                $program->product = zget($programLang->categoryList, $program->product);
                 $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
