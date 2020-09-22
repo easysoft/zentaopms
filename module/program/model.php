@@ -712,11 +712,12 @@ class programModel extends model
     /**
      * Get the treemenu of program.
      *
-     * @param  int        $programID
+     * @param  int $programID
+     * @param  int $productList
      * @access public
      * @return string
      */
-    public function getPGMTreeMenu($programID = 0)
+    public function getPGMTreeMenu($programID = 0, $productList = false)
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -727,7 +728,9 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $linkHtml = html::a(helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), "<i class='icon icon-stack'></i> " . $program->name);
+            $link = helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id);
+            if($productList) $link = helper::createLink('product', 'productlist', "programID=$program->id", '', '', $program->id);
+            $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id'");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -1084,7 +1087,8 @@ class programModel extends model
         if($program) $path = $program->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->beginIF($projectID > 0)->where('path')->like($path . '%')->fi()
+            ->where('type')->in('project,program')
+            ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
     }

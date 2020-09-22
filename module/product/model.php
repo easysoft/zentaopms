@@ -912,7 +912,7 @@ class productModel extends model
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($this->session->PRJ, $status, $limit = 0, $line);
+        $products = $this->getList($this->session->program, $status, $limit = 0, $line);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in(array_keys($products))
             ->orderBy($orderBy)
@@ -965,6 +965,7 @@ class productModel extends model
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -972,6 +973,7 @@ class productModel extends model
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
