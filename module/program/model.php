@@ -787,7 +787,8 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        if($currentMethod == 'prjbrowse') return $this->getPRJCommonAction();
+        $ignoreMethod = array('prjbrowse', 'prjcreate', 'prjedit');
+        if(in_array($currentMethod, $ignoreMethod)) return $this->getPRJCommonAction();
 
         $this->getPRJCommonAction();
         $this->loadModel('project');
