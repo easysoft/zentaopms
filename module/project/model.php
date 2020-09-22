@@ -75,7 +75,7 @@ class projectModel extends model
             unset($this->lang->project->subMenu->qa->testtask);
         }
 
-        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($projectID)) $this->accessDenied();
+        if($projects and (!isset($projects[$projectID]) or !$this->checkPriv($projectID))) $this->accessDenied();
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
