@@ -915,12 +915,12 @@ class program extends control
      *
      * @param  string $template
      * @param  int    $programID
-     * @param  int    $parentProgramID
-     * @param  int    $copyProgramID
+     * @param  string $from PRJ|PGM
+     * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function PRJCreate($template = 'waterfall', $programID = 0, $from = 'PRJ', $parentProgramID = 0, $copyProgramID = '')
+    public function PRJCreate($template = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
         if($from == 'PRJ')
         {
@@ -952,21 +952,9 @@ class program extends control
         $acl       = 'open';
         $privway   = 'extend';
 
-        if($parentProgramID)
+        if($copyProjectID)
         {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parentProgramID)->fetch();
-            if($this->program->checkHasContent($parentProgramID))
-            {
-                echo js::alert($this->lang->program->cannotCreateChild);
-                die(js::locate('back'));
-            }
-
-            if(empty($template)) $template = $parentProgram->template;
-        }
-
-        if($copyProgramID)
-        {
-            $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
+            $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
             $name        = $copyProgram->name;
             $code        = $copyProgram->code;
             $team        = $copyProgram->team;
@@ -981,7 +969,8 @@ class program extends control
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->programs      = array('' => '') + $this->program->getPairsByTemplate($template);
+        $this->view->programs      = array('' => '') + $this->program->getPRJPairsByTemplate($template, $programID);
+        $this->view->programID     = $programID;
         $this->view->template      = $template;
         $this->view->name          = $name;
         $this->view->code          = $code;
@@ -989,10 +978,10 @@ class program extends control
         $this->view->acl           = $acl;
         $this->view->privway       = $privway;
         $this->view->whitelist     = $whitelist;
-        $this->view->parentProgram = $parentProgramID ? $parentProgram : '';
-        $this->view->copyProgramID = $copyProgramID;
-        $this->view->programID     = $programID;
+        $this->view->copyProjectID = $copyProjectID;
+        $this->view->from          = $from;
         $this->view->programList   = $this->program->getParentPairs();
+        $this->view->parentProgram = $this->program->getPGMByID($programID);
         $this->display();
     }
 
@@ -1383,5 +1372,47 @@ class program extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
         $this->display('project', 'close');
+    }
+
+    /**
+     * Activate a project.
+     *
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJActivate($projectID)
+    {
+        $project = $this->program->getPRJByID($projectID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->activate($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $projectID, 'Activated', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        $newBegin = date('Y-m-d');
+        $dateDiff = helper::diffDate($newBegin, $project->begin);
+        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
+
+        $this->view->title      = $this->lang->project->activate;
+        $this->view->position[] = $this->lang->project->activate;
+
+        $this->view->project    = $project;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->newBegin   = $newBegin;
+        $this->view->newEnd     = $newEnd;
+        $this->view->project    = $project;
+        $this->display('project', 'activate');
     }
 }

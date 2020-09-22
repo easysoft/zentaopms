@@ -62,7 +62,7 @@ class programModel extends model
     /**
      * Get program pairs by template.
      *
-     * @param  varchar $template
+     * @param  string $model
      * @access public
      * @return void
      */
@@ -829,7 +829,7 @@ class programModel extends model
         if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
         if($action == 'prjclose')    return $program->status != 'closed';
         if($action == 'prjsuspend')  return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'prjactivate') return $program->status == 'done';
+        if($action == 'prjactivate') return $program->status == 'done' or $program->status == 'closed';
 
         return true;
     }
@@ -1077,19 +1077,36 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function buildPRJMenuQuery($projectID)
+    public function buildPRJMenuQuery($projectID = 0)
     {
-        $rootProject = $this->getPRJByID($projectID);
-        $path = '';
-        if($rootProject)
-        {
-            $path = $rootProject->path;
-        }
+        $path    = '';
+        $program = $this->getPRJByID($projectID);
+        if($program) $path = $program->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->beginIF($projectID > 0)->where('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
+    }
+
+    /**
+     * Get project pairs by template.
+     *
+     * @param  string $model
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function getPRJPairsByTemplate($model, $programID = 0)
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('project')
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->andWhere('model')->eq($model)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs();
     }
 
     /**
@@ -1161,6 +1178,7 @@ class programModel extends model
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->add('type', 'project')
+            ->add('lifetime', 'short')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')

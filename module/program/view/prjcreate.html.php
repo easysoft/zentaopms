@@ -10,30 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(isset($tips)):?>
-<?php $defaultURL = $this-> createLink('project', 'task', 'projectID=' . $projectID);?>
-<?php include '../../common/view/header.lite.html.php';?>
-<body>
-  <div class='modal-dialog mw-500px' id='tipsModal'>
-    <div class='modal-header'>
-      <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->tips;?></h4>
-    </div>
-    <div class='modal-body'>
-    <?php echo $tips;?>
-    </div>
-  </div>
-</body>
-</html>
-<?php exit;?>
-<?php endif;?>
-
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('weekend', $config->project->weekend);?>
-<?php js::set('holders', $lang->project->placeholder);?>
-<?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('template', $template);?>
+<?php js::set('programID', $programID);?>
+<?php js::set('from', $from);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -80,7 +62,7 @@
               <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'yuan' : $parentProgram->budgetUnit, "class='form-control'");?>
             </div>
           </td>
-          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBudget, $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, ''));?></td>
+          <td class='muted'></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->dateRange;?></th>
@@ -89,17 +71,15 @@
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
-              <?php if(empty($parentProgram) or $parentProgram->end == '0000-00-00'):?>
-              <span class='input-group-addon hidden' id='longTimeBox'>
+              <span class='input-group-addon' id='longTimeBox'>
                 <div class="checkbox-primary">
                   <input type="checkbox" name="longTime" value="1" id="longTime">
-                  <label for="longTime"><?php echo $lang->program->longTime;?></label>
+                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
                 </div>
               </span>
-              <?php endif;?>
             </div>
           </td>
-          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBeginEnd, $parentProgram->begin, $parentProgram->end == '0000-00-00' ? '' : $parentProgram->end);?></td>
+          <td class='muted'></td>
         </tr>
         <?php if($template == 'scrum'):?>
         <tr>
@@ -172,11 +152,11 @@
       <div id='copyProjects' class='row'>
       <?php foreach ($programs as $id => $name):?>
       <?php if(empty($id)):?>
-      <?php if($copyProgramID != 0):?>
+      <?php if($copyProjectID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
       <?php endif;?>
       <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProgramID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
+      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endif; ?>
       <?php endforeach;?>
       </div>
@@ -184,6 +164,4 @@
     </div>
   </div>
 </div>
-<?php js::set('template', $template);?>
-<?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
 <?php include '../../common/view/footer.html.php';?>
