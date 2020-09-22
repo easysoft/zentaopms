@@ -758,11 +758,10 @@ class programModel extends model
     /*
      * Get project swapper.
      *
-     * @param  object  $programs
      * @access private
      * @return void
      */
-    public function getPRJCommonAction()
+    public function printPRJCommonAction()
     {
         $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->common}'>{$this->lang->program->common} <i class='icon icon-sort-down'></i></button>";
         $output .= '<ul class="dropdown-menu">';
@@ -777,7 +776,6 @@ class programModel extends model
     /*
      * Get project swapper.
      *
-     * @param  object  $programs
      * @param  int     $projectID
      * @param  varchar $currentModule
      * @param  varchar $currentMethod
@@ -787,10 +785,9 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        $ignoreMethod = array('prjbrowse', 'prjcreate', 'prjedit');
-        if(in_array($currentMethod, $ignoreMethod)) return $this->getPRJCommonAction();
+        $this->printPRJCommonAction();
+        if($currentModule == 'program' && $currentMethod != 'index') return;
 
-        $this->getPRJCommonAction();
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
         if($projectID)
@@ -1083,14 +1080,14 @@ class programModel extends model
     public function buildPRJMenuQuery($projectID)
     {
         $rootProject = $this->getPRJByID($projectID);
-        if(!$rootProject)
+        $path = '';
+        if($rootProject)
         {
-            $rootProject = new stdclass();
-            $rootProject->path = '';
+            $path = $rootProject->path;
         }
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->beginIF($projectID > 0)->where('path')->like($rootProject->path . '%')->fi()
+            ->beginIF($projectID > 0)->where('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
     }
