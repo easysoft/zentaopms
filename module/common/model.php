@@ -2190,6 +2190,10 @@ EOD;
         {
             $lang->menu = $lang->program->menu;
         }
+        if($group == 'product') 
+        {
+            $lang->menu = $lang->product->menu;
+        }
         if($group == 'project') 
         {
             $lang->menu = self::getProgramMainMenu($moduleName);

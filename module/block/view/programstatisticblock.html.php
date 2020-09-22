@@ -108,7 +108,7 @@ $(function()
         <?php foreach($programs as $program):?>
         <li <?php if($program->id == $selected) echo "class='active' id='activeProject'";?> programID='<?php echo $program->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $program->id;?>" data-toggle="tab"><?php echo $program->name;?></a>
-          <?php echo html::a(helper::createLink('program', 'index', "programID=$program->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->program->index}");?>
+          <?php echo html::a(helper::createLink('program', 'pgmindex', "programID=$program->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->program->PGMIndex}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>

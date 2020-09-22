@@ -832,7 +832,7 @@ class block extends control
         }
 
         $today  = helper::today();
-        $monday = $this->loadModel('weekly')->getThisMonday($today);
+        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
         $tasks  = $this->dao->select("PRJ, 
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")

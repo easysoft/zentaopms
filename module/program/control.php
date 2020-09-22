@@ -20,8 +20,8 @@ class program extends control
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
 
-        $this->view->title      = $this->lang->program->PGMHome;
-        $this->view->position[] = $this->lang->program->PGMHome;
+        $this->view->title      = $this->lang->program->PGMIndex;
+        $this->view->position[] = $this->lang->program->PGMIndex;
         $this->display();
     }
 

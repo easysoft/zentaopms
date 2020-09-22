@@ -145,8 +145,8 @@ $lang->program->viewMenu->project = array('link' => "$lang->projectCommon|progra
 /* Scrum menu. */
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
-$lang->product->menu->productindex = '主页|product|index|';
-$lang->product->menu->product      = $lang->productCommon . '|product|productlist|';
+$lang->product->menu->home = '主页|product|index|';
+$lang->product->menu->list = $lang->productCommon . '|product|productlist|';
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -904,6 +904,6 @@ if($config->URAndSR)
 }
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'product', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');
