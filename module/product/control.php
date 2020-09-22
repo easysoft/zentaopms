@@ -731,7 +731,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($programID = 0, $browseType = 'noclosed', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function all($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->session->set('program', $programID);
         $this->loadModel('program');
