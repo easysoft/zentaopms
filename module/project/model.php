@@ -307,7 +307,8 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('type', 'sprint')
+            ->setDefault('parent', $this->session->PRJ)
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())

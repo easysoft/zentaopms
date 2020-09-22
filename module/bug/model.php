@@ -108,7 +108,7 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('PRJ', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
@@ -269,7 +269,7 @@ class bugModel extends model
                 }
             }
 
-            $bug->program = $this->session->PRJ;
+            $bug->PRJ = $this->session->PRJ;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -1367,7 +1367,7 @@ class bugModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()

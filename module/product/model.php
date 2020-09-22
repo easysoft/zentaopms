@@ -272,7 +272,7 @@ class productModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
@@ -304,7 +304,7 @@ class productModel extends model
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy($orderBy)
@@ -418,7 +418,7 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('PRJ', $this->session->PRJ)
             ->setDefault('status', 'normal')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
@@ -672,7 +672,7 @@ class productModel extends model
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('t2.program')->gt(0)
+            ->andWhere('t2.type')->in('sprint,stage')
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t1.project desc')
             ->fetchAll();

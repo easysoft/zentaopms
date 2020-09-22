@@ -47,7 +47,7 @@ class task extends control
         }
 
         $program = $this->loadModel('project')->getByID($this->session->PRJ);
-        if($program->template == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        if($program->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         $task = new stdClass();
         $task->module     = $moduleID;

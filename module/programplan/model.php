@@ -445,9 +445,8 @@ class programplanModel extends model
 
             $plan = new stdclass();
             $plan->id           = isset($planIDs[$key]) ? $planIDs[$key] : '';
-            $plan->type         = 'project';
-            $plan->program      = (int)$programID;
-            $plan->parent       = $parentID;
+            $plan->type         = 'stage';
+            $plan->parent       = $parentID ? $parentID : (int)$programID;
             $plan->name         = $names[$key];
             $plan->percent      = $percents[$key];
             $plan->attribute    = empty($parentID) ? $attributes[$key] : $parentStage;
