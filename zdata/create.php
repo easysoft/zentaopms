@@ -8,9 +8,9 @@ $password = 'root';      // 对应的密码。
 
 $dsn = "$dbms:host=$host:$port;dbname=$dbName";
 
-$dirPath = 'demo/story'; // 要生成SQL数据的zdata文件路径。
+$dirPath = 'demo/story'; // 自定义数据的zdata文件路径。
 
-/* 定义每个yaml文件生成SQL数量。 */
+/* 定义每个yaml文件生成SQL数量，自定义yaml文件名需和数据库表名对应。以下定义中键代表数据表名，值代表生成数量。*/
 $zdataCount = array();
 $zdataCount['zt_product']     = 100;
 $zdataCount['zt_productplan'] = 500;
