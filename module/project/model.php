@@ -767,7 +767,7 @@ class projectModel extends model
      */
     public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $programID = 0)
     {
-        $programID = $programID ? $programID : $this->session->PRJID;
+        $programID = $programID ? $programID : $this->session->PRJ;
         if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
 
         if($productID != 0)
