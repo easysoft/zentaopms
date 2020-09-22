@@ -102,7 +102,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('privway', $lang->program->PRJAuthList, $project->privway, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $project->auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>

@@ -51,8 +51,11 @@
         <td class='text-left'><?php echo $program->code;?></td>
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon<?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
-          <?php $link = $program->type == 'program' ? $this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : $this->createLink('program', 'prjindex', "programID=$program->id", '', '', $program->id);?>
-          <?php echo html::a($link, "<i class='icon icon-stack'></i> " . $program->name);?>
+          <?php if($program->type == 'program'):?>
+          <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), "<i class='icon icon-stack'></i> " . $program->name);?>
+          <?php else:?>
+          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), "<i class='icon icon-menu-doc'></i> " . $program->name);?>
+          <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>
@@ -60,6 +63,7 @@
         <td class='text-left'><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-center c-actions'>
+          <?php if($program->type == 'program'):?>
           <?php common::printIcon('program', 'pgmgroup', "programID=$program->id", $program, 'list', 'group');?>
           <?php common::printIcon('program', 'pgmmanageMembers', "programID=$program->id", $program, 'list', 'persons');?>
           <?php common::printIcon('program', 'prjstart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
@@ -69,6 +73,17 @@
           <?php if(common::hasPriv('program', 'pgmedit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'pgmcreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
           <?php if(common::hasPriv('program', 'pgmdelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+          <?php else:?>
+          <?php common::printIcon('program', 'prjgroup', "programID=$program->id", $program, 'list', 'group');?>
+          <?php common::printIcon('program', 'prjmanageMembers', "programID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'prjstart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'prjactivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'prjsuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
+          <?php common::printIcon('program', 'prjclose', "programID=$program->id", $program, 'list', 'off', '', 'iframe', true);?>
+          <?php if(common::hasPriv('program', 'prjedit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+          <?php common::printIcon('program', 'prjcreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
+          <?php if(common::hasPriv('program', 'prjdelete')) echo html::a($this->createLink("program", "prjdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+          <?php endif;?>
         </td>
         <?php if($canOrder):?>
         <td class='sort-handler text-center'><i class="icon icon-move"></i></td>

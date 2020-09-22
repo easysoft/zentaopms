@@ -289,7 +289,7 @@ class programModel extends model
     public function getPGMList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
+            ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
