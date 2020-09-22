@@ -703,8 +703,7 @@ class programModel extends model
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPGMDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
         $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
     }
@@ -717,19 +716,20 @@ class programModel extends model
      * @access public
      * @return string
      */
-    public function getPGMTreeMenu($programID = 0, $productList = false)
+    public function getPGMTreeMenu($programID = 0, $from = 'program')
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('program')
+            ->where('deleted')->eq('0')
+            ->beginIF($from == 'program')->andWhere('type')->in('program,project')->fi()
+            ->beginIF($from == 'product')->andWhere('type')->eq('program')->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy('grade desc, `order`')->get();
-        $stmt  = $this->dbh->query($query);
+        $stmt = $this->dbh->query($query);
 
         while($program = $stmt->fetch())
         {
-            $link = helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id);
-            if($productList) $link = helper::createLink('product', 'productlist', "programID=$program->id", '', '', $program->id);
+            $link = $from == 'program' ? helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : helper::createLink('product', 'all', "programID=$program->id", '', '', $program->id);
             $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id'");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))

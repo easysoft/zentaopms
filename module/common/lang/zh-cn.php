@@ -123,7 +123,7 @@ $lang->common->common = '公有模块';
 $lang->mainNav = new stdclass();
 $lang->mainNav->my         = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program    = '<i class="icon icon-stack"></i> 项目集|program|pgmindex|';
-$lang->mainNav->product    = '<i class="icon icon-menu-project"></i> 产品|product|productlist|';
+$lang->mainNav->product    = '<i class="icon icon-menu-project"></i> 产品|product|index|';
 $lang->mainNav->project    = '<i class="icon icon-menu-doc"></i> 项目|program|prjbrowse|';
 $lang->mainNav->system     = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
 $lang->mainNav->admin      = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
@@ -135,7 +135,7 @@ $lang->dividerMenu = ',admin,';
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
 $lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit');
+$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->view    = '概况|program|pgmview|program=%s';
@@ -146,7 +146,7 @@ $lang->program->viewMenu->project = array('link' => "$lang->projectCommon|progra
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 $lang->product->menu->home = '主页|product|index|';
-$lang->product->menu->list = $lang->productCommon . '|product|productlist|';
+$lang->product->menu->list = $lang->productCommon . '|product|all|';
 
 /* System menu. */
 $lang->system = new stdclass();

@@ -1,54 +1,52 @@
 <?php
 /**
- * The html template file of all method of product module of ZenTaoPMS.
+ * The html productlist file of productlist method of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id$
+ * @version     $Id
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
+  <div id="sidebarHeader">
+    <div class="title">
+      <?php echo empty($program) ? $lang->program->PGMCommon : $program->name;?>
+      <?php if($programID) echo html::a(inLink('all', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+    </div>
+  </div>
   <div class="btn-toolbar pull-left">
-    <?php 
-    foreach($lang->product->featureBar['all'] as $key => $label)
-    {
-        if(is_string($label)) $link = inlink("all", "productID={$productID}&line=&status={$key}");
-        if(is_array($label))
-        {
-            $link  = zget($label, 'link', '');
-            $label = zget($label, 'label', '');
-            if(!$link or !$label) continue;
-        }
-        $label   = "<span class='text'>{$label}</span>";
-        $label  .= $key == $status ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-        $active  = $key == $status ? 'btn-active-text' : '';
-        echo html::a($link, $label, '', "class='btn btn-link {$active}' id='{$key}'");
-    }
-    ?>
+    <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
+    <?php echo html::a(inlink("all", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('product', 'export', "status=$status&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'") ?>
+    <?php common::printLink('product', 'create', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
+  <div id="sidebar" class="side-col">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
+    <div class="cell">
+      <?php echo $programTree;?>
+    </div>
+  </div>
   <div class="main-col">
-    <form class="main-table table-product" data-ride="table" method="post" id='productsForm' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
-      <?php $canOrder = (common::hasPriv('product', 'updateOrder'))?>
-      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
-      <table class="table has-sort-head table-fixed" id='productList'>
-        <?php $vars = "productID=$productID&line=$line&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo inLink('batchEdit', "programID=$programID");?>'>
+      <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
+      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
+      <table id="productList" class="table has-sort-head table-fixed">
+        <?php $vars = "programID&$programID&browseType=$browseType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
             <th class='c-id'>
               <?php if($canBatchEdit):?>
-              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                <label></label>
-              </div>
+                <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll;?>">
+                  <label></label>
+                </div>
               <?php endif;?>
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
@@ -109,4 +107,6 @@
   </div>
 </div>
 <?php js::set('orderBy', $orderBy)?>
+<?php js::set('programID', $programID)?>
+<?php js::set('browseType', $browseType)?>
 <?php include '../../common/view/footer.html.php';?>

@@ -31,7 +31,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode', $this->session->program);
-        if(empty($this->products) and strpos(',productlist,create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos(',all,create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
@@ -718,11 +718,11 @@ class product extends control
     }
 
     /**
-     * All product.
+     * Products under project set.
      *
-     * @param  int    $productID
-     * @param  int    $line
-     * @param  string $status
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -730,31 +730,28 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($productID = 0, $line = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($programID = 0, $browseType = 'noclosed', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->session->set('productList', $this->app->getURI(true));
-        $productID = $this->product->saveState($productID, $this->products);
-        $this->product->setMenu($this->products, $productID);
+        $this->session->set('program', $programID);
+        $this->loadModel('program');
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Save this url to session. */
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('lineList', $uri);
+        $program = $programID ? $this->program->getPGMByID($programID) : 0;
 
-        $this->app->loadLang('my');
-        $this->view->title        = $this->lang->product->allProduct;
-        $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status, $line);
-        $this->view->lineTree     = $this->loadModel('tree')->getTreeMenu(0, $viewType = 'line', $startModuleID = 0, array('treeModel', 'createLineLink'), array('productID' => $productID, 'status' => $status));
+        $this->view->title        = $this->lang->product->common;
+        $this->view->position[]   = $this->lang->product->common;
+
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $browseType);
         $this->view->lines        = array('') + $this->tree->getLinePairs();
-        $this->view->productID    = $productID;
-        $this->view->line         = $line;
-        $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
+        $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product');
+        $this->view->programID    = $programID;
+        $this->view->program      = $program;
+        $this->view->browseType   = $browseType;
         $this->display();
     }
 
@@ -870,43 +867,5 @@ class product extends control
     {
         $this->session->set('product', (int)$productID);
         $this->send(array('result' => 'success', 'productID' => $this->session->product));
-    }
-
-    /**
-     * Products under project set.
-     *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function productList($programID = 0, $browseType = 'all', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
-    {
-        $this->session->set('program', $programID);
-        $this->loadModel('program');
-
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $program = $programID ? $this->program->getPGMByID($programID) : 0;
-
-        $this->view->title        = $this->lang->product->common;
-        $this->view->position[]   = $this->lang->product->common;
-
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $browseType);
-        $this->view->lines        = array('') + $this->tree->getLinePairs();
-        $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
-        $this->view->programTree  = $this->program->getPGMTreeMenu($programID, true);
-        $this->view->programID    = $programID;
-        $this->view->program      = $program;
-        $this->view->browseType   = $browseType;
-        $this->display();
     }
 }
