@@ -106,7 +106,7 @@ class program extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
             $this->loadModel('action')->create('program', $projectID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmbrowse', array('status' => 'wait', 'orderBy' => 'order_desc'))));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmbrowse')));
         }
 
         $this->view->title         = $this->lang->program->PGMCreate;
