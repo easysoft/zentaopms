@@ -9,6 +9,7 @@ include 'chosen.html.php';
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
 <?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
+<?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
 <?php $isSystem  = (zget($lang->navGroup, $app->rawModule) == 'system');?>
 <div id='menu'>
   <nav id='menuNav'>
@@ -28,6 +29,7 @@ include 'chosen.html.php';
       <div id='heading'>
         <?php if($isProgram) echo $this->lang->program->switcherMenu;?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
+        <?php if($isProduct) echo $this->loadModel('product')->getSwitcher($app->rawModule, $app->rawMethod);?>
         <?php if($isSystem)  echo $this->loadModel('custom')->getModeSwitcher();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>

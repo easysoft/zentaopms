@@ -408,6 +408,44 @@ class productModel extends model
         return array_slice($products, 0, $num, true);
     }
 
+    /*
+     * Get product switcher.
+     *
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public  
+     * @return void
+     */
+    public function getSwitcher($currentModule, $currentMethod)
+    {
+		$output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <i class='icon icon-sort-down'></i></button>";
+        $output .= '<ul class="dropdown-menu">';
+        $output .= '<li>' . html::a(helper::createLink('product', 'index'), "<i class='icon icon-home'></i> " . $this->lang->product->index) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('product', 'all'), "<i class='icon icon-cards-view'></i> " . $this->lang->product->all) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('product', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->product->create) . '</li>';
+        $output .= '</ul>';
+        $output .= "</div>";
+
+        if($currentModule == 'product' && ($currentMethod == 'index' || $currentMethod == 'all')) return $output;
+
+        $this->loadModel('project');
+        $currentProductName = $this->lang->product->common;
+        $products  = $this->getPairs('noclosed');
+        $productID = $this->session->product ? $this->session->product : key($products);
+        if($productID)
+        {
+            $currentProduct     = $this->getById($productID);
+            $currentProductName = $currentProduct->name;
+        }
+
+        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=");
+        $output .= "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProductName}'>{$currentProductName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
+    }
+
     /**
      * Create a product.
      *

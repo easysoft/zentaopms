@@ -2877,7 +2877,7 @@ class projectModel extends model
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $days         = count($dateList) - 1;
-        $rate         = $firstTime / $days;
+        $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
         foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
