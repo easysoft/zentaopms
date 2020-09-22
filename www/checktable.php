@@ -64,8 +64,8 @@ $lang->misc = new stdclass();
 $lang->storyCommon   = '';
 $lang->productCommon = '';
 $lang->projectCommon = '';
-$lang->urCommon      = '';
-$lang->srCommon      = '';
+$lang->URCommon      = '';
+$lang->SRCommon      = '';
 include "../module/common/lang/{$clientLang}.php";
 include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
