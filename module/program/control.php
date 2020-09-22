@@ -928,7 +928,7 @@ class program extends control
         }
         else
         {
-            $this->lang->navGroup->program = 'program';
+            $this->lang->navGroup->program     = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
         }
 

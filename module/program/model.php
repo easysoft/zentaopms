@@ -759,14 +759,10 @@ class programModel extends model
      * Get project swapper.
      *
      * @param  object  $programs
-     * @param  int     $projectID
-     * @param  varchar $currentModule
-     * @param  varchar $currentMethod
-     * @param  varchar $extra
      * @access private
      * @return void
      */
-    public function getPRJCommonAction($projectID = 0)
+    public function getPRJCommonAction()
     {
         $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->common}'>{$this->lang->program->common} <i class='icon icon-sort-down'></i></button>";
         $output .= '<ul class="dropdown-menu">';
@@ -775,8 +771,9 @@ class programModel extends model
         $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
         $output .= '</ul>';
         $output .= "</div>";
-        echo  $output;
+        echo $output;
     }
+
     /*
      * Get project swapper.
      *
@@ -790,7 +787,9 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        $this->getPRJCommonAction($projectID);
+        if($currentMethod == 'prjbrowse') return $this->getPRJCommonAction();
+
+        $this->getPRJCommonAction();
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
         if($projectID)
@@ -799,7 +798,6 @@ class programModel extends model
             $currentProject     = $this->project->getById($projectID);
             $currentProjectName = $currentProject->name;
         }
-        if($currentModule == 'program' && $currentMethod == 'browse') $currentProgramName = $this->lang->program->all;
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
         $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
@@ -1004,7 +1002,7 @@ class programModel extends model
             ->where('type')->eq('project')
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->PRJMine or $PRJMine)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
@@ -1061,6 +1059,7 @@ class programModel extends model
         {
             return $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('status')->ne('status')
                 ->andWhere('deleted')->eq('0')
                 ->orderBy('id_desc')
