@@ -75,7 +75,7 @@
             <?php printf('%03d', $product->id);?>
             <?php endif;?>
           </td>
-          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'index', 'locate=no&product=' . $product->id), $product->name);?></td>
           <td title='<?php echo zget($lines, $product->line, '')?>'><?php echo zget($lines, $product->line, '');?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
