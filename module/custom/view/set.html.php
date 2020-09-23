@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php
 $itemRow = <<<EOT
   <tr class='text-center'>

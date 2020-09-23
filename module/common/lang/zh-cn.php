@@ -473,6 +473,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->custom  = array('link' => '自定义|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron,search');

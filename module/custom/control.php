@@ -31,7 +31,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList', $lang = '')
+    public function set($module = 'block', $field = 'priList', $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
         if($module == 'user' and $field == 'priList') $field = 'roleList';
