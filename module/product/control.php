@@ -294,6 +294,8 @@ class product extends control
      */
     public function edit($productID, $action = 'edit', $extra = '')
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID);
@@ -456,6 +458,8 @@ class product extends control
      */
     public function view($productID)
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+
         $product = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -516,6 +520,7 @@ class product extends control
      */
     public function roadmap($productID, $branch = 0)
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));

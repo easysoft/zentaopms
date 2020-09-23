@@ -22,6 +22,8 @@ class productplan extends control
      */
     public function commonAction($productID, $branch = 0)
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+
         $this->loadModel('product');
         $this->app->loadConfig('project');
         $product = $this->product->getById($productID);
@@ -30,7 +32,7 @@ class productplan extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
-        $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $productID, $branch);
+        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
@@ -214,7 +216,7 @@ class productplan extends control
 
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($productID, $branch);
-        $products               = $this->product->getPairs('', $this->session->PRJ);
+        $products               = $this->product->getPairs();
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;

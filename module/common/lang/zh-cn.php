@@ -146,7 +146,7 @@ $lang->program->viewMenu->project = array('link' => "$lang->projectCommon|progra
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 $lang->product->menu->home = '主页|product|index|';
-$lang->product->menu->list = $lang->productCommon . '|product|all|';
+$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create');
 
 $lang->product->viewMenu = new stdclass();
 $lang->product->viewMenu->requirement = array('link' => "用户需求|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
@@ -157,6 +157,14 @@ $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s'
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->release     = new stdclass();
+$lang->branch      = new stdclass();
+$lang->productplan = new stdclass();
+
+$lang->release->menu     = $lang->product->viewMenu;
+$lang->branch->menu      = $lang->product->menu;
+$lang->productplan->menu = $lang->product->menu;
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -271,7 +279,7 @@ $lang->scrumproduct->menu = new stdclass();
 
 $lang->scrumproduct->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
+//$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
 $lang->scrumproduct->menu->dynamic = '动态|product|dynamic|productID=%s';
@@ -288,15 +296,9 @@ if($config->URAndSR)
 
 $lang->product->dividerMenu = ',project,doc,';
 
-$lang->productplan = new stdclass();
-$lang->release     = new stdclass();
-$lang->branch      = new stdclass();
-$lang->story       = new stdclass();
+$lang->story = new stdclass();
 
-$lang->branch->menu      = $lang->product->menu;
-$lang->story->menu       = $lang->product->menu;
-$lang->productplan->menu = $lang->product->menu;
-$lang->release->menu     = $lang->product->menu;
+$lang->story->menu = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
 $lang->project = new stdclass();
@@ -568,10 +570,10 @@ $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 
 $lang->navGroup->productplan = 'product';
+$lang->navGroup->release     = 'product';
+$lang->navGroup->branch      = 'product';
 
 $lang->navGroup->story       = 'project';
-$lang->navGroup->branch      = 'project';
-$lang->navGroup->release     = 'project';
 $lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';
 $lang->navGroup->qa          = 'project';
@@ -851,7 +853,7 @@ $lang->menu->waterfall->product      = array('link' => '需求|product|browse|pr
 $lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci           = '代码|repo|browse|';
 $lang->menu->waterfall->qa           = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
+//$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->waterfall->issue        = '问题|issue|browse|';
 $lang->menu->waterfall->risk         = '风险|risk|browse|';
 $lang->menu->waterfall->list         = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
@@ -916,6 +918,6 @@ if($config->URAndSR)
 }
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule   = array('my', 'todo', 'effort', 'program', 'product', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');
