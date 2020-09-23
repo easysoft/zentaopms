@@ -21,6 +21,8 @@ class release extends control
      */
     public function commonAction($productID, $branch = 0)
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+
         $this->loadModel('product');
         $product = $this->product->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
@@ -28,7 +30,7 @@ class release extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
-        $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $productID, $branch);
+        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
