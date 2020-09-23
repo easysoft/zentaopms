@@ -97,6 +97,11 @@ class testcase extends control
 
         /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        if(empty($cases) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);

@@ -171,6 +171,11 @@ class product extends control
 
         /* Get stories. */
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        if(empty($stories) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');

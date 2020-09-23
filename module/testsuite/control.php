@@ -49,6 +49,13 @@ class testsuite extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+        if(empty($suites) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+        }
+
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
@@ -60,7 +67,7 @@ class testsuite extends control
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
-        $this->view->suites      = $this->testsuite->getSuites($productID, $sort, $pager);
+        $this->view->suites      = $suites;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
 
