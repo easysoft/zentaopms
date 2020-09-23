@@ -997,7 +997,7 @@ class programModel extends model
      * @param  int    $programTitle
      * @param  int    $PRJMine
      * @access public
-     * @return bool
+     * @return object
      */
     public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
     {
@@ -1338,5 +1338,125 @@ class programModel extends model
 
             return common::createChanges($oldProject, $project);
         }
+    }
+
+    /**
+     * Get project stats.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $programTitle
+     * @param  int    $PRJMine
+     * @access public
+     * @return void
+     */
+    public function getPRJStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    {
+        /* Init vars. */
+        $projects = $this->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $PRJMine);
+        if(empty($projects)) return array();
+
+        $projectKeys = array_keys($projects);
+        $stats       = array();
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        /* Get burndown charts datas. */
+        $burns = $this->dao->select('project, date AS name, `left` AS value')
+            ->from(TABLE_BURN)
+            ->where('project')->in($projectKeys)
+            ->andWhere('task')->eq(0)
+            ->orderBy('date desc')
+            ->fetchGroup('project', 'name');
+
+        $this->loadModel('project');
+        $itemCounts = 30;
+        foreach($burns as $projectID => $projectBurns)
+        {
+            /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
+            $begin = $projects[$projectID]->begin;
+            $end   = $projects[$projectID]->end;
+            if($begin == '0000-00-00') $begin = $projects[$projectID]->openedDate;
+            $projectBurns = $this->project->processBurnData($projectBurns, $itemCounts, $begin, $end);
+
+            /* Shorter names.  */
+            foreach($projectBurns as $projectBurn)
+            {
+                $projectBurn->name = substr($projectBurn->name, 5);
+                unset($projectBurn->project);
+            }
+
+            ksort($projectBurns);
+            $burns[$projectID] = $projectBurns;
+        }
+
+        /* Get the number of project teams. */
+        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
+            ->where('root')->in($projectKeys)
+            ->andWhere('type')->eq('project')
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        /* Process projects. */
+        foreach($projects as $key => $project)
+        {
+            $project->end = date(DT_DATE1, strtotime($project->end)); // Process the end time.
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
+            /* Process the burns. */
+            $project->burns = array();
+            $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
+            foreach($burnData as $data) $project->burns[] = $data->value;
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+
+            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $stats[] = $project;
+        }
+        return $stats;
     }
 }

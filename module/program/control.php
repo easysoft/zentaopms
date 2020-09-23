@@ -595,6 +595,44 @@ class program extends control
     /**
      * Export program.
      *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PGMProject($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
+        $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $orderBy, $pager, $programTitle);
+
+        $this->view->title      = $this->lang->program->PRJBrowse;
+        $this->view->position[] = $this->lang->program->PRJBrowse;
+
+        $this->view->projectStats = $projectStats;
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->program      = $this->program->getPRJByID($programID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * Export program.
+     *
      * @param  string $status
      * @param  string $orderBy
      * @access public
@@ -1114,6 +1152,41 @@ class program extends control
         $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
         $this->view->currentMembers = $currentMembers;
         $this->display();
+    }
+
+    /**
+     * Manage members of a group.
+     *
+     * @param  int    $groupID
+     * @param  int    $deptID
+     * @access public
+     * @return void
+     */
+    public function PRJManageGroupMember($groupID, $deptID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->group->updateUser($groupID);
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+        }
+        $group      = $this->group->getById($groupID);
+        $groupUsers = $this->group->getUserPairs($groupID);
+        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $otherUsers = array_diff_assoc($allUsers, $groupUsers);
+
+        $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $position[] = $group->name;
+        $position[] = $this->lang->group->manageMember;
+
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->group      = $group;
+        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
+        $this->view->groupUsers = $groupUsers;
+        $this->view->otherUsers = $otherUsers;
+
+        $this->display('group', 'manageMember');
     }
 
     /**

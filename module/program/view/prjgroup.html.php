@@ -47,7 +47,7 @@
           <?php common::printIcon('program', 'PRJManageView', "groupID=$group->id&projectID=$projectID&programID=$programID", $group, 'list', 'eye', '', $disabled);?>
           <?php common::printIcon('program', 'PRJManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('program', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('program', 'PRJManageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
           <?php common::printIcon('program', 'PRJEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
           <?php common::printIcon('program', 'PRJCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
