@@ -35,7 +35,7 @@
         <td class='text-left'><?php echo $story->title;?></td>
         <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
         <td>
-          <?php if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);?>
+          <?php if($story->status == 'draft') unset($reasonList['cancel']);?>
           <table class='w-p100'>
             <tr>
               <td class='pd-0'>
