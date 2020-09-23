@@ -152,8 +152,6 @@ class router extends baseRouter
 
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
-            $lang->URCommon = '';
-            $lang->SRCommon = '';
             foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);

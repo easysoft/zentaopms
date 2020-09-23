@@ -564,7 +564,7 @@ class program extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            die(js::locate($this->createLink('program', 'browse'), 'parent'));
+            die(js::locate($this->createLink('program', 'pgmbrowse'), 'parent'));
         }
 
         /* Load model. */
@@ -695,7 +695,7 @@ class program extends control
         foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
 
         $closedProjectsHtml = '';
-        foreach($closedProjects as $project) $closedProjectsHtml .= html::a(inLink('index'), '<i class="icon icon-menu-doc"></i>' . $project->name);
+        foreach($closedProjects as $project) $closedProjectsHtml .= html::a($this->createLink('program', 'index', '', '', '', $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
 
         $this->view->projectID = $projectID;
         $this->view->module    = $module;
@@ -1069,7 +1069,7 @@ class program extends control
             }
         }
 
-        $this->display('group', 'managePriv');
+        $this->display();
     }
 
     /**
