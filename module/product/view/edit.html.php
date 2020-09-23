@@ -28,11 +28,11 @@
           <tr>
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
@@ -40,19 +40,19 @@
           <tr>
             <th><?php echo $lang->product->QD;?></th>
             <td><?php echo html::select('QD', $qdUsers, $product->QD, "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->RD;?></th>
             <td><?php echo html::select('RD', $rdUsers, $product->RD, "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
             <td><?php echo html::select('type', $lang->product->typeList, $product->type, "class='form-control'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='form-control'");?></td><td></td>
-          </tr>  
+          </tr>
           <?php $this->printExtendFields($product, 'table');?>
           <tr>
             <th><?php echo $lang->product->desc;?></th>

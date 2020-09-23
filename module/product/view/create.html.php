@@ -22,25 +22,29 @@
       <table class="table table-form">
         <tbody>
           <tr>
+            <th><?php echo $lang->program->PGMCommon;?></th>
+            <td><?php echo html::select('program', $program, '', "class='form-control chosen'");?></td><td></td>
+          </tr>
+          <tr>
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', '', "class='form-control input-product-code' required");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->QD;?></th>
             <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->RD;?></th>
             <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
             <td>

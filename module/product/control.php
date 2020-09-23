@@ -275,6 +275,7 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->program    = $this->loadModel('program')->getParentPairs();
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
@@ -334,8 +335,11 @@ class product extends control
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
+
         $this->view->product    = $product;
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->program    = $this->loadModel('program')->getParentPairs();
+        $this->view->poUsers    = $poUsers;
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
@@ -754,7 +758,7 @@ class product extends control
         $this->view->lines        = array('') + $this->tree->getLinePairs();
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
-        $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product');
+        $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product', '&browseType=' . $browseType);
         $this->view->programID    = $programID;
         $this->view->program      = $program;
         $this->view->browseType   = $browseType;

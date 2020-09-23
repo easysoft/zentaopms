@@ -11,7 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <?php
+js::set('orderBy', $orderBy);
 js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
@@ -35,7 +37,7 @@ js::set('browseType', $browseType);
     <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
   </div>
 </div>
-<div id='mainContent' class="main-row">
+<div id='mainContent' class="main-row fade">
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -46,9 +48,9 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
-    <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
-    <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "programID=$programID");?>' data-ride='table'>
-      <table class='table has-sort-head table-fixed' id='projectList'>
+    <?php $canOrder = common::hasPriv('program', 'PRJOrderUpdate');?>
+    <form class='main-table table-project' id='projectsForm' method='post' data-ride='table'>
+      <table class='table has-sort-head table-fixed'>
         <?php $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
@@ -61,11 +63,14 @@ js::set('browseType', $browseType);
             <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
             <th class='w-80px'><?php echo $lang->program->PRJPM;?></th>
             <th class='w-200px'><?php echo $lang->actions;?></th>
+            <?php if($canOrder):?>
+            <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->program->PRJUpdateOrder);?></th>
+            <?php endif;?>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="sortable" id='projectTableList'>
           <?php foreach($projectStats as $project):?>
-          <tr>
+          <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->code;?>'>
             <td><?php printf('%03d', $project->id);?></td>
             <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
             <td class='c-name text-left' title='<?php echo $project->name?>'>
@@ -85,6 +90,9 @@ js::set('browseType', $browseType);
               <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
               <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
             </td>
+            <?php if($canOrder):?>
+              <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
+            <?php endif;?>
           </tr>
           <?php endforeach;?>
         </tbody>

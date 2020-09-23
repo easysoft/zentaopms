@@ -25,6 +25,7 @@ $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
 $lang->program->PRJModuleSetting     = '项目集设置';
 $lang->program->PRJModuleOpen        = '列表页是否显示项目集名';
+$lang->program->PRJUpdateOrder       = '排序';
 
 /* Fields. */
 $lang->program->common             = '项目';

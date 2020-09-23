@@ -357,16 +357,16 @@ class productModel extends model
     }
 
     /**
-     * Get ordered products 
+     * Get ordered products.
      * 
-     * @param  string $status 
-     * @param  int    $num 
+     * @param  string $status
+     * @param  int    $num
      * @access public
      * @return array
      */
     public function getOrderedProducts($status, $num = 0)
     {
-        $products = $this->getList($this->session->PRJ, $status);
+        $products = $this->getList($this->session->program, $status);
         if(empty($products)) return $products;
 
         $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
@@ -456,7 +456,6 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setDefault('program', $this->session->PRJ)
             ->setDefault('status', 'normal')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())

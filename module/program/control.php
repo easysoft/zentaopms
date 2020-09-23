@@ -877,7 +877,6 @@ class program extends control
 
         $project = $this->program->getPRJByID($projectID);
         $parents = $this->program->getParentPairs();
-        unset($parents[$projectID]);
 
         $this->view->title       = $this->lang->program->PRJEdit;
         $this->view->position[]  = $this->lang->program->PRJEdit;
@@ -1279,5 +1278,26 @@ class program extends control
         $this->view->newEnd     = $newEnd;
         $this->view->project    = $project;
         $this->display('project', 'activate');
+    }
+
+    /**
+     * Update projects order.
+     *
+     * @access public
+     * @return void
+     */
+    public function PRJUpdateOrder()
+    {
+        $idList   = explode(',', trim($this->post->projects, ','));
+        $orderBy  = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
+
+        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($projects as $order => $id)
+        {
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
     }
 }
