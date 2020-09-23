@@ -168,6 +168,7 @@ $lang->program->PGMCreate            = '添加项目集';
 $lang->program->PGMCreateGuide       = '选择项目模板';
 $lang->program->PGMEdit              = '编辑项目集';
 $lang->program->PGMBrowse            = '项目集列表';
+$lang->program->PGMProduct           = '产品列表';
 $lang->program->PGMAll               = '所有项目集';
 $lang->program->PGMStart             = '启动项目集';
 $lang->program->PGMFinish            = '完成项目集';

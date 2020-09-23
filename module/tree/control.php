@@ -65,6 +65,7 @@ class tree extends control
             $this->lang->navGroup->tree = 'product';
             $this->lang->product->menu  = $this->lang->product->viewMenu;
             $this->lang->noMenuModule[] = 'tree';
+            $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
 
             $products = $this->product->getPairs();
 

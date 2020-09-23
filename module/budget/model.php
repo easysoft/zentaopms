@@ -60,7 +60,7 @@ class budgetModel extends model
     public function getList($programID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('program')->eq($programID)
+            ->where('PRJ')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -77,7 +77,7 @@ class budgetModel extends model
     public function getStages($programID)
     {
         return $this->dao->select('stage')->from(TABLE_BUDGET)
-            ->where('program')->eq($programID)
+            ->where('PRJ')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('stage_asc')
             ->fetchPairs();
@@ -93,7 +93,7 @@ class budgetModel extends model
     public function getSubjects($programID)
     {
         return $this->dao->select('subject')->from(TABLE_BUDGET)
-            ->where('program')->eq($programID)
+            ->where('PRJ')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('subject_asc')
             ->fetchPairs();
@@ -136,7 +136,7 @@ class budgetModel extends model
     public function getSummary($programID)
     {
         $budgets = $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('program')->eq($programID)
+            ->where('PRJ')->eq($programID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
 
@@ -174,7 +174,7 @@ class budgetModel extends model
         $budget = fixer::input('post')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('PRJ', $this->session->PRJ)
             ->cleanFloat('amount')
             ->remove('uid')
             ->get();
@@ -204,7 +204,7 @@ class budgetModel extends model
             if(!$name) continue;
             $data = new stdclass();
             $data->name        = $name;
-            $data->program     = $this->session->PRJ;
+            $data->PRJ         = $this->session->PRJ;
             $data->stage       = $budgets->stage[$i];
             $data->subject     = $budgets->subject[$i];
             $data->amount      = (float)$budgets->amount[$i];

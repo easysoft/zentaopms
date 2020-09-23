@@ -26,7 +26,11 @@
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-140px'><?php echo $lang->product->name;?></th>
+            <th class='w-140px'><?php echo $lang->product->program;?></th>
+            <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen' required");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
           <tr>

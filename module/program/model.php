@@ -299,6 +299,16 @@ class programModel extends model
             ->fetchAll('id');
     }
 
+    public function setPGMViewMenu($programID = 0)
+    {
+        foreach($this->lang->program->viewMenu as $label => $menu) 
+        {    
+            $this->lang->program->viewMenu->$label = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
+        }    
+
+        $this->lang->program->menu = $this->lang->program->viewMenu;
+    }
+
     /**
      * Create a program.
      *
@@ -730,7 +740,7 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id) : helper::createLink('product', 'all', "programID=$program->id" . $vars, '', '', $program->id);
+            $link = $from == 'program' ? helper::createLink('program', 'pgmview', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
             $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))

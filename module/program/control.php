@@ -87,6 +87,41 @@ class program extends control
     }
 
     /**
+     * Program products list.
+     *
+     * @param  int     $programID
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @access public
+     * @return void
+     */
+    public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title       = $this->lang->program->PGMProduct;
+        $this->view->position[]  = $this->lang->program->PGMProduct;
+
+        $this->view->program     = $this->program->getPGMByID($programID);
+        $this->view->browseType  = $browseType;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products    = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+
+        $this->display();
+    }
+
+    /**
      * Create a project.
      *
      * @param  string $template
@@ -170,14 +205,8 @@ class program extends control
     public function PGMView($programID = 0)
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu  = $this->program->getPGMCommonAction();
-        $this->lang->program->switcherMenu .= $this->program->getPGMSwitcher($programID);
-
-        foreach($this->lang->program->viewMenu as $label => $menu) 
-        {
-            $this->lang->program->viewMenu->$label = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-        }
-        $this->lang->program->menu = $this->lang->program->viewMenu;
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
 
         $program = $this->program->getPGMByID($programID);
 

@@ -650,12 +650,12 @@ class commonModel extends model
                             $subActive .= 'dropdown-submenu';
                             $subLink = 'javascript:;';
                             $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'edit', "programID={$app->session->PRJ}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'group', "projectID={$app->session->PRJ}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'manageMembers', "projectID={$app->session->PRJ}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'start', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'activate', "projectID={$app->session->PRJ}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'suspend', "projectID={$app->session->PRJ}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
+                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'prjedit', "programID={$app->session->PRJ}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjgroup', "projectID={$app->session->PRJ}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjmanageMembers', "projectID={$app->session->PRJ}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjstart', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjactivate', "projectID={$app->session->PRJ}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
+                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjsuspend', "projectID={$app->session->PRJ}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
                         }
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';

@@ -49,6 +49,8 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
@@ -103,6 +105,7 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -251,6 +254,8 @@ class product extends control
      */
     public function create()
     {
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+
         if(!empty($_POST))
         {
             $productID = $this->product->create();
@@ -284,6 +289,7 @@ class product extends control
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
+        $this->view->programs   = $this->loadModel('program')->getParentPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->rootID     = $rootID;
 
@@ -301,6 +307,7 @@ class product extends control
     public function edit($productID, $action = 'edit', $extra = '')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         if(!empty($_POST))
         {
@@ -348,6 +355,7 @@ class product extends control
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
+        $this->view->programs   = $this->loadModel('program')->getParentPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         unset($this->lang->product->typeList['']);
@@ -468,6 +476,7 @@ class product extends control
     public function view($productID)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         $product = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -530,6 +539,7 @@ class product extends control
     public function roadmap($productID, $branch = 0)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));
@@ -747,8 +757,8 @@ class product extends control
      */
     public function all($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->session->set('program', $programID);
         $this->loadModel('program');
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -759,8 +769,7 @@ class product extends control
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
 
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $browseType);
-        $this->view->lines        = array('') + $this->tree->getLinePairs();
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
         $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product', '&browseType=' . $browseType);

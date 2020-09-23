@@ -25,7 +25,7 @@ class designModel extends model
             ->stripTags('desc', $this->config->allowedTags)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->add('version', 1)
             ->remove('files,labels')
             ->get();
@@ -77,7 +77,7 @@ class designModel extends model
             $design->type        = $data->type[$i];
             $design->name        = $name;
             $design->product     = $productID;
-            $design->program     = $this->session->PRJ;
+            $design->PRJ         = $this->session->PRJ;
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
@@ -177,7 +177,7 @@ class designModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
-            $data->program  = $this->session->PRJ;
+            $data->PRJ      = $this->session->PRJ;
             $data->product  = $this->session->product;
             $data->AType    = 'design';
             $data->AID      = $designID;
@@ -311,7 +311,7 @@ class designModel extends model
         {
             $designs = $this->dao->select('*')->from(TABLE_DESIGN)
                 ->where('deleted')->eq(0)
-                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+                ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
                 ->andWhere('product')->eq($productID)
                 ->orderBy($orderBy)
@@ -375,7 +375,7 @@ class designModel extends model
         $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('program')->eq($programID)
+            ->andWhere('PRJ')->eq($programID)
             ->andWhere('product')->eq($productID)
             ->orderBy($orderBy)
             ->page($pager)

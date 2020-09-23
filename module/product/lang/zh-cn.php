@@ -66,6 +66,7 @@ $lang->product->errorNoProduct = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied   = "您无权访问该{$lang->productCommon}";
 
 $lang->product->id             = '编号';
+$lang->product->program        = "所属项目集";
 $lang->product->name           = "{$lang->productCommon}名称";
 $lang->product->code           = "{$lang->productCommon}代号";
 $lang->product->line           = "{$lang->productCommon}线";
