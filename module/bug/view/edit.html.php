@@ -52,7 +52,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->bug->legendSteps;?></div>
-            <div class='detail-content article-content'>
+            <div class='detail-content'>
               <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
