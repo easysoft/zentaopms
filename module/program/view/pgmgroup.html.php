@@ -43,12 +43,12 @@
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
-          <?php common::printIcon('program', 'pgmmanageview', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('program', 'pgmmanagepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('program', 'PGMManageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('program', 'PGMManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('program', 'pgmmanagegroupmember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('program', 'pgmeditgroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('program', 'pgmcopygroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'PGMManageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('program', 'PGMEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('program', 'PGMCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {

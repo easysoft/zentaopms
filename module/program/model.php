@@ -2,55 +2,12 @@
 class programModel extends model
 {
     /**
-     * Get program list.
-     *
-     * @param  varchar $status
-     * @param  varchar $orderBy
-     * @param  object  $pager
-     * @param  bool    $includeCat
-     * @param  bool    $mine
-     * @access public
-     * @return array
-     */
-    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL, $includeCat = false, $mine = false)
-    {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->beginIF($this->cookie->mine or $mine)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
      * Get program pairs.
      *
      * @access public
      * @return void
      */
     public function getPGMPairs()
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->fetchPairs();
-    }
-
-    /**
-     * Get program pairs.
-     *
-     * @access public
-     * @return void
-     */
-    public function getPairs()
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')

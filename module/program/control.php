@@ -1038,7 +1038,7 @@ class program extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group      = $group;
-        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('PRJ')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $this->display();
