@@ -26,7 +26,7 @@
       <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->story->closedReason;?></th>
-          <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
+          <td class='w-p25-f'><?php echo html::select('closedReason', $reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>
         <tr id='duplicateStoryBox' style='display:none'>
           <th><?php echo $lang->story->duplicateStory;?></th>

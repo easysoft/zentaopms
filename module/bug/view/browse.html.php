@@ -16,6 +16,8 @@
 .nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
 .outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+#subNavbar .nav{left: -70px !important;}
+#subNavbar .nav > li > a{padding: 8px 8px;}
 </style>
 <?php endif;?>
 <?php
