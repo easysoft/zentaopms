@@ -1902,6 +1902,7 @@ class testtaskModel extends model
         $matchPaths = $rules['path'];
         $nameFields = $rules['name'];
         $failure    = $rules['failure'];
+        $skipped    = $rules['skipped'];
         $suiteField = $rules['suite'];
         $aliasSuite = zget($rules, 'aliasSuite', array());
         $aliasName  = zget($rules, 'aliasName', array());
@@ -2026,6 +2027,12 @@ class testtaskModel extends model
                         $failureAttrs = $matchNode->$failure->attributes();
                         $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
                     }
+                }
+                elseif(isset($matchNode->$skipped))
+                {
+                    $result->caseResult = 'n/a';
+                    $result->stepResults[0]['result'] = 'n/a';
+                    $result->stepResults[0]['real']   = '';
                 }
                 $result->stepResults = serialize($result->stepResults);
                 $case->lastRunner    = $this->app->user->account;
