@@ -28,8 +28,8 @@ class programModel extends model
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
 
-        $hours = $this->dao->select('program, 
-            cast(sum(consumed) as decimal(10,2)) as consumed, 
+        $hours = $this->dao->select('program,
+            cast(sum(consumed) as decimal(10,2)) as consumed,
             cast(sum(estimate) as decimal(10,2)) as estimate')
             ->from(TABLE_TASK)
             ->where('program')->in($programIdList)
@@ -211,10 +211,10 @@ class programModel extends model
 
     public function setPGMViewMenu($programID = 0)
     {
-        foreach($this->lang->program->viewMenu as $label => $menu) 
-        {    
+        foreach($this->lang->program->viewMenu as $label => $menu)
+        {
             $this->lang->program->viewMenu->$label = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-        }    
+        }
 
         $this->lang->program->menu = $this->lang->program->viewMenu;
     }
@@ -393,7 +393,7 @@ class programModel extends model
      */
     public function getPGMCommonAction($programID = 0)
     {
-        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
@@ -432,7 +432,7 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPGMDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
@@ -492,7 +492,7 @@ class programModel extends model
     /**
      * Get children by program id.
      *
-     * @param  int     $programID 
+     * @param  int     $programID
      * @access private
      * @return void
      */
@@ -605,7 +605,7 @@ class programModel extends model
     /**
      * Get program parent pairs
      *
-     * @param  string $model 
+     * @param  string $model
      * @access public
      * @return array
      */
@@ -696,7 +696,7 @@ class programModel extends model
      */
     public function printPRJCommonAction()
     {
-        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <i class='icon icon-sort-down'></i></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
@@ -729,7 +729,7 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -796,7 +796,7 @@ class programModel extends model
 
     /**
      * Get a project by id.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return object
@@ -812,7 +812,7 @@ class programModel extends model
 
     /**
      * Get project name.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return object
@@ -838,7 +838,7 @@ class programModel extends model
 
     /**
      * Build the query.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return object

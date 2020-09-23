@@ -373,7 +373,7 @@ class customModel extends model
         $current = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? 'Scrum' : $this->lang->custom->waterfallCommon;
         $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setwaterfall'), $this->lang->custom->waterfallCommon) : html::a(helper::createLink('custom', 'setscrum'), 'Scrum');
 
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' title='{$current}'>{$current} <i class='icon icon-swap'></i></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' title='{$current}'>{$current} <span class='caret'></span></button>";
         $output .= "<ul class='dropdown-menu'><li>" . $link . "</li></ul>";
         $output .= "</div>";
 
