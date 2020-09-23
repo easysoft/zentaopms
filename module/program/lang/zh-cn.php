@@ -1,6 +1,6 @@
 <?php
 /* Actions. */
-$lang->program->PRJIndex             = '仪表盘';
+$lang->program->PRJIndex             = '项目仪表盘';
 $lang->program->PRJHome              = '项目主页';
 $lang->program->PRJCreate            = '创建项目';
 $lang->program->PRJCreateGuide       = '选择项目模板';
@@ -14,18 +14,19 @@ $lang->program->PRJSuspend           = '挂起项目';
 $lang->program->PRJDelete            = '删除项目';
 $lang->program->PRJClose             = '关闭项目';
 $lang->program->PRJActivate          = '激活项目';
-$lang->program->PRJGroup             = '权限分组';
-$lang->program->PRJCreateGroup       = '创建分组';
-$lang->program->PRJEditGroup         = '编辑分组';
-$lang->program->PRJCopyGroup         = '复制分组';
-$lang->program->PRJManageView        = '维护视图';
-$lang->program->PRJManagePriv        = '维护权限';
+$lang->program->PRJGroup             = '项目权限分组';
+$lang->program->PRJCreateGroup       = '项目创建分组';
+$lang->program->PRJEditGroup         = '项目编辑分组';
+$lang->program->PRJCopyGroup         = '项目复制分组';
+$lang->program->PRJManageView        = '项目维护视图';
+$lang->program->PRJManagePriv        = '项目维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->PRJExport            = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
 $lang->program->PRJModuleSetting     = '项目集设置';
-$lang->program->PRJModuleOpen        = '列表页是否显示项目集名';
+$lang->program->PRJModuleOpen        = '显示项目集名';
 $lang->program->PRJUpdateOrder       = '排序';
+$lang->program->PRJSort              = '项目排序';
 
 /* Fields. */
 $lang->program->common             = '项目';
@@ -136,8 +137,8 @@ $lang->program->childLongTime     = "子项目中有长期项目，父项目也�
 $lang->program->readjustTime      = '重新调整项目起止时间';
 
 $lang->program->PRJProgramTitle['0']    = '不显示';
-$lang->program->PRJProgramTitle['base'] = '只显示一级模块';
-$lang->program->PRJProgramTitle['end']  = '只显示最后一级模块';
+$lang->program->PRJProgramTitle['base'] = '只显示一级项目集';
+$lang->program->PRJProgramTitle['end']  = '只显示最后一级项目集';
 
 $lang->program->PRJNoProgram         = '暂时没有项目';
 $lang->program->PRJAccessDenied      = '您无权访问该项目！';
