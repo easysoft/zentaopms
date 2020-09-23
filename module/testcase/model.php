@@ -195,6 +195,7 @@ class testcaseModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
+            ->cleanInt('story,product,branch,module')
             ->join('stage', ',')
             ->get();
 
@@ -664,6 +665,7 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
+            ->cleanInt('story,product,branch,module')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
 

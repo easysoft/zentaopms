@@ -35,7 +35,8 @@ class html extends baseHTML
     static public function a($href = '', $title = '', $target = "_self", $misc = '', $newline = true)
     {
         if(empty($target)) $target = '_self';
-        if($target != '_self') $misc .= " target='$target'";
+        if($target != '_self')  $misc .= " target='$target'";
+        if($target == '_blank') $misc .= " rel='noopener noreferrer'";
         return parent::a($href, $title, $misc, $newline);
     }
 
