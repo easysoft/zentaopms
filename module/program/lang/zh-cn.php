@@ -81,6 +81,10 @@ $lang->program->templateList['waterfall'] = "瀑布";
 $lang->program->PRJCategoryList['single']   = "单产品项目";
 $lang->program->PRJCategoryList['multiple'] = "多产品项目";
 
+$lang->program->PRJLifeTimeList['short'] = "短期";
+$lang->program->PRJLifeTimeList['long']  = "长期";
+$lang->program->PRJLifeTimeList['ops']   = "运维";
+
 $lang->program->featureBar['all']       = '所有';
 $lang->program->featureBar['doing']     = '进行中';
 $lang->program->featureBar['wait']      = '未开始';

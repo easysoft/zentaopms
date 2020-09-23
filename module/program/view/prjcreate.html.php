@@ -16,6 +16,7 @@
 <?php js::set('template', $template);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('from', $from);?>
+<?php js::set('weekend', $config->project->weekend);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -43,6 +44,12 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php if($template == 'scrum'):?>
+        <tr>
+          <th><?php echo $lang->program->PRJCategory;?></th>
+          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, '', "class='form-control'");?></td><td></td><td></td>
+        </tr>
+        <?php endif;?>
         <?php if($template == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
@@ -96,13 +103,6 @@
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
-        <tr class='hide'>
-          <th><?php echo $lang->project->status;?></th>
-          <td><?php echo html::hidden('status', 'wait');?></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
@@ -113,7 +113,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('privway', $lang->program->PRJAuthList, $privway, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $privway, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
