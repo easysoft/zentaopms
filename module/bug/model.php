@@ -106,6 +106,11 @@ class bugModel extends model
      */
     public function create($from = '')
     {
+        /* Delete template HTML tags, line breaks and spaces and tags in the steps. */
+        $stepTemplate = strip_tags($this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect);
+        $steps        = strip_tags(preg_replace("/\s/", "", $this->post->steps));
+        $steps        = str_replace("&nbsp;", "", $steps);
+
         $now = helper::now();
         $bug = fixer::input('post')
             ->setDefault('PRJ', $this->session->PRJ)
@@ -118,6 +123,7 @@ class bugModel extends model
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(strpos($this->config->bug->create->requiredFields, 'project') !== false, 'project', $this->post->project)
+            ->setIF($steps == $stepTemplate, 'steps', '')
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,project,module,severity')
             ->join('openedBuild', ',')
