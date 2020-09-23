@@ -39,7 +39,7 @@
           <table class='w-p100'>
             <tr>
               <td class='pd-0'>
-                <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
+                <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
               <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
               <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>
