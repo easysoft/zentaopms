@@ -1101,6 +1101,7 @@ class programModel extends model
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->in('project,program')
+            ->andWhere('status')->ne('closed')
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
