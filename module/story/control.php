@@ -996,15 +996,18 @@ class story extends control
         /* Set the closed reason options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
 
+        unset($this->lang->story->reasonList['subdivided']);
+
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->close;
 
-        $this->view->product = $product;
-        $this->view->story   = $story;
-        $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->view->product    = $product;
+        $this->view->story      = $story;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->reasonList = $this->lang->story->reasonList;
         $this->display();
     }
 
@@ -1095,6 +1098,8 @@ class story extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
+        unset($this->lang->story->reasonList['subdivided']);
+
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchClose;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
@@ -1102,6 +1107,7 @@ class story extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->storyIdList      = $storyIdList;
+        $this->view->reasonList       = $this->lang->story->reasonList;
 
         $this->display();
     }
