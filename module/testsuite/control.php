@@ -53,6 +53,13 @@ class testsuite extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
 
+        $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+        if(empty($suites) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+        }
+
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
         $this->view->position[]  = $this->lang->testsuite->common;
@@ -60,7 +67,7 @@ class testsuite extends control
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
-        $this->view->suites      = $this->testsuite->getSuites($productID, $sort, $pager);
+        $this->view->suites      = $suites;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
 

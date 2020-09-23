@@ -134,6 +134,11 @@ class bug extends control
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
+        if(empty($bugs) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
+        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
