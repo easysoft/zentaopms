@@ -421,7 +421,7 @@ class productModel extends model
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
 
-		$output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <i class='icon icon-sort-down'></i></button>";
+		$output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('product', 'index'), "<i class='icon icon-home'></i> " . $this->lang->product->index) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('product', 'all'), "<i class='icon icon-cards-view'></i> " . $this->lang->product->all) . '</li>';
