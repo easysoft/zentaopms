@@ -62,7 +62,7 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <?php if($program->template == 'waterfall' and $story->type == 'requirement'):?>
+      <?php if($program->model == 'waterfall' and $story->type == 'requirement'):?>
         <?php if(!empty($track)):?>
         <div class="detail">
           <div class="detail-title"><?php echo $lang->story->track;?></div>

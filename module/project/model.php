@@ -95,7 +95,7 @@ class projectModel extends model
 
         $this->session->set('project', $projectID);
 
-        $products = $this->loadModel('product')->getPairs('', $program->id);
+        $products = $this->loadModel('product')->getPairs();
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($project and $project->type == 'ops')
