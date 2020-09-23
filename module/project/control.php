@@ -181,8 +181,13 @@ class project extends control
 
         /* Get tasks. */
         $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
+        if(empty($tasks) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
+        }
 
-       /* Build the search form. */
+        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['onMenuBar'] = 'yes';
         $this->project->buildTaskSearchForm($projectID, $this->projects, $queryID, $actionURL);
@@ -701,6 +706,12 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
+        if(empty($stories) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
+        }
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
 
