@@ -99,11 +99,14 @@ $('#jkHost').change(function()
         html += '</select>';
         $('#jkJobBox .loading').remove();
         $('#jkJobBox .input-group').append(html);
-        $('#jkJobBox #jkJob').chosen();
+
+        var dropDirection = $('#jkJobBox #jkJob option').length > 2 ? 'up' : 'auto';
+        $('#jkJobBox #jkJob').chosen({drop_direction: dropDirection});
     })
 })
 
 $(function()
 {
+    $('#jkHost').chosen({drop_direction: $('#jkHost option').length > 3 ? 'up' : 'auto'});
     $('#triggerType').change();
 });

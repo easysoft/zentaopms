@@ -99,7 +99,7 @@
             <th><?php echo $lang->job->jkHost; ?></th>
             <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkHost', $jkHostList, $job->jkHost, "class='form-control chosen'");?></div>
+                <div class='table-col'><?php echo html::select('jkHost', $jkHostList, $job->jkHost, "class='form-control'");?></div>
                 <div id='jkJobBox' class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->jkJob; ?></span>
