@@ -20,6 +20,8 @@ class branch extends control
      */
     public function manage($productID)
     {
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+
         if($_POST)
         {
             $this->branch->manage($productID);
