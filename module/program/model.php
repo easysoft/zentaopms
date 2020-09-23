@@ -16,7 +16,7 @@ class programModel extends model
     {
         $queryType = strtolower($queryType);
         $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
+            ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
@@ -123,7 +123,7 @@ class programModel extends model
     {
         /* Init vars. */
         $this->loadModel('project');
-        $programs = $this->getList($status, $orderBy, $pager);
+        $programs = $this->getPRJList(0, $status, $orderBy, $pager);
 
         if(empty($programs)) return array();
 
