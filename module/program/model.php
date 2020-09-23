@@ -2,38 +2,6 @@
 class programModel extends model
 {
     /**
-     * Get program pairs.
-     *
-     * @access public
-     * @return void
-     */
-    public function getPGMPairs()
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->fetchPairs();
-    }
-
-    /**
-     * Get program pairs by template.
-     *
-     * @param  string $model
-     * @access public
-     * @return void
-     */
-    public function getPairsByTemplate($model)
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('model')->eq($model)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->fetchPairs();
-    }
-
-    /**
      * Get program overview for block.
      *
      * @param  varchar     $queryType byId|byStatus
@@ -191,33 +159,18 @@ class programModel extends model
     }
 
     /**
-     * Get children by program id.
+     * Get program pairs.
      *
-     * @param  int     $programID 
-     * @access private
+     * @access public
      * @return void
      */
-    public function getChildren($programID = 0)
+    public function getPGMPairs()
     {
-        return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
-    }
-
-    /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    public function accessDenied()
-    {
-        echo(js::alert($this->lang->program->accessDenied));
-
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('program', 'browse')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('program', 'browse')));
-
-        die(js::locate('back'));
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->fetchPairs();
     }
 
     /**
@@ -427,196 +380,6 @@ class programModel extends model
         }
     }
 
-    /**
-     * Create a program.
-     *
-     * @access private
-     * @return void
-     */
-    public function create()
-    {
-        $project = fixer::input('post')
-            ->setDefault('status', 'wait')
-            ->add('type', 'program')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('end', '')
-            ->setDefault('openedDate', helper::now())
-            ->setDefault('team', substr($this->post->name, 0, 30))
-            ->join('whitelist', ',')
-            ->cleanInt('budget')
-            ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, longTime')
-            ->get();
-
-        if($project->parent)
-        {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($parentProgram)
-            {
-                /* Child project begin cannot less than parent. */
-                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
-                /* When parent set end then child project end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-                /* When parent set end then child project cannot set longTime. */
-                if(empty($project->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-
-                if(dao::isError()) return false;
-            }
-        }
-
-        $requiredFields = $this->config->program->create->requiredFields;
-        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PROGRAM)->data($project)
-            ->autoCheck()
-            ->batchcheck($requiredFields, 'notempty')
-            ->check('name', 'unique', "deleted='0'")
-            ->check('code', 'unique', "deleted='0'")
-            ->exec();
-
-        /* Add the creater to the team. */
-        if(!dao::isError())
-        {
-            $programID = $this->dao->lastInsertId();
-            $today     = helper::today();
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
-
-            /* Save order. */
-            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
-            $this->file->updateObjectID($this->post->uid, $programID, 'project');
-
-            if($project->parent > 0) $this->dao->update(TABLE_PROGRAM)->set('isCat')->eq(1)->where('id')->eq($project->parent)->exec();
-            $this->setTreePath($programID);
-
-            /* Add program admin.*/
-            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
-                ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJadmin')
-                ->fetch();
-            if(!empty($groupPriv))
-            {
-                $newProgram = $groupPriv->program . ",$programID";
-                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
-            }
-            else
-            {
-                $PRJadminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
-                $groupPriv  = new stdclass();
-                $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJadminID;
-                $groupPriv->program = $programID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
-
-            if($project->template == 'waterfall')
-            {
-                $product = new stdclass();
-                $product->name        = $project->name;
-                $product->program     = $programID;
-                $product->status      = 'normal';
-                $product->createdBy   = $this->app->user->account;
-                $product->createdDate = helper::now();
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-
-                $productID = $this->dao->lastInsertId();
-                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-
-                $data = new stdclass();
-                $data->project = $programID;
-                $data->product = $productID;
-                $this->dao->insert(TABLE_PROGRAMPRODUCT)->data($data)->exec();
-            }
-
-            return $programID;
-        }
-    }
-
-    /**
-     * Update program.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return array
-     */
-    public function update($programID)
-    {
-        $programID  = (int)$programID;
-        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
-
-        $program = fixer::input('post')
-            ->setDefault('team', $this->post->name)
-            ->setDefault('end', '')
-            ->setDefault('isCat', 0)
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, longTime')
-            ->get();
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
-
-        if(!$oldProgram->isCat and !empty($program->isCat) and $this->checkHasContent($programID))  dao::$errors['isCat'] = $this->lang->program->cannotChangeToCat;
-        if($oldProgram->isCat  and empty($program->isCat)  and $this->checkHasChildren($programID)) dao::$errors['isCat'] = $this->lang->program->cannotCancelCat;
-
-        if(!empty($program->isCat))
-        {
-            $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
-            $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
-
-            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild,   $maxChildEnd);
-
-            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
-            if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
-        }
-
-        if($program->parent)
-        {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
-            if($parentProgram)
-            {
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-            }
-        }
-        if(dao::isError()) return false;
-
-        $requiredFields = $this->config->program->edit->requiredFields;
-        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        $this->dao->update(TABLE_PROGRAM)->data($program)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF($program->begin != '', 'begin', 'date')
-            ->checkIF($program->end != '', 'end', 'date')
-            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0'")
-            ->check('code', 'unique', "id!=$programID and deleted='0'")
-            ->where('id')->eq($programID)
-            ->limit(1)
-            ->exec();
-
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $programID, 'project');
-            if($program->acl != 'open' and ($program->acl != $oldProgram->acl or $program->whitelist != $oldProgram->whitelist))
-            {
-                $this->loadModel('user')->updateUserView($programID, 'program');
-            }
-
-            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
-
-            return common::createChanges($oldProgram, $program);
-        }
-    }
-
     /*
      * Get program swapper.
      *
@@ -726,52 +489,34 @@ class programModel extends model
         return $lastMenu;
     }
 
-    /*
-     * Get project swapper.
+    /**
+     * Get children by program id.
      *
+     * @param  int     $programID 
      * @access private
      * @return void
      */
-    public function printPRJCommonAction()
+    public function getChildren($programID = 0)
     {
-        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <i class='icon icon-sort-down'></i></button>";
-        $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
-        $output .= '</ul>';
-        $output .= "</div>";
-        echo $output;
+        return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
     }
 
-    /*
-     * Get project swapper.
+    /**
+     * Show accessDenied response.
      *
-     * @param  int     $projectID
-     * @param  varchar $currentModule
-     * @param  varchar $currentMethod
-     * @param  varchar $extra
      * @access private
      * @return void
      */
-    public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
+    public function accessDenied()
     {
-        $this->printPRJCommonAction();
-        if($currentModule == 'program' && $currentMethod != 'index') return;
+        echo(js::alert($this->lang->program->accessDenied));
 
-        $this->loadModel('project');
-        $currentProjectName = $this->lang->program->common;
-        if($projectID)
-        {
-            $currentProject     = $this->project->getById($projectID);
-            $currentProjectName = $currentProject->name;
-        }
+        if(!$this->server->http_referer) die(js::locate(helper::createLink('program', 'browse')));
 
-        $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('program', 'browse')));
 
-        return $output;
+        die(js::locate('back'));
     }
 
     /**
@@ -941,6 +686,54 @@ class programModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /*
+     * Get project swapper.
+     *
+     * @access private
+     * @return void
+     */
+    public function printPRJCommonAction()
+    {
+        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <i class='icon icon-sort-down'></i></button>";
+        $output .= '<ul class="dropdown-menu">';
+        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
+        $output .= '</ul>';
+        $output .= "</div>";
+        echo $output;
+    }
+
+    /*
+     * Get project swapper.
+     *
+     * @param  int     $projectID
+     * @param  varchar $currentModule
+     * @param  varchar $currentMethod
+     * @param  varchar $extra
+     * @access private
+     * @return void
+     */
+    public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
+    {
+        $this->printPRJCommonAction();
+        if($currentModule == 'program' && $currentMethod != 'index') return;
+
+        $this->loadModel('project');
+        $currentProjectName = $this->lang->program->common;
+        if($projectID)
+        {
+            $currentProject     = $this->project->getById($projectID);
+            $currentProjectName = $currentProject->name;
+        }
+
+        $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'>{$currentProjectName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 
     /**
