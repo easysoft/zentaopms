@@ -1382,6 +1382,35 @@ class program extends control
     }
 
     /**
+     * Delete a project.
+     *
+     * @param  int     $projectID
+     * @param  string  $from
+     * @param  int     $programID
+     * @access public
+     * @return void
+     */
+    public function PRJDelete($projectID, $confirm = 'no', $from = 'PRJ', $programID = 0)
+    {
+        if($confirm == 'no')
+        {
+            $project = $this->program->getPRJByID($projectID);
+            echo js::confirm(sprintf($this->lang->program->confirmDelete, $project->name), $this->createLink('program', 'PRJDelete', "projectID=$projectID&confirm=yes&from=$from&programID=$programID"));
+            die();
+        }
+        else
+        {
+            $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
+            $this->project->updateUserView($projectID);
+            $this->session->set('project', '');
+
+            $link = $from == 'PRJ' ? inLink('PRJBrowse', 'programID=' . $programID) : inLink('PGMProject', 'programID=' . $programID);
+            die(js::locate($link, 'parent'));
+        }
+    }
+
+    /**
      * Update projects order.
      *
      * @access public

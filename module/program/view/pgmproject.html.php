@@ -50,7 +50,7 @@ js::set('browseType', $browseType);
             <th class='w-60px'><?php echo $lang->program->PRJConsume;?></th>
             <th class='w-60px'><?php echo $lang->program->PRJSurplus;?></th>
             <th class='w-150px'><?php echo $lang->program->PRJProgress;?></th>
-            <th class='w-200px'><?php echo $lang->actions;?></th>
+            <th class='text-center w-210px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody class="sortable" id='projectTableList'>
@@ -86,6 +86,7 @@ js::set('browseType', $browseType);
               <?php common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
               <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+              <?php common::printIcon('program', 'PRJDelete', "projectID=$project->id&confirm=no&from=PGM&programID=$programID", $project, 'list', 'trash', 'hiddenwin', '', true);?>
             </td>
           </tr>
           <?php endforeach;?>
