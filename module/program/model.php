@@ -766,10 +766,9 @@ class programModel extends model
      */
     public function printPRJCommonAction()
     {
-        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->common}'>{$this->lang->program->common} <i class='icon icon-sort-down'></i></button>";
+        $output  = "<div class='btn-group' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <i class='icon icon-sort-down'></i></button>";
         $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('program', 'index'), "<i class='icon icon-home'></i> " . $this->lang->program->PRJHome) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJBrowse) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
         $output .= '</ul>';
         $output .= "</div>";
@@ -795,7 +794,6 @@ class programModel extends model
         $currentProjectName = $this->lang->program->common;
         if($projectID)
         {
-            setCookie("lastproject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
             $currentProject     = $this->project->getById($projectID);
             $currentProjectName = $currentProject->name;
         }
@@ -1044,7 +1042,11 @@ class programModel extends model
      */
     public function getPRJByID($projectID)
     {
-        return $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        if(!$projectID) return false;
+
+        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        if($project->end == '0000-00-00') $project->end = '';
+        return $project;
     }
 
     /**
@@ -1182,7 +1184,8 @@ class programModel extends model
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->add('type', 'project')
-            ->add('lifetime', 'short')
+            ->setIF($this->post->longTime == 1, 'end', '')
+            ->setIF($this->post->longTime == 1, 'days', 0)
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')
@@ -1191,11 +1194,12 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
+            ->remove('longTime')
             ->get();
 
         if($project->parent)
         {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project->parent)->fetch();
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
             if($parentProgram)
             {
                 /* Child project begin cannot less than parent. */
@@ -1208,10 +1212,13 @@ class programModel extends model
             }
         }
 
+        $requiredFields = $this->config->program->PRJCreate->requiredFields;
+        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
-            ->batchcheck($this->config->program->PRJCreate->requiredFields, 'notempty')
+            ->batchcheck($requiredFields, 'notempty')
             ->check('name', 'unique', "deleted='0'")
             ->check('code', 'unique', "deleted='0'")
             ->exec();
@@ -1244,33 +1251,80 @@ class programModel extends model
             {
                 $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
                 $groupPriv  = new stdclass();
-                $groupPriv->account   = $this->app->user->account;
-                $groupPriv->group     = $PRJAdminID;
-                $groupPriv->PRJ       = $projectID;
+                $groupPriv->account = $this->app->user->account;
+                $groupPriv->group   = $PRJAdminID;
+                $groupPriv->PRJ     = $projectID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
-            if($project->model == 'waterfall')
+            return $projectID;
+        }
+    }
+
+    /**
+     * Update project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function PRJUpdate($projectID = 0)
+    {
+        $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+
+        $project = fixer::input('post')
+            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setIF($this->post->longTime == 1, 'end', '')
+            ->setIF($this->post->longTime == 1, 'days', 0)
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->join('whitelist', ',')
+            ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
+            ->remove('longTime')
+            ->get();
+
+        if($project->parent)
+        {
+            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+
+            if($parentProgram)
             {
-                $product = new stdclass();
-                $product->name        = $project->name;
-                $product->PRJ         = $projectID;
-                $product->status      = 'normal';
-                $product->createdBy   = $this->app->user->account;
-                $product->createdDate = helper::now();
+                /* Child project begin cannot less than parent. */
+                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
 
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                /* When parent set end then child project end cannot greater than parent. */
+                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
 
-                $productID = $this->dao->lastInsertId();
-                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+                if(dao::isError()) return false;
+            }
+        }
 
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $productID;
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);
+        $requiredFields = $this->config->program->PRJEdit->requiredFields;
+        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($requiredFields, 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->check('name', 'unique', "id!=$projectID and deleted='0'")
+            ->check('code', 'unique', "id!=$projectID and deleted='0'")
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist))
+            {
+                $this->loadModel('user')->updateUserView($projectID, 'project');
             }
 
-            return $projectID;
+            if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+
+            return common::createChanges($oldProject, $project);
         }
     }
 }

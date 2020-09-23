@@ -729,6 +729,7 @@ class program extends control
     public function PRJBrowse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->program = 'project';
+        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -806,7 +807,7 @@ class program extends control
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJBrowse', array('programID' => $programID, 'browseType' => 'doing'))));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJBrowse', array('programID' => $programID, 'browseType' => 'all'))));
         }
 
         $name      = '';
@@ -859,22 +860,22 @@ class program extends control
     public function PRJEdit($projectID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $project = $this->program->getPRJByID($projectID);
 
         if($_POST)
         {
-            $changes = $this->program->update($projectID);
+            $changes = $this->program->PRJUpdate($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('program', $projectID, 'edited');
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $url = $this->session->PRJList ? $this->session->PRJList : inlink('browse');
+            $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
+        $project = $this->program->getPRJByID($projectID);
         $parents = $this->program->getParentPairs();
         unset($parents[$projectID]);
 

@@ -6,6 +6,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#end').val('').attr('disabled', 'disabled');
+            $('#days').val('');
         }
         else
         {

@@ -47,7 +47,7 @@ $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
-$lang->misc->zentao->service['zentaotrain']= 'ZenTao Training';
+
 $lang->misc->zentao->service['idc']        = 'ZenTao Cloud';
 $lang->misc->zentao->service['custom']     = 'ZenTao Custom';
 $lang->misc->zentao->service['servicemore']= 'More';

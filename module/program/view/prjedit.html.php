@@ -38,6 +38,12 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php if($project->model == 'scrum'):?>
+        <tr>
+          <th><?php echo $lang->program->PRJCategory;?></th>
+          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, $project->lifetime, "class='form-control'");?></td><td></td><td></td>
+        </tr>
+        <?php endif;?>
         <?php if($project->model == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
@@ -65,15 +71,16 @@
             <div class='input-group'>
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
-              <?php if(empty($parentProgram) or $parentProgram->end == '0000-00-00'):?>
-              <span class='input-group-addon hidden' id='longTimeBox'>
+              <?php
+                $disabledEnd = empty($project->end) ? 'disabled' : '';
+                echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
+              ?>
+              <span class='input-group-addon' id='longTimeBox'>
                 <div class="checkbox-primary">
-                  <input type="checkbox" name="longTime" value="1" id="longTime">
-                  <label for="longTime"><?php echo $lang->program->longTime;?></label>
+                  <input type="checkbox" name="longTime" value="1" <?php echo empty($project->end) ? 'checked' : '';?> id="longTime">
+                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
                 </div>
               </span>
-              <?php endif;?>
             </div>
           </td>
           <td class='muted'></td>
@@ -86,7 +93,9 @@
               <?php echo html::input('days', '', "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->project->day;?></span>
             </div>
-          </td><td></td><td></td>
+          </td>
+          <td></td>
+          <td></td>
         </tr>
         <?php endif;?>
         <tr>
