@@ -53,7 +53,7 @@
         <?php if($template == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('category', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
+          <td><?php echo html::select('product', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
