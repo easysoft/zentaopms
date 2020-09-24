@@ -7,6 +7,7 @@ $(function()
     });
 
     var taskTree = $taskTree.data('zui.tree');
+    if(!taskTree) return;
 
     var sortItems = function($items)
     {
