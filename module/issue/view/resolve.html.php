@@ -70,6 +70,8 @@ echo js::set('resolveLink', $this->createLink('issue', 'ajaxGetResolveForm'));
 <script>
 function getSolutions()
 {
+    parent.$('#triggerModal .modal-body').height($('.modal-body').css('min-height'));
+
     var mode = $("#resolution").val();
     $.ajax(
     {
@@ -122,6 +124,7 @@ function getSolutions()
             }
         }
     })
+
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
