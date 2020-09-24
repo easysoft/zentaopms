@@ -76,7 +76,7 @@
             <?php endif;?>
           </td>
           <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
-          <td class='c-name' title='<?echo $programName;?>'><?php echo $programName;?></td>
+          <td class='c-name' title='<?echo empty($programID) ? $product->programName : $programName;?>'><?php echo empty($programID) ? $product->programName : $programName;?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>

@@ -785,7 +785,7 @@ class programModel extends model
                 $programID = $programTitle == 'base' ? current($path) : end($path);
                 if(empty($path) || $programID == $id) continue;
 
-                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJParams($programID);
+                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJPairs($programID);
                 $programList[$programID] = $program;
 
                 $projectList[$id]->name = $program->name . '/' . $projectList[$id]->name;
@@ -817,7 +817,7 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJParams($projectID = 0, $limit = 0)
+    public function getPRJPairs($projectID = 0, $limit = 0)
     {
         if($limit)
         {

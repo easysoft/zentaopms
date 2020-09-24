@@ -555,7 +555,7 @@ class commonModel extends model
 
         if(!empty($recentProjects))
         {
-            foreach($recentProjects as $project) echo '<li>' . html::a(helper::createLink('project', 'view', 'projectID=' . $project->id), $project->code) . '</li>';
+            foreach($recentProjects as $project) echo '<li>' . html::a(helper::createLink('program', 'index', 'projectID=' . $project->id), $project->code) . '</li>';
 
             if(count($recentProjects) >= 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $this->lang->more . '</span></li>';
         }

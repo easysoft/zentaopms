@@ -752,10 +752,10 @@ class program extends control
      */
     public function ajaxGetRecentProjects()
     {
-        $recentProjects = $this->program->getPRJParams(0, 15);
+        $recentProjects = $this->program->getPRJPairs(0, 15);
         if(!empty($recentProjects))
         {
-            foreach($recentProjects as $project) echo html::a(helper::createLink('project', 'view', 'projectID=' . $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
+            foreach($recentProjects as $project) echo html::a(helper::createLink('program', 'index', 'projectID=' . $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
         }
     }
 
