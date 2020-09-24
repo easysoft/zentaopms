@@ -194,7 +194,6 @@ class repoModel extends model
 
         $data = fixer::input('post')->setDefault('client', 'svn')->skipSpecial('path,client,account,password')->get();
         $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
-        $data->client = str_replace(' ', '" "', $data->client);
 
         if($data->SCM == 'Subversion')
         {
@@ -235,7 +234,6 @@ class repoModel extends model
             ->skipSpecial('path,client,account,password')
             ->get();
         $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
-        $data->client = str_replace(' ', '" "', $data->client);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
         {
