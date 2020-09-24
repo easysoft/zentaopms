@@ -12,6 +12,8 @@ class myClient extends client
             die($this->display('client', 'safe'));
         }
 
+        if($_POST) $_POST['desc'] = mb_substr($this->post->desc, 0, 100);
+
         parent::edit($clientID);
     }
 }

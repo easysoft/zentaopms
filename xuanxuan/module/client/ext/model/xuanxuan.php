@@ -10,7 +10,7 @@ public function getCurrentVersion()
 public function downloadZipPackage($version, $link)
 {
     $decodeLink = helper::safe64Decode($link);
-    if(preg_match('/^https?\:\/\//', $decodeLink)) return false;
+    if(!preg_match('/^https?\:\/\//', $decodeLink)) return false;
 
     $file      = basename($link);
     $extension = substr($file, strrpos($file, '.') + 1);
