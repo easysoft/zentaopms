@@ -393,7 +393,7 @@ class programModel extends model
      */
     public function getPGMCommonAction($programID = 0)
     {
-        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
