@@ -931,7 +931,7 @@ class repoModel extends model
     {
         if(empty($_POST)) return false;
         $scm      = $this->post->SCM;
-        $client   = $this->post->client;
+        $client   = str_replace(' ', '" "', $this->post->client);
         $account  = $this->post->account;
         $password = $this->post->password;
         $encoding = strtoupper($this->post->encoding);
