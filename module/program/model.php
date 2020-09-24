@@ -1187,7 +1187,7 @@ class programModel extends model
         /* Process projects. */
         foreach($projects as $key => $project)
         {
-            $project->end = date(DT_DATE1, strtotime($project->end)); // Process the end time.
+            if($project->end == '0000-00-00') $project->end = '';
 
             /* Judge whether the project is delayed. */
             if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')

@@ -39,11 +39,11 @@ js::set('browseType', $browseType);
             <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='w-80px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PRJName);?></th>
-            <th class='w-120px'><?php echo $lang->program->PGMCommon;?></th>
+            <th class='w-100px'><?php echo $lang->program->PGMCommon;?></th>
             <th class='w-70px'><?php echo $lang->program->PRJModel;?></th>
             <th class='w-90px'><?php echo $lang->program->PRJPM;?></th>
-            <th class='w-120px'><?php echo $lang->program->begin;?></th>
-            <th class='w-120px'><?php echo $lang->program->end;?></th>
+            <th class='w-100px'><?php echo $lang->program->begin;?></th>
+            <th class='w-100px'><?php echo $lang->program->end;?></th>
             <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
             <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
             <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
