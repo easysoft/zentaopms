@@ -609,6 +609,8 @@ class program extends control
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
+        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -967,7 +969,6 @@ class program extends control
     public function PRJGroup($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('PRJ', $projectID);
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
@@ -975,12 +976,15 @@ class program extends control
         $groupUsers = array();
         foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
+        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
+
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->groups     = $groups;
         $this->view->projectID  = $projectID;
         $this->view->programID  = $programID;
         $this->view->groupUsers = $groupUsers;
+        $this->view->goback     = $goback;
 
         $this->display();
     }
@@ -996,7 +1000,6 @@ class program extends control
     public function PRJCreateGroup($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('PRJ', $projectID);
 
         if(!empty($_POST))
         {
@@ -1023,7 +1026,6 @@ class program extends control
     public function PRJManageView($groupID, $projectID, $programID)
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('PRJ', $projectID);
 
         if($_POST)
         {
@@ -1123,7 +1125,6 @@ class program extends control
     public function PRJManageMembers($projectID, $dept = '')
     {
         $this->lang->navGroup->program = 'project';
-        $this->session->set('PRJ', $projectID);
 
         if(!empty($_POST))
         {
@@ -1172,6 +1173,7 @@ class program extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
+
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->group->getUserPairs($groupID);
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
@@ -1393,7 +1395,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJDelete($projectID, $confirm = 'no', $from = 'PRJ', $programID = 0)
+    public function PRJDelete($projectID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -1408,8 +1410,8 @@ class program extends control
             $this->project->updateUserView($projectID);
             $this->session->set('project', '');
 
-            $link = $from == 'PRJ' ? inLink('PRJBrowse', 'programID=' . $programID) : inLink('PGMProject', 'programID=' . $programID);
-            die(js::locate($link, 'parent'));
+            $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
+            die(js::locate($url, 'parent'));
         }
     }
 

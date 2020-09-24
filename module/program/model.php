@@ -857,6 +857,7 @@ class programModel extends model
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->in('project,program')
             ->andWhere('status')->ne('closed')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
@@ -876,7 +877,7 @@ class programModel extends model
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->andWhere('model')->eq($model)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();

@@ -107,7 +107,7 @@ js::set('browseType', $browseType);
               <?php common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
               <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-              <?php common::printIcon('program', 'PRJDelete', "projectID=$project->id&confirm=no&from=PRJ&programID=$programID", $project, 'list', 'trash', 'hiddenwin', '', true);?>
+              <?php common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);?>
             </td>
             <?php if($canOrder):?>
               <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
