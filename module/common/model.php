@@ -544,8 +544,8 @@ class commonModel extends model
         echo '<li><hr></li>';
         echo '<li><span><i class="icon icon-menu-doc"></i> ' . $this->lang->recent . '</span></li>';
 
-        $recentProjects = $this->dao->select('id,code')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
+        $recentProjects = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
+            ->where('type')->in('stage,sprint')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('close')
             ->andWhere('deleted')->eq('0')
@@ -555,7 +555,10 @@ class commonModel extends model
 
         if(!empty($recentProjects))
         {
-            foreach($recentProjects as $project) echo '<li>' . html::a(helper::createLink('program', 'index', 'projectID=' . $project->id), $project->code) . '</li>';
+            foreach($recentProjects as $project)
+            {
+                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "class='text-ellipsis' title='$project->name'") . '</li>';
+            }
 
             if(count($recentProjects) >= 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $this->lang->more . '</span></li>';
         }

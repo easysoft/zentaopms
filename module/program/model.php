@@ -817,23 +817,28 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJPairs($projectID = 0, $limit = 0)
+    public function getPRJPairs($projectID = 0)
     {
-        if($limit)
-        {
-            return $this->dao->select('id,name')->from(TABLE_PROJECT)
-                ->where('type')->eq('project')
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-                ->andWhere('status')->ne('status')
-                ->andWhere('deleted')->eq('0')
-                ->orderBy('id_desc')
-                ->limit('5,' . $limit)
-                ->fetchAll();
-        }
-        else
-        {
-            return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-        }
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+    }
+
+    /**
+     * Get recent projects.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getPRJRecent($limit = 15)
+    {
+        return $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
+            ->where('type')->in('stage,sprint')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('status')->ne('status')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->limit('5,' . $limit)
+            ->fetchAll();
     }
 
     /**
