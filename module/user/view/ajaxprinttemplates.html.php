@@ -77,6 +77,7 @@ function setTemplate(templateID)
     var cmd     = editor['<?php echo $link;?>'].edit.cmd;
     editor['<?php echo $link;?>'].html('');
     cmd.inserthtml(content);
+    $("#mainContent #dataform .table.table-form .steps #templateID").attr("value", templateID);
 }
 
 function deleteTemplate(templateID)
