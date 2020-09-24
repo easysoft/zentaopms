@@ -193,7 +193,7 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')->setDefault('client', 'svn')->skipSpecial('path,client,account,password')->get();
-        $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if($data->SCM == 'Subversion')
         {
@@ -233,7 +233,7 @@ class repoModel extends model
             ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
             ->get();
-        $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
         {
