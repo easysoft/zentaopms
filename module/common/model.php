@@ -1672,6 +1672,7 @@ EOD;
     public static function getSysURL()
     {
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+        if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strpos($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
     }
