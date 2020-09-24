@@ -14,7 +14,7 @@
 $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
-<form id='logForm' class='main-table' data-ride='table' action='<?php echo $this->repo->createLink('diff', "repoID=$repoID", "entry=" . $this->repo->encodePath($path))?>' method='post'>
+<form id='logForm' class='main-table' data-ride='table' method='post'>
   <table class='table table-fixed'>
     <thead>
       <tr>
