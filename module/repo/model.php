@@ -193,7 +193,8 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')->setDefault('client', 'svn')->skipSpecial('path,client,account,password')->get();
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->client = str_replace(' ', '" "', $data->client);
 
         if($data->SCM == 'Subversion')
         {
@@ -233,7 +234,8 @@ class repoModel extends model
             ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
             ->get();
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->acl    = empty($data->acl) ? '' : json_encode($data->acl);
+        $data->client = str_replace(' ', '" "', $data->client);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
         {
@@ -936,7 +938,7 @@ class repoModel extends model
 
         if(file_exists($clientVersionFile)) return true;
 
-        $cmd = $this->post->client . " --version > $clientVersionFile";
+        $cmd = str_replace(' ', '" "', $this->post->client) . " --version > $clientVersionFile";
         dao::$errors['client'] = sprintf($this->lang->repo->error->safe, $clientVersionFile, $cmd);
 
         return false;
@@ -972,7 +974,7 @@ class repoModel extends model
     {
         if(empty($_POST)) return false;
         $scm      = $this->post->SCM;
-        $client   = $this->post->client;
+        $client   = str_replace(' ', '" "', $this->post->client);
         $account  = $this->post->account;
         $password = $this->post->password;
         $encoding = strtoupper($this->post->encoding);
