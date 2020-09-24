@@ -39,7 +39,7 @@
       <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-fixed">
-        <?php $vars = "programID=$programID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
             <th class='c-id'>

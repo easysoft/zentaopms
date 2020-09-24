@@ -951,6 +951,8 @@ class productModel extends model
         $this->loadModel('bug');
 
         $products = $this->getList($programID, $status, $limit = 0, $line);
+        if(empty($products)) return array();
+
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in(array_keys($products))
             ->orderBy($orderBy)

@@ -55,13 +55,19 @@ js::set('browseType', $browseType);
         <thead>
           <tr>
             <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-            <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
+            <th class='w-80px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PRJName);?></th>
-            <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
+            <th class='w-70px'><?php echo $lang->program->PRJModel;?></th>
+            <th class='w-80px'><?php echo $lang->program->PRJPM;?></th>
             <th class='w-120px'><?php echo $lang->program->begin;?></th>
             <th class='w-120px'><?php echo $lang->program->end;?></th>
+            <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
             <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
-            <th class='w-80px'><?php echo $lang->program->PRJPM;?></th>
+            <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
+            <th class='w-60px'><?php echo $lang->program->PRJEstimate;?></th>
+            <th class='w-60px'><?php echo $lang->program->PRJConsume;?></th>
+            <th class='w-60px'><?php echo $lang->program->PRJSurplus;?></th>
+            <th class='w-150px'><?php echo $lang->program->PRJProgress;?></th>
             <th class='text-center w-210px'><?php echo $lang->actions;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->program->PRJUpdateOrder);?></th>
@@ -76,11 +82,23 @@ js::set('browseType', $browseType);
             <td class='c-name text-left' title='<?php echo $project->name?>'>
               <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
             </td>
-            <td><?php echo zget($lang->program->statusList, $project->status);?></td>
+            <td><?php echo zget($lang->program->templateList, $project->model);?></td>
+            <td><?php echo zget($users, $project->PM);?></td>
             <td><?php echo $project->begin;?></td>
             <td><?php echo $project->end;?></td>
-            <td><?php echo $project->budget;?></td>
-            <td><?php echo zget($users, $project->PM);?></td>
+            <td><?php echo zget($lang->program->statusList, $project->status);?></td>
+            <td><?php echo $project->budget . zget($lang->program->unitList, $project->budgetUnit);?></td>
+            <td><?php echo $project->teamCount;?></td>
+            <td><?php echo $project->hours->totalEstimate;?></td>
+            <td><?php echo $project->hours->totalConsumed;?></td>
+            <td><?php echo $project->hours->totalLeft;?></td>
+            <td class="c-progress">
+              <div class="progress progress-text-left">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+                <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+                </div>
+              </div>
+            </td>
             <td class='text-center c-actions'>
               <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');?>
               <?php common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');?>

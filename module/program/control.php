@@ -803,7 +803,7 @@ class program extends control
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
-        $projectStats = $this->program->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
+        $projectStats = $this->program->getPRJStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title      = $this->lang->program->PRJBrowse;
         $this->view->position[] = $this->lang->program->PRJBrowse;

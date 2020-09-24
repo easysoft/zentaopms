@@ -45,6 +45,7 @@ js::set('browseType', $browseType);
             <th class='w-120px'><?php echo $lang->program->begin;?></th>
             <th class='w-120px'><?php echo $lang->program->end;?></th>
             <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
+            <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
             <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
             <th class='w-60px'><?php echo $lang->program->PRJEstimate;?></th>
             <th class='w-60px'><?php echo $lang->program->PRJConsume;?></th>
@@ -67,6 +68,7 @@ js::set('browseType', $browseType);
             <td><?php echo $project->begin;?></td>
             <td><?php echo $project->end;?></td>
             <td><?php echo zget($lang->program->statusList, $project->status);?></td>
+            <td><?php echo $project->budget . zget($lang->program->unitList, $project->budgetUnit);?></td>
             <td><?php echo $project->teamCount;?></td>
             <td><?php echo $project->hours->totalEstimate;?></td>
             <td><?php echo $project->hours->totalConsumed;?></td>
