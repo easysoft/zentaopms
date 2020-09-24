@@ -80,6 +80,12 @@ $("#searchInput").mouseout(function()
         $("#showSearchGo").show();
     }
 });
+
+$("#menuToggle").bind('click', function()
+{
+    $("#morePRJ").hide();
+});
+
 function getMorePRJ()
 {
     $("#morePRJ").toggle();
@@ -92,7 +98,6 @@ function getMorePRJ()
             type: 'post',
             success: function(data)
             {
-                console.log(data);
                 $("#morePRJList").html(data);
             }
         })
