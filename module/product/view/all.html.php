@@ -51,14 +51,15 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <th class='w-80px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
-            <th class='w-90px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
-            <th class='w-70px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
-            <th class='w-90px' title='<?php echo $lang->product->closedStoriesTitle;?>'><?php echo $lang->product->closedStories;?></th>
+            <th class='w-100px' title='<?php echo $lang->program->PGMCommon;?>'><?php echo $lang->program->PGMCommon;?></th>
+            <th class='w-100px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
+            <th class='w-100px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
+            <th class='w-100px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
+            <th class='w-100px' title='<?php echo $lang->product->closedStoriesTitle;?>'><?php echo $lang->product->closedStories;?></th>
             <th class='w-70px' title='<?php echo $lang->product->plans;?>'><?php echo $lang->product->plans;?></th>
             <th class='w-70px' title='<?php echo $lang->product->releases;?>'><?php echo $lang->product->releases;?></th>
             <th class='w-80px' title='<?php echo $lang->product->unResolvedBugsTitle;?>'><?php echo $lang->product->unResolvedBugs;?></th>
-            <th class='w-110px' title='<?php echo $lang->product->assignToNullBugsTitle;?>'><?php echo $lang->product->assignToNullBugs;?></th>
+            <th class='w-80px' title='<?php echo $lang->product->assignToNullBugsTitle;?>'><?php echo $lang->product->assignToNullBugs;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
@@ -75,6 +76,7 @@
             <?php endif;?>
           </td>
           <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
+          <td class='c-name' title='<?echo empty($programID) ? $product->programName : $programName;?>'><?php echo empty($programID) ? $product->programName : $programName;?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>

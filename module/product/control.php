@@ -371,6 +371,7 @@ class product extends control
      */
     public function batchEdit($productID = 0)
     {
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
         if($this->post->names)
         {
             $allChanges = $this->product->batchUpdate();
@@ -384,6 +385,7 @@ class product extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
+
             die(js::locate($this->session->productList, 'parent'));
         }
 
@@ -493,6 +495,7 @@ class product extends control
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;
+
         $this->view->product    = $product;
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
@@ -759,12 +762,14 @@ class product extends control
     {
         $this->loadModel('program');
         $this->lang->product->switcherMenu = $this->product->getSwitcher();
+        $this->session->set('productList', $this->app->getURI(true));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $program = $programID ? $this->program->getPGMByID($programID) : 0;
+        $programName = empty($program) ? '' : $program->name;
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
@@ -775,7 +780,9 @@ class product extends control
         $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product', '&browseType=' . $browseType);
         $this->view->programID    = $programID;
         $this->view->program      = $program;
+        $this->view->programName  = $programName;
         $this->view->browseType   = $browseType;
+
         $this->display();
     }
 

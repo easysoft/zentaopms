@@ -287,6 +287,14 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 8, 1);
 
+        if($_POST)
+        {
+            $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
+            $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+
+            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath(urldecode($path)) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+        }
+
         /* Cache infos. */
         if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
         {
@@ -370,6 +378,14 @@ class repo extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        if($_POST)
+        {
+            $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
+            $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+
+            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath(urldecode($path)) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+        }
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
@@ -558,19 +574,16 @@ class repo extends control
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST')
         {
-            $oldRevision = isset($this->post->revision[1]) ?$this->post->revision[1] : '';
-            $newRevision = isset($this->post->revision[0]) ?$this->post->revision[0] : '';
+            $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
+            $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
             if($this->post->arrange) 
             {
                 $arrange = $this->post->arrange;
                 setcookie('arrange', $arrange);
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
-            if(!$oldRevision)
-            {
-                echo js::alert($this->lang->repo->error->diff);
-                die(js::locate('back'));
-            }
+
+            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=$entry&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
         }
 
         $this->scm->setEngine($repo);

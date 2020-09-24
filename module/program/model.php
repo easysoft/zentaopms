@@ -393,7 +393,7 @@ class programModel extends model
      */
     public function getPGMCommonAction($programID = 0)
     {
-        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <i class='icon icon-sort-down'></i></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
@@ -785,7 +785,7 @@ class programModel extends model
                 $programID = $programTitle == 'base' ? current($path) : end($path);
                 if(empty($path) || $programID == $id) continue;
 
-                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJParams($programID);
+                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJPairs($programID);
                 $programList[$programID] = $program;
 
                 $projectList[$id]->name = $program->name . '/' . $projectList[$id]->name;
@@ -817,23 +817,28 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJParams($projectID = 0, $limit = 0)
+    public function getPRJPairs($projectID = 0)
     {
-        if($limit)
-        {
-            return $this->dao->select('id,name')->from(TABLE_PROJECT)
-                ->where('type')->eq('project')
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-                ->andWhere('status')->ne('status')
-                ->andWhere('deleted')->eq('0')
-                ->orderBy('id_desc')
-                ->limit('5,' . $limit)
-                ->fetchAll();
-        }
-        else
-        {
-            return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-        }
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+    }
+
+    /**
+     * Get recent projects.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getPRJRecent($limit = 15)
+    {
+        return $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
+            ->where('type')->in('stage,sprint')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('status')->ne('status')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->limit('5,' . $limit)
+            ->fetchAll();
     }
 
     /**
@@ -852,6 +857,7 @@ class programModel extends model
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->in('project,program')
             ->andWhere('status')->ne('closed')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
@@ -871,7 +877,7 @@ class programModel extends model
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->andWhere('model')->eq($model)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();

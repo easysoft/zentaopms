@@ -50,7 +50,6 @@ a.showMoreImage:hover {opacity: 1;}
 #mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
 #mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
 
-#menu {width: 96px;}
 #menuNav> .nav > li > span {padding: 8px; line-height: 20px; cursor: pointer; color: #fff; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; -khtml-user-select: none; user-select:none;}
 #morePRJ {display:none; max-height: 420px; position: fixed; bottom: 0; left: 100px; z-index: 999; background: white; padding: 20px 10px; height: 420px; margin-bottom: 40px; border: 1px solid #efefef}
-#morePRJ > .list-group {height: 400px; min-width: 150px; max-width:200px;}
+#morePRJ > .list-group {height: 380px; min-width: 150px; max-width:200px;}

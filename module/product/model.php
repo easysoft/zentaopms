@@ -953,8 +953,9 @@ class productModel extends model
         $products = $this->getList($programID, $status, $limit = 0, $line);
         if(empty($products)) return array();
 
+        $productKeys = array_keys($products);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('id')->in(array_keys($products))
+            ->where('id')->in($productKeys)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -963,13 +964,13 @@ class productModel extends model
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($storyType)
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
 
         /* Padding the stories to sure all products have records. */
         $emptyStory = array_keys($this->lang->story->statusList);
-        foreach(array_keys($products) as $productID)
+        foreach($productKeys as $productID)
         {
             if(!isset($stories[$productID])) $stories[$productID] = $emptyStory;
         }
@@ -987,7 +988,7 @@ class productModel extends model
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->andWhere('end')->gt(helper::now())
             ->groupBy('product')
             ->fetchPairs();
@@ -995,14 +996,14 @@ class productModel extends model
         $releases = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->groupBy('product')
             ->fetchPairs();
 
         $bugs = $this->dao->select('product,count(*) AS conut')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->groupBy('product')
             ->fetchPairs();
 
@@ -1010,7 +1011,7 @@ class productModel extends model
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->andwhere('status')->eq('active')
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->groupBy('product')
             ->fetchPairs();
 
@@ -1018,9 +1019,21 @@ class productModel extends model
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->andwhere('assignedTo')->eq('')
-            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('product')->in($productKeys)
             ->groupBy('product')
             ->fetchPairs();
+
+        if(empty($programID))
+        {
+            $programKeys = array(0=>0);
+            foreach($products as $product) $programKeys[] = $product->program;
+            $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+                ->where('id')->in(array_unique($programKeys))
+                ->andWhere('deleted')->eq('0')
+                ->fetchPairs();
+
+            foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
+        }
 
         $stats = array();
         foreach($products as $key => $product)

@@ -47,7 +47,7 @@
       <?php endif;?>
     </ul>
   </nav>
-  <form id='logForm' class='main-table' data-ride='table' action='<?php echo $this->repo->createLink('diff', "repoID=$repoID", "entry=" . $this->repo->encodePath($entry))?>' method='post'>
+  <form id='logForm' class='main-table' data-ride='table' method='post'>
     <table class='table table-fixed' id='logList'>
       <thead>
         <tr>

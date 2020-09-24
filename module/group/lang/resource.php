@@ -159,6 +159,7 @@ $lang->todo->methodOrder[80] = 'batchClose';
 
 /* Program. */
 $lang->resource->program = new stdclass();
+$lang->resource->program->createGuide          = 'createGuide';
 $lang->resource->program->PGMIndex             = 'PGMIndex';
 $lang->resource->program->PGMBrowse            = 'PGMBrowse';
 $lang->resource->program->PGMProduct           = 'PGMProduct';
@@ -197,6 +198,7 @@ $lang->resource->program->PRJClose             = 'PRJClose';
 $lang->resource->program->PRJActivate          = 'PRJActivate';
 $lang->resource->program->PRJDelete            = 'PRJDelete';
 
+$lang->program->methodOrder[0]   = 'createGuide';
 $lang->program->methodOrder[5]   = 'PGMIndex';
 $lang->program->methodOrder[10]  = 'PGMBrowse';
 $lang->program->methodOrder[15]  = 'PGMProduct';

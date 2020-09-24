@@ -7,6 +7,7 @@ $(function()
     });
 
     var taskTree = $taskTree.data('zui.tree');
+    if(!taskTree) return;
 
     var sortItems = function($items)
     {
@@ -101,6 +102,13 @@ $(function()
             $.zui.store.set('project/tree/showItem', false);
             return;
         }
+        var adjustSidePosition = function()
+        {
+            var scrollTop = $(document).scrollTop() - 140;
+            if(scrollTop < 0) scrollTop = 0;
+            $itemContent.closest('.cell').css('margin-top', scrollTop);
+        };
+        adjustSidePosition();
         if (lastAjaxRequest) lastAjaxRequest.abort();
         $itemContent.empty().addClass('loading').attr('data-loading', loadingText || '');
         isItemLoading = true;
@@ -117,10 +125,8 @@ $(function()
                 $itemContent.find('.histories').histories();
                 $itemContent.find('.iframe').modalTrigger();
                 $.zui.store.set('project/tree/showItem', url);
-
-                var scrollTop = $(document).scrollTop() - 140;
-                if(scrollTop < 0) scrollTop = 0;
-                $itemContent.closest('.cell').css('margin-top', scrollTop);
+                adjustSidePosition();
+                setTimeout(adjustSidePosition, 300);
             },
             error: function()
             {

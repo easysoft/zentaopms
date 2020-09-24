@@ -731,7 +731,7 @@ CREATE TABLE `zt_project` (
   KEY `status` (`status`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE `zt_projectspec` (
   `project` mediumint(8) NOT NULL,
