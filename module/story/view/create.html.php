@@ -116,6 +116,12 @@
               <?php endif;?>
             <?php endif;?>
           </tr>
+          <?php if($type == 'story'):?>
+          <tr>
+            <th><?php echo $lang->story->requirement;?></th>
+            <td colspan=2><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->story->title;?></th>
             <td colspan="4">

@@ -155,6 +155,23 @@ class storyModel extends model
 
         return $story;
     }
+	
+	/**  
+     *  Get requirements for story.
+     *
+     *  @param  int     $productID
+     *  @access public
+     *  @return void
+     */
+    public function getRequierements($productID)
+    {    
+        return $this->dao->select('id,title')->from(TABLE_STORY)
+           ->where('deleted')->eq(0) 
+           ->andWhere('status')->ne('draft') 
+           ->andWhere('product')->eq($productID) 
+           ->andWhere('type')->eq('requirement') 
+           ->fetchPairs();
+    }
 
     /**
      * Create a story.
@@ -183,7 +200,7 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,needNotReview,newStory,uid,contactListMenu')
+            ->remove('files,labels,needNotReview,newStory,uid,contactListMenu,URS')
             ->get();
 
         /* Check repeat story. */
@@ -230,6 +247,36 @@ class storyModel extends model
                     ->set('version')->eq(1)
                     ->set('order')->eq($lastOrder + 1)
                     ->exec();
+            }
+
+            if(is_array($this->post->URS))
+            {
+                foreach($this->post->URS as $URID)
+                {
+                    $requirement = $this->getByID($URID);
+                    $data = new stdclass();
+                    $data->product  = $story->product;
+                    $data->AType    = 'requirement';
+                    $data->relation = 'subdivideinto';
+                    $data->BType    = 'story';
+                    $data->AID      = $URID;
+                    $data->BID      = $storyID;
+                    $data->AVersion = $requirement->version;
+                    $data->BVersion = 1;
+                    $data->extra    = 1;
+
+                    $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+                    $data->AType    = 'story';
+                    $data->relation = 'subdividedfrom';
+                    $data->BType    = 'requirement';
+                    $data->AID      = $storyID;
+                    $data->BID      = $URID;
+                    $data->AVersion = 1;
+                    $data->BVersion = $requirement->version;
+
+                    $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+                }
             }
 
             if($bugID > 0)

@@ -275,6 +275,7 @@ class story extends control
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
+        $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;
 
