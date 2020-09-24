@@ -558,11 +558,6 @@ class repo extends control
                 setcookie('arrange', $arrange);
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
-            if(!$oldRevision)
-            {
-                echo js::alert($this->lang->repo->error->diff);
-                die(js::locate('back'));
-            }
         }
 
         $this->scm->setEngine($repo);
