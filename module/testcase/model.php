@@ -603,6 +603,7 @@ class testcaseModel extends model
         $case = fixer::input('post')
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF(!$this->post->linkCase, 'linkCase', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('story,branch', 0)
