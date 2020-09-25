@@ -1256,6 +1256,7 @@ class storyModel extends model
                 $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
                 if(empty($story->branch)) $story->plan .= ",$planID";
             }
+            /* Fix bug #3529. */
             if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0 and !isset($oldStoryStages[$storyID][$plan->branch]))
             {
                 $story->stage = 'planned';
