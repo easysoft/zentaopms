@@ -90,8 +90,8 @@ class durationestimation extends control
 
         $estimation = $this->loadModel('workestimation')->getBudget($program);
         $duration   = $estimation->duration * $workload / 100;
-        $divisor    = ($people == 0 || $estimation->dayHour == 0) ? 0 : $worktimeRate / 100 * $people / $estimation->dayHour;
-        $duration   = !$divisor ? 0 : $duration / $divisor;
+        $divisor    = ($people == 0 || $estimation->dayHour == 0) ? 0 : $worktimeRate / 100 * $people * $estimation->dayHour;
+        $duration   = $divisor == 0 ? 0 : $duration / $divisor;
         if(!$divisor) $this->send(array('result' => 'fail'));
 
         $holidays   = array();
