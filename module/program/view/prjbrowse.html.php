@@ -64,11 +64,8 @@ js::set('browseType', $browseType);
             <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
             <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
             <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
-            <th class='w-60px'><?php echo $lang->program->PRJEstimate;?></th>
-            <th class='w-60px'><?php echo $lang->program->PRJConsume;?></th>
-            <th class='w-60px'><?php echo $lang->program->PRJSurplus;?></th>
             <th class='w-150px'><?php echo $lang->program->PRJProgress;?></th>
-            <th class='text-center w-210px'><?php echo $lang->actions;?></th>
+            <th class='text-center w-230px'><?php echo $lang->actions;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->program->PRJUpdateOrder);?></th>
             <?php endif;?>
@@ -89,9 +86,6 @@ js::set('browseType', $browseType);
             <td><?php echo zget($lang->program->statusList, $project->status);?></td>
             <td><?php echo $project->budget . zget($lang->program->unitList, $project->budgetUnit);?></td>
             <td><?php echo $project->teamCount;?></td>
-            <td><?php echo $project->hours->totalEstimate;?></td>
-            <td><?php echo $project->hours->totalConsumed;?></td>
-            <td><?php echo $project->hours->totalLeft;?></td>
             <td class="c-progress">
               <div class="progress progress-text-left">
                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">

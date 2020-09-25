@@ -13,12 +13,12 @@ class durationestimationModel extends model
 {
     public function getListByProgram($program)
     {
-        return $this->dao->select('*')->from(TABLE_DURATIONESTIMATION)->where('program')->eq($program)->fetchAll('stage');
+        return $this->dao->select('*')->from(TABLE_DURATIONESTIMATION)->where('PRJ')->eq($program)->fetchAll('stage');
     }
 
     public function save($program)
     {
-        $this->dao->delete()->from(TABLE_DURATIONESTIMATION)->where('program')->eq($program);
+        $this->dao->delete()->from(TABLE_DURATIONESTIMATION)->where('PRJ')->eq($program);
         foreach($this->post->stage as $i => $stage)
         {
             $estimation = new stdclass;
