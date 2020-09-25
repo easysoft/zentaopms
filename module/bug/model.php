@@ -136,7 +136,7 @@ class bugModel extends model
             ->cleanInt('product,project,module,severity')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
-            ->remove('files, labels,uid,oldTaskID,contactListMenu')
+            ->remove('files, labels,uid,oldTaskID,contactListMenu,templateID')
             ->get();
 
         /* Check repeat bug. */
