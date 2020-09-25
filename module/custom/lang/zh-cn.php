@@ -32,6 +32,7 @@ $lang->custom->region             = '区间';
 $lang->custom->tips               = '提示语';
 $lang->custom->setTips            = '设置提示语';
 $lang->custom->isRange            = '是否目标控制范围';
+$lang->custom->concept            = "概念";
 $lang->custom->URStory            = "用户需求";
 $lang->custom->SRStory            = "软件需求";
 $lang->custom->epic               = "史诗";

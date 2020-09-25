@@ -391,29 +391,82 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function configureWaterfall()
+    public function configureWaterfall($type = 'concept')
     {   
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
         if($_POST)
         {   
-            $this->custom->setURAndSR('waterfall');
+            if($type == 'concept')
+            {
+                $this->custom->setURAndSR('waterfall');
+            }
+
+            if($type == 'user')
+            {
+                $lang = $_POST['lang'];
+                $oldCustoms = $this->custom->getItems("lang=$lang&module=user&section=roleList");
+                foreach($_POST['keys'] as $index => $key) 
+                {
+                    if(strlen($key) > 10) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
+                }
+
+				$this->custom->deleteItems("lang=$lang&module=user&section=roleList");
+                $data = fixer::input('post')->get();
+                foreach($data->keys as $index => $key)
+                {
+
+                    $value  = $data->values[$index];
+                    $system = $data->systems[$index];
+                    $this->custom->setItem("{$lang}.user.roleList.{$key}.{$system}", $value);
+                }
+            }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'configurewaterfall')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'configurewaterfall', "type=$type")));
         }   
 
-        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('section')->eq('waterfall')
-            ->andWhere('`key`')->eq('URSRName')
-            ->fetch('value');
+        if($type == 'user')
+        {
+            $this->app->loadLang('user');
+            $fieldList = zget($this->lang->user, 'roleList', '');
+            $lang = $this->app->getClientLang();
+            $dbFields = $this->custom->getItems("lang=$lang&module=user&section=roleList");
+            if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=all&module=user&section=roleList");
+            if($dbFields)
+            {   
+                $dbField = reset($dbFields);
+                if($lang != $dbField->lang)
+                {   
+                    $lang = str_replace('-', "_", $dbField->lang);
+                    foreach($fieldList as $key => $value)
+                    {   
+                        if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
+                    }   
+                }   
+            }
 
-        $this->view->title      = $this->lang->custom->common;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->URSRName   = json_decode($URSRName);
+            $this->view->fieldList   = $fieldList;
+            $this->view->dbFields    = $dbFields;
+            $this->view->currentLang = $lang;
+            $this->view->lang2Set    = str_replace('_', '-', $lang);
+        }
 
+        if($type == 'concept')
+        {
+            $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
+                ->where('module')->eq('custom')
+                ->andWhere('section')->eq('waterfall')
+                ->andWhere('`key`')->eq('URSRName')
+                ->fetch('value');
+
+            $this->view->title      = $this->lang->custom->common;
+            $this->view->position[] = $this->lang->custom->common;
+            $this->view->URSRName   = json_decode($URSRName);
+        }
+
+        $this->view->type = $type; 
         $this->display();
     }
 
@@ -423,30 +476,83 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function configureScrum()
+    public function configureScrum($type = 'concept')
     {
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
         if($_POST)
         {
-            $this->custom->setConcept();
-            $this->custom->setURAndSR('scrum');
+            if($type == 'concept')
+            {
+                $this->custom->setConcept();
+                $this->custom->setURAndSR('scrum');
+            }
 
-            $locate = inlink('configureScrum');
+            if($type == 'user')
+            {
+                $lang = $_POST['lang'];
+                $oldCustoms = $this->custom->getItems("lang=$lang&module=user&section=roleList");
+                foreach($_POST['keys'] as $index => $key) 
+                {
+                    if(strlen($key) > 10) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
+                }
+
+				$this->custom->deleteItems("lang=$lang&module=user&section=roleList");
+                $data = fixer::input('post')->get();
+                foreach($data->keys as $index => $key)
+                {
+
+                    $value  = $data->values[$index];
+                    $system = $data->systems[$index];
+                    $this->custom->setItem("{$lang}.user.roleList.{$key}.{$system}", $value);
+                }
+            }
+
+            $locate = inlink('configureScrum', "type=$type");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('section')->eq('scrum')
-            ->andWhere('`key`')->eq('URSRName')
-            ->fetch('value');
+        if($type == 'concept')
+        {
+            $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
+                ->where('module')->eq('custom')
+                ->andWhere('section')->eq('scrum')
+                ->andWhere('`key`')->eq('URSRName')
+                ->fetch('value');
 
-        $this->view->title      = $this->lang->custom->configureScrum;
-        $this->view->position[] = $this->lang->custom->configureScrum;
-        $this->view->URSRName   = json_decode($URSRName);
+            $this->view->title      = $this->lang->custom->configureScrum;
+            $this->view->position[] = $this->lang->custom->configureScrum;
+            $this->view->URSRName   = json_decode($URSRName);
+        }
 
+        if($type == 'user')
+        {
+            $this->app->loadLang('user');
+            $fieldList = zget($this->lang->user, 'roleList', '');
+            $lang = $this->app->getClientLang();
+            $dbFields = $this->custom->getItems("lang=$lang&module=user&section=roleList");
+            if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=all&module=user&section=roleList");
+            if($dbFields)
+            {   
+                $dbField = reset($dbFields);
+                if($lang != $dbField->lang)
+                {   
+                    $lang = str_replace('-', "_", $dbField->lang);
+                    foreach($fieldList as $key => $value)
+                    {   
+                        if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
+                    }   
+                }   
+            }
+
+            $this->view->fieldList   = $fieldList;
+            $this->view->dbFields    = $dbFields;
+            $this->view->currentLang = $lang;
+            $this->view->lang2Set    = str_replace('_', '-', $lang);
+        }
+
+        $this->view->type = $type; 
         $this->display();
     }
 
