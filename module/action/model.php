@@ -641,7 +641,7 @@ class actionModel extends model
 
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('all');
-        $docs = $this->doc->getPrivDocs(array_keys($libs));
+        $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
         
         $actionCondition = $this->getActionCondition();
         if(is_array($actionCondition)) return array();
