@@ -74,11 +74,7 @@ js::set('browseType', $browseType);
             <td><?php echo $project->hours->totalConsumed;?></td>
             <td><?php echo $project->hours->totalLeft;?></td>
             <td class="c-progress">
-              <div class="progress progress-text-left">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-                <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
-                </div>
-              </div>
+              <span class='pie-icon' data-percent='<?php echo $project->hours->progress;?>' data-border-color='#ddd' data-back-color='#f1f1f1'></span> <?php echo $project->hours->progress;?>%
             </td>
             <td class='text-center c-actions'>
               <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');?>
