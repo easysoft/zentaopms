@@ -19,20 +19,20 @@
         <?php echo "<span title='$issue->title'>" . $issue->title . '</span>';?>
       </div>
     </div>
-    <div class="modal-body" style="min-height: 282px; overflow: auto;">
-    <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-      <table class='table table-form'>
-        <tr>
-          <th><?php echo $lang->issue->assignedTo;?></th>
-          <td colspan='2'><?php echo html::select('assignedTo', $users, $issue->assignedTo, 'class="form-control chosen"');?></td>
-        </tr>
-        <tr>
-          <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton();?>
-          </td>
-        </tr>
-      </table>
-    </form>
+    <div class="modal-body" style="min-height: 320px; overflow: auto;">
+      <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->issue->assignedTo;?></th>
+            <td colspan='2'><?php echo html::select('assignedTo', $users, $issue->assignedTo, 'class="form-control chosen"');?></td>
+          </tr>
+          <tr>
+            <td colspan='3' class='text-center form-actions'>
+              <?php echo html::submitButton();?>
+            </td>
+          </tr>
+        </table>
+      </form>
     </div>
   </div>
 </div>
