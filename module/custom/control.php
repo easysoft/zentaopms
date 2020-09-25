@@ -461,12 +461,13 @@ class custom extends control
                 ->andWhere('`key`')->eq('URSRName')
                 ->fetch('value');
 
-            $this->view->title      = $this->lang->custom->common;
-            $this->view->position[] = $this->lang->custom->common;
             $this->view->URSRName   = json_decode($URSRName);
         }
 
+        $this->view->title      = $this->lang->custom->common;
+        $this->view->position[] = $this->lang->custom->common;
         $this->view->type = $type; 
+
         $this->display();
     }
 
@@ -521,8 +522,6 @@ class custom extends control
                 ->andWhere('`key`')->eq('URSRName')
                 ->fetch('value');
 
-            $this->view->title      = $this->lang->custom->configureScrum;
-            $this->view->position[] = $this->lang->custom->configureScrum;
             $this->view->URSRName   = json_decode($URSRName);
         }
 
@@ -552,7 +551,10 @@ class custom extends control
             $this->view->lang2Set    = str_replace('_', '-', $lang);
         }
 
+        $this->view->title      = $this->lang->custom->configureScrum;
+        $this->view->position[] = $this->lang->custom->configureScrum;
         $this->view->type = $type; 
+
         $this->display();
     }
 
