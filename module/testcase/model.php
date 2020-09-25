@@ -664,6 +664,7 @@ class testcaseModel extends model
             ->setDefault('story,branch', 0)
             ->join('stage', ',')
             ->join('linkCase', ',')
+            ->setIF(!$this->post->linkCase, 'linkCase', '')
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
             ->remove('comment,steps,expects,files,labels,stepType')
