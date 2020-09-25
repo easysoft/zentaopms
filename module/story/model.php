@@ -1256,17 +1256,14 @@ class storyModel extends model
                 $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
                 if(empty($story->branch)) $story->plan .= ",$planID";
             }
-            if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
+            if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0 and !isset($oldStoryStages[$storyID][$plan->branch]))
             {
-                if(!isset($oldStoryStages[$storyID][$plan->branch]))
-                {
-                    $story->stage = 'planned';
-                    $newStoryStage = new stdclass();
-                    $newStoryStage->story  = $storyID;
-                    $newStoryStage->branch = $plan->branch;
-                    $newStoryStage->stage  = $story->stage;
-                    $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
-                }
+                $story->stage = 'planned';
+                $newStoryStage = new stdclass();
+                $newStoryStage->story  = $storyID;
+                $newStoryStage->branch = $plan->branch;
+                $newStoryStage->stage  = $story->stage;
+                $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
             }
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
