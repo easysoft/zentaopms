@@ -921,7 +921,6 @@ class docModel extends model
         static $libs;
         if($libs === null) $libs = $this->getLibs('all', 'notdoc');
         if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
-        if(!isset($libs[$object->lib]) and !isset($extraDocLibs[$object->lib])) return false;
 
         if($object->acl == 'open' and !isset($extraDocLibs[$object->lib])) return true;
         if($object->acl == 'public' and !isset($extraDocLibs[$object->lib])) return true;

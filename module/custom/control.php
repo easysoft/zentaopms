@@ -403,7 +403,7 @@ class custom extends control
                 $this->custom->setURAndSR('waterfall');
             }
 
-            if($type == 'user')
+            if($type == 'user' and isset($_POST['keys']))
             {
                 $lang = $_POST['lang'];
                 $oldCustoms = $this->custom->getItems("lang=$lang&module=user&section=roleList");
@@ -490,7 +490,7 @@ class custom extends control
                 $this->custom->setURAndSR('scrum');
             }
 
-            if($type == 'user')
+            if($type == 'user' && isset($_POST['keys']))
             {
                 $lang = $_POST['lang'];
                 $oldCustoms = $this->custom->getItems("lang=$lang&module=user&section=roleList");
