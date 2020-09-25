@@ -180,6 +180,8 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $buildID, $currentModule, $currentMethod, $extra = '')
     {
+        if(!$projects) return false;
+
         if(!$projectID) return;
 
         $isMobile = $this->app->viewType == 'mhtml';
