@@ -91,6 +91,19 @@ $(function()
     var $itemContent = $('#itemContent');
     var $mainContent = $('#mainContent');
     var isItemLoading = false, lastAjaxRequest;
+    var adjustSidePosition = function()
+    {
+        if($mainContent.hasClass('hide-side')) return;
+        var scrollTop = $(document).scrollTop();
+        var $cell = $itemContent.closest('.cell');
+        var bounding = $cell.parent()[0].getBoundingClientRect();
+        $cell.css(
+        {
+            left: bounding.left + 20,
+            top: Math.max(20, 150 - scrollTop),
+            bottom: 60,
+        });
+    };
     var showItem = function(url, loadingText)
     {
         $.zui.messager.hide();
@@ -102,12 +115,6 @@ $(function()
             $.zui.store.set('project/tree/showItem', false);
             return;
         }
-        var adjustSidePosition = function()
-        {
-            var scrollTop = $(document).scrollTop() - 140;
-            if(scrollTop < 0) scrollTop = 0;
-            $itemContent.closest('.cell').css('margin-top', scrollTop);
-        };
         adjustSidePosition();
         if (lastAjaxRequest) lastAjaxRequest.abort();
         $itemContent.empty().addClass('loading').attr('data-loading', loadingText || '');
@@ -150,6 +157,7 @@ $(function()
 
     $itemContent.on('click', stopPropagation);
     $taskTree.on('click', stopPropagation);
+    $(window).on('resize scroll', adjustSidePosition);
 
     $(document).on('click', function()
     {

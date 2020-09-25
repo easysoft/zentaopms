@@ -36,10 +36,9 @@
 
 #itemContent {min-height: 200px;}
 #itemContent .label {background: #fff; border: 1px solid #ddd;}
-#mainContent > .side-col {width: 460px; display: table-cell; overflow: hidden; transition: width .2s;}
-#mainContent > .side-col > .cell {opacity: 1; transition: opacity .2s .1s;}
-#mainContent.hide-side > .side-col {display: table-cell; width: 0px;}
-#mainContent.hide-side > .side-col > .cell {opacity: 0;}
+#mainContent > .side-col {width: 460px; display: table-cell; overflow: hidden;}
+#mainContent > .side-col > .cell {display: block; position: fixed; width: 440px; overflow: auto;}
+#mainContent.hide-side > .side-col {display: none}
 
 h2.detail-title {font-size: 14px;}
 h2.detail-title .label-id, h2.detail-title .label {top: -1px}
