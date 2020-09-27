@@ -2531,13 +2531,12 @@ class taskModel extends model
      */
     public function getDataOfTasksPerAssignedTo()
     {
-        $tasks = $this->dao->select('id,assignedTo')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,parent,assignedTo')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,assignedTo')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'assignedTo');
+        $datas    = $this->processData4Report($tasks, $tasks, 'assignedTo');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
