@@ -895,6 +895,10 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
+                $isLibCase    = ($oldCase->lib and empty($oldCase->product));
+                $titleChanged = ($case->title != $oldCase->title);
+                if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
+
                 $this->executeHooks($caseID);
 
                 unset($oldCase->steps);
