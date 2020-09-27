@@ -24,7 +24,7 @@
 </div>
 <div id="mainContent" class="main-row fade">
   <div class="main-col">
-    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo inLink('batchEdit', "programID=$program->id");?>'>
+    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$program->id");?>'>
       <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-fixed">

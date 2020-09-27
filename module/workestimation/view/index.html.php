@@ -86,6 +86,7 @@
           </tr>
         </tbody>
       </table>
+      <div class='alert alert-info mg-0'> <?php echo $lang->workestimation->tips;?></div>
     </form>  
   </div>
 </div>

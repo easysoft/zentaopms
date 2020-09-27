@@ -146,7 +146,7 @@ $lang->program->viewMenu->project = array('link' => "项目|program|pgmproject|p
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 $lang->product->menu->home = '主页|product|index|';
-$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create');
+$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
 $lang->product->viewMenu->requirement = array('link' => "用户需求|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
