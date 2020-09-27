@@ -108,17 +108,9 @@ class wechatapi
      */
     public function send($userList, $message)
     {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+        $curl = $this->initCurl();
 
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
         curl_setopt($curl, CURLOPT_URL, $this->apiUrl . 'message/send?access_token=' . $this->token);
 
         $message = json_decode($message);
@@ -129,12 +121,14 @@ class wechatapi
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($message));
 
         $response = curl_exec($curl);
+        $errors   = curl_error($curl);
         curl_close($curl);
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
 
-        $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
+        if(empty($response)) $this->errors[] = $errors;
+        if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return array('result' => 'fail', 'message' => $this->errors);
     }
 
@@ -147,11 +141,40 @@ class wechatapi
      */
     public function queryAPI($url)
     {
-        $response = json_decode(file_get_contents($url));
+        $curl = $this->initCurl();
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        $response = curl_exec($curl);
+        $errors   = curl_error($curl);
+        curl_close($curl);
+
+        $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return $response;
 
-        $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
+        if(empty($response)) $this->errors[] = $errors;
+        if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return false;
+    }
+
+    /**
+     * Init curl
+     * 
+     * @access public
+     * @return object
+     */
+    public function initCurl()
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($curl, CURLOPT_HEADER, FALSE);
+
+        return $curl;
     }
 
     /**
