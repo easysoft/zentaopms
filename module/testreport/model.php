@@ -187,7 +187,7 @@ class testreportModel extends model
 
         foreach($generatedBugs as $bug)
         {
-            if(!array_diff(explode(',', $bug->openedBuild), $buildIdList))
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
             {
                 $foundBugs[$bug->id] = $bug;
                 if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
