@@ -216,6 +216,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `atTime` varchar(10) NOT NULL,
   `testtask` mediumint(8) unsigned NOT NULL,
   `tag` varchar(255) NOT NULL,
+  `times` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `updateDate` datetime NOT NULL,
