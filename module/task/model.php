@@ -2454,8 +2454,21 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,assignedTo')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'assignedTo');
+        /* Fix bug #3497. */
+        $fields = array();
+        $datas  = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!isset($fields[$task->assignedTo])) $fields[$task->assignedTo] = 0;
+            $fields[$task->assignedTo] ++;
+        }
+        foreach($fields as $field => $count)
+        {
+            $data = new stdclass();
+            $data->name    = $field;
+            $data->value   = $count;
+            $datas[$field] = $data;
+        }
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
