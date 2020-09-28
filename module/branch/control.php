@@ -20,7 +20,8 @@ class branch extends control
      */
     public function manage($productID)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher();
 
         if($_POST)
         {
@@ -28,7 +29,7 @@ class branch extends control
             die(js::reload('parent'));
         }
 
-        $products = $this->loadModel('product')->getPairs('nocode' , $this->session->PRJ);
+        $products = $this->loadModel('product')->getPairs('nocode');
         $this->product->setMenu($products, $productID);
 
         $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID));
