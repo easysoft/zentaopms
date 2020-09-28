@@ -1228,7 +1228,7 @@ class block extends control
 
         $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('PRJ')->eq($this->session->PRJ)->fetch('people');
         $this->view->members  = count($members) ? count($members) - 1 : 0;
-        $this->view->consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('PRJ')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $this->view->consumed = $this->dao->select('sum(cast(consumed as decimal(10,2))) as consumed')->from(TABLE_TASK)->where('PRJ')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
         $this->view->budget   = $budget;
     }
 

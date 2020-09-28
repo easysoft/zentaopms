@@ -28,69 +28,69 @@ class programModel extends model
         if(empty($programs)) return array();
         $programIdList = array_keys($programs);
 
-        $hours = $this->dao->select('program,
+        $hours = $this->dao->select('PRJ,
             cast(sum(consumed) as decimal(10,2)) as consumed,
             cast(sum(estimate) as decimal(10,2)) as estimate')
             ->from(TABLE_TASK)
-            ->where('program')->in($programIdList)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
         $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
             ->where('root')->in($programIdList)
             ->groupBy('root')
             ->fetchAll('root');
 
-        $leftTasks = $this->dao->select('program, count(*) as leftTasks')->from(TABLE_TASK)
-            ->where('program')->in($programIdList)
+        $leftTasks = $this->dao->select('PRJ, count(*) as leftTasks')->from(TABLE_TASK)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $allStories = $this->dao->select('program, count(*) as allStories')->from(TABLE_STORY)
-            ->where('program')->in($programIdList)
+        $allStories = $this->dao->select('PRJ, count(*) as allStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('draft')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $doneStories = $this->dao->select('program, count(*) as doneStories')->from(TABLE_STORY)
-            ->where('program')->in($programIdList)
+        $doneStories = $this->dao->select('PRJ, count(*) as doneStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
             ->andWhere('closedReason')->eq('done')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $leftStories = $this->dao->select('program, count(*) as leftStories')->from(TABLE_STORY)
-            ->where('program')->in($programIdList)
+        $leftStories = $this->dao->select('PRJ, count(*) as leftStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('active')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $leftBugs = $this->dao->select('program, count(*) as leftBugs')->from(TABLE_BUG)
-            ->where('program')->in($programIdList)
+        $leftBugs = $this->dao->select('PRJ, count(*) as leftBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('active')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $allBugs = $this->dao->select('program, count(*) as allBugs')->from(TABLE_BUG)
-            ->where('program')->in($programIdList)
+        $allBugs = $this->dao->select('PRJ, count(*) as allBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
-        $doneBugs = $this->dao->select('program, count(*) as doneBugs')->from(TABLE_BUG)
-            ->where('program')->in($programIdList)
+        $doneBugs = $this->dao->select('PRJ, count(*) as doneBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('resolved')
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
         foreach($programs as $programID => $program)
         {
