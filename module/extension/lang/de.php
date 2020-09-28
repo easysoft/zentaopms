@@ -120,3 +120,4 @@ $lang->extension->errorConflicts               = 'Konflikt mit “%s”!';
 $lang->extension->errorDepends                 = 'Benötigte Erweiterung wurde nicht installiert oder die Versionen passen nicht:<br /><br /> %s';
 $lang->extension->errorIncompatible            = 'Inkompatibel mit dieser Version von ZenTao.';
 $lang->extension->errorUninstallDepends        = '“%s” benötigt für diese Erweiterung. Bitte nicht installieren.';
+$lang->extension->errorExtracted               = 'The package file %s extracted failed. The error is:<br />%s';
