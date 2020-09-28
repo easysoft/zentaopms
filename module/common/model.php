@@ -1425,11 +1425,27 @@ EOD;
      */
     public function getPreAndNextObject($type, $objectID)
     {
-        $preAndNextObject = new stdClass();
+        $preAndNextObject       = new stdClass();
+        $preAndNextObject->pre  = '';
+        $preAndNextObject->next = '';
 
-        /* Use existObject when the preAndNextObject of this objectID has exist in session. */
-        $existObject = $type . 'PreAndNext';
-        if(isset($_SESSION[$existObject]) and $_SESSION[$existObject]['objectID'] == $objectID) return $_SESSION[$existObject]['preAndNextObject'];
+        if($type == 'story' and !empty($_SESSION['planStoryOrder']))
+        {
+            $objects = explode(',', $_SESSION['planStoryOrder']);
+            $key     = array_search($objectID, $objects);
+
+            if($key > 0)
+            {
+                $preObjectID = $objects[$key - 1];
+                $preAndNextObject->pre = $this->loadModel('story')->getByID($preObjectID);
+            }
+            if($key < (count($objects) - 1))
+            {
+                $nextObjectID = $objects[$key + 1];
+                $preAndNextObject->next = $this->loadModel('story')->getByID($nextObjectID);
+            }
+            return $preAndNextObject;
+        }
 
         /* Get objectIDList. */
         $table             = $this->config->objectTables[$type];
@@ -1451,8 +1467,6 @@ EOD;
         }
 
         $preObj  = false;
-        $preAndNextObject->pre  = '';
-        $preAndNextObject->next = '';
         while($object = $queryObjects->fetch())
         {
             $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
@@ -1474,6 +1488,7 @@ EOD;
             if($preObj !== true) $preObj = $object;
         }
 
+        $existObject = $type . 'PreAndNext';
         $this->session->set($existObject, array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
         return $preAndNextObject;
     }

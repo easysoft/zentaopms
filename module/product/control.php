@@ -56,7 +56,7 @@ class product extends control
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
-        $this->product->setMenu($this->products, $productID, $branch);
+        //$this->product->setMenu($this->products, $productID, $branch);
 
         if(common::hasPriv('product', 'create')) $this->lang->modulePageActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
@@ -116,6 +116,7 @@ class product extends control
         /* Save session. */
         $this->session->set('storyList',   $this->app->getURI(true));
         $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('planStoryOrder', '');
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
