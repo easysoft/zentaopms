@@ -116,6 +116,7 @@ class product extends control
         /* Save session. */
         $this->session->set('storyList',   $this->app->getURI(true));
         $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('planStoryOrder', '');
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
