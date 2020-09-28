@@ -15,9 +15,9 @@ function setStories(moduleID, projectID, num)
         var storyID = $('#story' + num).val();
         if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         $('#story' + num).replaceWith(stories);
-        if(moduleID == 0 || moduleID == 'ditto') $('#story' + num).append("<option value='ditto'>" + ditto + "</option>");
+        if(num != 0 && (moduleID == 0 || moduleID == 'ditto')) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>");
         $('#story' + num).val(storyID);
-        if($('#zeroTaskStory').hasClass('zeroTask'))
+        if($('#zeroTaskStory').hasClass('checked'))
         {
             $('#story' + num).find('option').each(function()
             {

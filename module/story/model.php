@@ -568,7 +568,6 @@ class storyModel extends model
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
-        if(empty($_POST['branch']))  $story->branch = 0;
         if(!empty($_POST['stages']))
         {
             $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
@@ -1267,10 +1266,11 @@ class storyModel extends model
      */
     public function batchChangePlan($storyIdList, $planID, $oldPlanID = 0)
     {
-        $now         = helper::now();
-        $allChanges  = array();
-        $oldStories  = $this->getByList($storyIdList);
-        $plan        = $this->loadModel('productplan')->getById($planID);
+        $now            = helper::now();
+        $allChanges     = array();
+        $oldStories     = $this->getByList($storyIdList);
+        $plan           = $this->loadModel('productplan')->getById($planID);
+        $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -1284,16 +1284,25 @@ class storyModel extends model
             if($this->session->currentProductType == 'normal' or empty($oldPlanID) or $oldStory->branch)
             {
                 $story->plan = $planID;
+                if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
             }
             elseif($oldPlanID)
             {
                 $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
                 if(empty($story->branch)) $story->plan .= ",$planID";
             }
-            if($planID) $story->stage = 'planned';
+            /* Fix bug #3529. */
+            if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0 and !isset($oldStoryStages[$storyID][$plan->branch]))
+            {
+                $story->stage = 'planned';
+                $newStoryStage = new stdclass();
+                $newStoryStage->story  = $storyID;
+                $newStoryStage->branch = $plan->branch;
+                $newStoryStage->stage  = $story->stage;
+                $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+            }
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($story->stage)->autoCheck()->where('story')->eq((int)$storyID)->exec();
 
             if(!$planID) $this->setStage($storyID);
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);

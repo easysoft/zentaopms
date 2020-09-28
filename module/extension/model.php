@@ -91,7 +91,7 @@ class extensionModel extends model
     {
         $requestType = $this->config->requestType;
         $webRoot     = helper::safe64Encode($this->config->webRoot, '', false, true);
-        $apiURL      = $this->apiRoot . 'apiGetmodules-' . $requestType . '-' . $webRoot . '.json';
+        $apiURL      = $this->apiRoot . 'apiGetmodules-' . helper::safe64Encode($requestType) . '-' . $webRoot . '.json';
         $data = $this->fetchAPI($apiURL);
         if(isset($data->modules)) return $data->modules;
         return false;

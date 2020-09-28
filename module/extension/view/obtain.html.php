@@ -117,7 +117,7 @@
                       }
                   }
               }
-              echo html::a($currentRelease->downLink, $lang->extension->downloadAB, '', 'class="manual btn"');
+              echo html::a($currentRelease->downLink, $lang->extension->downloadAB, '_blank', 'class="btn"');
               echo html::a($extension->site, $lang->extension->site, '_blank', 'class=btn');
               ?>
               </div>
