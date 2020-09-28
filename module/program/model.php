@@ -699,7 +699,7 @@ class programModel extends model
         $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'prjcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate) . '</li>';
+        $output .= '<li>' . html::a(helper::createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate, '', 'data-toggle="modal" data-target="#guideDialog"') . '</li>';
         $output .= '</ul>';
         $output .= "</div>";
         echo $output;
