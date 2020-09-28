@@ -247,6 +247,8 @@ function toggleSelectTestStory()
         $('#estStarted').closest('tr').addClass('hidden');
         $('#estimate').closest('.table-col').addClass('hidden');
         $('#testStoryBox').removeClass('hidden');
+        $('#copyButton').addClass('hidden');
+        $('.colorpicker').css('right', '0');
     }
     else
     {
