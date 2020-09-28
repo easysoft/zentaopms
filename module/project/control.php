@@ -1052,7 +1052,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
+    public function create($projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no', $productID = '')
     {
         if($projectID)
         {
@@ -1166,6 +1166,7 @@ class project extends control
         $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->projectID     = $projectID;
+        $this->view->productID     = $productID;
         $this->view->products      = $products;
         $this->view->productPlan   = array(0 => '') + $productPlan;
         $this->view->productPlans  = array(0 => '') + $productPlans;
