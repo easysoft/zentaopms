@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../../common/view/header.html.php';?>
+<?php $debug = zget($config->xuanxuan, 'debug', 0);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('xuanxuan');?></div>
 </div>
@@ -42,7 +43,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->im->debug;?></th>
-          <td><?php echo $type == 'edit' ? html::radio('debug', $lang->im->debugStatus, zget($config->xuanxuan, 'debug', 0)) : zget($lang->im->debugStatus, zget($config->xuanxuan, 'debug', 0));?></td>
+          <td><?php echo $type == 'edit' ? html::radio('debug', $lang->im->debugStatus, $debug) : zget($lang->im->debugStatus, $debug);?></td>
           <td></td>
         </tr>
         <tr>
@@ -124,6 +125,7 @@
               <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'");?>
               <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'");?>
               <?php echo html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $lang->im->changeSetting, '', "class='btn'");?>
+              <?php if($debug) echo html::a(helper::createLink('im', 'debug', 'source=setting'), $lang->im->viewDebug, '', "class='btn viewDebug' data-toggle='modal'");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->im->help, '_blank', "class='btn'");?>
             <?php endif;?>
           </td>
