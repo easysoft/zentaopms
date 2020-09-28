@@ -3,9 +3,9 @@ include '../../control.php';
 class myMisc extends misc
 {
     /**
-     * Ajax set client config to client package. 
-     * 
-     * @param  string $os 
+     * Ajax set client config to client package.
+     *
+     * @param  string $os
      * @access public
      * @return void
      */
@@ -20,7 +20,7 @@ class myMisc extends misc
         /* write login info into config file. */
         $loginInfo = new stdclass();
         $loginInfo->ui = array();
-        $loginInfo->ui['defaultUser']['server']  = common::getSysURL();;
+        $loginInfo->ui['defaultUser']['server']  = ($this->config->xuanxuan->https ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . ':' . $this->config->xuanxuan->commonPort;
         $loginInfo->ui['defaultUser']['account'] = $this->app->user->account;
         $loginInfo->ui['defaultUser']['lock']    = false;
         $loginInfo->ui['defaultUser']['ldap']    = false;
