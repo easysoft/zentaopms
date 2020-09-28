@@ -86,6 +86,16 @@ $("#menuToggle").bind('click', function()
     $("#morePRJ").hide();
 });
 
+$("#morePRJList").mouseover(function()
+{
+    $("#morePRJ").show();
+});
+
+$("#morePRJList").mouseout(function()
+{
+    $("#morePRJ").hide();
+});
+
 function getMorePRJ()
 {
     $("#morePRJ").toggle();
