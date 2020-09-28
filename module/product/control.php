@@ -105,7 +105,7 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
 
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -301,7 +301,9 @@ class product extends control
     /**
      * Edit a product.
      *
-     * @param  int    $productID
+     * @param  int       $productID
+     * @param  string    $action
+     * @param  string    $extra
      * @access public
      * @return void
      */
@@ -543,7 +545,7 @@ class product extends control
     public function roadmap($productID, $branch = 0)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));

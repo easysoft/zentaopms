@@ -123,6 +123,7 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
     {
+        $this->app->loadLang('product');
         if(!$productID)
         {
             unset($this->lang->product->menu->branch);
@@ -411,12 +412,13 @@ class productModel extends model
     /*
      * Get product switcher.
      *
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @access public  
+     * @param  int    $productID
+     * @param  string $extra
+     * @param  int    $branch
+     * @access public
      * @return void
      */
-    public function getSwitcher($productID = 0, $extra = '')
+    public function getSwitcher($productID = 0, $extra = '', $branch = 0)
     {
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
@@ -443,6 +445,17 @@ class productModel extends model
         $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'>{$currentProductName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
+
+        if($currentProduct->type != 'normal')
+        {
+            $branches     = $this->loadModel('branch')->getPairs($productID);
+            $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+            $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+
+            $output .= "<div class='btn-group header-angle-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+        }
 
         return $output;
     }
@@ -1159,7 +1172,7 @@ class productModel extends model
             }
             elseif($module == 'product' && ($method == 'browse' or $method == 'index' or $method == 'all'))
             {
-                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));
+                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '') . "&browseType=&param=0&$extra");
             }
             elseif($module == 'programplan')
             {
