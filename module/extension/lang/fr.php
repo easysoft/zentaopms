@@ -121,3 +121,4 @@ $lang->extension->errorDepends                 = "L'extension dépendante n'a pa
 $lang->extension->errorIncompatible            = 'Incompatible avec votre version de ZenTao.';
 $lang->extension->errorUninstallDepends        = '“%s” est nécessaire pour cette extension. Veuillez ne pas installer.';
 $lang->extension->errorExtracted               = 'The package file %s extracted failed. The error is:<br />%s';
+$lang->extension->errorFileNotEmpty            = 'Please upload the file.';
