@@ -1295,6 +1295,7 @@ EOD;
             if($preObj !== true) $preObj = $object;
         }
 
+        $existObject = $type . 'PreAndNext';
         $this->session->set($existObject, array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
         return $preAndNextObject;
     }
