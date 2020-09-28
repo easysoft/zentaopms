@@ -145,7 +145,7 @@ function setStoryModule()
 /* Set the story priview link. */
 function setPreview()
 {
-    if(!$('#story').val())
+    if(!Number($('#story').val()))
     {
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
