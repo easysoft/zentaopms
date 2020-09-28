@@ -21,7 +21,7 @@ class branch extends control
     public function manage($productID)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher();
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         if($_POST)
         {

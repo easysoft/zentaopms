@@ -28,10 +28,10 @@ class productModel extends model
      * @return void
      */
     public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
-    {   
+    {
         $product = $this->getByID($productID);
         if($product)
-        {   
+        {
             $project = $this->loadModel('project')->getByID($product->program);
 
             if(isset($project->id)) $this->loadModel('project')->setMenu($products, $project->id);
@@ -41,14 +41,14 @@ class productModel extends model
 
         $pageActions = '';
         if($this->app->moduleName == 'programplan' and isset($product->program))
-        {   
+        {
             $pageActions .= html::a(helper::createLink('programplan', 'create', "program=$product->program&productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->programplan->create}", '', "class='btn btn-primary'");
         }
 
         $this->lang->modulePageActions = $pageActions;
 
         foreach($this->lang->product->menu as $key => $menu)
-        {    
+        {
             $replace = array();
             $replace['productID'] = $productID;
             $replace['branch']    = $branch;
@@ -69,13 +69,13 @@ class productModel extends model
      * @return string
      */
     public function getModuleNav($products, $project, $product, $extra, $branch, $module, $moduleType)
-    {   
+    {
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
-        {   
+        {
             if($currentMethod != 'track' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
             if($currentMethod == 'view') $currentMethod = 'browse';
         }
@@ -86,7 +86,7 @@ class productModel extends model
         $pageNav  = '';
         $isMobile = $this->app->viewType == 'mhtml';
         if($isMobile)
-        {   
+        {
             $pageNav  = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
             $pageNav .= $selectHtml;
         }
@@ -421,7 +421,7 @@ class productModel extends model
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
 
-		$output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <span class='caret'></span></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('product', 'index'), "<i class='icon icon-home'></i> " . $this->lang->product->index) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('product', 'all'), "<i class='icon icon-cards-view'></i> " . $this->lang->product->all) . '</li>';
