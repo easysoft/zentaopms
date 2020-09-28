@@ -589,7 +589,7 @@ class storyModel extends model
                     $newStage->stagedBy = $oldStage->stagedBy;
                     if($stage != $oldStage->stage) $newStage->stagedBy = (strpos('tested|verified|released|closed', $stage) !== false) ? $this->app->user->account : '';
                 }
-                $this->dao->insert(TABLE_STORYSTAGE)->data($newStage)->exec();
+                if($story->branch == 0) $this->dao->insert(TABLE_STORYSTAGE)->data($newStage)->exec();
                 if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
                 {
                     $minStage    = $stage;
