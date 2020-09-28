@@ -884,7 +884,7 @@ class programModel extends model
     }
 
     /**
-     * Get the treemenu of project.
+     * Get the tree menu of project.
      *
      * @param  int        $projectID
      * @param  string     $userFunc
@@ -923,7 +923,8 @@ class programModel extends model
 
         krsort($projectMenu);
         $projectMenu = array_pop($projectMenu);
-        $lastMenu = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
+        $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
+
         return $lastMenu;
     }
 
