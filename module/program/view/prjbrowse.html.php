@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
 <?php
 js::set('orderBy', $orderBy);
 js::set('programID', $programID);
@@ -48,64 +47,34 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
-    <?php $canOrder = common::hasPriv('program', 'PRJOrderUpdate');?>
-    <form class='main-table table-project' id='projectsForm' method='post' data-ride='table'>
-      <table class='table has-sort-head table-fixed'>
-        <?php $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+    <form class='main-table' id='PRJForm' method='post'>
+      <div class="table-header fixed-right">
+        <nav class="btn-toolbar pull-right"></nav>
+      </div>
+      <?php
+        include '../../common/view/datatable.html.php';
+        $vars    = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $setting = $this->datatable->getSetting('program');
+        $widths  = $this->datatable->setFixedFieldWidth($setting);
+      ?>
+      <table class='table has-sort-head datatable' data-fixed-left-width='<?php echo $widths['leftWidth'];?>' data-fixed-right-width='<?php echo $widths['rightWidth'];?>'>
         <thead>
           <tr>
-            <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-            <th class='w-80px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
-            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PRJName);?></th>
-            <th class='w-70px'><?php echo $lang->program->PRJModel;?></th>
-            <th class='w-80px'><?php echo $lang->program->PRJPM;?></th>
-            <th class='w-100px'><?php echo $lang->program->begin;?></th>
-            <th class='w-100px'><?php echo $lang->program->end;?></th>
-            <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
-            <th class='w-80px'><?php echo $lang->program->PRJBudget;?></th>
-            <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
-            <th class='w-150px'><?php echo $lang->program->PRJProgress;?></th>
-            <th class='text-center w-230px'><?php echo $lang->actions;?></th>
-            <?php if($canOrder):?>
-            <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->program->PRJUpdateOrder);?></th>
-            <?php endif;?>
+            <?php
+              foreach($setting as $value)
+              {
+                if($value->show)
+                {
+                  $this->datatable->printHead($value, $orderBy, $vars);
+                }
+              }
+            ?>
           </tr>
         </thead>
         <tbody class="sortable" id='projectTableList'>
           <?php foreach($projectStats as $project):?>
-          <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->code;?>'>
-            <td><?php printf('%03d', $project->id);?></td>
-            <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
-            <td class='c-name text-left' title='<?php echo $project->name?>'>
-              <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
-            </td>
-            <td><?php echo zget($lang->program->templateList, $project->model);?></td>
-            <td><?php echo zget($users, $project->PM);?></td>
-            <td><?php echo $project->begin;?></td>
-            <td><?php echo $project->end;?></td>
-            <td><?php echo zget($lang->program->statusList, $project->status);?></td>
-            <td><?php echo $project->budget . zget($lang->program->unitList, $project->budgetUnit);?></td>
-            <td><?php echo $project->teamCount;?></td>
-            <td class="c-progress">
-              <div class="progress progress-text-left">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-                <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
-                </div>
-              </div>
-            </td>
-            <td class='text-center c-actions'>
-              <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');?>
-              <?php common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');?>
-              <?php common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
-              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-              <?php common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);?>
-            </td>
-            <?php if($canOrder):?>
-              <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
-            <?php endif;?>
+          <tr data-id="<?php echo $project->id;?>">
+            <?php foreach($setting as $value) $this->program->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
         </tbody>

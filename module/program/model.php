@@ -1215,4 +1215,92 @@ class programModel extends model
         }
         return $stats;
     }
+
+    /**
+     * Print datatable cell.
+     *
+     * @param  object $col
+     * @param  object $project
+     * @param  array  $users
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function printCell($col, $project, $users, $programID = 0)
+    {
+        $canOrder = common::hasPriv('program', 'PRJOrderUpdate');
+        $account  = $this->app->user->account;
+        $id       = $col->id;
+
+        if($col->show)
+        {
+            $class = "c-$id";
+            $title = '';
+
+            if($id == 'idAB') $class .= ' cell-id';
+
+            if($id == 'PRJName')
+            {
+                $class .= ' text-left';
+                $title  = "title='{$project->name}'";
+            }
+
+            echo "<td class='" . $class . "' $title>";
+            switch($id)
+            {
+                case 'idAB':
+                    printf('%03d', $project->id);
+                    break;
+                case 'PRJCode':
+                    echo $project->code;
+                    break;
+                case 'PRJName':
+                    echo html::a(helper::createLink('program', 'index', "projectID=$project->id"), $project->name);
+                    break;
+                case 'PRJModel':
+                    echo zget($this->lang->program->templateList, $project->model);
+                    break;
+                case 'PRJPM':
+                    echo zget($users, $project->PM);
+                    break;
+                case 'begin':
+                    echo $project->begin;
+                    break;
+                case 'end':
+                    echo $project->end;
+                    break;
+                case 'PRJStatus':
+                    echo zget($this->lang->program->statusList, $project->status);
+                    break;
+                case 'PRJBudget':
+                    echo $project->budget . zget($this->lang->program->unitList, $project->budgetUnit);
+                    break;
+                case 'teamCount':
+                    echo $project->teamCount;
+                    break;
+                case 'PRJEstimate':
+                    echo $project->hours->totalEstimate;
+                    break;
+                case 'PRJConsume':
+                    echo $project->hours->totalConsumed;
+                    break;
+                case 'PRJSurplus':
+                    echo $project->hours->totalLeft;
+                    break;
+                case 'PRJProgress':
+                    echo "<span class='pie-icon' data-percent='{$project->hours->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$project->hours->progress}%";
+                    break;
+                case 'actions':
+                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
+                    common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
+                    common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);
+                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
+                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);
+                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);
+                    if(common::hasPriv('program', 'PRJEdit')) echo html::a(helper::createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->edit}'");
+                    common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);
+                    break;
+            }
+        }
+    }
 }

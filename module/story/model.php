@@ -637,6 +637,7 @@ class storyModel extends model
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
+        if($_POST['product'] == 0)   $story->branch = 0;
         if(!empty($_POST['stages']))
         {
             $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
@@ -686,6 +687,11 @@ class storyModel extends model
                     $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
                     foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
                 }
+            }
+
+            if($oldStory->parent == '-1' and $story->branch != $oldStory->branch)
+            {
+                $this->dao->update(TABLE_STORY)->set('branch')->eq($story->branch)->where('parent')->eq($storyID)->exec();
             }
 
             $this->loadModel('action');
