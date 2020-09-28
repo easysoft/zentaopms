@@ -637,7 +637,7 @@ class storyModel extends model
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
-        if($_POST['product'] == 0)   $story->branch = 0;
+        if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
         if(!empty($_POST['stages']))
         {
             $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
