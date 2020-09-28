@@ -228,6 +228,7 @@ $lang->story->noStory               = 'No stories yet. ';
 $lang->story->ignoreChangeStage     = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent    = "Can not delete parent {$lang->storyCommon}";
 $lang->story->moveChildrenTips      = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->changeBranchTips      = "Its Child {$lang->storyCommon} will be moved to the selected branch when editing the linked branch of Parent {$lang->storyCommon}.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Scope';
