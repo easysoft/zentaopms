@@ -609,6 +609,7 @@ class program extends control
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
+        $this->loadModel('datatable');
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
 
         /* Load pager and get tasks. */
@@ -616,7 +617,9 @@ class program extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
-        $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $orderBy, $pager, $programTitle);
+        $order        = explode('_', $orderBy);
+        $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
+        $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
         $this->view->title      = $this->lang->program->PRJBrowse;
         $this->view->position[] = $this->lang->program->PRJBrowse;
@@ -801,6 +804,7 @@ class program extends control
     {
         $this->lang->navGroup->program = 'project';
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->loadModel('datatable');
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -808,7 +812,9 @@ class program extends control
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=PRJProgramTitle');
-        $projectStats = $this->program->getPRJStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
+        $order        = explode('_', $orderBy);
+        $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
+        $projectStats = $this->program->getPRJStats($programID, $browseType, $queryID, $sortField, $pager, $programTitle);
 
         $this->view->title      = $this->lang->program->PRJBrowse;
         $this->view->position[] = $this->lang->program->PRJBrowse;
