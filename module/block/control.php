@@ -1436,7 +1436,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.program')->eq($this->session->PRJ)->fi()
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->orderBy('t1.id desc')
