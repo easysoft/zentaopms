@@ -23,7 +23,7 @@
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 
-.chosen-container-single .chosen-single > span{max-width:200px;}
+.chosen-container-single .chosen-single > span{max-width: 300px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
 
 #whitelistBox .checkbox-inline, #whitelistBox .radio-inline{margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px;}
 .main-table > .table-responsive {padding: 0 1px; background: #fff;}
