@@ -1121,12 +1121,12 @@ class programModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
+            ->where('PRJ')->in($projectKeys)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
+            ->fetchGroup('PRJ', 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
@@ -1154,35 +1154,6 @@ class programModel extends model
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
         }
 
-        /* Get burndown charts datas. */
-        $burns = $this->dao->select('project, date AS name, `left` AS value')
-            ->from(TABLE_BURN)
-            ->where('project')->in($projectKeys)
-            ->andWhere('task')->eq(0)
-            ->orderBy('date desc')
-            ->fetchGroup('project', 'name');
-
-        $this->loadModel('project');
-        $itemCounts = 30;
-        foreach($burns as $projectID => $projectBurns)
-        {
-            /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            $begin = $projects[$projectID]->begin;
-            $end   = $projects[$projectID]->end;
-            if($begin == '0000-00-00') $begin = $projects[$projectID]->openedDate;
-            $projectBurns = $this->project->processBurnData($projectBurns, $itemCounts, $begin, $end);
-
-            /* Shorter names.  */
-            foreach($projectBurns as $projectBurn)
-            {
-                $projectBurn->name = substr($projectBurn->name, 5);
-                unset($projectBurn->project);
-            }
-
-            ksort($projectBurns);
-            $burns[$projectID] = $projectBurns;
-        }
-
         /* Get the number of project teams. */
         $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
             ->where('root')->in($projectKeys)
@@ -1201,11 +1172,6 @@ class programModel extends model
                 $delay = helper::diffDate(helper::today(), $project->end);
                 if($delay > 0) $project->delay = $delay;
             }
-
-            /* Process the burns. */
-            $project->burns = array();
-            $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
-            foreach($burnData as $data) $project->burns[] = $data->value;
 
             /* Process the hours. */
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
