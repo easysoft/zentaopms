@@ -259,6 +259,10 @@ class productplan extends control
             $orderBy = str_replace('order', 'id', $orderBy);
             $reSort  = true;
         }
+        else
+        {
+            $this->session->set('planStoryOrder', '');
+        }
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -266,26 +270,26 @@ class productplan extends control
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
 
-        $bugPager    = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $storyPager  = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
+        $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
+
+        $this->loadModel('story');
+        if(!$reSort or empty($plan->order)) $planStories = $this->story->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
+
         if($reSort)
         {
             if(!empty($plan->order))
             {
-                $stories = array();
-                $order   = explode(',', $plan->order);
-                if(strpos($orderBy, 'desc') !== false) $order = array_reverse($order, true);
-                foreach($order as $id)
-                {
-                    if(empty($id)) continue;
-                    if(!isset($planStories[$id])) continue;
-                    $stories[$id] = $planStories[$id];
-                    unset($planStories[$id]);
-                }
-                if($planStories) $stories += $planStories;
-                $planStories = $stories;
-                unset($stories);
+                $planStories = $this->story->getPlanStories($planID, 'all', $sort);
+                $planStories = $this->story->sortPlanStory($planStories, $plan->order, $orderBy);
+
+                $storyIDList = implode(',', array_keys($planStories));
+                $this->session->set('planStoryOrder', $storyIDList);
+
+                $storyPager->recTotal = count($planStories);
+
+                $frontCount  = $storyPager->recPerPage * ($storyPager->pageID - 1);
+                $planStories = array_slice($planStories, $frontCount, $storyPager->recPerPage);
             }
             $orderBy = str_replace('id', 'order', $orderBy);
         }
@@ -330,9 +334,9 @@ class productplan extends control
     {
         $plans = $this->productplan->getPairs($productID, $branch);
 
-         $planName = $number === '' ? 'plan' : "plan[$number]";
-         $plans    = empty($plans) ? array('' => '') : $plans;
-         die(html::select($planName, $plans, '', "class='form-control'"));
+        $planName = $number === '' ? 'plan' : "plan[$number]";
+        $plans    = empty($plans) ? array('' => '') : $plans;
+        die(html::select($planName, $plans, '', "class='form-control'"));
     }
 
     /**
@@ -346,7 +350,12 @@ class productplan extends control
     public function ajaxStorySort($planID = 0)
     {
         if(empty($planID)) return true;
-        $this->dao->update(TABLE_PRODUCTPLAN)->set('`order`')->eq($this->post->storys)->where('id')->eq((int)$planID)->exec();
+
+        $plan  = $this->productplan->getByID($planID, true);
+        $order = $this->loadModel('story')->getAllStorySort($planID, $plan->order);
+
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('`order`')->eq($order)->where('id')->eq((int)$planID)->exec();
+        $this->session->set('planStoryOrder', $order);
     }
 
     /**

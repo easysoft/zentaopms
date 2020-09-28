@@ -71,7 +71,7 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('productplan', 'ajaxStorySort', 'planID=' + planID), {'storys' : list, 'orderBy' : orderBy}, function()
+        $.post(createLink('productplan', 'ajaxStorySort', 'planID=' + planID), {'stories' : list, 'orderBy' : orderBy, 'pageID' : storyPageID, 'recPerPage' : storyRecPerPage, 'recTotal' : storyRecTotal}, function()
         {
             var $target = $(data.element[0]);
             $target.hide();

@@ -211,6 +211,12 @@ class storyModel extends model
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
+            if(!empty($story->plan))
+            {
+                $plan[$story->plan][] = $storyID;
+                $this->updatePlanStoryOrder($plan);
+            }
+
             $data          = new stdclass();
             $data->story   = $storyID;
             $data->version = 1;
@@ -361,6 +367,8 @@ class storyModel extends model
             $data[$i] = $story;
         }
 
+        $planStories = array();
+
         foreach($data as $i => $story)
         {
             $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->exec();
@@ -372,6 +380,8 @@ class storyModel extends model
 
             $storyID = $this->dao->lastInsertID();
             $this->setStage($storyID);
+
+            if($story->plan) $planStories[$story->plan][] = $storyID;
 
             $specData = new stdclass();
             $specData->story   = $storyID;
@@ -422,6 +432,9 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
+
+        /* Update product plan stories order. */
+        if(!empty($planStories)) $this->updatePlanStoryOrder($planStories);
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
@@ -783,6 +796,29 @@ class storyModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
             }
+        }
+    }
+
+    /**
+     * update plan story order.
+     *
+     * @param  int    $planStories
+     * @access public
+     * @return void
+     */
+    public function updatePlanStoryOrder($planStories)
+    {
+        $planIDList = array_keys($planStories);
+        $plans      = $this->dao->select('id, `order`')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');
+
+        foreach($planStories as $planID => $stories)
+        {
+            $data = new stdClass();
+            $data->order = implode(',', $stories);
+            $productPlan = $plans[$planID];
+            if(!empty($productPlan->order)) $data->order = $data->order . ',' . $productPlan->order;
+
+            $this->dao->update(TABLE_PRODUCTPLAN)->data($data)->where('id')->eq($planID)->exec();
         }
     }
 
@@ -2295,6 +2331,34 @@ class storyModel extends model
     }
 
     /**
+     * Get all story sort.
+     *
+     * @param  int    $planID
+     * @param  int    $planOrder
+     * @access public
+     * @return string
+     */
+    public function getAllStorySort($planID, $planOrder)
+    {
+        $orderBy = $this->post->orderBy;
+        if(strpos($orderBy, 'order') !== false) $orderBy = str_replace('order', 'id', $orderBy);
+
+        $stories     = $this->loadModel('story')->getPlanStories($planID, 'all');
+        $storyIDList = array_keys($stories);
+
+        if(strpos($this->post->orderBy, 'order') !== false and !empty($planOrder)) $stories = $this->sortPlanStory($stories, $planOrder, $orderBy);
+
+        $frontCount   = (int)$this->post->recPerPage * ((int)$this->post->pageID - 1);
+        $behindCount  = (int)$this->post->recPerPage * (int)$this->post->pageID;
+        $frontIDList  = array_slice($storyIDList, 0, $frontCount);
+        $behindIDList = array_slice($storyIDList, $behindCount, count($storyIDList) - $behindCount);
+
+        $frontIDList  = !empty($frontIDList)  ? implode(',', $frontIDList) . ',' : '';
+        $behindIDList = !empty($behindIDList) ? implode(',', $behindIDList) : '';
+        return $frontIDList . $this->post->stories . $behindIDList;
+    }
+
+    /**
      * Batch get story stage.
      *
      * @param  array    $stories
@@ -2698,6 +2762,67 @@ class storyModel extends model
         foreach($stories as $story) $storyGroup[$story->stage][$story->id] = $story;
 
         return $storyGroup;
+    }
+
+    /**
+     * Get mail subject.
+     *
+     * @param  object    $story
+     * @access public
+     * @return string
+     */
+    public function getSubject($story)
+    {
+        $productName = $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object    $story
+     * @param  string    $actionType
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($story, $actionType)
+    {
+        /* Set toList and ccList. */
+        $toList = $story->assignedTo;
+        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+
+        /* If the action is changed or reviewed, mail to the project team. */
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
+        {
+            $prjMembers = $this->getProjectMembers($story->id);
+            if($prjMembers)
+            {
+                $ccList .= ',' . join(',', $prjMembers);
+                $ccList = ltrim($ccList, ',');
+            }
+        }
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+        elseif($toList == 'closed')
+        {
+            $toList = $story->openedBy;
+        }
+
+        return array($toList, $ccList);
     }
 
     /**
@@ -3150,63 +3275,32 @@ class storyModel extends model
     }
 
     /**
-     * Get mail subject.
+     * Sort product plan story.
      *
-     * @param  object    $story
+     * @param  int    $planStories
+     * @param  string $order
+     * @param  string $orderBy
      * @access public
-     * @return string
+     * @return array
      */
-    public function getSubject($story)
+    public function sortPlanStory($planStories, $order = '', $orderBy = 'order_asc')
     {
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
-    }
-
-    /**
-     * Get toList and ccList.
-     *
-     * @param  object    $story
-     * @param  string    $actionType
-     * @access public
-     * @return bool|array
-     */
-    public function getToAndCcList($story, $actionType)
-    {
-        /* Set toList and ccList. */
-        $toList = $story->assignedTo;
-        $ccList = str_replace(' ', '', trim($story->mailto, ','));
-
-        /* If the action is changed or reviewed, mail to the project team. */
-        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
+        $stories = array();
+        if(!empty($order))
         {
-            $prjMembers = $this->getProjectMembers($story->id);
-            if($prjMembers)
+            if(is_string($order)) $order = explode(',', $order);
+            if(strpos($orderBy, 'desc') !== false) $order = array_reverse($order, true);
+
+            foreach($order as $id)
             {
-                $ccList .= ',' . join(',', $prjMembers);
-                $ccList = ltrim($ccList, ',');
+                if(empty($id)) continue;
+                if(!isset($planStories[$id])) continue;
+                $stories[$id] = $planStories[$id];
+                unset($planStories[$id]);
             }
+            if($planStories) $stories += $planStories;
         }
 
-        if(empty($toList))
-        {
-            if(empty($ccList)) return false;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
-        }
-        elseif($toList == 'closed')
-        {
-            $toList = $story->openedBy;
-        }
-
-        return array($toList, $ccList);
+        return $stories;
     }
 }

@@ -16,6 +16,9 @@
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <?php js::set('planID', $plan->id);?>
+<?php js::set('storyPageID', $storyPager->pageID);?>
+<?php js::set('storyRecPerPage', $storyPager->recPerPage);?>
+<?php js::set('storyRecTotal', $storyPager->recTotal);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");?>
