@@ -676,6 +676,11 @@ class storyModel extends model
                 }
             }
 
+            if($oldStory->parent == '-1' and $story->branch != $oldStory->branch)
+            {
+                $this->dao->update(TABLE_STORY)->set('branch')->eq($story->branch)->where('parent')->eq($storyID)->exec();
+            }
+
             $this->loadModel('action');
             $changed = $story->parent != $oldStory->parent;
             if($oldStory->parent > 0)
