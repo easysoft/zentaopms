@@ -14,7 +14,7 @@ include 'chosen.html.php';
 <div id='menu'>
   <nav id='menuNav'>
     <?php commonModel::printMainNav($app->rawModule);?>
-    <?php $this->loadModel('common')->getRecentProjects();?>
+    <?php commonModel::getRecentProjects();?>
   </nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>

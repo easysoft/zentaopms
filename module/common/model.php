@@ -539,28 +539,23 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public function getRecentProjects()
+    public static function getRecentProjects()
     {
+        global $dbh, $lang, $app;
         echo '<li><hr></li>';
-        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $this->lang->recent . '</span></li>';
+        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
 
-        $recentProjects = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
-            ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('status')->ne('close')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
-            ->limit(5)
-            ->fetchAll();
+        $extraWhere     = empty($app->user->admin) && !empty($app->user->view->projects) ? ' and parent in (' . $app->user->view->projects . ') ' : '';
+        $recentProjects = $dbh->query('select * from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'close' and deleted = '0' order by 'id' desc limit 6")->fetchAll();
 
         if(!empty($recentProjects))
         {
-            foreach($recentProjects as $project)
+            foreach($recentProjects as $key => $project)
             {
+                if($key == 5) continue;
                 echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "class='text-ellipsis' title='$project->name'") . '</li>';
             }
-
-            if(count($recentProjects) >= 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $this->lang->more . '</span></li>';
+            if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $lang->more . '</span></li>';
         }
 
         echo "</ul>\n";

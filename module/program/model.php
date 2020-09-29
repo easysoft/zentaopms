@@ -139,12 +139,12 @@ class programModel extends model
             ->groupBy('root')
             ->fetchAll('root');
 
-        $estimates = $this->dao->select('program, sum(estimate) as estimate')->from(TABLE_TASK)
-            ->where('program')->in($programIdList)
+        $estimates = $this->dao->select('PRJ, sum(estimate) as estimate')->from(TABLE_TASK)
+            ->where('PRJ')->in($programIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
-            ->groupBy('program')
-            ->fetchAll('program');
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
 
         foreach($programs as $programID => $program)
         {
@@ -833,7 +833,7 @@ class programModel extends model
     {
         return $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
             ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin && $this->app->user->view->projects)->andWhere('parent')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('status')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
