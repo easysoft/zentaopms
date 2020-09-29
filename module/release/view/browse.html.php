@@ -47,6 +47,10 @@
         <?php endif;?>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
+        <?php
+        $extendFields = $this->release->getFlowExtendFields();
+        foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+        ?>
         <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -69,6 +73,7 @@
         <td class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>
+        <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
           <?php
           if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
