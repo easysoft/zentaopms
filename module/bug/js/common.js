@@ -97,11 +97,10 @@ function loadBranch()
   *Load all builds of one project or product.
   *
   * @param  that $that
-  * @param  bool $resolvedBuildBox
   * @access public
   * @return void
   */
-function loadAllBuilds(that, resolvedBuildBox)
+function loadAllBuilds(that)
 {
     that             = (typeof that == undefined) ? undefined : that;
     resolvedBuildBox = (typeof resolvedBuildBox == undefined) ? false : resolvedBuildBox;
@@ -118,15 +117,13 @@ function loadAllBuilds(that, resolvedBuildBox)
         projectID = $('#project').val();
         if(page == 'edit') buildBox = $(that).closest('.input-group').attr('id');
 
-        if(resolvedBuildBox) loadAllProductBuilds(productID, 'resolvedBuildBox');
-
         if(projectID)
         {
             loadAllProjectBuilds(projectID, productID);
         }
         else
         {
-            loadAllProductBuilds(productID, 'openedBuildBox');
+            loadAllProductBuilds(productID);
         }
     }
 }
@@ -166,7 +163,7 @@ function loadAllProjectBuilds(projectID, productID)
         }
         if(buildBox == 'resolvedBuildBox')
         {
-            link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=0&index=0&needCreate=true&type=all');
+            link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
             $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
         }
     }
@@ -176,11 +173,10 @@ function loadAllProjectBuilds(projectID, productID)
   * Load all builds of the product.
   *
   * @param  int    $productID
-  * @param  string $buildBox
   * @access public
   * @return void
   */
-function loadAllProductBuilds(productID, buildBox)
+function loadAllProductBuilds(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -206,7 +202,7 @@ function loadAllProductBuilds(productID, buildBox)
         }
         if(buildBox == 'resolvedBuildBox')
         {
-            link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch' + branch);
+            link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch' + branch + '&index=0&type=all');
             $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
         }
     }
