@@ -815,9 +815,14 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJPairs($projectID = 0)
+    public function getPRJPairs($programID = 0)
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->fetchPairs();
     }
 
     /**

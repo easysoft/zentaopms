@@ -590,7 +590,8 @@ class todo extends control
     public function ajaxGetProgramID($objectID, $objectType)
     {
         $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
-        die($this->dao->select('program')->from($table)->where('id')->eq($objectID)->fetch('program'));
+        $field = $objectType == 'project' ? 'parent' : 'program';
+        die($this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field));
     }
 
     /**
