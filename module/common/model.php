@@ -534,7 +534,7 @@ class commonModel extends model
     }
 
     /**
-     * Gets the most recently created project.
+     * Get recent stage and sprint.
      *
      * @access public
      * @return string

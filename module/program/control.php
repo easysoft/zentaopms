@@ -1,4 +1,13 @@
 <?php
+/**
+ * The control file of program module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     program
+ * @version     $Id
+ * @link        http://www.zentao.net
+ */
 class program extends control
 {
     public function __construct($moduleName = '', $methodName = '')
@@ -11,7 +20,7 @@ class program extends control
     /**
      * Program create guide.
      *
-     * @param  int $programID
+     * @param  int    $programID
      * @param  string $from
      * @access public
      * @return void
@@ -82,6 +91,7 @@ class program extends control
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->programType = $programType;
+
         $this->display();
     }
 
@@ -99,7 +109,7 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
@@ -124,14 +134,12 @@ class program extends control
      * Create a project.
      *
      * @param  string $template
-     * @param  int    $parentProgramID
-     * @param  int    $copyProgramID
      * @access public
      * @return void
      */
     public function PGMCreate($parentProgramID = 0)
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
 
         if($_POST)
@@ -143,13 +151,14 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmbrowse')));
         }
 
-        $this->view->title         = $this->lang->program->PGMCreate;
-        $this->view->position[]    = $this->lang->program->PGMCreate;
+        $this->view->title      = $this->lang->program->PGMCreate;
+        $this->view->position[] = $this->lang->program->PGMCreate;
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : '';
         $this->view->parents       = $this->program->getParentPairs();
+
         $this->display();
     }
 
@@ -162,7 +171,7 @@ class program extends control
      */
     public function PGMEdit($programID = 0)
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
 
         $program = $this->program->getPGMByID($programID);
@@ -191,19 +200,20 @@ class program extends control
         $this->view->program     = $program;
         $this->view->parents     = $parents;
         $this->view->groups      = $this->loadModel('group')->getPairs();
+
         $this->display();
     }
 
     /**
      * View a program.
      *
-     * @param  int $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
     public function PGMView($programID = 0)
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
@@ -220,7 +230,7 @@ class program extends control
     /**
      * Close a program.
      *
-     * @param  int     $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
@@ -248,6 +258,7 @@ class program extends control
         $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('program', $programID);
+
         $this->display('project', 'close');
     }
 
@@ -258,7 +269,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PGMActivate($programID)
+    public function PGMActivate($programID = 0)
     {
         $program = $this->program->getPGMByID($programID);
 
@@ -378,11 +389,9 @@ class program extends control
             die(js::closeModal('parent.parent', 'this'));
         }
 
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $position[] = $this->lang->group->edit;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->group    = $this->group->getById($groupID);
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $this->view->position[] = $this->lang->group->edit;
+        $this->view->group      = $this->group->getById($groupID);
 
         $this->display('group', 'edit');
     }
@@ -408,11 +417,12 @@ class program extends control
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
         $this->view->position[] = $this->lang->group->copy;
         $this->view->group      = $this->group->getById($groupID);
+
         $this->display('group', 'copy');
     }
 
     /**
-     * manageView
+     * Manage views.
      *
      * @param  int    $groupID
      * @access public
@@ -462,6 +472,7 @@ class program extends control
             $groupID = $param;
             $group   = $this->group->getById($groupID);
         }
+
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
@@ -631,6 +642,7 @@ class program extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->orderBy      = $orderBy;
+
         $this->display();
     }
 
@@ -665,7 +677,7 @@ class program extends control
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
                 $program->template = zget($programLang->templateList, $program->template);
-                $program->product = zget($programLang->categoryList, $program->product);
+                $program->product  = zget($programLang->categoryList, $program->product);
                 $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
@@ -674,6 +686,7 @@ class program extends control
                     if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$i]);
                 }
             }
+
             if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
 
             $this->post->set('fields', $fields);
@@ -711,7 +724,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPGMDropMenu($programID, $module, $method)
+    public function ajaxGetPGMDropMenu($programID = 0, $module, $method)
     {
         $this->view->programID = $programID;
         $this->view->module    = $module;
@@ -729,7 +742,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPRJDropMenu($projectID, $module, $method)
+    public function ajaxGetPRJDropMenu($projectID = 0, $module, $method)
     {
         $closedProjects = $this->program->getPRJList(0, 'closed', 0, 'id_desc', null, 0, 0);
 
@@ -828,6 +841,7 @@ class program extends control
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
+
         $this->display();
     }
 
@@ -924,13 +938,14 @@ class program extends control
         $this->view->from          = $from;
         $this->view->programList   = $this->program->getParentPairs();
         $this->view->parentProgram = $this->program->getPGMByID($programID);
+
         $this->display();
     }
 
     /**
      * Edit a project.
      *
-     * @param  int $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -942,6 +957,7 @@ class program extends control
         {
             $changes = $this->program->PRJUpdate($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
@@ -955,13 +971,13 @@ class program extends control
         $project = $this->program->getPRJByID($projectID);
         $parents = $this->program->getParentPairs();
 
-        $this->view->title       = $this->lang->program->PRJEdit;
-        $this->view->position[]  = $this->lang->program->PRJEdit;
+        $this->view->title      = $this->lang->program->PRJEdit;
+        $this->view->position[] = $this->lang->program->PRJEdit;
 
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->project     = $project;
-        $this->view->parents     = $parents;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->pmUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->project = $project;
+        $this->view->parents = $parents;
+        $this->view->groups  = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -1017,6 +1033,7 @@ class program extends control
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
         $this->view->position[] = $this->lang->group->create;
+
         $this->display('group', 'create');
     }
 
@@ -1047,9 +1064,9 @@ class program extends control
         $this->view->position[] = $group->name;
         $this->view->position[] = $this->lang->group->manageView;
 
-        $this->view->group      = $group;
-        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->group    = $group;
+        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $this->display();
     }
@@ -1057,7 +1074,10 @@ class program extends control
     /**
      * Manage privleges of a group.
      *
-     * @param  int    $groupID
+     * @param  string    $type
+     * @param  int       $param
+     * @param  string    $menu
+     * @param  string    $version
      * @access public
      * @return void
      */
@@ -1108,9 +1128,9 @@ class program extends control
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
             $this->view->version    = $version;
-            $program = $this->project->getByID($group->PRJ);
 
             /* Unset not program privs. */
+            $program = $this->project->getByID($group->PRJ);
             foreach($this->lang->resource as $method => $label)
             {
                 if(!in_array($method, $this->config->programPriv->{$program->model})) unset($this->lang->resource->$method);
@@ -1220,6 +1240,7 @@ class program extends control
          $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
          $this->view->position[] = $this->lang->group->copy;
          $this->view->group      = $this->group->getById($groupID);
+
          $this->display('group', 'copy');
     }
 
@@ -1238,11 +1259,9 @@ class program extends control
             die(js::closeModal('parent.parent', 'this'));
         }
 
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $position[] = $this->lang->group->edit;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->group    = $this->group->getById($groupID);
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $this->view->position[] = $this->lang->group->edit;
+        $this->view->group      = $this->group->getById($groupID);
 
         $this->display('group', 'edit');
     }
@@ -1313,6 +1332,7 @@ class program extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
         $this->view->project    = $project;
+
         $this->display('project', 'suspend');
     }
 
@@ -1347,6 +1367,7 @@ class program extends control
         $this->view->project    = $project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+
         $this->display('project', 'close');
     }
 
@@ -1389,6 +1410,7 @@ class program extends control
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
         $this->view->project    = $project;
+
         $this->display('project', 'activate');
     }
 
@@ -1397,7 +1419,6 @@ class program extends control
      *
      * @param  int     $projectID
      * @param  string  $from
-     * @param  int     $programID
      * @access public
      * @return void
      */
@@ -1429,8 +1450,8 @@ class program extends control
      */
     public function PRJUpdateOrder()
     {
-        $idList   = explode(',', trim($this->post->projects, ','));
-        $orderBy  = $this->post->orderBy;
+        $idList  = explode(',', trim($this->post->projects, ','));
+        $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'order') === false) return false;
 
         $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');

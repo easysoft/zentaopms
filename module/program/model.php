@@ -8,7 +8,6 @@ class programModel extends model
      * @param  varchar|int $param
      * @param  varchar     $orderBy
      * @param  int         $limit
-     * @param  int         $programID
      * @access public
      * @return void
      */
@@ -112,10 +111,10 @@ class programModel extends model
     /**
      * Get program stats.
      *
-     * @param  string $status
-     * @param  int    $itemCounts
-     * @param  string $orderBy
-     * @param  int    $pager
+     * @param  string    $status
+     * @param  int       $itemCounts
+     * @param  string    $orderBy
+     * @param  int       $pager
      * @access public
      * @return void
      */
@@ -192,7 +191,6 @@ class programModel extends model
      * @param  varchar $orderBy
      * @param  object  $pager
      * @param  bool    $includeCat
-     * @param  bool    $mine
      * @access public
      * @return array
      */
@@ -209,6 +207,13 @@ class programModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Set view menu.
+     *
+     * @param  int    $programID
+     * @access private
+     * @return void
+     */
     public function setPGMViewMenu($programID = 0)
     {
         foreach($this->lang->program->viewMenu as $label => $menu)
@@ -383,11 +388,7 @@ class programModel extends model
     /*
      * Get program swapper.
      *
-     * @param  object  $programs
-     * @param  int     $programID
-     * @param  varchar $currentModule
-     * @param  varchar $currentMethod
-     * @param  varchar $extra
+     * @param  int    $programID
      * @access private
      * @return void
      */
@@ -407,19 +408,16 @@ class programModel extends model
     /*
      * Get program swapper.
      *
-     * @param  object  $programs
      * @param  int     $programID
-     * @param  varchar $currentModule
-     * @param  varchar $currentMethod
-     * @param  varchar $extra
      * @access private
      * @return void
      */
     public function getPGMSwitcher($programID = 0)
     {
         $currentProgramName = '';
-        $currentModule = $this->app->moduleName;
-        $currentMethod = $this->app->methodName;
+        $currentModule      = $this->app->moduleName;
+        $currentMethod      = $this->app->methodName;
+
         if($programID)
         {
             setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -439,10 +437,10 @@ class programModel extends model
     }
 
     /**
-     * Get the treemenu of program.
+     * Get the tree menu of program.
      *
      * @param  int    $programID
-     * @param  int    $productList
+     * @param  int    $from
      * @param  string $vars
      * @access public
      * @return string
@@ -485,7 +483,8 @@ class programModel extends model
 
         krsort($programMenu);
         $programMenu = array_pop($programMenu);
-        $lastMenu = "<ul class='tree' data-ride='tree' id='programTree' data-name='tree-program'>{$programMenu}</ul>\n";
+        $lastMenu    = "<ul class='tree' data-ride='tree' id='programTree' data-name='tree-program'>{$programMenu}</ul>\n";
+
         return $lastMenu;
     }
 
@@ -522,7 +521,7 @@ class programModel extends model
     /**
      * Judge an action is clickable or not.
      *
-     * @param  object    $project
+     * @param  object    $program
      * @param  string    $action
      * @access public
      * @return bool
@@ -549,7 +548,7 @@ class programModel extends model
     }
 
     /**
-     * Check has content for program
+     * Check has content for program.
      *
      * @param  int    $programID
      * @access public
@@ -655,10 +654,10 @@ class programModel extends model
     /**
      * Move project node.
      *
-     * @param  int    $programID
-     * @param  int    $parentID
-     * @param  string $oldPath
-     * @param  int    $oldGrade
+     * @param  int       $programID
+     * @param  int       $parentID
+     * @param  string    $oldPath
+     * @param  int       $oldGrade
      * @access public
      * @return bool
      */
@@ -691,7 +690,7 @@ class programModel extends model
     /*
      * Get project swapper.
      *
-     * @access private
+     * @access public
      * @return void
      */
     public function printPRJCommonAction()
@@ -709,10 +708,9 @@ class programModel extends model
      * Get project swapper.
      *
      * @param  int     $projectID
-     * @param  varchar $currentModule
-     * @param  varchar $currentMethod
-     * @param  varchar $extra
-     * @access private
+     * @param  string  $currentModule
+     * @param  string  $currentMethod
+     * @access public
      * @return void
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
@@ -739,13 +737,13 @@ class programModel extends model
     /**
      * Get project list data.
      *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  string $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $programTitle
-     * @param  int    $PRJMine
+     * @param  int       $programID
+     * @param  string    $browseType
+     * @param  string    $queryID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $programTitle
+     * @param  int       $PRJMine
      * @access public
      * @return object
      */
@@ -823,13 +821,12 @@ class programModel extends model
     }
 
     /**
-     * Get recent projects.
+     * Get recent stage and sprint.
      *
-     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getPRJRecent($limit = 15)
+    public function getPRJRecent()
     {
         return $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
             ->where('type')->in('stage,sprint')
@@ -837,7 +834,7 @@ class programModel extends model
             ->andWhere('status')->ne('status')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->limit('5,' . $limit)
+            ->limit('5,' . $this->config->program->PRJRecentQuantity)
             ->fetchAll();
     }
 
@@ -886,9 +883,9 @@ class programModel extends model
     /**
      * Get the tree menu of project.
      *
-     * @param  int        $projectID
-     * @param  string     $userFunc
-     * @param  int        $param
+     * @param  int       $projectID
+     * @param  string    $userFunc
+     * @param  int       $param
      * @access public
      * @return string
      */
@@ -1069,6 +1066,7 @@ class programModel extends model
         }
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);
+
         $requiredFields = $this->config->program->PRJEdit->requiredFields;
         if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
