@@ -47,7 +47,7 @@
       <form method='post' target='hiddenwin'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
-            <th class='w-80px'><?php echo $lang->install->company;?></th>
+            <th class='w-160px'><?php echo $lang->install->company;?></th>
             <td class='w-300px'><?php echo html::input('company', '', "class='form-control'");?></td>
           </tr>
           <tr>
