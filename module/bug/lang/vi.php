@@ -131,7 +131,6 @@ $lang->bug->allBugs            = 'Tất cả Bugs';
 $lang->bug->byQuery            = 'Tìm kiếm';
 $lang->bug->needConfirm        = 'Câu chuyện đã thay đổi';
 $lang->bug->allProduct         = 'All' . $lang->productCommon;
-$lang->bug->allProject         = 'All' . $lang->projectCommon;
 $lang->bug->my                 = 'Của bạn';
 $lang->bug->yesterdayResolved  = 'Giải quyết hôm qua ';
 $lang->bug->yesterdayConfirmed = 'Xác nhận hôm qua ';

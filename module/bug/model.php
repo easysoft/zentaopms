@@ -1278,7 +1278,7 @@ class bugModel extends model
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID) + array('all' => $this->lang->bug->allProject);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
@@ -2336,15 +2336,6 @@ class bugModel extends model
             $products = $this->app->user->view->products;
             $bugQuery = str_replace($allProduct, '1', $bugQuery);
             $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
-        }
-
-        /* Fix bug #3356. */
-        $allProject = "`project` = 'all'";
-        if(strpos($bugQuery, $allProject) !== false)
-        {
-            $projects = $this->app->user->view->projects;
-            $bugQuery = str_replace($allProject, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `project` ' . helper::dbIN($projects);
         }
 
         $allBranch = "`branch` = 'all'";
