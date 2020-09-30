@@ -71,6 +71,8 @@ $lang->project->readjustTask  = 'Điều chỉnh nhiệm vụ Thời gian';
 $lang->project->effort        = 'Chấm công';
 $lang->project->relatedMember = 'Đội nhóm';
 $lang->project->watermark     = 'Đã xuất bởi ZenTao';
+$lang->project->burnXUnit     = '(Date)';
+$lang->project->burnYUnit     = "(Hours)";
 $lang->project->viewByUser    = 'Theo người dùng';
 
 $lang->project->start    = 'Bắt đầu';
