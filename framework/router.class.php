@@ -552,17 +552,12 @@ class router extends baseRouter
             /* 如果请求的方法名不是browse、create、edit、view、delete、export中的任何一个，则需要添加action参数来传递请求的方法名。 */
             /* If the requested method name is not any of browse, create, edit, view, delete, or export, you need to add an action parameter to pass the requested method name. */
             if(isset($this->config->workflowaction->default->actions) and !in_array($this->rawMethod, $this->config->workflowaction->default->actions)) $passedParams['action'] = $this->rawMethod;
+
             /* 添加module参数来传递请求的模块名。 */
             /* Add the module parameter to pass the requested module name. */
             $passedParams['module'] = $this->rawModule;
 
             $passedParams = array_reverse($passedParams);
-        }
-
-        /* Fix bug #3267. Param 'words' is not validated when searching. */
-        if($this->rawModule == 'search' and $this->rawMethod == 'index')
-        {
-            unset($passedParams['words']);
         }
 
         /* display参数用来标记请求是否来自禅道客户端的卡片展示页面，此处应该删掉以避免对方法调用产生影响。 */

@@ -1771,6 +1771,9 @@ class baseRouter
             $params = $_GET;
         }
 
+        /* Fix bug #3267. Param 'words' is not validated when searching. */
+        if($this->rawModule == 'search' and $this->rawMethod == 'index') unset($params['words']);
+
         $this->params = $this->mergeParams($defaultParams, $params);
     }
 
