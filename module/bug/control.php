@@ -428,8 +428,6 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
-
-        $moduleID    = $moduleID ? $moduleID : 0;
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
         /* Set team members of the latest project as assignedTo list. */
@@ -465,7 +463,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
-        $this->view->moduleID         = $moduleID ? $moduleID : 0;
+        $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;
