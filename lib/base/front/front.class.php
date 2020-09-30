@@ -342,7 +342,7 @@ class baseHTML
      */
     static public function password($name, $value = "", $attrib = "")
     {
-        if(strpos($attrib, 'autocomplete') === false) $attrib .= " autocomplete='off'";
+        if(stripos($attrib, 'autocomplete') === false) $attrib .= " autocomplete='off'";
         return "<input type='password' name='$name' id='$name' value='$value' $attrib />\n";
     }
 
