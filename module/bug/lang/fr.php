@@ -131,7 +131,6 @@ $lang->bug->allBugs            = 'Tous';
 $lang->bug->byQuery            = 'Rechercher';
 $lang->bug->needConfirm        = 'Story Changée';
 $lang->bug->allProduct         = 'Tous les ' . $lang->productCommon . 's';
-$lang->bug->allProject         = 'Tous les ' . $lang->projectCommon . 's';
 $lang->bug->my                 = 'Mes';
 $lang->bug->yesterdayResolved  = 'Bugs Résolus Hier ';
 $lang->bug->yesterdayConfirmed = 'Bugs Confirmés Hier ';
