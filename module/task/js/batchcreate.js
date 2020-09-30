@@ -1,8 +1,8 @@
-/* Remove 'ditto' in first row. */
+/* Remove 'ditto' in first row and control task name width and tips for tasks that consume. */
 $(function()
 {
     removeDitto();
-    if($('#batchCreateForm table thead tr th.c-name').width() < 200) $('#batchCreateForm table thead tr th.c-name').width(200);
+    if($('th.c-name').width() < 200) $('th.c-name').width(200);
     if(taskConsumed > 0) alert(addChildTask);
 });
 
