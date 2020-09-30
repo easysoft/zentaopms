@@ -297,6 +297,7 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
+        /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
@@ -994,9 +995,8 @@ class story extends control
         /* Set menu. */
         $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $product->id, $story->branch);
 
-        /* Set the closed reason options. */
+        /* Set the closed reason options and remove subdivided options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-
         unset($this->lang->story->reasonList['subdivided']);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
