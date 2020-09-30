@@ -11,13 +11,13 @@
  */
 $lang->install = new stdclass();
 
-$lang->install->common  = 'Installer';
-$lang->install->next    = 'Suivant';
-$lang->install->pre     = 'Retour';
-$lang->install->reload  = 'Rafraichir';
-$lang->install->error   = 'Erreur ';
+$lang->install->common = 'Installer';
+$lang->install->next   = 'Suivant';
+$lang->install->pre    = 'Retour';
+$lang->install->reload = 'Rafraichir';
+$lang->install->error  = 'Erreur ';
 
-$lang->install->officeDomain     = 'https://www.zentao.pm';
+$lang->install->officeDomain = 'https://www.zentao.pm';
 
 $lang->install->start            = 'Commencez';
 $lang->install->keepInstalling   = "Continuez l'installation de cette version";
@@ -30,7 +30,7 @@ ZenTao ALM est un logiciel Open Source publié sous <a href='http://zpl.pub/page
 ZenTao ALM est développé en PHP + MySQL et basé sur le framework ZentaoPHP, un framework independant développé par notre équipe. Les développeurs / organisations tiers peuvent développer des extensions ou personnaliser selon leurs besoins.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM est développé par <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+ZenTao ALM est développé par <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
 Site Officiel : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Support Technique: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a> 
@@ -40,22 +40,22 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 Vous installez ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
-$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Le site officiel a la dernière version <strong class='text-danger'>%s</strong>, sortie le %s.";
-$lang->install->or         = 'Ou';
-$lang->install->checking   = 'System Checkup';
-$lang->install->ok         = 'Passed(√)';
-$lang->install->fail       = 'Failed(×)';
-$lang->install->loaded     = 'Loaded';
-$lang->install->unloaded   = 'Not Loaded';
-$lang->install->exists     = 'Trouvé ';
-$lang->install->notExists  = 'Non trouvé ';
-$lang->install->writable   = 'Inscriptible ';
-$lang->install->notWritable= 'Non inscriptible ';
-$lang->install->phpINI     = 'PHP ini File';
-$lang->install->checkItem  = 'Item';
-$lang->install->current    = 'Param. courants';
-$lang->install->result     = 'Résultat';
-$lang->install->action     = 'Action';
+$lang->install->newReleased = "<strong class='text-danger'>Notice</strong>：Le site officiel a la dernière version <strong class='text-danger'>%s</strong>, sortie le %s.";
+$lang->install->or          = 'Ou';
+$lang->install->checking    = 'System Checkup';
+$lang->install->ok          = 'Passed(√)';
+$lang->install->fail        = 'Failed(×)';
+$lang->install->loaded      = 'Loaded';
+$lang->install->unloaded    = 'Not Loaded';
+$lang->install->exists      = 'Trouvé ';
+$lang->install->notExists   = 'Non trouvé ';
+$lang->install->writable    = 'Inscriptible ';
+$lang->install->notWritable = 'Non inscriptible ';
+$lang->install->phpINI      = 'PHP ini File';
+$lang->install->checkItem   = 'Item';
+$lang->install->current     = 'Param. courants';
+$lang->install->result      = 'Résultat';
+$lang->install->action      = 'Action';
 
 $lang->install->phpVersion = 'PHP Version';
 $lang->install->phpFail    = 'PHP Version devrait être 5.2.0 ou plus';
@@ -118,18 +118,18 @@ $lang->install->errorTableExists    = "La base existe. Si ZenTao a été install
 $lang->install->errorCreateTable    = 'Echec en création de la base.';
 $lang->install->errorImportDemoData = "Echec de l'importation des données de démo.";
 
-$lang->install->setConfig  = 'Créer fichier de configuration';
-$lang->install->key        = 'Objet';
-$lang->install->value      = 'Valeur';
-$lang->install->saveConfig = 'Sauver config';
-$lang->install->save2File  = '<div class="alert alert-warning">Copiez le contenu dans la zone de texte ci-dessus et enregistrez-le dans "<strong> %s </strong>". Vous pourrez modifier ce fichier de configuration ultérieurement.</div>';
-$lang->install->saved2File = 'Le fichier de configuration a été enregistré dans " <strong>%s</strong> ". Vous pouvez modifier ce fichier ultérieurement.';
+$lang->install->setConfig          = 'Créer fichier de configuration';
+$lang->install->key                = 'Objet';
+$lang->install->value              = 'Valeur';
+$lang->install->saveConfig         = 'Sauver config';
+$lang->install->save2File          = '<div class="alert alert-warning">Copiez le contenu dans la zone de texte ci-dessus et enregistrez-le dans "<strong> %s </strong>". Vous pourrez modifier ce fichier de configuration ultérieurement.</div>';
+$lang->install->saved2File         = 'Le fichier de configuration a été enregistré dans " <strong>%s</strong> ". Vous pouvez modifier ce fichier ultérieurement.';
 $lang->install->errorNotSaveConfig = "Le fichier de configuration n'est pas enregistré.";
 
-$lang->install->getPriv  = 'Paramétrage Admin';
-$lang->install->company  = 'Nom Entreprise';
-$lang->install->account  = 'Compte Admin';
-$lang->install->password = 'Mot de Passe Admin';
+$lang->install->getPriv            = 'Paramétrage Admin';
+$lang->install->company            = 'Nom Entreprise';
+$lang->install->account            = 'Compte Admin';
+$lang->install->password           = 'Mot de Passe Admin';
 $lang->install->errorEmptyPassword = 'Password ne doit pas être vide.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
@@ -183,7 +183,7 @@ $lang->install->promotion     = "Autres produits de l'équipe Nature Easy Soft :
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url  = 'http://www.zsite.net';
+$lang->install->chanzhi->url  = 'https://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Article, Blog, Manuel, Membre, Boutique, Forum, Commentaires……</li>
@@ -196,7 +196,7 @@ EOD;
 $lang->install->zdoo = new stdclass();
 $lang->install->zdoo->name = 'ZDOO';
 $lang->install->zdoo->logo = 'images/main/zdoo.ico';
-$lang->install->zdoo->url  = 'http://www.zdoo.com';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
 $lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: gestion des clients et suivi des commandes</li>
