@@ -159,6 +159,7 @@ $lang->repo->error->noPriv        = "Le programme n'a pas les privilèges pour b
 $lang->repo->error->output        = "La commande est: %s\nL'erreur est (%s): %s\n";
 $lang->repo->error->clientVersion = "La version du client est trop ancienne, veuillez mettre à niveau ou changer le client SVN";
 $lang->repo->error->encoding      = "L'encodage est peut-être erroné. Veuillez modifier l'encodage et réessayer.";
+$lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 
 $lang->repo->syncTips      = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";

@@ -924,6 +924,12 @@ class repoModel extends model
         if(!$this->config->features->checkClient) return true;
         if(!$this->post->client) return true;
 
+        if(strpos($this->post->client, ' '))
+        {
+            dao::$errors['client'] = $this->lang->repo->error->clientPath;
+            return false;
+        }
+
         $clientVersionFile = $this->session->clientVersionFile;
         if(empty($clientVersionFile))
         {
@@ -936,7 +942,7 @@ class repoModel extends model
 
         if(file_exists($clientVersionFile)) return true;
 
-        $cmd = str_replace(' ', '" "', $this->post->client) . " --version > $clientVersionFile";
+        $cmd = $this->post->client . " --version > $clientVersionFile";
         dao::$errors['client'] = sprintf($this->lang->repo->error->safe, $clientVersionFile, $cmd);
 
         return false;
@@ -972,7 +978,7 @@ class repoModel extends model
     {
         if(empty($_POST)) return false;
         $scm      = $this->post->SCM;
-        $client   = str_replace(' ', '" "', $this->post->client);
+        $client   = $this->post->client;
         $account  = $this->post->account;
         $password = $this->post->password;
         $encoding = strtoupper($this->post->encoding);

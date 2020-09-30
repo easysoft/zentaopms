@@ -159,6 +159,7 @@ $lang->repo->error->noPriv        = 'The program does not have the privilege  to
 $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n";
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding maybe wrong. Vui lòng change the encoding and try again.";
+$lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 
 $lang->repo->syncTips      = '<strong>Bạn có thể tìm tham khảo làm sao thiết lập đồng bộ Git từ <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，ví dụ:  utf-8";
