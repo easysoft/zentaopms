@@ -15,6 +15,10 @@
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <?php
+$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
+$sessionString .= session_name() . '=' . session_id();
+?>
+<?php
 js::set('fullscreen', $lang->fullscreen);
 js::set('retrack', $lang->retrack);
 js::set('sysurl', common::getSysUrl());
@@ -114,6 +118,20 @@ js::set('docID', $doc->id);
           }
           ?>
 
+          <?php foreach($doc->files as $file):?>
+          <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
+          <div class='file-image'>
+            <a href="<?php echo $file->webPath?>" target="_blank">
+              <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
+            </a>
+            <span class='right-icon'>
+              <?php if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', 'fileID=' . $file->id) . $sessionString, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");?>
+              <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
+            </span>
+          </div>
+          <?php unset($doc->files[$file->id]);?>
+          <?php endif;?>
+          <?php endforeach;?>
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
