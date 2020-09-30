@@ -930,8 +930,15 @@ class repoModel extends model
     public function checkConnection()
     {
         if(empty($_POST)) return false;
+
+        if(strpos($this->post->client, ' '))
+        {
+            dao::$errors['client'] = $this->lang->repo->error->clientPath;
+            return false;
+        }
+
         $scm      = $this->post->SCM;
-        $client   = str_replace(' ', '" "', $this->post->client);
+        $client   = $this->post->client;
         $account  = $this->post->account;
         $password = $this->post->password;
         $encoding = strtoupper($this->post->encoding);
