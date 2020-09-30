@@ -201,7 +201,7 @@ class upgrade extends control
                 else
                 {
                     $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
+                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
                 }
 
                 /* Change program field for product and project. */
@@ -246,7 +246,7 @@ class upgrade extends control
                 else
                 {
                     $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
+                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
                 }
 
                 /* Change program field for product and project. */
@@ -273,7 +273,7 @@ class upgrade extends control
                 else
                 {
                     $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('category')->eq('multiple')->where('id')->eq($programID)->andWhere('category')->eq('single')->exec();
+                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
                 }
 
                 $productID = $this->upgrade->createProduct4Program($programID);
@@ -306,7 +306,7 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetch('count');
-        $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
@@ -333,8 +333,7 @@ class upgrade extends control
 
             $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-                ->where('t1.program')->eq(0)
-                ->andWhere('t1.template')->eq('')
+                ->where('t1.model')->eq('')
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->fetchAll('id');
@@ -373,8 +372,7 @@ class upgrade extends control
 
             $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-                ->where('t1.program')->eq(0)
-                ->andWhere('t1.template')->eq('')
+                ->where('t1.model')->eq('')
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->fetchAll('id');
@@ -402,7 +400,7 @@ class upgrade extends control
         /* Get no merged projects than is not linked product. */
         if($type == 'project')
         {
-            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
+            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
             $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
             foreach($projectProducts as $projectID => $products) unset($noMergedProjects[$projectID]);
 
@@ -413,7 +411,7 @@ class upgrade extends control
         /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
         {
-            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
+            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
             $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
 
             $productPairs = array();
@@ -442,7 +440,7 @@ class upgrade extends control
 
         $this->view->title = $this->lang->upgrade->mergeProgram;
 
-        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->andWhere('template')->eq('scrum')->fetchPairs('id', 'name');
+        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('model')->eq('scrum')->fetchPairs('id', 'name');
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->display();

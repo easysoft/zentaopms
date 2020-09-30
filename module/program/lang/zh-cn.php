@@ -79,8 +79,8 @@ $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
-$lang->program->templateList['scrum']     = "Scrum";
-$lang->program->templateList['waterfall'] = "瀑布";
+$lang->program->modelList['scrum']     = "Scrum";
+$lang->program->modelList['waterfall'] = "瀑布";
 
 $lang->program->PRJCategoryList['single']   = "单产品项目";
 $lang->program->PRJCategoryList['multiple'] = "多产品项目";

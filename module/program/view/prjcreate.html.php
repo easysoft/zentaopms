@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('template', $template);?>
+<?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
@@ -29,7 +29,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
-          <td><?php echo zget($lang->program->templateList, $template, '');?></td><td></td><td>
+          <td><?php echo zget($lang->program->modelList, $model, '');?></td><td></td><td>
           </td>
         </tr>
         <tr>
@@ -44,13 +44,13 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($template == 'scrum'):?>
+        <?php if($model == 'scrum'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
           <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
-        <?php if($template == 'waterfall'):?>
+        <?php if($model == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
           <td><?php echo html::select('product', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
@@ -88,7 +88,7 @@
           </td>
           <td class='muted'></td>
         </tr>
-        <?php if($template == 'scrum'):?>
+        <?php if($model == 'scrum'):?>
         <tr>
           <th><?php echo $lang->project->days;?></th>
           <td>
@@ -126,7 +126,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
-              echo html::hidden('model', $template);
+              echo html::hidden('model', $model);
               echo html::submitButton();
               echo html::backButton();
             ?>

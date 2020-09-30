@@ -292,7 +292,7 @@ class programModel extends model
             if(!empty($groupPriv))
             {
                 $newProgram = $groupPriv->program . ",$programID";
-                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
             }
             else
             {
@@ -866,7 +866,7 @@ class programModel extends model
     }
 
     /**
-     * Get project pairs by template.
+     * Get project pairs by model.
      *
      * @param  string $model
      * @param  int    $programID
@@ -1228,7 +1228,7 @@ class programModel extends model
                     echo html::a(helper::createLink('program', 'index', "projectID=$project->id"), $project->name);
                     break;
                 case 'PRJModel':
-                    echo zget($this->lang->program->templateList, $project->model);
+                    echo zget($this->lang->program->modelList, $project->model);
                     break;
                 case 'PRJPM':
                     echo zget($users, $project->PM);

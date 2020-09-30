@@ -71,9 +71,7 @@ class weekly extends control
     {
         $programs = $this->dao->select('id, name')->from(TABLE_PROJECT)
            ->where('deleted')->eq(0)
-           ->andWhere('isCat')->eq(0)
-           ->andWhere('template')->ne('')
-           ->andWhere('program')->eq(0)
+           ->andWhere('type')->eq('project')
            ->fetchPairs();
         $date = helper::today();
 

@@ -3857,9 +3857,9 @@ class upgradeModel extends model
         $program = new stdclass();
         $program->name          = $data->name;
         $program->code          = $data->code;
-        $program->template      = 'scrum';
+        $program->model         = 'scrum';
         $program->type          = 'program';
-        $program->product      = count($productIdList) > 1 ? 'multiple' : 'single';
+        $program->product       = count($productIdList) > 1 ? 'multiple' : 'single';
         $program->status        = 'wait';
         $program->begin         = $data->begin;
         $program->end           = $data->end;

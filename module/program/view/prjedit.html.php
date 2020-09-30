@@ -23,7 +23,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
-          <td><?php echo zget($lang->program->templateList, $project->model, '');?></td><td></td><td>
+          <td><?php echo zget($lang->program->modelList, $project->model, '');?></td><td></td><td>
           </td>
         </tr>
         <tr>

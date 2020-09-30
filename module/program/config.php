@@ -19,7 +19,7 @@ $config->program->editor->prjstart    = array('id' => 'comment', 'tools' => 'sim
 $config->program->editor->prjactivate = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->program->list = new stdclass();
-$config->program->list->exportFields = 'id,name,code,template,category,status,begin,end,budget,PM,end,desc';
+$config->program->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';
 
 $config->program->PGMCreate = new stdclass();
 $config->program->PGMEdit   = new stdclass();

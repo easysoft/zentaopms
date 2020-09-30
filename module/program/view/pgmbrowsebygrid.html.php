@@ -4,7 +4,7 @@
     <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id", '', '', $program->id);?>'>
       <div class='panel-heading'>
         <strong class='program-name' title='<?php echo $program->name;?>'><?php echo $program->name;?></strong>
-        <?php if($program->template === 'waterfall'): ?>
+        <?php if($program->model === 'waterfall'): ?>
         <span class='program-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
         <?php else: ?>
         <span class='program-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
@@ -31,7 +31,7 @@
           <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $program->estimate); ?></span>
           <span><i class='icon icon-cost'></i> <?php echo $program->budget . '' . zget($lang->program->unitList, $program->budgetUnit);?></span>
         </div>
-        <?php if($program->template === 'waterfall'): ?>
+        <?php if($program->model === 'waterfall'): ?>
         <div class='program-detail program-stages'>
           <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
           <?php

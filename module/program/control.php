@@ -133,7 +133,7 @@ class program extends control
     /**
      * Create a project.
      *
-     * @param  string $template
+     * @param  string $parentProgramID
      * @access public
      * @return void
      */
@@ -676,8 +676,8 @@ class program extends control
             {
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
-                $program->template = zget($programLang->templateList, $program->template);
-                $program->product  = zget($programLang->categoryList, $program->product);
+                $program->model    = zget($programLang->modelList, $program->model);
+                $program->product  = zget($programLang->productList, $program->product);
                 $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
@@ -869,14 +869,14 @@ class program extends control
     /**
      * Create a project.
      *
-     * @param  string $template
+     * @param  string $model
      * @param  int    $programID
      * @param  string $from PRJ|PGM
      * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function PRJCreate($template = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
+    public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
         if($from == 'PRJ')
         {
@@ -917,7 +917,7 @@ class program extends control
             $acl         = $copyProgram->acl;
             $privway     = $copyProgram->privway;
             $whitelist   = $copyProgram->whitelist;
-            if(empty($template)) $template = $copyProgram->template;
+            if(empty($model)) $model = $copyProgram->model;
         }
 
         $this->view->title      = $this->lang->program->PRJCreate;
@@ -925,9 +925,9 @@ class program extends control
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->programs      = array('' => '') + $this->program->getPRJPairsByTemplate($template, $programID);
+        $this->view->programs      = array('' => '') + $this->program->getPRJPairsByTemplate($model, $programID);
         $this->view->programID     = $programID;
-        $this->view->template      = $template;
+        $this->view->model         = $model;
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
