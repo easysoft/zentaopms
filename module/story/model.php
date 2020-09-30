@@ -2366,7 +2366,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function getAllStorySort($planID, $planOrder)
+    public function sortStoriesOfPlan($planID, $planOrder)
     {
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'order') !== false) $orderBy = str_replace('order', 'id', $orderBy);

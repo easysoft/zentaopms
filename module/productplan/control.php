@@ -12,7 +12,7 @@
 class productplan extends control
 {
     /**
-     * Common actions
+     * Common actions.
      *
      * @param  int $productID
      * @param  int $branch
@@ -261,7 +261,7 @@ class productplan extends control
         }
         else
         {
-            $this->session->set('planStoryOrder', '');
+            $this->session->set('sortedIdList', '');
         }
 
         /* Append id for secend sort. */
@@ -284,7 +284,7 @@ class productplan extends control
                 $planStories = $this->story->sortPlanStory($planStories, $plan->order, $orderBy);
 
                 $storyIDList = implode(',', array_keys($planStories));
-                $this->session->set('planStoryOrder', $storyIDList);
+                $this->session->set('sortedIdList', $storyIDList);
 
                 $storyPager->recTotal = count($planStories);
 
@@ -352,10 +352,10 @@ class productplan extends control
         if(empty($planID)) return true;
 
         $plan  = $this->productplan->getByID($planID, true);
-        $order = $this->loadModel('story')->getAllStorySort($planID, $plan->order);
+        $order = $this->loadModel('story')->sortStoriesOfPlan($planID, $plan->order);
 
         $this->dao->update(TABLE_PRODUCTPLAN)->set('`order`')->eq($order)->where('id')->eq((int)$planID)->exec();
-        $this->session->set('planStoryOrder', $order);
+        $this->session->set('sortedIdList', $order);
     }
 
     /**

@@ -1236,9 +1236,9 @@ EOD;
         $preAndNextObject->pre  = '';
         $preAndNextObject->next = '';
 
-        if($type == 'story' and !empty($_SESSION['planStoryOrder']))
+        if($type == 'story' and !empty($_SESSION['sortedIdList']))
         {
-            $objects = explode(',', $_SESSION['planStoryOrder']);
+            $objects = explode(',', $_SESSION['sortedIdList']);
             $key     = array_search($objectID, $objects);
 
             if($key > 0)
