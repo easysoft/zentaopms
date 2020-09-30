@@ -372,10 +372,10 @@ class taskModel extends model
             /* When common task are child tasks and the common task has consumption, create a child task. */
             if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
             {
-                $childTask = $oldParentTask;
-                unset($childTask->id);
-                $childTask->parent = $parentID;
-                $this->dao->insert(TABLE_TASK)->data($childTask)->autoCheck()->exec();
+                $clonedTask = $oldParentTask;
+                unset($clonedTask->id);
+                $clonedTask->parent = $parentID;
+                $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
             }
 
             $this->updateParentStatus($taskID);

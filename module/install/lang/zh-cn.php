@@ -11,13 +11,13 @@
  */
 $lang->install = new stdclass();
 
-$lang->install->common  = '安装';
-$lang->install->next    = '下一步';
-$lang->install->pre     = '返回';
-$lang->install->reload  = '刷新';
-$lang->install->error   = '错误 ';
+$lang->install->common = '安装';
+$lang->install->next   = '下一步';
+$lang->install->pre    = '返回';
+$lang->install->reload = '刷新';
+$lang->install->error  = '错误 ';
 
-$lang->install->officeDomain     = 'https://www.zentao.net';
+$lang->install->officeDomain = 'https://www.zentao.net';
 
 $lang->install->start            = '开始安装';
 $lang->install->keepInstalling   = '继续安装当前版本';
@@ -30,32 +30,32 @@ $lang->install->desc             = <<<EOT
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
 $lang->install->links = <<<EOT
-禅道项目管理软件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>青岛易软天创网络科技有限公司</a>开发</strong>。
+禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>青岛易软天创网络科技有限公司</a>开发</strong>。
 官方网站：<a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 技术支持：<a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
-新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
+新浪微博：<a href='https://weibo.com/easysoft' target='_blank'>https://weibo.com/easysoft</a>
 
 
 
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
-$lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
-$lang->install->or         = '或者';
-$lang->install->checking   = '系统检查';
-$lang->install->ok         = '检查通过(√)';
-$lang->install->fail       = '检查失败(×)';
-$lang->install->loaded     = '已加载';
-$lang->install->unloaded   = '未加载';
-$lang->install->exists     = '目录存在 ';
-$lang->install->notExists  = '目录不存在 ';
-$lang->install->writable   = '目录可写 ';
-$lang->install->notWritable= '目录不可写 ';
-$lang->install->phpINI     = 'PHP配置文件';
-$lang->install->checkItem  = '检查项';
-$lang->install->current    = '当前配置';
-$lang->install->result     = '检查结果';
-$lang->install->action     = '如何修改';
+$lang->install->newReleased = "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
+$lang->install->or          = '或者';
+$lang->install->checking    = '系统检查';
+$lang->install->ok          = '检查通过(√)';
+$lang->install->fail        = '检查失败(×)';
+$lang->install->loaded      = '已加载';
+$lang->install->unloaded    = '未加载';
+$lang->install->exists      = '目录存在 ';
+$lang->install->notExists   = '目录不存在 ';
+$lang->install->writable    = '目录可写 ';
+$lang->install->notWritable = '目录不可写 ';
+$lang->install->phpINI      = 'PHP配置文件';
+$lang->install->checkItem   = '检查项';
+$lang->install->current     = '当前配置';
+$lang->install->result      = '检查结果';
+$lang->install->action      = '如何修改';
 
 $lang->install->phpVersion = 'PHP版本';
 $lang->install->phpFail    = 'PHP版本必须大于5.2.0';
@@ -118,12 +118,12 @@ $lang->install->errorTableExists    = '数据表已经存在，您之前应该�
 $lang->install->errorCreateTable    = '创建表失败';
 $lang->install->errorImportDemoData = '导入demo数据失败';
 
-$lang->install->setConfig  = '生成配置文件';
-$lang->install->key        = '配置项';
-$lang->install->value      = '值';
-$lang->install->saveConfig = '保存配置文件';
-$lang->install->save2File  = '<div class="alert alert-warning">拷贝上面文本框中的内容，将其保存到 "<strong> %s </strong>"中。您以后还可继续修改此配置文件。</div>';
-$lang->install->saved2File = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
+$lang->install->setConfig          = '生成配置文件';
+$lang->install->key                = '配置项';
+$lang->install->value              = '值';
+$lang->install->saveConfig         = '保存配置文件';
+$lang->install->save2File          = '<div class="alert alert-warning">拷贝上面文本框中的内容，将其保存到 "<strong> %s </strong>"中。您以后还可继续修改此配置文件。</div>';
+$lang->install->saved2File         = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 $lang->install->getPriv  = '设置帐号';
@@ -179,12 +179,13 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->promotion      = "为您推荐易软天创旗下其他产品：";
-$lang->install->chanzhi        = new stdclass();
-$lang->install->chanzhi->name  = '蝉知门户';
-$lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url   = 'http://www.zsite.com';
-$lang->install->chanzhi->desc  = <<<EOD
+$lang->install->promotion = "为您推荐易软天创旗下其他产品：";
+
+$lang->install->chanzhi       = new stdclass();
+$lang->install->chanzhi->name = '蝉知门户';
+$lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
+$lang->install->chanzhi->url  = 'https://www.zsite.com';
+$lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>专业的企业营销门户系统</li>
   <li>功能丰富，操作简洁方便</li>
@@ -194,10 +195,10 @@ $lang->install->chanzhi->desc  = <<<EOD
 EOD;
 
 $lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name  = 'ZDOO';
-$lang->install->zdoo->logo  = 'images/main/zdoo.ico';
-$lang->install->zdoo->url   = 'http://www.zdoo.com';
-$lang->install->zdoo->desc  = <<<EOD
+$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->logo = 'images/main/zdoo.ico';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>客户管理，订单跟踪</li>
   <li>项目任务，公告文档</li>
@@ -207,10 +208,10 @@ $lang->install->zdoo->desc  = <<<EOD
 EOD;
 
 $lang->install->xuanxuan = new stdclass();
-$lang->install->xuanxuan->name  = '喧喧聊天';
-$lang->install->xuanxuan->logo  = 'images/main/xuanxuan.ico';
-$lang->install->xuanxuan->url   = 'http://www.xuanim.com';
-$lang->install->xuanxuan->desc  = <<<EOD
+$lang->install->xuanxuan->name = '喧喧聊天';
+$lang->install->xuanxuan->logo = 'images/main/xuanxuan.ico';
+$lang->install->xuanxuan->url  = 'https://www.xuanim.com';
+$lang->install->xuanxuan->desc = <<<EOD
 <ul>
   <li>轻：轻量级架构，容易部署</li>
   <li>跨：真正完整跨平台解决方案</li>
@@ -220,10 +221,10 @@ $lang->install->xuanxuan->desc  = <<<EOD
 EOD;
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = '悦库网盘';
-$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
-$lang->install->ydisk->url   = 'http://www.ydisk.cn';
-$lang->install->ydisk->desc  = <<<EOD
+$lang->install->ydisk->name = '悦库网盘';
+$lang->install->ydisk->logo = 'images/main/ydisk.ico';
+$lang->install->ydisk->url  = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc = <<<EOD
 <ul>
   <li>绝对私有：只部署在自己的机器上</li>
   <li>海量存储：只取决于您的硬盘大小</li>
@@ -233,10 +234,10 @@ $lang->install->ydisk->desc  = <<<EOD
 EOD;
 
 $lang->install->meshiot = new stdclass();
-$lang->install->meshiot->name  = '易天物联';
-$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
-$lang->install->meshiot->url   = 'https://www.meshiot.com';
-$lang->install->meshiot->desc  = <<<EOD
+$lang->install->meshiot->name = '易天物联';
+$lang->install->meshiot->logo = 'images/main/meshiot.ico';
+$lang->install->meshiot->url  = 'https://www.meshiot.com';
+$lang->install->meshiot->desc = <<<EOD
 <ul>
   <li>超性能网关，一个可管6万个设备</li>
   <li>自研通讯协议，2.5公里穿墙无障碍</li>
