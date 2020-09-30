@@ -1272,35 +1272,43 @@ class storyModel extends model
      */
     public function batchChangePlan($storyIdList, $planID, $oldPlanID = 0)
     {
+        /* Prepare data. */
         $now            = helper::now();
         $allChanges     = array();
         $oldStories     = $this->getByList($storyIdList);
         $plan           = $this->loadModel('productplan')->getById($planID);
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
+
+        /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+
+            /* Ignore parent story, closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
             if($oldStory->status == 'closed') continue;
+            if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
 
+            /* Init story and set last edited data. */
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
-            if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
-            if($this->session->currentProductType == 'normal' or empty($oldPlanID) or $oldStory->branch)
-            {
-                $story->plan = $planID;
-                if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
-            }
-            elseif($oldPlanID)
-            {
-                $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
-                if(empty($story->branch)) $story->plan .= ",$planID";
-            }
-            /* Fix bug #3529. */
+
+            /* Remove old plan from the plan field. */
+            if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
+
+            /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
+            if($this->session->currentProductType == 'normal') $story->plan = $planID;
+            if(empty($oldPlanID)) $story->plan = $planID;
+            if($oldStory->branch) $story->plan = $planID;
+
+            /* Append the plan id to plan field if product is multi and story is all branch. */
+            if($this->session->currentProductType != 'normal' and empty($story->branch)) $story->plan .= ",$planID";
+
+            /* Change stage. */
+            if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
             if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
             {
-                $story->plan = $oldStory->plan ? $oldStory->plan . ',' . $planID : $planID;
                 if(!isset($oldStoryStages[$storyID][$plan->branch]))
                 {
                     $story->stage = 'planned';
@@ -1312,9 +1320,10 @@ class storyModel extends model
                 }
             }
 
+            /* Update story and recompute stage. */
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-
             if(!$planID) $this->setStage($storyID);
+
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         return $allChanges;
