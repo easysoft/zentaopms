@@ -34,17 +34,6 @@ function loadProduct(productID)
 
 function loadBranch()
 {
-    if(typeof parentStory != 'undefined' && parentStory)
-    {
-        confirmLoadBranch = confirm(changeBranchTips);
-        if(!confirmLoadBranch)
-        {
-            $('#branch').val(oldBranch);
-            $('#branch').trigger("chosen:updated");
-            return false;
-        }
-    }
-
     var branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     loadProductModules($('#product').val(), branch);

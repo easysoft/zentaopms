@@ -255,7 +255,6 @@ $lang->story->noStory              = "Aucune story pour l'instant. ";
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->storyCommon} parent";
 $lang->story->moveChildrenTips     = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
-$lang->story->changeBranchTips     = "Its Child {$lang->storyCommon} will be moved to the selected branch when editing the linked branch of Parent {$lang->storyCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
