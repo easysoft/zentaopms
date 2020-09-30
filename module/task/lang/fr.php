@@ -220,7 +220,7 @@ $lang->task->error->deadlineSmall     = '"Date Limite" doit être supérieur à 
 $lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
-$lang->task->error->chooseOtherParent = 'the currently selected parent task has been consumed, please select another parent task.';
+$lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
 
 /* Report. */
 $lang->task->report = new stdclass();

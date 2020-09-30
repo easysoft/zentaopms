@@ -220,7 +220,7 @@ $lang->task->error->deadlineSmall     = '"截止日期"必须大于"预计开始
 $lang->task->error->alreadyStarted    = '此任务已被启动，不能重复启动！';
 $lang->task->error->realStartedEmpty  = '实际开始不能为空';
 $lang->task->error->finishedDateEmpty = '实际完成不能为空';
-$lang->task->error->chooseOtherParent = '当前选中的父任务已有消耗，请选择其他父任务。';
+$lang->task->error->alreadyConsumed   = '当前选中的父任务已有消耗。';
 
 /* Report. */
 $lang->task->report         = new stdclass();
