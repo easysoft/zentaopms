@@ -745,7 +745,7 @@ class taskModel extends model
         {
             $taskConsumed = 0;
             $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0) die(js::error($this->lang->task->error->chooseOtherParent));
+            if($taskConsumed > 0) die(js::error($this->lang->task->error->alreadyConsumed));
         }
 
         $now  = helper::now();
