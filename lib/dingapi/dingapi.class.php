@@ -123,24 +123,19 @@ class dingapi
      */
     public function send($userList, $message)
     {
-        $curl = $this->initCurl();
-        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . 'topapi/message/corpconversation/asyncsend_v2?access_token=' . $this->token);
-
         $postData = array();
         $postData['agent_id']    = $this->agentId;
         $postData['userid_list'] = $userList;
         $postData['msg']         = $message;
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
 
-        $response = curl_exec($curl);
-        $errors   = curl_error($curl);
-        curl_close($curl);
+        $url = $this->apiUrl . 'topapi/message/corpconversation/asyncsend_v2?access_token=' . $this->token;
+        $response = common::http($url, $postData);
+        $errors   = commonModel::$errors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
 
-        if(empty($response)) $this->errors[] = $errors;
+        if(empty($response)) $this->errors = $errors;
         if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return array('result' => 'fail', 'message' => $this->errors);
     }
@@ -154,42 +149,15 @@ class dingapi
      */
     public function queryAPI($url)
     {
-        $curl = $this->initCurl();
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        $response = curl_exec($curl);
-        $errors   = curl_error($curl);
-        curl_close($curl);
+        $response = common::http($url);
+        $errors   = commonModel::$errors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return $response;
 
-        if(empty($response)) $this->errors[] = $errors;
+        if(empty($response)) $this->errors = $errors;
         if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return false;
-    }
-
-    /**
-     * Init curl.
-     * 
-     * @access public
-     * @return object
-     */
-    public function initCurl()
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
-
-        return $curl;
     }
 
     /**

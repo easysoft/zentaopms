@@ -11,6 +11,8 @@
  */
 class commonModel extends model
 {
+    static public $errors = array();
+
     /**
      * The construc method, to do some auto things.
      *
@@ -1881,10 +1883,12 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $optHeader = false, $userPWD = '')
+    public static function http($url, $data = null, $options = array(), $headers = array())
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        commonModel::$errors = array();
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -1897,19 +1901,18 @@ EOD;
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($curl, CURLOPT_HEADER, FALSE);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
 
         $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
-        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
-        if($optHeader) curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_URL, $url);
         if(!empty($data))
         {
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
-        if(!empty($userPWD)) curl_setopt($curl, CURLOPT_USERPWD, $userPWD);
+        foreach($options as $option => $value) curl_setopt($curl, $option, $value);
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
@@ -1928,6 +1931,8 @@ EOD;
             if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
             fclose($fh);
         }
+
+        if($errors) commonModel::$errors[] = $errors;
 
         return $response;
     }
