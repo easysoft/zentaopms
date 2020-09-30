@@ -1297,7 +1297,8 @@ class testcase extends control
                 {
                     foreach($relatedFiles[$case->id] as $file)
                     {
-                        $case->files .= $file->title . '<br />';
+                        $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");
+                        $case->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }
             }
