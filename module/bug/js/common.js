@@ -96,15 +96,12 @@ function loadBranch()
 /**
   *Load all builds of one project or product.
   *
-  * @param  that $that
+  * @param  object $object
   * @access public
   * @return void
   */
-function loadAllBuilds(that)
+function loadAllBuilds(object)
 {
-    that             = (typeof that == undefined) ? undefined : that;
-    resolvedBuildBox = (typeof resolvedBuildBox == undefined) ? false : resolvedBuildBox;
-
     if(page == 'resolve')
     {
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
@@ -115,7 +112,7 @@ function loadAllBuilds(that)
     {
         productID = $('#product').val();
         projectID = $('#project').val();
-        if(page == 'edit') buildBox = $(that).closest('.input-group').attr('id');
+        if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');
 
 
         if(projectID)
