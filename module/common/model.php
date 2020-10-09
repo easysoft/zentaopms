@@ -11,7 +11,7 @@
  */
 class commonModel extends model
 {
-    static public $errors = array();
+    static public $requestErrors = array();
 
     /**
      * The construc method, to do some auto things.
@@ -1888,7 +1888,7 @@ EOD;
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
 
-        commonModel::$errors = array();
+        commonModel::$requestErrors = array();
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -1932,7 +1932,7 @@ EOD;
             fclose($fh);
         }
 
-        if($errors) commonModel::$errors[] = $errors;
+        if($errors) commonModel::$requestErrors[] = $errors;
 
         return $response;
     }

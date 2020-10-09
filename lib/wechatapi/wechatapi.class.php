@@ -114,7 +114,7 @@ class wechatapi
 
         $url = $this->apiUrl . 'message/send?access_token=' . $this->token;
         $response = common::http($url, json_encode($message), array(), array('Content-Type: text/plain'));
-        $errors   = commonModel::$errors;
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
@@ -134,7 +134,7 @@ class wechatapi
     public function queryAPI($url)
     {
         $response = common::http($curl);
-        $errors   = commonModel::$errors;
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return $response;
