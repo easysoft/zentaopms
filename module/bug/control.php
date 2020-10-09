@@ -127,18 +127,13 @@ class bug extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init(0, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
         $projects = $this->loadModel('project')->getPairs('empty|withdelete');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
-        if(empty($bugs) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
-        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);

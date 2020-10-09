@@ -54,11 +54,6 @@ class testsuite extends control
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
 
         $suites = $this->testsuite->getSuites($productID, $sort, $pager);
-        if(empty($suites) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $suites = $this->testsuite->getSuites($productID, $sort, $pager);
-        }
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);

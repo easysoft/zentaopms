@@ -1729,6 +1729,7 @@ class storyModel extends model
             $branch = join(',', $branch);
             if($branch) $branch = "0,$branch";
         }
+
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
@@ -1738,7 +1739,10 @@ class storyModel extends model
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
         return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
