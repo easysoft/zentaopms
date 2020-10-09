@@ -1914,10 +1914,7 @@ EOD;
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
-        if($options)
-        {
-            foreach($options as $option => $value) curl_setopt($curl, $option, $value);
-        }
+        if($options) curl_setopt_array($curl, $options);
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
