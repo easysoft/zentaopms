@@ -567,7 +567,6 @@ class storyModel extends model
             ->remove('files,labels,comment,contactListMenu,stages')
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
-        if(empty($_POST['product'])) $story->branch = $oldStory->branch;
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
         if(!empty($_POST['stages']))
         {
