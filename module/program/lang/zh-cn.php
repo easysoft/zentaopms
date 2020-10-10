@@ -41,6 +41,7 @@ $lang->program->begin              = '计划开始日期';
 $lang->program->end                = '计划完成日期';
 $lang->program->PRJStatus          = '项目状态';
 $lang->program->PRJPM              = '项目负责人';
+$lang->program->PO                 = '产品负责人';
 $lang->program->PRJBudget          = '项目预算';
 $lang->program->PRJTemplate        = '项目模板';
 $lang->program->PRJEstimate        = '预计';
