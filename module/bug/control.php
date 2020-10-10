@@ -365,7 +365,7 @@ class bug extends control
         $pri        = 3;
         $color      = '';
 
-        /* Parse the extras. extract fix php7.2*/
+        /* Parse the extras. extract fix php7.2. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
         extract($output);

@@ -448,12 +448,12 @@ $lang->company->menu->view        = array('link' => 'Entreprise|company|view');
 /* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => 'Accueil|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company   = array('link' => 'Company|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->admin->menu->message   = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->data      = array('link' => 'Données|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe      = array('link' => 'Sécurité|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => 'Système|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->index   = array('link' => 'Accueil|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company = array('link' => 'Personnel|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->admin->menu->message = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->data    = array('link' => 'Données|backup|index', 'subModule' => 'backup,action');
+$lang->admin->menu->safe    = array('link' => 'Sécurité|admin|safe', 'alias' => 'checkweak');
+$lang->admin->menu->system  = array('link' => 'Système|cron|index', 'subModule' => 'cron');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;

@@ -60,6 +60,7 @@ $lang->required     = '必填';
 $lang->noData       = '暫無';
 $lang->fullscreen   = '全屏';
 $lang->retrack      = '收起';
+$lang->recent       = '近期';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
