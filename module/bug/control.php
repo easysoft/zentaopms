@@ -483,6 +483,7 @@ class bug extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->color            = $color;
+        $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
 
         $this->display();
     }

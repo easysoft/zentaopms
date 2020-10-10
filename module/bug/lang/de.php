@@ -172,12 +172,13 @@ $lang->bug->legendRelated               = 'Sonstige Infos';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
-$lang->bug->confirmChangeProduct  = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
-$lang->bug->confirmDelete         = 'Do you want to delete this bug?';
-$lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
-$lang->bug->projectAccessDenied   = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->summary              = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
+$lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
+$lang->bug->confirmDelete        = 'Do you want to delete this bug?';
+$lang->bug->remindTask           = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
+$lang->bug->skipClose            = 'Bug %s is not resolved. You cannot close it.';
+$lang->bug->projectAccessDenied  = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";

@@ -172,12 +172,13 @@ $lang->bug->legendRelated               = '其他信息';
 $lang->bug->buttonConfirm = '确认';
 
 /* 交互提示。*/
-$lang->bug->summary               = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
-$lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、{$lang->storyCommon}和任务发生变化，确定吗？";
-$lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
-$lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
-$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
-$lang->bug->projectAccessDenied   = "您无权访问该Bug所属的{$lang->projectCommon}！";
+$lang->bug->summary              = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
+$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、{$lang->storyCommon}和任务发生变化，确定吗？";
+$lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
+$lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
+$lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
+$lang->bug->projectAccessDenied  = "您无权访问该Bug所属的{$lang->projectCommon}！";
+$lang->bug->stepsNotEmpty        = "重现步骤不能为空。";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";

@@ -172,12 +172,13 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* Interactive prompt. */
-$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
-$lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
-$lang->bug->confirmDelete         = 'Do you want to delete this bug?';
-$lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
-$lang->bug->projectAccessDenied   = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->summary              = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
+$lang->bug->confirmChangeProduct = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
+$lang->bug->confirmDelete        = 'Do you want to delete this bug?';
+$lang->bug->remindTask           = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
+$lang->bug->skipClose            = 'Bug %s is active. You cannot close it.';
+$lang->bug->projectAccessDenied  = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
