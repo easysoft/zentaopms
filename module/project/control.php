@@ -689,7 +689,6 @@ class project extends control
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
-        $this->session->set('sortedIdList', '');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->projectStoryOrder ? $this->cookie->projectStoryOrder : 'pri';

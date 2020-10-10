@@ -1238,24 +1238,6 @@ EOD;
         $preAndNextObject->pre  = '';
         $preAndNextObject->next = '';
 
-        if($type == 'story' and !empty($_SESSION['sortedIdList']))
-        {
-            $objects = explode(',', $_SESSION['sortedIdList']);
-            $key     = array_search($objectID, $objects);
-
-            if($key > 0)
-            {
-                $preObjectID = $objects[$key - 1];
-                $preAndNextObject->pre = $this->loadModel('story')->getByID($preObjectID);
-            }
-            if($key < (count($objects) - 1))
-            {
-                $nextObjectID = $objects[$key + 1];
-                $preAndNextObject->next = $this->loadModel('story')->getByID($nextObjectID);
-            }
-            return $preAndNextObject;
-        }
-
         /* Get objectIDList. */
         $table             = $this->config->objectTables[$type];
         $queryCondition    = $type . 'QueryCondition';

@@ -610,6 +610,10 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4_1');
             $this->execSQL($this->getUpgradeFile('12.4.1'));
             $this->appendExec('12_4_1');
+        case '12_4_2':
+            $this->saveLogs('Execute 12_4_2');
+            $this->execSQL($this->getUpgradeFile('12.4.2'));
+            $this->appendExec('12_4_2');
         }
 
         $this->deletePatch();
