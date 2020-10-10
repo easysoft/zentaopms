@@ -1,6 +1,6 @@
 function setCopyProject(projectID)
 {
-    location.href = createLink('project', 'create', 'projectID=0&copyProjectID=' + projectID);
+    location.href = createLink('project', 'create', 'productID=&projectID=0&copyProjectID=' + projectID);
 }
 
 $(function()

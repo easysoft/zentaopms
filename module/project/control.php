@@ -1045,14 +1045,16 @@ class project extends control
     /**
      * Create a project.
      *
+     * @param string $productID
      * @param string $projectID
      * @param string $copyProjectID
      * @param int    $planID
+     * @param string $confirm
      *
      * @access public
      * @return void
      */
-    public function create($projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no', $productID = '')
+    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
     {
         if($projectID)
         {
@@ -1064,7 +1066,7 @@ class project extends control
                 }
                 else
                 {
-                    die(js::confirm($this->lang->project->importPlanStory, inlink('create', "projectID=$projectID&copyProjectID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID"), 'parent', 'parent'));
+                    die(js::confirm($this->lang->project->importPlanStory, inlink('create', "productID=&projectID=$projectID&copyProjectID=&planID=$planID&confirm=yes"), inlink('create', "productID=&projectID=$projectID"), 'parent', 'parent'));
                 }
             }
             $this->view->title     = $this->lang->project->tips;
@@ -1130,11 +1132,11 @@ class project extends control
             }
             if(!empty($planID))
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&copyProjectID=&planID=$planID&confirm=no")));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&projectID=$projectID&copyProjectID=&planID=$planID&confirm=no")));
             }
             else
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID")));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&projectID=$projectID")));
             }
         }
 
