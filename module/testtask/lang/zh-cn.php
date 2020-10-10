@@ -123,7 +123,7 @@ $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 $lang->testtask->confirmDelete     = '您确认要删除该测试单吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testtask->noticeNoOther     = '该产品还没有其他测试单';
-$lang->testtask->noTesttask        = '暂时没有测试单';
+$lang->testtask->noTesttask        = '暂时没有测试单。';
 $lang->testtask->checkLinked       = '请检查测试单的产品是否与项目相关联';
 $lang->testtask->noImportData      = '导入的XML没有解析出数据。';
 $lang->testtask->unitXMLFormat     = '请选择Junit XML 格式的文件。';

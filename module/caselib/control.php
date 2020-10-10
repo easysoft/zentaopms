@@ -200,11 +200,6 @@ class caselib extends control
 
         /* save session .*/
         $cases = $this->caselib->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-        if(empty($cases) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->caselib->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 

@@ -20,6 +20,8 @@ js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 js::set('flow', $config->global->flow);
+js::set('stepsRequired', $stepsRequired);
+js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -219,10 +221,9 @@ js::set('flow', $config->global->flow);
           </tr>
           <tr>
             <th><?php echo $lang->bug->steps;?></th>
-            <td colspan='2' class='steps'>
+            <td colspan='2'>
               <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
               <?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?>
-              <?php echo html::hidden('templateID', '');?>
             </td>
           </tr>
           <?php

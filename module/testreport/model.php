@@ -363,6 +363,24 @@ class testreportModel extends model
     }
 
     /**
+     * Get caseID list.
+     *
+     * @param  int    $reportID
+     * @access public
+     * @return void
+     */
+    public function getCaseIdList($reportID)
+    {
+        $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTREPORT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.tasks=t2.task')
+            ->where('t1.id')->eq($reportID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchPairs('case');
+
+        return $caseIdList;
+    }
+
+    /**
      * Get result summary.
      * 
      * @param  array    $tasks 
@@ -409,6 +427,7 @@ class testreportModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')
             ->on('t1.run= t2.id')
             ->where('t2.task')->in(array_keys($tasks))
+            ->andwhere('t1.date = t2.lastRunDate')
             ->andWhere('t1.`case`')->in(array_keys($cases))
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
@@ -440,6 +459,7 @@ class testreportModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')
             ->on('t1.run= t2.id')
             ->where('t2.task')->in(array_keys($tasks))
+            ->andwhere('t1.date = t2.lastRunDate')
             ->andWhere('t1.`case`')->in(array_keys($cases))
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")

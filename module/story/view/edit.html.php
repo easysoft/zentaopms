@@ -80,6 +80,13 @@
                   </div>
                 </td>
               </tr>
+              <?php else:?>
+              <tr>
+                <th class='thWidth'><?php echo $lang->product->branch;?></th>
+                <td>
+                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
+                </td>
+              </tr>
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->story->module;?></th>

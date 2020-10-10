@@ -21,7 +21,7 @@ $useGuest = $this->app->user->account == 'guest';
   <?php if(empty($longBlocks) and empty($shortBlocks)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->block->noData. ',';?></span>
+      <span class="text-muted"><?php echo $lang->block->noData;?></span>
       <?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus'></i> {$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}' class='btn btn-info'")?> 
       <?php echo html::a($this->createLink("block", "ajaxReset", "module=$module"), "<i class='icon icon-refresh'></i> {$lang->block->reset}", 'hiddenwin', 'class="btn btn-info"')?>
     </p>

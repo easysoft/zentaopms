@@ -127,18 +127,13 @@ class bug extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init(0, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
         $projects = $this->loadModel('project')->getPairs('empty|withdelete');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
-        if(empty($bugs) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
-        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
@@ -371,7 +366,7 @@ class bug extends control
         $pri        = 3;
         $color      = '';
 
-        /* Parse the extras. extract fix php7.2*/
+        /* Parse the extras. extract fix php7.2. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
         extract($output);
@@ -487,6 +482,7 @@ class bug extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->color            = $color;
+        $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
 
         $this->display();
     }

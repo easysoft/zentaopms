@@ -23,7 +23,6 @@
         <?php endif;?>
       </h2>
     </div>
-    
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr class='hide'>

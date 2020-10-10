@@ -360,8 +360,8 @@ class basePager
     /**
      * 设置分页信息的样式。
      * Get the pager html string.
-     * 
-     * @param  string $align 
+     *
+     * @param  string $align
      * @param  string $type     the pager type, full|short|shortest
      * @access public
      * @return string
@@ -392,7 +392,7 @@ class basePager
             $position = $this->pageTotal == 1 ? '' : $this->pageID . '/' . $this->pageTotal;
             $pager    = $pager . ' ' . $position;
         }
-        else if($type != 'full') 
+        else if($type != 'full')
         {
             $pager = $this->pageID . '/' . $this->pageTotal . ' ' . $pager;
         }

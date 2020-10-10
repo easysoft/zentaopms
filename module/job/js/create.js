@@ -100,13 +100,11 @@ $('#jkHost').change(function()
         $('#jkJobBox .loading').remove();
         $('#jkJobBox .input-group').append(html);
 
-        var dropDirection = $('#jkJobBox #jkJob option').length > 2 ? 'up' : 'auto';
-        $('#jkJobBox #jkJob').chosen({drop_direction: dropDirection});
+        $('#jkJobBox #jkJob').chosen({drop_direction: 'auto'});
     })
 })
 
 $(function()
 {
-    $('#jkHost').chosen({drop_direction: $('#jkHost option').length > 3 ? 'up' : 'auto'});
     $('#triggerType').change();
 });

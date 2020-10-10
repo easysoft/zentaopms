@@ -130,7 +130,7 @@ class dingapi
 
         $url = $this->apiUrl . 'topapi/message/corpconversation/asyncsend_v2?access_token=' . $this->token;
         $response = common::http($url, $postData);
-        $errors   = commonModel::$errors;
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
@@ -150,7 +150,7 @@ class dingapi
     public function queryAPI($url)
     {
         $response = common::http($url);
-        $errors   = commonModel::$errors;
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return $response;

@@ -22,7 +22,7 @@ function loadAllUsers()
 /**
   * Load team members of the latest project of a product as assignedTo list.
   *
-  * @param  $productID
+  * @param  int    $productID
   * @access public
   * @return void
   */
@@ -33,7 +33,7 @@ function loadProjectTeamMembers(productID)
 }
 
 /**
- * load assignedTo and stories of module.
+ * Load assignedTo and stories of module.
  *
  * @access public
  * @return void
@@ -50,6 +50,8 @@ function loadModuleRelated()
 /**
  * Set the assignedTo field.
  *
+ * @param  int    $moduleID
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -83,13 +85,14 @@ function setAssignedTo(moduleID, productID)
     });
 }
 
+var stepsTemplate;
 $(function()
 {
     if($('#project').val()) loadProjectRelated($('#project').val());
 
     $('[data-toggle=tooltip]').tooltip();
 
-    // adjust size of bug type input group
+    /* Adjust size of bug type input group. */
     var adjustBugTypeGroup = function()
     {
         var $group = $('#bugTypeInputGroup');
@@ -107,12 +110,30 @@ $(function()
     adjustBugTypeGroup();
     $(window).on('resize', adjustBugTypeGroup);
 
-    // init pri and severity selector
+    /* Init pri and severity selector. */
     $('#severity, #pri').on('change', function()
     {
         var $select = $(this);
         var $selector = $select.closest('.pri-selector');
         var value = $select.val();
         $selector.find('.pri-text').html($selector.data('type') === 'severity' ? '<span class="label-severity" data-severity="' + value + '" title="' + value + '"></span>' : '<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
+    });
+
+    /* Get steps template. */
+    stepsTemplate = editor['steps'].html();
+    $("a[id^='tplTitleBox']").on('click', function()
+    {
+        setTimeout("stepsTemplate = editor['steps'].html()", 100);
+    });
+
+    /* Judgment of required items for steps. */
+    $('#submit').on('click', function()
+    {
+        var steps = editor['steps'].html();
+        if(stepsRequired !== false && stepsTemplate == steps)
+        {
+            bootbox.alert(stepsNotEmpty);
+            return false;
+        }
     });
 });

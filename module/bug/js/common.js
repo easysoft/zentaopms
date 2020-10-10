@@ -112,16 +112,17 @@ function loadAllBuilds(object)
     {
         productID = $('#product').val();
         projectID = $('#project').val();
-        if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');
 
+        var buildBox = '';
+        if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');
 
         if(projectID)
         {
-            loadAllProjectBuilds(projectID, productID);
+            loadAllProjectBuilds(projectID, productID, buildBox);
         }
         else
         {
-            loadAllProductBuilds(productID);
+            loadAllProductBuilds(productID, buildBox);
         }
     }
 }
@@ -131,10 +132,11 @@ function loadAllBuilds(object)
   *
   * @param  int    $projectID
   * @param  int    $productID
+  * @param  string $buildBox
   * @access public
   * @return void
   */
-function loadAllProjectBuilds(projectID, productID)
+function loadAllProjectBuilds(projectID, productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -171,10 +173,11 @@ function loadAllProjectBuilds(projectID, productID)
   * Load all builds of the product.
   *
   * @param  int    $productID
+  * @param  string $buildBox
   * @access public
   * @return void
   */
-function loadAllProductBuilds(productID)
+function loadAllProductBuilds(productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;

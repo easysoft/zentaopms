@@ -92,16 +92,11 @@ class testcase extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
-        if(empty($cases) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
-        }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
@@ -1504,7 +1499,7 @@ class testcase extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->position[] = $this->lang->testcase->importFromLib;
