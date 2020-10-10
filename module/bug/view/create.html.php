@@ -219,10 +219,9 @@ js::set('flow', $config->global->flow);
           </tr>
           <tr>
             <th><?php echo $lang->bug->steps;?></th>
-            <td colspan='2' class='steps'>
+            <td colspan='2'>
               <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
               <?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?>
-              <?php echo html::hidden('templateID', '');?>
             </td>
           </tr>
           <?php

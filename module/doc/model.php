@@ -513,15 +513,15 @@ class docModel extends model
      *
      * @param  int    $libID
      * @param  int    $module
-     * @param  string $mode  undeleted|all
+     * @param  string $mode  normal|all
      * @access public
      * @return void
      */
-    public function getPrivDocs($libID = 0, $module = 0, $mode = 'undeleted')
+    public function getPrivDocs($libID = 0, $module = 0, $mode = 'normal')
     {
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('1=1')
-            ->beginIF($mode == 'undeleted')->andWhere('deleted')->eq(0)->fi()
+            ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
             ->beginIF(strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()

@@ -211,7 +211,7 @@ class repoModel extends model
             ->autoCheck()
             ->exec();
 
-        $this->rmClientVersionFile();
+        if(!dao::isError()) $this->rmClientVersionFile();
 
         return $this->dao->lastInsertID();
     }

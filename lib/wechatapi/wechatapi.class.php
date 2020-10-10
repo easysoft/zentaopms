@@ -108,26 +108,18 @@ class wechatapi
      */
     public function send($userList, $message)
     {
-        $curl = $this->initCurl();
-
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
-        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . 'message/send?access_token=' . $this->token);
-
         $message = json_decode($message);
         $message->agentid = $this->agentId;
         $message->touser  = str_replace(',', '|', $userList);
 
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($message));
-
-        $response = curl_exec($curl);
-        $errors   = curl_error($curl);
-        curl_close($curl);
+        $url = $this->apiUrl . 'message/send?access_token=' . $this->token;
+        $response = common::http($url, json_encode($message), array(), array('Content-Type: text/plain'));
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
 
-        if(empty($response)) $this->errors[] = $errors;
+        if(empty($response)) $this->errors = $errors;
         if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return array('result' => 'fail', 'message' => $this->errors);
     }
@@ -141,40 +133,15 @@ class wechatapi
      */
     public function queryAPI($url)
     {
-        $curl = $this->initCurl();
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        $response = curl_exec($curl);
-        $errors   = curl_error($curl);
-        curl_close($curl);
+        $response = common::http($curl);
+        $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return $response;
 
-        if(empty($response)) $this->errors[] = $errors;
+        if(empty($response)) $this->errors = $errors;
         if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return false;
-    }
-
-    /**
-     * Init curl
-     * 
-     * @access public
-     * @return object
-     */
-    public function initCurl()
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-
-        return $curl;
     }
 
     /**

@@ -195,7 +195,7 @@ $lang->install->chanzhi->desc = <<<EOD
 EOD;
 
 $lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->name = 'ZDOO协同';
 $lang->install->zdoo->logo = 'images/main/zdoo.ico';
 $lang->install->zdoo->url  = 'https://www.zdoo.com';
 $lang->install->zdoo->desc = <<<EOD
