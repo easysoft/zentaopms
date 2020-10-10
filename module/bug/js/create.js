@@ -22,7 +22,7 @@ function loadAllUsers()
 /**
   * Load team members of the latest project of a product as assignedTo list.
   *
-  * @param  $productID
+  * @param  int    $productID
   * @access public
   * @return void
   */
@@ -33,7 +33,7 @@ function loadProjectTeamMembers(productID)
 }
 
 /**
- * load assignedTo and stories of module.
+ * Load assignedTo and stories of module.
  *
  * @access public
  * @return void
@@ -50,6 +50,8 @@ function loadModuleRelated()
 /**
  * Set the assignedTo field.
  *
+ * @param  int    $moduleID
+ * @param  int    $productID
  * @access public
  * @return void
  */
