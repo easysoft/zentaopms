@@ -222,7 +222,6 @@ class bugModel extends model
             $data->browsers[$i] = $browser;
         }
 
-        /* If there are images to upload, load the file module. */
         if(isset($data->uploadImage)) $this->loadModel('file');
         $extendFields = $this->getFlowExtendFields();
 
