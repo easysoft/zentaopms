@@ -43,7 +43,7 @@ $lang->block->myBug     = '我的BUG';
 $lang->block->myProject = '未關閉的' . $lang->projectCommon;
 $lang->block->myProduct = '未關閉的' . $lang->productCommon;
 $lang->block->delayed   = '已延期';
-$lang->block->noData    = '當前統計類型下暫無數據';
+$lang->block->noData    = '當前統計類型下暫無數據。';
 $lang->block->emptyTip  = '暫無信息';
 
 $lang->block->params = new stdclass();
