@@ -20,10 +20,10 @@
   </div>
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
-      <!--tr>
+      <tr>
         <th class='text-bottom thWidth'><?php echo $lang->group->viewList;?></th>
         <td class='text-bottom'>
-          <?php foreach($lang->menu as $menuKey => $menu):?>
+          <?php foreach($lang->mainNav as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
           <?php if($module == 'my') continue;?>
@@ -46,13 +46,26 @@
             </div>
           </div>
         </td>
-      </tr-->
-      <tr id='productBox'>
-        <th class='text-right'><?php echo $lang->group->programList?></th>
+      </tr>
+      <tr id='productBox' style='display:none'>
+        <th class='text-right'><?php echo $lang->group->productList?></th>
         <td>
-          <?php if($programs):?>
+          <?php if($products):?>
           <div class='input-group'>
-            <?php echo html::select("actions[programs][]", $programs, isset($group->acl['programs']) ? join(',', $group->acl['programs']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
+            <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?>
+            <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
+          </div>
+          <?php else:?>
+          <?php echo $lang->group->noneProduct;?>
+          <?php endif;?>
+        </td>
+      </tr>
+      <tr id='projectBox' style='display:none'>
+        <th class='text-right'><?php echo $lang->group->projectList?></th>
+        <td>
+          <?php if($projects):?>
+          <div class='input-group'>
+            <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
@@ -60,24 +73,11 @@
           <?php endif;?>
         </td>
       </tr>
-      <!--tr id='projectBox' style='display:none'>
-        <th class='text-right'><?php echo $lang->group->projectList?></th>
-        <td>
-          <?php if($products):?>
-          <div class='input-group'>
-            <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' multiple")?>
-            <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
-          </div>
-          <?php else:?>
-          <?php echo $lang->group->noneProject;?>
-          <?php endif;?>
-        </td>
-      </tr>
      <tr>
         <th class='text-right text-top'><?php echo $lang->group->dynamic?></th>
         <td class='pl-0px pt-0px'>
           <table class='table table-form'>
-            <?php foreach($lang->menu as $module => $title):?>
+            <?php foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
             <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
@@ -123,7 +123,7 @@
             <?php endforeach;?>
           </table>
         </td>
-     </tr-->
+     </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton();?>
