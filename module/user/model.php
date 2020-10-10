@@ -1516,9 +1516,9 @@ class userModel extends model
     /**
      * Update user view.
      * 
-     * @param  int|array $objectID 
-     * @param  string    $objectType 
-     * @param  array     $users 
+     * @param  int|array $objectID
+     * @param  string    $objectType
+     * @param  array     $users
      * @access public
      * @return void
      */

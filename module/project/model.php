@@ -1823,10 +1823,14 @@ class projectModel extends model
     public function getTeamMembers($projectID)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
+
+        $project = $this->getByID($projectID);
+        if(empty($project)) return array();
+
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
-            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t1.type')->eq($project->type)
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('account');
     }
@@ -1942,12 +1946,15 @@ class projectModel extends model
     {
         $project = $this->getByID($projectID);
         $data    = (array)fixer::input('post')->get();
-        extract($data);
 
-        $accounts = array_unique($accounts);
-        $limited  = array_values($limited);
-        $oldJoin  = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->fetchPairs();
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->exec();
+        extract($data);
+        $projectType = $project->type;
+        $accounts    = array_unique($accounts);
+        $limited     = array_values($limited);
+        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($projectType)->fetchPairs();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($projectType)->exec();
+
+        $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1961,8 +1968,49 @@ class projectModel extends model
             $member->root    = (int)$projectID;
             $member->account = $account;
             $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
-            $member->type    = 'project';
+            $member->type    = $projectType;
 
+            $projectMember[$account] = $member;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+        }
+
+        /* Add iteration or phase team members to the project team. */
+        if($projectType == 'stage' || $projectType == 'sprint') $this->addProjectMembers($project->parent, $projectMember);
+
+        /* Only changed account update userview. */
+        $oldAccounts     = array_keys($oldJoin);
+        $changedAccounts = array_diff($accounts, $oldAccounts);
+        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
+        $changedAccounts = array_unique($changedAccounts);
+
+        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+
+        $products = $this->getProducts($projectID, false);
+        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
+    }
+
+    /**
+     * Add iteration or phase team members to the project team.
+     *
+     * @param  int    $projectID
+     * @param  array  $members
+     * @access public
+     * @return void
+     */
+    public function  addProjectMembers($projectID, $members = array())
+    {
+        $project     = $this->getByID($projectID);
+        $projectType = $project->type;
+        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($projectType)->fetchPairs();
+
+        $accounts = array();
+        foreach($members as $account => $member)
+        {
+            if(isset($oldJoin[$account])) continue;
+
+            $accounts[]   = $account;
+            $member->root = $projectID;
+            $member->type = $projectType;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
@@ -1972,8 +2020,7 @@ class projectModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $objectType = $project->model ? 'program' : 'project';
-        $this->loadModel('user')->updateUserView($projectID, $objectType, $changedAccounts);
+        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
 
         $products = $this->getProducts($projectID, false);
         if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
@@ -1989,9 +2036,10 @@ class projectModel extends model
      */
     public function unlinkMember($projectID, $account)
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+        $project = $this->getByID($projectID);
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($project->type)->andWhere('account')->eq($account)->exec();
 
-        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
+        $this->loadModel('user')->updateUserView($projectID, $project->type, array($account));
         $products = $this->getProducts($projectID, false);
         if($products) $this->user->updateUserView(array_keys($products), 'product', array($account));
     }

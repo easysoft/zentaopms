@@ -1918,10 +1918,11 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $team2Import    the team to import.
+     * @param  int    $dept
      * @access public
      * @return void
      */
-    public function manageMembers($projectID = 0, $team2Import = 0, $dept = '')
+    public function manageMembers($projectID = 0, $team2Import = 0, $dept = 0)
     {
         if(!empty($_POST))
         {
@@ -1936,7 +1937,7 @@ class project extends control
         $project        = $this->project->getById($projectID);
         $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
         $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $deptUsers      = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);

@@ -276,7 +276,7 @@ class programplanModel extends model
             $start = $task->estStarted == '0000-00-00' ? '' : date('d-m-Y', strtotime($task->estStarted));
             $end   = $task->deadline   == '0000-00-00' ? '' : $task->deadline;
 
-            $realBegan    = $task->realBegan == '0000-00-00' ? '' : $task->realBegan;
+            $realBegan    = $task->realStarted == '0000-00-00' ? '' : $task->realStarted;
             $realEnd      = $task->finishedDate == '0000-00-00 00:00:00' ? '' : substr($task->finishedDate, 5, 11);
             $priIcon      = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
