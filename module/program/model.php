@@ -254,8 +254,10 @@ class programModel extends model
             {
                 /* Child program begin cannot less than parent. */
                 if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+
                 /* When parent set end then child program end cannot greater than parent. */
                 if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+
                 /* When parent set end then child program cannot set longTime. */
                 if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
 
@@ -289,9 +291,10 @@ class programModel extends model
                 ->where('t1.account')->eq($this->app->user->account)
                 ->andWhere('t2.role')->eq('PRJadmin')
                 ->fetch();
+
             if(!empty($groupPriv))
             {
-                $newProgram = $groupPriv->program . ",$programID";
+                $newProgram = $groupPriv->PRJ . ",$programID";
                 $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
             }
             else

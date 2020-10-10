@@ -69,10 +69,6 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->program->PGMAuthList, $program->auth, '', 'block');?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>

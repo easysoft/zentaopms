@@ -37,7 +37,7 @@ INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJa
 
 ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
 
-ALTER TABLE `zt_userview` ADD `PRJ` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
+ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`, ADD `stages` mediumtext NOT NULL AFTER `projects`, ADD `sprints` mediumtext NOT NULL AFTER `stages`;
 
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
 
@@ -299,4 +299,4 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
 ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
 
-ALTER TABLE `zt_team` MODIFY COLUMN `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project' AFTER `root`;
+ALTER TABLE `zt_team` MODIFY `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project' AFTER `root`;

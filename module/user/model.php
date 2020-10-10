@@ -1440,8 +1440,9 @@ class userModel extends model
     /**
      * Grant user view.
      * 
-     * @param  string $account 
-     * @param  array  $acls 
+     * @param  string  $account
+     * @param  array   $acls
+     * @param  string  $programs
      * @access public
      * @return object
      */
@@ -1461,7 +1462,7 @@ class userModel extends model
             ->fetchAll('id');
 
         $openedPrograms     = join(',', array_keys($openedPrograms));
-        $userView->programs = rtrim($userView->PRJ, ',') . ',' . $openedPrograms;
+        $userView->programs = rtrim($userView->programs, ',') . ',' . $openedPrograms;
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
