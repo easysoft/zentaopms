@@ -172,12 +172,13 @@ $lang->bug->legendRelated               = 'Thông tin liên quan';
 $lang->bug->buttonConfirm = 'Xác nhận';
 
 /* Interactive prompt. */
-$lang->bug->summary               = "Tổng <strong>%s</strong> bugs, và <strong>%s</strong> kích hoạt.";
-$lang->bug->confirmChangeProduct  = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->projectCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
-$lang->bug->confirmDelete         = 'Bạn có muốn xóa bug này?';
-$lang->bug->remindTask            = 'Bug này đã chuyển thành một nhiệm vụ. Bạn có muốn cập nhật tình trạng của nhiệm vụ(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
-$lang->bug->projectAccessDenied   = "Truy cập của bạn tới {$lang->projectCommon} mà Bug này sở hữu bị từ chối!";
+$lang->bug->summary              = "Tổng <strong>%s</strong> bugs, và <strong>%s</strong> kích hoạt.";
+$lang->bug->confirmChangeProduct = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->projectCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
+$lang->bug->confirmDelete        = 'Bạn có muốn xóa bug này?';
+$lang->bug->remindTask           = 'Bug này đã chuyển thành một nhiệm vụ. Bạn có muốn cập nhật tình trạng của nhiệm vụ(ID %s)?';
+$lang->bug->skipClose            = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
+$lang->bug->projectAccessDenied  = "Truy cập của bạn tới {$lang->projectCommon} mà Bug này sở hữu bị từ chối!";
+$lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Các bước]</p><br/>";

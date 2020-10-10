@@ -172,12 +172,13 @@ $lang->bug->legendRelated               = 'Infos connexes';
 $lang->bug->buttonConfirm = 'Confirmer';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Total de <strong>%s</strong> bugs sur cette page, et <strong>%s</strong> sont Actifs.";
-$lang->bug->confirmChangeProduct  = "Tout changement aux {$lang->productCommon} fera que les {$lang->projectCommon}s, stories et tâches associées vont changer. Voulez-vous faire cela ?";
-$lang->bug->confirmDelete         = 'Voulez-vous supprimer ce bug ?';
-$lang->bug->remindTask            = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';
-$lang->bug->skipClose             = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
-$lang->bug->projectAccessDenied   = "Votre accès à {$lang->projectCommon} auquel ce bug appartient est refusé !";
+$lang->bug->summary              = "Total de <strong>%s</strong> bugs sur cette page, et <strong>%s</strong> sont Actifs.";
+$lang->bug->confirmChangeProduct = "Tout changement aux {$lang->productCommon} fera que les {$lang->projectCommon}s, stories et tâches associées vont changer. Voulez-vous faire cela ?";
+$lang->bug->confirmDelete        = 'Voulez-vous supprimer ce bug ?';
+$lang->bug->remindTask           = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';
+$lang->bug->skipClose            = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
+$lang->bug->projectAccessDenied  = "Votre accès à {$lang->projectCommon} auquel ce bug appartient est refusé !";
+$lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Etape]</p><br/>";
