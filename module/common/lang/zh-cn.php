@@ -121,12 +121,12 @@ $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
-$lang->mainNav->my         = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program    = '<i class="icon icon-stack"></i> 项目集|program|pgmindex|';
-$lang->mainNav->product    = '<i class="icon icon-menu-project"></i> 产品|product|index|';
-$lang->mainNav->project    = '<i class="icon icon-menu-doc"></i> 项目|program|prjbrowse|';
-$lang->mainNav->system     = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
-$lang->mainNav->admin      = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
+$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+$lang->mainNav->program = '<i class="icon icon-stack"></i> 项目集|program|pgmindex|';
+$lang->mainNav->product = '<i class="icon icon-menu-project"></i> 产品|product|index|';
+$lang->mainNav->project = '<i class="icon icon-menu-doc"></i> 项目|program|prjbrowse|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
+$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
@@ -473,7 +473,7 @@ $lang->company->menu->view        = array('link' => '公司|company|view');
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->admin->menu->company = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
