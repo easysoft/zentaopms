@@ -102,7 +102,7 @@ class bugModel extends model
      *
      * @param  string $from   object that is transfered to bug.
      * @access public
-     * @return int|bool
+     * @return array|bool
      */
     public function create($from = '')
     {
@@ -151,17 +151,19 @@ class bugModel extends model
      * Batch create
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
     public function batchCreate($productID, $branch = 0)
     {
+        /* Load module and init vars. */
         $this->loadModel('action');
-        $branch     = (int)$branch;
-        $productID  = (int)$productID;
-        $now        = helper::now();
-        $actions    = array();
-        $data       = fixer::input('post')->get();
+        $branch    = (int)$branch;
+        $productID = (int)$productID;
+        $now       = helper::now();
+        $actions   = array();
+        $data      = fixer::input('post')->get();
 
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
@@ -196,6 +198,7 @@ class bugModel extends model
 
         if(isset($data->uploadImage)) $this->loadModel('file');
         $extendFields = $this->getFlowExtendFields();
+
         $bugs = array();
         foreach($data->title as $i => $title)
         {
@@ -220,6 +223,7 @@ class bugModel extends model
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
 
+            /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
             {
                 $bug->assignedTo   = $moduleOwners[$bug->module];
@@ -233,6 +237,7 @@ class bugModel extends model
                 if($message) die(js::alert($message));
             }
 
+            /* Required field check. */
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -242,6 +247,7 @@ class bugModel extends model
             $bugs[$i] = $bug;
         }
 
+        /* When the bug is created by uploading an image, add the image to the step of the bug. */
         foreach($bugs as $i => $bug)
         {
             if(!empty($data->uploadImage[$i]))
@@ -280,6 +286,7 @@ class bugModel extends model
 
             $this->executeHooks($bugID);
 
+            /* When the bug is created by uploading the image, add the image to the file of the bug. */
             $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {

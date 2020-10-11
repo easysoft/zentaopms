@@ -1032,7 +1032,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 CREATE TABLE IF NOT EXISTS `zt_team` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `root` mediumint(8) unsigned NOT NULL default '0',
-  `type` enum('project','task') NOT NULL DEFAULT 'project',
+  `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
   `limited` char(8) NOT NULL default 'no',
@@ -1255,9 +1255,11 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
-  `PRJ` mediumtext NOT NULL,
+  `programs` mediumtext NOT NULL,
   `products` mediumtext NOT NULL,
   `projects` mediumtext NOT NULL,
+  `stages` mediumtext NOT NULL,
+  `sprints` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_entry`;

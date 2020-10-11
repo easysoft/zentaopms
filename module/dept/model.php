@@ -384,7 +384,7 @@ class deptModel extends model
             ->orderBy('account')
             ->fetchPairs();
     }
-    
+
     /**
      * Delete a department.
      * 

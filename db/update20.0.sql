@@ -37,7 +37,7 @@ INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJa
 
 ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
 
-ALTER TABLE `zt_userview` ADD `PRJ` mediumtext COLLATE 'utf8_general_ci' NOT NULL AFTER `account`;
+ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`, ADD `stages` mediumtext NOT NULL AFTER `projects`, ADD `sprints` mediumtext NOT NULL AFTER `stages`;
 
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
 
@@ -298,3 +298,5 @@ ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `modul
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '0', '*', '*', '*', 'moduleName=weekly&methodName=computeWeekly', '更新项目周报', 'system', 0, 'normal', '2020-08-27 10:07:53');
 
 ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
+
+ALTER TABLE `zt_team` MODIFY `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project' AFTER `root`;
