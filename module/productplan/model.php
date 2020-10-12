@@ -466,7 +466,6 @@ class productplanModel extends model
         $stories = $this->story->getByList($this->post->stories);
         $plan    = $this->getByID($planID);
 
-        $currentOrder = $plan->order;
         foreach($this->post->stories as $storyID)
         {
             if(!isset($stories[$storyID])) continue;
@@ -474,24 +473,19 @@ class productplanModel extends model
             $story = $stories[$storyID];
             if(strpos(",$story->plan,", ",{$planID},") !== false) continue;
 
-            /* Fix Bug #1538*/
-            $currentOrder = $currentOrder . $storyID . ',';
-            $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order'); 
-            $oldOrder = explode(',', $oldOrder);
-            unset($oldOrder[array_search($storyID,  $oldOrder)]);
-            $oldOrder = implode(',', $oldOrder);
-            $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($oldOrder)->where('id')->eq($story->plan)->exec();
-
-            /* Modify the plan linked with the story. */
+            /* Update the plan linked with the story and the order of the story in the plan. */
             if($this->session->currentProductType == 'normal' or $story->branch != 0 or empty($story->plan))
             {
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
+
+                $this->story->updateStoryOrderOfPlan($storyID, $planID, $story->plan);
             }
             else
             {
                 $plansOfStory = $story->plan . ',' . $planID;
-
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
+
+                $this->story->updateStoryOrderOfPlan($storyID, $planID);
             }
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
@@ -514,14 +508,11 @@ class productplanModel extends model
         $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
         $this->dao->update(TABLE_STORY)->set('plan')->eq(join(',', $plans))->where('id')->eq((int)$storyID)->exec();
 
-        /* Fix Bug #1538. */ 
-        $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order');
-        $oldOrder = explode(',', $oldOrder);
-        unset($oldOrder[array_search($storyID, $oldOrder)]);
-        $oldOrder = implode(',', $oldOrder);
-        $this->dao->update(TABLE_PRODUCTPLAN)->set('order')->eq($oldOrder)->where('id')->eq($story->plan)->exec();
+        /* Delete the story in the sort of the plan. */
+        $this->loadModel('story');
+        $this->story->updateStoryOrderOfPlan($storyID, '', $planID);
 
-        $this->loadModel('story')->setStage($storyID);
+        $this->story->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }
 

@@ -229,11 +229,7 @@ class storyModel extends model
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
-            if(!empty($story->plan))
-            {
-                $plan[$story->plan][] = $storyID;
-                $this->updatePlanStoryOrder($plan);
-            }
+            if(!empty($story->plan)) $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
 
             $data          = new stdclass();
             $data->story   = $storyID;
@@ -430,7 +426,8 @@ class storyModel extends model
             $storyID = $this->dao->lastInsertID();
             $this->setStage($storyID);
 
-            if($story->plan) $planStories[$story->plan][] = $storyID;
+            /* Update product plan stories order. */
+            if($story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan);
 
             $specData = new stdclass();
             $specData->story   = $storyID;
@@ -481,9 +478,6 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
-
-        /* Update product plan stories order. */
-        if(!empty($planStories)) $this->updatePlanStoryOrder($planStories);
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
@@ -738,8 +732,13 @@ class storyModel extends model
 
             if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
 
-            /* Fix bug #3153. */
-            if($oldStory->plan != $story->plan and (empty($oldStory->plan) or empty($story->plan))) $this->setStage($storyID);
+            /* Set new stage and update story sort of plan when story plan has changed. */
+            if($oldStory->plan != $story->plan)
+            {
+                $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
+
+                if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
+            }
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -895,25 +894,46 @@ class storyModel extends model
     }
 
     /**
-     * update plan story order.
+     * update the story order of plan.
      *
-     * @param  int    $planStories
+     * @param  int    $storyID
+     * @param  string $oldPlanIDList
+     * @param  string $planIDList
      * @access public
      * @return void
      */
-    public function updatePlanStoryOrder($planStories)
+    public function updateStoryOrderOfPlan($storyID, $planIDList = '', $oldPlanIDList = '')
     {
-        $planIDList = array_keys($planStories);
-        $plans      = $this->dao->select('id, `order`')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');
+        $planIDList    = $planIDList ? explode(',', $planIDList) : array();
+        $oldPlanIDList = $oldPlanIDList ? explode(',', $oldPlanIDList) : array();
 
-        foreach($planStories as $planID => $stories)
+        /* Get the ids to be inserted and deleted by comparing plan ids. */
+        $insertedPlanIDList = array_diff($planIDList, $oldPlanIDList);
+        $deletedPlanIDList  = array_diff($oldPlanIDList, $planIDList);
+
+        /* Delete old story sort of plan. */
+        if(!empty($deletedPlanIDList))
         {
-            $data = new stdClass();
-            $data->order = implode(',', $stories);
-            $productPlan = $plans[$planID];
-            if(!empty($productPlan->order)) $data->order = $data->order . ',' . $productPlan->order;
+            foreach($deletedPlanIDList as $planID)
+            {
+                $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->andWhere('story')->eq($storyID)->exec();
+            }
+        }
 
-            $this->dao->update(TABLE_PRODUCTPLAN)->data($data)->where('id')->eq($planID)->exec();
+        if(!empty($insertedPlanIDList))
+        {
+            /* Get last story order of plan list. */
+            $lastOrderOfPlans = $this->dao->select('plan, `order`')->from(TABLE_PLANSTORY)->where('plan')->in($insertedPlanIDList)->orderBy('order_asc')->fetchPairs();
+
+            foreach($insertedPlanIDList as $planID)
+            {
+                /* Set story order in new plan. */
+                $data->plan  = $planID;
+                $data->story = $storyID;
+                $data->order = zget($lastOrderOfPlans, $planID, 0) + 1;
+
+                $this->dao->replace(TABLE_PLANSTORY)->data($data)->exec();
+            }
         }
     }
 
@@ -1047,8 +1067,10 @@ class storyModel extends model
 
                 if(!dao::isError())
                 {
-                    $this->executeHooks($storyID);
+                    /* Update story sort of plan when the plan has changed. */
+                    if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
+                    $this->executeHooks($storyID);
                     $this->setStage($storyID);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
@@ -1418,6 +1440,10 @@ class storyModel extends model
                 $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
                 if(empty($story->branch)) $story->plan .= ",$planID";
             }
+
+            /* Update the order of the story in the plan. */
+            $this->updateStoryOrderOfPlan($storyID, $planID, $oldStory->plan);
+
             /* Fix bug #3529. */
             if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
             {
@@ -2317,13 +2343,15 @@ class storyModel extends model
      */
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
-            ->where("CONCAT(',', plan, ',')")->like("%,$planID,%")
-            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
+        $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+            ->from(TABLE_PLANSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.plan')->eq($planID)
+            ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+            ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         return $stories;
     }
@@ -3693,32 +3721,40 @@ class storyModel extends model
     }
 
     /**
-     * sortPlanStory
+     * Update the story order according to the plan.
      *
-     * @param  int    $planStories
-     * @param  string $order
+     * @param  int    $planID
+     * @param  array  $sortIDList
      * @param  string $orderBy
+     * @param  int    $pageID
+     * @param  int    $recPerPage
      * @access public
      * @return void
      */
-    public function sortPlanStory($planStories, $order = '', $orderBy = 'order_asc')
+    public function sortStoriesOfPlan($planID, $sortIDList, $orderBy = 'id_desc', $pageID = 1, $recPerPage = 100)
     {
-        $stories = array();
-        if(!empty($order))
+        /* Append id for secend sort. */
+        $orderBy = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Get all stories by plan. */
+        $stories     = $this->getPlanStories($planID, 'all', $orderBy);
+        $storyIDList = array_keys($stories);
+
+        /* Calculate how many numbers there are before the sort list and after the sort list. */
+        $frontStoryCount   = $recPerPage * ($pageID - 1);
+        $behindStoryCount  = $recPerPage * $pageID;
+        $frontStoryIDList  = array_slice($storyIDList, 0, $frontStoryCount);
+        $behindStoryIDList = array_slice($storyIDList, $behindStoryCount, count($storyIDList) - $behindStoryCount);
+
+        /* Merge to get a new sort list. */
+        $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
+
+        /* Loop update the story order of plan. */
+        $order = 1;
+        foreach($newSortIDList as $storyID)
         {
-            if(is_string($order)) $order = explode(',', $order);
-            if(strpos($orderBy, 'desc') !== false) $order = array_reverse($order, true);
-
-            foreach($order as $id)
-            {
-                if(empty($id)) continue;
-                if(!isset($planStories[$id])) continue;
-                $stories[$id] = $planStories[$id];
-                unset($planStories[$id]);
-            }
-
-            if($planStories) $stories += $planStories;
+            $this->dao->update(TABLE_PLANSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('plan')->eq($planID)->exec();
+            $order++;
         }
-        return $stories;
     }
 }

@@ -610,8 +610,8 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0');
             $this->execSQL($this->getUpgradeFile('20.0'));
             $this->setWork2Full();
-            $this->appendExec('20_0');
             $this->initStoryOfPlan();
+            $this->appendExec('20_0');
         }
 
         $this->deletePatch();
@@ -4110,7 +4110,7 @@ class upgradeModel extends model
      * Init story sort of plan.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function initStoryOfPlan()
     {
