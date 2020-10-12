@@ -800,7 +800,7 @@ class storyModel extends model
     }
 
     /**
-     * update the story order of plan.
+     * Update the story order of plan.
      *
      * @param  int    $storyID
      * @param  string $oldPlanIDList
