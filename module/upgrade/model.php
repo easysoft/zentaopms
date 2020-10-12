@@ -614,8 +614,8 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4_2');
             $this->execSQL($this->getUpgradeFile('12.4.2'));
             $this->fixFromCaseVersion();
-            $this->appendExec('12_4_2');
             $this->initStoryOfPlan();
+            $this->appendExec('12_4_2');
         }
 
         $this->deletePatch();
@@ -3900,7 +3900,7 @@ class upgradeModel extends model
      * Init story sort of plan.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function initStoryOfPlan()
     {
