@@ -668,6 +668,7 @@ class commonModel extends model
                 }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
+
                 echo $menuItemHtml;
             }
             else

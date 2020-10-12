@@ -141,9 +141,13 @@ $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->view        = '概况|program|pgmview|program=%s';
 $lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s');
 $lang->program->viewMenu->project     = array('link' => "项目|program|pgmproject|program=%s");
-$lang->program->viewMenu->plan        = array('link' => "排期|program|pgmproject|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "人员|program|pgmproject|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|accessible|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmproject|program=%s");
+
+$lang->personnel = new stdClass();
+$lang->personnel->menu = new stdClass();
+$lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
+$lang->personnel->menu->putinto    = array('link' => "可投入人员|personnel|putinto|program=%s");
 
 /* Scrum menu. */
 $lang->product = new stdclass();
@@ -651,6 +655,8 @@ $lang->navGroup->dev       = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 $lang->navGroup->search    = 'admin';
+
+$lang->navGroup->personnel = 'program';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
