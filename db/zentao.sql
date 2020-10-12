@@ -727,7 +727,7 @@ CREATE TABLE `zt_project` (
   KEY `status` (`status`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE `zt_projectspec` (
   `project` mediumint(8) NOT NULL,
@@ -871,6 +871,21 @@ CREATE TABLE `zt_risk` (
   `assignedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
    PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_stakeholder`;
+CREATE TABLE `zt_stakeholder` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `objectID` mediumint(8) NOT NULL,
+  `objectType` char(30) NOT NULL,
+  `user` char(30) NOT NULL,
+  `type` char(30) NOT NULL,
+  `key` enum('0','1') NOT NULL,
+  `from` char(30) NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` date NOT NULL,
+  `editedBy` char(30) NOT NULL,
+  `editedDate` date NOT NULL,
+  `deleted` enum('0','1') NOT NULL 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (

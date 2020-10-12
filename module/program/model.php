@@ -218,7 +218,7 @@ class programModel extends model
     {
         foreach($this->lang->program->viewMenu as $label => $menu)
         {
-            $this->lang->program->viewMenu->$label = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
+            $this->lang->program->viewMenu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
         }
 
         foreach($this->lang->personnel->menu as $label => $menu)
@@ -350,9 +350,6 @@ class programModel extends model
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
             if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
-
-            $longTimeCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->eq('0000-00-00')->fetch('count');
-            if(!empty($program->end) and $longTimeCount != 0) dao::$errors['end'] = $this->lang->program->childLongTime;
         }
 
         if($program->parent)
@@ -500,12 +497,68 @@ class programModel extends model
      * Get children by program id.
      *
      * @param  int     $programID
-     * @access private
+     * @access public
      * @return void
      */
     public function getChildren($programID = 0)
     {
         return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
+    }
+
+    /**
+     * Get stakeholders by program id.
+     *
+     * @param  int     $programID
+     * @access public
+     * @return void
+     */
+    public function getStakeholders($programID = 0, $orderBy, $pager = null)
+    {
+        return $this->dao->select('t2.*, t1.id')->from(TABLE_STAKEHOLDER)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account') 
+            ->where('t1.objectID')->eq($programID)
+            ->andWhere('t1.objectType')->eq('program')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Create stakeholder for a program.
+     *
+     * @param  int     $programID
+     * @access public 
+     * @return void
+     */
+    public function createStakeholder($programID = 0)
+    {
+        $data = (array)fixer::input('post')->get(); 
+
+        $accounts = array_unique($data['accounts']);
+        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->fetchPairs();
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->exec(); 
+
+        foreach($accounts as $key => $account)
+        {    
+            if(empty($account)) continue;
+
+            $stakeholder = new stdclass();
+            $stakeholder->objectID    = $programID;
+            $stakeholder->objectType  = 'program';
+            $stakeholder->user        = $account;
+            $stakeholder->createdBy   = $this->app->user->account;
+            $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
+
+            $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
+        }
+
+        /* Only changed account update userview. */
+        $oldAccounts     = array_keys($oldJoin);
+        $changedAccounts = array_diff($accounts, $oldAccounts);
+        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
+        $changedAccounts = array_unique($changedAccounts);
+
+        $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
     }
 
     /**

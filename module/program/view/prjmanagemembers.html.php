@@ -4,7 +4,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink('project', 'managemembers', "projectID={$project->id}"), "<span class='text'> {$lang->project->manageMembers}</span>");?>
+      <?php echo html::a($this->createLink('program', 'prjmanagemembers', "projectID={$project->id}"), "<span class='text'> {$lang->project->manageMembers}</span>");?>
     </span>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>

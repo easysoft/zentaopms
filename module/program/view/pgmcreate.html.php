@@ -60,6 +60,10 @@
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->program->PO;?></th>
+          <td><?php echo html::select('PO', $poUsers, '', "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
@@ -79,10 +83,6 @@
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>

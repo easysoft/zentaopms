@@ -156,6 +156,7 @@ class program extends control
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : '';
         $this->view->parents       = $this->program->getParentPairs();
 
@@ -197,6 +198,7 @@ class program extends control
         $this->view->position[]  = $this->lang->program->PGMEdit;
 
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
+        $this->view->poUsers     = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->program     = $program;
         $this->view->parents     = $parents;
         $this->view->groups      = $this->loadModel('group')->getPairs();
@@ -316,245 +318,12 @@ class program extends control
         if($childrenCount) die(js::alert($this->lang->program->hasChildren));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') die(js::confirm(sprintf($this->lang->program->confirmDelete, $program->name), $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         die(js::reload('parent'));
-    }
-
-    /**
-     * Browse groups.
-     *
-     * @param  int    $companyID
-     * @access public
-     * @return void
-     */
-    public function PGMGroup($programID = 0)
-    {
-        $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu  = $this->program->getPGMCommonAction();
-
-        $this->session->set('program', $programID);
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
-        $position[] = $this->lang->group->browse;
-
-        $groups = $this->group->getList($programID);
-        $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
-
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->groups     = $groups;
-        $this->view->programID  = $programID;
-        $this->view->groupUsers = $groupUsers;
-
-        $this->display();
-    }
-
-    /**
-     * Create a group.
-     *
-     * @access public
-     * @return void
-     */
-    public function PGMCreateGroup($programID = 0)
-    {
-        if(!empty($_POST))
-        {
-            $_POST['PRJ'] = $programID;
-            $this->group->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::closeModal('parent.parent', 'this'));
-        }
-
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-        $this->view->position[] = $this->lang->group->create;
-        $this->display('group', 'create');
-    }
-
-    /**
-     * Edit a group.
-     *
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function PGMEditGroup($groupID)
-    {
-       if(!empty($_POST))
-        {
-            $this->group->update($groupID);
-            die(js::closeModal('parent.parent', 'this'));
-        }
-
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $this->view->position[] = $this->lang->group->edit;
-        $this->view->group      = $this->group->getById($groupID);
-
-        $this->display('group', 'edit');
-    }
-
-    /**
-     * Copy a group.
-     *
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function PGMCopyGroup($groupID)
-    {
-       if(!empty($_POST))
-        {
-            $group = $this->group->getByID($groupID);
-            $_POST['PRJ'] = $group->PRJ;
-            $this->group->copy($groupID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::closeModal('parent.parent', 'this'));
-        }
-
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-        $this->view->position[] = $this->lang->group->copy;
-        $this->view->group      = $this->group->getById($groupID);
-
-        $this->display('group', 'copy');
-    }
-
-    /**
-     * Manage views.
-     *
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function PGMManageView($groupID)
-    {
-        $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu  = $this->program->getPGMCommonAction();
-
-        if($_POST)
-        {
-            $this->group->updateView($groupID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
-        }
-
-        $group = $this->group->getById($groupID);
-        if($group->acl) $group->acl = json_decode($group->acl, true);
-
-        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
-        $this->view->position[] = $group->name;
-        $this->view->position[] = $this->lang->group->manageView;
-
-        $this->view->group      = $group;
-        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('parent')->eq($group->PRJ)->andWhere('type')->in('sprint,stage')->orderBy('order_desc')->fetchPairs('id', 'name');
-
-        $this->display();
-    }
-
-    /**
-     * Manage privleges of a group.
-     *
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function PGMManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
-    {
-        $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
-
-        if($type == 'byGroup')
-        {
-            $groupID = $param;
-            $group   = $this->group->getById($groupID);
-        }
-
-        $this->view->type = $type;
-        foreach($this->lang->resource as $moduleName => $action)
-        {
-            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
-        }
-
-        if(!empty($_POST))
-        {
-            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmgroup', "programID=$group->PRJ")));
-        }
-
-        if($type == 'byGroup')
-        {
-            $this->group->sortResource();
-            $groupPrivs = $this->group->getPrivs($groupID);
-
-            $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[] = $group->name;
-            $this->view->position[] = $this->lang->group->managePriv;
-
-            /* Join changelog when be equal or greater than this version.*/
-            $realVersion = str_replace('_', '.', $version);
-            $changelog = array();
-            foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
-            {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
-            }
-
-            $this->view->group      = $group;
-            $this->view->changelogs = ',' . join($changelog, ',') . ',';
-            $this->view->groupPrivs = $groupPrivs;
-            $this->view->groupID    = $groupID;
-            $this->view->menu       = $menu;
-            $this->view->version    = $version;
-            $program = $this->program->getPGMByID($group->PRJ);
-
-            /* Unset not program privs. */
-            foreach($this->lang->resource as $method => $label)
-            {
-                if(!in_array($method, $this->config->programPriv->{$program->model})) unset($this->lang->resource->$method);
-            }
-        }
-
-        $this->display();
-    }
-
-    /**
-     * Manage members of a group.
-     *
-     * @param  int    $groupID
-     * @param  int    $deptID
-     * @access public
-     * @return void
-     */
-    public function PGMManageGroupMember($groupID, $deptID = 0)
-    {
-        if(!empty($_POST))
-        {
-            $this->group->updateUser($groupID);
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
-        }
-        $group      = $this->group->getById($groupID);
-        $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
-        $otherUsers = array_diff_assoc($allUsers, $groupUsers);
-
-        $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $position[] = $group->name;
-        $position[] = $this->lang->group->manageMember;
-
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->group      = $group;
-        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
-        $this->view->groupUsers = $groupUsers;
-        $this->view->otherUsers = $otherUsers;
-
-        $this->display('group', 'manageMember');
     }
 
     /**
@@ -603,7 +372,7 @@ class program extends control
     }
 
     /**
-     * Export program.
+     * Program project list.
      *
      * @param  int    $programID
      * @param  string $browseType
@@ -632,8 +401,8 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
-        $this->view->title      = $this->lang->program->PRJBrowse;
-        $this->view->position[] = $this->lang->program->PRJBrowse;
+        $this->view->title      = $this->lang->program->PGMProject;
+        $this->view->position[] = $this->lang->program->PGMProject;
 
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
@@ -645,6 +414,100 @@ class program extends control
 
         $this->display();
     }
+
+    /**
+     * Program stakeholder list.
+     *
+     * @param  int    $programID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PGMStakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->loadModel('user');
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->program->PGMStakeholder;
+        $this->view->position[] = $this->lang->program->PGMStakeholder;
+
+        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->program      = $this->program->getPRJByID($programID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->orderBy      = $orderBy;
+
+        $this->display();
+    }
+
+    /**
+     * Create program stakeholder.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function createStakeholder($programID = 0, $dept = '')
+    {
+        if($_POST)
+        {
+            $this->program->createStakeholder($programID);
+            die(js::locate($this->createLink('program', 'PGMStakeholder', "programID=$programID"), 'parent'));
+        }
+
+        $this->loadModel('user');
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        $this->loadModel('dept');
+        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+
+        $this->view->title      = $this->lang->program->createStakeholder;
+        $this->view->position[] = $this->lang->program->createStakeholder;
+
+        $this->view->programID     = $programID;
+        $this->view->program       = $this->program->getPRJByID($programID);
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->deptUsers     = $deptUsers;
+        $this->view->dept          = $dept;
+        $this->view->depts         = array('' => '') + $this->dept->getOptionMenu();
+        $this->view->stakeholders  = $this->program->getStakeholders($programID, 't1.id_desc');
+
+        $this->display();
+    }
+
+    /**
+     * Unlink program stakeholder.
+     *
+     * @param  int    $programID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function unlinkStakeholder($stakeholderID, $confirm = 'no')
+	{    
+		if($confirm == 'no')
+		{    
+			die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&confirm=yes")));
+		}    
+		else 
+		{    
+			$this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
+
+			die(js::reload('parent'));
+		}    
+	}
 
     /**
      * Export program.

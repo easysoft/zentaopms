@@ -122,20 +122,50 @@ $lang->common->common = 'Common Module';
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|browse|';
+$lang->mainNav->program     = '<i class="icon icon-menu-stack"></i> Program|program|browse|';
+$lang->mainNav->product     = '<i class="icon icon-menu-project"></i> Product|product|index|';
+$lang->mainNav->project     = '<i class="icon icon-menu-doc"></i> Project|program|prjbrowse|';
 $lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
 
+/* Program set menu. */
+$lang->program = new stdclass();
+$lang->program->menu = new stdclass();
+$lang->program->menu->index   = 'Home|program|pgmindex|';
+$lang->program->menu->browse  = array('link' => 'Program|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
+
+$lang->program->viewMenu = new stdclass();
+$lang->program->viewMenu->view        = array('link' => 'View|program|pgmview|program=%s');
+$lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s');
+$lang->program->viewMenu->project     = array('link' => "Project|program|pgmproject|program=%s");
+$lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
+
 /* Scrum menu. */
-$lang->menu = new stdclass();
-$lang->menu->program = 'Home|program|index';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = 'Iteration|project|index|locate=no';
-$lang->menu->doc     = 'Doc|doc|index|';
-$lang->menu->qa      = 'Qa|qa|index';
+$lang->product = new stdclass();
+$lang->product->menu = new stdclass();
+$lang->product->menu->home = 'Home|product|index|';
+$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
+
+$lang->product->viewMenu = new stdclass();
+$lang->product->viewMenu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
+$lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->module      = 'Module|tree|browse|productID=%s&view=story';
+$lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->release     = new stdclass();
+$lang->branch      = new stdclass();
+$lang->productplan = new stdclass();
+
+$lang->release->menu     = $lang->product->viewMenu;
+$lang->branch->menu      = $lang->product->menu;
+$lang->productplan->menu = $lang->product->menu;
 
 /* System menu. */
 $lang->system = new stdclass();

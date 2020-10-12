@@ -38,6 +38,10 @@
           <td><?php echo html::select('PM', $pmUsers, $program->PM, "class='form-control chosen'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->program->PO;?></th>
+          <td><?php echo html::select('PO', $poUsers, $program->PO, "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td><?php echo html::input('budget', $program->budget, "class='form-control'");?></td>
           <td style='float:left'><?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?></td><td></td>
@@ -56,10 +60,6 @@
         <tr>
           <th><?php echo $lang->program->realBegan;?></th>
           <td><?php echo html::input('realBegan', $program->realBegan, "class='form-control form-date'");?></td><td></td><td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', $program->team, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMDesc;?></th>

@@ -45,7 +45,7 @@
           <?php $isPRJadmin = $group->role == 'PRJadmin';?>
           <?php $disabled   = $isPRJadmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "iframe $disabled", true);?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "$disabled");?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php if($isPRJadmin):?>
