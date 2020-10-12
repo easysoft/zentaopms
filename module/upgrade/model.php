@@ -614,6 +614,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4_2');
             $this->execSQL($this->getUpgradeFile('12.4.2'));
             $this->appendExec('12_4_2');
+            $this->initStoryOfPlan();
         }
 
         $this->deletePatch();
@@ -3863,5 +3864,63 @@ class upgradeModel extends model
      */
     public function appendExec($zentaoVersion)
     {
+    }
+
+    /**
+     * Init story sort of plan.
+     *
+     * @access public
+     * @return void
+     */
+    public function initStoryOfPlan()
+    {
+        /* Get all the planned stories and story sort. */
+        $stories   = $this->dao->select('id, plan')->from(TABLE_STORY)->where('plan')->ne(0)->andWhere('plan')->ne('')->orderBy('id_desc')->fetchAll('id');
+        $planOrder = $this->dao->select('id, `order`')->from(TABLE_PRODUCTPLAN)->where('`order`')->ne('')->fetchAll('id');
+
+        /* Organize the stories according to the plan. */
+        $plans = array();
+        foreach($stories as $storyID => $story)
+        {
+            $planIDList = explode(',', trim($story->plan, ','));
+            foreach($planIDList as $planID) $plans[$planID][$storyID] = $storyID;
+        }
+
+        foreach($plans as $planID => $storyIDList)
+        {
+            /* Order the story according to the plan. */
+            if(!empty($planOrder[$planID]))
+            {
+                $sortIDList = array();
+                $storySort  = explode(',', $planOrder[$planID]->order);
+
+                /* Reorder story id list by story order of plan. */
+                foreach($storySort as $storyID)
+                {
+                    if(empty($storyID)) continue;
+                    if(!isset($storyIDList[$storyID])) continue;
+                    $sortIDList[$storyID] = $storyID;
+                    unset($storyIDList[$storyID]);
+                }
+
+                if($storyIDList) $sortIDList += $storyIDList;
+                $storyIDList = $sortIDList;
+                unset($sortIDList);
+            }
+
+            /* Loop insert sort data by plan. */
+            $order = 1;
+            foreach($storyIDList as $storyID)
+            {
+                $this->dao->replace(TABLE_PLANSTORY)
+                    ->set('plan')->eq($planID)
+                    ->set('story')->eq($storyID)
+                    ->set('`order`')->eq($order)
+                    ->exec();
+                $order++;
+            }
+        }
+
+        return true;
     }
 }
