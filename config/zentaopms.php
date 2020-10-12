@@ -148,6 +148,13 @@ $config->charsets['vi']['GBK']      = 'GBK';
 /* IP white list settings.*/
 $config->ipWhiteList = '*';
 
+/* Switch for zentao features. */
+$config->features = new stdclass();
+$config->features->apiGetModel    = false;
+$config->features->apiSQL         = false;
+$config->features->cronSystemCall = false;
+$config->features->checkClient    = true;
+
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
