@@ -246,7 +246,7 @@ $(function()
         if(window.config.requestType == 'GET')
         {
             var paramStr  = url.split('?')[1];
-            var paramArr  = paramString.split('&');
+            var paramArr  = paramStr.split('&');
             var productID = paramArr[2] ? paramArr[2].split('=')[1] : 0;
         }
         else
