@@ -300,3 +300,10 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
 
 ALTER TABLE `zt_team` MODIFY `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project' AFTER `root`;
+
+CREATE TABLE IF NOT EXISTS `zt_planstory` (
+  `plan` mediumint(8) unsigned NOT NULL,
+  `story` mediumint(8) unsigned NOT NULL,
+  `order` mediumint(9) NOT NULL,
+  UNIQUE KEY `unique` (`plan`,`story`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
