@@ -71,6 +71,8 @@ $lang->project->readjustTask  = 'Fälligkeit der Aufgabe anpassen';
 $lang->project->effort        = 'Aufwand';
 $lang->project->relatedMember = 'Teammitglieder';
 $lang->project->watermark     = 'Exported by ZenTao';
+$lang->project->burnXUnit     = '(Date)';
+$lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'By User';
 
 $lang->project->start    = 'Start';

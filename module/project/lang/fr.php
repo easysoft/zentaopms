@@ -71,6 +71,8 @@ $lang->project->readjustTask  = 'Ajuster Début et Fin de la Tâche';
 $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Equipe';
 $lang->project->watermark     = 'Exporté par ZenTao';
+$lang->project->burnXUnit     = '(Date)';
+$lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'Par Utilisateur';
 
 $lang->project->start    = 'Démarrer';

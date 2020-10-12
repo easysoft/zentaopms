@@ -71,6 +71,8 @@ $lang->project->readjustTask  = 'Adjust Task Begin and End';
 $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Team';
 $lang->project->watermark     = 'Exported by ZenTao';
+$lang->project->burnXUnit     = '(Date)';
+$lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'By User';
 
 $lang->project->start    = 'Start';
