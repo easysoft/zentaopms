@@ -473,12 +473,11 @@ class productplanModel extends model
             $story = $stories[$storyID];
             if(strpos(",$story->plan,", ",{$planID},") !== false) continue;
 
-            /* Modify the plan linked with the story. */
+            /* Update the plan linked with the story and the order of the story in the plan. */
             if($this->session->currentProductType == 'normal' or $story->branch != 0 or empty($story->plan))
             {
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
 
-                /* Update the order of the story in the plan. */
                 $this->story->updateStoryOrderOfPlan($storyID, $planID, $story->plan);
             }
             else
@@ -487,7 +486,6 @@ class productplanModel extends model
 
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
 
-                /* Update the order of the story in the plan. */
                 $this->story->updateStoryOrderOfPlan($storyID, $planID);
             }
 
