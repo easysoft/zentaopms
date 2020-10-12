@@ -77,6 +77,7 @@ function setTemplate(templateID)
     var cmd     = editor['<?php echo $link;?>'].edit.cmd;
     editor['<?php echo $link;?>'].html('');
     cmd.inserthtml(content);
+    editor['<?php echo $link;?>'].templateHtml = editor['<?php echo $link;?>'].html();
 }
 
 function deleteTemplate(templateID)
