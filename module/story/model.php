@@ -814,30 +814,24 @@ class storyModel extends model
         $oldPlanIDList = $oldPlanIDList ? explode(',', $oldPlanIDList) : array();
 
         /* Get the ids to be inserted and deleted by comparing plan ids. */
-        $insertedPlanIDList = array_diff($planIDList, $oldPlanIDList);
-        $deletedPlanIDList  = array_diff($oldPlanIDList, $planIDList);
+        $plansTobeInsert = array_diff($planIDList, $oldPlanIDList);
+        $plansTobeDelete = array_diff($oldPlanIDList, $planIDList);
 
         /* Delete old story sort of plan. */
-        if(!empty($deletedPlanIDList))
-        {
-            foreach($deletedPlanIDList as $planID)
-            {
-                $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->andWhere('story')->eq($storyID)->exec();
-            }
-        }
+        if(!empty($plansTobeDelete)) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in($plansTobeDelete)->exec();
 
-        if(!empty($insertedPlanIDList))
+        if(!empty($plansTobeInsert))
         {
             /* Get last story order of plan list. */
-            $lastOrderOfPlans = $this->dao->select('plan, `order`')->from(TABLE_PLANSTORY)->where('plan')->in($insertedPlanIDList)->orderBy('order_asc')->fetchPairs();
+            $maxOrders = $this->dao->select('plan, max(`order`) as `order`')->from(TABLE_PLANSTORY)->where('plan')->in($plansTobeInsert)->groupBy('plan')->fetchPairs();
 
-            foreach($insertedPlanIDList as $planID)
+            foreach($plansTobeInsert as $planID)
             {
                 /* Set story order in new plan. */
                 $data = new stdClass();
                 $data->plan  = $planID;
                 $data->story = $storyID;
-                $data->order = zget($lastOrderOfPlans, $planID, 0) + 1;
+                $data->order = zget($maxOrders, $planID, 0) + 1;
 
                 $this->dao->replace(TABLE_PLANSTORY)->data($data)->exec();
             }
