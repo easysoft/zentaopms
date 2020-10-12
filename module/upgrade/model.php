@@ -613,6 +613,7 @@ class upgradeModel extends model
         case '12_4_2':
             $this->saveLogs('Execute 12_4_2');
             $this->execSQL($this->getUpgradeFile('12.4.2'));
+            $this->fixFromCaseVersion();
             $this->appendExec('12_4_2');
             $this->initStoryOfPlan();
         }
@@ -3834,6 +3835,35 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_REPO)->data($gitRepo)->exec();
             }
         }
+        return true;
+    }
+
+    /**
+     * Fix fromCaseVersion field for zt_case table.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixFromCaseVersion()
+    {
+        /* Get imported cases and cases version is null. */
+        $errorCasePairs = $this->dao->select('id,fromCaseID,fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->ne(0)->andWhere('fromCaseVersion')->eq(0)->fetchPairs('id', 'fromCaseID');
+        $this->saveLogs($this->dao->get());
+        if(empty($errorCasePairs)) return true;
+
+        /* Get from case versions by from cases. */
+        $fromCaseIdList   = array_unique(array_values($errorCasePairs));
+        $fromCaseVersions = $this->dao->select('id,version')->from(TABLE_CASE)->where('id')->in($fromCaseIdList)->fetchPairs('id', 'version');
+        $this->saveLogs($this->dao->get());
+
+        /* Fix fromCaseVersion field. */
+        foreach($errorCasePairs as $caseID => $fromCaseID)
+        {
+            $fromCaseVersion = zget($fromCaseVersions, $fromCaseID, 1);
+            $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($fromCaseVersion)->where('id')->eq($caseID)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
         return true;
     }
 

@@ -4,3 +4,4 @@ CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `order` mediumint(9) NOT NULL,
   UNIQUE KEY `unique` (`plan`,`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_case` change `fromCaseVersion` `fromCaseVersion` mediumint(8) unsigned NOT NULL default '1' AFTER `fromCaseID`;
