@@ -318,7 +318,7 @@ class program extends control
         if($childrenCount) die(js::alert($this->lang->program->hasChildren));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') die(js::confirm(sprintf($this->lang->program->confirmDelete, $program->name), $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
@@ -372,7 +372,7 @@ class program extends control
     }
 
     /**
-     * Export program.
+     * Program project list.
      *
      * @param  int    $programID
      * @param  string $browseType
@@ -401,8 +401,8 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
-        $this->view->title      = $this->lang->program->PRJBrowse;
-        $this->view->position[] = $this->lang->program->PRJBrowse;
+        $this->view->title      = $this->lang->program->PGMProject;
+        $this->view->position[] = $this->lang->program->PGMProject;
 
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
@@ -414,6 +414,100 @@ class program extends control
 
         $this->display();
     }
+
+    /**
+     * Program stakeholder list.
+     *
+     * @param  int    $programID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PGMStakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->loadModel('user');
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->program->PGMStakeholder;
+        $this->view->position[] = $this->lang->program->PGMStakeholder;
+
+        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->program      = $this->program->getPRJByID($programID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->orderBy      = $orderBy;
+
+        $this->display();
+    }
+
+    /**
+     * Create program stakeholder.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function createStakeholder($programID = 0, $dept = '')
+    {
+        if($_POST)
+        {
+            $this->program->createStakeholder($programID);
+            die(js::locate($this->createLink('program', 'PGMStakeholder', "programID=$programID"), 'parent'));
+        }
+
+        $this->loadModel('user');
+        $this->lang->navGroup->program = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        $this->loadModel('dept');
+        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+
+        $this->view->title      = $this->lang->program->createStakeholder;
+        $this->view->position[] = $this->lang->program->createStakeholder;
+
+        $this->view->programID     = $programID;
+        $this->view->program       = $this->program->getPRJByID($programID);
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->deptUsers     = $deptUsers;
+        $this->view->dept          = $dept;
+        $this->view->depts         = array('' => '') + $this->dept->getOptionMenu();
+        $this->view->stakeholders  = $this->program->getStakeholders($programID, 't1.id_desc');
+
+        $this->display();
+    }
+
+    /**
+     * Unlink program stakeholder.
+     *
+     * @param  int    $programID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function unlinkStakeholder($stakeholderID, $confirm = 'no')
+	{    
+		if($confirm == 'no')
+		{    
+			die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&confirm=yes")));
+		}    
+		else 
+		{    
+			$this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
+
+			die(js::reload('parent'));
+		}    
+	}
 
     /**
      * Export program.

@@ -41,6 +41,7 @@ ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`, AD
 
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
 
+-- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -52,6 +53,22 @@ CREATE TABLE `zt_stage` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_stakeholder`;
+CREATE TABLE `zt_stakeholder` (
+ `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+ `objectID` mediumint(8) NOT NULL,
+ `objectType` char(30) NOT NULL,
+ `user` char(30) NOT NULL,
+ `type` char(30) NOT NULL,
+ `key` enum('0','1') NOT NULL,
+ `from` char(30) NOT NULL,
+ `createdBy` char(30) NOT NULL,
+ `createdDate` date NOT NULL,
+ `editedBy` char(30) NOT NULL,
+ `editedDate` date NOT NULL,
+ `deleted` enum('0','1') NOT NULL 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES 
