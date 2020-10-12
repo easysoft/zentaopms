@@ -222,9 +222,9 @@ class bugModel extends model
             $data->browsers[$i] = $browser;
         }
 
+        /* Get bug data. */
         if(isset($data->uploadImage)) $this->loadModel('file');
         $extendFields = $this->getFlowExtendFields();
-
         $bugs = array();
         foreach($data->title as $i => $title)
         {
