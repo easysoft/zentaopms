@@ -34,6 +34,7 @@
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

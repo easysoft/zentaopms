@@ -30,6 +30,12 @@ $(function()
         });
     }
 
+    /* Assign value to the manage products by the different request type.*/
+    var product = $('#products0');
+    $(product).val(productID);
+    $(product).trigger("chosen:updated");
+    loadBranches($(product));
+
     var adjustMainCol = function()
     {
         $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
