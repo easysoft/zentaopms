@@ -1,3 +1,4 @@
+update zt_story set `plan`='' where `plan`=0;
 CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL,
