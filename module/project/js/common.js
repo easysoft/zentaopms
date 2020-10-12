@@ -240,24 +240,27 @@ $(function()
     });
 
     /*Assign value to the manage products by the different request type.*/
-    var url = window.location.href;
-    if(window.config.requestType == 'GET')
+    if(window.config.currentMethod === 'create')
     {
-        var paramStr  = url.split('?')[1];
-        var paramArr  = paramString.split('&');
-        var productID = paramArr[2].split('=')[1];
+        var url = window.location.href;
+        if(window.config.requestType == 'GET')
+        {
+            var paramStr  = url.split('?')[1];
+            var paramArr  = paramString.split('&');
+            var productID = paramArr[2] ? paramArr[2].split('=')[1] : 0;
+        }
+        else
+        {
+            var urlArr    = url.split('/');
+            var paramStr  = urlArr[urlArr.length-1];
+            var paramArr  = paramStr.split('-');
+            var productID = paramArr[2] ? paramArr[2].split('.')[0] : 0;
+        }
+        var product = $('#productsBox .input-group:last select:first');
+        $(product).val(productID);
+        $(product).trigger("chosen:updated");
+        loadBranches($(product));
     }
-    else
-    {
-        var urlArr    = url.split('/');
-        var paramStr  = urlArr[urlArr.length-1];
-        var paramArr  = paramStr.split('-');
-        var productID = paramArr[2].split('.')[0];
-    }
-    var product   = $('#productsBox .input-group:last select:first');
-    $(product).val(productID);
-    $(product).trigger("chosen:updated");
-    loadBranches($(product));
 
     adjustProductBoxMargin();
     adjustPlanBoxMargin();
