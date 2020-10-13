@@ -21,6 +21,9 @@
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
     </div>
+    <?php if($program->parent):?>
+    <?php echo html::a($this->createLink('program', 'createStakeholder', "programID=$programID&dept=&parent=$program->parent"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
@@ -41,6 +44,17 @@
             <input type='text' name='realnames[]' value='<?php echo $stakeholder->realname;?>' readonly class='form-control' />
             <input type='hidden' name='accounts[]' value='<?php echo $stakeholder->account;?>' />
           </td>
+          <td class='c-actions text-center'>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+          </td>
+        </tr>
+        <?php endforeach;?>
+
+        <?php foreach($parentStakeholders as $stakeholder):?>
+        <?php if(!isset($users[$stakeholder->account])) continue;?>
+        <tr>
+          <td><?php echo html::select("accounts[]", $users, $stakeholder->account, "class='form-control chosen'");?></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

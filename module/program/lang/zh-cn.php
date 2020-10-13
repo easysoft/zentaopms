@@ -183,6 +183,7 @@ $lang->program->PGMExport            = '导出';
 $lang->program->PGMManageGroupMember = '维护分组用户';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
+$lang->program->importStakeholder    = '从父项目导入';
 
 /* Fields. */
 $lang->program->PGMName      = '项目集名称';

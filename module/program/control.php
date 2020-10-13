@@ -457,7 +457,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function createStakeholder($programID = 0, $dept = '')
+    public function createStakeholder($programID = 0, $dept = '', $parentID = 0)
     {
         if($_POST)
         {
@@ -476,13 +476,14 @@ class program extends control
         $this->view->title      = $this->lang->program->createStakeholder;
         $this->view->position[] = $this->lang->program->createStakeholder;
 
-        $this->view->programID     = $programID;
-        $this->view->program       = $this->program->getPRJByID($programID);
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted');
-        $this->view->deptUsers     = $deptUsers;
-        $this->view->dept          = $dept;
-        $this->view->depts         = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->stakeholders  = $this->program->getStakeholders($programID, 't1.id_desc');
+        $this->view->programID          = $programID;
+        $this->view->program            = $this->program->getPGMByID($programID);
+        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->deptUsers          = $deptUsers;
+        $this->view->dept               = $dept;
+        $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
+        $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
+        $this->view->parentStakeholders = $this->program->getStakeholders($parentID, 't1.id_desc');
 
         $this->display();
     }
