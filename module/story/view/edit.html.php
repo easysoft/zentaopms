@@ -80,7 +80,7 @@
                   </div>
                 </td>
               </tr>
-              <?php else:?>
+              <?php elseif($product->type != 'normal'):?>
               <tr>
                 <th class='thWidth'><?php echo $lang->product->branch;?></th>
                 <td>
