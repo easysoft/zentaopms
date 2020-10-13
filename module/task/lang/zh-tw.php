@@ -197,6 +197,7 @@ $lang->task->deniedNotice          = '當前任務只有%s才可以%s。';
 $lang->task->noTask                = '暫時沒有任務。';
 $lang->task->createDenied          = '你不能在該項目添加任務';
 $lang->task->cannotDeleteParent    = '不能刪除父任務。';
+$lang->task->addChildTask          = '因該任務已經產生消耗，為保證數據一致性，我們會幫您創建一條同名子任務記錄該消耗。';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->totalNumber      = '"總計消耗"必須為數字';
@@ -214,6 +215,7 @@ $lang->task->error->assignedTo       = '當前狀態的多人任務不能指派�
 $lang->task->error->consumedEmpty    = '"本次消耗"不能為0';
 $lang->task->error->deadlineSmall    = '"截止日期"必須大於"預計開始"';
 $lang->task->error->alreadyStarted   = '此任務已被啟動，不能重複啟動！';
+$lang->task->error->alreadyConsumed  = '當前選中的父任務已有消耗。';
 
 /* Report. */
 $lang->task->report         = new stdclass();
