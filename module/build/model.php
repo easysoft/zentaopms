@@ -336,7 +336,7 @@ class buildModel extends model
         $build = $this->getByID($buildID);
         $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
-        $this->loadModel('action')->create('story', $storyID, 'unlinkedfrombuild', '', $buildID);
+        $this->loadModel('action')->create('story', $storyID, 'unlinkedfrombuild', '', $buildID, '', false);
     }
 
     /**
