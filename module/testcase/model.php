@@ -673,7 +673,7 @@ class testcaseModel extends model
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if($case->lib != 0)
         {
-            /* remove the require field named story when the case is a lib case.*/
+            /* Remove the require field named story when the case is a lib case.*/
             $requiredFieldsArr = explode(',', $requiredFields);
             $fieldIndex        = array_search('story', $requiredFieldsArr);
             array_splice($requiredFieldsArr, $fieldIndex, 1);
