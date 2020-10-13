@@ -1437,7 +1437,6 @@ class projectModel extends model
     {
         $this->loadModel('task');
 
-        /* Update tasks. */
         $tasks = $this->dao->select('id, project, assignedTo, story, consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
@@ -1447,6 +1446,7 @@ class projectModel extends model
 
             $data = new stdclass();
             $data->project = $projectID;
+            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
 
             if($task->status == 'cancel')
             {
@@ -1454,12 +1454,12 @@ class projectModel extends model
                 $data->canceledDate = null;
             }
 
-            $data->status = $task->consumed > 0 ? 'doing' : 'wait';
-            $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
-            $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
-
+            /* Update tasks. */
+            $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             unset($data->status);
-            $this->dao->update(TABLE_TASK)->data($data)->where('parent')->in($this->post->tasks)->exec();
+            $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
+
+            $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
 
         /* Remove empty story. */
