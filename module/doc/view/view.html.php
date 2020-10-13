@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
+<style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
