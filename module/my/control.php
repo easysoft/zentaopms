@@ -149,7 +149,7 @@ class my extends control
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
-        $this->view->programs   = $this->loadModel('program')->getPairs();
+        $this->view->programs   = $this->loadModel('program')->getPRJPairs();
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -187,7 +187,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->programs   = $this->loadModel('program')->getPairs();
+        $this->view->programs   = $this->loadModel('program')->getPRJPairs();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -238,7 +238,7 @@ class my extends control
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
-        $this->view->programs   = $this->loadModel('program')->getPairs();
+        $this->view->programs   = $this->loadModel('program')->getPRJPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
 
@@ -421,7 +421,7 @@ class my extends control
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
         $this->view->position[] = $this->lang->my->myProgram;
-        $this->view->programs   = $this->program->getList($status, $orderBy, $pager, true, true);
+        $this->view->programs   = $this->program->getPRJList(0, $status, 0, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->status     = $status;

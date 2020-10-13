@@ -1189,6 +1189,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `company` mediumint unsigned NOT NULL,
   `type` char(30) NOT NULL default 'inside',
   `dept` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
@@ -1211,6 +1212,9 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `whatsapp` varchar(90) NOT NULL default '',
   `address` char(120) NOT NULL default '',
   `zipcode` char(10) NOT NULL default '',
+  `nature` text NOT NULL,
+  `analysis` text NOT NULL,
+  `strategy` text NOT NULL,
   `join` date NOT NULL default '0000-00-00',
   `visits` mediumint(8) unsigned NOT NULL default '0',
   `ip` char(15) NOT NULL default '',
@@ -1294,6 +1298,17 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_expect`;
+CREATE TABLE `zt_expect` (
+  `id` mediumint(8) NOT NULL,
+  `userID` mediumint(8) NOT NULL,
+  `program` mediumint(8) NOT NULL DEFAULT 0,
+  `expect` text NOT NULL,
+  `progress` text NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` date NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0' 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (

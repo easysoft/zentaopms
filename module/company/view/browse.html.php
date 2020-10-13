@@ -24,8 +24,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </div>
   </div>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->createLink('company', 'browse', 'browseType=inside'), '<span class="text">' . $lang->user->inside . '</span>', '', 'class="btn btn-link inside hidden"');?>
-    <?php echo html::a($this->createLink('company', 'browse', 'browseType=outside'), '<span class="text">' . $lang->user->outside . '</span>', '', 'class="btn btn-link outside hidden"');?>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=inside'), '<span class="text">' . $lang->user->inside . '</span>', '', 'class="btn btn-link inside"');?>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=outside'), '<span class="text">' . $lang->user->outside . '</span>', '', 'class="btn btn-link outside"');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>

@@ -494,6 +494,23 @@ class programModel extends model
     }
 
     /**
+     * Get top program pairs.
+     *
+     * @access public
+     * @return void
+     */
+    public function getTopPGMPairs($model = '')
+    {
+        return $this->dao->select('id,name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('grade')->eq(1)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->orderBy('`order`')
+            ->fetchPairs();
+    }
+
+    /**
      * Get children by program id.
      *
      * @param  int     $programID

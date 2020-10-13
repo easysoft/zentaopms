@@ -285,11 +285,10 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->program    = $this->loadModel('program')->getParentPairs();
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
-        $this->view->programs   = $this->loadModel('program')->getParentPairs();
+        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->rootID     = $rootID;
 
@@ -357,7 +356,7 @@ class product extends control
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
-        $this->view->programs   = $this->loadModel('program')->getParentPairs();
+        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         unset($this->lang->product->typeList['']);

@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class="main-content" id="mainCentent">
-  <div class="panel-heading">
-    <strong><?php echo $lang->issue->create;?></strong>
-  </div>
-  <div class="panel-body">
+  <div class="center-block">
+    <div class="main-header">
+      <h2><?php echo $lang->issue->create;?></h2>
+    </div>
     <form method="post" class="main-form form-ajax" enctype="multipart/form-data" id="issueForm">
       <table class="table table-form">
         <tbody>
@@ -56,16 +56,10 @@
             <td></td>
             <td></td>
           </tr>
-          <?php if(isset($owner) && $owner):?>
+          <?php if($from == 'stakeholder'):?>
           <tr>
             <th><?php echo $lang->issue->owner;?></th>
-            <td><?php echo html::select('owner', $users, $account, 'class="form-control chosen"');?></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->issue->activity;?></th>
-            <td><?php echo html::select('activity', $activity, $activityID, 'class="form-control chosen"');?></td>
+            <td><?php echo html::select('owner', $owners, $owner, 'class="form-control chosen"');?></td>
             <td></td>
             <td></td>
           </tr>

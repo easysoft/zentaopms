@@ -870,6 +870,7 @@ $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->list = new stdclass();
 $lang->waterfall->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->list->stakeholder    = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 $lang->waterfall->subMenu->list->program        = '项目|program|edit|';
 
 $lang->waterfallproduct   = new stdclass();
@@ -904,6 +905,9 @@ $lang->risk->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
 $lang->durationestimation->menu = new stdclass();
+
+$lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
+$lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
 
 $lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
 $lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');

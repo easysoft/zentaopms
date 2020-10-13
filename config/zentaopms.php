@@ -178,6 +178,7 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
+define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
 define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');

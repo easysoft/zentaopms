@@ -41,7 +41,12 @@ ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`;
 ALTER TABLE `zt_userview` ADD `stages` mediumtext NOT NULL AFTER `projects`;
 ALTER TABLE `zt_userview` ADD `sprints` mediumtext NOT NULL AFTER `stages`;
 
-ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
+ALTER TABLE `zt_user` 
+ADD `company` mediumint unsigned NOT NULL AFTER `id`,
+ADD `type` char(30) NOT NULL default 'inside' AFTER `account`,
+ADD `nature` text NOT NULL AFTER `zipcode`,
+ADD `analysis` text NOT NULL AFTER `nature`,
+ADD `strategy` text NOT NULL AFTER `analysis`;
 
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE `zt_stage` (
@@ -71,6 +76,18 @@ CREATE TABLE `zt_stakeholder` (
  `editedBy` char(30) NOT NULL,
  `editedDate` date NOT NULL,
  `deleted` enum('0','1') NOT NULL 
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_expect`;
+CREATE TABLE `zt_expect` (
+  `id` mediumint(8) NOT NULL,
+  `userID` mediumint(8) NOT NULL,
+  `program` mediumint(8) NOT NULL DEFAULT 0,
+  `expect` text NOT NULL,
+  `progress` text NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` date NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES 

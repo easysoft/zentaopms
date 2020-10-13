@@ -52,10 +52,12 @@ class issue extends control
     /**
      * Create an issue.
      *
+     * @param  string $from  issue|stakeholder
+     * @param  string $owner
      * @access public
      * @return void
      */
-    public function create()
+    public function create($from = 'issue', $owner = '')
     {
         if($_POST)
         {
@@ -69,7 +71,10 @@ class issue extends control
         $this->view->position[] = $this->lang->issue->common;
         $this->view->position[] = $this->lang->issue->create;
 
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->owners = $this->loadModel('stakeholder')->getStakeholders4Issue();
+        $this->view->from   = $from; 
+        $this->view->owner  = $owner; 
 
         $this->display();
     }

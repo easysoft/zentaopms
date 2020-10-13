@@ -324,6 +324,40 @@ $lang->branch->methodOrder[0]  = 'manage';
 $lang->branch->methodOrder[5]  = 'sort';
 $lang->branch->methodOrder[10] = 'delete';
 
+/* Stakeholer. */
+$lang->resource->stakeholder = new stdclass();
+$lang->resource->stakeholder->browse       = 'browse';
+$lang->resource->stakeholder->create       = 'create';
+$lang->resource->stakeholder->edit         = 'edit';
+$lang->resource->stakeholder->delete       = 'delete';
+$lang->resource->stakeholder->view         = 'view';
+$lang->resource->stakeholder->issue        = 'issue';
+$lang->resource->stakeholder->viewIssue    = 'viewIssue';
+$lang->resource->stakeholder->communicate  = 'communicate';
+$lang->resource->stakeholder->expect       = 'expect';
+$lang->resource->stakeholder->expectation  = 'expectation';
+$lang->resource->stakeholder->deleteExpect = 'deleteExpect';
+$lang->resource->stakeholder->createExpect = 'createExpect';
+$lang->resource->stakeholder->editExpect   = 'editExpect';
+$lang->resource->stakeholder->viewExpect   = 'viewExpect';
+$lang->resource->stakeholder->userIssue    = 'userIssue';
+
+$lang->stakeholder->methodOrder[5]  = 'browse';
+$lang->stakeholder->methodOrder[10] = 'create';
+$lang->stakeholder->methodOrder[15] = 'edit';
+$lang->stakeholder->methodOrder[25] = 'delete';
+$lang->stakeholder->methodOrder[30] = 'view';
+$lang->stakeholder->methodOrder[35] = 'issue';
+$lang->stakeholder->methodOrder[40] = 'viewIssue';
+$lang->stakeholder->methodOrder[45] = 'communicate';
+$lang->stakeholder->methodOrder[50] = 'expect';
+$lang->stakeholder->methodOrder[55] = 'expectation';
+$lang->stakeholder->methodOrder[60] = 'deleteExpect';
+$lang->stakeholder->methodOrder[65] = 'createExpect';
+$lang->stakeholder->methodOrder[70] = 'editExpect';
+$lang->stakeholder->methodOrder[75] = 'viewExpect';
+$lang->stakeholder->methodOrder[80] = 'userIssue';
+
 /* Story. */
 $lang->resource->story = new stdclass();
 $lang->resource->story->create      = 'create';
