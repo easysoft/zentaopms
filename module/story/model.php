@@ -1651,7 +1651,7 @@ class storyModel extends model
             foreach($plans as $branch) $stages[$branch] = 'planned';
         }
 
-        /* When the status is closed, phase = is also changed to closed. */
+        /* When the status is closed, stage is also changed to closed. */
         if($story->status == 'closed')
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
