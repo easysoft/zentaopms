@@ -2411,8 +2411,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,project')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'project');
+        $datas    = $this->processData4Report($tasks, '', 'project');
 
         $projects = $this->loadModel('project')->getPairs('all');
         foreach($datas as $projectID => $data)
@@ -2435,8 +2434,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,module')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'module');
+        $datas    = $this->processData4Report($tasks, '', 'module');
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
         foreach($datas as $moduleID => $data)
@@ -2459,21 +2457,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        /* Fix bug #3497. */
-        $fields = array();
-        $datas  = array();
-        foreach($tasks as $taskID => $task)
-        {
-            if(!isset($fields[$task->assignedTo])) $fields[$task->assignedTo] = 0;
-            $fields[$task->assignedTo] ++;
-        }
-        foreach($fields as $field => $count)
-        {
-            $data = new stdclass();
-            $data->name    = $field;
-            $data->value   = $count;
-            $datas[$field] = $data;
-        }
+        $datas    = $this->processData4Report($tasks, '', 'assignedTo');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2496,8 +2480,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,type')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'type');
+        $datas    = $this->processData4Report($tasks, '', 'type');
 
         foreach($datas as $type => $data)
         {
@@ -2519,8 +2502,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,pri')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'pri');
+        $datas    = $this->processData4Report($tasks, '', 'pri');
 
         foreach($datas as $index => $pri) $pri->name = $this->lang->task->priList[$pri->name];
         return $datas;
@@ -2540,8 +2522,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,deadline')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        return $this->processData4Report($tasks, $children, 'deadline');
+        return $this->processData4Report($tasks, '', 'deadline');
     }
 
     /**
@@ -2609,8 +2590,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,finishedBy')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->andWhere('finishedBy')->ne('')->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'finishedBy');
+        $datas    = $this->processData4Report($tasks, '', 'finishedBy');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2634,8 +2614,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,closedReason')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->andWhere('closedReason')->ne('')->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'closedReason');
+        $datas    = $this->processData4Report($tasks, '', 'closedReason');
 
         foreach($datas as $closedReason => $data)
         {
@@ -2659,8 +2638,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->orderBy('date asc')->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'date');
+        $datas    = $this->processData4Report($tasks, '', 'date');
         return $datas;
     }
 
@@ -2677,8 +2655,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,status')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
-        $datas    = $this->processData4Report($tasks, $children, 'status');
+        $datas    = $this->processData4Report($tasks, '', 'status');
 
         foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
         return $datas;
@@ -2695,10 +2672,13 @@ class taskModel extends model
      */
     public function processData4Report($tasks, $children, $field)
     {
-        foreach($children as $taskID => $task)
+        if($children)
         {
-            $tasks[$taskID] = $task;
-            unset($tasks[$task->parent]);
+            foreach($children as $taskID => $task)
+            {
+                $tasks[$taskID] = $task;
+                unset($tasks[$task->parent]);
+            }
         }
 
         $fields = array();
