@@ -179,7 +179,8 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');
 
-$lang->install->promotion     = "Autres produits de l'équipe Nature Easy Soft :";
+$lang->install->promotion = "Autres produits de l'équipe Nature Easy Soft :";
+
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';

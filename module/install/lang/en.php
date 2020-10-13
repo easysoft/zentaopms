@@ -179,7 +179,8 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
-$lang->install->promotion     = "Products also from EasyCorp:";
+$lang->install->promotion = "Products also from EasyCorp:";
+
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';

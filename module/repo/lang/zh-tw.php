@@ -159,7 +159,7 @@ $lang->repo->error->noPriv        = '程序沒有權限切換到目錄 %s';
 $lang->repo->error->output        = "執行命令：%s\n錯誤結果(%s)： %s\n";
 $lang->repo->error->clientVersion = "客戶端版本過低，請升級或更換SVN客戶端";
 $lang->repo->error->encoding      = "編碼可能錯誤，請更換編碼重試。";
-$lang->repo->error->clientPath    = "客户端安裝目錄不能有空格！";
+$lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
 
 $lang->repo->syncTips      = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';
 $lang->repo->encodingsTips = "提交日誌的編碼，可以用逗號連接起來的多個，比如utf-8。";

@@ -728,6 +728,7 @@ class baseDAO
          */
         $originalPageID = $pager->pageID;
         $recTotal       = $this->count($distinctField);
+
         $pager->setRecTotal($recTotal);
         $pager->setPageTotal();
         if($originalPageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
