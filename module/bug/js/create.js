@@ -85,7 +85,6 @@ function setAssignedTo(moduleID, productID)
     });
 }
 
-var stepsTemplate;
 $(function()
 {
     if($('#project').val()) loadProjectRelated($('#project').val());
@@ -120,17 +119,13 @@ $(function()
     });
 
     /* Get steps template. */
-    stepsTemplate = editor['steps'].html();
-    $("a[id^='tplTitleBox']").on('click', function()
-    {
-        setTimeout("stepsTemplate = editor['steps'].html()", 100);
-    });
+    var stepsTemplate = editor['steps'].html();
 
     /* Judgment of required items for steps. */
     $('#submit').on('click', function()
     {
         var steps = editor['steps'].html();
-        if(stepsRequired !== false && stepsTemplate == steps)
+        if(stepsRequired !== false && (steps == stepsTemplate || steps == editor.steps.templateHtml))
         {
             bootbox.alert(stepsNotEmpty);
             return false;
