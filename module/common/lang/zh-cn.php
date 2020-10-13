@@ -147,7 +147,7 @@ $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmst
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
-$lang->personnel->menu->putinto    = array('link' => "可投入人员|personnel|putinto|program=%s");
+$lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
 
 /* Scrum menu. */
 $lang->product = new stdclass();

@@ -14,19 +14,45 @@ class personnel extends control
     /**
      * Get a list of people who can be accessed.
      *
-     * @param  int  $programID
+     * @param  int    $programID
+     * @param  int    $deptID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $deptID
      * @access public
      * @return void
      */
-    public function accessible($programID = 0)
+    public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
+        /* Set the pager. */
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $queryID   = $browseType == 'browse' ? 0 : (int)$param;
+        $actionURL = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&param=myQueryID&type=bysearch");
+        $this->personnel->buildSearchForm($queryID, $actionURL);
+
         $this->view->title      = $this->lang->personnel->accessible;
         $this->view->position[] = $this->lang->personnel->accessible;
+
+        $this->view->deptID     = $deptID;
+        $this->view->programID  = $programID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->browseType = $browseType;
+        $this->view->dept       = $this->loadModel('dept')->getByID($deptID);
+        $this->view->deptTree   = $this->personnel->getTreeMenu($deptID = 0, array('personnelModel', 'createMemberLink'), $programID);
 
         $this->display();
     }
@@ -34,19 +60,27 @@ class personnel extends control
     /**
      * Access to investable personnel.
      *
-     * @param  int  $programID
+     * @param  int    $browseType
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function putinto($programID = 0)
+    public function putInto($programID = 0, $browseType = 'all', $orderBy = 'id_desc')
     {
         $this->loadModel('program');
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
-        $this->view->title      = $this->lang->personnel->putinto;
-        $this->view->position[] = $this->lang->personnel->putinto;
+        $inputPersonnel = $this->personnel->getInputPersonnel($programID, $browseType, $orderBy);
+
+        $this->view->title      = $this->lang->personnel->putInto;
+        $this->view->position[] = $this->lang->personnel->putInto;
+
+        $this->view->programID      = $programID;
+        $this->view->orderBy        = $orderBy;
+        $this->view->browseType     = $browseType;
+        $this->view->inputPersonnel = $inputPersonnel;
 
         $this->display();
     }

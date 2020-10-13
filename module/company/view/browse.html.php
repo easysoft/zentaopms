@@ -70,7 +70,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php common::printorderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
+          <th><?php common::printOrderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
           <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
           <th class="w-90px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
           <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>

@@ -151,13 +151,13 @@ class deptModel extends model
         krsort($deptMenu);
         $deptMenu = array_pop($deptMenu);
         $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
-        return $lastMenu; 
+        return $lastMenu;
     }
 
     /**
      * Update dept.
      * 
-     * @param  int    $deptID 
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -179,7 +179,7 @@ class deptModel extends model
     /**
      * Create the manage link.
      * 
-     * @param  int    $dept 
+     * @param  object    $dept
      * @access public
      * @return string
      */
