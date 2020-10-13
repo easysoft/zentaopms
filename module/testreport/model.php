@@ -367,7 +367,7 @@ class testreportModel extends model
      *
      * @param  int    $reportID
      * @access public
-     * @return void
+     * @return array
      */
     public function getCaseIdList($reportID)
     {
