@@ -398,8 +398,8 @@ class testtask extends control
 
         /* Set the browseType, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
-        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Get project type and set assignedTos. */
         $project = $this->project->getById($task->project);
