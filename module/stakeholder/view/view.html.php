@@ -58,7 +58,7 @@ $createLink = $this->createLink('stakeholder', 'create');
       <div class="detail">
         <div class="detail-title"><?php echo $lang->stakeholder->expect . "($expect->createdDate)";?></div>
         <div class="detail-content article-content">
-          <?php echo !empty($expect->expectr) ? $expect->expect : '<div class="text-center text-muted">' . $lang->noData . '</div>';?>
+          <?php echo !empty($expect->expect) ? $expect->expect : '<div class="text-center text-muted">' . $lang->noData . '</div>';?>
         </div>
       </div>
       <div class="detail">

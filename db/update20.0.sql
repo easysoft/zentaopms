@@ -80,7 +80,7 @@ CREATE TABLE `zt_stakeholder` (
 
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE `zt_expect` (
-  `id` mediumint(8) NOT NULL,
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `userID` mediumint(8) NOT NULL,
   `program` mediumint(8) NOT NULL DEFAULT 0,
   `expect` text NOT NULL,

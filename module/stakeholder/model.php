@@ -102,6 +102,7 @@ class stakeholderModel extends model
      */
     public function batchCreate() 
     {    
+        $this->loadModel('action');
         $data = (array)fixer::input('post')->get(); 
 
 		$members  = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
@@ -122,6 +123,9 @@ class stakeholderModel extends model
             $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
 
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
+
+            $stakeholderID = $this->dao->lastInsertId();
+            $this->action->create('stakeholder', $stakeholderID, 'Opened');
         }    
 
         /* Only changed account update userview. */
@@ -176,38 +180,6 @@ class stakeholderModel extends model
 
         if(!dao::isError()) return common::createChanges($oldStakeholder, $stakeholder);
         return false;
-    }
-
-    /**
-     * Save stakeholder plan.
-     *
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function savePlan()
-    {
-        $data = fixer::input('post')->get();
-
-        foreach($data->status as $activityID => $value)
-        {
-            $stakeholder = new stdclass();
-            $stakeholder->activity    = $activityID;
-            $stakeholder->status      = $data->status[$activityID];
-            $stakeholder->begin       = $data->begin[$activityID];
-            $stakeholder->realBegin   = $data->realBegin[$activityID];
-            $stakeholder->partake     = json_encode($data->partake[$activityID]);
-            $stakeholder->situation   = $data->situation[$activityID];
-            $stakeholder->program     = $this->session->PRJ;
-            $stakeholder->createdBy   = $this->app->user->account;
-            $stakeholder->createdDate = helper::today();
-
-            $this->dao->replace(TABLE_INTERVENTION)->data($stakeholder)->exec();
-        }
-
-        return !dao::isError();
     }
 
     /**
