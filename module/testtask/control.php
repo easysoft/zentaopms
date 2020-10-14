@@ -412,7 +412,6 @@ class testtask extends control
             $assignedTos = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
 
-
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
 
