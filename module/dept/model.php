@@ -26,6 +26,18 @@ class deptModel extends model
     }
 
     /**
+     * Get all department names.
+     *
+     * @param  int   $deptID
+     * @access public
+     * @return object
+     */
+    public function getDeptPairs($deptID = 0)
+    {
+        return $this->dao->select('id,name')->from(TABLE_DEPT)->fetchPairs('id', 'name');
+    }
+
+    /**
      * Build the query.
      * 
      * @param  int    $rootDeptID 

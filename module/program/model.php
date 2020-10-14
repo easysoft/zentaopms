@@ -339,6 +339,7 @@ class programModel extends model
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+        if(!isset($project->whitelist) or $project->acl != 'custom') $project->whitelist = '';
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
         $children = $this->getChildren($programID);
@@ -1131,6 +1132,8 @@ class programModel extends model
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
             ->remove('longTime')
             ->get();
+
+        if(!isset($project->whitelist) or $project->acl != 'custom') $project->whitelist = '';
 
         if($project->parent)
         {

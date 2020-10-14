@@ -15,6 +15,44 @@ class personnelModel extends model
      * Access to program set input staff.
      *
      * @param  int       $programID
+     * @param  int       $deptID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  int       $queryID
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $orderBy = 't2.id_desc', $queryID = 0, $pager)
+    {
+        $accessibleQuery = '';
+        if($browseType == 'bysearch')
+        {
+            $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
+            if($query)
+            {
+                $this->session->set('accessibleQuery', $query->sql);
+                $this->session->set('accessibleForm', $query->form);
+            }
+            if($this->session->accessibleQuery == false) $this->session->set('accessibleQuery', ' 1=1');
+            $accessibleQuery = $this->session->accessibleQuery;
+        }
+
+        $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.programs')->like(',%' . $programID . ',%')
+            ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        return $personnelList;
+    }
+    /**
+     * Access to program set input staff.
+     *
+     * @param  int       $programID
      * @param  string    $browseType
      * @param  string    $orderBy
      * @access public

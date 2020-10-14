@@ -31,26 +31,45 @@ js::set('deptID', $deptID);
     </div>
   </div>
   <div class="main-col">
+  <?php if(!empty($personnelList)):?>
     <div id="queryBox" class="cell" data-module="accessible"></div>
     <form class="main-table table-personnel" action="" data-ride="table">
-      <?php $vars = "programID=$programID&deptID=$deptID&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+      <?php $vars = "programID=$programID&deptID=$deptID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
       <table id="accessibleList" class="table has-sort-head">
         <thead>
           <tr>
-            <th class="c-id"><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-            <th class="w-120px"><?php echo common::printOrderLink('department', $orderBy, $vars, $lang->personnel->department);?></th>
+            <th class="c-id"><?php common::printOrderLink('t2.id', $orderBy, $vars, $lang->idAB);?></th>
+            <th class="w-120px"><?php echo common::printOrderLink('t2.dept', $orderBy, $vars, $lang->personnel->department);?></th>
             <th class="w-100px"><?php echo $lang->personnel->realName;?></th>
             <th class="w-100px"><?php echo $lang->personnel->userName;?></th>
             <th class="w-80px"><?php echo $lang->personnel->job;?></th>
             <th class="w-60px"><?php echo $lang->personnel->genders;?></th>
           </tr>
         </thead>
+        <tbody>
+          <?php foreach($personnelList as $personnel):?>
+          <tr>
+            <td class="c-id"><?php echo $personnel->id;?></td>
+            <td class="c-name"><?php echo zget($deptList, $personnel->dept);?></td>
+            <td class="c-name"><?php echo $personnel->realname;?></td>
+            <td class="c-name"><?php echo $personnel->account;?></td>
+            <td><?php echo zget($lang->user->roleList, $personnel->role);?></td>
+            <td><?php echo zget($lang->user->genderList, $personnel->gender);?></td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
       </table>
+      <div class="table-footer">
+        <?php $pager->show('right', 'pagerjs');?>
+      </div>
     </form>
   </div>
+  <?php else:?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->personnel->emptyTip;?></span>
+      </p>
+    </div>
+  <?php endif;?>
 </div>
-<script>
-$('#dept' + deptID).addClass('active');
-$(".tree .active").parent('li').addClass('active');
-</script>
 <?php include '../../common/view/footer.html.php';?>
