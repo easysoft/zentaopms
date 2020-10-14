@@ -89,7 +89,8 @@ js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
             <td>
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
-                <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
+                <?php $builds[''] = '';?>
+                <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='chosen form-control'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
