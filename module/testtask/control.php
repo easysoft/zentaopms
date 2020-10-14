@@ -407,7 +407,7 @@ class testtask extends control
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
-        /* Set the browseType,moduleID and queryID. */
+        /* Set the browseType, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
