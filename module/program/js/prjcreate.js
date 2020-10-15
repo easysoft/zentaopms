@@ -19,3 +19,15 @@ function setCopyProject(copyProjectID)
 {
     location.href = createLink('program', 'PRJCreate', 'template=' + template + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
+
+function setAclList(programID)
+{
+    if(programID != 0)
+    {
+        $('.aclBox').html($('#PGMAcl').html());
+    }
+    else
+    {
+        $('.aclBox').html($('#PRJAcl').html());
+    }
+}

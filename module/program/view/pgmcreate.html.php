@@ -43,7 +43,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : '', "class='form-control chosen'");?>
+          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : '', "class='form-control chosen' onchange=setAclList(this.value)");?>
           <td></td>
         </tr>
         <tr>
@@ -101,7 +101,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'open', '', 'block'));?></td>
         </tr>
         <tr id='whitelistBox' class='hidden'>
           <th><?php echo $lang->project->whitelist;?></th>
@@ -144,6 +144,12 @@
       <?php endif;?>
     </div>
   </div>
+</div>
+<div id='PGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'open', '', 'block'));?>
+</div>
+<div id='subPGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, 'open', '', 'block'));?>
 </div>
 <?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
 <?php include '../../common/view/footer.html.php';?>

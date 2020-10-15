@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen'");?></td><td></td><td></td>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setAclList(this.value)'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
@@ -117,11 +117,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-        </tr>
-        <tr id='whitelistBox' class='hidden'>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $whitelist, '', '', 'inline');?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $acl, '', 'block'));?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -163,5 +159,11 @@
       <?php endif;?>
     </div>
   </div>
+</div>
+<div id='PRJAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $acl, '', 'block'));?>
+</div>
+<div id='PGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, $acl, '', 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

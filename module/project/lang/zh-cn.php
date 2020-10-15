@@ -115,9 +115,8 @@ $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['closed']    = '已关闭';
 
-$lang->project->aclList['open']    = "默认设置(有{$lang->projectCommon}视图权限，即可访问)";
-$lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang->projectCommon}团队成员才能访问)";
-$lang->project->aclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
+$lang->project->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
+$lang->project->aclList['private'] = "私有（团队成员和项目干系人可访问）";
 
 $lang->project->storyPoint = '故事点';
 

@@ -95,9 +95,8 @@ $lang->program->featureBar['wait']      = 'Waiting';
 $lang->program->featureBar['suspended'] = 'Suspended';
 $lang->program->featureBar['closed']    = 'Closed';
 
-$lang->program->PRJAclList['open']    = "Default (Users who can visit {$lang->projectCommon} can access it)";
-$lang->program->PRJAclList['private'] = 'Private (For team members only)';
-$lang->program->PRJAclList['custom']  = 'Custom (Team members and the whitelist users can access it)';
+$lang->program->PRJAclList['open']    = "Open(Users who can visit {$lang->projectCommon} can access it)";
+$lang->program->PRJAclList['private'] = 'Private (For team members and stakeholders only)';
 
 $lang->program->PRJPrivwayList['extend'] = 'Inherit (program privilege and company privilege)';
 $lang->program->PRJPrivwayList['reset']  = 'Reset (program privilege only)';
