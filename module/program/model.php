@@ -283,7 +283,7 @@ class programModel extends model
         {
             $programID = $this->dao->lastInsertId();
             $today     = helper::today();
-            //if($project->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
             $this->file->updateObjectID($this->post->uid, $programID, 'project');

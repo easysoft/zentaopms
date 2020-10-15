@@ -1533,7 +1533,7 @@ class userModel extends model
         if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
         if(!is_array($objectIdList)) return false;
 
-        $allGroups      = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
+        $allGroups      = $this->dao->select('account, `group`')->from(TABLE_USERGROUP)->fetchAll();
         $managePrograms = $this->dao->select('account, PRJ')->from(TABLE_USERGROUP)->where('PRJ')->ne('')->fetchPairs();
         $userGroups = array();
         $groupUsers = array();
@@ -1590,7 +1590,6 @@ class userModel extends model
                         if(strpos(",{$userView->programs},", ",{$program},") === false) $userView->programs .= ",{$program}";
                     }
                 }
-                $userObjects[$account]['programs'] = $userView->programs;
             }
         }
 
@@ -1678,6 +1677,26 @@ class userModel extends model
             }
         }
 
+        /* Get linked projects stakeholders.*/
+        $projectStakeholders = $this->dao->select('user')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('project')
+            ->andWhere('objectID')->in($linkedProjects)
+            ->fetchPairs();
+
+        if(isset($projectStakeholders[$account])) return true;
+
+        /* Get linked program stakeholders.*/
+        if($product->program)
+        {
+            $program = $this->loadModel('program')->getPGMByID($product->program);
+            $programStakeholders = $this->dao->select('user')->from(TABLE_STAKEHOLDER)
+                ->where('objectType')->eq('program')
+                ->andWhere('objectID')->eq($program->id)
+                ->fetchPairs();
+
+            if(isset($programStakeholders[$account])) return true;
+        }
+
         return false;
     }
 
@@ -1715,6 +1734,31 @@ class userModel extends model
         if(!empty($linkedProjects))
         {
             foreach($linkedProjects as $projectID) $users += zget($teams, $projectID, array());
+        }
+
+        /* Get linked projects stakeholders.*/
+        $projectStakeholders = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('project')
+            ->andWhere('objectID')->in($linkedProjects)
+            ->fetchPairs();
+        if(!empty($projectStakeholders))
+        {
+            foreach($projectStakeholders as $account) $users[$account] = $account;
+        }
+
+        /* Get linked program stakeholders.*/
+        if($product->program)
+        {
+            $program = $this->loadModel('program')->getPGMByID($product->program);
+            $programStakeholders = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+                ->where('objectType')->eq('program')
+                ->andWhere('objectID')->eq($program->id)
+                ->fetchPairs();
+
+            if(!empty($programStakeholders))
+            {
+                foreach($programStakeholders as $account) $users[$account] = $account;
+            }
         }
 
         return $users;
