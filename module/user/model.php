@@ -1380,11 +1380,11 @@ class userModel extends model
 
             $userView = new stdclass();
             $userView->account  = $account;
-            $userView->PRJ = array();
+            $userView->programs = array();
             $programs = array();
             if($isAdmin)
             {
-                $userView->PRJ = join(',', array_keys($allPrograms));
+                $userView->programs = join(',', array_keys($allPrograms));
             }
             else
             {
@@ -1393,7 +1393,7 @@ class userModel extends model
                     $programTeams = isset($teams[$id]) ? $teams[$id] : array();
                     if($this->checkProjectPriv($program, $account, $groups, $programTeams)) $programs[$id] = $id;
                 }
-                $userView->PRJ = join(',', $programs);
+                $userView->programs = join(',', $programs);
             }
 
             $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
@@ -1515,26 +1515,164 @@ class userModel extends model
     }
 
     /**
-     * Update user view.
+     * Update user view by object type.
      * 
-     * @param  int|array $objectID
-     * @param  string    $objectType
-     * @param  array     $users
+     * @param  string $objectIdList
+     * @param  string $objectType
+     * @param  array  $users
      * @access public
-     * @return void
+     * @return void 
      */
     public function updateUserView($objectIdList, $objectType, $users = array())
     {
-        $table = '';
-        if($objectType == 'product') $table = TABLE_PRODUCT;
-        if($objectType == 'project' || $objectType == 'program') $table = TABLE_PROJECT;
-        if(empty($table)) return false;
-
         if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
         if(!is_array($objectIdList)) return false;
 
-        $allGroups      = $this->dao->select('account, `group`')->from(TABLE_USERGROUP)->fetchAll();
-        $managePrograms = $this->dao->select('account, PRJ')->from(TABLE_USERGROUP)->where('PRJ')->ne('')->fetchPairs();
+        if($objectType == 'program') $this->updateProgramView($objectIdList, $users);
+        if($objectType == 'product') $this->updateProductView($objectIdList, $users);
+        if($objectType == 'project') $this->updateProjectView($objectIdList, $users);
+        if($objectType == 'sprint')  $this->updateSprintView($objectIdList, $users);
+        if($objectType == 'stage')   $this->updateStageView($objectIdList, $users);
+    }
+
+    /**
+     * Update program user view.
+     * 
+     * @param  array  $programIdList
+     * @param  array  $user
+     * @access public
+     * @return void 
+     */
+    public function updateProgramView($programIdList, $users)
+    {
+        $programs = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path')->from(TABLE_PROJECT)->where('id')->in($programIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($programs)) return true;
+
+        /* Get self stakeholders.*/
+        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($programIdList);
+
+        /* Get all parent program and subprogram relation.*/
+        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
+ 
+        /* Get auth users.*/
+        $authUsers = array();
+        if(!empty($users)) $authUsers = $users;
+        if(empty($users))
+        {
+            foreach($programs as $program) 
+            {
+                $stakeholders = zget($stakeholderGroup, $program->id, array());
+                if($program->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                $authUsers += $this->getProgramAuthUsers($program, $stakeholders);
+            }
+        }
+
+        /* Get all programs user view.*/
+        $stmt  = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
+        if(empty($users) and $authUsers)
+        {
+            foreach($programs as $programID => $program) $stmt->orWhere("CONCAT(',', programs, ',')")->like("%,{$programID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', 'programs');
+
+        /* Judge auth and update view.*/
+        foreach($userViews as $account => $view)
+        {
+            foreach($programs as $programID => $program)
+            {
+                $stakeholders = zget($stakeholderGroup, $program->id, array());
+                if($program->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+
+                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders);
+                if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";
+                if(!$hasPriv and strpos(",{$view},", ",{$programID},") !== false) $view  = trim(str_replace(",{$programID},", ',', ",{$view},"), ',');
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($view)->where('account')->eq($account)->exec();
+        }
+    }
+    
+    /**
+     * Update project view 
+     * 
+     * @param  array $projectIdList
+     * @param  array $users 
+     * @access public
+     * @return void
+     */
+    public function updateProjectView($projectIdList, $users)
+    {
+        $projects = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($projects)) return true;
+
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->andWhere('root')->in($projectIdList)
+            ->query();
+
+        while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
+
+        /* Get self stakeholders.*/
+        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
+
+        /* Get all parent program and subprogram relation.*/
+        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($projectIdList);
+ 
+        /* Get auth users.*/
+        $authUsers = array();
+        if(!empty($users)) $authUsers = $users;
+        if(empty($users))
+        {
+            foreach($projects as $project) 
+            {
+                $stakeholders = zget($stakeholderGroup, $project->id, array());
+                $teams        = zget($teamGroups, $project->id, array());
+                if($project->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
+
+                $authUsers += $this->getProjectAuthUsers($project, $stakeholders, $teams);
+            }
+        }
+
+        /* Get all programs user view.*/
+        $stmt  = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
+        if(empty($users) and $authUsers)
+        {
+            foreach($projects as $projectID => $project) $stmt->orWhere("CONCAT(',', projects, ',')")->like("%,{$projectID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', 'projects');
+
+        /* Judge auth and update view.*/
+        foreach($userViews as $account => $view)
+        {
+            foreach($projects as $projectID => $project)
+            {
+                $stakeholders = zget($stakeholderGroup, $project->id, array());
+                $teams        = zget($teamGroups, $project->id, array());
+                if($project->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
+
+                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams);
+                if($hasPriv and strpos(",{$view},", ",{$projectID},") === false)  $view .= ",{$projectID}";
+                if(!$hasPriv and strpos(",{$view},", ",{$projectID},") !== false) $view  = trim(str_replace(",{$projectID},", ',', ",{$view},"), ',');
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($view)->where('account')->eq($account)->exec();
+        }
+    }
+
+    /**
+     * Update product user view.
+     * 
+     * @param  array  $productIdList
+     * @param  array  $user
+     * @access public
+     * @return void 
+     */
+    public function updateProductView($productIdList, $users)
+    {
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($products)) return true;
+
+        /* Get all groups for whiteList.*/
+        $allGroups  = $this->dao->select('account, `group`')->from(TABLE_USERGROUP)->fetchAll();
         $userGroups = array();
         $groupUsers = array();
         foreach($allGroups as $group)
@@ -1543,104 +1681,299 @@ class userModel extends model
             $userGroups[$group->account] .= "{$group->group},";
             $groupUsers[$group->group][$group->account] = $group->account;
         }
-
-        $linkedProductProjects = array();
-        $linkedProjectProducts = array();
-        if($objectType == 'product')
+ 
+        /* Get product and project relation and group by product and project.*/
+        $linkedProductGroups = array();
+        $linkedProjectGroups = array();
+        $stmt = $this->dao->select('project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+        while($projectProduct = $stmt->fetch())
         {
-            $stmt = $this->dao->select('project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($objectIdList)
-                ->andWhere('t2.deleted')->eq(0)
-                ->query();
-            while($projectProduct = $stmt->fetch())
-            {
-                $linkedProductProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
-                $linkedProjectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
-            }
+            $linkedProductGroups[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+            $linkedProjectGroups[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
         }
 
+        /* Get linked projects team members.*/
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->eq('project')
-            ->beginIF($objectType == 'product')->andWhere('root')->in(array_keys($linkedProjectProducts))->fi()
-            ->beginIF($objectType == 'project' || $objectType == 'program')->andWhere('root')->in($objectIdList)->fi()
+            ->andWhere('root')->in(array_keys($linkedProjectGroups))
             ->query();
+
         while($team = $stmt->fetch())
         {
-            if($objectType == 'product')
-            {
-                $productIdList = zget($linkedProjectProducts, $team->root, array());
-                foreach($productIdList as $productID) $teamGroups[$productID][$team->root][$team->account] = $team->account;
-            }
-            elseif($objectType == 'project')
-            {
-                $teamGroups[$team->root][$team->account] = $team->account;
-            }
-            elseif($objectType == 'program')
-            {
-                $manageProgram = zget($managePrograms, $account, '');
-                $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
-                if($hasPriv and strpos(",{$userView->programs},", ",{$objectID},") === false) $userView->programs .= ",{$objectID}";
-                if(!$hasPriv and strpos(",{$userView->programs},", ",{$objectID},") !== false) $userView->programs = trim(str_replace(",{$objectID},", ',', ",{$userView->programs},"), ',');
-                if($manageProgram)
-                {
-                    foreach(explode(',', $manageProgram) as $program)
-                    {
-                        if(strpos(",{$userView->programs},", ",{$program},") === false) $userView->programs .= ",{$program}";
-                    }
-                }
-            }
+            $productIdList = zget($linkedProjectGroups, $team->root, array());
+            foreach($productIdList as $productID) $teamGroups[$productID][$team->account] = $team->account;
         }
 
-        $whiteList = array();
-        $objects   = $this->dao->select('*')->from($table)->where('id')->in($objectIdList)->fetchAll('id');
-        foreach($objects as $objectID => $object)
+        /* Get linked projects stakeholders.*/
+        $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('project')
+            ->andWhere('objectID')->in(array_keys($linkedProjectGroups))
+            ->query();
+
+        $stakeholderGroups = array();
+        while($stakeholder = $stmt->fetch())
         {
-            if($object->acl == 'open')
-            {
-                unset($objects[$objectID]);
-                continue;
-            }
-            if(!empty($users)) continue;
-
-            if($objectType == 'product') $whiteList += $this->getProductWhiteListUsers($object, $groupUsers, zget($linkedProductProjects, $objectID, array()), zget($teamGroups, $objectID, array()));
-            if($objectType == 'project') $whiteList += $this->getProjectWhiteListUsers($object, $groupUsers, zget($teamGroups, $objectID, array()));
+            $productIdList = zget($linkedProjectGroups, $stakeholder->objectID, array());
+            foreach($productIdList as $productID) $stakeholderGroups[$productID][$stakeholder->user] = $stakeholder->user;
         }
-        if(empty($objects)) return true;
 
-        if($whiteList) $users = $whiteList;
+        /* Get linked programs stakeholders.*/
+        $linkedProgramGroups = array();
+        foreach($products as $product)
+        {
+            if($product->program) $linkedProgramGroups[$product->program][$product->id] = $product->id;
+        }
 
-        $field = $objectType == 'product' ? 'products' : 'projects';
-        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)->where('account')->in($users);
+        if($linkedProgramGroups)
+        {
+            $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+                ->where('objectType')->eq('program')
+                ->andWhere('objectID')->in(array_keys($linkedProgramGroups))
+                ->query();
+
+            while($programStakeholder = $stmt->fetch())
+            {
+                $productIdList = zget($linkedProgramGroups, $programStakeholder->objectID, array());
+                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
+            }
+        }
+
+        /* Get white list.*/
+        $whiteList = array();
+        if(empty($users))
+        {
+            foreach($products as $productID => $product)
+            {
+                $whiteList += $this->getProductWhiteListUsers($product, $groupUsers, zget($teamGroups, $productID, array(), zget($stakeholderGroups, $productID, array())));
+            }
+
+            $users = $whiteList;
+        }
+
+        $stmt = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($users);
         if($whiteList)
         {
-            foreach($objects as $objectID => $object) $stmt->orWhere("CONCAT(',', {$field}, ',')")->like("%,{$objectID},%");
+            foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
         }
-        $userViews = $stmt->fetchPairs('account', $field);
+        $userViews = $stmt->fetchPairs('account', 'products');
 
+        /* Process user view.*/
         foreach($userViews as $account => $view)
         {
-            foreach($objects as $objectID => $object)
+            foreach($products as $productID => $product)
             {
-                $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objectID, array()) : array();
-                $members        = zget($teamGroups, $objectID, array());
+                $members      = zget($teamGroups, $productID, array());
+                $stakeholders = zget($stakeholderGroups, $productID, array());
 
-                if($objectType == 'product')
-                {
-                    $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $members);
-                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
-                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
-                }
-                elseif($objectType == 'project')
-                {
-                    $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), $members);
-                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
-                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
-                }
+                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders);
+                if($hasPriv and strpos(",{$view},", ",{$productID},") === false)  $view .= ",{$productID}";
+                if(!$hasPriv and strpos(",{$view},", ",{$productID},") !== false) $view  = trim(str_replace(",{$productID},", ',', ",{$view},"), ',');
             }
-            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set($field)->eq($view)->where('account')->eq($account)->exec();
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('products')->eq($view)->where('account')->eq($account)->exec();
         }
+    }
+
+    /**
+     * Update stage view.
+     * 
+     * @param  array $stageIdList
+     * @param  array $users 
+     * @access public
+     * @return void
+     */
+    public function updateStageView($stageIdList, $users)
+    {
+        $stages = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade')->from(TABLE_PROJECT)->where('id')->in($stageIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($stages)) return true;
+
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('stage')
+            ->andWhere('root')->in($stageIdList)
+            ->query();
+
+        while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
+
+        $projectIdList = array();
+        foreach($stages as $stageID => $stage)
+        {
+            list($projectID) = explode(',', trim($stage->path, ','));
+
+            $projectIdList[$projectID] = $projectID;
+            $stage->project = $projectID;
+        }
+
+        /* Get self stakeholders.*/
+        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
+
+        /* Get auth users.*/
+        $authUsers = array();
+        if(!empty($users)) $authUsers = $users;
+        if(empty($users))
+        {
+            foreach($stages as $stage) 
+            {
+                $stakeholders = zget($stakeholderGroup, $stage->project, array());
+                $teams        = zget($teamGroups, $stage->id, array());
+
+                $authUsers += $this->getStageAuthUsers($stage, $stakeholders, $teams);
+            }
+        }
+
+        /* Get all programs user view.*/
+        $stmt  = $this->dao->select("account,stages")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
+        if(empty($users) and $authUsers)
+        {
+            foreach($stages as $stageID => $stage) $stmt->orWhere("CONCAT(',', stages, ',')")->like("%,{$stageID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', 'stages');
+
+        /* Judge auth and update view.*/
+        foreach($userViews as $account => $view)
+        {
+            foreach($stages as $stageID => $stage)
+            {
+                $stakeholders = zget($stakeholderGroup, $stage->project, array());
+                $teams        = zget($teamGroups, $stage->id, array());
+
+                $hasPriv = $this->checkStagePriv($stage, $account, $stakeholders, $teams);
+                if($hasPriv and strpos(",{$view},", ",{$stageID},") === false)  $view .= ",{$stageID}";
+                if(!$hasPriv and strpos(",{$view},", ",{$stageID},") !== false) $view  = trim(str_replace(",{$stageID},", ',', ",{$view},"), ',');
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('stages')->eq($view)->where('account')->eq($account)->exec();
+        }
+    }
+
+    /**
+     * Update sprint view.
+     * 
+     * @param  array $sprintIdList
+     * @param  array $users 
+     * @access public
+     * @return void
+     */
+    public function updateSprintView($sprintIdList, $users)
+    {
+        $sprints = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($sprints)) return true;
+
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('sprint')
+            ->andWhere('root')->in($sprintIdList)
+            ->query();
+
+        while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
+
+        $projectIdList = array();
+        foreach($sprints as $sprintID => $sprint)
+        {
+            $projectIdList[$sprint->parent] = $sprint->parent;
+            $sprint->project = $projectID;
+        }
+
+        /* Get self stakeholders.*/
+        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
+
+        /* Get auth users.*/
+        $authUsers = array();
+        if(!empty($users)) $authUsers = $users;
+        if(empty($users))
+        {
+            foreach($sprints as $sprint) 
+            {
+                $stakeholders = zget($stakeholderGroup, $sprint->project, array());
+                $teams        = zget($teamGroups, $sprint->id, array());
+
+                $authUsers += $this->getSprintAuthUsers($sprint, $stakeholders, $teams);
+            }
+        }
+
+        /* Get all programs user view.*/
+        $stmt  = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
+        if(empty($users) and $authUsers)
+        {
+            foreach($sprints as $sprintID => $sprint) $stmt->orWhere("CONCAT(',', sprints, ',')")->like("%,{$sprintID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', 'sprints');
+
+        /* Judge auth and update view.*/
+        foreach($userViews as $account => $view)
+        {
+            foreach($sprints as $sprintID => $sprint)
+            {
+                $stakeholders = zget($stakeholderGroup, $sprint->project, array());
+                $teams        = zget($teamGroups, $sprint->id, array());
+
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams);
+                if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
+                if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($view)->where('account')->eq($account)->exec();
+        }
+    }
+
+    /**
+     * Check program priv
+     * 
+     * @param  object $program 
+     * @param  string $account 
+     * @param  array  $stakeholders
+     * @access public
+     * @return bool 
+     */
+    public function checkProgramPriv($program, $account, $stakeholders)
+    {
+        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+
+        if($program->PM == $account OR $program->openedBy == $account) return true;
+
+        if($program->acl == 'open') return true;
+
+        if(isset($stakeholders[$account])) return true;
+
+        return false;
+    }
+
+    /**
+     * Check project priv.
+     * 
+     * @param  object    $project 
+     * @param  string    $account 
+     * @param  string    $groups 
+     * @param  array     $teams 
+     * @access public
+     * @return bool
+     */
+    public function checkProjectPriv($project, $account, $stakeholders, $teams)
+    {
+        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+        if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
+        if($project->acl == 'open') return true;
+        if(isset($teams[$account])) return true;
+        if(isset($stakeholders[$account])) return true;
+
+        return false;
+    }
+
+    /**
+     * Check sprint priv.
+     * 
+     * @param  object    $project 
+     * @param  string    $account 
+     * @param  string    $groups 
+     * @param  array     $teams 
+     * @access public
+     * @return bool
+     */
+    public function checkSprintPriv($sprint, $account, $stakeholders, $teams)
+    {
+        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams);
     }
 
     /**
@@ -1654,7 +1987,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
+    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
@@ -1669,35 +2002,73 @@ class userModel extends model
             }
         }
 
-        if(!empty($linkedProjects))
-        {
-            foreach($linkedProjects as $projectID)
-            {
-                if(isset($teams[$projectID][$account])) return true;
-            }
-        }
-
-        /* Get linked projects stakeholders.*/
-        $projectStakeholders = $this->dao->select('user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->in($linkedProjects)
-            ->fetchPairs();
-
-        if(isset($projectStakeholders[$account])) return true;
-
-        /* Get linked program stakeholders.*/
-        if($product->program)
-        {
-            $program = $this->loadModel('program')->getPGMByID($product->program);
-            $programStakeholders = $this->dao->select('user')->from(TABLE_STAKEHOLDER)
-                ->where('objectType')->eq('program')
-                ->andWhere('objectID')->eq($program->id)
-                ->fetchPairs();
-
-            if(isset($programStakeholders[$account])) return true;
-        }
+        if(isset($teams[$account])) return true;
+        if(isset($stakeholders[$account])) return true;
 
         return false;
+    }
+
+    /**
+     * Get project auth users.
+     * 
+     * @param  object $project
+     * @param  array  $stakeholders 
+     * @param  array  $teams
+     * @access public
+     * @return array 
+     */
+    public function getProjectAuthUsers($project, $stakeholders, $teams)
+    {
+        $users = array(); 
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$project->openedBy] = $project->openedBy;
+        $users[$project->PM]       = $project->PM;
+        $users[$project->PO]       = $project->PO;
+        $users[$project->QD]       = $project->QD;
+        $users[$project->RD]       = $project->RD;
+
+        $users += $stakeholders ? $stakeholders : array();
+        $users += $teams ? $teams : array();
+
+        return $users;
+    }
+
+    /**
+     * Get program auth users.
+     * 
+     * @param  object $program 
+     * @param  array  $stakeholders 
+     * @access public
+     * @return array 
+     */
+    public function getProgramAuthUsers($program,  $stakeholders)
+    {
+        $users = array(); 
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$program->openedBy] = $program->openedBy;
+        $users[$program->PM]       = $program->PM;
+
+        $users += $stakeholders ? $stakeholders : array();
+
+        return $users;
+    }
+
+    /**
+     * Get sprint auth users.
+     * 
+     * @param  object $sprint
+     * @param  array  $stakeholders 
+     * @param  array  $teams
+     * @access public
+     * @return array 
+     */
+    public function getSprintAuthUsers($sprint, $stakeholders, $teams)
+    {
+        return $this->getProjectAuthUsers($sprint, $stakeholders, $teams);
     }
 
     /**
@@ -1710,7 +2081,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProductWhiteListUsers($product, $groupUsers, $linkedProjects, $teams)
+    public function getProductWhiteListUsers($product, $groupUsers, $teams, $stakeholders)
     {
         $users = array();
 
@@ -1731,66 +2102,10 @@ class userModel extends model
             }
         }
 
-        if(!empty($linkedProjects))
-        {
-            foreach($linkedProjects as $projectID) $users += zget($teams, $projectID, array());
-        }
-
-        /* Get linked projects stakeholders.*/
-        $projectStakeholders = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->in($linkedProjects)
-            ->fetchPairs();
-        if(!empty($projectStakeholders))
-        {
-            foreach($projectStakeholders as $account) $users[$account] = $account;
-        }
-
-        /* Get linked program stakeholders.*/
-        if($product->program)
-        {
-            $program = $this->loadModel('program')->getPGMByID($product->program);
-            $programStakeholders = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
-                ->where('objectType')->eq('program')
-                ->andWhere('objectID')->eq($program->id)
-                ->fetchPairs();
-
-            if(!empty($programStakeholders))
-            {
-                foreach($programStakeholders as $account) $users[$account] = $account;
-            }
-        }
+        $users += $teams ? $teams : array();
+        $users += $stakeholders ? $stakeholders : array();
 
         return $users;
-    }
-
-    /**
-     * Check project priv.
-     * 
-     * @param  object    $project 
-     * @param  string    $account 
-     * @param  string    $groups 
-     * @param  array     $teams 
-     * @access public
-     * @return bool
-     */
-    public function checkProjectPriv($project, $account, $groups, $teams)
-    {
-        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
-        if($project->acl == 'open') return true;
-        if(isset($teams[$account])) return true;
-
-        if($project->acl == 'custom')
-        {
-            foreach(explode(',', $project->whitelist) as $whitelist)
-            {
-                if(empty($whitelist)) continue;
-                if(strpos(",{$groups},", ",$whitelist,") !== false) return true;
-            }
-        }
-
-        return false;
     }
 
     /**

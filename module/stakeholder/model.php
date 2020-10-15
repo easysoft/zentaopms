@@ -229,6 +229,64 @@ class stakeholderModel extends model
     }
 
     /**
+     * Get self stakeholders by object id list.
+     * 
+     * @param  array  $objectIdList 
+     * @param  string $objectType 
+     * @access public
+     * @return array 
+     */
+    public function getStakeholderGroup($objectIdList)
+    {
+        $stakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->fetchAll();
+
+        $stakeholderGroup = array();
+        foreach($stakeholders as $stakeholder)
+        {    
+            $stakeholderGroup[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user; 
+        }
+
+        return $stakeholderGroup;
+    }
+
+    /**
+     * Get parent stakeholder group by object id list.
+     * 
+     * @param  array  $objectIdList 
+     * @param  string $objectType 
+     * @access public
+     * @return array 
+     */
+    public function getParentStakeholderGroup($objectIdList)
+    {
+		$objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+
+        $parents = '';
+        foreach($objects as $object)
+        {    
+            if($object->parent == 0) continue;
+            foreach(explode(',', $object->path) as $objectID)
+            {    
+                if(empty($objectID)) continue;
+                if($objectID == $object->id) continue;
+                $parents[$objectID][] = $object->id;
+            }    
+        }    
+
+        /* Get all parent stakeholders.*/
+        $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->fetchAll();
+
+        $parentStakeholderGroup = array();
+        foreach($parentStakeholders as $parentStakeholder)
+        {
+            $subPrograms = zget($parentPrograms, $parentStakeholder->objectID, array());
+            foreach($subPrograms as $subProgramID) $parentStakeholderGroup[$subProgramID][$parentStakeholder->user] = $parentStakeholder->user;
+        } 
+
+		return $parentStakeholderGroup;
+    }
+
+    /**
      * Get stakeholder group by type.
      *
      * @param  string $browseType
