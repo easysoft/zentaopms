@@ -674,6 +674,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
 -- DROP TABLE IF EXISTS `zt_project`;
 CREATE TABLE `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL,
   `type` char(30) NOT NULL DEFAULT 'sprint',
   `product` char(30) NOT NULL DEFAULT 'single',

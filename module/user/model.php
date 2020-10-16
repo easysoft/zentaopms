@@ -827,6 +827,7 @@ class userModel extends model
                 ->andWhere('t1.role')->ne('PRJadmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
+
             /* Init variables. */
             $acls = array();
             $programAllow = false;
@@ -836,6 +837,7 @@ class userModel extends model
             $stageAllow   = false;
             $viewAllow    = false;
             $actionAllow  = false;
+            /* Authorize by group. */
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
@@ -1372,6 +1374,7 @@ class userModel extends model
             if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->eq('sprint')->fetchAll('id');
             if($allStages   === null) $allStages   = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->eq('stage')->fetchAll('id');
 
+            /* Get product and project relation. */
             if($projectProducts === null)
             {    
                 $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
@@ -1381,12 +1384,14 @@ class userModel extends model
                 }    
             }
 
+            /* Get teams. */
             if($teams === null)
             {
                 $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,sprint,stage')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
             }
 
+            /* Get stakeholders. */
             if($stakeholders === null)
             {
                 $stmt = $this->dao->select('objectID,account')->from(TABLE_STAKEHOLDER)->query();
@@ -1410,7 +1415,8 @@ class userModel extends model
                 $userView->stages   = join(',', array_keys($allStages));
             }    
             else 
-            {    
+            {
+                /* Process program userview. */
                 $programs = array();
                 foreach($allPrograms as $id => $program)
                 {    
@@ -1419,6 +1425,7 @@ class userModel extends model
                 }    
                 $userView->programs = join(',', $programs);
 
+                /* Process product userview. */
                 $products = array();
                 foreach($allProducts as $id => $product)
                 {    
@@ -1427,6 +1434,7 @@ class userModel extends model
                 }    
                 $userView->products = join(',', $products);
 
+                /* Process project userview. */
                 $projects = array();
                 foreach($allProjects as $id => $project)
                 {    
@@ -1436,6 +1444,7 @@ class userModel extends model
                 }    
                 $userView->projects = join(',', $projects);
 
+                /* Process sprint userview. */
                 $sprints = array();
                 foreach($allSprints as $id => $sprint)
                 {    
@@ -1445,6 +1454,7 @@ class userModel extends model
                 }    
                 $userView->projects = join(',', $projects);
 
+                /* Process stage userview. */
                 $stages = array();
                 foreach($allStages as $id => $stage)
                 {    
