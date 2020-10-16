@@ -310,6 +310,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->setDefault('type', 'sprint')
+            ->setDefault('project', $this->session->PRJ)
             ->setDefault('parent', $this->session->PRJ)
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
@@ -320,6 +321,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -341,6 +343,9 @@ class projectModel extends model
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+
+            /* Update the path. */
+            $this->loadModel('programplan')->setTreePath($projectID);
 
             /* Copy team of project. */
             if($copyProjectID != '')

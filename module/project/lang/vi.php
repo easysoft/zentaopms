@@ -115,9 +115,8 @@ $lang->project->statusList['doing']     = 'Đang làm';
 $lang->project->statusList['suspended'] = 'Đã đình chỉ';
 $lang->project->statusList['closed']    = 'Đã đóng';
 
-$lang->project->aclList['open']    = "Mặc định (Người dùng có thể vào {$lang->projectCommon} có thể truy cập nó.)";
-$lang->project->aclList['private'] = 'Riêng tư (Chỉ có  thành viên nhóm.)';
-$lang->project->aclList['custom']  = 'Tùy biến (Thành viên nhóm và người dùng dánh sách trắng có thể truy cập nó.)';
+$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+$lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
 
 $lang->project->storyPoint = 'Story Point';
 

@@ -115,9 +115,8 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
 $lang->project->statusList['closed']    = 'Closed';
 
-$lang->project->aclList['open']    = "Default (Users who can visit {$lang->projectCommon} can access it.)";
-$lang->project->aclList['private'] = 'Private (For team members only.)';
-$lang->project->aclList['custom']  = 'Custom (Team members and the whitelist users can access it.)';
+$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+$lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
 
 $lang->project->storyPoint = 'Story Point';
 

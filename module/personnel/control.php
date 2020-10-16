@@ -84,6 +84,7 @@ class personnel extends control
         $this->program->setPGMViewMenu($programID);
 
         $inputPersonnel = $this->personnel->getInputPersonnel($programID, $browseType, $orderBy);
+echo array_keys($inputPersonnel);
 
         $this->view->title      = $this->lang->personnel->putInto;
         $this->view->position[] = $this->lang->personnel->putInto;

@@ -115,9 +115,8 @@ $lang->project->statusList['doing']     = '進行中';
 $lang->project->statusList['suspended'] = '已掛起';
 $lang->project->statusList['closed']    = '已關閉';
 
-$lang->project->aclList['open']    = "預設設置(有{$lang->projectCommon}視圖權限，即可訪問)";
-$lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang->projectCommon}團隊成員才能訪問)";
-$lang->project->aclList['custom']  = "自定義白名單(團隊成員和白名單的成員可以訪問)";
+$lang->project->aclList['open']    = "繼承項目訪問權限 (能訪問當前項目，即可訪問)";
+$lang->project->aclList['private'] = "私有 (團隊成員和項目幹系人可訪問)";
 
 /* 方法列表。*/
 $lang->project->index             = "{$lang->projectCommon}主頁";

@@ -1104,11 +1104,12 @@ class project extends control
 
         if(!empty($planID))
         {
-            $plan        = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
-            $products    = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
+            $plan     = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
+            $products = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
+
             $productPlan = $this->loadModel('productplan')->getPairs($plan->product, 0, 'unexpired');
         }
 

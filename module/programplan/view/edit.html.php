@@ -58,6 +58,10 @@ js::set('parentID', $plan->parent);
             <?php echo html::hidden('milestone', $plan->milestone);?>
           <?php endif;?>
           <tr>
+            <th><?php echo $lang->programplan->accessRight;?> </th>
+            <td><?php echo html::select('acl', $lang->programplan->accessRights, $plan->acl, 'class="form-control"');?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->programplan->begin;?> </th>
             <td><?php echo html::input('begin', $plan->begin, "class='form-control form-date'");?></td>
           </tr>

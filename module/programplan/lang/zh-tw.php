@@ -1,0 +1,69 @@
+<?php
+/**
+ * The programplan module zh-cn file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     programplan
+ * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
+$lang->programplan->common        = '項目計劃';
+$lang->programplan->browse        = '瀏覽階段計劃';
+$lang->programplan->gantt         = '甘特圖';
+$lang->programplan->list          = '階段列表';
+$lang->programplan->create        = '設置階段';
+$lang->programplan->edit          = '編輯';
+$lang->programplan->delete        = '刪除';
+$lang->programplan->createSubPlan = '創建二級階段';
+
+$lang->programplan->parent           = '父階段';
+$lang->programplan->emptyParent      = '無';
+$lang->programplan->name             = '名稱';
+$lang->programplan->percent          = '計劃工作量';
+$lang->programplan->percentAB        = '計劃工作量';
+$lang->programplan->planPercent      = '工作量';
+$lang->programplan->attribute        = '階段';
+$lang->programplan->milestone        = '里程碑';
+$lang->programplan->taskProgress     = '任務進度';
+$lang->programplan->task             = '任務';
+$lang->programplan->begin            = '計劃開始';
+$lang->programplan->end              = '計劃完成';
+$lang->programplan->realBegan        = '實際開始';
+$lang->programplan->realEnd          = '實際完成';
+$lang->programplan->output           = '輸出';
+$lang->programplan->openedBy         = '由誰創建';
+$lang->programplan->openedDate       = '創建日期';
+$lang->programplan->editedBy         = '由誰編輯';
+$lang->programplan->editedDate       = '編輯日期';
+$lang->programplan->duration         = '計劃工期';
+$lang->programplan->version          = '版本號';
+$lang->programplan->full             = '全屏';
+$lang->programplan->today            = '今天';
+$lang->programplan->exporting        = '導出';
+$lang->programplan->exportFail       = '導出失敗';
+$lang->programplan->hideCriticalPath = '隱藏關鍵路徑';
+$lang->programplan->showCriticalPath = '顯示關鍵路徑';
+$lang->programplan->accessRight      = '訪問控制';
+
+$lang->programplan->milestoneList[1] = '是';
+$lang->programplan->milestoneList[0] = '否';
+
+$lang->programplan->accessRights['open']    = '繼承項目訪問權限 (能訪問當前項目，即可訪問)';
+$lang->programplan->accessRights['private'] = '私有 (團隊成員和項目干係人可訪問)';
+
+$lang->programplan->noData        = '暫無數據。';
+$lang->programplan->children      = '二級計劃';
+$lang->programplan->childrenAB    = '子';
+$lang->programplan->confirmDelete = '確定要刪除當前計劃嗎？';
+
+$lang->programplan->stageCustom = new stdClass();
+$lang->programplan->stageCustom->date = '顯示日期';
+$lang->programplan->stageCustom->task = '顯示任務';
+
+$lang->programplan->error                  = new stdclass();
+$lang->programplan->error->percentNumber   = '"工作量比例"必須為數字';
+$lang->programplan->error->planFinishSmall = '"計劃完成時間"必須大於"計劃開始時間"';
+$lang->programplan->error->percentOver     = '"工作量比例"累計不應當超過100%';
+$lang->programplan->error->createdTask     = '已分解任務,不可添加子階段';

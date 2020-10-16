@@ -58,7 +58,9 @@ class programplan extends control
     {
         $this->app->loadLang('stage');
         $this->commonAction($programID, $productID, $type);
-        $this->session->set('programplanList', $this->app->getURI(true));
+        $this->session->set('programPlanList', $this->app->getURI(true));
+
+        if(common::hasPriv('programplan', 'create')) $this->lang->modulePageActions = html::a($this->createLink('programplan', 'create', "programID=$programID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
 
         $selectCustom = 0;
         $dateDetails  = 1;
@@ -111,30 +113,37 @@ class programplan extends control
         $this->commonAction($programID, $productID);
         if($_POST)
         {
-            $this->programplan->create($programID, $planID, $this->productID);
+            $this->programplan->create($programID, $this->productID, $planID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locate = $this->session->PRJplanList ? $this->session->PRJplanList : $this->createLink('programplan', 'browse', "program=$programID");
+            $locate = $this->session->programPlanList ? $this->session->programPlanList : $this->createLink('programplan', 'browse', "program=$programID");
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $stages     = array();
+        $browseType = 'parent';
+        if($planID)
+        {
+            $stages     = $this->loadModel('stage')->getStages('id_asc');
+            $browseType = 'children';
+        }
+
         $this->app->loadLang('stage');
         $program = $this->loadModel('project')->getById($programID);
-        $stages  = $planID ? array() : $this->loadModel('stage')->getStages('id_asc');
-        $plans   = $this->programplan->getList($programID, $this->productID, $planID);
+        $plans   = $this->programplan->getList($programID, $this->productID, $planID, $browseType);
 
         $title      = $this->lang->programplan->create . $this->lang->colon . $program->name;
         $position[] = html::a($this->createLink('programplan', 'browse', "program=$programID"), $program->name);
         $position[] = $this->lang->programplan->create;
 
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->program      = $program;
-        $this->view->stages       = $stages;
-        $this->view->plans        = $plans;
-        $this->view->planID       = $planID;
-        $this->view->type         = 'lists';
+        $this->view->title    = $title;
+        $this->view->position = $position;
+        $this->view->program  = $program;
+        $this->view->stages   = $stages;
+        $this->view->plans    = $plans;
+        $this->view->planID   = $planID;
+        $this->view->type     = 'lists';
 
         $this->display();
     }
@@ -143,17 +152,18 @@ class programplan extends control
      * Edit a programplan.
      *
      * @param  int    $planID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function edit($planID = 0)
+    public function edit($planID = 0, $programID = 0)
     {
         $plan = $this->programplan->getByID($planID);
         $this->commonAction($plan->program, $plan->product);
 
         if($_POST)
         {
-            $changes = $this->programplan->update($planID);
+            $changes = $this->programplan->update($planID, $programID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -168,9 +178,9 @@ class programplan extends control
         $this->view->title        = $this->lang->programplan->edit;
         $this->view->position[]   = $this->lang->programplan->edit;
         $this->view->parentStage  = $this->programplan->getParentStageList($this->session->PRJ, $planID, $plan->product);
-        $this->view->plan         = $plan;
         $this->view->isParent     = $this->programplan->isParent($planID);
         $this->view->isCreateTask = $this->programplan->isCreateTask($planID);
+        $this->view->plan         = $plan;
 
         $this->display();
     }

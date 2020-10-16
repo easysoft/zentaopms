@@ -147,11 +147,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-        </tr>
-        <tr id='whitelistBox' <?php if($acl != 'custom') echo "class='hidden'";?>>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $whitelist, '', '', 'inline');?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, '', 'block'));?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

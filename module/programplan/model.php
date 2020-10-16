@@ -55,26 +55,27 @@ class programplanModel extends model
     }
 
     /**
-     * Get  plans list.
+     * Get plans list.
      *
      * @param  int    $programID
      * @param  int    $productID
      * @param  int    $planID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $productID = 0, $planID = 0, $type = '', $orderBy = 'id_asc')
+    public function getList($programID = 0, $productID = 0, $planID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
         $projects = $this->getProjectsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
-            ->andWhere('parent')->eq($programID)
-            ->beginIF($type != 'all')->andWhere('parent')->eq($planID)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->beginIF($browseType == 'all')->andWhere('path')->like(",$programID,%")->fi()
+            ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
 
@@ -139,10 +140,11 @@ class programplanModel extends model
     {
         $plans = $this->getList($programID, $productID, 0, 'all', $orderBy);
 
-        $parents = array();
+        $parents  = array();
+        $children = array();
         foreach($plans as $planID => $plan)
         {
-            $plan->parent == 0 ? $parents[$planID] = $plan : $children[$plan->parent][] = $plan;
+            $plan->grade == 1 ? $parents[$planID] = $plan : $children[$plan->parent][] = $plan;
         }
 
         foreach($parents as $planID => $plan) $parents[$planID]->children = isset($children[$planID]) ? $children[$planID] : array();
@@ -220,19 +222,19 @@ class programplanModel extends model
             $end   = $plan->end   == '0000-00-00' ? '' : $plan->end;
 
             $data = new stdclass();
-            $data->id           = $plan->id;
-            $data->type         = 'plan';
-            $data->text         = empty($plan->milestone) ? $plan->name : $isMilestone . $plan->name;
-            $data->percent      = $plan->percent;
-            $data->attribute    = zget($this->lang->stage->typeList, $plan->attribute);
-            $data->milestone    = zget($this->lang->programplan->milestoneList, $plan->milestone);
-            $data->start_date   = $start;
-            $data->deadline     = $end;
-            $data->realBegan    = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
-            $data->realEnd      = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
-            $data->duration     = helper::diffDate($plan->end, $plan->begin) + 1;;
-            $data->parent       = $plan->parent;
-            $data->open         = true;
+            $data->id         = $plan->id;
+            $data->type       = 'plan';
+            $data->text       = empty($plan->milestone) ? $plan->name : $isMilestone . $plan->name;
+            $data->percent    = $plan->percent;
+            $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
+            $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->start_date = $start;
+            $data->deadline   = $end;
+            $data->realBegan  = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
+            $data->realEnd    = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
+            $data->duration   = helper::diffDate($plan->end, $plan->begin) + 1;;
+            $data->parent     = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->open       = true;
 
             if($data->start_date == '' or $data->deadline == '') $data->duration = 0;
 
@@ -244,11 +246,11 @@ class programplanModel extends model
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
-        $owner        = $this->app->user->account;
-        $module       = 'programplan';
-        $section      = 'browse';
-        $object       = 'stageCustom';
-        $setting      = $this->loadModel('setting');
+        $owner   = $this->app->user->account;
+        $module  = 'programplan';
+        $section = 'browse';
+        $object  = 'stageCustom';
+        $setting = $this->loadModel('setting');
 
         if(empty($selectCustom)) $selectCustom = $setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
@@ -276,9 +278,9 @@ class programplanModel extends model
             $start = $task->estStarted == '0000-00-00' ? '' : date('d-m-Y', strtotime($task->estStarted));
             $end   = $task->deadline   == '0000-00-00' ? '' : $task->deadline;
 
-            $realBegan    = $task->realStarted == '0000-00-00' ? '' : $task->realStarted;
-            $realEnd      = $task->finishedDate == '0000-00-00 00:00:00' ? '' : substr($task->finishedDate, 5, 11);
-            $priIcon      = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+            $realBegan = $task->realStarted == '0000-00-00' ? '' : $task->realStarted;
+            $realEnd   = $task->finishedDate == '0000-00-00 00:00:00' ? '' : substr($task->finishedDate, 5, 11);
+            $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
             $data = new stdclass();
             $data->id           = $task->project . '-' . $task->id;
@@ -324,19 +326,19 @@ class programplanModel extends model
     /**
      * Get total percent.
      *
-     * @param  int    $plan
+     * @param  object    $plan
      * @access public
      * @return int
      */
     public function getTotalPercent($plan)
     {
-        $plans = $this->getList($plan->program, $plan->product, $plan->parent);
+        $plans = $this->getList($plan->program, $plan->product, $plan->parent,'parent');
 
         $totalPercent = 0;
-        foreach($plans as $planID => $planObj)
+        foreach($plans as $id => $stage)
         {
-            if($planID == $plan->id) continue;
-            $totalPercent += $planObj->percent;
+            if($id == $plan->id) continue;
+            $totalPercent += $stage->percent;
         }
 
         return $totalPercent;
@@ -417,51 +419,56 @@ class programplanModel extends model
     /**
      * Create a plan.
      *
-     * @param  int    $programID
-     * @param  int    $parentID
-     * @param  int    $productID
+     * @param  int  $programID
+     * @param  int  $productID
+     * @param  int  $parentID
      * @access public
      * @return bool
      */
-    public function create($programID = 0, $parentID = 0, $productID = 0)
+    public function create($programID = 0, $productID = 0, $parentID = 0)
     {
         $data = (array)fixer::input('post')->get();
         extract($data);
 
+        /* Determine if a task has been created under the parent phase. */
         if(!$this->isCreateTask($parentID)) return dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
-        $parentStage = '';
+
+        /* The child phase type setting is the same as the parent phase. */
+        $parentStageType = '';
         if($parentID)
         {
-            $parentData  = $this->getByID($parentID);
-            $parentStage = $parentData->attribute;
+            $parentData      = $this->getByID($parentID);
+            $parentStageType = $parentData->attribute;
         }
 
         $attributes = array_values($attributes);
         $milestone  = array_values($milestone);
-        $datas = array();
+        $datas      = array();
         foreach($names as $key => $name)
         {
             if(empty($name)) continue;
 
             $plan = new stdclass();
-            $plan->id           = isset($planIDs[$key]) ? $planIDs[$key] : '';
-            $plan->type         = 'stage';
-            $plan->parent       = $parentID ? $parentID : (int)$programID;
-            $plan->name         = $names[$key];
-            $plan->percent      = $percents[$key];
-            $plan->attribute    = empty($parentID) ? $attributes[$key] : $parentStage;
-            $plan->milestone    = $milestone[$key];
-            $plan->begin        = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
-            $plan->end          = empty($end[$key]) ? '0000-00-00' : $end[$key];
-            $plan->realBegan    = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
-            $plan->realEnd      = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
-            $plan->output       = empty($output[$key]) ? '' : implode(',', $output[$key]);
+            $plan->id        = isset($planIDList[$key]) ? $planIDList[$key] : '';
+            $plan->type      = 'stage';
+            $plan->project   = $programID;
+            $plan->parent    = $parentID ? $parentID : $programID;
+            $plan->name      = $names[$key];
+            $plan->percent   = $percents[$key];
+            $plan->attribute = empty($parentID) ? $attributes[$key] : $parentStageType;
+            $plan->milestone = $milestone[$key];
+            $plan->begin     = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
+            $plan->end       = empty($end[$key]) ? '0000-00-00' : $end[$key];
+            $plan->realBegan = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
+            $plan->realEnd   = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
+            $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
+            $plan->acl       = $acl[$key];
 
             $datas[] = $plan;
         }
 
         $totalPercent = 0;
-        $devCounts    = 0;
+        $totalDevType = 0;
         $milestone    = 0;
         foreach($datas as $plan)
         {
@@ -476,19 +483,8 @@ class programplanModel extends model
                 return false;
             }
 
-            /* Check dev stage counts which should not be over one for parent plan. */
-            if($parentID == 0)
-            {
-                if($plan->attribute == 'develop') $devCounts += 1;
-                if($devCounts > 1)
-                {
-                    dao::$errors['message'][] = $this->lang->programplan->error->onlyOneDev;
-                    return false;
-                }
-            }
-
             if($plan->begin == '0000-00-00') $plan->begin = '';
-            if($plan->end  == '0000-00-00') $plan->end  = '';
+            if($plan->end   == '0000-00-00') $plan->end   = '';
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -499,11 +495,8 @@ class programplanModel extends model
                 }
             }
 
-            if($plan->percent)
-            {
-                $plan->percent = (float)$plan->percent;
-                $totalPercent += $plan->percent;
-            }
+            $plan->percent = (float)$plan->percent;
+            $totalPercent += $plan->percent;
 
             if($plan->milestone) $milestone = 1;
         }
@@ -575,6 +568,7 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $planID = $this->dao->lastInsertID();
+                    $this->setTreePath($planID);
                     $this->loadModel('project')->updateProducts($planID);
 
                     $spec = new stdclass();
@@ -597,13 +591,39 @@ class programplanModel extends model
     }
 
     /**
-     * Update a plan.
+     * Set stage tree path.
      *
      * @param  int    $planID
      * @access public
+     * @return bool
+     */
+    public function setTreePath($planID)
+    {
+        $stage  = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
+        $parent = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($stage->parent)->fetch();
+
+        if($parent->type == 'project')
+        {
+            $path['path']  =  ",{$parent->id},{$stage->id},";
+            $path['grade'] = 1;
+        }
+        elseif($parent->type == 'stage')
+        {
+            $path['path']  = $parent->path . "{$stage->id},";
+            $path['grade'] = $parent->grade + 1;
+        }
+        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
+    }
+
+    /**
+     * Update a plan.
+     *
+     * @param  int    $planID
+     * @param  int    $programID
+     * @access public
      * @return bool|array
      */
-    public function update($planID = 0)
+    public function update($planID = 0, $programID = 0)
     {
         $oldPlan = $this->getByID($planID);
         $plan    = fixer::input('post')
@@ -625,35 +645,21 @@ class programplanModel extends model
         $totalPercent += (float)$plan->percent;
         if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
 
-        if($plan->parent == 0)
-        {
-            $projects  = $this->getProjectsByProduct($oldPlan->product);
-            $devCounts = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-                ->where('parent')->eq($oldPlan->program)
-                ->andWhere('type')->eq('stage')
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('attribute')->eq('dev')
-                ->andWhere('id')->ne($oldPlan->id)
-                ->andWhere('id')->in($projects)
-                ->fetch('count');
-        }
-
         if($plan->parent > 0)
         {
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             $parentPlan = $this->getByID($plan->parent);
             if($plan->milestone and $parentPlan->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
+            $plan->attribute = $parentPlan->attribute;
         }
-
-        if(dao::isError()) return false;
 
         /* Set planDuration and realDuration. */
         $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
         $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
 
-        if($plan->parent) $plan->attribute = $parentPlan->attribute;
+        if($planChanged)  $plan->version = $oldPlan->version + 1;
+        if(empty($plan->parent)) $plan->parent = $programID;
 
-        if($planChanged) $plan->version = $oldPlan->version + 1;
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
@@ -663,6 +669,7 @@ class programplanModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+        $this->setTreePath($planID);
 
         if($planChanged)
         {
@@ -686,10 +693,11 @@ class programplanModel extends model
      * @param  int    $col
      * @param  int    $plan
      * @param  int    $users
+     * @param  int    $programID
      * @access public
      * @return string
      */
-    public function printCell($col, $plan, $users)
+    public function printCell($col, $plan, $users, $programID)
     {
         $id = $col->id;
         if($col->show)
@@ -718,7 +726,7 @@ class programplanModel extends model
                 echo sprintf('%03d', $plan->id);
                 break;
             case 'name':
-                if($plan->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
+                if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
                 echo $plan->name;
                 if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
@@ -766,7 +774,7 @@ class programplanModel extends model
                 common::printIcon('task', 'create', "projectID={$plan->id}", $plan, 'list');
                 if($this->isCreateTask($plan->id))
                 {
-                    common::printIcon('programplan', 'create', "program={$plan->program}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'treemap', '', '', '', '', $this->lang->programplan->createSubPlan);
+                    common::printIcon('programplan', 'create', "program={$plan->parent}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'treemap', '', '', '', '', $this->lang->programplan->createSubPlan);
                 }
                 else
                 {
@@ -774,7 +782,7 @@ class programplanModel extends model
                     echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-treemap"></i>', '', 'class="btn ' . $disabled . '"');
                 }
 
-                common::printIcon('programplan', 'edit', "planID=$plan->id", $plan, 'list', '', '', 'iframe', true);
+                common::printIcon('programplan', 'edit', "planID=$plan->id&programID=$programID", $plan, 'list', '', '', 'iframe', true);
                 $disabled = !empty($plan->children) ? ' disabled' : '';
                 if(common::hasPriv('programplan', 'delete', $plan))
                 {
@@ -813,7 +821,7 @@ class programplanModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'create' and $plan->parent) return false;
+        if($action == 'create' and $plan->grade > 1) return false;
 
         return true;
     }
@@ -864,8 +872,8 @@ class programplanModel extends model
      */
     public function isParent($planID)
     {
-        $children = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetch();
-        return empty($children) ? false : true;
+        $childrenStage = $this->dao->select('grade')->from(TABLE_PROJECT)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetch();
+        return empty($childrenStage) ? false : true;
     }
 
     /**
@@ -883,8 +891,7 @@ class programplanModel extends model
         unset($projects[$planID]);
 
         $parentStage = $this->dao->select('id,name')->from(TABLE_PROJECT)
-            ->where('id')->in($projects)
-            ->andWhere('type')->eq('stage')
+            ->where('type')->eq('stage')
             ->andWhere('parent')->eq($programID)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs('id');

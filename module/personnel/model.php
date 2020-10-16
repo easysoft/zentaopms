@@ -49,6 +49,7 @@ class personnelModel extends model
 
         return $personnelList;
     }
+
     /**
      * Access to program set input staff.
      *
@@ -73,30 +74,13 @@ class personnelModel extends model
         $personnelList['projects'] = $projects;
         if(empty($projects)) return $personnelList;
 
-        /* Get the sprint or stage under the project. */
-        $projectKeys = array_keys($projects);
-        $sprints = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
-            ->where('type')->in('stage,sprint')
-            ->andWhere('parent')->in($projectKeys)
-            ->andWhere('deleted')->eq('0')
-            ->fetchGroup('parent', 'id');
-
-        /* Get team members for projects, stage, sprints. */
-        $sprintKeys = array(0);
-        foreach($sprints as $sprint)
-        {
-            foreach($sprint as $id => $data) $sprintKeys[] = $id;
-        }
-        $teams = $this->dao->select('id,root,type,role,account')->from(TABLE_TEAM)
-            ->where('root')->in($sprintKeys)
-            ->andWhere('type')->in('project,stage,sprint')
-            ->fetchGroup('root', 'id');
-
-        $programNameList = $this->getProgramPairs();
-        $personnelList['sprints'] = $sprints;
-        $personnelList['teams']   = $teams;
+        $teams = $this->getTeams($projects);
+        $personnelList['stages']  = $teams['stages'];
+        $personnelList['sprints'] = $teams['sprints'];
+        $personnelList['teams']   = $teams['teams'];
 
         /* Get the program name for each level. */
+        $programNameList = $this->getProgramPairs();
         foreach($personnelList['projects'] as $id => $project)
         {
             $path = explode(',', $project->path);
@@ -112,6 +96,65 @@ class personnelModel extends model
         }
 
         return $personnelList;
+    }
+
+    /**
+     * Get team members for projects, stage, sprints.
+     *
+     * @param  string    $projects
+     * @access public
+     * @return object
+     */
+    public function getTeams($projects)
+    {
+        $sprintParent = array();
+        $stageParent  = array();
+        foreach($projects as $project)
+        {
+            $project->model == 'scrum' ? $sprintParent[] = $project->id : $stageParent[] = $project->id;
+        }
+
+        $sprints = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
+            ->where('type')->eq('sprint')
+            ->andWhere('parent')->in($sprintParent)
+            ->andWhere('deleted')->eq('0')
+            ->fetchGroup('parent', 'id');
+
+        $stages = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
+            ->where('type')->eq('stage')
+            ->andWhere('parent')->in($stageParent)
+            ->andWhere('deleted')->eq('0')
+            ->fetchGroup('parent', 'id');
+
+        $rootIDList = array();
+        foreach($stages as $stage)
+        {
+            foreach($stage as $stageFields)
+            {
+                $stageFields->children = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
+                    ->where('type')->eq('stage')
+                    ->andWhere('grade')->eq('2')
+                    ->andWhere('path')->like(",$stageFields->id,%")
+                    ->andWhere('deleted')->eq('0')
+                    ->fetchAll('id');
+                $childrenIDList = array_keys($stageFields->children);
+                $rootIDList     = array_merge($childrenIDList, $rootIDList);
+                $rootIDList[]   = $stageFields->id;
+            }
+        }
+
+        foreach($sprints as $sprint)
+        {
+            foreach($sprint as $id => $data) $rootIDList[] = $id;
+        }
+
+        $teams = $this->dao->select('t1.id,t1.root,t1.type,t1.role,t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.root')->in($rootIDList)
+            ->andWhere('t1.type')->in('stage,sprint')
+            ->fetchGroup('root', 'id');
+
+        return array('sprints' => $sprints, 'stages' => $stages, 'teams' => $teams);
     }
 
     /**

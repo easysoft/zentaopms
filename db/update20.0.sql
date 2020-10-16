@@ -1,7 +1,8 @@
 ALTER TABLE `zt_project` 
 DROP `isCat`,
 DROP `catID`,
-ADD `model` char(30) NOT NULL AFTER `id`,
+ADD `project` mediumint(8) NOT NULL DEFAULT 0 AFTER `id`;
+ADD `model` char(30) NOT NULL AFTER `project`,
 CHANGE `type` `type` char(30) NOT NULL DEFAULT 'sprint' AFTER `model`,
 ADD `product` varchar(20) NOT NULL DEFAULT 'single' AFTER `type`,
 ADD `lifetime` char(30) NOT NULL AFTER `product`,

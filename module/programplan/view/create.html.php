@@ -28,6 +28,7 @@
           <th class='required'><?php echo $lang->programplan->name;?></th>
           <th class='w-100px'><?php echo $lang->programplan->percent;?></th>
           <th class='w-110px <?php echo $hideAttribute?>'><?php echo $lang->programplan->attribute;?></th>
+          <th class='w-110px'><?php echo $lang->programplan->accessRight;?></th>
           <th class='w-110px'><?php echo $lang->programplan->milestone;?></th>
           <th class='w-110px required'><?php echo $lang->programplan->begin;?></th>
           <th class='w-110px required'><?php echo $lang->programplan->end;?></th>
@@ -49,6 +50,7 @@
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $stage->type, "class='form-control'");?></td>
+            <td><?php echo html::select("acl[$i]", $lang->programplan->accessRights, 'open', 'class="form-control"');?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
             <td><input type='text' name='begin[]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
@@ -66,7 +68,7 @@
         <?php if(!empty($plans)):?>
           <?php foreach($plans as $plan):?>
           <?php $disabled = $plan->setMilestone ? '' : "disabled='disabled'"?>
-          <?php echo html::hidden('planIDs[]', $plan->id);?>
+          <?php echo html::hidden('planIDList[]', $plan->id);?>
           <tr>
             <td><input type='text' name='names[]' id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
             <td>
@@ -76,6 +78,7 @@
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
+            <td><?php echo html::select("acl[$i]", $lang->programplan->accessRights, $plan->acl, 'class="form-control"');?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
             <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
@@ -100,6 +103,7 @@
             </div>
           </td>
           <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
+          <td><?php echo html::select("acl[$i]", $lang->programplan->accessRights, 'open', 'class="form-control"');?></td>
           <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
           <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
@@ -135,6 +139,7 @@
         </div>
       </td>
       <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("acl[$i]", $lang->programplan->accessRights, 'open', 'class="form-control"');?></td>
       <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
       <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='end[]' id='end<?php echo $i;?>' class='form-control form-date' /></td>
