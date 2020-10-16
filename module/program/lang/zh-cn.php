@@ -100,7 +100,7 @@ $lang->program->PRJAclList['open']    = "公开(有项目视图权限，即可�
 $lang->program->PRJAclList['private'] = "私有(项目团队成员和干系人可访问)";
 
 $lang->program->PGMPRJAclList['open']       = "全部公开（有项目视图权限，即可访问）";
-$lang->program->PGMPRJAclList['openinside'] = "项目集内公开（项目集负责人和干系人，即可访问）";
+$lang->program->PGMPRJAclList['openinside'] = "项目集内公开（所有上级项目集负责人和干系人，本项目团队成员和干系人可访问）";
 $lang->program->PGMPRJAclList['private']    = "私有(项目团队成员和干系人可访问)";
 
 $lang->program->PRJAuthList['extend'] = '继承(取项目权限与组织权限的并集)';
@@ -212,7 +212,7 @@ $lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即
 $lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问）";
 
 $lang->program->subPGMAclList['open']       = "全部公开（有项目集视图权限，即可访问）";
-$lang->program->subPGMAclList['openinside'] = "项目集内公开 (所有上级项目集干系人，即可访问）";
+$lang->program->subPGMAclList['openinside'] = "项目集内公开 (所有上级项目集干系人、本项目集负责人和干系人可访问）";
 $lang->program->subPGMAclList['private']    = "私有（本项目集负责人和干系人可访问）";
 
 $lang->program->PGMAuthList['extend'] = '继承(取项目权限与组织权限的并集)';

@@ -827,63 +827,57 @@ class userModel extends model
                 ->andWhere('t1.role')->ne('PRJadmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
+            /* Init variables. */
             $acls = array();
-            $viewAllow    = false;
             $programAllow = false;
             $projectAllow = false;
             $productAllow = false;
+            $sprintAllow  = false;
+            $stageAllow   = false;
+            $viewAllow    = false;
             $actionAllow  = false;
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
-                if($group->PRJ)
+                if(empty($group->acl))
                 {
-                    if(empty($group->acl))
-                    {
-                        $projectAllow = true;
-                        $productAllow = true;
-                        $viewAllow    = true;
-                        $actionAllow  = true;
-                        break;
-                    }
-
-                    if(empty($acl['projects'])) $projectAllow = true;
-                    if(empty($acl['products'])) $productAllow = true;
-                    if(empty($acl['views']))    $viewAllow    = true;
-                    if(!isset($acl['actions'])) $actionAllow  = true;
-                    if(empty($acls) and !empty($acl))
-                    {
-                        $acls = $acl;
-                        continue;
-                    }
-
-                    if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
-                    if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
-                    if(!empty($acl['views']))    $acls['views']    = array_merge($acls['views'], $acl['views']);
-                    if(!empty($acl['actions']))  $acls['actions']  = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
+                    $programAllow = true;
+                    $projectAllow = true;
+                    $productAllow = true;
+                    $sprintAllow  = false;
+                    $stageAllow   = false;
+                    $viewAllow    = true;
+                    $actionAllow  = true;
+                    break;
                 }
-                else
+
+                if(empty($acl['programs'])) $programAllow = true;
+                if(empty($acl['projects'])) $projectAllow = true;
+                if(empty($acl['products'])) $productAllow = true;
+                if(empty($acl['sprints']))  $sprintAllow  = true;
+                if(empty($acl['stages']))   $stageAllow   = true;
+                if(empty($acl['views']))    $viewAllow    = true;
+                if(!isset($acl['actions'])) $actionAllow  = true;
+                if(empty($acls) and !empty($acl))
                 {
-                    if(empty($group->acl))
-                    {
-                        $programAllow = true;
-                        break;
-                    }
-
-                    if(empty($acl['programs'])) $programAllow = true;
-                    if(empty($acls) and !empty($acl))
-                    {
-                        $acls = $acl;
-                        continue;
-                    }
-
-                    if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
+                    $acls = $acl;
+                    continue;
                 }
+
+                if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
+                if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+                if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
+                if(!empty($acl['sprints']))  $acls['sprints']  = !empty($acls['sprints'])  ? array_merge($acls['sprints'],  $acl['sprints'])  : $acl['sprints'];
+                if(!empty($acl['stages']))   $acls['stages']   = !empty($acls['stages'])   ? array_merge($acls['stages'],   $acl['stages'])   : $acl['stages'];
+                if(!empty($acl['views']))    $acls['views']    = array_merge($acls['views'], $acl['views']);
+                if(!empty($acl['actions']))  $acls['actions']  = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
             }
 
             if($programAllow) $acls['programs'] = array();
             if($projectAllow) $acls['projects'] = array();
             if($productAllow) $acls['products'] = array();
+            if($sprintAllow)  $acls['sprints']  = array();
+            if($stageAllow)   $acls['stages']   = array();
             if($viewAllow)    $acls['views']    = array();
             if($actionAllow)  unset($acls['actions']);
 
@@ -903,8 +897,8 @@ class userModel extends model
 
         /* Get can manage programs by user. */
         $PRJadminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
-        $canManagePrograms = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
-        return array('rights' => $rights, 'acls' => $acls, 'programs' => $canManagePrograms);
+        $canManageProjects = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
+        return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects);
     }
 
     /**
@@ -1370,67 +1364,96 @@ class userModel extends model
             $groups  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs('group', 'group');
             $groups  = ',' . join(',', $groups) . ',';
 
-            static $allProducts, $allPrograms, $allProjects, $projectProducts, $teams;
-            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+            /* Init objects.*/
+            static $allProducts, $allPrograms, $allProjects, $allSprints, $allStages, $projectProducts, $teams, $stakeholders;
+            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
+            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->eq('sprint')->fetchAll('id');
+            if($allStages   === null) $allStages   = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->eq('stage')->fetchAll('id');
+
+            if($projectProducts === null)
+            {    
+                $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
+                while($projectProduct = $stmt->fetch())
+                {    
+                    $projectProducts[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+                }    
+            }
+
             if($teams === null)
             {
-                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->query();
+                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,sprint,stage')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
             }
 
+            if($stakeholders === null)
+            {
+                $stmt = $this->dao->select('objectID,account')->from(TABLE_STAKEHOLDER)->query();
+                while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->account] = $stakeholder->account;
+            }
+            
             $userView = new stdclass();
             $userView->account  = $account;
             $userView->programs = array();
-            $programs = array();
-            if($isAdmin)
-            {
-                $userView->programs = join(',', array_keys($allPrograms));
-            }
-            else
-            {
-                foreach($allPrograms as $id => $program)
-                {
-                    $programTeams = isset($teams[$id]) ? $teams[$id] : array();
-                    if($this->checkProjectPriv($program, $account, $groups, $programTeams)) $programs[$id] = $id;
-                }
-                $userView->programs = join(',', $programs);
-            }
-
-            $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->where('program')->in($programs)->fetchAll('id');
-            $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->where('parent')->in($programs)->fetchAll('id');
-            if($projectProducts === null)
-            {
-                $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
-                while($projectProduct = $stmt->fetch())
-                {
-                    $projectProducts[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
-                }
-            }
-
             $userView->products = array();
             $userView->projects = array();
+            $userView->sprints  = array();
+            $userView->stages   = array();
+
             if($isAdmin)
-            {
+            {    
+                $userView->programs = join(',', array_keys($allPrograms));
                 $userView->products = join(',', array_keys($allProducts));
                 $userView->projects = join(',', array_keys($allProjects));
-            }
-            else
-            {
+                $userView->sprints  = join(',', array_keys($allSprints));
+                $userView->stages   = join(',', array_keys($allStages));
+            }    
+            else 
+            {    
+                $programs = array();
+                foreach($allPrograms as $id => $program)
+                {    
+                    $stakeholders = isset($stakeholders[$id]) ? $stakeholders[$id] : array();
+                    if($this->checkProgramPriv($program, $account, $stakeholders)) $programs[$id] = $id;
+                }    
+                $userView->programs = join(',', $programs);
+
                 $products = array();
                 foreach($allProducts as $id => $product)
-                {
-                    if($this->checkProductPriv($product, $account, $groups, zget($projectProducts, $id, array()), $teams)) $products[$id] = $id;
-                }
+                {    
+                    $stakeholders = isset($stakeholders[$product->program]) ? $stakeholders[$product->program] : array();
+                    if($this->checkProductPriv($product, $account, $groups, $teams, $stakeholders)) $products[$id] = $id;
+                }    
                 $userView->products = join(',', $products);
+
                 $projects = array();
                 foreach($allProjects as $id => $project)
-                {
+                {    
                     $projectTeams = isset($teams[$id]) ? $teams[$id] : array();
+                    $stakeholders = isset($stakeholders[$id]) ? $stakeholders[$id] : array();
                     if($this->checkProjectPriv($project, $account, $groups, $projectTeams)) $projects[$id] = $id;
-                }
+                }    
                 $userView->projects = join(',', $projects);
-            }
 
+                $sprints = array();
+                foreach($allSprints as $id => $sprint)
+                {    
+                    $sprintTeams  = isset($teams[$id]) ? $teams[$id] : array();
+                    $stakeholders = isset($stakeholders[$sprint->project]) ? $stakeholders[$sprint->project] : array();
+                    if($this->checkSprintPriv($sprint, $account, $stakeholders, $sprintTeams)) $sprints[$id] = $id;
+                }    
+                $userView->projects = join(',', $projects);
+
+                $stages = array();
+                foreach($allStages as $id => $stage)
+                {    
+                    $stageTeams   = isset($teams[$id]) ? $teams[$id] : array();
+                    $stakeholders = isset($stakeholders[$sprint->project]) ? $stakeholders[$sprint->project] : array();
+                    if($this->checkStagePriv($project, $account, $stakeholders, $stageTeams)) $stages[$id] = $id;
+                }    
+                $userView->stages = join(',', $stages);
+            }    
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
 
@@ -1442,52 +1465,57 @@ class userModel extends model
      * 
      * @param  string  $account
      * @param  array   $acls
-     * @param  string  $programs
+     * @param  string  $projects
      * @access public
      * @return object
      */
-    public function grantUserView($account = '', $acls = array(), $programs = '')
+    public function grantUserView($account = '', $acls = array(), $projects = '')
     {
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return array();
         if(empty($acls) and !empty($this->session->user->rights['acls']))  $acls     = $this->session->user->rights['acls'];
-        if(!$programs and isset($this->session->user->rights['programs'])) $programs = $this->session->user->rights['programs'];
+        if(!$projects and isset($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
 
+        /* If userview is empty, init it.*/
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(empty($userView)) $userView = $this->computeUserView($account);
 
-        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('acl')->eq('open')
-            ->andWhere('type')->eq('project')
-            ->fetchAll('id');
+        /* Get opened projects, programs, products and set it to userview.*/
+        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('project')->fetchAll('id');
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
 
-        $openedPrograms     = join(',', array_keys($openedPrograms));
+        $openedPrograms = join(',', array_keys($openedPrograms));
+        $openedProducts = join(',', array_keys($openedProducts));
+        $openedProjects = join(',', array_keys($openedProjects));
+
         $userView->programs = rtrim($userView->programs, ',') . ',' . $openedPrograms;
+        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
+        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
         if(!empty($acls['programs']) and !$isAdmin)
         {
             $grantPrograms = '';
-            /* If is program admin, set programID to userview. */
-            if($programs) $acls['programs'] = array_merge($acls['programs'], explode(',', $programs));
             foreach($acls['programs'] as $programID)
             {
                 if(strpos(",{$userView->programs},", ",{$programID},") !== false) $grantPrograms .= ",{$programID}";
             }
             $userView->programs = $grantPrograms;
         }
-        $programIds = explode(',', $userView->programs);
-
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->andWhere('program')->in($programIds)->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('parent')->in($programIds)->fetchAll('id');
-
-        $openedProducts = join(',', array_keys($openedProducts));
-        $openedProjects = join(',', array_keys($openedProjects));
-
-        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
-        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
-
+        if(!empty($acls['projects']) and !$isAdmin)
+        {
+            $grantProjects = '';
+            /* If is project admin, set projectID to userview. */
+            if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
+            foreach($acls['projects'] as $projectID)
+            {
+                if(strpos(",{$userView->projects},", ",{$projectID},") !== false) $grantProjects .= ",{$projectID}";
+            }
+            $userView->projects = $grantProjects;
+        }
         if(!empty($acls['products']) and !$isAdmin)
         {
             $grantProducts = '';
@@ -1497,19 +1525,41 @@ class userModel extends model
             }
             $userView->products = $grantProducts;
         }
-        if(!empty($acls['projects']) and !$isAdmin)
+
+        /* Set opened sprints and stages into userview.*/
+        $openedSprints  = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('sprint')->andWhere('project')->in($userView->projects)->fetchAll('id');
+        $openedStages   = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('stage')->andWhere('project')->in($userView->projects)->fetchAll('id');
+
+        $openedSprints  = join(',', array_keys($openedSprints));
+        $openedStages   = join(',', array_keys($openedStages));
+
+        $userView->sprints  = rtrim($userView->sprints, ',')  . ',' . $openedSprints;
+        $userView->stages   = rtrim($userView->stages, ',')   . ',' . $openedStages;
+
+        if(!empty($acls['sprints']) and !$isAdmin)
         {
-            $grantProjects = '';
-            foreach($acls['projects'] as $projectID)
+            $grantSprints= '';
+            foreach($acls['sprints'] as $sprintID)
             {
-                if(strpos(",{$userView->projects},", ",{$projectID},") !== false) $grantProjects .= ",{$projectID}";
+                if(strpos(",{$userView->sprints},", ",{$sprintID},") !== false) $grantSprints .= ",{$sprintID}";
             }
-            $userView->projects = $grantProjects;
+            $userView->sprints = $grantSprints;
+        }
+        if(!empty($acls['stages']) and !$isAdmin)
+        {
+            $grantStages = '';
+            foreach($acls['stages'] as $stageID)
+            {
+                if(strpos(",{$userView->stages},", ",{$stageID},") !== false) $grantStages .= ",{$stageID}";
+            }
+            $userView->stages = $grantStages;
         }
 
         $userView->products = trim($userView->products, ',');
         $userView->programs = trim($userView->programs, ',');
         $userView->projects = trim($userView->projects, ',');
+        $userView->sprints  = trim($userView->sprints, ',');
+        $userView->stages   = trim($userView->stages, ',');
 
         return $userView;
     }
@@ -1808,7 +1858,7 @@ class userModel extends model
             $stage->project = $projectID;
         }
 
-        /* Get self stakeholders.*/
+        /* Get parent project stakeholders.*/
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
         /* Get auth users.*/
@@ -1877,7 +1927,7 @@ class userModel extends model
             $sprint->project = $projectID;
         }
 
-        /* Get self stakeholders.*/
+        /* Get parent project stakeholders.*/
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
         /* Get auth users.*/
@@ -1958,7 +2008,33 @@ class userModel extends model
         if(isset($teams[$account])) return true;
         if(isset($stakeholders[$account])) return true;
 
+        /* Parent program managers. */
+        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'openinside')
+        {
+            $path     = trim($project->path, ",$project->id,");
+            $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            foreach($programs as $program)
+            {
+                if($program->PO == $account OR $program->QD == $account OR $program->RD == $account OR $program->PM == $account) return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * Check stage priv.
+     * 
+     * @param  object    $project 
+     * @param  string    $account 
+     * @param  string    $groups 
+     * @param  array     $teams 
+     * @access public
+     * @return bool
+     */
+    public function checkStagePriv($stage, $account, $stakeholders, $teams)
+    {
+        return $this->checkProjectPriv($stage, $account, $stakeholders, $teams);
     }
 
     /**
@@ -2032,6 +2108,22 @@ class userModel extends model
         $users += $stakeholders ? $stakeholders : array();
         $users += $teams ? $teams : array();
 
+        /* Parent program managers. */
+        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'openinside')
+        {
+            $path     = trim($project->path, ",$project->id,");
+            $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            foreach($programs as $program)
+            {
+                $users[$program->openedBy] = $program->openedBy;
+                $users[$program->PM]       = $program->PM;
+                $users[$program->PO]       = $program->PO;
+                $users[$program->QD]       = $program->QD;
+                $users[$program->RD]       = $program->RD;
+
+            }
+        }
+
         return $users;
     }
 
@@ -2055,6 +2147,20 @@ class userModel extends model
         $users += $stakeholders ? $stakeholders : array();
 
         return $users;
+    }
+
+    /**
+     * Get stage auth users.
+     * 
+     * @param  object $stage
+     * @param  array  $stakeholders 
+     * @param  array  $teams
+     * @access public
+     * @return array 
+     */
+    public function getStageAuthUsers($stage, $stakeholders, $teams)
+    {
+        return $this->getProjectAuthUsers($stage, $stakeholders, $teams);
     }
 
     /**

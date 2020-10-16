@@ -1676,8 +1676,8 @@ EOD;
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
         /* If is the program admin, have all program privs. */
-        $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
-        if($inProgram && strpos(",{$app->user->rights['programs']},", ",{$app->session->PRJ},") !== false) return true; 
+        $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
+        if($inProject && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true; 
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];

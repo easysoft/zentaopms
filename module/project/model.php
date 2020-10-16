@@ -389,7 +389,7 @@ class projectModel extends model
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('user');
-            if($project->acl != 'open') $this->user->updateUserView($projectID, 'project');
+            if($project->acl != 'open') $this->user->updateUserView($projectID, 'sprint');
             if(isset($_POST['products'])) $this->user->updateUserView($this->post->products, 'product');
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
@@ -457,7 +457,7 @@ class projectModel extends model
         }
 
         /* Fix bug#3074, Update views for team members. */
-        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+        $this->loadModel('user')->updateUserView($projectID, 'sprint', $changedAccounts);
         $products = $this->getProducts($projectID, false);
         if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
 
@@ -540,7 +540,7 @@ class projectModel extends model
                     }
                 }
             }
-            $this->user->updateUserView($projectID, 'project', $changedAccounts);
+            $this->user->updateUserView($projectID, 'sprint', $changedAccounts);
 
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
@@ -3264,7 +3264,7 @@ class projectModel extends model
      */
     public function updateUserView($projectID)
     {
-        $this->loadModel('user')->updateUserView($projectID, 'project');
+        $this->loadModel('user')->updateUserView($projectID, 'sprint');
         $products = $this->getProducts($projectID, $withBranch = false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product');
     }
