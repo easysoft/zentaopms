@@ -543,7 +543,7 @@ class commonModel extends model
     {
         global $dbh, $lang, $app;
         echo '<li><hr></li>';
-        echo '<li><span><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
+        echo '<li><span id="mainRecent"><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
 
         $extraWhere     = empty($app->user->admin) && !empty($app->user->view->projects) ? ' and parent in (' . $app->user->view->projects . ') ' : '';
         $recentProjects = $dbh->query('select * from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'close' and deleted = '0' order by 'id' desc limit 6")->fetchAll();
@@ -553,7 +553,7 @@ class commonModel extends model
             foreach($recentProjects as $key => $project)
             {
                 if($key == 5) continue;
-                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "class='text-ellipsis' title='$project->name'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "style='padding: 2px 8px 2px 8px;' class='text-ellipsis' title='$project->name'") . '</li>';
             }
             if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $lang->more . '</span></li>';
         }

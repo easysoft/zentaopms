@@ -60,6 +60,7 @@ $lang->required     = 'Bắt buộc';
 $lang->noData       = 'Không có dữ liệu.';
 $lang->fullscreen   = 'Fullscreen';
 $lang->retrack      = 'Retrack';
+$lang->recent       = 'Recente';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
