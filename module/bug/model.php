@@ -2777,10 +2777,11 @@ class bugModel extends model
         if(strpos($action->extra, ':') !== false)
         {
             list($extra, $id) = explode(':', $action->extra);
-            $action->extra    = $extra;
-            if($id)
+            if($id and is_numeric($id))
             {
-                $name  = $this->dao->select('title')->from(TABLE_BUG)->where('id')->eq($id)->fetch('title');
+                $action->extra = $extra;
+
+                $name = $this->dao->select('title')->from(TABLE_BUG)->where('id')->eq($id)->fetch('title');
                 if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $name);
             }
         }
