@@ -138,7 +138,6 @@ $lang->program->PRJProgramTitle['0']    = '不顯示';
 $lang->program->PRJProgramTitle['base'] = '只顯示一級項目集';
 $lang->program->PRJProgramTitle['end']  = '只顯示最後一級項目集';
 
-$lang->program->PRJNoProgram         = '暫時沒有項目';
 $lang->program->PRJAccessDenied      = '您無權訪問該項目！';
 $lang->program->PRJChooseProgramType = '選擇項目管理方式';
 $lang->program->scrumTitle           = '敏捷開發全流程項目管理';

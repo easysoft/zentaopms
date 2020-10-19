@@ -141,7 +141,6 @@ $lang->program->PRJProgramTitle['0']    = '不显示';
 $lang->program->PRJProgramTitle['base'] = '只显示一级项目集';
 $lang->program->PRJProgramTitle['end']  = '只显示最后一级项目集';
 
-$lang->program->PRJNoProgram         = '暂时没有项目';
 $lang->program->PRJAccessDenied      = '您无权访问该项目！';
 $lang->program->PRJChooseProgramType = '选择项目管理方式';
 $lang->program->scrumTitle           = '敏捷开发全流程项目管理';

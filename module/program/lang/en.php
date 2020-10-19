@@ -136,7 +136,6 @@ $lang->program->PRJProgramTitle['0']    = 'Hide';
 $lang->program->PRJProgramTitle['base'] = 'Base-level program only';
 $lang->program->PRJProgramTitle['end']  = 'End-level program only';
 
-$lang->program->PRJNoProgram         = 'No program';
 $lang->program->PRJAccessDenied      = 'Access denied to this program';
 $lang->program->PRJChooseProgramType = 'Select management type';
 $lang->program->scrumTitle           = 'Agile Development Management';

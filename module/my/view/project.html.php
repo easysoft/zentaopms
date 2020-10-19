@@ -43,7 +43,7 @@
     </thead>
     <tbody>
       <?php foreach($projects as $project):?>
-      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id", '', '', $project->program);?>
+      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id", '', '', $project->project);?>
       <tr class='text-center'>
         <td><?php echo html::a($projectLink, $project->id);?></td>
         <td class='text-left'><?php echo $project->code;?></td>

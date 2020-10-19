@@ -47,6 +47,14 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
+    <?php if(empty($projectStats)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
+        <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table' id='PRJForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -85,6 +93,7 @@ js::set('browseType', $browseType);
       </div>
       <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

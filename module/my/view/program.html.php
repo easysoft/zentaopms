@@ -21,7 +21,7 @@
   <?php if(empty($programs)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
+      <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
       <?php if(common::hasPriv('program', 'createGuide')):?>
       <?php echo html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
       <?php endif;?>
