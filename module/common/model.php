@@ -555,7 +555,7 @@ class commonModel extends model
                 if($key == 5) continue;
                 echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "style='padding: 2px 8px 2px 8px;' class='text-ellipsis' title='$project->name'") . '</li>';
             }
-            if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" class="text-center"><span>' . $lang->more . '</span></li>';
+            if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
         }
 
         echo "</ul>\n";
