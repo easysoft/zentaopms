@@ -106,7 +106,7 @@
                   </div>
                 </td>
               </tr>
-              <?php if($story->parent >= 0):?>
+              <?php if($story->parent >= 0 and $story->type == 'story'):?>
               <tr>
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
