@@ -1125,6 +1125,18 @@ class programModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
+            /* Init groups. */
+            $groups = $this->dao->select('name, `desc`')->from(TABLE_GROUP)
+                ->where('PRJ')->eq(0)
+                ->andWhere('role')->in('dev,qa,pm,po,others')
+                ->fetchAll();
+
+            foreach($groups as $group)
+            {
+                $group->PRJ = $projectID;
+                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+            }
+
             return $projectID;
         }
     }

@@ -241,6 +241,18 @@ $lang->action->dynamicAction->todo['assigned']             = '指派待办';
 $lang->action->dynamicAction->todo['undeleted']            = '还原待办';
 $lang->action->dynamicAction->todo['hidden']               = '隐藏待办';
 
+$lang->action->dynamicAction->program['PGMCreate']         = '创建项目集';
+$lang->action->dynamicAction->program['PGMEdit']           = '编辑项目集';
+$lang->action->dynamicAction->program['PGMActivate']       = '激活项目集';
+$lang->action->dynamicAction->program['PGMDelete']         = '删除项目集';
+$lang->action->dynamicAction->program['PGMClose']          = '关闭项目集';
+$lang->action->dynamicAction->program['PRJCreate']         = '创建项目';
+$lang->action->dynamicAction->program['PRJEdit']           = '编辑项目';
+$lang->action->dynamicAction->program['PRJStart']          = '开始项目';
+$lang->action->dynamicAction->program['PRJSuspend']        = '延期项目';
+$lang->action->dynamicAction->program['PRJActivate']       = '激活项目';
+$lang->action->dynamicAction->program['PRJClose']          = '关闭项目';
+
 $lang->action->dynamicAction->product['opened']            = '创建' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = '编辑' . $lang->productCommon;
 $lang->action->dynamicAction->product['deleted']           = '删除' . $lang->productCommon;
