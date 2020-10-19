@@ -41,6 +41,7 @@ $lang->program->begin              = 'Begin';
 $lang->program->end                = 'End';
 $lang->program->PRJStatus          = 'Status';
 $lang->program->PRJPM              = 'Manager';
+$lang->program->PO                 = 'Product Owner';
 $lang->program->PRJBudget          = 'Budget';
 $lang->program->PRJTemplate        = 'Template';
 $lang->program->PRJEstimate        = 'Estimates';
@@ -98,8 +99,12 @@ $lang->program->featureBar['closed']    = 'Closed';
 $lang->program->PRJAclList['open']    = "Open(Users who can visit {$lang->projectCommon} can access it)";
 $lang->program->PRJAclList['private'] = 'Private (For team members and stakeholders only)';
 
-$lang->program->PRJPrivwayList['extend'] = 'Inherit (program privilege and company privilege)';
-$lang->program->PRJPrivwayList['reset']  = 'Reset (program privilege only)';
+$lang->program->PGMPRJAclList['open']       = "全部公开（有项目视图权限，即可访问）";
+$lang->program->PGMPRJAclList['openinside'] = "项目集内公开（所有上级项目集负责人和干系人，本项目团队成员和干系人可访问）";
+$lang->program->PGMPRJAclList['private']    = "私有(项目团队成员和干系人可访问)";
+
+$lang->program->PRJAuthList['extend'] = 'Inherit (project privilege and company privilege)';
+$lang->program->PRJAuthList['reset']  = 'Reset (project privilege only)';
 
 $lang->program->statusList['wait']      = 'Waiting';
 $lang->program->statusList['doing']     = 'Doing';
@@ -169,15 +174,10 @@ $lang->program->PGMDelete            = 'Delete';
 $lang->program->PGMClose             = 'Close';
 $lang->program->PGMView              = 'Overview';
 $lang->program->PGMActivate          = 'Activate';
-$lang->program->PGMGroup             = 'Privilege Group';
-$lang->program->PGMCreateGroup       = 'Create Group';
-$lang->program->PGMEditGroup         = 'Edit Group';
-$lang->program->PGMCopyGroup         = 'Copy Group';
-$lang->program->PGMManageView        = 'Manage View';
-$lang->program->PGMManagePriv        = 'Manage Privilege';
-$lang->program->PGMManageMembers     = 'Program Team';
 $lang->program->PGMExport            = 'Export';
-$lang->program->PGMManageGroupMember = 'Manage Group';
+$lang->program->PGMStakeholder       = 'Stakeholder';
+$lang->program->createStakeholder    = 'Create stakeholder';
+$lang->program->importStakeholder    = 'Import program';
 
 /* Fields. */
 $lang->program->PGMName      = 'Name';
@@ -200,8 +200,11 @@ $lang->program->noPGM         = 'No program.';
 $lang->program->PGMShowClosed = 'Closed programs.';i 
 
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
-$lang->program->PGMAclList['private'] = "Private(for the program team only)";
-$lang->program->PGMAclList['custom']  = "Custom(the program team and the whitelist users can access it)";
+$lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";
+
+$lang->program->subPGMAclList['open']       = "Default(user who can visit the program can access it)";
+$lang->program->subPGMAclList['openinside'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
+$lang->program->subPGMAclList['private']    = "Private (accessible to this program set leader and stakeholders)";
 
 $lang->program->PGMAuthList['extend'] = 'Inherit(program privileges and company privileges)';
 $lang->program->PGMAuthList['reset']  = 'Reset(program privileges only)';

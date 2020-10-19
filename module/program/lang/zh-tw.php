@@ -18,7 +18,7 @@ $lang->program->PRJGroup             = '項目權限分組';
 $lang->program->PRJCreateGroup       = '項目創建分組';
 $lang->program->PRJEditGroup         = '項目編輯分組';
 $lang->program->PRJCopyGroup         = '項目複製分組';
-$lang->program->PRJManageView        = '項目維護視圖';
+$lang->program->PRJManageView        = '項目維護視野';
 $lang->program->PRJManagePriv        = '項目維護權限';
 $lang->program->PRJManageMembers     = '項目團隊';
 $lang->program->export               = '導出';
@@ -96,9 +96,12 @@ $lang->program->featureBar['wait']      = '未開始';
 $lang->program->featureBar['suspended'] = '已掛起';
 $lang->program->featureBar['closed']    = '已關閉';
 
-$lang->program->PRJAclList['open']    = "預設設置(有項目視圖權限，即可訪問)";
-$lang->program->PRJAclList['private'] = "私有項目(只有項目團隊成員才能訪問)";
-$lang->program->PRJAclList['custom']  = "自定義白名單(團隊成員和白名單的成員可以訪問)";
+$lang->program->PRJAclList['open']    = "公開(有項目視圖權限，即可訪問)";
+$lang->program->PRJAclList['private'] = "私有(項目團隊成員和干係人可訪問)";
+
+$lang->program->PGMPRJAclList['open']       = "全部公開（有項目視圖權限，即可訪問）";
+$lang->program->PGMPRJAclList['openinside'] = "項目集內公開（所有上級項目集負責人和干係人，本項目團隊成員和干係人可訪問）";
+$lang->program->PGMPRJAclList['private']    = "私有(項目團隊成員和干係人可訪問)";
 
 $lang->program->PRJAuthList['extend'] = '繼承(取項目權限與組織權限的並集)';
 $lang->program->PRJAuthList['reset']  = '重新定義(只取項目權限)';
@@ -171,18 +174,10 @@ $lang->program->PGMDelete            = '刪除項目集';
 $lang->program->PGMClose             = '關閉項目集';
 $lang->program->PGMView              = '項目集概況';
 $lang->program->PGMActivate          = '激活項目集';
-$lang->program->PGMGroup             = '權限分組';
-$lang->program->PGMCreateGroup       = '創建分組';
-$lang->program->PGMEditGroup         = '編輯分組';
-$lang->program->PGMCopyGroup         = '複製分組';
-$lang->program->PGMManageView        = '維護視圖';
-$lang->program->PGMManagePriv        = '維護權限';
-$lang->program->PGMManageMembers     = '項目集團隊';
 $lang->program->PGMExport            = '導出';
-$lang->program->PGMManageGroupMember = '維護分組用戶';
 $lang->program->PGMStakeholder       = '干係人列表';
 $lang->program->createStakeholder    = '添加干係人';
-$lang->program->importStakeholder    = '從父項目導入';
+$lang->program->importStakeholder    = '從父項目集導入';
 
 /* Fields. */
 $lang->program->PGMName      = '項目集名稱';
@@ -204,9 +199,12 @@ $lang->program->PGMLongTime  = '長期項目';
 $lang->program->noPGM         = '暫時沒有項目集';
 $lang->program->PGMShowClosed = '顯示已關閉';
 
-$lang->program->PGMAclList['open']    = "預設設置(有項目視圖權限，即可訪問)";
-$lang->program->PGMAclList['private'] = "私有項目(只有項目團隊成員才能訪問)";
-$lang->program->PGMAclList['custom']  = "自定義白名單(團隊成員和白名單的成員可以訪問)";
+$lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
+$lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問）";
+
+$lang->program->subPGMAclList['open']       = "全部公開（有項目集視圖權限，即可訪問）";
+$lang->program->subPGMAclList['openinside'] = "項目集內公開 (所有上級項目集負責人和干係人、本項目集負責人和干係人可訪問）";
+$lang->program->subPGMAclList['private']    = "私有（本項目集負責人和干係人可訪問）";
 
 $lang->program->PGMAuthList['extend'] = '繼承(取項目權限與組織權限的並集)';
 $lang->program->PGMAuthList['reset']  = '重新定義(只取項目權限)';
