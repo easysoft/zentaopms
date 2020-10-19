@@ -79,13 +79,14 @@
           <table class='table table-form'>
             <?php foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
+            <?php if($module == 'admin') continue;?>
             <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>
                 <div class='action-item'>
                   <div class='checkbox-primary'>
                     <input type="checkbox" id='allchecker' onclick="selectAll(this)"/>
-                    <label class='priv' for='allchecker'><?php echo substr($title, 0, strpos($title, '|'));?></label>
+                    <label class='priv' for='allchecker'><?php echo $module == 'project' ? "<i class='icon icon-menu-doc'></i> " . $lang->projectCommon : substr($title, 0, strpos($title, '|'));?></label>
                   </div>
                 </div>
               </th>

@@ -1390,6 +1390,7 @@ class userModel extends model
 
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
             
+            /* Init user view. */
             $userView = new stdclass();
             $userView->account  = $account;
             $userView->programs = array();
@@ -1442,7 +1443,7 @@ class userModel extends model
                     $sprintStakeholders = zget($stakeholders, $sprint->project, array());
                     if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams)) $sprints[$id] = $id;
                 }    
-                $userView->projects = join(',', $projects);
+                $userView->sprints = join(',', $sprints);
 
                 /* Process stage userview. */
                 $stages = array();

@@ -132,7 +132,7 @@ $lang->product->statusList['closed'] = '结束';
 
 $lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
 $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的干系人、相关联项目的团队成员和干系人可访问)";
-$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
+//$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
 $lang->product->storySummary   = "本页共 <strong>%s</strong> 个%s，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
 $lang->product->checkedSummary = "选中 <strong>%total%</strong> 个%storyCommon%，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
