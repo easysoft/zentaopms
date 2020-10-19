@@ -1384,11 +1384,11 @@ class userModel extends model
             /* Get stakeholders. */
             if($stakeholders === null)
             {
-                $stmt = $this->dao->select('objectID,account')->from(TABLE_STAKEHOLDER)->query();
-                while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->account] = $stakeholder->account;
+                $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
+                while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
             }
 
-            list($productTeams, $productStakeholders) = $this->getProductStakeholders($allProducts);
+            list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
             
             $userView = new stdclass();
             $userView->account  = $account;
@@ -1412,8 +1412,7 @@ class userModel extends model
                 $programs = array();
                 foreach($allPrograms as $id => $program)
                 {    
-                    $stakeholders = isset($stakeholders[$id]) ? $stakeholders[$id] : array();
-                    if($this->checkProgramPriv($program, $account, $stakeholders)) $programs[$id] = $id;
+                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array()))) $programs[$id] = $id;
                 }    
                 $userView->programs = join(',', $programs);
 
@@ -1421,19 +1420,17 @@ class userModel extends model
                 $products = array();
                 foreach($allProducts as $id => $product)
                 {    
-                    $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
-                    $teams        = isset($programTeams[$product->id]) ? $teamGroups[$product->id] : array();
-                    if($this->checkProductPriv($product, $account, $groups, $teams, $stakeholders)) $products[$id] = $id;
+                    if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()))) $products[$id] = $id;
                 }    
-                $userView->product = join(',', $products);
+                $userView->products = join(',', $products);
 
                 /* Process project userview. */
                 $projects = array();
                 foreach($allProjects as $id => $project)
                 {    
-                    $projectTeams = isset($teams[$id]) ? $teams[$id] : array();
-                    $stakeholders = isset($stakeholders[$id]) ? $stakeholders[$id] : array();
-                    if($this->checkProjectPriv($project, $account, $stakeholders, $projectTeams)) $projects[$id] = $id;
+                    $projectTeams        = zget($teams, $id, array());
+                    $projectStakeholders = zget($stakeholders, $id, array());
+                    if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams)) $projects[$id] = $id;
                 }    
                 $userView->projects = join(',', $projects);
 
@@ -1441,9 +1438,9 @@ class userModel extends model
                 $sprints = array();
                 foreach($allSprints as $id => $sprint)
                 {    
-                    $sprintTeams  = isset($teams[$id]) ? $teams[$id] : array();
-                    $stakeholders = isset($stakeholders[$sprint->project]) ? $stakeholders[$sprint->project] : array();
-                    if($this->checkSprintPriv($sprint, $account, $stakeholders, $sprintTeams)) $sprints[$id] = $id;
+                    $sprintTeams        = zget($teams, $id, array());
+                    $sprintStakeholders = zget($stakeholders, $sprint->project, array());
+                    if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams)) $sprints[$id] = $id;
                 }    
                 $userView->projects = join(',', $projects);
 
@@ -1451,9 +1448,9 @@ class userModel extends model
                 $stages = array();
                 foreach($allStages as $id => $stage)
                 {    
-                    $stageTeams   = isset($teams[$id]) ? $teams[$id] : array();
-                    $stakeholders = isset($stakeholders[$sprint->project]) ? $stakeholders[$sprint->project] : array();
-                    if($this->checkStagePriv($project, $account, $stakeholders, $stageTeams)) $stages[$id] = $id;
+                    $stageTeams        = zget($teams, $id, array());
+                    $stageStakeholders = zget($stakeholders, $sprint->project, array());
+                    if($this->checkStagePriv($project, $account, $stageStakeholders, $stageTeams)) $stages[$id] = $id;
                 }    
                 $userView->stages = join(',', $stages);
             }    
@@ -1464,13 +1461,13 @@ class userModel extends model
     }
 
     /**
-     * Get product teams and stakeholders 
+     * Get product teams and stakeholders.
      * 
      * @param  array $allProducts 
      * @access public
      * @return array 
      */
-    public function getProductStakeholders($allProducts)
+    public function getProductMembers($allProducts)
     {
         /* Get product and project relation. */
         $projectProducts = array();
@@ -1723,7 +1720,7 @@ class userModel extends model
      */
     public function updateProjectView($projectIdList, $users)
     {
-        $projects = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        $projects = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, type')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($projects)) return true;
 
         $teamGroups = array();
@@ -1804,7 +1801,7 @@ class userModel extends model
             $groupUsers[$group->group][$group->account] = $group->account;
         }
  
-        list($productTeams, $productStakeholders) = $this->getProductStakeholders($products);
+        list($productTeams, $productStakeholders) = $this->getProductMembers($products);
 
         /* Get white list.*/
         $whiteList = array();
@@ -1853,7 +1850,7 @@ class userModel extends model
      */
     public function updateStageView($stageIdList, $users)
     {
-        $stages = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade')->from(TABLE_PROJECT)->where('id')->in($stageIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        $stages = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)->where('id')->in($stageIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($stages)) return true;
 
         $teamGroups = array();
@@ -1924,7 +1921,7 @@ class userModel extends model
      */
     public function updateSprintView($sprintIdList, $users)
     {
-        $sprints = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        $sprints = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($sprints)) return true;
 
         $teamGroups = array();

@@ -457,7 +457,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function createStakeholder($programID = 0, $dept = '', $parentID = 0)
+    public function createStakeholder($programID = 0, $dept = '', $parentIdList = '')
     {
         if($_POST)
         {
@@ -483,7 +483,7 @@ class program extends control
         $this->view->dept               = $dept;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholders($parentID, 't1.id_desc');
+        $this->view->parentStakeholders = $this->program->getStakeholdersByList($parentIdList);
 
         $this->display();
     }

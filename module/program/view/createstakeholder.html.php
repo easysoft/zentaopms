@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('programID', $programID);?>
+<?php $path = rtrim($program->path, ",$programID,") . ',';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
@@ -22,7 +23,7 @@
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
     </div>
     <?php if($program->parent):?>
-    <?php echo html::a($this->createLink('program', 'createStakeholder', "programID=$programID&dept=&parent=$program->parent"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
+    <?php echo html::a($this->createLink('program', 'createStakeholder', "programID=$programID&dept=&parent=$path"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>

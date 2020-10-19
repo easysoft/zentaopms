@@ -717,7 +717,7 @@ CREATE TABLE `zt_project` (
   `QD` varchar(30) NOT NULL DEFAULT '',
   `RD` varchar(30) NOT NULL DEFAULT '',
   `team` varchar(90) NOT NULL,
-  `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
+  `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -1302,7 +1302,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE `zt_expect` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userID` mediumint(8) NOT NULL,
   `program` mediumint(8) NOT NULL DEFAULT 0,
   `expect` text NOT NULL,

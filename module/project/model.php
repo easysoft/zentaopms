@@ -29,7 +29,7 @@ class projectModel extends model
 
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+        return (strpos(",{$this->app->user->view->sprints},", ",{$projectID},") !== false);
     }
 
     /**
@@ -291,7 +291,7 @@ class projectModel extends model
         if(!isset($projects[$this->session->project]))
         {
             $this->session->set('project', key($projects));
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
+            if($projectID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
         }
         return $this->session->project;
     }
@@ -464,7 +464,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'sprint');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -730,7 +730,7 @@ class projectModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
@@ -788,7 +788,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -800,7 +800,7 @@ class projectModel extends model
                 ->andWhere('type')->in('sprint,stage')
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -828,7 +828,7 @@ class projectModel extends model
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
@@ -842,7 +842,7 @@ class projectModel extends model
             return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
@@ -897,7 +897,7 @@ class projectModel extends model
         $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->fetchGroup('product');
 
         $noProducts = array();
@@ -1318,7 +1318,7 @@ class projectModel extends model
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in($projectIds)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll('id');

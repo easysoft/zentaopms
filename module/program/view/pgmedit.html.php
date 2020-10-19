@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
+<?php $aclList = $program->parent ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -22,7 +23,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen'");?></td>
+          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen'  onchange=setAclList(this.value)");?></td>
           <td></td><td></td>
         </tr>
         <tr>
@@ -70,11 +71,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-        </tr>
-        <tr id='whitelistBox' <?php if($program->acl != 'custom') echo "class='hidden'";?>>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $program->whitelist, '', '', 'inline');?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $aclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -85,5 +82,11 @@
       </table>
     </form>
   </div>
+</div>
+<div id='PGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl, '', 'block'));?>
+</div>
+<div id='subPGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, $program->acl, '', 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

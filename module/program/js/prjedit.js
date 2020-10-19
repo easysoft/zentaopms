@@ -13,3 +13,15 @@ $(function()
         }
     });
 });
+
+function setAclList(programID)
+{
+    if(programID != 0)
+    {
+        $('.aclBox').html($('#PGMAcl').html());
+    }
+    else
+    {
+        $('.aclBox').html($('#PRJAcl').html());
+    }
+}

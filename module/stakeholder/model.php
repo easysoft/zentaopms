@@ -261,7 +261,7 @@ class stakeholderModel extends model
     {
 		$objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
 
-        $parents = '';
+        $parents = array();
         foreach($objects as $object)
         {    
             if($object->parent == 0) continue;
@@ -279,7 +279,7 @@ class stakeholderModel extends model
         $parentStakeholderGroup = array();
         foreach($parentStakeholders as $parentStakeholder)
         {
-            $subPrograms = zget($parentPrograms, $parentStakeholder->objectID, array());
+            $subPrograms = zget($parents, $parentStakeholder->objectID, array());
             foreach($subPrograms as $subProgramID) $parentStakeholderGroup[$subProgramID][$parentStakeholder->user] = $parentStakeholder->user;
         } 
 

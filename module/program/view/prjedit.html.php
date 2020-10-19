@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->project->weekend);?>
+<?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -28,7 +29,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, $project->parent, "class='form-control chosen'");?></td><td></td><td></td>
+          <td><?php echo html::select('parent', $parents, $project->parent, "class='form-control chosen' onchange='setAclList(this.value)");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
@@ -115,11 +116,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-        </tr>
-        <tr id='whitelistBox' <?php if($project->acl != 'custom') echo "class='hidden'";?>>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $project->whitelist, '', '', 'inline');?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -133,5 +130,11 @@
       </table>
     </form>
   </div>
+</div>
+<div id='PRJAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $project->acl, '', 'block'));?>
+</div>
+<div id='PGMAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, $project->acl, '', 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

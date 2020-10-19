@@ -74,6 +74,7 @@ class programplanModel extends model
             ->beginIF($browseType == 'all')->andWhere('project')->eq($programID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
             ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->stages)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)

@@ -4,6 +4,7 @@ DROP `catID`,
 ADD `project` mediumint(8) NOT NULL DEFAULT 0 AFTER `id`,
 ADD `model` char(30) NOT NULL AFTER `project`,
 CHANGE `type` `type` char(30) NOT NULL DEFAULT 'sprint' AFTER `model`,
+CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open',
 ADD `product` varchar(20) NOT NULL DEFAULT 'single' AFTER `type`,
 ADD `lifetime` char(30) NOT NULL AFTER `product`,
 ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `lifetime`,
@@ -81,7 +82,7 @@ CREATE TABLE `zt_stakeholder` (
 
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE `zt_expect` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userID` mediumint(8) NOT NULL,
   `program` mediumint(8) NOT NULL DEFAULT 0,
   `expect` text NOT NULL,

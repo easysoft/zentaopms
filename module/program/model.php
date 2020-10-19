@@ -339,7 +339,6 @@ class programModel extends model
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
-        if(!isset($project->whitelist) or $project->acl != 'custom') $project->whitelist = '';
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
         $children = $this->getChildren($programID);
@@ -456,8 +455,14 @@ class programModel extends model
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
-            ->beginIF($from == 'program')->andWhere('type')->in('program,project')->fi()
-            ->beginIF($from == 'product')->andWhere('type')->eq('program')->fi()
+            ->beginIF($from == 'program')
+            ->andWhere('type')->in('program,project')
+            ->andWhere('id')->in($this->app->user->view->programs . $this->app->user->view->projects)
+            ->fi()
+            ->beginIF($from == 'product')
+            ->andWhere('type')->eq('program')
+            ->andWhere('id')->in($this->app->user->view->programs)
+            ->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy('grade desc, `order`')->get();
         $stmt = $this->dbh->query($query);
@@ -526,6 +531,7 @@ class programModel extends model
     /**
      * Get stakeholders by program id.
      *
+     * @param  string $orderBy
      * @param  int     $programID
      * @access public
      * @return void
@@ -538,6 +544,22 @@ class programModel extends model
             ->andWhere('t1.objectType')->eq('program')
             ->orderBy($orderBy)
             ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get stakeholders by program id list.
+     *
+     * @param  string $programIdList
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getStakeholdersByList($programIdList = 0)
+    {
+        return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
+            ->where('objectID')->in($programIdList)
+            ->andWhere('objectType')->eq('program')
             ->fetchAll();
     }
 
@@ -900,7 +922,7 @@ class programModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchPairs();
     }
 
@@ -959,7 +981,7 @@ class programModel extends model
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->andWhere('model')->eq($model)
             ->andWhere('deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
     }
