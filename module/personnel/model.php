@@ -64,7 +64,7 @@ class personnelModel extends model
         $personnelList = array();
 
         /* Get all projects under the current program. */
-        $projects = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('id,model,type,parent,path,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('path')->like("%,$programID,%")
             ->beginIF($browseType == 'scrum')->andWhere('model')->eq('scrum')->fi()
@@ -77,11 +77,11 @@ class personnelModel extends model
         $personnelList['projects'] = $projects;
         if(empty($projects)) return $personnelList;
 
-        $teams = $this->getTeams($projects);
-        $personnelList['sprintAndStage'] = $teams['sprintAndStage'];
-        $personnelList['childrenStage']  = $teams['childrenStage'];
-        $personnelList['teams']          = $teams['teams'];
-        $personnelList['objectRows']     = $teams['objectRows'];
+        $sprintAndStage = $this->getSprintAndStage($projects);
+        $personnelList['sprintAndStage'] = $sprintAndStage['sprintAndStage'];
+        $personnelList['childrenStage']  = $sprintAndStage['childrenStage'];
+        $personnelList['teams']          = $sprintAndStage['teams'];
+        $personnelList['objectRows']     = $sprintAndStage['objectRows'];
 
         /* Get the program name for each level. */
         $programNameList = $this->getProgramPairs();
@@ -109,7 +109,7 @@ class personnelModel extends model
      * @access public
      * @return array
      */
-    public function getTeams($projects)
+    public function getSprintAndStage($projects)
     {
         /* Get all sprints and iterations under the project. */
         $projectKeys  = array_keys($projects);

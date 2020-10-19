@@ -18,7 +18,7 @@ class personnel extends control
      * @param  int    $deptID
      * @param  string $browseType
      * @param  int    $param
-     * @param  int    $orderBy
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -61,8 +61,8 @@ class personnel extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->personnelList = $personnelList;
-        $this->view->dept          = $this->dept->getByID($deptID);
         $this->view->deptList      = $deptList;
+        $this->view->dept          = $this->dept->getByID($deptID);
         $this->view->deptTree      = $this->personnel->getTreeMenu($deptID = 0, array('personnelModel', 'createMemberLink'), $programID);
 
         $this->display();
@@ -83,15 +83,13 @@ class personnel extends control
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
         $this->program->setPGMViewMenu($programID);
 
-        $inputPersonnel = $this->personnel->getInputPersonnel($programID, $browseType, $orderBy);
-
         $this->view->title      = $this->lang->personnel->putInto;
         $this->view->position[] = $this->lang->personnel->putInto;
 
         $this->view->programID      = $programID;
         $this->view->orderBy        = $orderBy;
         $this->view->browseType     = $browseType;
-        $this->view->inputPersonnel = $inputPersonnel;
+        $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID, $browseType, $orderBy);
 
         $this->display();
     }

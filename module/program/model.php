@@ -379,10 +379,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
-            if($program->acl != 'open' and ($program->acl != $oldProgram->acl or $program->whitelist != $oldProgram->whitelist))
-            {
-                $this->loadModel('user')->updateUserView($programID, 'program');
-            }
+            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
@@ -872,10 +869,10 @@ class programModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        /* Determine whether the program name is displayed. */
+        /* Determine how to display the name of the program. */
         if($programTitle)
         {
-            $programList = array();
+            $programList = $this->getPGMPairs();
             foreach($projectList as $id => $project)
             {
                 $path = explode(',', $project->path);
@@ -884,10 +881,9 @@ class programModel extends model
                 $programID = $programTitle == 'base' ? current($path) : end($path);
                 if(empty($path) || $programID == $id) continue;
 
-                $program = isset($programList[$programID]) ? $programList[$programID] : $this->getPRJPairs($programID);
-                $programList[$programID] = $program;
+                $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-                $projectList[$id]->name = $program->name . '/' . $projectList[$id]->name;
+                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
             }
         }
         return $projectList;
@@ -1192,10 +1188,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist))
-            {
-                $this->loadModel('user')->updateUserView($projectID, 'project');
-            }
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
