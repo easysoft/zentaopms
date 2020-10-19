@@ -66,18 +66,22 @@ class personnelModel extends model
         /* Get all projects under the current program. */
         $projects = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->beginIF($browseType != 'parent')->andWhere('path')->like("%,{$programID},%")->fi()
+            ->andWhere('path')->like("%,$programID,%")
+            ->beginIF($browseType == 'scrum')->andWhere('model')->eq('scrum')->fi()
+            ->beginIF($browseType == 'waterfall')->andWhere('model')->eq('waterfall')->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
+
         $personnelList['projects'] = $projects;
         if(empty($projects)) return $personnelList;
 
         $teams = $this->getTeams($projects);
-        $personnelList['stages']  = $teams['stages'];
-        $personnelList['sprints'] = $teams['sprints'];
-        $personnelList['teams']   = $teams['teams'];
+        $personnelList['sprintAndStage'] = $teams['sprintAndStage'];
+        $personnelList['childrenStage']  = $teams['childrenStage'];
+        $personnelList['teams']          = $teams['teams'];
+        $personnelList['objectRows']     = $teams['objectRows'];
 
         /* Get the program name for each level. */
         $programNameList = $this->getProgramPairs();
@@ -90,7 +94,7 @@ class personnelModel extends model
             foreach($path as $program)
             {
                 if($program == $id) continue;
-                $programName .= '/'. $programNameList[$program];
+                $programName .= '/' . $programNameList[$program];
             }
             $personnelList['projects'][$id]->programName = $programName;
         }
@@ -101,60 +105,76 @@ class personnelModel extends model
     /**
      * Get team members for projects, stage, sprints.
      *
-     * @param  string    $projects
+     * @param  object    $projects
      * @access public
-     * @return object
+     * @return array
      */
     public function getTeams($projects)
     {
-        $sprintParent = array();
-        $stageParent  = array();
-        foreach($projects as $project)
-        {
-            $project->model == 'scrum' ? $sprintParent[] = $project->id : $stageParent[] = $project->id;
-        }
-
-        $sprints = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
-            ->where('type')->eq('sprint')
-            ->andWhere('parent')->in($sprintParent)
+        /* Get all sprints and iterations under the project. */
+        $projectKeys  = array_keys($projects);
+        $projectObjet = $this->dao->select('id,project,model,type,parent,path,grade,name')->from(TABLE_PROJECT)
+            ->where('project')->in($projectKeys)
             ->andWhere('deleted')->eq('0')
-            ->fetchGroup('parent', 'id');
+            ->orderBy('id_desc')
+            ->fetchAll();
 
-        $stages = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
-            ->where('type')->eq('stage')
-            ->andWhere('parent')->in($stageParent)
-            ->andWhere('deleted')->eq('0')
-            ->fetchGroup('parent', 'id');
-
-        $rootIDList = array();
-        foreach($stages as $stage)
+        /* Get the team's root ID, separate the parent-child iteration. */
+        $rootIDList     = array();
+        $sprintAndStage = array();
+        $childrenStage  = array();
+        foreach($projectObjet as $id => $object)
         {
-            foreach($stage as $stageFields)
+            if($object->grade == 1)
             {
-                $stageFields->children = $this->dao->select('id,model,type,template,parent,path,name')->from(TABLE_PROJECT)
-                    ->where('type')->eq('stage')
-                    ->andWhere('grade')->eq('2')
-                    ->andWhere('path')->like(",$stageFields->id,%")
-                    ->andWhere('deleted')->eq('0')
-                    ->fetchAll('id');
-                $childrenIDList = array_keys($stageFields->children);
-                $rootIDList     = array_merge($childrenIDList, $rootIDList);
-                $rootIDList[]   = $stageFields->id;
+                $sprintAndStage[$object->project][] = $object;
             }
-        }
-
-        foreach($sprints as $sprint)
-        {
-            foreach($sprint as $id => $data) $rootIDList[] = $id;
+            else
+            {
+                $childrenStage[$object->parent][] = $object;
+            }
+            $rootIDList[] = $object->id;
         }
 
         $teams = $this->dao->select('t1.id,t1.root,t1.type,t1.role,t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.root=t2.id')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.root')->in($rootIDList)
             ->andWhere('t1.type')->in('stage,sprint')
             ->fetchGroup('root', 'id');
 
-        return array('sprints' => $sprints, 'stages' => $stages, 'teams' => $teams);
+        /* Calculate the number of cross rows for iterations and sprints. */
+        $objectRows = array();
+        foreach($projects as $project)
+        {
+            $objectRows[$project->id] = isset($sprintAndStage[$project->id]) ? count($sprintAndStage[$project->id]) : 1;
+            if(!isset($sprintAndStage[$project->id])) continue;
+            foreach($sprintAndStage[$project->id] as $object)
+            {
+                $objectRows[$object->id] = 1;
+                if($object->type == 'sprint')
+                {
+                    $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
+                    $objectRows[$project->id] += isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 0;;
+                }
+                elseif($object->type == 'stage' && isset($childrenStage[$object->id]))
+                {
+                    $objectRows[$object->id] += count($childrenStage[$object->id]);
+                    foreach($childrenStage[$object->id] as $stage)
+                    {
+                        $objectRows[$stage->id]    = isset($teams[$stage->id]) ? count($teams[$stage->id]) + 1 : 1;
+                        $objectRows[$object->id]  += isset($teams[$stage->id]) ? count($teams[$stage->id]) : 0;
+                        $objectRows[$project->id] += $objectRows[$stage->id];
+                    }
+                }
+                else
+                {
+                    $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
+                    $objectRows[$project->id] += $objectRows[$object->id];
+                }
+            }
+        }
+
+        return array('sprintAndStage' => $sprintAndStage, 'childrenStage' => $childrenStage, 'teams' => $teams, 'objectRows' => $objectRows);
     }
 
     /**

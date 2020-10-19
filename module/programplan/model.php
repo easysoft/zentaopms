@@ -71,7 +71,7 @@ class programplanModel extends model
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
-            ->beginIF($browseType == 'all')->andWhere('path')->like(",$programID,%")->fi()
+            ->beginIF($browseType == 'all')->andWhere('project')->eq($programID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
             ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
