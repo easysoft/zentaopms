@@ -333,7 +333,7 @@ class programplanModel extends model
      */
     public function getTotalPercent($plan)
     {
-        $plans = $this->getList($plan->program, $plan->product, $plan->parent,'parent');
+        $plans = $this->getList($plan->project, $plan->product, $plan->parent, 'parent');
 
         $totalPercent = 0;
         foreach($plans as $id => $stage)
@@ -508,8 +508,6 @@ class programplanModel extends model
             return false;
         }
 
-        $this->post->set('products', array(0 => $productID));//目前计划阶段用的就是迭代，迭代和产品会有个绑定关系，调用迭代（项目）模块的updateProducts方法来实现这个绑定关系，需要往post里塞入产品数据。
-
         $account = $this->app->user->account;
         $now     = helper::now();
         foreach($datas as $data)
@@ -535,6 +533,8 @@ class programplanModel extends model
                     ->checkIF($plan->percent != '', 'percent', 'float')
                     ->where('id')->eq($planID)
                     ->exec();
+
+                if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
 
                 if($planChanged)
                 {
@@ -569,7 +569,11 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $planID = $this->dao->lastInsertID();
+
                     $this->setTreePath($planID);
+                    if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
+
+                    $this->post->set('products', array(0 => $productID));
                     $this->loadModel('project')->updateProducts($planID);
 
                     $spec = new stdclass();
@@ -671,6 +675,7 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
+        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
 
         if($planChanged)
         {

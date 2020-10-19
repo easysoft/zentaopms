@@ -875,7 +875,7 @@ CREATE TABLE `zt_risk` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE `zt_stakeholder` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `objectID` mediumint(8) NOT NULL,
   `objectType` char(30) NOT NULL,
   `user` char(30) NOT NULL,
@@ -886,7 +886,7 @@ CREATE TABLE `zt_stakeholder` (
   `createdDate` date NOT NULL,
   `editedBy` char(30) NOT NULL,
   `editedDate` date NOT NULL,
-  `deleted` enum('0','1') NOT NULL 
+  `deleted` enum('0','1') NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (

@@ -159,7 +159,6 @@ class programplan extends control
     public function edit($planID = 0, $programID = 0)
     {
         $plan = $this->programplan->getByID($planID);
-        $this->commonAction($plan->program, $plan->product);
 
         if($_POST)
         {
