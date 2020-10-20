@@ -27,6 +27,7 @@
           <th><?php echo $lang->caselib->desc;?></th>
           <td><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
         </tr>
+        <?php $this->printExtendFields('', 'table');?>
         <tr>
           <td class='text-center form-actions' colspan='2'>
             <?php echo html::submitButton();?>
