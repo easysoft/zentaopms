@@ -1659,7 +1659,7 @@ class userModel extends model
             foreach($programs as $program) 
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
-                if($program->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                 $authUsers += $this->getProgramAuthUsers($program, $stakeholders);
             }
         }
@@ -1678,7 +1678,7 @@ class userModel extends model
             foreach($programs as $programID => $program)
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
-                if($program->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
 
                 $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders);
                 if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";
@@ -1727,7 +1727,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
-                if($project->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
+                if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
                 $authUsers += $this->getProjectAuthUsers($project, $stakeholders, $teams);
             }
@@ -1748,7 +1748,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
-                if($project->acl == 'openinside') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
+                if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
                 $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams);
                 if($hasPriv and strpos(",{$view},", ",{$projectID},") === false)  $view .= ",{$projectID}";
@@ -1934,7 +1934,7 @@ class userModel extends model
         if(isset($stakeholders[$account])) return true;
 
         /* Parent program managers. */
-        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'openinside')
+        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = trim($project->path, ",$project->id,");
             $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
@@ -2019,7 +2019,7 @@ class userModel extends model
         $users += $teams ? $teams : array();
 
         /* Parent program managers. */
-        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'openinside')
+        if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = trim($project->path, ",$project->id,");
             $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();

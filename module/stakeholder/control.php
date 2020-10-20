@@ -63,7 +63,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->create;
         $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->members    = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
-        $this->view->companys   = $this->loadModel('company')->getOutsideCompanys();
+        $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
 
         $this->display();
     }
@@ -145,7 +145,7 @@ class stakeholder extends control
 
         $this->view->stakeholder = $stakeholder;
         $this->view->users       = $users;
-        $this->view->companys    = $this->loadModel('company')->getOutsideCompanys();
+        $this->view->companys    = $this->loadModel('company')->getOutsideCompanies();
         $this->display();
     }
 
@@ -197,7 +197,7 @@ class stakeholder extends control
      */
     public function ajaxGetOutsideCompany()
     {
-        $companys = $this->loadModel('company')->getOutsideCompanys();
+        $companys = $this->loadModel('company')->getOutsideCompanies();
         die(html::select('company', $companys, '', "class='form-control chosen'"));
     }
 

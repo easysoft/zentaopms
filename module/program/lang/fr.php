@@ -99,9 +99,9 @@ $lang->program->featureBar['closed']    = 'Closed';
 $lang->program->PRJAclList['open']    = "Open(Users who can visit project can access it)";
 $lang->program->PRJAclList['private'] = 'Private (For team members and stakeholders only)';
 
-$lang->program->PGMPRJAclList['open']       = "Full disclosure (accessible with project view permissions)";
-$lang->program->PGMPRJAclList['openinside'] = "Public within the project set (accessible to all higher-level project set leaders and stakeholders, members of this project team and stakeholders)";
-$lang->program->PGMPRJAclList['private']    = "Private (accessible to project team members and associates)";
+$lang->program->PGMPRJAclList['open']    = "Full disclosure (accessible with project view permissions)";
+$lang->program->PGMPRJAclList['program'] = "Public within the project set (accessible to all higher-level project set leaders and stakeholders, members of this project team and stakeholders)";
+$lang->program->PGMPRJAclList['private'] = "Private (accessible to project team members and associates)";
 
 $lang->program->PRJAuthList['extend'] = 'Inherit (project privilege and company privilege)';
 $lang->program->PRJAuthList['reset']  = 'Reset (project privilege only)';
@@ -203,9 +203,9 @@ $lang->program->PGMShowClosed = 'Closed programs.';i
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";
 
-$lang->program->subPGMAclList['open']       = "Default(user who can visit the program can access it)";
-$lang->program->subPGMAclList['openinside'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
-$lang->program->subPGMAclList['private']    = "Private (accessible to this program set leader and stakeholders)";
+$lang->program->subPGMAclList['open']    = "Default(user who can visit the program can access it)";
+$lang->program->subPGMAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
+$lang->program->subPGMAclList['private'] = "Private (accessible to this program set leader and stakeholders)";
 
 $lang->program->PGMAuthList['extend'] = 'Inherit(program privileges and company privileges)';
 $lang->program->PGMAuthList['reset']  = 'Reset(program privileges only)';
