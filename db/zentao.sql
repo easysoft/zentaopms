@@ -1278,7 +1278,6 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `programs` mediumtext NOT NULL,
   `products` mediumtext NOT NULL,
   `projects` mediumtext NOT NULL,
-  `stages` mediumtext NOT NULL,
   `sprints` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

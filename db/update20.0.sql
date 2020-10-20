@@ -10,11 +10,7 @@ ADD `lifetime` char(30) NOT NULL AFTER `product`,
 ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `lifetime`,
 ADD `budgetUnit` char(30) NOT NULL  DEFAULT 'yuan' AFTER `budget`,
 ADD `percent` float unsigned NOT NULL DEFAULT '0' AFTER `budgetUnit`,
-ADD `auth` char(30) NOT NULL AFTER `percent`,
-ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`,
-ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`,
-ADD `realBegan` date NOT NULL AFTER `end`,
-ADD `realEnd` date NOT NULL AFTER `realStarted`,
+ADD `auth` char(30) NOT NULL AFTER `percent`, ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`, ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`, ADD `realBegan` date NOT NULL AFTER `end`, ADD `realEnd` date NOT NULL AFTER `realStarted`,
 ADD `version` smallint(6) NOT NULL AFTER `desc`,
 ADD `parentVersion` smallint(6) NOT NULL AFTER `version`,
 ADD `planDuration` int(11) NOT NULL AFTER `parentVersion`,
@@ -40,8 +36,7 @@ INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJa
 ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
 
 ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`;
-ALTER TABLE `zt_userview` ADD `stages` mediumtext NOT NULL AFTER `projects`;
-ALTER TABLE `zt_userview` ADD `sprints` mediumtext NOT NULL AFTER `stages`;
+ALTER TABLE `zt_userview` ADD `sprints` mediumtext NOT NULL AFTER `programs`;
 
 ALTER TABLE `zt_user` 
 ADD `company` mediumint unsigned NOT NULL AFTER `id`,
