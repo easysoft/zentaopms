@@ -15,10 +15,3 @@ $lang->personnel->search        = '搜索';
 $lang->personnel->program       = '项目集';
 $lang->personnel->emptyTip      = '暂无';
 $lang->personnel->childrenStage = '子阶段';
-
-$lang->personnel->inputLabel['all']       = '全部';
-$lang->personnel->inputLabel['noempty']   = '非空项目';
-$lang->personnel->inputLabel['parent']    = '直属项目';
-$lang->personnel->inputLabel['scrum']     = 'Scrum项目';
-$lang->personnel->inputLabel['waterfall'] = '瀑布项目';
-

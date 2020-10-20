@@ -921,11 +921,11 @@ class projectModel extends model
     /**
      * Get project stats.
      *
-     * @param  string $status
-     * @param  int    $productID
-     * @param  int    $itemCounts
-     * @param  string $orderBy
-     * @param  int    $pager
+     * @param  string  $status
+     * @param  int     $productID
+     * @param  int     $itemCounts
+     * @param  string  $orderBy
+     * @param  object  $pager
      * @access public
      * @return void
      */

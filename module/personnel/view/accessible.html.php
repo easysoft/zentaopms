@@ -34,14 +34,13 @@ js::set('deptID', $deptID);
   <?php if(!empty($personnelList)):?>
     <div id="queryBox" class="cell" data-module="accessible"></div>
     <form class="main-table table-personnel" action="" data-ride="table">
-      <?php $vars = "programID=$programID&deptID=$deptID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
       <table id="accessibleList" class="table has-sort-head">
         <thead>
           <tr>
-            <th class="c-id"><?php common::printOrderLink('t2.id', $orderBy, $vars, $lang->idAB);?></th>
-            <th class="w-120px"><?php echo common::printOrderLink('t2.dept', $orderBy, $vars, $lang->personnel->department);?></th>
-            <th class="w-100px"><?php echo $lang->personnel->realName;?></th>
-            <th class="w-100px"><?php echo $lang->personnel->userName;?></th>
+            <th class="c-id w-40px"><?php echo $lang->idAB;?></th>
+            <th class="w-120px"><?php echo $lang->personnel->department;?></th>
+            <th class="w-80px"><?php echo $lang->personnel->realName;?></th>
+            <th class="w-80px"><?php echo $lang->personnel->userName;?></th>
             <th class="w-80px"><?php echo $lang->personnel->job;?></th>
             <th class="w-60px"><?php echo $lang->personnel->genders;?></th>
           </tr>

@@ -48,7 +48,7 @@ class companyModel extends model
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
-    
+
     /**
      * Get company info by id.
      * 
@@ -126,7 +126,6 @@ class companyModel extends model
 
         return $pairs;
     }
-
 
     /**
      * Update a company.

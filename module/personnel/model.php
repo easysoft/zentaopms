@@ -23,7 +23,7 @@ class personnelModel extends model
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $orderBy = 't2.id_desc', $queryID = 0, $pager)
+    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0, $pager)
     {
         $accessibleQuery = '';
         if($browseType == 'bysearch')
@@ -38,14 +38,33 @@ class personnelModel extends model
             $accessibleQuery = $this->session->accessibleQuery;
         }
 
-        $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.programs')->like(',%' . $programID . ',%')
-            ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
-            ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
+        /* Determine who can be accessed based on access control. */
+        $program = $this->loadModel('program')->getPGMByID($programID);
+        if($program->acl == 'private')
+        {
+            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+                ->page($pager)
+                ->fetchAll();
+        }
+        else
+        {
+            /* The program is public, and users are judged to be accessible by permission groups. */
+            $accessibleGroupID = $this->loadModel('group')->getAccessProgramGroup();
+            $personnelList = $this->dao->select('t1.account,t3.role,t3.dept,t3.realname,t3.gender,t3.id')->from(TABLE_USERGROUP)->alias('t1')
+                ->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.group = t2.group')
+                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account = t3.account')
+                ->where('t1.group')->in($accessibleGroupID)
+                ->andWhere('t2.module')->eq('program')
+                ->andWhere('t2.method')->eq('PGMBrowse')
+                ->beginIF($deptID > 0)->andWhere('t3.dept')->eq($deptID)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+                ->page($pager)
+                ->fetchAll('account');
+        }
 
         return $personnelList;
     }
@@ -67,10 +86,6 @@ class personnelModel extends model
         $projects = $this->dao->select('id,model,type,parent,path,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('path')->like("%,$programID,%")
-            ->beginIF($browseType == 'scrum')->andWhere('model')->eq('scrum')->fi()
-            ->beginIF($browseType == 'waterfall')->andWhere('model')->eq('waterfall')->fi()
-            ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -85,7 +100,7 @@ class personnelModel extends model
         $personnelList['objectRows']     = $sprintAndStage['objectRows'];
 
         /* Get the program name for each level. */
-        $programNameList = $this->loadModel('program')->getPGMPairs();
+        $programNameList = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($personnelList['projects'] as $id => $project)
         {
             $path = explode(',', $project->path);
@@ -113,11 +128,9 @@ class personnelModel extends model
     public function getSprintAndStage($projects)
     {
         /* Get all sprints and iterations under the project. */
-        $userViewID   = array_merge(array(0), explode(',', $this->app->user->view->stages), explode(',', $this->app->user->view->sprints));
         $projectKeys  = array_keys($projects);
         $projectObjet = $this->dao->select('id,project,model,type,parent,path,grade,name')->from(TABLE_PROJECT)
             ->where('project')->in($projectKeys)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($userViewID)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
@@ -178,71 +191,6 @@ class personnelModel extends model
         }
 
         return array('sprintAndStage' => $sprintAndStage, 'childrenStage' => $childrenStage, 'teams' => $teams, 'objectRows' => $objectRows);
-    }
-
-    /**
-     * Get the treemenu of departments.
-     *
-     * @param  int     $deptID
-     * @param  string  $userFunc
-     * @param  int     $param
-     * @access public
-     * @return string
-     */
-    public function getTreeMenu($deptID = 0, $userFunc, $param = 0)
-    {
-        $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($deptID));
-        while($dept = $stmt->fetch())
-        {
-            $linkHtml = call_user_func($userFunc, $dept, $param);
-
-            if(isset($deptMenu[$dept->id]) and !empty($deptMenu[$dept->id]))
-            {
-                if(!isset($deptMenu[$dept->parent])) $deptMenu[$dept->parent] = '';
-                $deptMenu[$dept->parent] .= "<li>$linkHtml";
-                $deptMenu[$dept->parent] .= "<ul>".$deptMenu[$dept->id]."</ul>\n";
-            }
-            else
-            {
-                if(isset($deptMenu[$dept->parent]) and !empty($deptMenu[$dept->parent]))
-                {
-                    $deptMenu[$dept->parent] .= "<li>$linkHtml\n";
-                }
-                else
-                {
-                    $deptMenu[$dept->parent] = "<li>$linkHtml\n";
-                }
-            }
-            $deptMenu[$dept->parent] .= "</li>\n";
-        }
-
-        krsort($deptMenu);
-        $deptMenu = array_pop($deptMenu);
-        $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
-        return $lastMenu;
-    }
-
-    /**
-     * Build the query.
-     *
-     * @param  int    $rootDeptID
-     * @access public
-     * @return object
-     */
-    public function buildMenuQuery($rootDeptID)
-    {
-        $rootDept = $this->loadModel('dept')->getByID($rootDeptID);
-        if(!$rootDept)
-        {
-            $rootDept = new stdclass();
-            $rootDept->path = '';
-        }
-
-        return $this->dao->select('*')->from(TABLE_DEPT)
-            ->beginIF($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->fi()
-            ->orderBy('grade desc, `order`')
-            ->get();
     }
 
     /**

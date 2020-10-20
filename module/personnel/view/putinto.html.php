@@ -14,17 +14,6 @@
 .main-table tbody>tr:hover { background-color: #fff; }
 .main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
 </style>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
-    <?php
-      foreach($lang->personnel->inputLabel as $label => $labelName)
-      {
-          $active = $browseType == $label ? 'btn-active-text' : '';
-          echo html::a($this->createLink('personnel', 'putInto', "programID=$programID&browseType=$label"), '<span class="text">' . $labelName . '</span>', '', "class='btn btn-link $active'");
-      }
-    ?>
-  </div>
-</div>
 <div id="mainContent" class="main-row fade">
   <?php if(!empty($inputPersonnel['projects'])):?>
   <div class="main-col">

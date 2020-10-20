@@ -74,7 +74,7 @@ class programplanModel extends model
             ->beginIF($browseType == 'all')->andWhere('project')->eq($programID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
             ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->stages)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
@@ -534,7 +534,7 @@ class programplanModel extends model
                     ->where('id')->eq($planID)
                     ->exec();
 
-                if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
+                if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
 
                 if($planChanged)
                 {
@@ -571,7 +571,7 @@ class programplanModel extends model
                     $planID = $this->dao->lastInsertID();
 
                     $this->setTreePath($planID);
-                    if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
+                    if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
 
                     $this->post->set('products', array(0 => $productID));
                     $this->loadModel('project')->updateProducts($planID);
@@ -675,7 +675,7 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
-        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'stage');
+        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
 
         if($planChanged)
         {

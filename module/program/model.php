@@ -161,7 +161,7 @@ class programModel extends model
      * Get program pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getPGMPairs()
     {

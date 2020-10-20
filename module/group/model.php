@@ -205,6 +205,42 @@ class groupModel extends model
     }
 
     /**
+     * Get the ID of the group that has access to the program.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAccessProgramGroup()
+    {
+        $accessibleGroup   = $this->getList();
+        $accessibleGroupID = array(0);
+        foreach($accessibleGroup as $group)
+        {
+            if($group->acl) $group->acl = json_decode($group->acl, true);
+            if(!isset($group->acl) || !is_array($group->acl)) $group->acl = array();
+
+            if(empty($group->acl))
+            {
+                $accessibleGroupID[] = $group->id;
+                continue;
+            }
+
+            if(!isset($group->acl['views']) || empty($group->acl['views']))
+            {
+                $accessibleGroupID[] = $group->id;
+                continue;
+            }
+
+            if(in_array('program', $group->acl['views']))
+            {
+                $accessibleGroupID[] = $group->id;
+                continue;
+            }
+        }
+        return $accessibleGroupID;
+    }
+
+    /**
      * Delete a group.
      * 
      * @param  int    $groupID 

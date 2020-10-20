@@ -18,14 +18,13 @@ class personnel extends control
      * @param  int    $deptID
      * @param  string $browseType
      * @param  int    $param
-     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $orderBy = 't2.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
         $this->app->loadLang('user');
@@ -40,13 +39,9 @@ class personnel extends control
         /* Build the search form. */
         $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
         $actionURL = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
-        $deptList  = $this->loadModel('dept')->getDeptPairs($deptID);
-        $this->config->personnel->accessible->search['params']['dept']['values']   = $deptList;
         $this->config->personnel->accessible->search['params']['role']['values']   = $this->lang->user->roleList;
         $this->config->personnel->accessible->search['params']['gender']['values'] = $this->lang->user->genderList;
         $this->personnel->buildSearchForm($queryID, $actionURL);
-
-        $personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $orderBy, $queryID, $pager);
 
         $this->view->title      = $this->lang->personnel->accessible;
         $this->view->position[] = $this->lang->personnel->accessible;
@@ -58,12 +53,11 @@ class personnel extends control
         $this->view->pageID        = $pageID;
         $this->view->pager         = $pager;
         $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
-        $this->view->personnelList = $personnelList;
-        $this->view->deptList      = $deptList;
+        $this->view->personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID, $pager);
+        $this->view->deptList      = $this->loadModel('dept')->getOptionMenu();
         $this->view->dept          = $this->dept->getByID($deptID);
-        $this->view->deptTree      = $this->personnel->getTreeMenu($deptID = 0, array('personnelModel', 'createMemberLink'), $programID);
+        $this->view->deptTree      = $this->dept->getTreeMenu($deptID = 0, array(new personnelModel, 'createMemberLink'), $programID);
 
         $this->display();
     }

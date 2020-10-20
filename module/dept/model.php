@@ -34,7 +34,7 @@ class deptModel extends model
      */
     public function getDeptPairs($deptID = 0)
     {
-        return $this->dao->select('id,name')->from(TABLE_DEPT)->fetchPairs('id', 'name');
+        return $this->dao->select('id,name')->from(TABLE_DEPT)->fetchPairs();
     }
 
     /**
