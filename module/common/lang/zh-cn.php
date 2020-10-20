@@ -575,6 +575,8 @@ $lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 
+$lang->navGroup->personnel = 'program';
+
 $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
@@ -655,8 +657,6 @@ $lang->navGroup->dev       = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 $lang->navGroup->search    = 'admin';
-
-$lang->navGroup->personnel = 'program';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
