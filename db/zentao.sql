@@ -1444,7 +1444,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (10, 'OTHERS', 'others', 'for others.'),
 (11, 'guest', 'guest', 'For guest'),
 (12, 'LIMITED', 'limited', 'For limited user'),
-(13, '项目管理员', 'pgmadmin', '项目管理员可以维护项目的权限');
+(13, '项目管理员', 'PRJAdmin', '项目管理员可以维护项目的权限');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'action', 'editComment'),

@@ -824,7 +824,7 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl, t1.PRJ')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.role')->ne('PRJadmin')
+                ->andWhere('t1.role')->ne('PRJAdmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
 
@@ -894,8 +894,8 @@ class userModel extends model
         }
 
         /* Get can manage programs by user. */
-        $PRJadminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
-        $canManageProjects = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJadminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
+        $PRJAdminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
+        $canManageProjects = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJAdminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
         return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects);
     }
 

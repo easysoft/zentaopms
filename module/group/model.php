@@ -388,7 +388,7 @@ class groupModel extends model
      * @access public
      * @return void
      */
-    public function updatePRJadmin($groupID)
+    public function updatePRJAdmin($groupID)
     {
         $this->loadModel('user');
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();

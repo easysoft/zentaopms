@@ -1199,7 +1199,7 @@ $lang->resource->group->delete         = 'delete';
 $lang->resource->group->manageView     = 'manageView';
 $lang->resource->group->managePriv     = 'managePriv';
 $lang->resource->group->manageMember   = 'manageMember';
-$lang->resource->group->managePRJadmin = 'managePRJadmin';
+$lang->resource->group->managePRJAdmin = 'managePRJAdmin';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';
@@ -1208,7 +1208,7 @@ $lang->group->methodOrder[20] = 'copy';
 $lang->group->methodOrder[25] = 'delete';
 $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
-$lang->group->methodOrder[40] = 'managePRJadmin';
+$lang->group->methodOrder[40] = 'managePRJAdmin';
 
 /* User. */
 $lang->resource->user = new stdclass();

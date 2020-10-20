@@ -264,12 +264,12 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePRJadmin($groupID, $deptID = 0)
+    public function managePRJAdmin($groupID, $deptID = 0)
     {
         if(!empty($_POST))
         {
-            $this->group->updatePRJadmin($groupID);
-            die(js::locate(inlink('managePRJadmin', "group=$groupID"), 'parent'));
+            $this->group->updatePRJAdmin($groupID);
+            die(js::locate(inlink('managePRJAdmin', "group=$groupID"), 'parent'));
         }
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
@@ -285,7 +285,7 @@ class group extends control
         $this->view->allUsers     = $allUsers;
         $this->view->group        = $group;
         $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->andWhere('isCat')->eq(0)->fetchPairs();
-        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePRJadminLink'), $groupID);
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePRJAdminLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->userPrograms = $userPrograms;
 

@@ -25,8 +25,8 @@
     <td class='required'><?php echo html::input("code", '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
-    <th><?php echo $lang->upgrade->PRJadmin;?></th>
-    <td class='required'><?php echo html::select('PRJadmins[]', $users, '', "class='form-control chosen' multiple");?></td>
+    <th><?php echo $lang->upgrade->PRJAdmin;?></th>
+    <td class='required'><?php echo html::select('PRJAdmins[]', $users, '', "class='form-control chosen' multiple");?></td>
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->PM;?></th>

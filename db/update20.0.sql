@@ -31,7 +31,7 @@ ALTER TABLE `zt_build` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_release` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 
 ALTER TABLE `zt_group` ADD `PRJ` mediumint NOT NULL AFTER `id`;
-INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJadmin', '项目管理员可以维护项目的权限');
+INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJAdmin', '项目管理员可以维护项目的权限');
 
 ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
 

@@ -294,7 +294,7 @@ class programModel extends model
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                 ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJadmin')
+                ->andWhere('t2.role')->eq('PRJAdmin')
                 ->fetch();
 
             if(!empty($groupPriv))
@@ -304,10 +304,10 @@ class programModel extends model
             }
             else
             {
-                $PRJadminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
+                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
                 $groupPriv  = new stdclass();
                 $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJadminID;
+                $groupPriv->group   = $PRJAdminID;
                 $groupPriv->program = $programID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
@@ -1107,7 +1107,7 @@ class programModel extends model
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                 ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJadmin')
+                ->andWhere('t2.role')->eq('PRJAdmin')
                 ->fetch();
 
             if(!empty($groupPriv))
@@ -1117,7 +1117,7 @@ class programModel extends model
             }
             else
             {
-                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJadmin')->fetch('id');
+                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
                 $groupPriv  = new stdclass();
                 $groupPriv->account = $this->app->user->account;
                 $groupPriv->group   = $PRJAdminID;
