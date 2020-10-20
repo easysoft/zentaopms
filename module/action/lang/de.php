@@ -241,6 +241,18 @@ $lang->action->dynamicAction->todo['assigned']             = 'Assign Todo';
 $lang->action->dynamicAction->todo['undeleted']            = 'Restore Todo';
 $lang->action->dynamicAction->todo['hidden']               = 'Hide Todo';
 
+$lang->action->dynamicAction->program['PGMCreate']         = 'Create Program';
+$lang->action->dynamicAction->program['PGMEdit']           = 'Edit Program';
+$lang->action->dynamicAction->program['PGMActivate']       = 'Activate Program';
+$lang->action->dynamicAction->program['PGMDelete']         = 'Delete Program';
+$lang->action->dynamicAction->program['PGMClose']          = 'Close Program';
+$lang->action->dynamicAction->program['PRJCreate']         = 'Create Project';
+$lang->action->dynamicAction->program['PRJEdit']           = 'Edit Project';
+$lang->action->dynamicAction->program['PRJStart']          = 'Start Project';
+$lang->action->dynamicAction->program['PRJSuspend']        = 'Suspend Project';
+$lang->action->dynamicAction->program['PRJActivate']       = 'Activate Project';
+$lang->action->dynamicAction->program['PRJClose']          = 'Close Project';
+
 $lang->action->dynamicAction->product['opened']            = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = 'Edit ' . $lang->productCommon;
 $lang->action->dynamicAction->product['deleted']           = 'Delete ' . $lang->productCommon;

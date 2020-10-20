@@ -241,6 +241,18 @@ $lang->action->dynamicAction->todo['assigned']    = 'Bàn giao việc làm';
 $lang->action->dynamicAction->todo['undeleted']   = 'Khôi phục việc làm';
 $lang->action->dynamicAction->todo['hidden']      = 'Ẩn việc làm';
 
+$lang->action->dynamicAction->program['PGMCreate']         = 'Create Program';
+$lang->action->dynamicAction->program['PGMEdit']           = 'Edit Program';
+$lang->action->dynamicAction->program['PGMActivate']       = 'Activate Program';
+$lang->action->dynamicAction->program['PGMDelete']         = 'Delete Program';
+$lang->action->dynamicAction->program['PGMClose']          = 'Close Program';
+$lang->action->dynamicAction->program['PRJCreate']         = 'Create Project';
+$lang->action->dynamicAction->program['PRJEdit']           = 'Edit Project';
+$lang->action->dynamicAction->program['PRJStart']          = 'Start Project';
+$lang->action->dynamicAction->program['PRJSuspend']        = 'Suspend Project';
+$lang->action->dynamicAction->program['PRJActivate']       = 'Activate Project';
+$lang->action->dynamicAction->program['PRJClose']          = 'Close Project';
+
 $lang->action->dynamicAction->product['opened']            = 'Tạo ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = 'Sửa ' . $lang->productCommon;
 $lang->action->dynamicAction->product['deleted']           = 'Xóa ' . $lang->productCommon;

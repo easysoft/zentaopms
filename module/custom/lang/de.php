@@ -32,6 +32,7 @@ $lang->custom->region             = 'Interval';
 $lang->custom->tips               = 'Tips';
 $lang->custom->setTips            = 'Set Tips';
 $lang->custom->isRange            = 'Is Target Control';
+$lang->custom->concept            = "Concept";
 $lang->custom->URStory            = "User requirements";
 $lang->custom->SRStory            = "Software requirements";
 $lang->custom->epic               = "Epic";
