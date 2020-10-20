@@ -70,6 +70,7 @@ class personnelModel extends model
             ->beginIF($browseType == 'scrum')->andWhere('model')->eq('scrum')->fi()
             ->beginIF($browseType == 'waterfall')->andWhere('model')->eq('waterfall')->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -84,7 +85,7 @@ class personnelModel extends model
         $personnelList['objectRows']     = $sprintAndStage['objectRows'];
 
         /* Get the program name for each level. */
-        $programNameList = $this->getProgramPairs();
+        $programNameList = $this->loadModel('program')->getPGMPairs();
         foreach($personnelList['projects'] as $id => $project)
         {
             $path = explode(',', $project->path);
@@ -103,7 +104,7 @@ class personnelModel extends model
     }
 
     /**
-     * Get team members for projects, stage, sprints.
+     * Access to data on stages and sprints.
      *
      * @param  object    $projects
      * @access public
@@ -112,9 +113,11 @@ class personnelModel extends model
     public function getSprintAndStage($projects)
     {
         /* Get all sprints and iterations under the project. */
+        $userViewID   = array_merge(array(0), explode(',', $this->app->user->view->stages), explode(',', $this->app->user->view->sprints));
         $projectKeys  = array_keys($projects);
         $projectObjet = $this->dao->select('id,project,model,type,parent,path,grade,name')->from(TABLE_PROJECT)
             ->where('project')->in($projectKeys)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($userViewID)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
@@ -175,17 +178,6 @@ class personnelModel extends model
         }
 
         return array('sprintAndStage' => $sprintAndStage, 'childrenStage' => $childrenStage, 'teams' => $teams, 'objectRows' => $objectRows);
-    }
-
-    /**
-     * Get all program set names.
-     *
-     * @access public
-     * @return object
-     */
-    public function getProgramPairs()
-    {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs('id', 'name');
     }
 
     /**

@@ -96,12 +96,12 @@ $lang->program->featureBar['wait']      = 'Waiting';
 $lang->program->featureBar['suspended'] = 'Suspended';
 $lang->program->featureBar['closed']    = 'Closed';
 
-$lang->program->PRJAclList['open']    = "Open(Users who can visit {$lang->projectCommon} can access it)";
+$lang->program->PRJAclList['open']    = "Open(Users who can visit project can access it)";
 $lang->program->PRJAclList['private'] = 'Private (For team members and stakeholders only)';
 
-$lang->program->PGMPRJAclList['open']       = "全部公开（有项目视图权限，即可访问）";
-$lang->program->PGMPRJAclList['openinside'] = "项目集内公开（所有上级项目集负责人和干系人，本项目团队成员和干系人可访问）";
-$lang->program->PGMPRJAclList['private']    = "私有(项目团队成员和干系人可访问)";
+$lang->program->PGMPRJAclList['open']       = "Full disclosure (accessible with project view permissions)";
+$lang->program->PGMPRJAclList['openinside'] = "Public within the project set (accessible to all higher-level project set leaders and stakeholders, members of this project team and stakeholders)";
+$lang->program->PGMPRJAclList['private']    = "Private (accessible to project team members and associates)";
 
 $lang->program->PRJAuthList['extend'] = 'Inherit (project privilege and company privilege)';
 $lang->program->PRJAuthList['reset']  = 'Reset (project privilege only)';
@@ -178,6 +178,7 @@ $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';
 $lang->program->createStakeholder    = 'Create stakeholder';
 $lang->program->importStakeholder    = 'Import program';
+$lang->program->PGMManageMembers     = 'Program Team';
 
 /* Fields. */
 $lang->program->PGMName      = 'Name';

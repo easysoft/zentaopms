@@ -178,6 +178,7 @@ $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
 $lang->program->importStakeholder    = '从父项目集导入';
+$lang->program->PGMManageMembers     = '项目集团队';
 
 /* Fields. */
 $lang->program->PGMName      = '项目集名称';
