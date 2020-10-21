@@ -116,6 +116,10 @@ js::set('flow',          $config->global->flow);
               <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
               <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
               <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+              <?php
+              $extendFields = $this->caselib->getFlowExtendFields();
+              foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+              ?>
               <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
             </tr>
           </thead>
@@ -138,6 +142,7 @@ js::set('flow',          $config->global->flow);
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td><?php echo zget($users, $case->openedBy);?></td>
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
+              <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>
                 <?php
                 if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
