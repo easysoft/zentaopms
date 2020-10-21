@@ -73,6 +73,10 @@ $status = $this->session->testTaskVersionStatus;
         <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-100px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px text-left'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+        <?php
+        $extendFields = $this->testtask->getFlowExtendFields();
+        foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+        ?>
         <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -93,6 +97,7 @@ $status = $this->session->testTaskVersionStatus;
           <?php echo $status;?>
         </span>
       </td>
+      <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $task) . "</td>";?>
       <td class='c-actions'>
         <?php
         echo '<div id="action-divider">';

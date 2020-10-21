@@ -44,6 +44,10 @@
         <th><?php echo $lang->testsuite->desc;?></th>
         <th class='w-90px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->testsuite->addedBy);?></th>
         <th class='w-150px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
+        <?php
+        $extendFields = $this->testsuite->getFlowExtendFields();
+        foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+        ?>
         <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -59,6 +63,7 @@
       <td><?php echo $suite->desc;?></td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
       <td><?php echo $suite->addedDate;?></td>
+      <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
         <?php
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
