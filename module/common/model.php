@@ -1636,7 +1636,6 @@ EOD;
 
         if(isset($this->app->user))
         {
-            if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
 
             $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project';
