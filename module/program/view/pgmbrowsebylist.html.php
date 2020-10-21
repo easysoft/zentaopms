@@ -64,7 +64,6 @@
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-right c-actions'>
           <?php if($program->type == 'program'):?>
-          <?php common::printIcon('program', 'PGMManageMembers', "programID=$program->id", $program, 'list', 'persons');?>
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
           <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>

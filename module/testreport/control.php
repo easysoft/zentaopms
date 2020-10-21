@@ -525,7 +525,7 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
+            $this->products = $this->product->getPairs('nocode');
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
             return $productID;

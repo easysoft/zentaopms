@@ -435,7 +435,7 @@ class program extends control
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->program->PGMStakeholder;
         $this->view->position[] = $this->lang->program->PGMStakeholder;
