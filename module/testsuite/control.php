@@ -41,7 +41,7 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true));
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
