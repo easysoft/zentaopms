@@ -29,7 +29,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, $project->parent, "class='form-control chosen' onchange='setAclList(this.value)");?></td><td></td><td></td>
+          <td><?php echo html::select('parent', $parents, $project->parent, "class='form-control chosen' onchange='setAclList(this.value)'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>

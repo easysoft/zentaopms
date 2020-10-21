@@ -1638,8 +1638,8 @@ EOD;
         {
             $this->app->user = $this->session->user;
 
-            $inProgram = isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project';
-            if(!defined('IN_UPGRADE') and $inProgram)
+            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project') || ($module == 'program' && $method == 'index');
+            if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
                 if(strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
