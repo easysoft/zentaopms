@@ -463,4 +463,16 @@ class groupModel extends model
 
         return true;
     }
+
+    /**
+     * Get primary menus.
+     *
+     * @access public
+     * @return object
+     */
+    public function getPrimaryMenus()
+    {
+        $menus = clone $this->lang->menu;
+        return $menus;
+    }
 }

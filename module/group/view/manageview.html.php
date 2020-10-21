@@ -23,7 +23,7 @@
       <tr>
         <th class='text-bottom thWidth'><?php echo $lang->group->viewList;?></th>
         <td class='text-bottom'>
-          <?php foreach($lang->menu as $menuKey => $menu):?>
+          <?php foreach($menus as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
           <?php if($module == 'my') continue;?>
