@@ -45,7 +45,7 @@ class project extends control
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
         
-        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('project', 'create')) $this->lang->TRActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -969,7 +969,7 @@ class project extends control
         $this->view->chartData   = $chartData;
         $this->view->dayList     = array('full' => $this->lang->project->interval . '1' . $this->lang->day) + $dayList;
 
-        unset($this->lang->modulePageActions);
+        unset($this->lang->TRActions);
         $this->display();
     }
 

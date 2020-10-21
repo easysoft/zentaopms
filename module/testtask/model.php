@@ -40,9 +40,9 @@ class testtaskModel extends model
             $selectHtml .= "</div>";
             $selectHtml .= "</div>";
 
-            $this->lang->modulePageActions = '';
-            if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
-            if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
+            $this->lang->TRActions = '';
+            if(common::hasPriv('testtask', 'view'))     $this->lang->TRActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
+            if(common::hasPriv('testreport', 'browse')) $this->lang->TRActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
         }
 
         $this->app->loadLang('qa');
@@ -75,8 +75,8 @@ class testtaskModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
@@ -167,8 +167,8 @@ class testtaskModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
         foreach($this->lang->testtask->menu as $key => $value)
         {

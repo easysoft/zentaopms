@@ -29,7 +29,7 @@ include 'chosen.html.php';
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
       <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
-      <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->modulePageActions)) echo $lang->modulePageActions;?></div></div>
+      <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->TRActions)) echo $lang->TRActions;?></div></div>
     </div>
   </div>
   <?php

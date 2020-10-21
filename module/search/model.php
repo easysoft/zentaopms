@@ -40,6 +40,7 @@ class searchModel extends model
                 if($field->field == 'subStatus')
                 {
                     $field = $this->workflowfield->getByField($flowModule, 'subStatus');
+                    if(!isset($field->options[''])) $field->options[''] = '';
 
                     $searchConfig['fields'][$field->field] = $field->name;
                     $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $field->options);
