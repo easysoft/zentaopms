@@ -334,7 +334,6 @@ class projectModel extends model
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'gt', $sprint->begin)
-            ->check('name', 'unique', "deleted='0'")
             ->check('code', 'unique', "deleted='0'")
             ->exec();
 
