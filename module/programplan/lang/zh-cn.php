@@ -45,13 +45,9 @@ $lang->programplan->exporting        = '导出';
 $lang->programplan->exportFail       = '导出失败';
 $lang->programplan->hideCriticalPath = '隐藏关键路径';
 $lang->programplan->showCriticalPath = '显示关键路径';
-$lang->programplan->accessRight      = '访问控制';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
-
-$lang->programplan->accessRights['open']    = '继承项目访问权限 (能访问当前项目，即可访问)';
-$lang->programplan->accessRights['private'] = '私有 (团队成员和项目干系人可访问)';
 
 $lang->programplan->noData        = '暂无数据。';
 $lang->programplan->children      = '二级计划';

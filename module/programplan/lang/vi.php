@@ -45,13 +45,9 @@ $lang->programplan->exporting        = 'Exporting';
 $lang->programplan->exportFail       = 'Export failed';
 $lang->programplan->hideCriticalPath = 'Hide Critical Path';
 $lang->programplan->showCriticalPath = 'Show Critical Path';
-$lang->programplan->accessRight      = 'Access Control';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
-
-$lang->programplan->accessRights['open']    = 'Inherited Project ACL (for who can access the current project)';
-$lang->programplan->accessRights['private'] = 'Private (for team members and project stakeholders)';
 
 $lang->programplan->noData        = 'No Data';
 $lang->programplan->children      = 'Sub Plan';

@@ -111,6 +111,7 @@ class programplan extends control
     public function create($programID = 0, $productID = 0, $planID = 0)
     {
         $this->commonAction($programID, $productID);
+        $this->app->loadLang('project');
         if($_POST)
         {
             $this->programplan->create($programID, $this->productID, $planID);
@@ -158,8 +159,8 @@ class programplan extends control
      */
     public function edit($planID = 0, $programID = 0)
     {
+        $this->app->loadLang('project');
         $plan = $this->programplan->getByID($planID);
-
         if($_POST)
         {
             $changes = $this->programplan->update($planID, $programID);

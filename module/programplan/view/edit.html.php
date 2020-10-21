@@ -58,8 +58,8 @@ js::set('parentID', $plan->parent);
             <?php echo html::hidden('milestone', $plan->milestone);?>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->programplan->accessRight;?> </th>
-            <td><?php echo html::select('acl', $lang->programplan->accessRights, $plan->acl, 'class="form-control"');?></td>
+            <th><?php echo $lang->project->acl;?> </th>
+            <td><?php echo html::select('acl', $lang->project->aclList, $plan->acl, 'class="form-control"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->programplan->begin;?> </th>

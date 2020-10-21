@@ -1832,7 +1832,7 @@ class userModel extends model
      */
     public function updateSprintView($sprintIdList, $users)
     {
-        $sprints = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)
+        $sprints = $this->dao->select('id, project, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)
             ->where('id')->in($sprintIdList)
             ->andWhere('acl')->ne('open')
             ->fetchAll('id');
@@ -1850,7 +1850,7 @@ class userModel extends model
         foreach($sprints as $sprintID => $sprint)
         {
             $projectIdList[$sprint->parent] = $sprint->parent;
-            $sprint->project = $projectID;
+            $sprint->project = $sprint->project;
         }
 
         /* Get parent project stakeholders. */
