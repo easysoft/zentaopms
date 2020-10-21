@@ -501,6 +501,8 @@ class programplanModel extends model
             return false;
         }
 
+        $this->loadModel('user');
+        $this->loadModel('project');
         $account = $this->app->user->account;
         $now     = helper::now();
         foreach($datas as $data)
@@ -527,8 +529,9 @@ class programplanModel extends model
                     ->where('id')->eq($planID)
                     ->exec();
 
-                if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
+                if($data->acl != 'open') $this->user->updateUserView($planID, 'sprints');
 
+                /* Record version change information. */
                 if($planChanged)
                 {
                     $spec = new stdclass();
@@ -538,7 +541,6 @@ class programplanModel extends model
                     $spec->milestone = $data->milestone;
                     $spec->begin     = $data->begin;
                     $spec->end       = $data->end;
-
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
                 }
             }
@@ -561,22 +563,34 @@ class programplanModel extends model
 
                 if(!dao::isError())
                 {
-                    $planID = $this->dao->lastInsertID();
+                    $stageID = $this->dao->lastInsertID();
 
-                    $this->setTreePath($planID);
-                    if($data->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
+                    /* Add creators to stage teams and project teams. */
+                    $member = new stdclass();
+                    $member->root    = $stageID;
+                    $member->account = $account;
+                    $member->role    = $this->lang->user->roleList[$this->app->user->role];
+                    $member->join    = $now;
+                    $member->type    = $data->type;
+                    $member->days    = $data->days;
+                    $member->hours   = $this->config->project->defaultWorkhours;
+                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    $this->project->addProjectMembers($data->project, array($member));
+
+                    $this->setTreePath($stageID);
+                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprints');
 
                     $this->post->set('products', array(0 => $productID));
-                    $this->loadModel('project')->updateProducts($planID);
+                    $this->project->updateProducts($stageID);
 
+                    /* Record version change information. */
                     $spec = new stdclass();
-                    $spec->project   = $planID;
+                    $spec->project   = $stageID;
                     $spec->version   = $data->version;
                     $spec->name      = $data->name;
                     $spec->milestone = $data->milestone;
                     $spec->begin     = $data->begin;
                     $spec->end       = $data->end;
-
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
                 }
             }
