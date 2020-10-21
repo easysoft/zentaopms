@@ -162,7 +162,7 @@ class personnelModel extends model
         $objectRows = array();
         foreach($projects as $project)
         {
-            $objectRows[$project->id] = isset($sprintAndStage[$project->id]) ? count($sprintAndStage[$project->id]) : 1;
+            $objectRows[$project->id] = isset($sprintAndStage[$project->id]) ? count($sprintAndStage[$project->id]) + 1 : 1;
             if(!isset($sprintAndStage[$project->id])) continue;
             foreach($sprintAndStage[$project->id] as $object)
             {
@@ -170,22 +170,23 @@ class personnelModel extends model
                 if($object->type == 'sprint')
                 {
                     $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
-                    $objectRows[$project->id] += isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 0;;
+                    $objectRows[$project->id] += $objectRows[$object->id] > 1 ? count($teams[$object->id]) : 0;;
                 }
                 elseif($object->type == 'stage' && isset($childrenStage[$object->id]))
                 {
-                    $objectRows[$object->id] += count($childrenStage[$object->id]);
+                    $objectRows[$object->id]  += count($childrenStage[$object->id]);
+                    $objectRows[$project->id] += count($childrenStage[$object->id]);
                     foreach($childrenStage[$object->id] as $stage)
                     {
                         $objectRows[$stage->id]    = isset($teams[$stage->id]) ? count($teams[$stage->id]) + 1 : 1;
-                        $objectRows[$object->id]  += isset($teams[$stage->id]) ? count($teams[$stage->id]) : 0;
-                        $objectRows[$project->id] += $objectRows[$stage->id];
+                        $objectRows[$object->id]  += $objectRows[$stage->id] > 1 ? count($teams[$stage->id]) : 0;
+                        $objectRows[$project->id] += $objectRows[$stage->id] > 1 ? count($teams[$stage->id]) : 0;
                     }
                 }
                 else
                 {
                     $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
-                    $objectRows[$project->id] += $objectRows[$object->id];
+                    $objectRows[$project->id] += $objectRows[$object->id] > 1 ? count($teams[$object->id]) : 0;
                 }
             }
         }
