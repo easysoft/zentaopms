@@ -87,8 +87,8 @@ class productModel extends model
             }
         }
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $productID;

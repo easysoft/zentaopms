@@ -114,8 +114,8 @@ class caselibModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->caselib->menu as $key => $value)
         {
             if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
