@@ -130,7 +130,7 @@ class programplan extends control
 
         $this->app->loadLang('stage');
         $program = $this->loadModel('project')->getById($programID);
-        $plans   = $this->programplan->getList($programID, $this->productID, $planID, $browseType);
+        $plans   = $this->programplan->getStaes($programID, $this->productID, $planID, $browseType);
 
         $title      = $this->lang->programplan->create . $this->lang->colon . $program->name;
         $position[] = html::a($this->createLink('programplan', 'browse', "program=$programID"), $program->name);
