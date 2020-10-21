@@ -132,7 +132,7 @@ class projectModel extends model
         if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
 
         $projectIndex .= '</ul></div></div>';
-        $projectIndex .= $this->select(null, $projectID, null, $moduleName, $methodName, $extra);
+        $projectIndex .= $this->select($projects, $projectID, null, $moduleName, $methodName, $extra);
         $this->lang->modulePageNav = $projectIndex;
 
         foreach($this->lang->project->menu as $key => $menu)
@@ -733,7 +733,7 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)

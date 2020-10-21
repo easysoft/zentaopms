@@ -496,15 +496,27 @@ class program extends control
      * @access public
      * @return void
      */
-    public function unlinkStakeholder($stakeholderID, $confirm = 'no')
+    public function unlinkStakeholder($stakeholderID, $programID, $confirm = 'no')
 	{    
 		if($confirm == 'no')
 		{    
-			die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&confirm=yes")));
+			die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
 		}    
 		else 
 		{    
+            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
 			$this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
+            
+            $this->loadModel('user')->updateUserView($programID, 'program', array($account));
+
+            /* Update children user view. */
+            $childPgmList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+            $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+            $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+
+            if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program',  array($account));
+            if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
+            if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
 
 			die(js::reload('parent'));
 		}    
