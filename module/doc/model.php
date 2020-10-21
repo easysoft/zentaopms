@@ -109,7 +109,7 @@ class docModel extends model
 
             $actions  = $this->setFastMenu($fastLib);
 
-            $this->lang->modulePageActions = $actions;
+            $this->lang->TRActions = $actions;
         }
 
         //$selectHtml .= $crumb ? $crumb : $this->getCrumbs($libID, $moduleID);

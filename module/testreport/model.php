@@ -45,8 +45,8 @@ class testreportModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             $this->loadModel('qa')->setSubMenu('testreport', $key, $productID);

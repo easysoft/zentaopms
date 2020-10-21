@@ -108,8 +108,8 @@ class testcaseModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);

@@ -35,7 +35,7 @@ class jenkins extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(common::hasPriv('jenkins', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('jenkins', 'create')) $this->lang->TRActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

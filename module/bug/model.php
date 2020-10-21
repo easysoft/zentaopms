@@ -87,8 +87,8 @@ class bugModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->modulePageActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
             $this->loadModel('qa')->setSubMenu('bug', $key, $productID);

@@ -60,7 +60,7 @@ class programplan extends control
         $this->commonAction($programID, $productID, $type);
         $this->session->set('programPlanList', $this->app->getURI(true));
 
-        if(common::hasPriv('programplan', 'create')) $this->lang->modulePageActions = html::a($this->createLink('programplan', 'create', "programID=$programID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('programplan', 'create')) $this->lang->TRActions = html::a($this->createLink('programplan', 'create', "programID=$programID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
 
         $selectCustom = 0;
         $dateDetails  = 1;

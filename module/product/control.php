@@ -58,7 +58,7 @@ class product extends control
         $branch    = (int)$this->cookie->preBranch;
         //$this->product->setMenu($this->products, $productID, $branch);
 
-        if(common::hasPriv('product', 'create')) $this->lang->modulePageActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->product->index;
         $this->view->position[]    = $this->lang->product->index;
