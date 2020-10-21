@@ -454,7 +454,7 @@ class programModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($from == 'program')
             ->andWhere('type')->in('program,project')
-            ->andWhere('id')->in($this->app->user->view->programs . $this->app->user->view->projects)
+            ->andWhere('id')->in($this->app->user->view->programs . ',' . $this->app->user->view->projects)
             ->fi()
             ->beginIF($from == 'product')
             ->andWhere('type')->eq('program')
@@ -467,7 +467,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link = $from == 'program' ? helper::createLink('program', 'pgmview', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
-            $linkHtml = html::a($link, "<i class='icon icon-stack'></i> " . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $linkHtml = html::a($link, "<i class='icon icon-folder'></i> " . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -535,7 +535,7 @@ class programModel extends model
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
-        return $this->dao->select('t2.*, t1.id')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account') 
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
@@ -552,7 +552,7 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function getStakeholdersByList($programIdList = 0)
+    public function getStakeholdersByPGMList($programIdList = 0)
     {
         return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
             ->where('objectID')->in($programIdList)
@@ -589,13 +589,22 @@ class programModel extends model
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
         }
 
-        /* Only changed account update userview. */
+        /* If any account changed, update his view. */
         $oldAccounts     = array_keys($oldJoin);
         $changedAccounts = array_diff($accounts, $oldAccounts);
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
+
+        /* Update children user view. */
+        $childPgmList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+
+        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program', $changedAccounts);
+        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project', $changedAccounts);
+        if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $changedAccounts);
     }
 
     /**
@@ -957,6 +966,7 @@ class programModel extends model
             ->where('type')->in('project,program')
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs . ',' . $this->app->user->view->projects)->fi()
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
@@ -1037,7 +1047,7 @@ class programModel extends model
     public function createPRJManageLink($project)
     {
         $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? '<i class="icon icon-stack"></i> ' : '<i class="icon icon-menu-doc"></i> ';
+        $icon = $project->type == 'program' ? '<i class="icon icon-folder"></i> ' : '<i class="icon icon-file"></i> ';
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
@@ -1123,18 +1133,6 @@ class programModel extends model
                 $groupPriv->group   = $PRJAdminID;
                 $groupPriv->PRJ     = $projectID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
-
-            /* Init groups. */
-            $groups = $this->dao->select('name, `desc`')->from(TABLE_GROUP)
-                ->where('PRJ')->eq(0)
-                ->andWhere('role')->in('dev,qa,pm,po,others')
-                ->fetchAll();
-
-            foreach($groups as $group)
-            {
-                $group->PRJ = $projectID;
-                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
             }
 
             return $projectID;

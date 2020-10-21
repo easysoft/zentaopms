@@ -478,12 +478,12 @@ class program extends control
 
         $this->view->programID          = $programID;
         $this->view->program            = $this->program->getPGMByID($programID);
-        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholdersByList($parentIdList);
+        $this->view->parentStakeholders = $this->program->getStakeholdersByPGMList($parentIdList);
 
         $this->display();
     }

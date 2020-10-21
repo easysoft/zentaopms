@@ -52,9 +52,9 @@
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon<?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id"), "<i class='icon icon-stack'></i> " . $program->name);?>
+          <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id"), "<i class='icon icon-folder'></i> " . $program->name);?>
           <?php else:?>
-          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), "<i class='icon icon-menu-doc'></i> " . $program->name);?>
+          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), "<i class='icon icon-file'></i> " . $program->name);?>
           <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>

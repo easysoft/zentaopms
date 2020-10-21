@@ -1,3 +1,8 @@
+function toggleProgram()
+{ 
+    $('#programBox').toggle($('#program').prop("checked"));
+}
+
 function toggleProduct()
 { 
     $('#productBox').toggle($('#product').prop("checked"));
@@ -30,6 +35,7 @@ $(function()
         $('.group-item input:checkbox[name^="allchecker"]').prop('checked', allChecked);
 
         var id = $(this).attr('id');
+        if(id == 'program') toggleProgram();
         if(id == 'product') toggleProduct();
         if(id == 'project') toggleProject();
         if($('#' + id + 'ActionBox').length == 1) $('#' + id + 'ActionBox').toggle($(this).prop("checked"));

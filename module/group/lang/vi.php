@@ -26,6 +26,7 @@ $lang->group->confirmDelete      = 'Bạn có muốn xóa người dùng này gr
 $lang->group->successSaved       = 'Đã lưu.';
 $lang->group->errorNotSaved      = 'Thất bại.  Vui lòng select actions and groups.';
 $lang->group->viewList           = 'Truy cập Sight';
+$lang->group->programList        = 'Truy cập Program';
 $lang->group->productList        = 'Truy cập Product';
 $lang->group->projectList        = 'Truy cập Project';
 $lang->group->dynamic            = 'Truy cập Dynamics';

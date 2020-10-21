@@ -139,9 +139,10 @@ class group extends control
         $this->view->position[] = $group->name;
         $this->view->position[] = $this->lang->group->manageView;
 
-        $this->view->group      = $group;
-        $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->group    = $group;
+        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $menugroup = array();
         foreach($this->lang->menugroup as $moduleName => $groupName) $menugroup[$groupName][$moduleName] = $moduleName;

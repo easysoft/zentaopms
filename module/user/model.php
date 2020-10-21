@@ -864,6 +864,7 @@ class userModel extends model
                     continue;
                 }
 
+                /* Merge acls. */
                 if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
@@ -878,7 +879,7 @@ class userModel extends model
             if($sprintAllow)  $acls['sprints']  = array();
             if($viewAllow)    $acls['views']    = array();
             if($actionAllow)  unset($acls['actions']);
-
+            
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group = t3.group')
@@ -1652,21 +1653,21 @@ class userModel extends model
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
  
         /* Get auth users. */
-        $authUsers = array();
-        if(!empty($users)) $authUsers = $users;
+        $authedUsers = array();
+        if(!empty($users)) $authedUsers = $users;
         if(empty($users))
         {
             foreach($programs as $program) 
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
-                $authUsers += $this->getProgramAuthUsers($program, $stakeholders);
+                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders);
             }
         }
 
         /* Get all programs user view. */
-        $stmt  = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
-        if(empty($users) and $authUsers)
+        $stmt  = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
+        if(empty($users) and $authedUsers)
         {
             foreach($programs as $programID => $program) $stmt->orWhere("CONCAT(',', programs, ',')")->like("%,{$programID},%");
         }
@@ -1719,8 +1720,8 @@ class userModel extends model
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($projectIdList);
  
         /* Get auth users. */
-        $authUsers = array();
-        if(!empty($users)) $authUsers = $users;
+        $authedUsers = array();
+        if(!empty($users)) $authedUsers = $users;
         if(empty($users))
         {
             foreach($projects as $project) 
@@ -1729,13 +1730,13 @@ class userModel extends model
                 $teams        = zget($teamGroups, $project->id, array());
                 if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
-                $authUsers += $this->getProjectAuthUsers($project, $stakeholders, $teams);
+                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams);
             }
         }
 
         /* Get all programs user view. */
-        $stmt  = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
-        if(empty($users) and $authUsers)
+        $stmt  = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
+        if(empty($users) and $authedUsers)
         {
             foreach($projects as $projectID => $project) $stmt->orWhere("CONCAT(',', projects, ',')")->like("%,{$projectID},%");
         }
@@ -1856,8 +1857,8 @@ class userModel extends model
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
         /* Get auth users. */
-        $authUsers = array();
-        if(!empty($users)) $authUsers = $users;
+        $authedUsers = array();
+        if(!empty($users)) $authedUsers = $users;
         if(empty($users))
         {
             foreach($sprints as $sprint) 
@@ -1865,13 +1866,13 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
 
-                $authUsers += $this->getSprintAuthUsers($sprint, $stakeholders, $teams);
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, $teams);
             }
         }
 
         /* Get all programs user view. */
-        $stmt  = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authUsers);
-        if(empty($users) and $authUsers)
+        $stmt  = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
+        if(empty($users) and $authedUsers)
         {
             foreach($sprints as $sprintID => $sprint) $stmt->orWhere("CONCAT(',', sprints, ',')")->like("%,{$sprintID},%");
         }
@@ -1937,10 +1938,10 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = trim($project->path, ",$project->id,");
-            $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
-                if($program->PO == $account OR $program->QD == $account OR $program->RD == $account OR $program->PM == $account) return true;
+                if($program->PM == $account || $program->openedBy == $account) return true;
             }
         }
 
@@ -1995,7 +1996,7 @@ class userModel extends model
     }
 
     /**
-     * Get project auth users.
+     * Get project authed users.
      * 
      * @param  object $project
      * @param  array  $stakeholders 
@@ -2003,7 +2004,7 @@ class userModel extends model
      * @access public
      * @return array 
      */
-    public function getProjectAuthUsers($project, $stakeholders, $teams)
+    public function getProjectAuthedUsers($project, $stakeholders, $teams)
     {
         $users = array(); 
 
@@ -2022,15 +2023,11 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = trim($project->path, ",$project->id,");
-            $programs = $this->dao->select('id,openedBy,PM,PO,QD,RD')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
                 $users[$program->openedBy] = $program->openedBy;
                 $users[$program->PM]       = $program->PM;
-                $users[$program->PO]       = $program->PO;
-                $users[$program->QD]       = $program->QD;
-                $users[$program->RD]       = $program->RD;
-
             }
         }
 
@@ -2038,14 +2035,14 @@ class userModel extends model
     }
 
     /**
-     * Get program auth users.
+     * Get program authed users.
      * 
      * @param  object $program 
      * @param  array  $stakeholders 
      * @access public
      * @return array 
      */
-    public function getProgramAuthUsers($program,  $stakeholders)
+    public function getProgramAuthedUsers($program,  $stakeholders)
     {
         $users = array(); 
 
@@ -2060,7 +2057,7 @@ class userModel extends model
     }
 
     /**
-     * Get sprint auth users.
+     * Get sprint authed users.
      * 
      * @param  object $sprint
      * @param  array  $stakeholders 
@@ -2068,9 +2065,9 @@ class userModel extends model
      * @access public
      * @return array 
      */
-    public function getSprintAuthUsers($sprint, $stakeholders, $teams)
+    public function getSprintAuthedUsers($sprint, $stakeholders, $teams)
     {
-        return $this->getProjectAuthUsers($sprint, $stakeholders, $teams);
+        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams);
     }
 
     /**
@@ -2106,42 +2103,6 @@ class userModel extends model
 
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();
-
-        return $users;
-    }
-
-    /**
-     * Get project white list users.
-     * 
-     * @param  object $project 
-     * @param  array  $groupUsers 
-     * @param  array  $teams 
-     * @access public
-     * @return array
-     */
-    public function getProjectWhiteListUsers($project, $groupUsers, $teams)
-    {
-        $users = array();
-
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
-
-        $users[$project->PO]       = $project->PO;
-        $users[$project->QD]       = $project->QD;
-        $users[$project->RD]       = $project->RD;
-        $users[$project->PM]       = $project->PM;
-        $users[$project->openedBy] = $project->openedBy;
-        if(isset($project->feedback)) $users[$project->feedback] = $project->feedback;
-
-        $users += $teams;
-
-        if($project->acl == 'custom')
-        {
-            foreach(explode(',', $project->whitelist) as $whitelist)
-            {
-                if(empty($whitelist)) continue;
-                $users += zget($groupUsers, $whitelist, array());
-            }
-        }
 
         return $users;
     }
