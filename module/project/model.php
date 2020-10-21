@@ -362,7 +362,7 @@ class projectModel extends model
                     $member->root = $projectID;
                     $member->join = $today;
                     $member->days = $sprint->days;
-                    $member->type = 'project';
+                    $member->type = $sprintType;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                     if($member->account == $this->app->user->account) $creatorExists = true;
                 }
@@ -377,10 +377,12 @@ class projectModel extends model
                 $member->account = $this->app->user->account;
                 $member->role    = $this->lang->user->roleList[$this->app->user->role];
                 $member->join    = $today;
-                $member->type    = 'project';
+                $member->type    = $sprintType;
                 $member->days    = $sprint->days;
                 $member->hours   = $this->config->project->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+
+                $this->addProjectMembers($this->session->PRJ, array($member));
             }
 
             /* Create doc lib. */
@@ -1985,7 +1987,7 @@ class projectModel extends model
         }
 
         /* Add iteration or phase team members to the project team. */
-        if($projectType == 'stage' || $projectType == 'sprint') $this->addProjectMembers($project->parent, $projectMember);
+        if($projectType == 'stage' || $projectType == 'sprint') $this->addProjectMembers($project->project, $projectMember);
 
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
@@ -2007,18 +2009,18 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function  addProjectMembers($projectID, $members = array())
+    public function  addProjectMembers($projectID = 0, $members = array())
     {
         $project     = $this->getByID($projectID);
         $projectType = $project->type;
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($projectType)->fetchPairs();
+        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
         foreach($members as $account => $member)
         {
-            if(isset($oldJoin[$account])) continue;
+            if(isset($oldJoin[$member->account])) continue;
 
-            $accounts[]   = $account;
+            $accounts[]   = $member->account;
             $member->root = $projectID;
             $member->type = $projectType;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
@@ -2039,18 +2041,30 @@ class projectModel extends model
     /**
      * Unlink a member.
      *
-     * @param  int    $projectID
+     * @param  int    $sprintID
      * @param  string $account
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account)
+    public function unlinkMember($sprintID, $account)
     {
-        $project = $this->getByID($projectID);
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq($project->type)->andWhere('account')->eq($account)->exec();
+        $sprint = $this->getByID($sprintID);
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($sprint->type)->andWhere('account')->eq($account)->exec();
 
-        $this->loadModel('user')->updateUserView($projectID, $project->type, array($account));
-        $products = $this->getProducts($projectID, false);
+        /* Remove team members from the sprint or stage, and determine whether to remove team members from the project. */
+        if($sprint->type == 'sprint' || $sprint->type == 'stage')
+        {
+            $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
+                ->where('t1.project')->eq($sprint->project)
+                ->andWhere('t1.type')->eq($sprint->type)
+                ->andWhere('t2.account')->eq($account)
+                ->fetch();
+            if(empty($teamMember)) $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+        }
+
+        $this->loadModel('user')->updateUserView($sprintID, $sprint->type, array($account));
+        $products = $this->getProducts($sprintID, false);
         if($products) $this->user->updateUserView(array_keys($products), 'product', array($account));
     }
 

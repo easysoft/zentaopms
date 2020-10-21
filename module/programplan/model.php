@@ -16,12 +16,12 @@ class programplanModel extends model
     /**
      * Set menu.
      *
-     * @param  int    $programID
-     * @param  int    $productID
+     * @param  int  $projectID
+     * @param  int  $productID
      * @access public
      * @return bool
      */
-    public function setMenu($programID, $productID)
+    public function setMenu($projectID, $productID)
     {
         return true;
     }
@@ -49,30 +49,28 @@ class programplanModel extends model
      */
     public function getProjectsByProduct($productID)
     {
-        $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-
-        return $projects;
+        return $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
     }
 
     /**
      * Get plans list.
      *
-     * @param  int    $programID
-     * @param  int    $productID
-     * @param  int    $planID
-     * @param  string $browseType
-     * @param  string $orderBy
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  int     $planID
+     * @param  string  $browseType
+     * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $productID = 0, $planID = 0, $browseType = 'all', $orderBy = 'id_asc')
+    public function getStage($projectID = 0, $productID = 0, $planID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
         $projects = $this->getProjectsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
-            ->beginIF($browseType == 'all')->andWhere('project')->eq($programID)->fi()
-            ->beginIF($browseType == 'parent')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($browseType == 'all')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($browseType == 'parent')->andWhere('parent')->eq($projectID)->fi()
             ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
@@ -139,7 +137,7 @@ class programplanModel extends model
      */
     public function getPlans($programID = 0, $productID = 0, $orderBy = 'id_asc')
     {
-        $plans = $this->getList($programID, $productID, 0, 'all', $orderBy);
+        $plans = $this->getStage($programID, $productID, 0, 'all', $orderBy);
 
         $parents  = array();
         $children = array();
@@ -182,19 +180,19 @@ class programplanModel extends model
     /**
      * Get gantt data.
      *
-     * @param  int    $programID
-     * @param  int    $productID
-     * @param  int    $baselineID
-     * @param  string $selectCustom
-     * @param  bool   $returnJson
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
      * @access public
      * @return string
      */
-    public function getDataForGantt($programID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
+    public function getDataForGantt($projectID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
 
-        $plans = $this->getList($programID, $productID, 0, 'all');
+        $plans = $this->getStage($projectID, $productID, 0, 'all');
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
@@ -251,9 +249,8 @@ class programplanModel extends model
         $module  = 'programplan';
         $section = 'browse';
         $object  = 'stageCustom';
-        $setting = $this->loadModel('setting');
 
-        if(empty($selectCustom)) $selectCustom = $setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+        if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
         $tasks = array();
         if(strpos($selectCustom, 'task') !== false)
@@ -333,7 +330,7 @@ class programplanModel extends model
      */
     public function getTotalPercent($plan)
     {
-        $plans = $this->getList($plan->project, $plan->product, $plan->parent, 'parent');
+        $plans = $this->getStage($plan->project, $plan->product, $plan->parent, 'parent');
 
         $totalPercent = 0;
         foreach($plans as $id => $stage)
@@ -354,11 +351,7 @@ class programplanModel extends model
      */
     public function processPlans($plans)
     {
-        foreach($plans as $planID => $plan)
-        {
-            $plans[$planID] = $this->processPlan($plan);
-        }
-
+        foreach($plans as $planID => $plan) $plans[$planID] = $this->processPlan($plan);
         return $plans;
     }
 
@@ -392,8 +385,8 @@ class programplanModel extends model
             }
         }
 
-        $plan->begin = $plan->begin == '0000-00-00' ? '' : $plan->begin;
-        $plan->end   = $plan->end  == '0000-00-00' ? '' : $plan->end;
+        $plan->begin     = $plan->begin == '0000-00-00' ? '' : $plan->begin;
+        $plan->end       = $plan->end  == '0000-00-00' ? '' : $plan->end;
         $plan->realBegan = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
         $plan->realEnd   = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
 

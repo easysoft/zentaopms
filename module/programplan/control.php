@@ -28,66 +28,64 @@ class programplan extends control
     /**
      * Common action.
      *
-     * @param  int    $programID
-     * @param  int    $productID
-     * @param  string $extra
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  string  $extra
      * @access public
      * @return void
      */
-    public function commonAction($programID, $productID = 0, $extra = '')
+    public function commonAction($projectID, $productID = 0, $extra = '')
     {
-        $products  = $this->loadModel('product')->getPairs('', $programID);
+        $products  = $this->loadModel('product')->getProductsByProject('', $projectID);
         $productID = $this->product->saveState($productID, $products);
-        $this->product->setMenu($products, $productID, 0, 0, '', $extra);
         $this->productID = $productID;
-        $this->programplan->setMenu($programID, $productID);
+        $this->product->setMenu($products, $productID, 0, 0, '', $extra);
+        $this->programplan->setMenu($projectID, $productID);
     }
 
     /**
-     * Browse programplans.
+     * Browse program plans.
      *
-     * @param  int    $programID
-     * @param  int    $productID
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $baselineID
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  string  $type
+     * @param  string  $orderBy
+     * @param  int     $baselineID
      * @access public
      * @return void
      */
-    public function browse($programID = 0, $productID = 0, $type = 'gantt', $orderBy = 'id_asc', $baselineID = 0)
+    public function browse($projectID = 0, $productID = 0, $type = 'gantt', $orderBy = 'id_asc', $baselineID = 0)
     {
         $this->app->loadLang('stage');
-        $this->commonAction($programID, $productID, $type);
+        $this->commonAction($projectID, $productID, $type);
         $this->session->set('programPlanList', $this->app->getURI(true));
 
-        if(common::hasPriv('programplan', 'create')) $this->lang->TRActions = html::a($this->createLink('programplan', 'create', "programID=$programID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('programplan', 'create')) $this->lang->TRActions = html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
 
-        $selectCustom = 0;
-        $dateDetails  = 1;
+        $selectCustom = 0; // Display date and task settings.
+        $dateDetails  = 1; // Gantt chart detail date display.
         if($type == 'gantt')
         {
             $owner        = $this->app->user->account;
             $module       = 'programplan';
             $section      = 'browse';
             $object       = 'stageCustom';
-            $setting      = $this->loadModel('setting');
-            $selectCustom = $setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
-
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
-            $plans = $this->programplan->getDataForGantt($programID, $this->productID, $baselineID);
+            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID);
         }
 
         if($type == 'lists')
         {
             $sort  = $this->loadModel('common')->appendOrder($orderBy);
             $this->loadModel('datatable');
-            $plans = $this->programplan->getPlans($programID, $this->productID, $sort);
+            $plans = $this->programplan->getPlans($projectID, $this->productID, $sort);
         }
 
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
-        $this->view->programID    = $programID;
+        $this->view->programID    = $projectID;
         $this->view->productID    = $this->productID;
         $this->view->type         = $type;
         $this->view->plans        = $plans;

@@ -40,17 +40,7 @@ class personnelModel extends model
 
         /* Determine who can be accessed based on access control. */
         $program = $this->loadModel('program')->getPGMByID($programID);
-        if($program->acl == 'private')
-        {
-            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
-                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-                ->page($pager)
-                ->fetchAll();
-        }
-        else
+        if($program->acl == 'open')
         {
             /* The program is public, and users are judged to be accessible by permission groups. */
             $accessibleGroupID = $this->loadModel('group')->getAccessProgramGroup();
@@ -64,6 +54,16 @@ class personnelModel extends model
                 ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
                 ->page($pager)
                 ->fetchAll('account');
+        }
+        else
+        {
+            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+                ->page($pager)
+                ->fetchAll();
         }
 
         return $personnelList;
