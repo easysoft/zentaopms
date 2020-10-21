@@ -39,6 +39,7 @@ $lang->story->subdivide         = 'Phân rã';
 $lang->story->link              = 'Link';
 $lang->story->unlink            = 'Unlink';
 $lang->story->track             = 'Track';
+$lang->story->processStoryChange= 'Process Story Change';
 $lang->story->subdivideAction   = 'Phân rã câu chuyện';
 $lang->story->splitRequirent    = 'Phân rã';
 $lang->story->close             = 'Đóng';

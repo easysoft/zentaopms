@@ -29,7 +29,7 @@ $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '项目排序';
 
 /* Fields. */
-$lang->program->common             = '项目';
+$lang->program->common             = '项目集';
 $lang->program->stage              = '阶段';
 $lang->program->PRJName            = '项目名称';
 $lang->program->PRJModel           = '管理类型';
@@ -177,6 +177,7 @@ $lang->program->PGMActivate          = '激活项目集';
 $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
+$lang->program->unlinkStakeholder    = '删除干系人';
 $lang->program->importStakeholder    = '从父项目集导入';
 $lang->program->PGMManageMembers     = '项目集团队';
 

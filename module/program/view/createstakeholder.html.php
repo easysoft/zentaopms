@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('programID', $programID);?>
-<?php $path = rtrim($program->path, ",$programID,") . ',';?>
+<?php $path = str_replace(",{$programID},", ',', "{$program->path}");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>

@@ -159,7 +159,7 @@ $lang->product->viewMenu = new stdclass();
 $lang->product->viewMenu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->module      = 'Module|tree|browse|productID=%s&view=story';
@@ -581,6 +581,7 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 
+$lang->navGroup->project     = 'project';
 $lang->navGroup->story       = 'project';
 $lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';

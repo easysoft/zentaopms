@@ -581,6 +581,7 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 
+$lang->navGroup->project     = 'project';
 $lang->navGroup->story       = 'project';
 $lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';

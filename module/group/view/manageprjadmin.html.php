@@ -39,7 +39,7 @@
           </td>
           <td class='pv-10px' colspan='2'>
             <div class='input-group'>
-              <span class='input-group-addon'> <?php echo $lang->group->program;?></span>
+              <span class='input-group-addon'> <?php echo $lang->group->PRJ;?></span>
               <?php echo html::select("program[$account][]", $programs, $program, "class='form-control chosen' multiple");?>
             </div>
           </td>

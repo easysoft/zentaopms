@@ -66,6 +66,7 @@ $lang->product->errorNoProduct = "Không có {$lang->productCommon} được t�
 $lang->product->accessDenied   = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
 
 $lang->product->id            = 'ID';
+$lang->product->program       = "Program";
 $lang->product->name          = "Tên {$lang->productCommon}";
 $lang->product->code          = 'Mã';
 $lang->product->line          = "Dòng {$lang->productCommon}";

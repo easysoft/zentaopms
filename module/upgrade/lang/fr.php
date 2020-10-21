@@ -47,5 +47,45 @@ $lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la versio
 $lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
 $lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
+$lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
+$lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
+$lang->upgrade->to20Desc      = <<<EOD
+<p>Dear users, thank you for your support of Zentao. Since version 20, Zentao Buddhism has been upgraded to a general purpose project management platform. Compared to previous versions, Zentao 20 adds the concept of a large project and management model. Next we will help you with this upgrade by using the wizard to go to. This upgrade is divided into two parts: Project data merge and permission reset.</p>
+<br />
+<h4>1、Project merge</h4>
+<p>We will merge the previous product and project data under the big project concept, and adjust the concept according to your choice of management model as follows：</p>
+<ul>
+  <li class='strong'>Scrum:Project > Product > Sprint > Task </li>
+  <li class='strong'>Waterfall:Project > Product > Stage > Task</li>
+  <li class='strong'>Kanban:Project > Product > Kanban > Card</li>
+</ul>
+<br />
+<h4>2、Permission Reset</h4>
+<p>Since the 20th version of Zentao, permissions are granted on a project basis, and the mechanism of authorization is:</p>
+<p class='strong'>The administrator delegates authority to the project manager > The project manager delegates authority to the project members</p>
+<br />
+<div class='text-warning'>
+  <p>Tips：</p>
+  <ol>
+    <li>You can start by installing a 20 version of Zen and experiencing the concepts and processes.</li>
+    <li>Zentao version 20 changes a lot, please make a backup before you upgrade.</li>
+  </ol>
+</div>
+EOD;
+
+$lang->upgrade->line     = 'Product Line';
+$lang->upgrade->program  = 'Merge Project';
+$lang->upgrade->existPGM = 'Existing projects';
+$lang->upgrade->PRJAdmin = 'Project Admin';
+$lang->upgrade->product  = $lang->productCommon;
+$lang->upgrade->project  = $lang->projectCommon;
+
+$lang->upgrade->newProgram         = 'Create';
+$lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s iterations in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
+$lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate the entire product line and the products and iterations below it into one large project.";
+$lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their lower iterations to merge into a large project, or you can select a product to merge its lower iterations into a larger project";
+$lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
+$lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
 
 include dirname(__FILE__) . '/version.php';

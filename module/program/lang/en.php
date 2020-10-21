@@ -176,7 +176,8 @@ $lang->program->PGMView              = 'Overview';
 $lang->program->PGMActivate          = 'Activate';
 $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';
-$lang->program->createStakeholder    = 'Create stakeholder';
+$lang->program->createStakeholder    = 'Create Stakeholder';
+$lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
 

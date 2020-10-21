@@ -285,7 +285,7 @@ class group extends control
         $this->view->position     = $position;
         $this->view->allUsers     = $allUsers;
         $this->view->group        = $group;
-        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->andWhere('isCat')->eq(0)->fetchPairs();
+        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('deleted')->eq(0)->fetchPairs();
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePRJAdminLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->userPrograms = $userPrograms;

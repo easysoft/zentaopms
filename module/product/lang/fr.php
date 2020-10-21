@@ -66,6 +66,7 @@ $lang->product->errorNoProduct = "Aucun {$lang->productCommon} n'est créé pour
 $lang->product->accessDenied   = "Vous n'avez pas accès au {$lang->productCommon}.";
 
 $lang->product->id            = 'ID';
+$lang->product->program       = "Program";
 $lang->product->name          = "Nom du {$lang->productCommon}";
 $lang->product->code          = 'Code';
 $lang->product->line          = "Ligne Produit";

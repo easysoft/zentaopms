@@ -39,6 +39,7 @@ $lang->story->subdivide         = 'Aufteilen';
 $lang->story->link              = 'Link';
 $lang->story->unlink            = 'Unlink';
 $lang->story->track             = 'Track';
+$lang->story->processStoryChange= 'Process Story Change';
 $lang->story->subdivideAction   = 'Decompose Story';
 $lang->story->splitRequirent    = 'Decompose';
 $lang->story->close             = 'Schließen';
