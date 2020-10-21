@@ -8,6 +8,9 @@ $config->project->weekend          = '2';
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
+$config->project->modelList['scrum']     = 'sprint';
+$config->project->modelList['waterfall'] = 'stage';
+
 global $lang, $app;
 $app->loadLang('task');
 $config->project->task   = new stdclass();

@@ -307,28 +307,33 @@ class projectModel extends model
     public function create($copyProjectID = '')
     {
         $this->lang->project->team = $this->lang->project->teamname;
-        $project = fixer::input('post')
+
+        /* Determine whether to add a sprint or a stage according to the model of the project. */
+        $project    = $this->getByID($this->session->PRJ);
+        $sprintType = zget($this->config->project->modelList, $project->model, '');
+
+        $sprint = fixer::input('post')
             ->setDefault('project', $this->session->PRJ)
             ->setDefault('status', 'wait')
-            ->setDefault('type', 'sprint')
             ->setDefault('parent', $this->session->PRJ)
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
+            ->add('type', $sprintType)
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PROJECT)->data($project)
+        $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->project->editor->create['id'], $this->post->uid);
+        $this->dao->insert(TABLE_PROJECT)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->create->requiredFields, 'notempty')
-            ->checkIF($project->begin != '', 'begin', 'date')
-            ->checkIF($project->end != '', 'end', 'date')
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkIF($sprint->begin != '', 'begin', 'date')
+            ->checkIF($sprint->end != '', 'end', 'date')
+            ->checkIF($sprint->end != '', 'end', 'gt', $sprint->begin)
             ->check('name', 'unique', "deleted='0'")
             ->check('code', 'unique', "deleted='0'")
             ->exec();
@@ -356,7 +361,7 @@ class projectModel extends model
                     unset($member->id);
                     $member->root = $projectID;
                     $member->join = $today;
-                    $member->days = $project->days;
+                    $member->days = $sprint->days;
                     $member->type = 'project';
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                     if($member->account == $this->app->user->account) $creatorExists = true;
@@ -373,7 +378,7 @@ class projectModel extends model
                 $member->role    = $this->lang->user->roleList[$this->app->user->role];
                 $member->join    = $today;
                 $member->type    = 'project';
-                $member->days    = $project->days;
+                $member->days    = $sprint->days;
                 $member->hours   = $this->config->project->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
@@ -389,7 +394,7 @@ class projectModel extends model
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('user');
-            if($project->acl != 'open') $this->user->updateUserView($projectID, 'sprint');
+            if($sprint->acl != 'open') $this->user->updateUserView($projectID, 'sprint');
             if(isset($_POST['products'])) $this->user->updateUserView($this->post->products, 'product');
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
