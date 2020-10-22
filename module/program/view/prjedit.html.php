@@ -132,7 +132,7 @@
   </div>
 </div>
 <div id='PRJAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $project->acl, '', 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $project->acl == 'program' ? 'private' : 'open', '', 'block'));?>
 </div>
 <div id='PGMAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, $project->acl, '', 'block'));?>

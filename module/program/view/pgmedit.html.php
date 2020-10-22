@@ -84,7 +84,7 @@
   </div>
 </div>
 <div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl, '', 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl == 'program' ? 'private' : 'open', '', 'block'));?>
 </div>
 <div id='subPGMAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, $program->acl, '', 'block'));?>

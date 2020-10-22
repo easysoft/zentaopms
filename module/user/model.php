@@ -1938,7 +1938,7 @@ class userModel extends model
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
-            $path     = trim($project->path, ",$project->id,");
+            $path     = str_replace(",{$project->id},", ',', "{$project->path}");
             $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
@@ -2023,7 +2023,7 @@ class userModel extends model
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
-            $path     = trim($project->path, ",$project->id,");
+            $path     = str_replace(",{$project->id},", ',', "{$project->path}");
             $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
