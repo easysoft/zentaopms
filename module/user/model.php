@@ -1838,20 +1838,19 @@ class userModel extends model
             ->fetchAll('id');
         if(empty($sprints)) return true;
 
+        $parentIdList = array();
+        foreach($sprints as $sprint) $parentIdList[$sprint->project] = $sprint->project;
+
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->eq('sprint')
-            ->andWhere('root')->in($sprintIdList)
+            ->where('type')->in('project,sprint,stage')
+            ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
 
         $projectIdList = array();
-        foreach($sprints as $sprintID => $sprint)
-        {
-            $projectIdList[$sprint->parent] = $sprint->parent;
-            $sprint->project = $sprint->project;
-        }
+        foreach($sprints as $sprintID => $sprint) $projectIdList[$sprint->parent] = $sprint->parent;
 
         /* Get parent project stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
@@ -1865,8 +1864,9 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
+                $parentTeams  = zget($teamGroups, $sprint->project, array());
 
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, $teams);
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams));
             }
         }
 
@@ -1885,8 +1885,9 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
+                $parentTeams  = zget($teamGroups, $sprint->project, array());
 
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams);
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, array_merge($teams, $parentTeams));
                 if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
             }

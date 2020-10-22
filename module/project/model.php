@@ -1996,6 +1996,9 @@ class projectModel extends model
 
         $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
 
+        $childSprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->in('sprint,stage')->fetchPairs();
+        if($childSprints) $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
+
         $products = $this->getProducts($projectID, false);
         if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
     }
