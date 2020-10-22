@@ -379,7 +379,7 @@ class taskModel extends model
 
                 /* Update task estimate log. */
                 $clonedTaskID = $this->dao->lastInsertID();
-                $this->dao->update(TABLE_TASKESTIMATE)->set('task')->eq($clonedTaskID)->where('task')->eq($oldParentTask->id)->exec();
+                $this->updateTaskID($clonedTaskID, $oldParentTask->id);
             }
 
             $this->updateParentStatus($taskID);
@@ -467,6 +467,19 @@ class taskModel extends model
     }
 
     /**
+     * Update task ID in TABLE_TASKESTIMATE.
+     *
+     * @param  int    $newID
+     * @param  int    $oldID
+     * @access public
+     * @return void
+     */
+    public function updateTaskID($newID, $oldID)
+    {
+        $this->dao->update(TABLE_TASKESTIMATE)->set('task')->eq($newID)->where('task')->eq($oldID)->exec();
+    }
+
+    /**
      * Update parent status by taskID.
      *
      * @param $taskID
@@ -481,7 +494,7 @@ class taskModel extends model
         if($parentID <= 0) return true;
 
         $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
-        if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec(); 
+        if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         $this->computeWorkingHours($parentID);
 
         $childrenStatus       = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
@@ -2282,7 +2295,7 @@ class taskModel extends model
             $task = $this->processTask($task);
             if(!empty($task->children))
             {
-                foreach($task->children as $child) 
+                foreach($task->children as $child)
                 {
                     $tasks[$task->id]->children[$child->id] = $this->processTask($child);
                 }
