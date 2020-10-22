@@ -529,7 +529,7 @@ class programplanModel extends model
                     ->where('id')->eq($planID)
                     ->exec();
 
-                if($data->acl != 'open') $this->user->updateUserView($planID, 'sprints');
+                if($data->acl != 'open') $this->user->updateUserView($planID, 'sprint');
 
                 /* Record version change information. */
                 if($planChanged)
@@ -578,7 +578,7 @@ class programplanModel extends model
                     $this->project->addProjectMembers($data->project, array($member));
 
                     $this->setTreePath($stageID);
-                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprints');
+                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     $this->post->set('products', array(0 => $productID));
                     $this->project->updateProducts($stageID);
@@ -682,7 +682,7 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
-        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprints');
+        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprint');
 
         if($planChanged)
         {

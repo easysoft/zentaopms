@@ -82,10 +82,6 @@ $lang->project->suspend  = 'Suspend';
 $lang->project->close    = 'Close';
 $lang->project->export   = 'Export';
 
-$lang->project->typeList['sprint']    = 'Sprint';
-$lang->project->typeList['waterfall'] = 'Waterfall';
-$lang->project->typeList['ops']       = 'OPS';
-
 $lang->project->endList[7]   = '1 Week';
 $lang->project->endList[14]  = '2 Weeks';
 $lang->project->endList[31]  = '1 Month';

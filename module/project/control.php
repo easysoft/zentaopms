@@ -1058,6 +1058,7 @@ class project extends control
      */
     public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
     {
+        $this->app->loadLang('program');
         if($projectID)
         {
             if(!empty($planID))
@@ -1144,11 +1145,11 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(isset($this->config->custom->productProject) and strpos($this->config->custom->productProject, '_2'))
+        $project = $this->project->getById($this->session->PRJ);
+
+        if($project->model == 'scrum' && isset($this->config->custom->productProject) and strpos($this->config->custom->productProject, '_1'))
         {
             $this->view->isSprint = true;
-            unset($this->lang->project->typeList['waterfall']);
-            unset($this->lang->project->typeList['ops']);
 
             unset($this->lang->project->endList[62]);
             unset($this->lang->project->endList[93]);
@@ -1191,6 +1192,7 @@ class project extends control
      */
     public function edit($projectID, $action = 'edit', $extra = '')
     {
+        $this->app->loadLang('program');
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
@@ -1252,12 +1254,10 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2'))
+        $PRJData = $this->project->getById($this->session->PRJ);
+        if($PRJData->model == 'scrum' && strpos($this->config->custom->productProject, '_1'))
         {
             $this->view->isSprint = true;
-
-            unset($this->lang->project->typeList['waterfall']);
-            unset($this->lang->project->typeList['ops']);
 
             unset($this->lang->project->endList[62]);
             unset($this->lang->project->endList[93]);
@@ -1553,6 +1553,7 @@ class project extends control
      */
     public function view($projectID)
     {
+        $this->app->loadLang('program');
         $project = $this->project->getById($projectID, true);
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 

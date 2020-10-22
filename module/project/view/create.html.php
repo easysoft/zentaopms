@@ -81,8 +81,8 @@
         <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?></td>
-          <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
+          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");?></td>
+          <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
         <?php endif;?>
         <tr class='hide'>
@@ -151,9 +151,9 @@
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
+            <?php if($isSprint) echo html::hidden('lifetime', 'short');?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
-            <?php if($isSprint) echo html::hidden('type', 'sprint');?>
           </td>
         </tr>
       </table>

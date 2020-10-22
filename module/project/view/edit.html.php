@@ -63,7 +63,7 @@
         <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='form-control'");?></td>
+          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, $project->type, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
         <tr>

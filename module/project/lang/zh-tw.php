@@ -82,10 +82,6 @@ $lang->project->suspend  = "掛起";
 $lang->project->close    = "關閉";
 $lang->project->export   = "導出";
 
-$lang->project->typeList['sprint']    = "短期$lang->projectCommon";
-$lang->project->typeList['waterfall'] = "長期$lang->projectCommon";
-$lang->project->typeList['ops']       = "運維$lang->projectCommon";
-
 $lang->project->endList[7]   = '一星期';
 $lang->project->endList[14]  = '兩星期';
 $lang->project->endList[31]  = '一個月';

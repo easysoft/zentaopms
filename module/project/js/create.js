@@ -44,16 +44,16 @@ $(function()
     $(window).on('resize', adjustMainCol);
 });
 
-function showTypeTips()
+function showLifeTimeTips()
 {
-    var type = $('#type').val();
-    if(type == 'ops')
+    var lifetime = $('#lifetime option:selected').val();
+    if(lifetime == 'ops')
     {
-        $('.type-tips').show();
+        $('#lifeTimeTips').show();
     }
     else
     {
-        $('.type-tips').hide();
+        $('#lifeTimeTips').hide();
     }
 }
 

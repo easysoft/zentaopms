@@ -74,7 +74,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$projectID]", $poUsers, $projects[$projectID]->PO, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$projectID]", $qdUsers, $projects[$projectID]->QD, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$projectID]", $rdUsers, $projects[$projectID]->RD, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'><?php echo html::select("types[$projectID]",    $lang->project->typeList,   $projects[$projectID]->type,   'class=form-control');?></td>
+            <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'><?php echo html::select("lifetimes[$projectID]",    $lang->program->PRJLifeTimeList,   $projects[$projectID]->type,   'class=form-control');?></td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
             <td><?php echo html::input("begins[$projectID]", $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td><?php echo html::input("ends[$projectID]",   $projects[$projectID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>

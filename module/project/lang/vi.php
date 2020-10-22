@@ -82,10 +82,6 @@ $lang->project->suspend  = 'Đình chỉ';
 $lang->project->close    = 'Đóng';
 $lang->project->export   = 'Xuất';
 
-$lang->project->typeList['sprint']    = 'Sprint';
-$lang->project->typeList['waterfall'] = 'Waterfall';
-$lang->project->typeList['ops']       = 'OPS';
-
 $lang->project->endList[7]   = '1 tuần';
 $lang->project->endList[14]  = '2 tuần';
 $lang->project->endList[31]  = '1 tháng';

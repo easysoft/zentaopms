@@ -182,7 +182,7 @@
                   <?php if($project->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                   <?php endif; ?>
-                  <span class="label label-primary label-outline"><?php echo zget($lang->project->typeList, $project->type);?></span>
+                  <span class="label label-primary label-outline"><?php echo zget($lang->program->PRJLifeTimeList, $project->lifetime);?></span>
                   <?php if(isset($project->delay)):?>
                   <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                   <?php else:?>

@@ -177,6 +177,7 @@ $lang->program->PGMActivate          = '激活項目集';
 $lang->program->PGMExport            = '導出';
 $lang->program->PGMStakeholder       = '干係人列表';
 $lang->program->createStakeholder    = '添加干係人';
+$lang->program->unlinkStakeholder    = '删除干係人';
 $lang->program->importStakeholder    = '從父項目集導入';
 $lang->program->PGMManageMembers     = '項目集團隊';
 

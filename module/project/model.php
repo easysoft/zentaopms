@@ -394,9 +394,7 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->loadModel('user');
-            if($sprint->acl != 'open') $this->user->updateUserView($projectID, 'sprint');
-            if(isset($_POST['products'])) $this->user->updateUserView($this->post->products, 'product');
+            if($sprint->acl != 'open') $this->updateUserView($projectID);
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
             return $projectID;
@@ -415,8 +413,8 @@ class projectModel extends model
         $projectID  = (int)$projectID;
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $team = $this->getTeamMemberPairs($projectID);
+
         $this->lang->project->team = $this->lang->project->teamname;
-        $projectID = (int)$projectID;
         $project = fixer::input('post')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
@@ -427,6 +425,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans')
             ->get();
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -434,7 +433,6 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id!=$projectID and deleted='0'")
             ->check('code', 'unique', "id!=$projectID and deleted='0'")
             ->where('id')->eq($projectID)
             ->limit(1)
@@ -463,14 +461,11 @@ class projectModel extends model
         }
 
         /* Fix bug#3074, Update views for team members. */
-        $this->loadModel('user')->updateUserView($projectID, 'sprint', $changedAccounts);
-        $products = $this->getProducts($projectID, false);
-        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
+        if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);
 
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'sprint');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -493,20 +488,20 @@ class projectModel extends model
         {
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name   = $data->names[$projectID];
-            $projects[$projectID]->code   = $data->codes[$projectID];
-            $projects[$projectID]->PM     = $data->PMs[$projectID];
-            $projects[$projectID]->PO     = $data->POs[$projectID];
-            $projects[$projectID]->QD     = $data->QDs[$projectID];
-            $projects[$projectID]->RD     = $data->RDs[$projectID];
-            $projects[$projectID]->type   = $data->types[$projectID];
-            $projects[$projectID]->status = $data->statuses[$projectID];
-            $projects[$projectID]->begin  = $data->begins[$projectID];
-            $projects[$projectID]->end    = $data->ends[$projectID];
-            $projects[$projectID]->team   = $data->teams[$projectID];
-            $projects[$projectID]->desc   = htmlspecialchars_decode($data->descs[$projectID]);
-            $projects[$projectID]->days   = $data->dayses[$projectID];
-            $projects[$projectID]->order  = $data->orders[$projectID];
+            $projects[$projectID]->name     = $data->names[$projectID];
+            $projects[$projectID]->code     = $data->codes[$projectID];
+            $projects[$projectID]->PM       = $data->PMs[$projectID];
+            $projects[$projectID]->PO       = $data->POs[$projectID];
+            $projects[$projectID]->QD       = $data->QDs[$projectID];
+            $projects[$projectID]->RD       = $data->RDs[$projectID];
+            $projects[$projectID]->lifetime = $data->lifetimes[$projectID];
+            $projects[$projectID]->status   = $data->statuses[$projectID];
+            $projects[$projectID]->begin    = $data->begins[$projectID];
+            $projects[$projectID]->end      = $data->ends[$projectID];
+            $projects[$projectID]->team     = $data->teams[$projectID];
+            $projects[$projectID]->desc     = htmlspecialchars_decode($data->descs[$projectID]);
+            $projects[$projectID]->days     = $data->dayses[$projectID];
+            $projects[$projectID]->order    = $data->orders[$projectID];
         }
 
         foreach($projects as $projectID => $project)
@@ -520,12 +515,12 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('name', 'unique', "id!=$projectID and deleted='0'")
                 ->check('code', 'unique', "id!=$projectID and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->limit(1)
                 ->exec();
 
+            $changedAccounts = array();
             foreach($project as $fieldName => $value)
             {
                 if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
@@ -546,7 +541,7 @@ class projectModel extends model
                     }
                 }
             }
-            $this->user->updateUserView($projectID, 'sprint', $changedAccounts);
+            if(!empty($changedAccounts)) $this->updateUserView($projectID, 'sprint', $changedAccounts);
 
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
@@ -1985,22 +1980,28 @@ class projectModel extends model
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
-        /* Add iteration or phase team members to the project team. */
-        if($projectType == 'stage' || $projectType == 'sprint') $this->addProjectMembers($project->project, $projectMember);
-
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
         $changedAccounts = array_diff($accounts, $oldAccounts);
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
 
-        $childSprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->in('sprint,stage')->fetchPairs();
-        if($childSprints) $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
+        if($projectType == 'project')
+        {
+            $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
+            $linkedProducts = $this->loadModel('product')->getProductsByProject($project->id);
 
-        $products = $this->getProducts($projectID, false);
-        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
+            if(!empty($childSprints))  $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
+            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        }
+
+        /* Add iteration or phase team members to the project team. */
+        if($projectType == 'stage' || $projectType == 'sprint')
+        {
+            $this->addProjectMembers($project->project, $projectMember);
+            if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);
+        }
     }
 
     /**
@@ -2013,8 +2014,7 @@ class projectModel extends model
      */
     public function  addProjectMembers($projectID = 0, $members = array())
     {
-        $project     = $this->getByID($projectID);
-        $projectType = $project->type;
+        $projectType = 'project';
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
@@ -2035,9 +2035,8 @@ class projectModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-
-        $products = $this->getProducts($projectID, false);
-        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
+        $linkedProducts = $this->loadModel('product')->getProductsByProject($projectID);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 
     /**
@@ -2052,9 +2051,10 @@ class projectModel extends model
     {
         $sprint = $this->getByID($sprintID);
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($sprint->type)->andWhere('account')->eq($account)->exec();
+        $this->updateUserView($sprintID, 'sprint', array($account));
 
         /* Remove team members from the sprint or stage, and determine whether to remove team members from the project. */
-        if($sprint->type == 'sprint' || $sprint->type == 'stage')
+        if($sprint->type == 'stage' || $sprint->type == 'sprint')
         {
             $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
@@ -2062,12 +2062,14 @@ class projectModel extends model
                 ->andWhere('t1.type')->eq($sprint->type)
                 ->andWhere('t2.account')->eq($account)
                 ->fetch();
-            if(empty($teamMember)) $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+            if(empty($teamMember))
+            {
+                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+                $this->loadModel('user')->updateUserView($sprint->project, 'project', array($account));
+                $linkedProducts = $this->loadModel('product')->getProductsByProject($sprint->project);
+                if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
+            }
         }
-
-        $this->loadModel('user')->updateUserView($sprintID, $sprint->type, array($account));
-        $products = $this->getProducts($sprintID, false);
-        if($products) $this->user->updateUserView(array_keys($products), 'product', array($account));
     }
 
     /**
@@ -3279,14 +3281,16 @@ class projectModel extends model
     /**
      * Update user view of project and it's product.
      *
-     * @param  int    $projectID
+     * @param  int|array $projectID
+     * @param  string    $objectType
+     * @param  array     $users
      * @access public
      * @return void
      */
-    public function updateUserView($projectID)
+    public function updateUserView($projectID, $objectType = 'sprint', $users = array())
     {
-        $this->loadModel('user')->updateUserView($projectID, 'sprint');
+        $this->loadModel('user')->updateUserView($projectID, $objectType, $users);
         $products = $this->getProducts($projectID, $withBranch = false);
-        if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product');
+        if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
 }
