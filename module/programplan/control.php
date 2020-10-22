@@ -58,7 +58,7 @@ class programplan extends control
     {
         $this->app->loadLang('stage');
         $this->commonAction($projectID, $productID, $type);
-        $this->session->set('programPlanList', $this->app->getURI(true));
+        $this->session->set('projectPlanList', $this->app->getURI(true));
 
         if(common::hasPriv('programplan', 'create')) $this->lang->TRActions = html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
 
@@ -85,7 +85,7 @@ class programplan extends control
 
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
-        $this->view->programID    = $projectID;
+        $this->view->projectID    = $projectID;
         $this->view->productID    = $this->productID;
         $this->view->type         = $type;
         $this->view->plans        = $plans;
@@ -98,47 +98,42 @@ class programplan extends control
     }
 
     /**
-     * Create a programplan.
+     * Create a project plan.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $planID
      * @access public
      * @return void
      */
-    public function create($programID = 0, $productID = 0, $planID = 0)
+    public function create($projectID = 0, $productID = 0, $planID = 0)
     {
-        $this->commonAction($programID, $productID);
+        $this->commonAction($projectID, $productID);
         $this->app->loadLang('project');
         if($_POST)
         {
-            $this->programplan->create($programID, $this->productID, $planID);
+            $this->programplan->create($projectID, $this->productID, $planID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locate = $this->session->programPlanList ? $this->session->programPlanList : $this->createLink('programplan', 'browse', "program=$programID");
+            $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('programplan', 'browse', "projectID=$projectID");
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $stages     = array();
-        $browseType = 'parent';
-        if($planID)
-        {
-            $stages     = $this->loadModel('stage')->getStages('id_asc');
-            $browseType = 'children';
-        }
+        $stages     = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $browseType = empty($planID) ? 'parent' : 'children';
 
         $this->app->loadLang('stage');
-        $program = $this->loadModel('project')->getById($programID);
-        $plans   = $this->programplan->getStage($programID, $this->productID, $planID, $browseType);
+        $project = $this->loadModel('project')->getById($projectID);
+        $plans   = $this->programplan->getStage($projectID, $this->productID, $planID, $browseType);
 
-        $title      = $this->lang->programplan->create . $this->lang->colon . $program->name;
-        $position[] = html::a($this->createLink('programplan', 'browse', "program=$programID"), $program->name);
+        $title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
+        $position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->programplan->create;
 
         $this->view->title    = $title;
         $this->view->position = $position;
-        $this->view->program  = $program;
+        $this->view->project  = $project;
         $this->view->stages   = $stages;
         $this->view->plans    = $plans;
         $this->view->planID   = $planID;
@@ -148,20 +143,20 @@ class programplan extends control
     }
 
     /**
-     * Edit a programplan.
+     * Edit a project plan.
      *
      * @param  int    $planID
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function edit($planID = 0, $programID = 0)
+    public function edit($planID = 0, $projectID = 0)
     {
         $this->app->loadLang('project');
         $plan = $this->programplan->getByID($planID);
         if($_POST)
         {
-            $changes = $this->programplan->update($planID, $programID);
+            $changes = $this->programplan->update($planID, $projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -184,7 +179,7 @@ class programplan extends control
     }
 
     /**
-     * Delete a programplan.
+     * Delete a project plan.
      *
      * @param  int    $planID
      * @param  string $confirm
@@ -212,7 +207,7 @@ class programplan extends control
     }
 
     /**
-     * Ajax custom.
+     * Save custom settings via ajax.
      *
      * @access public
      * @return void

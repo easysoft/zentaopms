@@ -15,7 +15,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink('programplan', 'create', "program={$program->id}"), "<span class='text'> {$lang->programplan->create}</span>");?>
+      <?php echo html::a($this->createLink('programplan', 'create', "projectID={$project->id}"), "<span class='text'> {$lang->programplan->create}</span>");?>
     </span>
   </div>
 </div>

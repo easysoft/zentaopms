@@ -259,19 +259,19 @@ class stakeholderModel extends model
      */
     public function getParentStakeholderGroup($objectIdList)
     {
-		$objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+        $objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
 
         $parents = array();
         foreach($objects as $object)
-        {    
+        {
             if($object->parent == 0) continue;
             foreach(explode(',', $object->path) as $objectID)
-            {    
+            {
                 if(empty($objectID)) continue;
                 if($objectID == $object->id) continue;
                 $parents[$objectID][] = $object->id;
-            }    
-        }    
+            }
+        }
 
         /* Get all parent stakeholders.*/
         $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->fetchAll();
@@ -281,9 +281,9 @@ class stakeholderModel extends model
         {
             $subPrograms = zget($parents, $parentStakeholder->objectID, array());
             foreach($subPrograms as $subProgramID) $parentStakeholderGroup[$subProgramID][$parentStakeholder->user] = $parentStakeholder->user;
-        } 
+        }
 
-		return $parentStakeholderGroup;
+        return $parentStakeholderGroup;
     }
 
     /**

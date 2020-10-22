@@ -129,15 +129,15 @@ class programplanModel extends model
     /**
      * Get plans.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPlans($programID = 0, $productID = 0, $orderBy = 'id_asc')
+    public function getPlans($projectID = 0, $productID = 0, $orderBy = 'id_asc')
     {
-        $plans = $this->getStage($programID, $productID, 0, 'all', $orderBy);
+        $plans = $this->getStage($projectID, $productID, 0, 'all', $orderBy);
 
         $parents  = array();
         $children = array();
@@ -154,15 +154,15 @@ class programplanModel extends model
     /**
      * Get pairs.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getPairs($programID, $productID = 0, $type = 'all')
+    public function getPairs($projectID, $productID = 0, $type = 'all')
     {
-        $plans = $this->getPlans($programID, $productID);
+        $plans = $this->getPlans($projectID, $productID);
 
         $pairs = array(0 => '');
         foreach($plans as $plan)
@@ -324,7 +324,7 @@ class programplanModel extends model
     /**
      * Get total percent.
      *
-     * @param  object    $plan
+     * @param  object  $plan
      * @access public
      * @return int
      */
@@ -413,13 +413,13 @@ class programplanModel extends model
     /**
      * Create a plan.
      *
-     * @param  int  $programID
+     * @param  int  $projectID
      * @param  int  $productID
      * @param  int  $parentID
      * @access public
      * @return bool
      */
-    public function create($programID = 0, $productID = 0, $parentID = 0)
+    public function create($projectID = 0, $productID = 0, $parentID = 0)
     {
         $data = (array)fixer::input('post')->get();
         extract($data);
@@ -445,8 +445,8 @@ class programplanModel extends model
             $plan = new stdclass();
             $plan->id        = isset($planIDList[$key]) ? $planIDList[$key] : '';
             $plan->type      = 'stage';
-            $plan->project   = $programID;
-            $plan->parent    = $parentID ? $parentID : $programID;
+            $plan->project   = $projectID;
+            $plan->parent    = $parentID ? $parentID : $projectID;
             $plan->name      = $names[$key];
             $plan->percent   = $percents[$key];
             $plan->attribute = empty($parentID) ? $attributes[$key] : $parentStageType;
@@ -631,11 +631,11 @@ class programplanModel extends model
      * Update a plan.
      *
      * @param  int    $planID
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return bool|array
      */
-    public function update($planID = 0, $programID = 0)
+    public function update($planID = 0, $projectID = 0)
     {
         $oldPlan = $this->getByID($planID);
         $plan    = fixer::input('post')
@@ -670,7 +670,7 @@ class programplanModel extends model
         $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
 
         if($planChanged)  $plan->version = $oldPlan->version + 1;
-        if(empty($plan->parent)) $plan->parent = $programID;
+        if(empty($plan->parent)) $plan->parent = $projectID;
 
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
@@ -706,11 +706,11 @@ class programplanModel extends model
      * @param  int    $col
      * @param  int    $plan
      * @param  int    $users
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function printCell($col, $plan, $users, $programID)
+    public function printCell($col, $plan, $users, $projectID)
     {
         $id = $col->id;
         if($col->show)
@@ -795,7 +795,7 @@ class programplanModel extends model
                     echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-treemap"></i>', '', 'class="btn ' . $disabled . '"');
                 }
 
-                common::printIcon('programplan', 'edit', "planID=$plan->id&programID=$programID", $plan, 'list', '', '', 'iframe', true);
+                common::printIcon('programplan', 'edit', "planID=$plan->id&projectID=$projectID", $plan, 'list', '', '', 'iframe', true);
                 $disabled = !empty($plan->children) ? ' disabled' : '';
                 if(common::hasPriv('programplan', 'delete', $plan))
                 {
@@ -840,20 +840,20 @@ class programplanModel extends model
     }
 
     /**
-     * Get milestones.
+     * Get the stage set to milestone.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getMilestones($programID = 0)
+    public function getMilestones($projectID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('parent')->eq($programID)
+            ->where('project')->eq($projectID)
             ->andWhere('type')->eq('stage')
             ->andWhere('milestone')->eq(1)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin asc')
+            ->orderBy('id_desc')
             ->fetchPairs();
     }
 
@@ -892,20 +892,20 @@ class programplanModel extends model
     /**
      * Get parent stage list.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  int    $planID
      * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getParentStageList($programID, $planID, $productID)
+    public function getParentStageList($projectID, $planID, $productID)
     {
         $projects = $this->getProjectsByProduct($productID);
         unset($projects[$planID]);
 
         $parentStage = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
-            ->andWhere('parent')->eq($programID)
+            ->andWhere('parent')->eq($projectID)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs('id');
 

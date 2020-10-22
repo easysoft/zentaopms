@@ -35,7 +35,7 @@ js::set('confirmDelete', $lang->programplan->confirmDelete);
     <nav class="btn-toolbar pull-right"></nav>
   </div>
   <?php
-  $vars    = "programID=$programID&productID=$productID&type=lists&orderBy=%s";
+  $vars    = "projectID=$projectID&productID=$productID&type=lists&orderBy=%s";
   $setting = $this->datatable->getSetting('programplan');
   $widths  = $this->datatable->setFixedFieldWidth($setting);
   $widths['leftWidth']  = 300;
@@ -59,7 +59,7 @@ js::set('confirmDelete', $lang->programplan->confirmDelete);
     <tbody>
       <?php foreach($plans as $plan):?>
       <tr data-id='<?php echo $plan->id?>'>
-        <?php foreach($setting as $key => $value) $this->programplan->printCell($value, $plan, $users, $programID);?>
+        <?php foreach($setting as $key => $value) $this->programplan->printCell($value, $plan, $users, $projectID);?>
       </tr>
       <?php if(!empty($plan->children)):?>
       <?php $i = 0;?>
@@ -67,7 +67,7 @@ js::set('confirmDelete', $lang->programplan->confirmDelete);
       <?php $class  = $i == 0 ? ' table-child-top' : '';?>
       <?php $class .= ($i + 1 == count($plan->children)) ? ' table-child-bottom' : '';?>
       <tr class='table-children<?php echo $class;?> parent-<?php echo $plan->id;?>' data-id='<?php echo $child->id?>'>
-        <?php foreach($setting as $key => $value) $this->programplan->printCell($value, $child, $users, $programID);?>
+        <?php foreach($setting as $key => $value) $this->programplan->printCell($value, $child, $users, $projectID);?>
       </tr>
       <?php $i ++;?>
       <?php endforeach;?>

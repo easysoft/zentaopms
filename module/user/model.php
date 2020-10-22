@@ -1651,7 +1651,7 @@ class userModel extends model
 
         /* Get all parent program and subprogram relation. */
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
- 
+
         /* Get auth users. */
         $authedUsers = array();
         if(!empty($users)) $authedUsers = $users;
@@ -1688,7 +1688,7 @@ class userModel extends model
             if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($view)->where('account')->eq($account)->exec();
         }
     }
-    
+
     /**
      * Update project view 
      * 

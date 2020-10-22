@@ -129,7 +129,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
                             orientation: width > height ? 'l' : 'p'
                         });
                         pdf.addImage(canvas, 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-                        pdf.save('gantt-export-<?php echo $programID;?>.pdf');
+                        pdf.save('gantt-export-<?php echo $projectID;?>.pdf');
                         if(successCallback) successCallback(pdf);
                         afterFinish();
                     }, function(error)

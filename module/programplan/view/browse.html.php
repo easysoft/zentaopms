@@ -19,7 +19,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->programplan->noData;?></span>
       <?php if(common::hasPriv('programplan', 'create')):?>
-      <?php echo html::a($this->createLink('programplan', 'create', "program=$programID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
