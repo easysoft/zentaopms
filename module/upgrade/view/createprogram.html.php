@@ -17,30 +17,20 @@
   </tr>
   <?php endif;?>
   <tr class='pgmParams'>
-    <th class='w-90px'><?php echo $lang->program->name;?></th>
+    <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
     <td class='required'><?php echo html::input("name", isset($programName) ? $programName : '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
-    <th><?php echo $lang->program->code;?></th>
+    <th><?php echo $lang->program->PRJName;?></th>
+    <td class='required'><?php echo html::input("name", isset($projectName) ? $projectName : '', "class='form-control'");?></td>
+  </tr>
+  <tr class='pgmParams'>
+    <th><?php echo $lang->program->PRJCode;?></th>
     <td class='required'><?php echo html::input("code", '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
-    <th><?php echo $lang->upgrade->PRJAdmin;?></th>
-    <td class='required'><?php echo html::select('PRJAdmins[]', $users, '', "class='form-control chosen' multiple");?></td>
-  </tr>
-  <tr class='pgmParams'>
-    <th><?php echo $lang->program->PM;?></th>
+    <th><?php echo $lang->program->PRJPM;?></th>
     <td><?php echo html::select('PM', array('' => '') + $users, '', "class='form-control chosen'");?></td>
-  </tr>
-  <tr class='pgmParams'>
-    <th><?php echo $lang->program->budget;?></th>
-    <td>
-      <div class='input-group'>
-        <?php echo html::input('budget', '', "class='form-control'");?>
-        <span class='input-group-addon'></span>
-        <?php echo html::select('budgetUnit', $lang->program->unitList, 'yuan', "class='form-control'");?>
-      </div>
-    </td>
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->dateRange;?></th>
@@ -53,17 +43,8 @@
     </td>
   </tr>
   <tr class='pgmParams'>
-    <th><?php echo $lang->project->days;?></th>
-    <td>
-      <div class='input-group'>
-        <?php echo html::input('days', '', "class='form-control'");?>
-        <span class='input-group-addon'><?php echo $lang->project->day;?></span>
-      </div>
-    </td>
-  </tr>
-  <tr class='pgmParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->program->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
   </tr>
   <tr class='hidden' id='whitelistBox'>
     <th><?php echo $lang->project->whitelist;?></th>

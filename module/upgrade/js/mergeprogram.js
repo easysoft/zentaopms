@@ -1,5 +1,9 @@
 $(function()
 {
+    $('.side-col .cell').height($('.side-col').height() - 20);
+    $('#source .cell').height($('#source').height() - 20);
+    $('#programBox .cell').height($('#programBox').height() - 20);
+
     pgmBegin = $('.pgmParams #begin').val();
     setPgmBegin(pgmBegin);
 
@@ -14,6 +18,25 @@ $(function()
         {
             $('[data-line=' + value + ']').prop('checked', false)
         }
+        setPgmBegin(pgmBegin);
+    })
+
+    $('#lineList li a').click(function()
+    {
+        /* Active current li and remove active before li. */
+        $(this).closest('ul').find('li').removeClass('active');
+        $(this).closest('li').addClass('active');
+
+        /* Show current data and hide before data. */
+        var target = $(this).attr('data-target');        
+        $('.lineBox').addClass('hidden');
+        $(target).removeClass('hidden');
+        $(target).closest('tbody').find(':checkbox').prop('checked', false);
+        $(target).find(":checkbox").prop('checked', true);
+
+        /* Replace program name. */
+        $('#name').val($(this).text());
+
         setPgmBegin(pgmBegin);
     })
 

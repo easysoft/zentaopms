@@ -36,40 +36,29 @@ $lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操�
                                       <li>或者删掉"<strong style="color:#ed980f">%s</strong>" 这个文件 ，重新创建一个<strong style="color:#ed980f">ok.txt</strong>文件，不需要内容。</li>
                                       </ul>
                                       <p><strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="#" onclick="location.reload()">继续更新</a></strong></p>';
-$lang->upgrade->selectVersion = '选择版本';
-$lang->upgrade->continue      = '继续';
-$lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
-$lang->upgrade->fromVersion   = '原来的版本';
-$lang->upgrade->toVersion     = '升级到';
-$lang->upgrade->confirm       = '确认要执行的SQL语句';
-$lang->upgrade->sureExecute   = '确认执行';
-$lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自动禁用：';
-$lang->upgrade->updateFile    = '需要更新附件信息。';
-$lang->upgrade->noticeSQL     = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
-$lang->upgrade->afterDeleted  = '以上文件未能删除， 删除后刷新！';
-$lang->upgrade->mergeProgram  = '数据归并';
-$lang->upgrade->to20Tips      = '禅道20版本升级提示';
-$lang->upgrade->to20Button    = '我已经做好备份，开始升级吧！';
-$lang->upgrade->to20Desc      = <<<EOD
-<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。和之前的版本相比，20版本的禅道增加了大项目和管理模型的概念。接下来我们将通过向导的方式来帮助您完成此次升级。此次升级共分为两部分：项目数据归并和权限重新设置。</p>
-<br />
-<h4>一、项目数据归并</h4>
-<p>我们会将之前的产品和项目的数据归并到大项目概念下，并根据你选择管理模型的不同，调整概念为如下：</p>
-<ul>
-  <li class='strong'>敏捷：项目 > 产品 > 迭代 > 任务</li>
-  <li class='strong'>瀑布：项目 > 产品 > 阶段 > 任务</li>
-  <li class='strong'>看板：项目 > 产品 > 看板 > 卡片</li>
-</ul>
-<br />
-<h4>二、权限重新设置</h4>
-<p>禅道自20版本开始权限以大项目为一个基础单位来进行授权，授权的机制为：</p>
-<p class='strong'>管理员授权给项目管理员 > 项目管理员授权给项目成员</p>
-<br />
+$lang->upgrade->selectVersion  = '选择版本';
+$lang->upgrade->continue       = '继续';
+$lang->upgrade->noteVersion    = "务必选择正确的版本，否则会造成数据丢失。";
+$lang->upgrade->fromVersion    = '原来的版本';
+$lang->upgrade->toVersion      = '升级到';
+$lang->upgrade->confirm        = '确认要执行的SQL语句';
+$lang->upgrade->sureExecute    = '确认执行';
+$lang->upgrade->forbiddenExt   = '以下插件与新版本不兼容，已经自动禁用：';
+$lang->upgrade->updateFile     = '需要更新附件信息。';
+$lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
+$lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
+$lang->upgrade->mergeProgram   = '数据归并';
+$lang->upgrade->to20Tips       = '禅道20版本升级提示';
+$lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
+$lang->upgrade->to20TipsHeader = "<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。相关介绍请看如下视频：</p><br />";
+$lang->upgrade->to20Desc       = <<<EOD
 <div class='text-warning'>
   <p>友情提示：</p>
   <ol>
-    <li>可以先安装一个20版本的禅道，体验一下里边的概念和流程。</li>
+    <li>您可以先安装一个20版本的禅道，体验一下里边的概念和流程。</li>
     <li>20版本禅道改动比较大，升级之前请做好备份。</li>
+    <li>请放心升级，即使第一次升级不到位，后续还可以再调整，不会影响系统数据。</li>
+    <li>点击查看<a href='https://demo.qcmmi.com/' target='_blank'>20.0版系统demo</a>。</li>
   </ol>
 </div>
 EOD;
@@ -79,7 +68,7 @@ $lang->upgrade->program  = '归并项目';
 $lang->upgrade->existPGM = '已有项目';
 $lang->upgrade->PRJAdmin = '项目管理员';
 $lang->upgrade->product  = $lang->productCommon;
-$lang->upgrade->project  = $lang->projectCommon;
+$lang->upgrade->project  = '迭代';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。经系统计算，我们推荐您的迁移方案如下，您也可以根据自己的情况进行调整：";

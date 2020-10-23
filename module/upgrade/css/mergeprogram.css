@@ -6,3 +6,16 @@
 #budget {border-right:0px;}
 .divider{background:#f1f1f1 !important; width:20px !important; padding:1px !important;}
 .gray{background:#f1f1f1 !important}
+
+.main-row{margin-top: 20px; padding: 20px; background: #f1f1f1}
+.main-row .side-col .nav li.active a{background: #006af1;color: #fff; border-radius: 4px}
+
+#source .lineBox{margin-top: 30px}
+#source .lineGroup-title .item{float: left;}
+#source .lineGroup-title .item:first-child{width: 40%}
+#source .lineGroup-title .item:last-child{width: 60%}
+#source .lineGroup>div{display: table-cell}
+#source .lineGroup{background: #f1f1f1; margin-top:20px; border-radius: 4px; padding:5px;}
+#source .lineGroup+.lineGroup{margin-top:10px;}
+#source .lineGroup .productList{vertical-align: middle; width: 170px;}
+#source .lineGroup .projectList .scroll-handle{max-height: 200px; overflow-y: scroll;}

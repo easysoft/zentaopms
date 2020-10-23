@@ -10,7 +10,11 @@ ADD `lifetime` char(30) NOT NULL AFTER `product`,
 ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `lifetime`,
 ADD `budgetUnit` char(30) NOT NULL  DEFAULT 'yuan' AFTER `budget`,
 ADD `percent` float unsigned NOT NULL DEFAULT '0' AFTER `budgetUnit`,
-ADD `auth` char(30) NOT NULL AFTER `percent`, ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`, ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`, ADD `realBegan` date NOT NULL AFTER `end`, ADD `realEnd` date NOT NULL AFTER `realStarted`,
+ADD `auth` char(30) NOT NULL AFTER `percent`, 
+ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`, 
+ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`, 
+ADD `realBegan` date NOT NULL AFTER `end`, 
+ADD `realEnd` date NOT NULL AFTER `realBegan`,
 ADD `version` smallint(6) NOT NULL AFTER `desc`,
 ADD `parentVersion` smallint(6) NOT NULL AFTER `version`,
 ADD `planDuration` int(11) NOT NULL AFTER `parentVersion`,
@@ -319,7 +323,7 @@ CREATE TABLE `zt_weeklyreport`(
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
 ('system','custom','','hourPoint','1'),
 ('system','custom','','URAndSR','1'),
 ('system','custom','waterfall','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}'),

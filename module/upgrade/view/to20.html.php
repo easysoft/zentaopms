@@ -14,7 +14,10 @@
 <div class='container'>
   <div class='panel' style='padding:20px;'>
     <div class='panel-title text-center'><?php echo $lang->upgrade->to20Tips;?></div>
-    <div class='panel-body'><?php echo $lang->upgrade->to20Desc;?></div>
+    <div class='panel-body'>
+      <?php echo $lang->upgrade->to20TipsHeader;?>
+      <?php echo $lang->upgrade->to20Desc;?>
+    </div>
     <div class='panel-footer text-center'><?php echo html::a($this->createLink('upgrade', 'selectVersion'), $lang->upgrade->to20Button, '', "class='btn btn-primary'");?></div>
   </div>
 </div>
