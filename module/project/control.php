@@ -2332,7 +2332,7 @@ class project extends control
             return $this->send(array('result' => 'fail'));
         }
 
-        $idList   = explode(',', $this->post->projects);
+        $idList   = explode(',', trim($this->post->projects, ','));
         $projects = $this->dao->select('id, `order`')->from(TABLE_PROJECT)
             ->where('id')->in($idList)
             ->fetchPairs('id', 'order');

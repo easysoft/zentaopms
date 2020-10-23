@@ -458,6 +458,7 @@ class programModel extends model
             ->fi()
             ->beginIF($from == 'product')
             ->andWhere('type')->eq('program')
+            ->andWhere('grade')->eq(1)
             ->andWhere('id')->in($this->app->user->view->programs)
             ->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
