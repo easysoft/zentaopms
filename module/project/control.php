@@ -2332,11 +2332,11 @@ class project extends control
             return $this->send(array('result' => 'fail'));
         }
 
-        $orders   = $this->post->projects;
-        $idList   = array_keys($orders);
+        $idList   = explode(',', $this->post->projects);
         $projects = $this->dao->select('id, `order`')->from(TABLE_PROJECT)
             ->where('id')->in($idList)
             ->fetchPairs('id', 'order');
+
         foreach($projects as $id => $order)
         {
             $newOrder = $orders[$id];
@@ -2387,6 +2387,7 @@ class project extends control
     public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
+        $this->app->loadLang('programplan');
         if($this->projects)
         {
             $project   = $this->commonAction($projectID);

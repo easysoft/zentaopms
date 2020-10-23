@@ -564,6 +564,7 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+                    $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($stageID * 5)->where('id')->eq($stageID)->exec();
 
                     /* Add creators to stage teams and project teams. */
                     $member = new stdclass();

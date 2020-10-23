@@ -936,13 +936,29 @@ class projectModel extends model
         $projects = $this->getList($status, 0, $productID, $branch, $programID);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projects))
+            ->andWhere('grade')->eq(1)
+            ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         if(empty($projects)) return array();
 
+        /* In case of a waterfall model, obtain sub-stage data. */
+        $PRJData = $this->getById($this->session->PRJ);
+        if($PRJData->model == 'waterfall')
+        {
+            $childrens = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('parent')->in(array_keys($projects))
+                ->andWhere('grade')->eq(2)
+                ->andWhere('deleted')->eq('0')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+            $projects = $projects + $childrens;
+        }
+
         $projectKeys = array_keys($projects);
-        $stats       = array();
         $hours       = array();
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
@@ -996,7 +1012,7 @@ class projectModel extends model
             if($begin == '0000-00-00') $begin = $projects[$projectID]->openedDate;
             $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
 
-            /* Shorter names.  */
+            /* Shorter names. */
             foreach($projectBurns as $projectBurn)
             {
                 $projectBurn->name = substr($projectBurn->name, 5);
@@ -1008,9 +1024,11 @@ class projectModel extends model
         }
 
         /* Process projects. */
+        $parents  = array();
+        $children = array();
         foreach($projects as $key => $project)
         {
-            // Process the end time.
+            /* Process the end time. */
             $project->end = date(DT_DATE1, strtotime($project->end));
 
             /* Judge whether the project is delayed. */
@@ -1028,10 +1046,17 @@ class projectModel extends model
             /* Process the hours. */
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
 
-            $stats[] = $project;
+            $project->children = array();
+            $project->grade == 1 ? $parents[$project->id] = $project : $children[$project->parent][] = $project;
         }
 
-        return $stats;
+        /* In the case of the waterfall model, calculate the sub-stage. */
+        if($PRJData->model == 'waterfall')
+        {
+            foreach($parents as $id => $project) $project->children = isset($children[$id]) ? $children[$id] : array();
+        }
+
+        return $parents;
     }
 
     /**

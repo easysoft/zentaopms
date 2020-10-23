@@ -11,6 +11,19 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<style>
+.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
+.table td.has-child > a:not(.plan-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.table td.has-child > .plan-toggle {color: #838a9d; position: relative; top: 1px;}
+.table td.has-child > .plan-toggle:hover {color: #006af1; cursor: pointer;}
+.table td.has-child > .plan-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
+.table td.has-child > .plan-toggle > .icon:before {text-align: left;}
+.table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
+.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
+</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
@@ -67,11 +80,14 @@
             <?php endif;?>
             <?php printf('%03d', $project->id);?>
           </td>
-          <td class='text-left' title='<?php echo $project->name?>'>
+          <td class='text-left <?php if(!empty($project->children)) echo 'has-child';?>' title='<?php echo $project->name?>'>
             <?php
             if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
             echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);
             ?>
+            <?php if(!empty($project->children)):?>
+              <a class="plan-toggle" data-id="<?php echo $project->id;?>"><i class="icon icon-angle-double-right"></i></a>
+            <?php endif;?>
           </td>
           <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
           <td><?php echo zget($users, $project->PM);?></td>
@@ -95,6 +111,53 @@
           <td class='sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>
         </tr>
+        <?php if(!empty($project->children)):?>
+         <?php $i = 0;?>
+           <?php foreach($project->children as $key => $child):?>
+           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+           <?php $class .= ($i + 1 == count($project->children)) ? ' table-child-bottom' : '';?>
+           <tr class='table-children<?php echo $class;?> parent-<?php echo $project->id;?>' data-id='<?php echo $child->id?>'>
+             <td class='c-id'>
+               <?php if($canBatchEdit):?>
+               <div class="checkbox-primary">
+                 <input type='checkbox' name='projectIDList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
+                 <label></label>
+               </div>
+               <?php endif;?>
+               <?php printf('%03d', $child->id);?>
+             </td>
+             <td class='text-left' title='<?php echo $child->name?>'>
+               <?php
+               if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
+               echo "<span class='label label-badge label-light' title='{$lang->programplan->children}'>{$lang->programplan->childrenAB}</span>";
+               echo html::a($this->createLink('project', 'view', 'project=' . $child->id), $child->name);
+               ?>
+             </td>
+             <td class='text-left' title="<?php echo $child->code;?>"><?php echo $child->code;?></td>
+             <td><?php echo zget($users, $child->PM);?></td>
+             <td><?php echo $child->end;?></td>
+             <?php $projectStatus = $this->processStatus('project', $child);?>
+             <td class='c-status' title='<?php echo $projectStatus;?>'>
+               <span class="status-project status-<?php echo $child->status?>"><?php echo $projectStatus;?></span>
+             </td>
+             <td><?php echo $child->hours->totalEstimate;?></td>
+             <td><?php echo $child->hours->totalConsumed;?></td>
+             <td><?php echo $child->hours->totalLeft;?></td>
+             <td class="c-progress">
+               <div class="progress progress-text-left">
+                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $child->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $child->hours->progress;?>%">
+                 <span class="progress-text"><?php echo $child->hours->progress;?>%</span>
+                 </div>
+               </div>
+             </td>
+             <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
+             <?php if($canOrder):?>
+             <td class='sort-handler'><i class="icon icon-move"></i></td>
+             <?php endif;?>
+           </tr>
+           <?php $i ++;?>
+           <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
       </tbody>
     </table>
@@ -110,6 +173,18 @@
     <?php endif;?>
   </form>
 </div>
-<script>$("#<?php echo $status;?>Tab").addClass('btn-active-text');</script>
+<script>
+$("#<?php echo $status;?>Tab").addClass('btn-active-text');
+$(document).on('click', '.plan-toggle', function(e)
+{
+    var $toggle = $(this);
+    var id      = $(this).data('id');
+    var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
+    $toggle.closest('[data-ride="table"]').find('tr.parent-' + id).toggle(!isCollapsed);
+
+    e.stopPropagation();
+    e.preventDefault();
+});
+</script>
 <?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>
