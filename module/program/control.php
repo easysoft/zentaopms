@@ -64,7 +64,7 @@ class program extends control
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
 
-        if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-primary'");
+        if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
         $this->app->session->set('programList', $this->app->getURI(true));
 
@@ -154,9 +154,9 @@ class program extends control
         $this->view->title      = $this->lang->program->PGMCreate;
         $this->view->position[] = $this->lang->program->PGMCreate;
 
-        $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
         $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : '';
         $this->view->parents       = $this->program->getParentPairs();
 
@@ -199,6 +199,7 @@ class program extends control
 
         $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->poUsers     = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users       = $this->user->getPairs('noclosed|nodeleted');
         $this->view->program     = $program;
         $this->view->parents     = $parents;
         $this->view->groups      = $this->loadModel('group')->getPairs();
@@ -497,16 +498,16 @@ class program extends control
      * @return void
      */
     public function unlinkStakeholder($stakeholderID, $programID, $confirm = 'no')
-	{    
-		if($confirm == 'no')
-		{    
-			die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
-		}    
-		else 
-		{    
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+        }
+        else
+        {
             $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
-			$this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
-            
+            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
+
             $this->loadModel('user')->updateUserView($programID, 'program', array($account));
 
             /* Update children user view. */
@@ -518,9 +519,9 @@ class program extends control
             if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
             if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
 
-			die(js::reload('parent'));
-		}    
-	}
+            die(js::reload('parent'));
+         }
+    }
 
     /**
      * Export program.
@@ -801,6 +802,7 @@ class program extends control
 
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programs      = array('' => '') + $this->program->getPRJPairsByTemplate($model, $programID);
         $this->view->programID     = $programID;
         $this->view->model         = $model;
@@ -851,6 +853,7 @@ class program extends control
         $this->view->position[] = $this->lang->program->PRJEdit;
 
         $this->view->pmUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->users   = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project = $project;
         $this->view->parents = $parents;
         $this->view->groups  = $this->loadModel('group')->getPairs();

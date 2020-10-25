@@ -1,8 +1,3 @@
-function setWhite(acl)
-{
-    acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
-}
-
 function setProgramType(type)
 {
     $.cookie('programType', type, {expires:config.cookieLife, path:config.webRoot});

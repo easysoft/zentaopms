@@ -150,9 +150,10 @@
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
-        <tr id='whitelistBox' <?php if($project->acl != 'custom') echo "class='hidden'";?>>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='2'><?php echo html::checkbox('whitelist', $groups, $project->whitelist, '', '', 'inline');?></td>
+        <tr>
+          <th><?php echo $lang->whitelist;?></th>
+          <td><?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control chosen" multiple');?></td>
+          <td></td>
         </tr>
         <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton();?></td></tr>
       </table>

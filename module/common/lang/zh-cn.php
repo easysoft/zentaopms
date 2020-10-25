@@ -61,6 +61,7 @@ $lang->noData       = '暂无';
 $lang->fullscreen   = '全屏';
 $lang->retrack      = '收起';
 $lang->recent       = '近期';
+$lang->whitelist    = '访问白名单';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -147,6 +148,7 @@ $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmst
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
+$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s");
 $lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
 
 /* Scrum menu. */

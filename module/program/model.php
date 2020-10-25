@@ -239,17 +239,14 @@ class programModel extends model
     {
         $program = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->add('type', 'program')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')
             ->setDefault('parent', 0)
             ->setDefault('openedDate', helper::now())
-            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->add('type', 'program')
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
-            ->remove('workDays, delta, branch, uid')
             ->get();
 
         if($program->parent)
@@ -278,16 +275,15 @@ class programModel extends model
             ->check('code', 'unique', "deleted='0'")
             ->exec();
 
-        /* Add the creater to the team. */
         if(!dao::isError())
         {
             $programID = $this->dao->lastInsertId();
-            $today     = helper::today();
+            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
+
+            $this->updateUserACL($this->post->whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
-            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
-
             $this->setTreePath($programID);
 
             /* Add program admin.*/
@@ -333,8 +329,6 @@ class programModel extends model
             ->setDefault('end', '')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
             ->remove('uid')
@@ -379,6 +373,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            $this->updateUserACL($this->post->whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
@@ -1062,14 +1057,13 @@ class programModel extends model
     {
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->add('type', 'project')
             ->setIF($this->post->longTime == 1, 'end', '')
             ->setIF($this->post->longTime == 1, 'days', 0)
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->add('type', 'project')
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
@@ -1106,7 +1100,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
-            $today     = helper::today();
+            $this->updateUserACL($this->post->whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Save order. */
@@ -1162,8 +1156,6 @@ class programModel extends model
             ->remove('longTime')
             ->get();
 
-        if(!isset($project->whitelist) or $project->acl != 'custom') $project->whitelist = '';
-
         if($project->parent)
         {
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
@@ -1199,6 +1191,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            $this->updateUserACL($this->post->whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
@@ -1378,6 +1371,36 @@ class programModel extends model
                     common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);
                     break;
             }
+        }
+    }
+
+    /**
+     * Adding users to access control lists.
+     *
+     * @param  array   $users
+     * @param  string  $objectType  program|project|product|sprint
+     * @param  int     $objectID
+     * @param  string  $type    whitelist|blacklist
+     * @param  string  $source  upgrade|add
+     * @param  string  $desc
+     * @access public
+     * @return void
+     */
+    public function updateUserACL($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $desc = '')
+    {
+        if(empty($users)) return false;
+        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->exec();
+        foreach($users as $account)
+        {
+            if(empty($account)) continue;
+            $acl             = new stdClass();
+            $acl->account    = $account;
+            $acl->objectType = $objectType;
+            $acl->objectID   = $objectID;
+            $acl->type       = $type;
+            $acl->source     = $source;
+            $acl->desc       = $desc;
+            $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
         }
     }
 }

@@ -148,7 +148,7 @@ class productModel extends model
             if($currentProduct->type != 'normal')
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-                $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branchName[$currentProduct->type], $this->lang->product->menu->branch);
+                $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branchName[$currentProduct->type], $this->lang->product->branch);
                 $branches   = $this->loadModel('branch')->getPairs($productID);
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
                 if(!$isMobile)
@@ -469,13 +469,12 @@ class productModel extends model
     public function create()
     {
         $product = fixer::input('post')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('status', 'normal')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
-            ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
+            ->join('whitelist', ',')
             ->remove('uid')
             ->get();
 
@@ -491,6 +490,9 @@ class productModel extends model
         $this->file->updateObjectID($this->post->uid, $productID, 'product');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
+        $this->loadModel('program')->updateUserACL($this->post->whitelist, 'product', $productID);
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
         /* Create doc lib. */
         $this->app->loadLang('doc');
         $lib = new stdclass();
@@ -500,7 +502,6 @@ class productModel extends model
         $lib->main    = '1';
         $lib->acl     = 'default';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
         return $productID;
     }
@@ -517,11 +518,11 @@ class productModel extends model
         $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $product = fixer::input('post')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
@@ -533,6 +534,7 @@ class productModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
+            $this->loadModel('program')->updateUserACL($this->post->whitelist, 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }

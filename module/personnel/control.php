@@ -87,4 +87,95 @@ class personnel extends control
 
         $this->display();
     }
+
+    /**
+     * Get white list personnel.
+     *
+     * @param  int    $programID
+     * @param  string $browsetype
+     * @param  string $orderby
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function whitelist($programID = 0, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('program');
+        $this->app->loadLang('user');
+        $this->lang->navGroup->program     = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $whitelist = $this->personnel->getWhitelist($programID, $browseType, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->personnel->whitelist;
+        $this->view->position[] = $this->lang->personnel->whitelist;
+        $this->view->pager      = $pager;
+        $this->view->programID  = $programID;
+        $this->view->whitelist  = $whitelist;
+
+        $this->display();
+    }
+
+    /**
+     * Adding users to the white list.
+     *
+     * @param  int     $objectID
+     * @param  int     $deptID
+     * @access public
+     * @return void
+     */
+    public function addWhitelist($objectID = 0, $deptID = 0)
+    {
+        $this->loadModel('program');
+        $this->app->loadLang('project');
+        $this->lang->navGroup->program     = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($objectID);
+        $this->program->setPGMViewMenu($objectID);
+
+        $this->view->title      = $this->lang->personnel->addWhitelist;
+        $this->view->position[] = $this->lang->personnel->addWhitelist;
+
+        $this->view->objectID  = $objectID;
+        $this->view->deptID    = $deptID;
+        $this->view->whitelist = $this->personnel->getWhitelist($objectID);
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->dept      = $this->dept->getByID($deptID);
+
+        $this->display();
+    }
+
+    /*
+     * Removing users from the white list.
+     *
+     * @param  int     $id
+     * @param  string  $confirm
+     * @access public
+     * @return void
+     */
+    public function unlinkACL($id = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unlinkUser',"id=$id&confirm=yes")));
+        }
+        else
+        {
+            $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
+
+            $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
+            $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
+            $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
+
+            $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
+            die(js::reload('parent'));
+        }
+    }
 }

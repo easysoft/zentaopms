@@ -150,6 +150,12 @@
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, '', 'block'));?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->whitelist;?></th>
+          <td><?php echo html::select('whitelist[]', $users, $whitelist, 'class="form-control chosen" multiple');?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php if($isSprint) echo html::hidden('lifetime', 'short');?>
             <?php echo html::submitButton();?>

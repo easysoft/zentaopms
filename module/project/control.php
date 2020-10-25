@@ -1177,6 +1177,7 @@ class project extends control
         $this->view->whitelist     = $whitelist;
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->display();
     }
 
@@ -1286,6 +1287,7 @@ class project extends control
         $this->view->pmUsers        = $pmUsers;
         $this->view->qdUsers        = $qdUsers;
         $this->view->rdUsers        = $rdUsers;
+        $this->view->users          = $this->user->getPairs('nodeleted|noclosed');
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;

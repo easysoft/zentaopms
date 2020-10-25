@@ -34,7 +34,10 @@
 <div id='mainContent' class='main-row'>
   <?php if(empty($programs)):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->program->noPGM;?></span> <?php common::printLink('program', 'pgmcreate', '', "<i class='icon icon-plus'></i> " . $lang->program->PGMCreate, '', "class='btn btn-info'");?></p>
+    <p>
+      <span class="text-muted"><?php echo $lang->program->noPGM;?></span>
+      <?php common::printLink('program', 'pgmcreate', '', "<i class='icon icon-plus'></i> " . $lang->program->PGMCreate, '', "class='btn btn-info'");?>
+    </p>
   </div>
   <?php else:?>
   <div class='main-col'>

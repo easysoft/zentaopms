@@ -61,6 +61,7 @@ $lang->noData       = 'No data.';
 $lang->fullscreen   = 'Plein Ecran';
 $lang->retrack      = 'Réduire';
 $lang->recent       = 'Récent';
+$lang->whitelist    = 'Liste blanche';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Réinitialiser';

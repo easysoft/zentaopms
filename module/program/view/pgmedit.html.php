@@ -74,6 +74,12 @@
           <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $aclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->whitelist;?></th>
+          <td><?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>

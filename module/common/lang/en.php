@@ -61,6 +61,7 @@ $lang->noData       = 'No data.';
 $lang->fullscreen   = 'Fullscreen';
 $lang->retrack      = 'Retrack';
 $lang->recent       = 'Recent';
+$lang->whitelist    = 'Access whitelist';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';

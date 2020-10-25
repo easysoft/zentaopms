@@ -103,9 +103,11 @@
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'open', '', 'block'));?></td>
         </tr>
-        <tr id='whitelistBox' class='hidden'>
-          <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $whitelist, '', '', 'inline');?></td>
+        <tr>
+          <th><?php echo $lang->whitelist;?></th>
+          <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

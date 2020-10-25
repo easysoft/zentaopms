@@ -120,6 +120,12 @@
           <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->program->PRJAclList, $acl, '', 'block'));?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->whitelist;?></th>
+          <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::hidden('model', $model);

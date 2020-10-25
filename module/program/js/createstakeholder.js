@@ -1,3 +1,9 @@
+/**
+ * Users by department.
+ *
+ * @param  object  obj
+ * @return void
+ */
 function setDeptUsers(obj)
 {
     dept = $(obj).val();//Get dept ID.
@@ -5,6 +11,12 @@ function setDeptUsers(obj)
     location.href=link;
 }
 
+/**
+ * Add an item.
+ *
+ * @param  object  obj
+ * @return void
+ */
 function addItem(obj)
 {
     var item = $('#addItem').html(); 
@@ -13,6 +25,12 @@ function addItem(obj)
     $accounts.chosen();
 }
 
+/**
+ * Delete an item.
+ *
+ * @param  object  obj
+ * @return void
+ */
 function deleteItem(obj)
 {
     $(obj).closest('tr').remove();

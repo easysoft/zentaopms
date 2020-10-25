@@ -288,6 +288,7 @@ class product extends control
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
+        $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->rootID     = $rootID;
@@ -356,6 +357,7 @@ class product extends control
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
+        $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 

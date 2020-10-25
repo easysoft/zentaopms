@@ -195,6 +195,27 @@ class personnelModel extends model
     }
 
     /**
+     * Access to program set input staff.
+     *
+     * @param  int       $objectID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getWhitelist($objectID = 0, $browseType = 'all', $orderBy = 'id_desc', $pager = '')
+    {
+        return $this->dao->select('t1.id,t1.account,t2.realname,t2.role,t2.phone,t2.qq,t2.weixin,t2.email')->from(TABLE_ACL)->alias('t1')
+            ->leftjoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.objectID')->eq($objectID)
+            ->andWhere('t1.type')->eq('whitelist')
+            ->orderBy($orderBy)
+            ->beginIF(!empty($pager))->page($pager)->fi()
+            ->fetchAll();
+    }
+
+    /**
      * Create access links by department.
      *
      * @param  object  $dept

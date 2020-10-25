@@ -320,9 +320,8 @@ class projectModel extends model
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
-            ->add('type', $sprintType)
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
+            ->add('type', $sprintType)
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
@@ -394,6 +393,7 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
+            $this->loadModel('program')->updateUserACL($this->post->whitelist, 'sprint', $projectID);
             if($sprint->acl != 'open') $this->updateUserView($projectID);
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
@@ -418,8 +418,6 @@ class projectModel extends model
         $project = fixer::input('post')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
-            ->setIF($this->post->acl == 'custom' and !isset($_POST['whitelist']), 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
@@ -459,6 +457,8 @@ class projectModel extends model
                 }
             }
         }
+
+        $this->loadModel('program')->updateUserACL($this->post->whitelist, 'sprint', $projectID);
 
         /* Fix bug#3074, Update views for team members. */
         if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);
@@ -729,6 +729,7 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('grade')->eq(1)
             ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -2010,7 +2011,6 @@ class projectModel extends model
         $changedAccounts = array_diff($accounts, $oldAccounts);
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
-
 
         if($projectType == 'project')
         {
