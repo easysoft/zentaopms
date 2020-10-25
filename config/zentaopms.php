@@ -199,6 +199,7 @@ define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
+define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
 define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',           '`' . $config->db->prefix . 'doc`');
