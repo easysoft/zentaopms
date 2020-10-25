@@ -53,8 +53,8 @@
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
-            $deleteClass = common::hasPriv('personnel', 'unlinkACL') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink('personnel', 'unlinkACL', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->delete}' class='{$deleteClass}'");
+            $deleteClass = common::hasPriv('personnel', 'unbindWhielist') ? 'btn' : 'btn disabled';
+            echo html::a($this->createLink('personnel', 'unbindWhielist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->delete}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

@@ -138,13 +138,30 @@ class personnel extends control
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($objectID);
         $this->program->setPGMViewMenu($objectID);
 
+        if($_POST)
+        {
+            $this->personnel->addWhitelist('program', $objectID);
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->getError();
+                $this->send($response);
+            }
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('whitelist', "programID=$objectID")));
+        }
+
+        $this->loadModel('dept');
+        $deptUsers = empty($deptID) ? array() : $this->dept->getDeptUserPairs($deptID);
+
         $this->view->title      = $this->lang->personnel->addWhitelist;
         $this->view->position[] = $this->lang->personnel->addWhitelist;
 
         $this->view->objectID  = $objectID;
         $this->view->deptID    = $deptID;
+        $this->view->deptUsers = $deptUsers;
         $this->view->whitelist = $this->personnel->getWhitelist($objectID);
-        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->depts     = $this->dept->getOptionMenu();
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->dept      = $this->dept->getByID($deptID);
 
@@ -159,7 +176,7 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function unlinkACL($id = 0, $confirm = 'no')
+    public function unbindWhielist($id = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {

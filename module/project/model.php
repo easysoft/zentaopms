@@ -393,7 +393,7 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->loadModel('program')->updateUserACL($this->post->whitelist, 'sprint', $projectID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'sprint', $projectID);
             if($sprint->acl != 'open') $this->updateUserView($projectID);
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
@@ -458,7 +458,7 @@ class projectModel extends model
             }
         }
 
-        $this->loadModel('program')->updateUserACL($this->post->whitelist, 'sprint', $projectID);
+        $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'sprint', $projectID);
 
         /* Fix bug#3074, Update views for team members. */
         if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);

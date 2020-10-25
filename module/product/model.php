@@ -490,7 +490,7 @@ class productModel extends model
         $this->file->updateObjectID($this->post->uid, $productID, 'product');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
-        $this->loadModel('program')->updateUserACL($this->post->whitelist, 'product', $productID);
+        $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
         /* Create doc lib. */
@@ -534,7 +534,7 @@ class productModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            $this->loadModel('program')->updateUserACL($this->post->whitelist, 'product', $productID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }

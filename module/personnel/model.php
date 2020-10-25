@@ -216,6 +216,58 @@ class personnelModel extends model
     }
 
     /**
+     * Adding users to access control lists.
+     *
+     * @param  array   $users
+     * @param  string  $objectType  program|project|product|sprint
+     * @param  int     $objectID
+     * @param  string  $type    whitelist|blacklist
+     * @param  string  $source  upgrade|add
+     * @param  string  $desc
+     * @access public
+     * @return void
+     */
+    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $desc = '')
+    {
+        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->exec();
+
+        $users = array_filter($users);
+        $users = array_unique($users);
+        if(empty($users)) return false;
+
+        $whitelist = '';
+        foreach($users as $account)
+        {
+            $acl             = new stdClass();
+            $acl->account    = $account;
+            $acl->objectType = $objectType;
+            $acl->objectID   = $objectID;
+            $acl->type       = $type;
+            $acl->source     = $source;
+            $acl->desc       = $desc;
+            $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
+            $whitelist .= ',' . $account;
+        }
+
+        $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
+    }
+
+    /**
+     * Adding users to access control lists.
+     *
+     * @param  string  $objectType  program|project|product|sprint
+     * @param  int     $objectID
+     * @access public
+     * @return void
+     */
+    public function addWhitelist($objectType = '', $objectID = 0)
+    {
+        $users = $this->post->accounts;
+        $this->updateWhitelist($users, $objectType, $objectID);
+    }
+
+    /**
      * Create access links by department.
      *
      * @param  object  $dept

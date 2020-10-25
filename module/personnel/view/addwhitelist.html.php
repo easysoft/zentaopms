@@ -24,7 +24,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class='main-form' method='post'>
+  <form class='main-form form-ajax' method='post' target='hiddenwin' id="whitelistForm">
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -34,6 +34,7 @@
       </thead>
       <tbody>
         <?php $i = 1;?>
+        <?php $whitelistUsers = array();?>
         <?php foreach($whitelist as $user):?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
           <td>
@@ -45,12 +46,29 @@
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
         </tr>
+        <?php
+            $i++;
+            $whitelistUsers[$user->account] = $user->realname;
+        ?>
+        <?php endforeach;?>
+
+        <?php foreach($deptUsers as $account => $realname):?>
+        <?php if(isset($whitelistUsers[$account])) continue;?>
+        <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
+          <td>
+            <?php echo html::select('accounts[]', $users, $account, "class='form-control chosen'");?>
+          </td>
+          <td class='c-actions text-center'>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+          </td>
+        </tr>
         <?php $i++;?>
         <?php endforeach;?>
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
-          <td><?php echo html::select("accounts[]", $users, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('accounts[]', $users, '', "class='form-control chosen'");?></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

@@ -280,7 +280,7 @@ class programModel extends model
             $programID = $this->dao->lastInsertId();
             $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
 
-            $this->updateUserACL($this->post->whitelist, 'program', $programID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
@@ -373,7 +373,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
-            $this->updateUserACL($this->post->whitelist, 'program', $programID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
@@ -1100,7 +1100,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
-            $this->updateUserACL($this->post->whitelist, 'project', $projectID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Save order. */
@@ -1191,7 +1191,7 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            $this->updateUserACL($this->post->whitelist, 'project', $projectID);
+            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
@@ -1371,36 +1371,6 @@ class programModel extends model
                     common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);
                     break;
             }
-        }
-    }
-
-    /**
-     * Adding users to access control lists.
-     *
-     * @param  array   $users
-     * @param  string  $objectType  program|project|product|sprint
-     * @param  int     $objectID
-     * @param  string  $type    whitelist|blacklist
-     * @param  string  $source  upgrade|add
-     * @param  string  $desc
-     * @access public
-     * @return void
-     */
-    public function updateUserACL($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $desc = '')
-    {
-        if(empty($users)) return false;
-        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->exec();
-        foreach($users as $account)
-        {
-            if(empty($account)) continue;
-            $acl             = new stdClass();
-            $acl->account    = $account;
-            $acl->objectType = $objectType;
-            $acl->objectID   = $objectID;
-            $acl->type       = $type;
-            $acl->source     = $source;
-            $acl->desc       = $desc;
-            $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
         }
     }
 }
