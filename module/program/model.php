@@ -223,7 +223,8 @@ class programModel extends model
 
         foreach($this->lang->personnel->menu as $label => $menu)
         {
-            $this->lang->personnel->menu->$label = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
+            $menu['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
+            $this->lang->personnel->menu->$label = $menu;
         }
 
         $this->lang->program->menu = $this->lang->program->viewMenu;

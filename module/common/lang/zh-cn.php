@@ -148,7 +148,7 @@ $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmst
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
-$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s");
+$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
 $lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
 
 /* Scrum menu. */

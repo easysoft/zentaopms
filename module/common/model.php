@@ -622,6 +622,7 @@ class commonModel extends model
 
                 $label   = $menuItem->text;
                 $subMenu = '';
+
                 /* Print sub menus. */
                 if(isset($menuItem->subMenu))
                 {

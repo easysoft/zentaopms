@@ -216,13 +216,25 @@ class personnelModel extends model
     }
 
     /**
+     * Get whitelisted accounts.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getWhitelistAccount($objectID = 0)
+    {
+        return $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->fetchPairs('account');
+    }
+
+    /**
      * Adding users to access control lists.
      *
      * @param  array   $users
      * @param  string  $objectType  program|project|product|sprint
      * @param  int     $objectID
      * @param  string  $type    whitelist|blacklist
-     * @param  string  $source  upgrade|add
+     * @param  string  $source  upgrade|add|sync
      * @param  string  $desc
      * @access public
      * @return void
@@ -235,7 +247,7 @@ class personnelModel extends model
         $users = array_unique($users);
         if(empty($users)) return false;
 
-        $whitelist = '';
+        $accounts = '';
         foreach($users as $account)
         {
             $acl             = new stdClass();
@@ -246,11 +258,30 @@ class personnelModel extends model
             $acl->source     = $source;
             $acl->desc       = $desc;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
-            $whitelist .= ',' . $account;
+            $accounts[$account] = $account;
         }
 
         $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $whitelist   = ',' . implode(',', $accounts);
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
+
+        /* Synchronization of people from the product whitelist to the program set. */
+        if($objectType == 'product')
+        {
+            $product = $this->loadModel('product')->getById($objectID);
+            $programWhitelist = $this->getWhitelistAccount($product->program);
+            $newWhitelist     = array_merge($programWhitelist, $accounts);
+            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', 'sync', 'From product synchronization to program set.');
+        }
+
+        /* Synchronization of people from the sprint white list to the project. */
+        if($objectType == 'sprint')
+        {
+            $project = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('project', '');
+            $projectWhitelist = $this->getWhitelistAccount($project);
+            $newWhitelist     = array_merge($projectWhitelist, $accounts);
+            $this->updateWhitelist($newWhitelist, 'project', $project, 'whitelist', 'sync', 'From sprint synchronization to project.');
+        }
     }
 
     /**

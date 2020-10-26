@@ -133,10 +133,10 @@ class personnel extends control
     public function addWhitelist($objectID = 0, $deptID = 0)
     {
         $this->loadModel('program');
-        $this->app->loadLang('project');
         $this->lang->navGroup->program     = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($objectID);
         $this->program->setPGMViewMenu($objectID);
+        $this->app->loadLang('project');
 
         if($_POST)
         {
