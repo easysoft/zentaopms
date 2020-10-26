@@ -530,7 +530,6 @@ class commonModel extends model
             if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
             if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
         }
-
     }
 
     /**

@@ -793,7 +793,7 @@ class product extends control
      * Get white list personnel.
      *
      * @param  int    $productID
-     * @param  string $branch
+     * @param  string $module
      * @param  string $browsetype
      * @param  string $orderby
      * @param  int    $recTotal
@@ -802,13 +802,13 @@ class product extends control
      * @access public
      * @return void
      */
-    public function whitelist($productID = 0, $branch = '', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($productID = 0, $module = 'product', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', 0);
+        $this->product->setMenu($this->products, $productID, 0);
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$browseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

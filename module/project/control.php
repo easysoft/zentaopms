@@ -2417,6 +2417,62 @@ class project extends control
     }
 
     /**
+     * Get white list personnel.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $browsetype
+     * @param  string $orderby
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function whitelist($projectID = 0, $module='project', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* use first project if projectID does not exist. */
+        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
+
+        /* Set the menu. If the projectID = 0, use the indexMenu instead. */
+        $this->project->setMenu($this->projects, $projectID);
+
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$browseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * Adding users to the white list.
+     *
+     * @param  int     $projectID
+     * @param  int     $deptID
+     * @access public
+     * @return void
+     */
+    public function addWhitelist($projectID = 0, $deptID = 0)
+    {
+        /* use first project if projectID does not exist. */
+        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
+
+        /* Set the menu. If the projectID = 0, use the indexMenu instead. */
+        $this->project->setMenu($this->projects, $projectID);
+
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=sprint&module=project");
+    }
+
+    /*
+     * Removing users from the white list.
+     *
+     * @param  int     $id
+     * @param  string  $confirm
+     * @access public
+     * @return void
+     */
+    public function unbindWhielist($id = 0, $confirm = 'no')
+    {
+        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+    }
+
+    /**
      * Export project.
      *
      * @param  string $status

@@ -74,9 +74,10 @@ $lang->project->menuOrder[25] = 'story';
 $lang->project->menuOrder[30] = 'qa';
 $lang->project->menuOrder[35] = 'doc';
 $lang->project->menuOrder[40] = 'team';
-$lang->project->menuOrder[45] = 'action';
-$lang->project->menuOrder[50] = 'product';
-$lang->project->menuOrder[55] = 'view';
+$lang->project->menuOrder[45] = 'whitelist';
+$lang->project->menuOrder[50] = 'action';
+$lang->project->menuOrder[55] = 'product';
+$lang->project->menuOrder[60] = 'view';
 $lang->task->menuOrder        = $lang->project->menuOrder;
 $lang->build->menuOrder       = $lang->project->menuOrder;
 
