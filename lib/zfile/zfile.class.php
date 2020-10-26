@@ -37,7 +37,6 @@ class zfile
             if(!is_readable($from)) $log['message'] = "$from: Permission denied";
         }
         if(!is_dir($to) and !@mkdir($to, 0777, true)) $log['message'] = "$to: Permission denied";
-        if(is_dir($to)  and !is_writeable($to))       $log['message'] = "$to: Permission denied";
         if($logFile     and !file_exists($logFile))   touch($logFile);
         if(!empty($log['message'])) return $log;
 
@@ -52,6 +51,9 @@ class zfile
             $fullEntry = $from . $entry;
             if(is_file($fullEntry))
             {
+                if(is_dir($to) and !is_writeable($to)) $log['message'] = "$to: Permission denied";
+                if(!empty($log['message'])) return $log;
+
                 if(file_exists($to . $entry)) unlink($to . $entry);
 
                 if(copy($fullEntry, $to . $entry))

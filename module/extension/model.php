@@ -575,8 +575,11 @@ class extensionModel extends model
         foreach($pathes as $path)
         {
             if($path == 'db' or $path == 'doc' or $path == 'hook' or $path == '..' or $path == '.') continue;
-            list($copiedFiles) = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path);
+
+            $result      = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path, true);
+            $copiedFiles = zget($result, 'copiedFiles', array());
         }
+
         foreach($copiedFiles as $key => $copiedFile)
         {
             $copiedFiles[$copiedFile] = md5_file($copiedFile);
