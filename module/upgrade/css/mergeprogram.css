@@ -17,5 +17,5 @@
 #source .lineGroup>div{display: table-cell}
 #source .lineGroup{background: #f1f1f1; margin-top:20px; border-radius: 4px; padding:5px;}
 #source .lineGroup+.lineGroup{margin-top:10px;}
-#source .lineGroup .productList{vertical-align: middle; width: 170px;}
+#source .lineGroup .productList{vertical-align: middle;}
 #source .lineGroup .projectList .scroll-handle{max-height: 200px; overflow-y: scroll;}

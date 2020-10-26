@@ -16,13 +16,29 @@
     </td>
   </tr>
   <?php endif;?>
+  <?php if($projects):?>
+  <tr>
+    <th><?php echo $lang->upgrade->existPRJ;?></th>
+    <td>
+      <div class='input-group'>
+        <?php echo html::select("projects", $projects, '', "class='form-control'");?>
+        <span class='input-group-addon'>
+          <div class="checkbox-primary">
+            <input type="checkbox" name="newProject" value="0" checked onchange="toggleProject(this)" id="newProject0" />
+            <label for="newProject0"><?php echo $lang->upgrade->newProgram;?></label>
+          </div>
+        </span>
+      </div>
+    </td>
+  </tr>
+  <?php endif;?>
   <tr class='pgmParams'>
     <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
-    <td class='required'><?php echo html::input("name", isset($programName) ? $programName : '', "class='form-control'");?></td>
+    <td class='required'><?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->PRJName;?></th>
-    <td class='required'><?php echo html::input("name", isset($projectName) ? $projectName : '', "class='form-control'");?></td>
+    <td class='required'><?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->PRJCode;?></th>
@@ -45,9 +61,5 @@
   <tr class='pgmParams'>
     <th><?php echo $lang->project->acl;?></th>
     <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
-  </tr>
-  <tr class='hidden' id='whitelistBox'>
-    <th><?php echo $lang->project->whitelist;?></th>
-    <td><?php echo html::checkbox('whitelist', $groups, '', '', '', 'inline');?></td>
   </tr>
 </table>

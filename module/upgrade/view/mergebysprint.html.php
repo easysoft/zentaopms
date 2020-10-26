@@ -2,7 +2,7 @@
   <div class='table-col' id='source'>
     <div class='alert alert-info'>
       <?php
-      printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedProjectCount);
+      printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
       echo '<br />' . $lang->upgrade->mergeByProject;
       ?>
     </div>
@@ -13,9 +13,9 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($noMergedProjects as $projectID => $project):?>
+        <?php foreach($noMergedSprints as $sprintID => $sprint):?>
         <tr>
-          <td><?php echo html::checkBox("projects", array($project->id => "{$lang->projectCommon} #{$project->id} {$project->name}"), $project->id);?></td>
+          <td><?php echo html::checkBox("sprint", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id);?></td>
         </tr>
         <?php endforeach;?>
       </tbody>

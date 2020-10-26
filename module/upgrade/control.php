@@ -159,133 +159,93 @@ class upgrade extends control
      */
     public function mergeProgram($type = 'productline')
     {
+        $this->app->loadLang('program');
+
         if($_POST)
         {
             if($type == 'productline')
             {
                 $linkedProducts = array();
-                $linkedProjects = array();
+                $linkedSprints  = array();
                 $unlinkProducts = array();
-                $unlinkProjects = array();
-                foreach($this->post->lines as $lineID)
+                $unlinkSprints  = array();
+
+                /* Compute checked products and sprints, unchecked products and sprints. */
+                foreach($_POST['products'] as $lineID => $products)
                 {
-                    if(isset($_POST['products'][$lineID]))
+                    foreach($products as $productID)
                     {
-                        foreach($_POST['products'][$lineID] as $productID)
+                        $linkedProducts[$productID] = $productID;
+                        unset($_POST['productIdList'][$lineID][$productID]);
+
+                        if(isset($_POST['sprints'][$lineID][$productID]))
                         {
-                            $linkedProducts[$productID] = $productID;
-                            unset($_POST['productIdList'][$lineID][$productID]);
-
-                            if(isset($_POST['projects'][$lineID][$productID]))
+                            foreach($_POST['sprints'][$lineID][$productID] as $sprintID)
                             {
-                                foreach($_POST['projects'][$lineID][$productID] as $projectID)
-                                {
-                                    $linkedProjects[$projectID] = $projectID;
-                                    unset($_POST['projectIdList'][$lineID][$productID][$projectID]);
-                                }
-                                $unlinkProjects += $this->post->projectIdList[$lineID][$productID];
+                                $linkedSprints[$sprintID] = $sprintID;
+                                unset($_POST['sprintIdList'][$lineID][$productID][$sprintID]);
                             }
+                            $unlinkSprints += $this->post->sprintIdList[$lineID][$productID];
                         }
-                        $unlinkProducts += $this->post->productIdList[$lineID];
                     }
+
+                    $unlinkProducts += $this->post->productIdList[$lineID];
                 }
 
-                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
-                {
-                    if(empty($_POST['PRJAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJAdmin)));
-
-                    /* Create Program. */
-                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->PRJAdmins);
-                    if(dao::isError()) die(js::error(dao::getError()));
-                }
-                else
-                {
-                    $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
-                }
-
-                /* Change program field for product and project. */
-                $this->upgrade->setProgram4Product($programID, $linkedProducts);
-                if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
-
-                /* Set program team. */
-                $this->upgrade->setProgramTeam($programID, $linkedProducts, $linkedProjects);
+                /* Create Program. */
+                list($programID, $projectID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                if(dao::isError()) die(js::error(dao::getError()));
+                
+                /* Process merged products and projects. */
+                $this->upgrade->processMergedData($programID, $projectID, $linkedProducts, $linkedSprints);
 
                 /* Process unlinked product. */
                 if($unlinkProducts) $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('id')->in($unlinkProducts)->exec();
-                if($unlinkProjects) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkProjects)->exec();
+                if($unlinkSprints)  $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkSprints)->exec();
             }
             elseif($type == 'product')
             {
                 $linkedProducts = array();
-                $linkedProjects = array();
-                $unlinkProjects = array();
+                $linkedSprints  = array();
+                $unlinkSprints  = array();
                 foreach($_POST['products'] as $productID)
                 {
                     $linkedProducts[$productID] = $productID;
 
-                    if(isset($_POST['projects'][$productID]))
+                    if(isset($_POST['sprints'][$productID]))
                     {
-                        foreach($_POST['projects'][$productID] as $projectID)
+                        foreach($_POST['sprints'][$productID] as $sprintID)
                         {
-                            $linkedProjects[$projectID] = $projectID;
-                            unset($_POST['projectIdList'][$productID][$projectID]);
+                            $linkedSprints[$sprintID] = $sprintID;
+                            unset($_POST['sprintIdList'][$productID][$sprintID]);
                         }
-                        $unlinkProjects += $this->post->projectIdList[$productID];
+                        $unlinkSprints += $this->post->sprintIdList[$productID];
                     }
                 }
 
-                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
-                {
-                    if(empty($_POST['PRJAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJAdmin)));
+                /* Create Program. */
+                list($programID, $projectID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                if(dao::isError()) die(js::error(dao::getError()));
 
-                    /* Create Program. */
-                    $programID = $this->upgrade->createProgram($linkedProducts, $linkedProjects, $this->post->PRJAdmins);
-                    if(dao::isError()) die(js::error(dao::getError()));
-                }
-                else
-                {
-                    $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
-                }
-
-                /* Change program field for product and project. */
-                $this->upgrade->setProgram4Product($programID, $linkedProducts);
-                if($linkedProjects) $this->upgrade->setProgram4Project($programID, $linkedProjects);
-
-                /* Set program team. */
-                $this->upgrade->setProgramTeam($programID, $linkedProducts, $linkedProjects);
+                /* Process merged products and projects. */
+                $this->upgrade->processMergedData($programID, $projectID, $linkedProducts, $linkedSprints);
 
                 /* Process unlinked product. */
-                if($unlinkProjects) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkProjects)->exec();
+                if($unlinkSprints) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkSprints)->exec();
             }
-            elseif($type == 'project')
+            elseif($type == 'sprint')
             {
-                $linkedProjects = $this->post->projects;
-                if(isset($_POST['newProgram']) or !isset($_POST['programs']))
-                {
-                    if(empty($_POST['PRJAdmins'])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->PRJAdmin)));
+                $linkedSprints = $this->post->sprints;
 
-                    /* Create Program. */
-                    $programID = $this->upgrade->createProgram(array(), $linkedProjects, $this->post->PRJAdmins);
-                    if(dao::isError()) die(js::error(dao::getError()));
-                }
-                else
-                {
-                    $programID = $this->post->programs;
-                    $this->dao->update(TABLE_PROJECT)->set('product')->eq('multiple')->where('id')->eq($programID)->andWhere('product')->eq('single')->exec();
-                }
+                /* Create Program. */
+                list($programID, $projectID) = $this->upgrade->createProgram(array(), $linkedSprints);
+                if(dao::isError()) die(js::error(dao::getError()));
 
-                $productID = $this->upgrade->createProduct4Program($programID);
-
-                /* Change program field for product and project. */
-                $this->upgrade->setProgram4Project($programID, $linkedProjects);
-
-                /* Set program team. */
-                $this->upgrade->setProgramTeam($programID, array(), $linkedProjects);
+                //$productID = $this->upgrade->createProduct4Program($programID);
+                $this->upgrade->processMergedData($programID, $projectID, array(), $linkedSprints);
 
                 /* Link product. */
-                foreach($linkedProjects as $projectID) $this->dao->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($projectID)->set('product')->eq($productID)->exec();
+                foreach($linkedSprints as $sprintID) $this->dao->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($sprintID)->set('product')->eq($productID)->exec();
             }
             elseif($type == 'moreLink')
             {
@@ -306,10 +266,10 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetch('count');
-        $noMergedProjectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
-        if(empty($noMergedProductCount) and empty($noMergedProjectCount)) 
+        if(empty($noMergedProductCount) and empty($noMergedSprintCount)) 
         {
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
@@ -317,9 +277,8 @@ class upgrade extends control
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
-        $this->view->noMergedProjectCount = $noMergedProjectCount;
+        $this->view->noMergedSprintCount  = $noMergedSprintCount;
 
-        $this->app->loadLang('program');
         $this->loadModel('project');
         $this->view->type = $type;
 
@@ -331,33 +290,38 @@ class upgrade extends control
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('line')->in(array_keys($productlines))->andWhere('deleted')->eq(0)->fetchAll('id');
             if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
 
-            $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+            $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t1.model')->eq('')
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->fetchAll('id');
 
-            /* Remove project than linked more than two products */
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
-            foreach($projectProducts as $projectID => $products)
+            /* Remove sprint than linked more than two products */
+            $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+            foreach($sprintProducts as $sprintID => $products)
             {
-                if(count($products) > 1) unset($noMergedProjects[$projectID]);
+                if(count($products) > 1) unset($noMergedSprints[$sprintID]);
             }
 
             /* Group product by product line. */
             $lineGroups = array();
             foreach($noMergedProducts as $product) $lineGroups[$product->line][$product->id] = $product;
 
-            /* Group project by product. */
+            /* Group sprint by product. */
             $productGroups = array();
-            foreach($noMergedProjects as $project)
+            foreach($noMergedSprints as $sprint)
             {
-                $projectProduct = zget($projectProducts, $project->id, array());
-                if(empty($projectProduct)) continue;
+                $sprintProduct = zget($sprintProducts, $sprint->id, array());
+                if(empty($sprintProduct)) continue;
 
-                $productID = key($projectProduct);
-                $productGroups[$productID][$project->id] = $project;
+                $productID = key($sprintProduct);
+                $productGroups[$productID][$sprint->id] = $sprint;
+            }
+
+            foreach($productlines as $line)
+            {
+                if(!isset($lineGroups[$line->id])) unset($productlines[$line->id]);
             }
 
             $this->view->productlines  = $productlines;
@@ -368,9 +332,9 @@ class upgrade extends control
         if($type == 'product')
         {
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetchAll('id');
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=project'));
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
 
-            $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+            $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t1.model')->eq('')
                 ->andWhere('t1.deleted')->eq(0)
@@ -378,35 +342,36 @@ class upgrade extends control
                 ->fetchAll('id');
 
             /* Remove project than linked more than two products */
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
-            foreach($projectProducts as $projectID => $products)
+            $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+            foreach($sprintProducts as $sprintID => $products)
             {
-                if(count($products) > 1) unset($noMergedProjects[$projectID]);
+                if(count($products) > 1) unset($noMergedSprints[$sprintID]);
             }
 
             /* Group project by product. */
             $productGroups = array();
-            foreach($noMergedProjects as $project)
+            foreach($noMergedSprints as $sprint)
             {
-                $projectProduct = zget($projectProducts, $project->id, array());
-                if(empty($projectProduct)) continue;
+                $sprintProduct = zget($sprintProducts, $sprint->id, array());
+                if(empty($sprintProduct)) continue;
 
-                $productID = key($projectProduct);
-                $productGroups[$productID][$project->id] = $project;
+                $productID = key($sprintProduct);
+                $productGroups[$productID][$sprint->id] = $sprint;
             }
+
             $this->view->noMergedProducts = $noMergedProducts;
             $this->view->productGroups    = $productGroups;
         }
         /* Get no merged projects than is not linked product. */
-        if($type == 'project')
+        if($type == 'sprint')
         {
-            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
-            $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
-            foreach($projectProducts as $projectID => $products) unset($noMergedProjects[$projectID]);
+            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->fetchAll('id');
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+            foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
-            if(empty($noMergedProjects)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=moreLink'));
+            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=moreLink'));
 
-            $this->view->noMergedProjects = $noMergedProjects;
+            $this->view->noMergedSprints = $noMergedSprints;
         }
         /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
@@ -440,7 +405,8 @@ class upgrade extends control
 
         $this->view->title = $this->lang->upgrade->mergeProgram;
 
-        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('model')->eq('scrum')->fetchPairs('id', 'name');
+        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs('id', 'name');
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->fetchPairs('id', 'name');
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->display();
@@ -581,5 +547,17 @@ class upgrade extends control
             $response['message']  = strtoupper($result['type']) . " <span class='{$result['type']}-num'>0</span>";
         }
         die(json_encode($response));
+    }
+
+    /**
+     * Ajax get product name.
+     * 
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductName($productID)
+    {
+        die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name'));
     }
 }

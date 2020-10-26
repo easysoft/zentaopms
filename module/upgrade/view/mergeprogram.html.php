@@ -23,8 +23,8 @@
         <?php include './mergebyline.html.php';?>
         <?php elseif($type == 'product'):?>
         <?php include './mergebyproduct.html.php';?>
-        <?php elseif($type == 'project'):?>
-        <?php include './mergebyproject.html.php';?>
+        <?php elseif($type == 'sprint'):?>
+        <?php include './mergebysprint.html.php';?>
         <?php elseif($type == 'moreLink'):?>
         <div class='alert alert-info'>
           <?php

@@ -35,7 +35,15 @@ $(function()
         $(target).find(":checkbox").prop('checked', true);
 
         /* Replace program name. */
-        $('#name').val($(this).text());
+        $('#PGMName').val($(this).text());
+
+        /* Replace project name. */
+        var productID = $(target).find('.lineGroup .productList input[name*="product"]').val();
+        var link = createLink('upgrade', 'ajaxGetProductName', 'productID=' + productID);
+        $.post(link, function(data)
+        {
+            $('#PRJName').val(data);
+        })
 
         setPgmBegin(pgmBegin);
     })
@@ -57,7 +65,7 @@ $(function()
         setPgmBegin(pgmBegin);
     })
 
-    $('[name^=projects]').change(function()
+    $('[name^=sprints]').change(function()
     {
         if($(this).prop('checked'))
         {
@@ -71,22 +79,51 @@ $(function()
     })
 
     toggleProgram($('form #newProgram0'));
+    toggleProject($('form #newProject0'));
 });
 
 function toggleProgram(obj)
 {
-    $obj       = $(obj);
-    $programs  = $obj.closest('table').find('#programs');
-    $pgmParams = $obj.closest('table').find('.pgmParams');
+    var $obj       = $(obj);
+    var $programs  = $obj.closest('table').find('#programs');
+    var $pgmParams = $obj.closest('table').find('.pgmParams');
     if($obj.prop('checked'))
     {
+        $('form #newProject0').prop('checked', true);
+        toggleProject($('form #newProject0'));
+
+        $('#PGMName').closest('tr').show();
         $programs.attr('disabled', 'disabled');
         $pgmParams.removeClass('hidden');
     }
     else
     {
+        $('#PGMName').closest('tr').hide();
         $programs.removeAttr('disabled');
         $pgmParams.addClass('hidden');
+
+        toggleProject($('form #newProject0'));
+    }
+}
+
+function toggleProject(obj)
+{
+    var $obj       = $(obj);
+    var $projects  = $obj.closest('table').find('#projects');
+    var $pgmParams = $obj.closest('table').find('.pgmParams');
+    if($obj.prop('checked'))
+    {
+        $projects.attr('disabled', 'disabled');
+        $pgmParams.removeClass('hidden');
+        if(!$('form #newProgram0').prop('checked')) $('#PGMName').closest('tr').hide();
+    }
+    else
+    {
+        $projects.removeAttr('disabled');
+        $pgmParams.addClass('hidden');
+
+        $('form #newProgram0').prop('checked', false);
+        $('#programs').removeAttr('disabled');
     }
 }
 
@@ -103,11 +140,6 @@ function setPgmBegin(pgmBegin)
             $('.pgmParams #begin').val(pgmBegin);
         }
     });
-}
-
-function setWhite(acl)
-{
-    acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }
 
 function convertStringToDate(dateString)

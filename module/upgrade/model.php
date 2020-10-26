@@ -3852,72 +3852,80 @@ class upgradeModel extends model
      * @access public
      * @return int
      */
-    public function createProgram($productIdList = array(), $projectIdList = array(), $PRJAdmins = '')
+    public function createProgram($productIdList = array(), $projectIdList = array())
     {
-        $data    = fixer::input('post')->get();
-        $program = new stdclass();
-        $program->name          = $data->name;
-        $program->code          = $data->code;
-        $program->model         = 'scrum';
-        $program->type          = 'program';
-        $program->product       = count($productIdList) > 1 ? 'multiple' : 'single';
-        $program->status        = 'wait';
-        $program->begin         = $data->begin;
-        $program->end           = $data->end;
-        $program->days          = $data->days;
-        $program->budget        = $data->budget;
-        $program->budgetUnit    = $data->budgetUnit;
-        $program->PM            = $data->PM;
-        $program->privway       = 'extend';
-        $program->team          = substr($data->name, 0, 30);
-        $program->openedBy      = $this->app->user->account;
-        $program->openedDate    = helper::now();
-        $program->openedVersion = $this->config->version;
-        $program->acl           = $data->acl;
-        if(!empty($data->whitelist)) $program->whitelist = join(',', $data->whitelist);
+        $data = fixer::input('post')->get();
 
-        $this->app->loadLang('project');
-        $this->lang->upgrade->name  = $this->lang->project->name;
-        $this->lang->upgrade->code  = $this->lang->project->code;
-        $this->lang->upgrade->begin = $this->lang->project->begin;
-        $this->lang->upgrade->end   = $this->lang->project->end;
-
-        $this->dao->insert(TABLE_PROJECT)->data($program)
-            ->batchcheck('name,code,begin,end', 'notempty')
-            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "deleted='0'")
-            ->check('code', 'unique', "deleted='0'")
-            ->exec();
-        if(dao::isError()) return false;
-
-        $programID = $this->dao->lastInsertId();
-        $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
-
-        if($PRJAdmins)
+        if(!isset($data->programs))
         {
-            $groupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
-            if($groupID)
-            {
-                foreach($PRJAdmins as $PRJAdmin)
-                {
-                    $userGroup = $this->dao->select('*')->from(TABLE_USERGROUP)->where('account')->eq($PRJAdmin)->andWhere('`group`')->eq($groupID)->fetch();
-                    if(empty($userGroup))
-                    {
-                        $userGroup = new stdclass();
-                        $userGroup->account = $PRJAdmin;
-                        $userGroup->group   = $groupID;
-                        $userGroup->program = '';
-                    }
+            /* Insert program. */
+            $program = new stdclass();
+            $program->name          = $data->PGMName;
+            $program->type          = 'program';
+            $program->status        = 'wait';
+            $program->begin         = $data->begin;
+            $program->end           = $data->end;
+            $program->openedBy      = $this->app->user->account;
+            $program->openedDate    = helper::now();
+            $program->openedVersion = $this->config->version;
+            $program->acl           = 'open';
 
-                    $userGroup->program .= ',' . $programID;
-                    $userGroup->program  = trim($userGroup->program, ',');
+            $this->app->loadLang('program');
+            $this->app->loadLang('project');
+            $this->lang->project->name  = $this->lang->program->PGMName;
 
-                    $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
-                }
-            }
+            $this->dao->insert(TABLE_PROJECT)->data($program)
+                ->batchcheck('name,begin,end', 'notempty')
+                ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+                ->check('name', 'unique', "deleted='0'")
+                ->check('code', 'unique', "deleted='0'")
+                ->exec();
+            if(dao::isError()) return false;
+
+            $programID = $this->dao->lastInsertId();
+            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
+        }
+        else
+        {
+            $programID = $data->programs;
         }
 
-        return $programID;
+        if(!isset($data->programs))
+        {
+            /* Insert project. */
+            $project = new stdclass();
+            $project->name          = $data->PRJName;
+            $project->type          = 'project';
+            $project->parent        = $programID;
+            $project->status        = 'wait';
+            $project->begin         = $data->begin;
+            $project->end           = $data->end;
+            $project->PM            = $data->PM;
+            $project->auth          = 'extend';
+            $project->openedBy      = $this->app->user->account;
+            $project->openedDate    = helper::now();
+            $project->openedVersion = $this->config->version;
+            $project->acl           = $data->acl;
+
+            $this->lang->project->name  = $this->lang->program->PRJName;
+            $this->lang->project->code  = $this->lang->program->PRJCode;
+
+            $this->dao->insert(TABLE_PROJECT)->data($project)
+                ->batchcheck('name,code', 'notempty')
+                ->check('name', 'unique', "deleted='0'")
+                ->check('code', 'unique', "deleted='0'")
+                ->exec();
+            if(dao::isError()) return false;
+
+            $projectID = $this->dao->lastInsertId();
+            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(2)->set('path')->eq(",{$programID},{$projectID},")->where('id')->eq($projectID)->exec();
+        }
+        else
+        {
+            $projectID = $data->projects;
+        }
+
+        return array($programID, $projectID);
     }
 
     /**
@@ -3964,55 +3972,75 @@ class upgradeModel extends model
     }
 
     /**
-     * Set program for product
+     * Replace program or PRJ id for product and project linked objects.
      * 
      * @param  int    $programID 
+     * @param  int    $projectID
      * @param  array  $productIdList 
+     * @param  array  $projectIdList
      * @access public
      * @return void
      */
-    public function setProgram4Product($programID, $productIdList = array())
+    public function processMergedData($programID, $projectID, $productIdList = array(), $sprintIdList = array())
     {
+        /* Product linked objects. */
         $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->in($productIdList)->exec();
-        $this->dao->update(TABLE_STORY)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUG)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_RELEASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_CASE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUILD)->set('program')->eq($programID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
+        $this->dao->update(TABLE_STORY)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_RELEASE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_CASE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUILD)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
+
+        /* Project linked objects. */
+        $this->dao->update(TABLE_TASK)->set('PRJ')->eq($projectID)->where('project')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
+
+        /* Compute sprint path and grade. */
+        foreach($sprintIdList as $sprint)
+        {
+            $data = new stdclass();
+            $data->project  = $projectID;
+            $data->parent   = $projectID;
+            $data->grade    = 1;
+            $data->path     = ",{$projectID},{$sprint->id},";
+            $data->type     = 'sprint';
+            $data->lifetime = $sprint->type;
+
+            $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
+        }
+
+        /* Set product and project relation. */
+        foreach($productIdList as $product)
+        {
+            $data = new stdclass(); 
+            $data->project = $projectID;
+            $data->product = $product->id;
+
+            $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+        }
+
+        $this->computeObjectMembers($programID, $projectID, $productIdList = array(), $sprintIdList = array());
     }
 
     /**
-     * Set program for project
+     * Compute program and project members.
      * 
      * @param  int    $programID 
-     * @param  array  $projectIdList 
-     * @access public
-     * @return void
-     */
-    public function setProgram4Project($programID, $projectIdList = array())
-    {
-        $this->dao->update(TABLE_PROJECT)->set('program')->eq($programID)->where('id')->in($projectIdList)->exec();
-        $this->dao->update(TABLE_TASK)->set('program')->eq($programID)->where('project')->in($projectIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('program')->eq($programID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($projectIdList) . ')')->exec();
-    }
-
-    /**
-     * Set program team.
-     * 
-     * @param  int    $programID 
+     * @param  int    $projectID
      * @param  array  $productIdList 
-     * @param  array  $projectIdList 
+     * @param  array  $sprintIdList
      * @access public
      * @return void
      */
-    public function setProgramTeam($programID, $productIdList = array(), $projectIdList = array())
+    public function computeObjectMembers($programID, $projectID, $productIdList = array(), $sprintIdList = array())
     {
+        /* Get product and sprint team. */
         $teams    = array();
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $sprints  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll('id');
         foreach($products as $product)
         {
             $teams[$product->PO] = $product->PO;
@@ -4030,11 +4058,10 @@ class upgradeModel extends model
             if(isset($project->feedback)) $teams[$project->feedback] = $project->feedback;
         }
 
-        foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
-        $teams += $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($projectIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
-        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIdList)->fetchPairs('account', 'account');
-
+        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($sprintIdList)->fetchPairs('account', 'account');
         $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
+
+        /* Insert product and sprint team into project team. */
         $today = helper::today();
         foreach($teams as $account)
         {
@@ -4042,11 +4069,28 @@ class upgradeModel extends model
             if(!isset($users[$account])) continue;
 
             $team = new stdclass();
-            $team->root    = $programID;
+            $team->root    = $projectID;
             $team->type    = 'project';
             $team->account = $account;
             $team->join    = $today;
             $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+        }
+
+        /* Update project type to sprint. */
+        $this->dao->update(TABLE_TEAM)->set('type')->eq('sprint')
+            ->where('type')->eq('project')
+            ->andWhere('root')->in($sprintIdList)
+            ->exec();
+
+        /* Get all white list. */
+        foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
+        $whiteList = $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($sprintIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
+        $whiteList = array_diff($whiteList, $team);
+
+        /* Insert whiteList into program and projec. */
+        if($whiteList)
+        {
+        
         }
     }
 

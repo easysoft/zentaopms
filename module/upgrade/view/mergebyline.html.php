@@ -1,11 +1,12 @@
+<style> #source .lineGroup .productList{width: 250px;} </style>
 <?php $selected = key($productlines);?>
 <div class='alert alert-info'>
   <?php
-  printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedProjectCount);
+  printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
   echo '<br />' . $lang->upgrade->mergeByProductLine;
   ?>
 </div>
-<div class='main-row' style='margin-top: 20px; padding: 20px; background: #f1f1f1'>
+<div class='main-row'>
   <div class='side-col'>
     <div class='cell'>
       <div class='detial'>
@@ -30,15 +31,7 @@
       </div>
       <?php $i = 0;?>
       <?php foreach($productlines as $line):?>
-      <?php
-      if(!isset($lineGroups[$line->id]))
-      {
-          unset($productlines[$line->id]);
-          continue;
-      }
-      ?>
       <div id='line<?php echo $line->id;?>' class='<?php if($line->id != $selected) echo 'hidden';?> lineBox'>
-        <?php $projectHtml = '';?>
         <?php foreach($lineGroups[$line->id] as $productID => $product):?>
         <div class='lineGroup'>
           <div class='productList'>
@@ -46,11 +39,11 @@
           <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
           </div>
           <div class='projectList'>
-            <div class='scroll-handle scrollbar-hover'>
+            <div class='scroll-handle'>
             <?php if(isset($productGroups[$productID])):?>
-            <?php foreach($productGroups[$productID] as $project):?>
-            <?php echo html::checkBox("projects[$line->id][$productID]", array($project->id => "{$lang->upgrade->project} #{$project->id} {$project->name}"), $i == 0 ? $project->id : 0, "data-product='{$product->id}' data-line='{$line->id}' data-begin='{$project->begin}'");?>
-            <?php echo html::hidden("projectIdList[$line->id][$productID][$project->id]", $project->id);?>
+            <?php foreach($productGroups[$productID] as $sprint):?>
+            <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $i == 0 ? $sprint->id : 0, "data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}'");?>
+            <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
             <?php endforeach;?>
             <?php endif;?>
             </div>
@@ -68,6 +61,8 @@
     <?php
     $line = reset($productlines);
     $programName = $line->name;
+    $product     = isset($lineGroups[$line->id]) ? reset($lineGroups[$line->id]) : '';
+    $sprintName  = $product ? $product->name : '';
     include "./createprogram.html.php";
     ?>
     </div>

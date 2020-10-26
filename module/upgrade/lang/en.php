@@ -77,7 +77,6 @@ EOD;
 $lang->upgrade->line     = 'Product Line';
 $lang->upgrade->program  = 'Merge Project';
 $lang->upgrade->existPGM = 'Existing projects';
-$lang->upgrade->PRJAdmin = 'Project Admin';
 $lang->upgrade->product  = $lang->productCommon;
 $lang->upgrade->project  = $lang->projectCommon;
 
