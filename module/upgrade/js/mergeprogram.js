@@ -31,7 +31,7 @@ $(function()
         var target = $(this).attr('data-target');        
         $('.lineBox').addClass('hidden');
         $(target).removeClass('hidden');
-        $(target).closest('tbody').find(':checkbox').prop('checked', false);
+        $('#source').find('.lineBox :checkBox').prop('checked', false);
         $(target).find(":checkbox").prop('checked', true);
 
         /* Replace program name. */
