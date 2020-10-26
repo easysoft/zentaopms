@@ -166,6 +166,7 @@ $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s'
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->viewMenu->whitelist   = array('link' => '白名单|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();

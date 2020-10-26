@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('personnel', 'whitelist', "programID=$programID"), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', 'class="btn btn-link btn-active-text"');?>
+    <?php echo html::a($this->createLink($module, 'whitelist', "objectID=$objectID"), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('personnel', 'addWhitelist', "objectID=$programID", "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary'");?>
+    <?php common::printLink($module, 'addWhitelist', "objectID=$objectID", "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -26,7 +26,6 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "programID=$programID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
             <?php echo $lang->idAB;?>
           </th>
@@ -53,8 +52,8 @@
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
-            $deleteClass = common::hasPriv('personnel', 'unbindWhielist') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink('personnel', 'unbindWhielist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->delete}' class='{$deleteClass}'");
+            $deleteClass = common::hasPriv($module, 'unbindWhielist') ? 'btn' : 'btn disabled';
+            echo html::a($this->createLink($module, 'unbindWhielist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->delete}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

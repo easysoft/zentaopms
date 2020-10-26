@@ -790,6 +790,59 @@ class product extends control
     }
 
     /**
+     * Get white list personnel.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browsetype
+     * @param  string $orderby
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function whitelist($productID = 0, $branch = '', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->product->setMenu($this->products, $productID, $branch);
+
+        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product");
+    }
+
+    /**
+     * Adding users to the white list.
+     *
+     * @param  int     $productID
+     * @param  int     $deptID
+     * @param  string  $branch
+     * @access public
+     * @return void
+     */
+    public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
+    {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->product->setMenu($this->products, $productID, $branch);
+
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
+    }
+
+    /*
+     * Removing users from the white list.
+     *
+     * @param  int     $id
+     * @param  string  $confirm
+     * @access public
+     * @return void
+     */
+    public function unbindWhielist($id = 0, $confirm = 'no')
+    {
+        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+    }
+
+    /**
      * Export product.
      *
      * @param  string    $status

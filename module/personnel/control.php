@@ -26,11 +26,8 @@ class personnel extends control
      */
     public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->loadModel('program');
+        $this->setProgramNavMenu($programID);
         $this->app->loadLang('user');
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
-        $this->program->setPGMViewMenu($programID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
@@ -72,10 +69,7 @@ class personnel extends control
      */
     public function putInto($programID = 0, $browseType = 'all', $orderBy = 'id_desc')
     {
-        $this->loadModel('program');
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
-        $this->program->setPGMViewMenu($programID);
+        $this->setProgramNavMenu($programID);
 
         $this->view->title      = $this->lang->personnel->putInto;
         $this->view->position[] = $this->lang->personnel->putInto;
@@ -91,7 +85,7 @@ class personnel extends control
     /**
      * Get white list personnel.
      *
-     * @param  int    $programID
+     * @param  int    $objectID
      * @param  string $browsetype
      * @param  string $orderby
      * @param  int    $recTotal
@@ -100,24 +94,22 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function whitelist($programID = 0, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($objectID = 0, $module = 'personnel', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('program');
+        if($module == 'personnel') $this->setProgramNavMenu($objectID);
         $this->app->loadLang('user');
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
-        $this->program->setPGMViewMenu($programID);
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $whitelist = $this->personnel->getWhitelist($programID, $browseType, $orderBy, $pager);
+        $whitelist = $this->personnel->getWhitelist($objectID, $browseType, $orderBy, $pager);
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
         $this->view->pager      = $pager;
-        $this->view->programID  = $programID;
+        $this->view->objectID   = $objectID;
         $this->view->whitelist  = $whitelist;
+        $this->view->module     = $module;
 
         $this->display();
     }
@@ -127,20 +119,18 @@ class personnel extends control
      *
      * @param  int     $objectID
      * @param  int     $deptID
+     * @param  string  $objectType  program|project|product|sprint
      * @access public
      * @return void
      */
-    public function addWhitelist($objectID = 0, $deptID = 0)
+    public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel')
     {
-        $this->loadModel('program');
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($objectID);
-        $this->program->setPGMViewMenu($objectID);
+        if($module == 'personnel') $this->setProgramNavMenu($objectID);
         $this->app->loadLang('project');
 
         if($_POST)
         {
-            $this->personnel->addWhitelist('program', $objectID);
+            $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -148,7 +138,7 @@ class personnel extends control
                 $this->send($response);
             }
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('whitelist', "programID=$objectID")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, 'whitelist', "objectID=$objectID")));
         }
 
         $this->loadModel('dept');
@@ -157,13 +147,15 @@ class personnel extends control
         $this->view->title      = $this->lang->personnel->addWhitelist;
         $this->view->position[] = $this->lang->personnel->addWhitelist;
 
-        $this->view->objectID  = $objectID;
-        $this->view->deptID    = $deptID;
-        $this->view->deptUsers = $deptUsers;
-        $this->view->whitelist = $this->personnel->getWhitelist($objectID);
-        $this->view->depts     = $this->dept->getOptionMenu();
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $this->view->dept      = $this->dept->getByID($deptID);
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->view->module     = $module;
+        $this->view->deptID     = $deptID;
+        $this->view->deptUsers  = $deptUsers;
+        $this->view->whitelist  = $this->personnel->getWhitelist($objectID);
+        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->dept       = $this->dept->getByID($deptID);
 
         $this->display();
     }
@@ -180,7 +172,7 @@ class personnel extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unlinkUser',"id=$id&confirm=yes")));
+            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhielist',"id=$id&confirm=yes")));
         }
         else
         {
@@ -194,5 +186,20 @@ class personnel extends control
             $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
             die(js::reload('parent'));
         }
+    }
+
+    /*
+     * Setting up the program's navigation menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function setProgramNavMenu($programID = 0)
+    {
+        $this->loadModel('program');
+        $this->lang->navGroup->program     = 'program';
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->program->setPGMViewMenu($programID);
     }
 }

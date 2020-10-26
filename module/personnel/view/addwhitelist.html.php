@@ -12,10 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('objectID', $objectID);?>
+<?php js::set('objectType', $objectType);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink('personnel', 'addWhitelist', "objectID={$objectID}"), "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
+      <?php echo html::a($this->createLink($module, 'addWhitelist', "objectID=$objectID&deptID=$deptID&objectType=$objectType&module=$module"), "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
     </span>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
@@ -93,4 +94,5 @@
   </table>
 </div>
 <?php js::set('index', $i);?>
+<?php js::set('module', $module);?>
 <?php include '../../common/view/footer.html.php';?>
