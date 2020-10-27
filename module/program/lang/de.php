@@ -27,6 +27,7 @@ $lang->program->PRJModuleSetting     = 'Program Settings';
 $lang->program->PRJModuleOpen        = 'Program Name';
 $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
+$lang->program->PRJWhitelist         = 'Project Whitelist';
 
 /* Fields. */
 $lang->program->common             = 'Project';

@@ -126,5 +126,5 @@ $config->program->datatable->fieldList['PRJSurplus']['sort']     = 'no';
 
 $config->program->datatable->fieldList['actions']['title']    = 'actions';
 $config->program->datatable->fieldList['actions']['fixed']    = 'right';
-$config->program->datatable->fieldList['actions']['width']    = '220';
+$config->program->datatable->fieldList['actions']['width']    = '240';
 $config->program->datatable->fieldList['actions']['required'] = 'yes';

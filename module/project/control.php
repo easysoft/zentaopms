@@ -2421,7 +2421,7 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $module
-     * @param  string $browsetype
+     * @param  string $objectType
      * @param  string $orderby
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -2429,7 +2429,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist($projectID = 0, $module='project', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($projectID = 0, $module='project', $objectType = 'sprint', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
@@ -2437,7 +2437,7 @@ class project extends control
         /* Set the menu. If the projectID = 0, use the indexMenu instead. */
         $this->project->setMenu($this->projects, $projectID);
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$browseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

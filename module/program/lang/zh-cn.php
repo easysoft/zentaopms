@@ -27,6 +27,7 @@ $lang->program->PRJModuleSetting     = '项目集设置';
 $lang->program->PRJModuleOpen        = '显示项目集名';
 $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '项目排序';
+$lang->program->PRJWhitelist         = '项目白名单';
 
 /* Fields. */
 $lang->program->common             = '项目集';

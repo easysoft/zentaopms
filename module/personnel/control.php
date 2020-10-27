@@ -94,15 +94,22 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function whitelist($objectID = 0, $module = 'personnel', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($module == 'personnel') $this->setProgramNavMenu($objectID);
         $this->app->loadLang('user');
+        $this->app->session->set('whitelistBrowse', $this->app->getURI(true));
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $whitelist = $this->personnel->getWhitelist($objectID, $browseType, $orderBy, $pager);
+        $whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
+
+        if($module == 'program')
+        {
+            $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJBrowse');
+            $this->view->goback = $goback;
+        }
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
@@ -137,8 +144,8 @@ class personnel extends control
                 $response['message'] = $this->getError();
                 $this->send($response);
             }
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, 'whitelist', "objectID=$objectID")));
+            $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'addWhitelist';
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $moduleMethod, "objectID=$objectID")));
         }
 
         $this->loadModel('dept');
@@ -152,7 +159,7 @@ class personnel extends control
         $this->view->module     = $module;
         $this->view->deptID     = $deptID;
         $this->view->deptUsers  = $deptUsers;
-        $this->view->whitelist  = $this->personnel->getWhitelist($objectID);
+        $this->view->whitelist  = $this->personnel->getWhitelist($objectID, $objectType);
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->dept       = $this->dept->getByID($deptID);

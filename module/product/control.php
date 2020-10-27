@@ -794,21 +794,21 @@ class product extends control
      *
      * @param  int    $productID
      * @param  string $module
-     * @param  string $browsetype
-     * @param  string $orderby
+     * @param  string $objectType
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function whitelist($productID = 0, $module = 'product', $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', 0);
         $this->product->setMenu($this->products, $productID, 0);
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$browseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

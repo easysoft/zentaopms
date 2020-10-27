@@ -7,7 +7,7 @@
 function setDeptUsers(dept)
 {
     var deptID = $(dept).val();
-    var link   = createLink(module, 'addWhitelist', 'objectID=' + objectID + '&deptID=' + deptID + '&objectType=' + objectType + '&module=' + module);
+    var link   = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&objectType=' + objectType + '&module=' + module);
     location.href = link;
 }
 

@@ -16,7 +16,8 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink($module, 'addWhitelist', "objectID=$objectID&deptID=$deptID&objectType=$objectType&module=$module"), "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
+      <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
+      <?php echo html::a($this->createLink($module, $moduleMethod, "objectID=$objectID&deptID=$deptID&objectType=$objectType&module=$module"), "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
     </span>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
@@ -78,7 +79,15 @@
         <?php $i++;?>
         <?php endfor;?>
       </tbody>
-      <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton(); ?></td></tr></tfoot>
+      <tfoot>
+        <tr>
+          <td colspan='6' class='text-center form-actions'>
+            <?php echo html::submitButton(); ?>
+            <?php $gobackURL = $this->session->whitelistBrowse;?>
+            <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', 'class="btn btn-back btn-wide"');?>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </form>
 </div>
@@ -95,4 +104,5 @@
 </div>
 <?php js::set('index', $i);?>
 <?php js::set('module', $module);?>
+<?php js::set('moduleMethod', $moduleMethod);?>
 <?php include '../../common/view/footer.html.php';?>

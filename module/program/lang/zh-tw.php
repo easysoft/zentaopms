@@ -27,9 +27,10 @@ $lang->program->PRJModuleSetting     = '項目集設置';
 $lang->program->PRJModuleOpen        = '顯示項目集名';
 $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '項目排序';
+$lang->program->PRJWhitelist         = '項目白名單';
 
 /* Fields. */
-$lang->program->common             = '項目';
+$lang->program->common             = '項目集';
 $lang->program->stage              = '階段';
 $lang->program->PRJName            = '項目名稱';
 $lang->program->PRJModel           = '管理類型';
@@ -99,9 +100,9 @@ $lang->program->featureBar['closed']    = '已關閉';
 $lang->program->PRJAclList['open']    = "公開(有項目視圖權限，即可訪問)";
 $lang->program->PRJAclList['private'] = "私有(項目團隊成員和干係人可訪問)";
 
-$lang->program->PGMPRJAclList['open']       = "全部公開（有項目視圖權限，即可訪問）";
-$lang->program->PGMPRJAclList['openinside'] = "項目集內公開（所有上級項目集負責人和干係人，本項目團隊成員和干係人可訪問）";
-$lang->program->PGMPRJAclList['private']    = "私有(項目團隊成員和干係人可訪問)";
+$lang->program->PGMPRJAclList['open']    = "全部公開（有項目視圖權限，即可訪問）";
+$lang->program->PGMPRJAclList['program'] = "項目集內公開（所有上級項目集負責人和干係人，本項目團隊成員和干係人可訪問）";
+$lang->program->PGMPRJAclList['private'] = "私有(項目團隊成員和干係人可訪問)";
 
 $lang->program->PRJAuthList['extend'] = '繼承(取項目權限與組織權限的並集)';
 $lang->program->PRJAuthList['reset']  = '重新定義(只取項目權限)';
@@ -177,7 +178,7 @@ $lang->program->PGMActivate          = '激活項目集';
 $lang->program->PGMExport            = '導出';
 $lang->program->PGMStakeholder       = '干係人列表';
 $lang->program->createStakeholder    = '添加干係人';
-$lang->program->unlinkStakeholder    = '删除干係人';
+$lang->program->unlinkStakeholder    = '刪除干係人';
 $lang->program->importStakeholder    = '從父項目集導入';
 $lang->program->PGMManageMembers     = '項目集團隊';
 
@@ -204,9 +205,9 @@ $lang->program->PGMShowClosed = '顯示已關閉';
 $lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
 $lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問）";
 
-$lang->program->subPGMAclList['open']       = "全部公開（有項目集視圖權限，即可訪問）";
-$lang->program->subPGMAclList['openinside'] = "項目集內公開 (所有上級項目集負責人和干係人、本項目集負責人和干係人可訪問）";
-$lang->program->subPGMAclList['private']    = "私有（本項目集負責人和干係人可訪問）";
+$lang->program->subPGMAclList['open']    = "全部公開（有項目集視圖權限，即可訪問）";
+$lang->program->subPGMAclList['program'] = "項目集內公開 (所有上級項目集負責人和干係人、本項目集負責人和干係人可訪問）";
+$lang->program->subPGMAclList['private'] = "私有（本項目集負責人和干係人可訪問）";
 
 $lang->program->PGMAuthList['extend'] = '繼承(取項目權限與組織權限的並集)';
 $lang->program->PGMAuthList['reset']  = '重新定義(只取項目權限)';

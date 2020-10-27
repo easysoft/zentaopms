@@ -1,5 +1,5 @@
 <?php
-$lang->personnel->common        = '人員';
+$lang->personnel->common        = '項目集人員';
 $lang->personnel->accessible    = '可訪問人員列表';
 $lang->personnel->putInto       = '投入人員列表';
 $lang->personnel->department    = '部門';

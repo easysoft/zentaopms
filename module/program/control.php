@@ -1341,4 +1341,51 @@ class program extends control
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
     }
+
+    /**
+     * Get white list personnel.
+     *
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @param  string $module
+     * @param  string $objectType
+     * @param  string $orderby
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function PRJWhitelist($projectID = 0, $programID = 0, $module='program', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->navGroup->program = 'project';
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * Adding users to the white list.
+     *
+     * @param  int     $projectID
+     * @param  int     $deptID
+     * @access public
+     * @return void
+     */
+    public function PRJAddWhitelist($projectID = 0, $deptID = 0)
+    {
+        $this->lang->navGroup->program = 'project';
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=program");
+    }
+
+    /*
+     * Removing users from the white list.
+     *
+     * @param  int     $id
+     * @param  string  $confirm
+     * @access public
+     * @return void
+     */
+    public function unbindWhielist($id = 0, $confirm = 'no')
+    {
+        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+    }
 }

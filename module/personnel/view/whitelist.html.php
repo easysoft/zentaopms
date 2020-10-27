@@ -13,10 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if($module == 'program') echo html::a($goback, $lang->goback, '', 'class="btn btn-secondary"');?>
     <?php echo html::a($this->createLink($module, 'whitelist', "objectID=$objectID"), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink($module, 'addWhitelist', "objectID=$objectID", "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary'");?>
+    <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
+    <?php common::printLink($module, $moduleMethod, "objectID=$objectID", "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>

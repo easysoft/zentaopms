@@ -1,5 +1,5 @@
 <?php
-$lang->personnel->common        = 'Personnel';
+$lang->personnel->common        = 'Program Personnel';
 $lang->personnel->accessible    = 'Acess List';
 $lang->personnel->putInto       = 'Input Resource';
 $lang->personnel->department    = 'Department';

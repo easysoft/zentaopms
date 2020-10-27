@@ -1362,8 +1362,9 @@ class programModel extends model
                     echo "<span class='pie-icon' data-percent='{$project->hours->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$project->hours->progress}%";
                     break;
                 case 'actions':
-                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
+                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
                     common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
+                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
                     common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);
                     common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
                     common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);
