@@ -21,6 +21,19 @@ $(function()
         setPgmBegin(pgmBegin);
     })
 
+    $('#longTime').change(function()
+    {   
+        if($(this).prop('checked'))
+        {   
+            $('#end').val('').attr('disabled', 'disabled');
+            $('#days').val('');
+        }   
+        else
+        {   
+            $('#end').removeAttr('disabled');
+        }   
+    }); 
+
     $('#lineList li a').click(function()
     {
         /* Active current li and remove active before li. */

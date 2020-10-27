@@ -249,15 +249,12 @@ class upgrade extends control
             }
             elseif($type == 'moreLink')
             {
-                foreach($this->post->programs as $i => $programID)
+                foreach($this->post->projects as $i => $projectID)
                 {
-                    $projectID = $this->post->projects[$i];
+                    $sprintID = $this->post->sprints[$i];
 
                     /* Change program field for product and project. */
-                    $this->upgrade->setProgram4Project($programID, array($projectID));
-
-                    /* Set program team. */
-                    $this->upgrade->setProgramTeam($programID, array(), array($projectID));
+                    $this->upgrade->processMergedData(0, $projectID, array(), array($sprintID));
                 }
             }
 
@@ -376,31 +373,31 @@ class upgrade extends control
         /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
         {
-            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
-            $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
+            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->fetchAll('id');
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
 
             $productPairs = array();
-            foreach($projectProducts as $projectID => $products)
+            foreach($projectProducts as $sprintID => $products)
             {
                 foreach($products as $productID => $data) $productPairs[$productID] = $productID;
             }
 
-            $programs = $this->dao->select('t1.*,t2.id as productID')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.id=t2.program')
-                ->where('t2.id')->in($productPairs)
+            $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+                ->where('t2.product')->in($productPairs)
                 ->fetchAll('productID');
 
-            foreach($noMergedProjects as $projectID => $project)
+            foreach($noMergedSprints as $sprintID => $sprint)
             {
-                $products = zget($projectProducts, $projectID, array());
+                $products = zget($projectProducts, $sprintID, array());
                 foreach($products as $productID => $data)
                 {
-                    $program = zget($programs, $productID, '');
-                    if($program) $project->programs[$program->id] = $program->name;
+                    $project = zget($projects, $productID, '');
+                    if($project) $sprint->projects[$project->id] = $project->name;
                 }
             }
 
-            $this->view->noMergedProjects = $noMergedProjects;
+            $this->view->noMergedSprints = $noMergedSprints;
         }
 
         $this->view->title = $this->lang->upgrade->mergeProgram;

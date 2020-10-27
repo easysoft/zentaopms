@@ -3854,17 +3854,20 @@ class upgradeModel extends model
      */
     public function createProgram($productIdList = array(), $projectIdList = array())
     {
+        $this->app->loadLang('program');
         $data = fixer::input('post')->get();
 
         if(!isset($data->programs))
         {
+            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
+
             /* Insert program. */
             $program = new stdclass();
             $program->name          = $data->PGMName;
             $program->type          = 'program';
             $program->status        = 'wait';
             $program->begin         = $data->begin;
-            $program->end           = $data->end;
+            $program->end           = isset($data->end) ? $data->end : '';
             $program->openedBy      = $this->app->user->account;
             $program->openedDate    = helper::now();
             $program->openedVersion = $this->config->version;
@@ -3875,10 +3878,9 @@ class upgradeModel extends model
             $this->lang->project->name  = $this->lang->program->PGMName;
 
             $this->dao->insert(TABLE_PROJECT)->data($program)
-                ->batchcheck('name,begin,end', 'notempty')
+                ->batchcheck('name,begin', 'notempty')
                 ->checkIF($program->end != '', 'end', 'gt', $program->begin)
                 ->check('name', 'unique', "deleted='0'")
-                ->check('code', 'unique', "deleted='0'")
                 ->exec();
             if(dao::isError()) return false;
 
@@ -3890,12 +3892,16 @@ class upgradeModel extends model
             $programID = $data->programs;
         }
 
-        if(!isset($data->programs))
+        if(!isset($data->projects))
         {
+            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
+
             /* Insert project. */
             $project = new stdclass();
             $project->name          = $data->PRJName;
             $project->type          = 'project';
+            $project->model         = 'scrum';
+            $project->code          = $data->code;
             $project->parent        = $programID;
             $project->status        = 'wait';
             $project->begin         = $data->begin;
@@ -3911,9 +3917,8 @@ class upgradeModel extends model
             $this->lang->project->code  = $this->lang->program->PRJCode;
 
             $this->dao->insert(TABLE_PROJECT)->data($project)
-                ->batchcheck('name,code', 'notempty')
+                ->batchcheck('name', 'notempty')
                 ->check('name', 'unique', "deleted='0'")
-                ->check('code', 'unique', "deleted='0'")
                 ->exec();
             if(dao::isError()) return false;
 
@@ -3926,49 +3931,6 @@ class upgradeModel extends model
         }
 
         return array($programID, $projectID);
-    }
-
-    /**
-     * Create product for program.
-     * 
-     * @param  int    $programID 
-     * @access public
-     * @return void
-     */
-    public function createProduct4Program($programID)
-    {
-        $program = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
-
-        $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->andWhere('code')->eq($program->code)->fetch();
-        if($product) return $product->id;
-
-        $product = new stdclass();
-        $product->name           = $program->name;
-        $product->code           = $program->code;
-        $product->program        = $program->id;
-        $product->type           = 'normal';
-        $product->status         = 'normal';
-        $product->acl            = $program->acl;
-        $product->whitelist      = $program->whitelist;
-        $product->createdBy      = $program->createdBy;
-        $product->createdDate    = $program->createdDate;
-        $product->createdVersion = $this->config->version;
-
-        $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-        $productID = $this->dao->lastInsertId();
-        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-
-        $this->app->loadLang('doc');
-        $lib = new stdclass();
-        $lib->product = $productID;
-        $lib->name    = $this->lang->doclib->main['product'];
-        $lib->type    = 'product';
-        $lib->main    = '1'; 
-        $lib->acl     = 'default';
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-        return $productID;
     }
 
     /**
@@ -3999,7 +3961,8 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
 
         /* Compute sprint path and grade. */
-        foreach($sprintIdList as $sprint)
+        $sprints = $this->dao->select('id, type')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
+        foreach($sprints as $sprint)
         {
             $data = new stdclass();
             $data->project  = $projectID;
@@ -4013,11 +3976,11 @@ class upgradeModel extends model
         }
 
         /* Set product and project relation. */
-        foreach($productIdList as $product)
+        foreach($productIdList as $productID)
         {
             $data = new stdclass(); 
             $data->project = $projectID;
-            $data->product = $product->id;
+            $data->product = $productID;
 
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
@@ -4049,13 +4012,13 @@ class upgradeModel extends model
             if(isset($product->feedback)) $teams[$product->feedback] = $product->feedback;
         }
 
-        foreach($projects as $project)
+        foreach($sprints as $sprint)
         {
-            $teams[$project->PO] = $project->PO;
-            $teams[$project->PM] = $project->PM;
-            $teams[$project->QD] = $project->QD;
-            $teams[$project->RD] = $project->RD;
-            if(isset($project->feedback)) $teams[$project->feedback] = $project->feedback;
+            $teams[$sprint->PO] = $sprint->PO;
+            $teams[$sprint->PM] = $sprint->PM;
+            $teams[$sprint->QD] = $sprint->QD;
+            $teams[$sprint->RD] = $sprint->RD;
+            if(isset($sprint->feedback)) $teams[$sprint->feedback] = $sprint->feedback;
         }
 
         $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($sprintIdList)->fetchPairs('account', 'account');
@@ -4082,10 +4045,27 @@ class upgradeModel extends model
             ->andWhere('root')->in($sprintIdList)
             ->exec();
 
-        /* Get all white list. */
+        /* Get all actor in sprint and product. */
         foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
         $whiteList = $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($sprintIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
-        $whiteList = array_diff($whiteList, $team);
+        $whiteList = array_diff($whiteList, $teams);
+
+        /* Get all white list in sprint and product. */
+        $groups = array();
+        foreach($products as $product)
+        {
+            if($product->acl != 'custom' || $product->whitelist) return;
+            $groups += explode(',', $product->whitelist);
+        }
+
+        foreach($sprints as $sprint)
+        {
+            if($sprint->acl != 'custom' || $sprint->whitelist) return;
+            $groups += explode(',', $sprint->whitelist);
+        }
+
+        $users = $groups ? $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs() : array();
+        foreach($users as $account) $whiteList[$account] = $account;
 
         /* Insert whiteList into program and projec. */
         if($whiteList)

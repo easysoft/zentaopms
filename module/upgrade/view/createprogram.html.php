@@ -42,7 +42,7 @@
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->PRJCode;?></th>
-    <td class='required'><?php echo html::input("code", '', "class='form-control'");?></td>
+    <td><?php echo html::input("code", '', "class='form-control'");?></td>
   </tr>
   <tr class='pgmParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
@@ -55,6 +55,12 @@
         <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
         <span class='input-group-addon'><?php echo $lang->program->to;?></span>
         <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
+        <span class='input-group-addon' id='longTimeBox'>
+          <div class="checkbox-primary">
+            <input type="checkbox" name="longTime" value="1" id="longTime">
+            <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
+          </div>
+        </span>
       </div>
     </td>
   </tr>
