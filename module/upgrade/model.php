@@ -3905,7 +3905,7 @@ class upgradeModel extends model
             $project->parent        = $programID;
             $project->status        = 'wait';
             $project->begin         = $data->begin;
-            $project->end           = $data->end;
+            $project->end           = isset($data->end) ? $data->end : '';
             $project->PM            = $data->PM;
             $project->auth          = 'extend';
             $project->openedBy      = $this->app->user->account;
@@ -3985,7 +3985,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
 
-        $this->computeObjectMembers($programID, $projectID, $productIdList = array(), $sprintIdList = array());
+        $this->computeObjectMembers($programID, $projectID, $productIdList, $sprintIdList);
     }
 
     /**

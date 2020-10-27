@@ -98,6 +98,8 @@ $(function()
 function toggleProgram(obj)
 {
     var $obj       = $(obj);
+    if($obj.length == 0) return false;
+
     var $programs  = $obj.closest('table').find('#programs');
     var $pgmParams = $obj.closest('table').find('.pgmParams');
     if($obj.prop('checked'))
@@ -122,6 +124,8 @@ function toggleProgram(obj)
 function toggleProject(obj)
 {
     var $obj       = $(obj);
+    if($obj.length == 0) return false;
+
     var $projects  = $obj.closest('table').find('#projects');
     var $pgmParams = $obj.closest('table').find('.pgmParams');
     if($obj.prop('checked'))
