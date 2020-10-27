@@ -184,13 +184,17 @@ class personnel extends control
         else
         {
             $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
+            if(empty($acl)) die(js::reload('parent'));
 
             $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
             $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
             $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
-
             $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
+
+            if($acl->objectType == 'product') $this->personnel->deleteProgramWhitelist($acl->objectID, $acl->account);
+            if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
+
             die(js::reload('parent'));
         }
     }

@@ -40,7 +40,6 @@ $config->program->sortFields->end       = 'end';
 $config->program->sortFields->PRJStatus = 'status';
 $config->program->sortFields->PRJBudget = 'budget';
 
-
 global $lang;
 $config->program->datatable = new stdclass();
 $config->program->datatable->defaultField = array('idAB', 'PRJCode', 'PRJName', 'PRJModel', 'PRJPM', 'begin', 'end', 'PRJStatus', 'PRJBudget', 'teamCount','PRJEstimate','PRJConsume', 'PRJProgress', 'actions');
@@ -110,7 +109,6 @@ $config->program->datatable->fieldList['PRJConsume']['width']    = '60';
 $config->program->datatable->fieldList['PRJConsume']['required'] = 'no';
 $config->program->datatable->fieldList['PRJConsume']['sort']     = 'no';
 
-
 $config->program->datatable->fieldList['PRJProgress']['title']    = 'PRJProgress';
 $config->program->datatable->fieldList['PRJProgress']['fixed']    = 'right';
 $config->program->datatable->fieldList['PRJProgress']['width']    = '80';
@@ -122,7 +120,6 @@ $config->program->datatable->fieldList['PRJSurplus']['fixed']    = 'no';
 $config->program->datatable->fieldList['PRJSurplus']['width']    = '80';
 $config->program->datatable->fieldList['PRJSurplus']['required'] = 'no';
 $config->program->datatable->fieldList['PRJSurplus']['sort']     = 'no';
-
 
 $config->program->datatable->fieldList['actions']['title']    = 'actions';
 $config->program->datatable->fieldList['actions']['fixed']    = 'right';

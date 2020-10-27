@@ -544,7 +544,7 @@ class commonModel extends model
         echo '<li><hr></li>';
         echo '<li><span id="mainRecent"><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
 
-        $extraWhere     = empty($app->user->admin) ? ' and id in (' . $app->user->view->sprints . ') and project in (' . $app->user->view->projects . ') ' : '';
+        $extraWhere = empty($app->user->admin) ? ' and id in (' . $app->user->view->sprints . ') and project in (' . $app->user->view->projects . ') ' : '';
 
         if(empty($app->user->admin) && (empty($app->user->view->sprints) || empty($app->user->view->projects)))
         {
@@ -552,7 +552,7 @@ class commonModel extends model
             return false;
         }
 
-        $recentProjects = $dbh->query('select * from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'close' and deleted = '0' order by 'id' desc limit 6")->fetchAll();
+        $recentProjects = $dbh->query('select * from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'close' and deleted = '0' order by id desc limit 6")->fetchAll();
 
         if(!empty($recentProjects))
         {

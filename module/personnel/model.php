@@ -243,15 +243,22 @@ class personnelModel extends model
      */
     public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $desc = '')
     {
+        $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source,`desc`')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
         $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
 
         $users = array_filter($users);
         $users = array_unique($users);
-        if(empty($users)) return false;
 
-        $accounts = '';
+        $accounts = array();
         foreach($users as $account)
         {
+            if(isset($oldWhitelist[$account]))
+            {
+                $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
+                $accounts[$account] = $account;
+                continue;
+            }
+
             $acl             = new stdClass();
             $acl->account    = $account;
             $acl->objectType = $objectType;
@@ -267,6 +274,12 @@ class personnelModel extends model
         $whitelist   = ',' . implode(',', $accounts);
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
+        $deletedAccouns = array();
+        foreach($oldWhitelist as $account => $whitelist)
+        {
+            if(!isset($accounts[$account])) $deletedAccouns[] = $account;
+        }
+
         /* Synchronization of people from the product whitelist to the program set. */
         if($objectType == 'product')
         {
@@ -274,6 +287,9 @@ class personnelModel extends model
             $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
             $newWhitelist     = array_merge($programWhitelist, $accounts);
             $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', 'sync', 'From product synchronization to program set.');
+
+            /* Removal of persons from centralized program whitelisting. */
+            foreach($deletedAccouns as $account) $this->deleteProgramWhitelist($objectID, $account);
         }
 
         /* Synchronization of people from the sprint white list to the project. */
@@ -283,6 +299,9 @@ class personnelModel extends model
             $projectWhitelist = $this->getWhitelistAccount($project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
             $this->updateWhitelist($newWhitelist, 'project', $project, 'whitelist', 'sync', 'From sprint synchronization to project.');
+
+            /* Removal of whitelisted persons from projects. */
+            foreach($deletedAccouns as $account) $this->deleteProjectWhitelist($objectID, $account);
         }
     }
 
@@ -298,6 +317,56 @@ class personnelModel extends model
     {
         $users = $this->post->accounts;
         $this->updateWhitelist($users, $objectType, $objectID);
+    }
+
+    /**
+     * Determine whether the user exists in the white list of multiple products.
+     *
+     * @param  int     $objectID
+     * @param  string  $account
+     * @access public
+     * @return void
+     */
+    public function deleteProgramWhitelist($objectID = 0, $account = '')
+    {
+        $program = $this->dao->select('id,program,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch();
+        if(empty($program)) return false;
+        $programID = $program->program;
+        $products  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs('id');
+        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($products)->andWhere('account')->eq($account)->andWhere('objectType')->eq('product')->fetch();
+
+        /* Determine if the user exists in other products in the program set. */
+        if(empty($whitelist))
+        {
+            $newWhitelist = str_replace(',' . $account, '', $program->whitelist);
+            $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
+            $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('program')->exec();
+        }
+    }
+
+    /**
+     * Determine if the user is on a whitelist for multiple sprints
+     *
+     * @param  int     $objectID
+     * @param  string  $account
+     * @access public
+     * @return void
+     */
+    public function deleteProjectWhitelist($objectID = 0, $account = '')
+    {
+        $project = $this->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+        if(empty($project)) return false;
+        $projectID = $project->project;
+        $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');
+        $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($sprints)->andWhere('account')->eq($account)->andWhere('objectType')->eq('sprint')->fetch();
+
+        /* Determine if the user exists in other sprints in the project set. */
+        if(empty($whitelist))
+        {
+            $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
+            $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
+            $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($projectID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('project')->exec();
+        }
     }
 
     /**

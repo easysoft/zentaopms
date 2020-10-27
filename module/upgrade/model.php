@@ -4068,10 +4068,7 @@ class upgradeModel extends model
         foreach($users as $account) $whiteList[$account] = $account;
 
         /* Insert whiteList into program and projec. */
-        if($whiteList)
-        {
-        
-        }
+        if($whiteList) $this->loadModel('personnel')->updateWhitelist($whiteList, 'project', $projectiD, 'whitelist', 'upgrade', 'Upgrade synced accounts.');
     }
 
     /**
