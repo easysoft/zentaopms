@@ -736,7 +736,7 @@ class projectModel extends model
             ->andWhere('grade')->eq(1)
             ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
