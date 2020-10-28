@@ -2689,13 +2689,10 @@ class taskModel extends model
      */
     public function processData4Report($tasks, $children, $field)
     {
-        if($children)
+        if(is_array($children))
         {
-            foreach($children as $taskID => $task)
-            {
-                $tasks[$taskID] = $task;
-                unset($tasks[$task->parent]);
-            }
+            /* Remove the parent task from the tasks. */
+            foreach($children as $childTaskID => $childTask) unset($tasks[$childTask->parent]);
         }
 
         $fields = array();
