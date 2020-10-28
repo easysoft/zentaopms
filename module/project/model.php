@@ -682,6 +682,7 @@ class projectModel extends model
 
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
+
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
@@ -1794,15 +1795,15 @@ class projectModel extends model
     }
 
     /**
-     * Get team slice.
+     * Get the skip members of the team.
      * 
-     * @param  array  $teams 
-     * @param  string $begin 
-     * @param  string $end 
+     * @param  array  $teams
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return array
      */
-    public function getTeamSlice($teams, $begin, $end)
+    public function getTeamSkip($teams, $begin, $end)
     {
         $members = array();
         foreach($teams as $account => $team)

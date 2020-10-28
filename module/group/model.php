@@ -468,7 +468,7 @@ class groupModel extends model
      * Get primary menus.
      *
      * @access public
-     * @return object
+     * @return array
      */
     public function getPrimaryMenus()
     {
