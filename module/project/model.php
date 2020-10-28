@@ -1795,15 +1795,15 @@ class projectModel extends model
     }
 
     /**
-     * Get team slice.
+     * Get the skip members of the team.
      * 
-     * @param  array  $teams 
-     * @param  string $begin 
-     * @param  string $end 
+     * @param  array  $teams
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return array
      */
-    public function getTeamSlice($teams, $begin, $end)
+    public function getTeamSkip($teams, $begin, $end)
     {
         $members = array();
         foreach($teams as $account => $team)
