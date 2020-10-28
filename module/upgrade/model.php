@@ -4052,35 +4052,26 @@ class upgradeModel extends model
 
         /* Get all white list in sprint and product. */
         $this->loadModel('group');
-        $this->loadModel('personnel');
         foreach($products as $product)
         {
-            if($product->acl != 'custom' || $product->whitelist) return;
-            $groups = explode(',', $product->whitelist);
-            $whitelist = $this->group->getGroupAccounts($groups);
-            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
-            $this->personnel->updateWhitelist($whitelist, 'project', $projectID, 'whitelist', 'upgrade');
+            if($product->acl != 'custom' || $product->whitelist) continue;
+
+            $groups        = explode(',', $product->whitelist);
+            $groupAccounts = $this->group->getGroupAccounts($groups);
+            $whiteList    += $groupAccounts;
+            $this->personnel->updateWhitelist($groupAccounts, 'product', $product->id, 'whitelist', 'upgrade');
         }
+
+        $this->personnel->updateWhitelist($whiteList, 'project', $projectID, 'whitelist', 'upgrade');
 
         foreach($sprints as $sprint)
         {
-            if($sprint->acl != 'custom' || $sprint->whitelist) return;
-            $groups = explode(',', $sprint->whitelist);
-            $whitelist = $this->group->getGroupAccounts($groups);
-            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
-        }
-    }
+            if($sprint->acl != 'custom' || $sprint->whitelist) continue;
 
-    /**
-     * Set program default priv.
-     * 
-     * @param  string $fromVersion 
-     * @access public
-     * @return void
-     */
-    public function setDefaultPriv()
-    {
-        
+            $groups        = explode(',', $sprint->whitelist);
+            $groupAccounts = $this->group->getGroupAccounts($groups);
+            $this->personnel->updateWhitelist($groupAccounts, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+        }
     }
 
     /**
@@ -4098,13 +4089,17 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'program';
-            $data->method = 'index';
+            $data->method = 'pgmindex';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
-            $data->method = 'transfer';
+            $data->method = 'prjbrowse';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'index';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
 
+        /* If is project admin, have all project priv. */
         $PRJAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
         foreach($this->lang->resource->program as $method => $methodLang)
         {

@@ -1364,7 +1364,7 @@ class userModel extends model
             $groups  = ',' . join(',', $groups) . ',';
 
             /* Init objects. */
-            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders;
+            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList;
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
@@ -1375,6 +1375,20 @@ class userModel extends model
             {
                 $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,sprint,stage')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
+            }
+
+            /* Get product white list. */
+            if($productWhiteList === null)
+            {
+                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('type')->eq('product')->query();
+                while($acl = $stmt->fetch()) $productWhiteList[$acl->objectID][$acl->account] = $acl->account;
+            }
+
+            /* Get white list. */
+            if($whiteList === null)
+            {
+                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('type')->in('program,project,sprint')->query();
+                while($acl = $stmt->fetch()) $whiteList[$acl->objectID][$acl->account] = $acl->account;
             }
 
             /* Get stakeholders. */
@@ -1407,7 +1421,7 @@ class userModel extends model
                 $programs = array();
                 foreach($allPrograms as $id => $program)
                 {    
-                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array()))) $programs[$id] = $id;
+                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array(), zget($whiteList, $id, array())))) $programs[$id] = $id;
                 }    
                 $userView->programs = join(',', $programs);
 
@@ -1415,7 +1429,7 @@ class userModel extends model
                 $products = array();
                 foreach($allProducts as $id => $product)
                 {    
-                    if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()))) $products[$id] = $id;
+                    if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
                 }    
                 $userView->products = join(',', $products);
 
@@ -1425,7 +1439,7 @@ class userModel extends model
                 {    
                     $projectTeams        = zget($teams, $id, array());
                     $projectStakeholders = zget($stakeholders, $id, array());
-                    if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams)) $projects[$id] = $id;
+                    if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
                 }    
                 $userView->projects = join(',', $projects);
 
@@ -1435,7 +1449,7 @@ class userModel extends model
                 {    
                     $sprintTeams        = zget($teams, $id, array());
                     $sprintStakeholders = zget($stakeholders, $sprint->project, array());
-                    if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams)) $sprints[$id] = $id;
+                    if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
                 }    
                 $userView->sprints = join(',', $sprints);
             }    
@@ -1652,6 +1666,14 @@ class userModel extends model
         /* Get all parent program and subprogram relation. */
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
 
+        $whiteListGroup = array();
+        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
+            ->where('objectType')->eq('program')
+            ->andWhere('objectID')->in($programIdList)
+            ->query();
+
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
+
         /* Get auth users. */
         $authedUsers = array();
         if(!empty($users)) $authedUsers = $users;
@@ -1660,8 +1682,9 @@ class userModel extends model
             foreach($programs as $program) 
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
+                $whiteList    = zget($whiteListGroup, $program->id, array());
                 if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
-                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders);
+                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList);
             }
         }
 
@@ -1679,9 +1702,10 @@ class userModel extends model
             foreach($programs as $programID => $program)
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
+                $whiteList    = zget($whiteListGroup, $program->id, array());
                 if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
 
-                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders);
+                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$programID},") !== false) $view  = trim(str_replace(",{$programID},", ',', ",{$view},"), ',');
             }
@@ -1705,6 +1729,7 @@ class userModel extends model
             ->fetchAll('id');
         if(empty($projects)) return true;
 
+        /* Get team group. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->eq('project')
@@ -1712,6 +1737,15 @@ class userModel extends model
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
+
+        /* Get white list group. */
+        $whiteListGroup = array();
+        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
+            ->where('objectType')->eq('project')
+            ->andWhere('objectID')->in($projectIdList)
+            ->query();
+
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
         /* Get self stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
@@ -1728,9 +1762,10 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
+                $whiteList    = zget($whiteListGroup, $project->id, array());
                 if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
-                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams);
+                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList);
             }
         }
 
@@ -1749,9 +1784,10 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
+                $whiteList    = zget($whiteListGroup, $project->id, array());
                 if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
-                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams);
+                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$projectID},") === false)  $view .= ",{$projectID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$projectID},") !== false) $view  = trim(str_replace(",{$projectID},", ',', ",{$view},"), ',');
             }
@@ -1785,18 +1821,28 @@ class userModel extends model
  
         list($productTeams, $productStakeholders) = $this->getProductMembers($products);
 
-        /* Get white list. */
-        $whiteList = array();
+        /* Get white list group. */
+        $whiteListGroup = array();
+        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
+            ->where('objectType')->eq('product')
+            ->andWhere('objectID')->in($productIdList)
+            ->query();
+
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
+
+        /* Get product view list. */
+        $viewList = array();
         if(empty($users))
         {
             foreach($products as $productID => $product)
             {
                 $teams        = zget($productTeams, $productID, array());
                 $stakeholders = zget($productStakeholders, $productID, array());
-                $whiteList += $this->getProductWhiteListUsers($product, $groupUsers, $teams, $stakeholders);
+                $whiteList    = zget($whiteListGroup, $productID, array());
+                $viewList    += $this->getProductViewListUsers($product, $groupUsers, $teams, $stakeholders, $whiteList);
             }
 
-            $users = $whiteList;
+            $users = $viewList;
         }
 
         $stmt = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($users);
@@ -1813,8 +1859,9 @@ class userModel extends model
             {
                 $members      = zget($productTeams, $productID, array());
                 $stakeholders = zget($productStakeholders, $productID, array());
+                $whiteList    = zget($whiteListGroup, $productID, array());
 
-                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders);
+                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$productID},") === false)  $view .= ",{$productID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$productID},") !== false) $view  = trim(str_replace(",{$productID},", ',', ",{$view},"), ',');
             }
@@ -1841,6 +1888,7 @@ class userModel extends model
         $parentIdList = array();
         foreach($sprints as $sprint) $parentIdList[$sprint->project] = $sprint->project;
 
+        /* Get team group. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->in('project,sprint,stage')
@@ -1849,8 +1897,17 @@ class userModel extends model
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
 
+        /* Get white list group. */
+        $whiteListGroup = array();
+        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
+            ->where('objectType')->eq('sprint')
+            ->andWhere('objectID')->in($sprintIdList)
+            ->query();
+
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
+
         $projectIdList = array();
-        foreach($sprints as $sprintID => $sprint) $projectIdList[$sprint->parent] = $sprint->parent;
+        foreach($sprints as $sprintID => $sprint) $projectIdList[$sprint->project] = $sprint->project;
 
         /* Get parent project stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
@@ -1865,8 +1922,9 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $parentTeams  = zget($teamGroups, $sprint->project, array());
+                $whiteList    = zget($whiteListGroup, $sprint->project, array());
 
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams));
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
             }
         }
 
@@ -1885,9 +1943,10 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
+                $whiteList    = zget($whiteListGroup, $sprint->id, array());
                 $parentTeams  = zget($teamGroups, $sprint->project, array());
 
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, array_merge($teams, $parentTeams));
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
             }
@@ -1901,10 +1960,11 @@ class userModel extends model
      * @param  object $program 
      * @param  string $account 
      * @param  array  $stakeholders
+     * @param  array  $whiteList
      * @access public
      * @return bool 
      */
-    public function checkProgramPriv($program, $account, $stakeholders)
+    public function checkProgramPriv($program, $account, $stakeholders, $whitelist)
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
@@ -1913,6 +1973,7 @@ class userModel extends model
         if($program->acl == 'open') return true;
 
         if(isset($stakeholders[$account])) return true;
+        if(isset($whiteList[$account])) return true;
 
         return false;
     }
@@ -1924,16 +1985,18 @@ class userModel extends model
      * @param  string    $account 
      * @param  string    $groups 
      * @param  array     $teams 
+     * @param  array     $whiteList
      * @access public
      * @return bool
      */
-    public function checkProjectPriv($project, $account, $stakeholders, $teams)
+    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList)
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
         if($project->acl == 'open') return true;
         if(isset($teams[$account])) return true;
         if(isset($stakeholders[$account])) return true;
+        if(isset($whiteList[$account])) return true;
 
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
@@ -1956,12 +2019,13 @@ class userModel extends model
      * @param  string    $account 
      * @param  string    $groups 
      * @param  array     $teams 
+     * @param  array     $whiteList
      * @access public
      * @return bool
      */
-    public function checkSprintPriv($sprint, $account, $stakeholders, $teams)
+    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList)
     {
-        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams);
+        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList);
     }
 
     /**
@@ -1972,10 +2036,11 @@ class userModel extends model
      * @param  string $groups 
      * @param  array  $linkedProjects 
      * @param  array  $teams 
+     * @param  array  $whiteList
      * @access public
      * @return bool
      */
-    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders) 
+    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
@@ -1992,6 +2057,7 @@ class userModel extends model
 
         if(isset($teams[$account])) return true;
         if(isset($stakeholders[$account])) return true;
+        if(isset($whiteList[$account])) return true;
 
         return false;
     }
@@ -2002,10 +2068,11 @@ class userModel extends model
      * @param  object $project
      * @param  array  $stakeholders 
      * @param  array  $teams
+     * @param  array  $whiteList
      * @access public
      * @return array 
      */
-    public function getProjectAuthedUsers($project, $stakeholders, $teams)
+    public function getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList)
     {
         $users = array(); 
 
@@ -2019,6 +2086,7 @@ class userModel extends model
 
         $users += $stakeholders ? $stakeholders : array();
         $users += $teams ? $teams : array();
+        $users += $whiteList ? $whiteList : array();
 
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
@@ -2032,11 +2100,6 @@ class userModel extends model
             }
         }
 
-        /* Get white list accounts. */
-        $objectType = $project->type == 'project' ? 'project' : 'sprint';
-        $accounts = $this->loadModel('personnel')->getWhitelistAccount($project->id, $objectType);
-        $users += $accounts ? $accounts : array();
-
         return $users;
     }
 
@@ -2045,10 +2108,11 @@ class userModel extends model
      * 
      * @param  object $program 
      * @param  array  $stakeholders 
+     * @param  array  $whiteList
      * @access public
      * @return array 
      */
-    public function getProgramAuthedUsers($program, $stakeholders)
+    public function getProgramAuthedUsers($program, $stakeholders, $whiteList)
     {
         $users = array();
 
@@ -2058,10 +2122,7 @@ class userModel extends model
         $users[$program->PM]       = $program->PM;
 
         $users += $stakeholders ? $stakeholders : array();
-
-        /* Get white list accounts. */
-        $accounts = $this->loadModel('personnel')->getWhitelistAccount($program->id, 'program');
-        $users += $accounts ? $accounts : array();
+        $users += $whiteList ? $whiteList : array();
 
         return $users;
     }
@@ -2072,25 +2133,27 @@ class userModel extends model
      * @param  object $sprint
      * @param  array  $stakeholders 
      * @param  array  $teams
+     * @param  array  $whiteList
      * @access public
      * @return array 
      */
-    public function getSprintAuthedUsers($sprint, $stakeholders, $teams)
+    public function getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList)
     {
-        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams);
+        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams, $whiteList);
     }
 
     /**
-     * Get product white list users.
+     * Get product view list users.
      * 
      * @param  object $product 
      * @param  array  $groupUsers 
      * @param  array  $linkedProjects 
      * @param  array  $teams 
+     * @param  array  $whiteList
      * @access public
      * @return array
      */
-    public function getProductWhiteListUsers($product, $groupUsers, $teams, $stakeholders)
+    public function getProductViewListUsers($product, $groupUsers, $teams, $stakeholders, $whiteList)
     {
         $users = array();
 
@@ -2104,10 +2167,7 @@ class userModel extends model
 
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();
-
-        /* Get white list accounts. */
-        $accounts = $this->loadModel('personnel')->getWhitelistAccount($product->id, 'product');
-        $users += $accounts ? $accounts : array();
+        $users += $whiteList ? $whiteList : array();
 
         return $users;
     }

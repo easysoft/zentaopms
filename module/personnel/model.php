@@ -242,39 +242,46 @@ class personnelModel extends model
      */
     public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add')
     {
-        $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source,`desc`')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
-        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
+        /* If not open, update its whitelist. */
+        $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $acl = $this->dao->select('acl')->from($objectTable)->where('id')->eq($objectID)->fetch('acl');
 
-        $users = array_filter($users);
-        $users = array_unique($users);
-        $accounts = array();
-        foreach($users as $account)
+        if($acl != 'open')
         {
-            if(isset($oldWhitelist[$account]))
+            $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source,`desc`')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
+            $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
+
+            $users = array_filter($users);
+            $users = array_unique($users);
+
+            $accounts = array();
+            foreach($users as $account)
             {
-                $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
+                if(isset($oldWhitelist[$account]))
+                {
+                    $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
+                    $accounts[$account] = $account;
+                    continue;
+                }
+
+                $acl             = new stdClass();
+                $acl->account    = $account;
+                $acl->objectType = $objectType;
+                $acl->objectID   = $objectID;
+                $acl->type       = $type;
+                $acl->source     = $source;
+                $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
                 $accounts[$account] = $account;
-                continue;
             }
 
-            $acl             = new stdClass();
-            $acl->account    = $account;
-            $acl->objectType = $objectType;
-            $acl->objectID   = $objectID;
-            $acl->type       = $type;
-            $acl->source     = $source;
-            $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
-            $accounts[$account] = $account;
-        }
+            $whitelist = ',' . implode(',', $accounts);
+            $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
-        $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $whitelist   = ',' . implode(',', $accounts);
-        $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
-
-        $deletedAccouns = array();
-        foreach($oldWhitelist as $account => $whitelist)
-        {
-            if(!isset($accounts[$account])) $deletedAccouns[] = $account;
+            $deletedAccouns = array();
+            foreach($oldWhitelist as $account => $whitelist)
+            {
+                if(!isset($accounts[$account])) $deletedAccouns[] = $account;
+            }
         }
 
         /* Synchronization of people from the product whitelist to the program set. */
@@ -293,11 +300,12 @@ class personnelModel extends model
         /* Synchronization of people from the sprint white list to the project. */
         if($objectType == 'sprint')
         {
-            $project = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('project', '');
-            $projectWhitelist = $this->getWhitelistAccount($project, 'project');
+            $sprint = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+
+            $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'project', $project, 'whitelist', $source);
+            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source);
 
             /* Removal of whitelisted persons from projects. */
             foreach($deletedAccouns as $account) $this->deleteProjectWhitelist($objectID, $account);
