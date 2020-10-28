@@ -16,6 +16,7 @@ $lang->personnel->program       = '项目集';
 $lang->personnel->emptyTip      = '暂无';
 $lang->personnel->childrenStage = '子阶段';
 
-$lang->personnel->whitelist     = '白名单列表';
-$lang->personnel->addWhitelist  = '添加白名单';
-$lang->personnel->confirmDelete = '确认将该用户移除白名单？';
+$lang->personnel->whitelist      = '白名单列表';
+$lang->personnel->addWhitelist   = '添加白名单';
+$lang->personnel->unbindWhielist = '删除白名单';
+$lang->personnel->confirmDelete  = '确认将该用户移除白名单？';

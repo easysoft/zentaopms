@@ -28,6 +28,8 @@ $lang->program->PRJModuleOpen        = 'Program Name';
 $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
 $lang->program->PRJWhitelist         = 'Project Whitelist';
+$lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
+$lang->program->unbindWhielist       = 'Project Remove Whitelist';
 
 /* Fields. */
 $lang->program->common             = 'Project';
@@ -177,8 +179,8 @@ $lang->program->PGMView              = 'Overview';
 $lang->program->PGMActivate          = 'Activate';
 $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';
-$lang->program->createStakeholder    = 'Create stakeholder';
-$lang->program->unlinkStakeholder    = 'Unlink stakeholder';
+$lang->program->createStakeholder    = 'Create Stakeholder';
+$lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
 

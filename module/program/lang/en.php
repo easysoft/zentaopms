@@ -28,6 +28,8 @@ $lang->program->PRJModuleOpen        = 'Program Name';
 $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
 $lang->program->PRJWhitelist         = 'Project Whitelist';
+$lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
+$lang->program->unbindWhielist       = 'Project Remove Whitelist';
 
 /* Fields. */
 $lang->program->common             = 'Project';

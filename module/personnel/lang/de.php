@@ -16,6 +16,7 @@ $lang->personnel->program       = 'Program';
 $lang->personnel->emptyTip      = 'No data';
 $lang->personnel->childrenStage = 'Child stage';
 
-$lang->personnel->whitelist     = 'Whitelist';
-$lang->personnel->addWhitelist  = 'Add Whitelist';
-$lang->personnel->confirmDelete = 'Confirm removal of the user from the whitelist?';
+$lang->personnel->whitelist      = 'Whitelist';
+$lang->personnel->addWhitelist   = 'Add Whitelist';
+$lang->personnel->unbindWhielist = 'Remove Whitelist';
+$lang->personnel->confirmDelete  = 'Confirm removal of the user from the whitelist?';

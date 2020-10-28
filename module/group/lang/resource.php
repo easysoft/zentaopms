@@ -194,6 +194,9 @@ $lang->resource->program->PRJSuspend           = 'PRJSuspend';
 $lang->resource->program->PRJClose             = 'PRJClose';
 $lang->resource->program->PRJActivate          = 'PRJActivate';
 $lang->resource->program->PRJDelete            = 'PRJDelete';
+$lang->resource->program->PRJWhitelist         = 'PRJWhitelist';
+$lang->resource->program->PRJAddWhitelist      = 'PRJAddWhitelist';
+$lang->resource->program->unbindWhielist       = 'unbindWhielist';
 
 $lang->program->methodOrder[0]   = 'createGuide';
 $lang->program->methodOrder[5]   = 'PGMIndex';
@@ -230,14 +233,23 @@ $lang->program->methodOrder[150] = 'PRJClose';
 $lang->program->methodOrder[155] = 'PRJActivate';
 $lang->program->methodOrder[160] = 'PRJUpdateOrder';
 $lang->program->methodOrder[165] = 'PRJDelete';
+$lang->program->methodOrder[170] = 'PRJWhitelist';
+$lang->program->methodOrder[175] = 'PRJAddWhitelist';
+$lang->program->methodOrder[180] = 'unbindWhielist';
 
 /* Personnel . */
 $lang->resource->personnel = new stdclass();
-$lang->resource->personnel->accessible = 'accessible';
-$lang->resource->personnel->putInto    = 'putInto';
+$lang->resource->personnel->accessible     = 'accessible';
+$lang->resource->personnel->putInto        = 'putInto';
+$lang->resource->personnel->whitelist      = 'whitelist';
+$lang->resource->personnel->addWhitelist   = 'addWhitelist';
+$lang->resource->personnel->unbindWhielist = 'unbindWhielist';
 
 $lang->personnel->methodOrder[5]  = 'accessible';
 $lang->personnel->methodOrder[10] = 'putInto';
+$lang->personnel->methodOrder[15] = 'whitelist';
+$lang->personnel->methodOrder[20] = 'addWhitelist';
+$lang->personnel->methodOrder[25] = 'unbindWhielist';
 
 /* Issue . */
 $lang->resource->issue = new stdclass();
@@ -295,22 +307,25 @@ $lang->risk->methodOrder[60] = 'assignTo';
 
 /* Product. */
 $lang->resource->product = new stdclass();
-$lang->resource->product->index       = 'index';
-$lang->resource->product->browse      = 'browse';
-$lang->resource->product->create      = 'create';
-$lang->resource->product->view        = 'view';
-$lang->resource->product->edit        = 'edit';
-$lang->resource->product->batchEdit   = 'batchEdit';
-$lang->resource->product->delete      = 'delete';
-$lang->resource->product->roadmap     = 'roadmap';
-$lang->resource->product->doc         = 'doc';
-$lang->resource->product->dynamic     = 'dynamic';
-$lang->resource->product->project     = 'project';
-$lang->resource->product->close       = 'closeAction';
-$lang->resource->product->updateOrder = 'orderAction';
-$lang->resource->product->all         = 'all';
-$lang->resource->product->build       = 'build';
-$lang->resource->product->export      = 'exportAction';
+$lang->resource->product->index          = 'index';
+$lang->resource->product->browse         = 'browse';
+$lang->resource->product->create         = 'create';
+$lang->resource->product->view           = 'view';
+$lang->resource->product->edit           = 'edit';
+$lang->resource->product->batchEdit      = 'batchEdit';
+$lang->resource->product->delete         = 'delete';
+$lang->resource->product->roadmap        = 'roadmap';
+$lang->resource->product->doc            = 'doc';
+$lang->resource->product->dynamic        = 'dynamic';
+$lang->resource->product->project        = 'project';
+$lang->resource->product->close          = 'closeAction';
+$lang->resource->product->updateOrder    = 'orderAction';
+$lang->resource->product->all            = 'all';
+$lang->resource->product->build          = 'build';
+$lang->resource->product->export         = 'exportAction';
+$lang->resource->product->whitelist      = 'whitelist';
+$lang->resource->product->addWhitelist   = 'addWhitelist';
+$lang->resource->product->unbindWhielist = 'unbindWhielist';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -328,6 +343,9 @@ $lang->product->methodOrder[65] = 'updateOrder';
 $lang->product->methodOrder[70] = 'all';
 $lang->product->methodOrder[75] = 'build';
 $lang->product->methodOrder[80] = 'export';
+$lang->product->methodOrder[85] = 'whitelist';
+$lang->product->methodOrder[90] = 'addWhitelist';
+$lang->product->methodOrder[95] = 'unbindWhielist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -539,6 +557,9 @@ $lang->resource->project->kanbanColsColor   = 'kanbanColsColor';
 $lang->resource->project->export            = 'exportAction';
 $lang->resource->project->storyKanban       = 'storyKanban';
 $lang->resource->project->storySort         = 'storySort';
+$lang->resource->project->whitelist         = 'whitelist';
+$lang->resource->project->addWhitelist      = 'addWhitelist';
+$lang->resource->project->unbindWhielist    = 'unbindWhielist';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -586,6 +607,9 @@ $lang->project->methodOrder[210] = 'all';
 $lang->project->methodOrder[215] = 'export';
 $lang->project->methodOrder[220] = 'storyKanban';
 $lang->project->methodOrder[225] = 'storySort';
+$lang->project->methodOrder[230] = 'whitelist';
+$lang->project->methodOrder[235] = 'addWhitelist';
+$lang->project->methodOrder[240] = 'unbindWhielist';
 
 /* Design. */
 $lang->resource->design = new stdclass();

@@ -28,6 +28,8 @@ $lang->program->PRJModuleOpen        = '显示项目集名';
 $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '项目排序';
 $lang->program->PRJWhitelist         = '项目白名单';
+$lang->program->PRJAddWhitelist      = '项目添加白名单';
+$lang->program->unbindWhielist       = '项目删除白名单';
 
 /* Fields. */
 $lang->program->common             = '项目集';

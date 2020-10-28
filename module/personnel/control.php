@@ -138,12 +138,8 @@ class personnel extends control
         if($_POST)
         {
             $this->personnel->addWhitelist($objectType, $objectID);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->getError();
-                $this->send($response);
-            }
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
+
             $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'addWhitelist';
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $moduleMethod, "objectID=$objectID")));
         }

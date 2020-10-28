@@ -48,7 +48,9 @@ $lang->project->teamname      = '團隊名稱';
 $lang->project->order         = $lang->projectCommon . '排序';
 $lang->project->orderAB       = '排序';
 $lang->project->products      = '相關' . $lang->productCommon;
-$lang->project->whitelist     = '分組白名單';
+$lang->project->whitelist     = '白名單';
+$lang->project->addWhitelist  = '添加白名單';
+$lang->project->unbindWhielist = '刪除白名單';
 $lang->project->totalEstimate = '預計';
 $lang->project->totalConsumed = '消耗';
 $lang->project->totalLeft     = '剩餘';
@@ -111,8 +113,14 @@ $lang->project->statusList['doing']     = '進行中';
 $lang->project->statusList['suspended'] = '已掛起';
 $lang->project->statusList['closed']    = '已關閉';
 
-$lang->project->aclList['open']    = "繼承項目訪問權限 (能訪問當前項目，即可訪問)";
-$lang->project->aclList['private'] = "私有 (團隊成員和項目幹系人可訪問)";
+$lang->project->aclList['open']    = "繼承項目訪問權限（能訪問當前項目，即可訪問）";
+$lang->project->aclList['private'] = "私有（團隊成員和項目負責人、干係人可訪問）";
+
+$lang->project->storyPoint = '故事點';
+
+$lang->project->burnByList['left']       = '按剩餘工時查看';
+$lang->project->burnByList['estimate']   = "按{$lang->planCommon}工時查看";
+$lang->project->burnByList['storyPoint'] = '按故事點查看';
 
 /* 方法列表。*/
 $lang->project->index             = "{$lang->projectCommon}主頁";
