@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('orderBy', $orderBy);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProgram;?></span></span>
@@ -28,57 +27,33 @@
     </p>
   </div>
   <?php else:?>
-    <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
     <form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
-      <table class='table has-sort-head table-fixed table-nested' id='programList'>
-        <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <table class='table table-fixed table-nested' id='programList'>
         <thead>
           <tr>
             <th class='c-id w-80px'>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+              <?php echo $lang->idAB;?>
             </th>
-            <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PRJCode);?></th>
-            <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PRJName);?></th>
-            <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PRJStatus);?></th>
-            <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
-            <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
-            <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PRJBudget);?></th>
-            <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PRJPM);?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
+            <th class='table-nest-title'><?php echo $lang->program->PRJName;?></th>
+            <th class='w-80px'><?php  echo $lang->program->PRJStatus;?></th>
+            <th class='w-100px'><?php echo $lang->program->begin;?></th>
+            <th class='w-100px'><?php echo $lang->program->end;?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJPM;?></th>
             <th class='text-center w-240px'><?php echo $lang->actions;?></th>
-            <?php if($canOrder):?>
-            <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
-            <?php endif;?>
           </tr>
         </thead>
         <tbody id='programTableList'>
           <?php foreach($programs as $program):?>
-          <?php
-          $trClass = '';
-          $trAttrs = "data-id='$program->id' data-order='$program->order' data-parent='$program->parent'";
-          if($program->isCat)
-          {
-              $trAttrs .= " data-nested='true'";
-              if($program->parent == '0') $trClass .= ' is-top-level table-nest-child-hide';
-              else $trClass .= ' is-top-level table-nest-hide';
-          }
-
-          if($program->parent)
-          {
-              if(!$program->isCat) $trClass .= ' is-nest-child';
-              $trClass .= ' table-nest-hide';
-              $trAttrs .= " data-nest-parent='$program->parent' data-nest-path='$program->path'";
-          }
-          else if(!$program->isCat) $trClass .= ' no-nest';
-          $trAttrs .= " class='$trClass'";
-          ?>
-          <tr <?php echo $trAttrs;?>>
+          <tr>
             <td class='c-id'>
               <?php printf('%03d', $program->id);?>
             </td>
             <td class='text-left'><?php echo $program->code;?></td>
             <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
-              <span class="table-nest-icon icon<?php if($program->isCat) echo ' table-nest-toggle' ?>"></span>
-              <?php echo $program->isCat ? $program->name : html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
+              <span class="table-nest-icon"></span>
+              <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), $program->name);?>
             </td>
             <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
             <td class='text-center'><?php echo $program->begin;?></td>
@@ -96,9 +71,6 @@
               <?php common::printIcon('program', 'create', "template=&programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PRJChildren);?>
               <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
             </td>
-            <?php if($canOrder):?>
-              <td class='sort-handler text-center'><i class="icon icon-move"></i></td>
-            <?php endif;?>
           </tr>
           <?php endforeach;?>
         </tbody>
@@ -113,44 +85,6 @@
     #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
     #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
     </style>
-    <script>
-    $(function()
-    {
-        var $list = $('#programTableList');
-        $list.addClass('sortable').sortable(
-        {
-            reverse: orderBy === 'order_desc',
-            selector: 'tr',
-            dragCssClass: 'drag-row',
-            trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
-            canMoveHere: function($ele, $target)
-            {
-                return $ele.data('parent') === $target.data('parent');
-            },
-            start: function(e)
-            {
-                e.targets.filter('[data-parent!="' + e.element.attr('data-parent') + '"]').addClass('drop-not-allowed');
-            },
-            finish: function(e)
-            {
-                var orders = {};
-                e.list.each(function()
-                {
-                    orders[$(this.item).data('id')] = this.order;
-                });
-                $.post(createLink('project', 'updateOrder'), {'projects' : orders, 'orderBy' : orderBy});
-
-                var $thead = $list.closest('table').children('thead');
-                $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
-                $thead.find('th.sort-default .header').removeClass('header').addClass('headerSortDown');
-
-                e.element.addClass('drop-success');
-                setTimeout(function(){e.element.removeClass('drop-success');}, 800);
-                $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
-            }
-        });
-    });
-    </script>
   <?php endif;?>
 </div>
 

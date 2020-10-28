@@ -3960,8 +3960,19 @@ class upgradeModel extends model
         $this->dao->update(TABLE_TASK)->set('PRJ')->eq($projectID)->where('project')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
 
+        /* Compute product acl. */
+        $products = $this->dao->select('id, acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        foreach($products as $product)
+        {
+            $data = new stdclass();
+            $data->program = $programID;
+            $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+
+            $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
+        }
+
         /* Compute sprint path and grade. */
-        $sprints = $this->dao->select('id, type')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
+        $sprints = $this->dao->select('id, type, acl')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
@@ -3970,6 +3981,7 @@ class upgradeModel extends model
             $data->grade    = 1;
             $data->path     = ",{$projectID},{$sprint->id},";
             $data->type     = 'sprint';
+            $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
             $data->lifetime = $sprint->type;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
@@ -4052,6 +4064,8 @@ class upgradeModel extends model
 
         /* Get all white list in sprint and product. */
         $this->loadModel('group');
+        $this->loadModel('personnel');
+
         foreach($products as $product)
         {
             if($product->acl != 'custom' || $product->whitelist) continue;

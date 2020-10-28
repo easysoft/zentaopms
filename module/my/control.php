@@ -392,7 +392,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
         $this->view->position[] = $this->lang->my->myProject;
         $this->view->tabID      = 'project';
-        $this->view->projects   = $this->user->getProjects($this->app->user->account);
+        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'sprint');
 
         $this->display();
     }
@@ -408,7 +408,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function program($status = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function program($status = 'all', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
         $this->app->loadLang('project');
@@ -421,11 +421,10 @@ class my extends control
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
         $this->view->position[] = $this->lang->my->myProgram;
-        $this->view->programs   = $this->program->getPRJList(0, $status, 0, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->programs   = $this->user->getProjects($this->app->user->account, 'project', $pager);
         $this->view->pager      = $pager;
         $this->view->status     = $status;
-        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
