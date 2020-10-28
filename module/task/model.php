@@ -839,7 +839,7 @@ class taskModel extends model
                 $member->type     = 'task';
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
-                $member->left     = $this->post->teamLeft[$row];
+                $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
                 $member->order    = $row;
                 $teams[$account]  = $member;
                 if($task->status == 'done') $member->left = 0;
