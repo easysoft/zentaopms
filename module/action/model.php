@@ -443,7 +443,12 @@ class actionModel extends model
      */
     public function getById($actionID)
     {
-        return $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
+        $action = $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
+
+        /* Splice domain name for connection when the action is equal to 'repocreated'.*/
+        if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), $action->extra);
+
+        return $action;
     }
 
     /**

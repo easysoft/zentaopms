@@ -49,7 +49,7 @@
         <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
         <?php
         $extendFields = $this->release->getFlowExtendFields();
-        foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+        foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
         ?>
         <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
       </tr>
