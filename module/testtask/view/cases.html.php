@@ -103,13 +103,13 @@
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->testtask->assign;?> <span class="caret"></span></button>
             <?php
-            $withSearch = count($assignedTos) > 10;
+            $withSearch = count($assignedToList) > 10;
             $actionLink = inLink('batchAssign', "taskID=$task->id");
-            echo html::select('assignedTo', $assignedTos, '', 'class="hidden"');
+            echo html::select('assignedTo', $assignedToList, '', 'class="hidden"');
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
               <?php if($withSearch):?>
-              <?php $membersPinYin = common::convert2Pinyin($assignedTos);?>
+              <?php $membersPinYin = common::convert2Pinyin($assignedToList);?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
@@ -117,7 +117,7 @@
               </div>
               <?php endif;?>
               <div class="list-group">
-              <?php foreach ($assignedTos as $key => $value):?>
+              <?php foreach ($assignedToList as $key => $value):?>
                   <?php
                   if(empty($key) or $key == 'closed') continue;
                   $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";

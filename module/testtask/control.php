@@ -405,11 +405,11 @@ class testtask extends control
         $project = $this->project->getById($task->project);
         if($project->acl == 'private')
         {
-            $assignedTos = $this->project->getTeamMemberPairs($project->id, 'nodeleted');
+            $assignedToList = $this->project->getTeamMemberPairs($project->id, 'nodeleted');
         }
         else
         {
-            $assignedTos = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
+            $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
 
         /* Append id for secend sort. */
@@ -443,23 +443,23 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->task        = $task;
-        $this->view->runs        = $runs;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qafirst');
-        $this->view->assignedTos = $assignedTos;
-        $this->view->moduleTree  = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
-        $this->view->browseType  = $browseType;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->taskID      = $taskID;
-        $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
-        $this->view->pager       = $pager;
-        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
-        $this->view->setModule   = false;
+        $this->view->productID      = $productID;
+        $this->view->productName    = $this->products[$productID];
+        $this->view->task           = $task;
+        $this->view->runs           = $runs;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst');
+        $this->view->assignedToList = $assignedToList;
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->taskID         = $taskID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->moduleName     = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->treeClass      = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->pager          = $pager;
+        $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
+        $this->view->setModule      = false;
 
         $this->display();
     }
