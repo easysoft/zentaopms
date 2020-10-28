@@ -401,7 +401,7 @@ class testtask extends control
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* Get project type and set assignedTos. */
+        /* Get project type and set assignedToList. */
         $project = $this->project->getById($task->project);
         if($project->acl == 'private')
         {
