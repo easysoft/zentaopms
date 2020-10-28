@@ -682,6 +682,7 @@ class projectModel extends model
 
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
+
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
