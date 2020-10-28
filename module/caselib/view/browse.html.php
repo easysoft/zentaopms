@@ -116,7 +116,7 @@ js::set('flow',          $config->global->flow);
               <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
               <?php
               $extendFields = $this->caselib->getFlowExtendFields();
-              foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+              foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
               ?>
               <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
             </tr>
