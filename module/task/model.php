@@ -778,7 +778,7 @@ class taskModel extends model
      */
     public function update($taskID)
     {
-        $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$taskID)->fetch();
+        $oldTask = $this->getByID($taskID);
         if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
         {
             dao::$errors[] = $this->lang->task->error->recordMinus;
@@ -873,7 +873,7 @@ class taskModel extends model
                 $member->type     = 'task';
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
-                $member->left     = $this->post->teamLeft[$row] ? $this->post->teamLeft[$row] : ($member->estimate - $member->consumed);
+                $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
                 $member->order    = $row;
                 $teams[$account]  = $member;
                 if($task->status == 'done') $member->left = 0;
@@ -885,6 +885,11 @@ class taskModel extends model
         if(!empty($teams))
         {
             foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
+
+            /* Assign the left hours to zero who will be skipped. */
+            $skipMembers = $this->loadModel('project')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
+
             $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
             if($task->status == 'wait')
             {
@@ -1280,8 +1285,8 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
-            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
+            $skipMembers = $this->loadModel('project')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $this->dao->update(TABLE_TEAM)->set('left')->eq($task->left)
                 ->where('root')->eq($taskID)
@@ -1622,8 +1627,8 @@ class taskModel extends model
                 ->andWhere('type')->eq('task')
                 ->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
-            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
-            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
+            $skipMembers = $this->loadModel('project')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
