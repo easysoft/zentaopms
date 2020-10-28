@@ -133,7 +133,7 @@ class group extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        /* Get the group data by id and primary menus. */
+        /* Get the group data by id. */
         $group = $this->group->getByID($groupID);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
