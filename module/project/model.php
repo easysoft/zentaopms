@@ -320,6 +320,7 @@ class projectModel extends model
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
@@ -393,7 +394,8 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'sprint', $projectID);
+            $whitelist = explode(',', $sprint->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $projectID);
             if($sprint->acl != 'open') $this->updateUserView($projectID);
 
             if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
@@ -418,6 +420,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
@@ -458,7 +461,8 @@ class projectModel extends model
             }
         }
 
-        $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'sprint', $projectID);
+        $whitelist = explode(',', $project->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $projectID);
 
         /* Fix bug#3074, Update views for team members. */
         if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);

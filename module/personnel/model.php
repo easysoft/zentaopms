@@ -247,7 +247,6 @@ class personnelModel extends model
 
         $users = array_filter($users);
         $users = array_unique($users);
-
         $accounts = array();
         foreach($users as $account)
         {

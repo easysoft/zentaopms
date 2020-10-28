@@ -250,7 +250,6 @@ class programModel extends model
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
             ->get();
-        $whitelist = explode(',', $program->whitelist);
 
         if($program->parent)
         {
@@ -283,6 +282,7 @@ class programModel extends model
             $programID = $this->dao->lastInsertId();
             $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
 
+            $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
@@ -332,6 +332,7 @@ class programModel extends model
             ->setDefault('end', '')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
             ->remove('uid')
@@ -376,7 +377,8 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'program', $programID);
+            $whitelist = explode(',', $program->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
@@ -1062,6 +1064,7 @@ class programModel extends model
             ->setDefault('status', 'wait')
             ->setIF($this->post->longTime == 1, 'end', '')
             ->setIF($this->post->longTime == 1, 'days', 0)
+            ->setIF($this->post->acl      == 'open', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('end', '')
             ->setDefault('openedDate', helper::now())
@@ -1103,7 +1106,8 @@ class programModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'project', $projectID);
+            $whitelist = explode(',', $project->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Save order. */
@@ -1154,6 +1158,7 @@ class programModel extends model
             ->setIF($this->post->longTime == 1, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
             ->remove('longTime')
@@ -1194,7 +1199,8 @@ class programModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'project', $projectID);
+            $whitelist = explode(',', $project->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);

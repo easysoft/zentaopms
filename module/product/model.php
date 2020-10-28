@@ -473,6 +473,7 @@ class productModel extends model
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
             ->remove('uid')
@@ -490,7 +491,8 @@ class productModel extends model
         $this->file->updateObjectID($this->post->uid, $productID, 'product');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
-        $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'product', $productID);
+        $whitelist = explode(',', $product->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
         /* Create doc lib. */
@@ -518,6 +520,7 @@ class productModel extends model
         $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $product = fixer::input('post')
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
@@ -531,10 +534,12 @@ class productModel extends model
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
             ->exec();
+
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'product', $productID);
+            $whitelist = explode(',', $product->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }
