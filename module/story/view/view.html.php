@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<style>.comment-content span strong {color: unset;}</style>
 <?php $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
