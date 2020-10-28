@@ -147,9 +147,9 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, '', 'block'));?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
-        <tr>
+        <tr class="hidden" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
           <td><?php echo html::select('whitelist[]', $users, $whitelist, 'class="form-control chosen" multiple');?></td>
           <td></td>

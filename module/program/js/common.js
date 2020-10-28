@@ -4,6 +4,11 @@ function setProgramType(type)
     location.href = location.href;
 }
 
+function setWhite(acl)
+{
+    acl != 'open' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
+}
+
 /**
  * Convert a date string like 2011-11-11 to date object in js.
  *

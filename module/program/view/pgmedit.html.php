@@ -73,7 +73,7 @@
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $aclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
-        <tr>
+        <tr class="<?php if($program->acl == 'open') echo 'hidden';?>" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
           <td><?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?></td>
           <td></td>
@@ -90,9 +90,9 @@
   </div>
 </div>
 <div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl == 'program' ? 'private' : 'open', '', 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl == 'program' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='subPGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, $program->acl, '', 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

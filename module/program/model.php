@@ -244,11 +244,13 @@ class programModel extends model
             ->setDefault('end', '')
             ->setDefault('parent', 0)
             ->setDefault('openedDate', helper::now())
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
             ->get();
+        $whitelist = explode(',', $program->whitelist);
 
         if($program->parent)
         {
@@ -281,7 +283,7 @@ class programModel extends model
             $programID = $this->dao->lastInsertId();
             $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
 
-            $this->loadModel('personnel')->updateWhitelist($this->post->whitelist, 'program', $programID);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             $this->file->updateObjectID($this->post->uid, $programID, 'project');

@@ -4051,24 +4051,36 @@ class upgradeModel extends model
         $whiteList = array_diff($whiteList, $teams);
 
         /* Get all white list in sprint and product. */
-        $groups = array();
+        $this->loadModel('group');
+        $this->loadModel('personnel');
         foreach($products as $product)
         {
             if($product->acl != 'custom' || $product->whitelist) return;
-            $groups += explode(',', $product->whitelist);
+            $groups = explode(',', $product->whitelist);
+            $whitelist = $this->group->getGroupAccounts($groups);
+            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'project', $projectID, 'whitelist', 'upgrade');
         }
 
         foreach($sprints as $sprint)
         {
             if($sprint->acl != 'custom' || $sprint->whitelist) return;
-            $groups += explode(',', $sprint->whitelist);
+            $groups = explode(',', $sprint->whitelist);
+            $whitelist = $this->group->getGroupAccounts($groups);
+            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
         }
+    }
 
-        $users = $groups ? $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs() : array();
-        foreach($users as $account) $whiteList[$account] = $account;
-
-        /* Insert whiteList into program and projec. */
-        if($whiteList) $this->loadModel('personnel')->updateWhitelist($whiteList, 'project', $projectiD, 'whitelist', 'upgrade', 'Upgrade synced accounts.');
+    /**
+     * Set program default priv.
+     * 
+     * @param  string $fromVersion 
+     * @access public
+     * @return void
+     */
+    public function setDefaultPriv()
+    {
+        
     }
 
     /**

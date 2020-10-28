@@ -154,6 +154,18 @@ class groupModel extends model
     }
 
     /**
+     * Get the account number in the group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getGroupAccounts($groupID = 0)
+    {
+        return $this->dao->select('account')->from(TABLE_USERGROUP)->where('group')->eq($groupIdList)->fetchPairs('account');
+    }
+
+    /**
      * Get privileges of a groups.
      * 
      * @param  int    $groupID 

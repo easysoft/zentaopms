@@ -67,12 +67,12 @@
               <?php echo $this->fetch('user', 'ajaxPrintTemplates', "type=product&link=desc");?>
               <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
             </td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->acl;?></th>
             <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
           </tr>
-          <tr>
+          <tr class="hidden" id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
             <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
             <td></td>

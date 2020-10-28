@@ -2032,6 +2032,11 @@ class userModel extends model
             }
         }
 
+        /* Get white list accounts. */
+        $objectType = $project->type == 'project' ? 'project' : 'sprint';
+        $accounts = $this->loadModel('personnel')->getWhitelistAccount($project->id, $objectType);
+        $users += $accounts ? $accounts : array();
+
         return $users;
     }
 
@@ -2043,9 +2048,9 @@ class userModel extends model
      * @access public
      * @return array 
      */
-    public function getProgramAuthedUsers($program,  $stakeholders)
+    public function getProgramAuthedUsers($program, $stakeholders)
     {
-        $users = array(); 
+        $users = array();
 
         foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
 
@@ -2053,6 +2058,10 @@ class userModel extends model
         $users[$program->PM]       = $program->PM;
 
         $users += $stakeholders ? $stakeholders : array();
+
+        /* Get white list accounts. */
+        $accounts = $this->loadModel('personnel')->getWhitelistAccount($program->id, 'program');
+        $users += $accounts ? $accounts : array();
 
         return $users;
     }
@@ -2093,17 +2102,12 @@ class userModel extends model
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
 
-        if($product->acl == 'custom')
-        {
-            foreach(explode(',', $product->whitelist) as $whitelist)
-            {
-                if(empty($whitelist)) continue;
-                $users += zget($groupUsers, $whitelist, array());
-            }
-        }
-
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();
+
+        /* Get white list accounts. */
+        $accounts = $this->loadModel('personnel')->getWhitelistAccount($product->id, 'product');
+        $users += $accounts ? $accounts : array();
 
         return $users;
     }

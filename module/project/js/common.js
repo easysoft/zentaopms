@@ -1,11 +1,11 @@
-function setWhite(acl)
-{
-    acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
-}
-
 function switchStatus(projectID, status)
 {
   if(status) location.href = createLink('project', 'task', 'project=' + projectID + '&type=' + status);
+}
+
+function setWhite(acl)
+{
+    acl != 'open' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }
 
 function switchGroup(projectID, groupBy)

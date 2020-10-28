@@ -237,11 +237,10 @@ class personnelModel extends model
      * @param  int     $objectID
      * @param  string  $type    whitelist|blacklist
      * @param  string  $source  upgrade|add|sync
-     * @param  string  $desc
      * @access public
      * @return void
      */
-    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $desc = '')
+    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add')
     {
         $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source,`desc`')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
         $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
@@ -265,7 +264,6 @@ class personnelModel extends model
             $acl->objectID   = $objectID;
             $acl->type       = $type;
             $acl->source     = $source;
-            $acl->desc       = $desc;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
             $accounts[$account] = $account;
         }
@@ -286,7 +284,8 @@ class personnelModel extends model
             $product = $this->loadModel('product')->getById($objectID);
             $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
             $newWhitelist     = array_merge($programWhitelist, $accounts);
-            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', 'sync', 'From product synchronization to program set.');
+            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source);
 
             /* Removal of persons from centralized program whitelisting. */
             foreach($deletedAccouns as $account) $this->deleteProgramWhitelist($objectID, $account);
@@ -298,7 +297,8 @@ class personnelModel extends model
             $project = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('project', '');
             $projectWhitelist = $this->getWhitelistAccount($project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
-            $this->updateWhitelist($newWhitelist, 'project', $project, 'whitelist', 'sync', 'From sprint synchronization to project.');
+            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+            $this->updateWhitelist($newWhitelist, 'project', $project, 'whitelist', $source);
 
             /* Removal of whitelisted persons from projects. */
             foreach($deletedAccouns as $account) $this->deleteProjectWhitelist($objectID, $account);
