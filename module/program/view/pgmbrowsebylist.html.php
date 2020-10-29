@@ -7,7 +7,6 @@
         <th class='c-id w-80px'>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->PGMCode);?></th>
         <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PGMName);?></th>
         <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PGMStatus);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
@@ -48,14 +47,14 @@
         <td class='c-id'>
           <?php printf('%03d', $program->id);?>
         </td>
-        <td class='text-left'><?php echo $program->code;?></td>
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
-          <span class="table-nest-icon icon<?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
+          <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id"), "<i class='icon icon-folder'></i> " . $program->name);?>
+          <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id"), "<i class='icon icon-folder-open-o'></i>" . $program->name);?>
           <?php else:?>
           <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), "<i class='icon icon-file'></i> " . $program->name);?>
           <?php endif;?>
+          <span class="label label-badge label-info label-outline"><?php echo $program->code;?></span>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>
