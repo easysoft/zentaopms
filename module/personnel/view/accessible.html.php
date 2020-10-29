@@ -52,8 +52,8 @@ js::set('deptID', $deptID);
             <td class="c-name"><?php echo zget($deptList, $personnel->dept);?></td>
             <td class="c-name"><?php echo $personnel->realname;?></td>
             <td class="c-name"><?php echo $personnel->account;?></td>
-            <td><?php echo zget($lang->user->roleList, $personnel->role);?></td>
-            <td><?php echo zget($lang->user->genderList, $personnel->gender);?></td>
+            <td><?php echo zget($lang->user->roleList, $personnel->role, '');?></td>
+            <td><?php echo zget($lang->user->genderList, $personnel->gender, '');?></td>
           </tr>
           <?php endforeach;?>
         </tbody>
