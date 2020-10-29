@@ -1367,10 +1367,10 @@ class userModel extends model
 
             /* Init objects. */
             static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList;
-            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
-            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
-            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,type')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
+            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage')->fetchAll('id');
 
             /* Get teams. */
             if($teams === null)
@@ -1382,14 +1382,14 @@ class userModel extends model
             /* Get product white list. */
             if($productWhiteList === null)
             {
-                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('type')->eq('product')->query();
+                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('product')->query();
                 while($acl = $stmt->fetch()) $productWhiteList[$acl->objectID][$acl->account] = $acl->account;
             }
 
             /* Get white list. */
             if($whiteList === null)
             {
-                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('type')->in('program,project,sprint')->query();
+                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint')->query();
                 while($acl = $stmt->fetch()) $whiteList[$acl->objectID][$acl->account] = $acl->account;
             }
 
@@ -1401,7 +1401,7 @@ class userModel extends model
             }
 
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
-            
+
             /* Init user view. */
             $userView = new stdclass();
             $userView->account  = $account;
@@ -1411,19 +1411,19 @@ class userModel extends model
             $userView->sprints  = array();
 
             if($isAdmin)
-            {    
+            {
                 $userView->programs = join(',', array_keys($allPrograms));
                 $userView->products = join(',', array_keys($allProducts));
                 $userView->projects = join(',', array_keys($allProjects));
                 $userView->sprints  = join(',', array_keys($allSprints));
-            }    
-            else 
+            }
+            else
             {
                 /* Process program userview. */
                 $programs = array();
                 foreach($allPrograms as $id => $program)
                 {    
-                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array(), zget($whiteList, $id, array())))) $programs[$id] = $id;
+                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array()), zget($whiteList, $id, array()))) $programs[$id] = $id;
                 }    
                 $userView->programs = join(',', $programs);
 
@@ -1966,11 +1966,11 @@ class userModel extends model
      * @access public
      * @return bool 
      */
-    public function checkProgramPriv($program, $account, $stakeholders, $whitelist)
+    public function checkProgramPriv($program, $account, $stakeholders, $whiteList)
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
-        if($program->PM == $account OR $program->openedBy == $account) return true;
+        if($program->PM == $account || $program->openedBy == $account) return true;
 
         if($program->acl == 'open') return true;
 
@@ -2047,15 +2047,6 @@ class userModel extends model
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
-
-        if($product->acl == 'custom')
-        {
-            foreach(explode(',', $product->whitelist) as $whitelist)
-            {
-                if(empty($whitelist)) continue;
-                if(strpos(",{$groups},", ",$whitelist,") !== false) return true;
-            }
-        }
 
         if(isset($teams[$account])) return true;
         if(isset($stakeholders[$account])) return true;
