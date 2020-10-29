@@ -352,6 +352,5 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
   `type` char(40) NOT NULL DEFAULT 'whitelist',
   `source` char(30) NOT NULL,
-  `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

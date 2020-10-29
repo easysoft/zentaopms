@@ -1,12 +1,11 @@
--- DROP TABLE IF EXISTS `zt_acllist`;
-CREATE TABLE IF NOT EXISTS `zt_acllist` (
+-- DROP TABLE IF EXISTS `zt_acl`;
+CREATE TABLE IF NOT EXISTS `zt_acl` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL,
   `objectType` char(30) NOT NULL,
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
   `type` char(40) NOT NULL DEFAULT 'whitelist',
   `source` char(30) NOT NULL,
-  `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

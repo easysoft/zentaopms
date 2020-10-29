@@ -281,14 +281,6 @@
               <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
               <div class="detail-content">
                 <p><?php echo $lang->project->aclList[$project->acl];?></p>
-                <?php if($project->acl == 'custom'):?>
-                <p>
-                  <?php
-                  $whitelist = explode(',', $project->whitelist);
-                  foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
-                  ?>
-                </p>
-                <?php endif;?>
               </div>
             </div>
             <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
