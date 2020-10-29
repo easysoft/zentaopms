@@ -382,7 +382,7 @@ class issue extends control
 
         if(in_array($data->mode, array('tostory', 'tobug')))
         {
-            $products  = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+            $products  = $this->loadModel('product')->getPairs();
             $productID = $this->session->product;
             $productID = isset($products[$productID]) ? $productID : key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');

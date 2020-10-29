@@ -58,7 +58,7 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->program);?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->PRJ);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
@@ -70,7 +70,7 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-product'><?php echo zget($programs, $story->program, '');?></td>
+          <td class='c-product'><?php echo zget($programs, $story->PRJ, '');?></td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
@@ -80,11 +80,11 @@
           <td class='c-actions'>
             <?php
             $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $story->program);
-            common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $story->PRJ);
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $story->PRJ);
+            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $story->PRJ);
+            common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $story->PRJ);
+            common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $story->PRJ);
             ?>
           </td>
         </tr>
@@ -105,7 +105,7 @@
             unset($lang->story->reviewResultList['revert']);
             foreach($lang->story->reviewResultList as $key => $result)
             {
-                $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $story->program);
+                $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $story->PRJ);
                 if($key == 'reject')
                 {
                     echo "<li class='dropdown-submenu'>";
@@ -117,7 +117,7 @@
 
                     foreach($lang->story->reasonList as $key => $reason)
                     {
-                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $story->program);
+                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $story->PRJ);
                         echo "<li>";
                         echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                         echo "</li>";
@@ -138,7 +138,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($users) > 10;
-          $actionLink = $this->createLink('story', 'batchAssignTo', '', '', '', $story->program);
+          $actionLink = $this->createLink('story', 'batchAssignTo', '', '', '', $story->PRJ);
           echo html::select('assignedTo', $users, '', 'class="hidden"');
           if($withSearch)
           {

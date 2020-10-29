@@ -1,8 +1,8 @@
 $(function()
 {
     if(typeof(storyType) == 'undefined') storyType = ''; 
-    $('#subNavbar .nav li').removeClass('active');
-    $("#subNavbar .nav li[data-id=" + storyType + ']').addClass('active');
+    $('#navbar .nav li').removeClass('active');
+    $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
 })
 
 function getStatus(method, params)

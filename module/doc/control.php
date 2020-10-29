@@ -111,7 +111,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $lib->product);
+            $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
@@ -223,7 +223,7 @@ class doc extends control
             }
         }
         $libTypeList = $this->lang->doc->libTypeList;
-        $products    = $this->product->getPairs('nocode', $this->session->PRJ);
+        $products    = $this->product->getPairs('nocode');
         $projects    = $this->project->getPairs('nocode', $this->session->PRJ);
         if(empty($products)) unset($libTypeList['product']);
         if(empty($projects)) unset($libTypeList['project']);
@@ -341,7 +341,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $lib->product);
+            $this->product->setMenu($this->product->getPairs(''), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -762,7 +762,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $objectID);
+            $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
@@ -856,7 +856,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs('', $this->session->PRJ), $objectID);
+            $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')

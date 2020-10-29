@@ -62,6 +62,7 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
+      <!--
       <?php if($program->model == 'waterfall' and $story->type == 'requirement'):?>
         <?php if(!empty($track)):?>
         <div class="detail">
@@ -112,6 +113,7 @@
         </div>
         <?php endif;?>
       <?php endif;?>
+      -->
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
       <?php if(!empty($story->children)):?>
