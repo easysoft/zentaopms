@@ -5,7 +5,9 @@ $(function()
     $('#programBox .cell').height($('#programBox').height() - 20);
 
     pgmBegin = $('.pgmParams #begin').val();
+    pgmEnd   = $('.pgmParams #end').val();
     setPgmBegin(pgmBegin);
+    setPgmEnd(pgmEnd);
 
     $('[name^=lines]').change(function()
     {
@@ -19,6 +21,7 @@ $(function()
             $('[data-line=' + value + ']').prop('checked', false)
         }
         setPgmBegin(pgmBegin);
+        setPgmEnd(pgmEnd);
     })
 
     $('#longTime').change(function()
@@ -59,6 +62,7 @@ $(function()
         })
 
         setPgmBegin(pgmBegin);
+        setPgmEnd(pgmEnd);
     })
 
     $('[name^=products]').change(function()
@@ -76,6 +80,7 @@ $(function()
             $('[data-product=' + value + ']').prop('checked', false)
         }
         setPgmBegin(pgmBegin);
+        setPgmEnd(pgmEnd);
     })
 
     $('[name^=sprints]').change(function()
@@ -89,6 +94,7 @@ $(function()
             if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
         }
         setPgmBegin(pgmBegin);
+        setPgmEnd(pgmEnd);
     })
 
     toggleProgram($('form #newProgram0'));
@@ -155,6 +161,21 @@ function setPgmBegin(pgmBegin)
         {
             pgmBegin = begin;
             $('.pgmParams #begin').val(pgmBegin);
+        }
+    });
+}
+
+function setPgmEnd(pgmEnd)
+{
+    $(':checkbox:checked[data-end]').each(function()
+    {
+        end = $(this).attr('data-end').substr(0, 10);
+        if(end == '0000-00-00') return true;
+
+        if(end > pgmEnd)
+        {
+            pgmEnd = end;
+            $('.pgmParams #end').val(pgmEnd);
         }
     });
 }
