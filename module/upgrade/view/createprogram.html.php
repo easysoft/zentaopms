@@ -69,3 +69,4 @@
     <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
   </tr>
 </table>
+<div class='table-foot text-center'><?php echo html::submitButton();?></div>

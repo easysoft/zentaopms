@@ -1180,7 +1180,7 @@ class docModel extends model
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
-            $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProject  = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($objectID)
                 ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
