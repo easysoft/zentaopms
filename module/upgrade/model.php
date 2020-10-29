@@ -4068,7 +4068,7 @@ class upgradeModel extends model
 
         foreach($products as $product)
         {
-            if($product->acl != 'custom' || $product->whitelist) continue;
+            if($product->acl != 'private') continue;
 
             $groups        = explode(',', $product->whitelist);
             $groupAccounts = $this->group->getGroupAccounts($groups);
@@ -4080,7 +4080,7 @@ class upgradeModel extends model
 
         foreach($sprints as $sprint)
         {
-            if($sprint->acl != 'custom' || $sprint->whitelist) continue;
+            if($sprint->acl != 'private') continue;
 
             $groups        = explode(',', $sprint->whitelist);
             $groupAccounts = $this->group->getGroupAccounts($groups);

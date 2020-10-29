@@ -162,8 +162,9 @@ class groupModel extends model
      */
     public function getGroupAccounts($groupIdList = array())
     {
+        $groupIdList = array_filter($groupIdList);
         if(empty($groupIdList)) return array();
-        return $this->dao->select('account')->from(TABLE_USERGROUP)->where('group')->in($groupIdList)->fetchPairs('account');
+        return $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groupIdList)->fetchPairs('account');
     }
 
     /**
