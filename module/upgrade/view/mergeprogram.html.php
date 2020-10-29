@@ -49,10 +49,14 @@
           </tr>
           <?php endforeach;?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td class='text-center' colspan='3'><?php echo html::submitButton();?></td>
+            </tr>
+          </tfoot>
         </table>
         <?php endif;?>
       </div>
-      <div class='modal-footer'><?php echo html::submitButton();?></div>
     </div>
   </form>
 </div>

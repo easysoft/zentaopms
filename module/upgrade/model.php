@@ -3945,17 +3945,6 @@ class upgradeModel extends model
      */
     public function processMergedData($programID, $projectID, $productIdList = array(), $sprintIdList = array())
     {
-        /* Product linked objects. */
-        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->in($productIdList)->exec();
-        $this->dao->update(TABLE_STORY)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUG)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_RELEASE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_CASE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUILD)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
-
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('PRJ')->eq($projectID)->where('project')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
@@ -3964,6 +3953,8 @@ class upgradeModel extends model
         $products = $this->dao->select('id, acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
         foreach($products as $product)
         {
+            if($product->program) continue;
+
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;

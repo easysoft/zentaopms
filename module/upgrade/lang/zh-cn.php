@@ -48,6 +48,7 @@ $lang->upgrade->updateFile     = '需要更新附件信息。';
 $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
 $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
 $lang->upgrade->mergeProgram   = '数据归并';
+$lang->upgrade->to20Demo       = '查看20版本Demo';
 $lang->upgrade->to20Tips       = '禅道20版本升级提示';
 $lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
 $lang->upgrade->to20TipsHeader = "<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。相关介绍请看如下视频：</p><br />";
@@ -58,7 +59,6 @@ $lang->upgrade->to20Desc       = <<<EOD
     <li>您可以先安装一个20版本的禅道，体验一下里边的概念和流程。</li>
     <li>20版本禅道改动比较大，升级之前请做好备份。</li>
     <li>请放心升级，即使第一次升级不到位，后续还可以再调整，不会影响系统数据。</li>
-    <li>点击查看<a href='https://demo.qcmmi.com/' target='_blank'>20.0版系统demo</a>。</li>
   </ol>
 </div>
 EOD;
@@ -71,7 +71,7 @@ $lang->upgrade->product  = $lang->productCommon;
 $lang->upgrade->project  = '迭代';
 
 $lang->upgrade->newProgram         = '新建';
-$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。经系统计算，我们推荐您的迁移方案如下，您也可以根据自己的情况进行调整：";
+$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。";
 $lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个项目集和项目中，也可以分开归并。";
 $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个项目集和项目中，也可以选择某一个产品将其下面所属的迭代归并到项目集和项目中。";
 $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个项目中，也可以独立归并。";
