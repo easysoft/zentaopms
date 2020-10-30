@@ -2011,6 +2011,13 @@ class userModel extends model
             }
         }
 
+        /* Judge sprint auth. */
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        {
+            $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            if($parent->PM == $account || $parent->openedBy == $account) return true;
+        }
+
         return false;
     }
 
@@ -2091,6 +2098,14 @@ class userModel extends model
                 $users[$program->openedBy] = $program->openedBy;
                 $users[$program->PM]       = $program->PM;
             }
+        }
+
+        /* Judge sprint auth. */
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        {
+            $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            $users[$parent->openedBy] = $parent->openedBy;
+            $users[$parent->PM]       = $parent->PM;
         }
 
         return $users;
