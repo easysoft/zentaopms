@@ -133,7 +133,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['20.0'][]   = array('title'=>'增加项目模板，兼容渠成', 'desc' => '');
+$lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'禅道20版本大更新，重构导航，增加瀑布模型', 'desc' => '<p>增加项目集和项目概念</p><p>将原项目概念变为迭代或阶段概念</p><p>增加瀑布开发模板</p>');
 $lang->misc->feature->all['12.4.1'][] = array('title'=>'修复Bug', 'desc' => '');
 
 $lang->misc->feature->all['12.4.stable'][] = array('title'=>'修复Bug', 'desc' => '');
