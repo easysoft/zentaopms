@@ -947,6 +947,11 @@ class programModel extends model
             $path = array_filter($path);
             $programID = current($path);
         }
+        elseif($program->parent == 0)
+        {
+            $programID = $program->id;
+        }
+
         return $programID;
     }
 

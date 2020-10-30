@@ -71,7 +71,7 @@
           <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
           <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
           <?php else:?>
-          <?php common::printIcon('program', 'PRJGroup', "programID=$program->id", $program, 'list', 'group');?>
+          <?php common::printIcon('program', 'PRJGroup', "programID=$program->id", $program, 'list', 'icon icon-lock');?>
           <?php common::printIcon('program', 'PRJManageMembers', "programID=$program->id", $program, 'list', 'persons');?>
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php common::printIcon('program', 'PRJActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>

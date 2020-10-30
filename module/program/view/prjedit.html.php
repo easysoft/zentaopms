@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, $project->parent, "class='form-control chosen' onchange='setAclList(this.value)'");?></td><td></td><td></td>
+          <td><?php echo zget($parents, $project->parent, '/');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
@@ -130,7 +130,7 @@
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', '', "class='form-control'");?>
+              <?php echo html::input('days', $project->days, "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->project->day;?></span>
             </div>
           </td>

@@ -13,6 +13,7 @@ $(function()
             $('#end').removeAttr('disabled');
         }
     });
+    setAclList($("#parent").val());
 
     if(typeof(currentPlanID) == 'undefined')
     {
@@ -27,6 +28,12 @@ $(function()
         });
     }
 });
+
+function setParentProgram()
+{
+    var parentProgram = $("#parent").val();
+    location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + parentProgram + '&from=' + from + '&copyProjectID=' + copyProjectID);
+}
 
 function setCopyProject(copyProjectID)
 {

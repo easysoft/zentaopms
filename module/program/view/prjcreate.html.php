@@ -15,6 +15,7 @@
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
+<?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
@@ -35,7 +36,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setAclList(this.value)'");?></td><td></td><td></td>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>

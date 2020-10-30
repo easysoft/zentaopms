@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($goback, $lang->goback, '', 'class="btn btn-secondary"');?>
+    <?php echo html::backButton($lang->goback, '', 'btn-secondary');?>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>

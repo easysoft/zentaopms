@@ -202,7 +202,6 @@ class program extends control
         $this->view->users       = $this->user->getPairs('noclosed|nodeleted');
         $this->view->program     = $program;
         $this->view->parents     = $parents;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
 
         $this->display();
     }
@@ -319,7 +318,7 @@ class program extends control
         if($childrenCount) die(js::alert($this->lang->program->hasChildren));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'PGMDelete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
@@ -764,7 +763,6 @@ class program extends control
             $this->lang->navGroup->program     = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
         }
-        $this->loadModel('project');
 
         if($_POST)
         {
@@ -923,15 +921,12 @@ class program extends control
         $groupUsers = array();
         foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
-        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
-
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->groups     = $groups;
         $this->view->projectID  = $projectID;
         $this->view->programID  = $programID;
         $this->view->groupUsers = $groupUsers;
-        $this->view->goback     = $goback;
 
         $this->display();
     }
@@ -1200,6 +1195,7 @@ class program extends control
      */
     public function PRJStart($projectID)
     {
+        $this->lang->navGroup->program = 'project';
         $project   = $this->program->getPGMByID($projectID);
         $projectID = $project->id;
 
@@ -1235,6 +1231,7 @@ class program extends control
      */
     public function PRJSuspend($projectID)
     {
+        $this->lang->navGroup->program = 'project';
         $project = $this->program->getPGMByID($projectID);
 
         if(!empty($_POST))
@@ -1270,6 +1267,7 @@ class program extends control
      */
     public function PRJClose($projectID)
     {
+        $this->lang->navGroup->program = 'project';
         $project = $this->program->getPGMByID($projectID);
 
         if(!empty($_POST))
@@ -1305,6 +1303,7 @@ class program extends control
      */
     public function PRJActivate($projectID)
     {
+        $this->lang->navGroup->program = 'project';
         $project = $this->program->getPRJByID($projectID);
 
         if(!empty($_POST))
@@ -1352,7 +1351,7 @@ class program extends control
         if($confirm == 'no')
         {
             $project = $this->program->getPRJByID($projectID);
-            echo js::confirm(sprintf($this->lang->program->confirmDelete, $project->name), $this->createLink('program', 'PRJDelete', "projectID=$projectID&confirm=yes&from=$from&programID=$programID"));
+            echo js::confirm(sprintf($this->lang->program->PRJConfirmDelete, $project->name), $this->createLink('program', 'PRJDelete', "projectID=$projectID&confirm=yes"));
             die();
         }
         else
@@ -1360,10 +1359,9 @@ class program extends control
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
-            $this->session->set('project', '');
+            $this->session->set('PRJ', '');
 
-            $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
-            die(js::locate($url, 'parent'));
+            die(js::reload('parent'));
         }
     }
 
