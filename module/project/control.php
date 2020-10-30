@@ -1897,7 +1897,7 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->manageProducts;
 
-        $allProducts     = $this->product->getPairs('noclosed|nocode');
+        $allProducts     = $this->product->getProductsByProject($project->project);
         $linkedProducts  = $this->project->getProducts($project->id);
         $linkedBranches  = array();
         // Merge allProducts and linkedProducts for closed product.
