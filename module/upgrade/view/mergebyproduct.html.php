@@ -19,7 +19,7 @@
             <?php echo html::checkBox("products", array($product->id => "{$lang->productCommon} #{$product->id} {$product->name}"), $product->id, "data-productid='{$product->id}' data-begin='{$product->createdDate}'");?>
           </div>
           <div class='projectList'>
-            <div class='scroll-handle scrollbar-hover'>
+            <div class='scroll-handle'>
             <?php if(isset($productGroups[$productID])):?>
             <?php foreach($productGroups[$productID] as $sprint):?>
             <?php echo html::checkBox("sprints[$productID]", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>

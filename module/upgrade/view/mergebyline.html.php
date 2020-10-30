@@ -41,7 +41,7 @@
             <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
             </div>
             <div class='projectList'>
-              <div class='scroll-handle scrollbar-hover'>
+              <div class='scroll-handle'>
               <?php if(isset($productGroups[$productID])):?>
               <?php foreach($productGroups[$productID] as $sprint):?>
               <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $i == 0 ? $sprint->id : 0, "data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>

@@ -165,8 +165,8 @@ $lang->product->menu->home = '主页|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->requirement = array('link' => "$URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->story       = array('link' => "$SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "$lang->storyCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
@@ -174,6 +174,7 @@ $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->whitelist   = array('link' => '白名单|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
+
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
