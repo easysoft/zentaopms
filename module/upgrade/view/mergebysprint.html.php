@@ -1,4 +1,3 @@
-<style> .sprint-group{padding: 10px 0px}</style>
 <div class='alert alert-info'>
   <?php
   printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
@@ -8,12 +7,12 @@
 <div class='main-row'>
   <div class='table-col' id='source'>
     <div class='cell'>
-      <div class='item'><strong><?php echo $lang->upgrade->project;?></strong></div>
-      <div class='sprint-group'>
+      <div class='lineGroup-title'>
+        <div class='item'><strong><?php echo $lang->upgrade->project;?></strong></div>
+      </div>
+      <div class='line-groups'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-        <tr>
-          <td><?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?></td>
-        </tr>
+        <?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>
         <?php endforeach;?>
       </div>
     </div>

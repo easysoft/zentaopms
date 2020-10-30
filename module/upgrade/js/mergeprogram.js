@@ -1,7 +1,7 @@
 $(function()
 {
     $('.side-col .cell').height($('.side-col').height() - 20);
-    $('#source .cell').height($('#source').height() - 20);
+    $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
     pgmBegin = $('.pgmParams #begin').val();
@@ -25,17 +25,17 @@ $(function()
     })
 
     $('#longTime').change(function()
-    {   
+    {
         if($(this).prop('checked'))
-        {   
+        {
             $('#end').val('').attr('disabled', 'disabled');
             $('#days').val('');
-        }   
+        }
         else
-        {   
+        {
             $('#end').removeAttr('disabled');
-        }   
-    }); 
+        }
+    });
 
     $('#lineList li a').click(function()
     {
@@ -44,7 +44,7 @@ $(function()
         $(this).closest('li').addClass('active');
 
         /* Show current data and hide before data. */
-        var target = $(this).attr('data-target');        
+        var target = $(this).attr('data-target');
         $('.lineBox').addClass('hidden');
         $(target).removeClass('hidden');
         $('#source').find('.lineBox :checkBox').prop('checked', false);

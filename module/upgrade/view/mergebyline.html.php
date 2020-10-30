@@ -30,35 +30,37 @@
         <div class='item'><strong><?php echo $lang->upgrade->product;?></strong></div>
         <div class='item'><strong><?php echo $lang->upgrade->project;?></strong></div>
       </div>
-      <?php $i = 0;?>
-      <?php foreach($productlines as $line):?>
-      <div id='line<?php echo $line->id;?>' class='<?php if($line->id != $selected) echo 'hidden';?> lineBox'>
-        <?php foreach($lineGroups[$line->id] as $productID => $product):?>
-        <div class='lineGroup'>
-          <div class='productList'>
-          <?php echo html::checkBox("products[$line->id]", array($productID => "{$lang->productCommon} #{$product->id} {$product->name}"), $i == 0 ? $product->id : 0, "data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}'");?>
-          <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
-          </div>
-          <div class='projectList'>
-            <div class='scroll-handle'>
-            <?php if(isset($productGroups[$productID])):?>
-            <?php foreach($productGroups[$productID] as $sprint):?>
-            <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $i == 0 ? $sprint->id : 0, "data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>
-            <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
-            <?php endforeach;?>
-            <?php endif;?>
+      <div class='line-groups'>
+        <?php $i = 0;?>
+        <?php foreach($productlines as $line):?>
+        <div id='line<?php echo $line->id;?>' class='<?php if($line->id != $selected) echo 'hidden';?> lineBox'>
+          <?php foreach($lineGroups[$line->id] as $productID => $product):?>
+          <div class='lineGroup'>
+            <div class='productList'>
+            <?php echo html::checkBox("products[$line->id]", array($productID => "{$lang->productCommon} #{$product->id} {$product->name}"), $i == 0 ? $product->id : 0, "data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}'");?>
+            <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
+            </div>
+            <div class='projectList'>
+              <div class='scroll-handle scrollbar-hover'>
+              <?php if(isset($productGroups[$productID])):?>
+              <?php foreach($productGroups[$productID] as $sprint):?>
+              <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $i == 0 ? $sprint->id : 0, "data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>
+              <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
+              <?php endforeach;?>
+              <?php endif;?>
+              </div>
             </div>
           </div>
+          <?php endforeach;?>
         </div>
+        <?php $i ++;?>
         <?php endforeach;?>
       </div>
-      <?php $i ++;?>
-      <?php endforeach;?>
     </div>
   </div>
   <div class='table-col divider strong'><i class='icon icon-angle-double-right'></i></div>
   <div class='table-col pgmWidth' id='programBox'>
-    <div class='cell'> 
+    <div class='cell'>
     <?php
     $line = reset($productlines);
     $programName = $line->name;
