@@ -606,12 +606,12 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4');
             $this->execSQL($this->getUpgradeFile('12.4'));
             $this->appendExec('12_4');
-        case '20_0':
-            $this->saveLogs('Execute 20_0');
-            $this->execSQL($this->getUpgradeFile('20.0'));
+        case '20_0_alpha1':
+            $this->saveLogs('Execute 20_0_alpha1');
+            $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
             $this->setWork2Full();
             $this->initStoryOfPlan();
-            $this->appendExec('20_0');
+            $this->appendExec('20_0_alpha1');
         }
 
         $this->deletePatch();
