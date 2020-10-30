@@ -30,6 +30,7 @@ $lang->program->PRJSort              = '項目排序';
 $lang->program->PRJWhitelist         = '項目白名單';
 $lang->program->PRJAddWhitelist      = '項目添加白名單';
 $lang->program->unbindWhielist       = '項目刪除白名單';
+$lang->program->PRJManageProducts    = '項目關聯產品';
 
 /* Fields. */
 $lang->program->common             = '項目集';
@@ -168,7 +169,7 @@ $lang->program->PGMCreateGuide       = '選擇項目模板';
 $lang->program->PGMEdit              = '編輯項目集';
 $lang->program->PGMBrowse            = '項目集列表';
 $lang->program->PGMProduct           = '產品列表';
-$lang->program->PGMProject           = '项目集项目列表';
+$lang->program->PGMProject           = '項目集項目列表';
 $lang->program->PGMAll               = '所有項目集';
 $lang->program->PGMStart             = '啟動項目集';
 $lang->program->PGMFinish            = '完成項目集';

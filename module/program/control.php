@@ -764,13 +764,16 @@ class program extends control
             $this->lang->navGroup->program     = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
         }
+        $this->loadModel('project');
 
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
+            $this->project->updateProducts($projectID);
             $this->loadModel('action')->create('project', $projectID, 'opened');
+
             if($from == 'PGM')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
@@ -783,7 +786,10 @@ class program extends control
         $team      = '';
         $whitelist = '';
         $acl       = 'open';
-        $privway   = 'extend';
+        $auth      = 'extend';
+
+        $products     = array();
+        $productPlans = array();
 
         if($copyProjectID)
         {
@@ -792,25 +798,36 @@ class program extends control
             $code        = $copyProgram->code;
             $team        = $copyProgram->team;
             $acl         = $copyProgram->acl;
-            $privway     = $copyProgram->privway;
+            $auth        = $copyProgram->auth;
             $whitelist   = $copyProgram->whitelist;
             if(empty($model)) $model = $copyProgram->model;
+
+            $products = $this->project->getProducts($copyProjectID);
+            foreach($products as $product)
+            {
+                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
+            }
         }
+
+        $allProducts = $this->program->getPGMProduct($programID);
 
         $this->view->title      = $this->lang->program->PRJCreate;
         $this->view->position[] = $this->lang->program->PRJCreate;
 
-        $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programs      = array('' => '') + $this->program->getPRJPairsByTemplate($model, $programID);
+        $this->view->products      = $products;
+        $this->view->allProducts   = array('0' => '') + $allProducts;
+        $this->view->productPlans  = array('0' => '') + $productPlans;
+        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->programID     = $programID;
         $this->view->model         = $model;
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->acl           = $acl;
-        $this->view->privway       = $privway;
+        $this->view->auth          = $auth;
         $this->view->whitelist     = $whitelist;
         $this->view->copyProjectID = $copyProjectID;
         $this->view->from          = $from;
@@ -830,10 +847,15 @@ class program extends control
     public function PRJEdit($projectID = 0)
     {
         $this->lang->navGroup->program = 'project';
+        $this->app->loadLang('project');
+        $this->loadModel('productplan');
 
         if($_POST)
         {
             $changes = $this->program->PRJUpdate($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+
+            $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
             if($changes)
@@ -846,17 +868,41 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
-        $project = $this->program->getPRJByID($projectID);
-        $parents = $this->program->getParentPairs();
+        $project     = $this->program->getPRJByID($projectID);
+        $parents     = $this->program->getParentPairs();
+        $programID   = $this->program->getPRJProgramID($projectID);
+        $allProducts = $this->program->getPGMProduct($programID);
+        $linkedProducts = $this->project->getProducts($projectID);
+        $linkedBranches = array();
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+        }
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+        }
+
+        $productPlans = array(0 => '');
+        foreach($linkedProducts as $product)
+        {
+            $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+        }
 
         $this->view->title      = $this->lang->program->PRJEdit;
         $this->view->position[] = $this->lang->program->PRJEdit;
 
-        $this->view->pmUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->users   = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->project = $project;
-        $this->view->parents = $parents;
-        $this->view->groups  = $this->loadModel('group')->getPairs();
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->project        = $project;
+        $this->view->parents        = $parents;
+        $this->view->allProducts    = array('0' => '') + $allProducts;
+        $this->view->productPlans   = $productPlans;
+        $this->view->linkedProducts = $linkedProducts;
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+
         $this->display();
     }
 
@@ -1387,5 +1433,64 @@ class program extends control
     public function unbindWhielist($id = 0, $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+    }
+
+    /**
+     * Manage products.
+     *
+     * @param  int     $projectID
+     * @param  int     $programID
+     * @param  string  $from
+     * @access public
+     * @return void
+     */
+    public function PRJManageProducts($projectID, $programID, $from = '')
+    {
+        $this->lang->navGroup->program = 'project';
+        $browseProjectLink = $this->createLink('program', 'PRJBrowse', "programID=$programID");
+
+        if(!empty($_POST))
+        {
+            $oldProducts = $this->project->getProducts($projectID);
+            $this->project->updateProducts($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+
+            die(js::locate($browseProjectLink));
+        }
+
+        $this->loadModel('product');
+        $project   = $this->project->getById($projectID);
+        $programID = $this->program->getPRJProgramID($projectID);
+
+        /* Title and position. */
+        $title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $position[] = html::a($browseProjectLink, $project->name);
+        $position[] = $this->lang->project->manageProducts;
+
+        $allProducts    = $this->product->getPairs('noclosed|nocode', $programID);
+        $linkedProducts = $this->project->getProducts($project->id);
+        $linkedBranches = array();
+
+        /* Merge allProducts and linkedProducts for closed product. */
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if(!empty($product->branch)) $linkedBranches[$product->branch] = $product->branch;
+        }
+
+        /* Assign. */
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->allProducts    = $allProducts;
+        $this->view->linkedProducts = $linkedProducts;
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+
+        $this->display();
     }
 }

@@ -30,6 +30,7 @@ $lang->program->PRJSort              = '项目排序';
 $lang->program->PRJWhitelist         = '项目白名单';
 $lang->program->PRJAddWhitelist      = '项目添加白名单';
 $lang->program->unbindWhielist       = '项目删除白名单';
+$lang->program->PRJManageProducts    = '项目关联产品';
 
 /* Fields. */
 $lang->program->common             = '项目集';

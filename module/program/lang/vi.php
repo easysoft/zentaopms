@@ -30,6 +30,7 @@ $lang->program->PRJSort              = 'Order';
 $lang->program->PRJWhitelist         = 'Project Whitelist';
 $lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
 $lang->program->unbindWhielist       = 'Project Remove Whitelist';
+$lang->program->PRJManageProducts    = 'Manage Products';
 
 /* Fields. */
 $lang->program->common             = 'Project';
@@ -168,7 +169,7 @@ $lang->program->PGMCreateGuide       = 'Select Template';
 $lang->program->PGMEdit              = 'Edit Program';
 $lang->program->PGMBrowse            = 'Programs';
 $lang->program->PGMProduct           = 'Products';
-$lang->program->PGMProject           = 'Program Project';
+$lang->program->PGMProject           = 'Program Project List';
 $lang->program->PGMAll               = 'All Programs';
 $lang->program->PGMStart             = 'Start';
 $lang->program->PGMFinish            = 'Finish';

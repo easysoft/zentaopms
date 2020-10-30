@@ -197,6 +197,7 @@ $lang->resource->program->PRJDelete            = 'PRJDelete';
 $lang->resource->program->PRJWhitelist         = 'PRJWhitelist';
 $lang->resource->program->PRJAddWhitelist      = 'PRJAddWhitelist';
 $lang->resource->program->unbindWhielist       = 'unbindWhielist';
+$lang->resource->program->PRJManageProducts    = 'PRJManageProducts';
 
 $lang->program->methodOrder[0]   = 'createGuide';
 $lang->program->methodOrder[5]   = 'PGMIndex';
@@ -236,6 +237,7 @@ $lang->program->methodOrder[165] = 'PRJDelete';
 $lang->program->methodOrder[170] = 'PRJWhitelist';
 $lang->program->methodOrder[175] = 'PRJAddWhitelist';
 $lang->program->methodOrder[180] = 'unbindWhielist';
+$lang->program->methodOrder[185] = 'PRJManageProducts';
 
 /* Personnel . */
 $lang->resource->personnel = new stdclass();

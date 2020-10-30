@@ -173,6 +173,19 @@ class programModel extends model
     }
 
     /**
+     * Get the product associated with the project.
+     *
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getPGMProduct($programID = 0)
+    {
+        if(!empty($programID)) $programID = $this->getPRJProgramID($programID);
+        return $this->loadModel('product')->getPairs('noclosed', $programID);
+    }
+
+    /**
      * Get program by id.
      *
      * @param  int  $programID
@@ -916,6 +929,28 @@ class programModel extends model
     }
 
     /**
+     * Get the program to which the project belongs.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getPRJProgramID($projectID)
+    {
+        if(empty($projectID)) return 0;
+        $program  = $this->getPGMByID($projectID);
+
+        $programID = 0;
+        if($program->parent > 0)
+        {
+            $path = explode(',', $program->path);
+            $path = array_filter($path);
+            $programID = current($path);
+        }
+        return $programID;
+    }
+
+    /**
      * Get project name.
      *
      * @param  int    $projectID
@@ -1073,7 +1108,7 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('longTime')
+            ->remove('longTime,products,branch,plans')
             ->get();
 
         if($project->parent)
@@ -1161,7 +1196,7 @@ class programModel extends model
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
-            ->remove('longTime')
+            ->remove('longTime,products,branch,plans')
             ->get();
 
         if($project->parent)
@@ -1373,6 +1408,7 @@ class programModel extends model
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
                     common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'icon icon-menu-project');
                     common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);
                     common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
                     common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);

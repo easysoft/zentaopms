@@ -17,6 +17,7 @@
 <?php js::set('programID', $programID);?>
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -56,6 +57,48 @@
           <td><?php echo html::select('product', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
+        <tr>
+          <th><?php echo $lang->project->manageProducts;?></th>
+          <td class='text-left' id='productsBox' colspan="3">
+            <div class='row'>
+              <?php $i = 0;?>
+              <?php foreach($products as $product):?>
+              <div class="col-sm-4">
+                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <span class='input-group-addon fix-border'></span>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                </div>
+              </div>
+              <?php $i++;?>
+              <?php endforeach;?>
+              <div class='col-sm-4'>
+                <div class='input-group'>
+                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                  <span class='input-group-addon fix-border'></span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->project->linkPlan;?></th>
+          <td colspan="3" id="plansBox">
+            <div class='row'>
+              <?php if($copyProjectID):?>
+              <?php $i = 0;?>
+              <?php foreach($products as $product):?>
+              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen'");?></div>
+              <?php $i++;?>
+              <?php endforeach;?>
+              <?php else:?>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", '', '', "class='form-control chosen'");?></div>
+              <?php endif;?>
+            </div>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
@@ -113,7 +156,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $privway, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
