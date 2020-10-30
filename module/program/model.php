@@ -980,9 +980,14 @@ class programModel extends model
      */
     public function getPRJRecent()
     {
-        return $this->dao->select('id,parent,name')->from(TABLE_PROJECT)
+        if(!$this->app->user->admin && (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)))
+        {
+            return array();
+        }
+        return $this->dao->select('id,project,name')->from(TABLE_PROJECT)
             ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin && $this->app->user->view->projects)->andWhere('parent')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('status')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')

@@ -2024,8 +2024,8 @@ class projectModel extends model
             $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
             $linkedProducts = $this->loadModel('product')->getProductsByProject($project->id);
 
-            if(!empty($childSprints))  $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
-            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+            if(!empty($childSprints))  $this->loadModel('user')->updateUserView($childSprints, 'sprint', $changedAccounts);
+            if(!empty($linkedProducts)) $this->loadModel('user')->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
         }
 
         /* Add iteration or phase team members to the project team. */

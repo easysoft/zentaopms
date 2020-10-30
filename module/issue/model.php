@@ -279,7 +279,7 @@ class issueModel extends model
 
             $issue['createdBy']   = $this->app->user->account;
             $issue['createdDate'] = $now;
-            $issue['program']     = $this->session->PRJ;
+            $issue['PRJ']         = $this->session->PRJ;
 
             if($issue['assignedTo'])
             {

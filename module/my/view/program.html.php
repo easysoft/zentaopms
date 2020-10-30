@@ -17,7 +17,7 @@
   </div>
 </div>
 <div id="mainContent" class='main-table'>
-  <?php if(empty($programs)):?>
+  <?php if(empty($projects)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
@@ -45,31 +45,31 @@
           </tr>
         </thead>
         <tbody id='programTableList'>
-          <?php foreach($programs as $program):?>
+          <?php foreach($projects as $project):?>
           <tr>
             <td class='c-id'>
-              <?php printf('%03d', $program->id);?>
+              <?php printf('%03d', $project->id);?>
             </td>
-            <td class='text-left'><?php echo $program->code;?></td>
-            <td class='text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
+            <td class='text-left'><?php echo $project->code;?></td>
+            <td class='text-left pgm-title table-nest-title' title='<?php echo $project->name?>'>
               <span class="table-nest-icon"></span>
-              <?php echo html::a($this->createLink('program', 'pgmview', "programID=$program->id", '', '', $program->id), $program->name);?>
+              <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
             </td>
-            <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
-            <td class='text-center'><?php echo $program->begin;?></td>
-            <td class='text-center'><?php echo $program->end == '0000-00-00' ? '' : $program->end;?></td>
-            <td class='text-left'><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
-            <td><?php echo zget($users, $program->PM);?></td>
+            <td class='c-status'><span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+            <td class='text-center'><?php echo $project->begin;?></td>
+            <td class='text-center'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
+            <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
+            <td><?php echo zget($users, $project->PM);?></td>
             <td class='text-center c-actions'>
-              <?php common::printIcon('program', 'group', "programID=$program->id", $program, 'list', 'group');?>
-              <?php common::printIcon('program', 'manageMembers', "programID=$program->id", $program, 'list', 'persons');?>
-              <?php common::printIcon('program', 'start', "programID=$program->id", $program, 'list', '', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', '', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'list', '', '', 'iframe', true);?>
-              <?php common::printIcon('program', 'close', "programID=$program->id", $program, 'list', '', '', 'iframe', true);?>
-              <?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-              <?php common::printIcon('program', 'create', "template=&programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PRJChildren);?>
-              <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+              <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'group');?>
+              <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
+              <?php common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'start', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
+              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+              <?php common::printIcon('program', 'create', "template=&projectID=$project->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PRJChildren);?>
+              <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
             </td>
           </tr>
           <?php endforeach;?>

@@ -422,7 +422,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProgram;
         $this->view->position[] = $this->lang->my->myProgram;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->programs   = $this->user->getProjects($this->app->user->account, 'project', $pager);
+        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $pager);
         $this->view->pager      = $pager;
         $this->view->status     = $status;
         $this->display();

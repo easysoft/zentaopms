@@ -373,7 +373,7 @@ class product extends control
      */
     public function batchEdit($productID = 0)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+        $this->lang->product->switcherMenu = '';
         if($this->post->names)
         {
             $allChanges = $this->product->batchUpdate();

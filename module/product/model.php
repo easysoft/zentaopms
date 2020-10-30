@@ -446,7 +446,7 @@ class productModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        if($currentProduct->type != 'normal')
+        if(isset($currentProduct->type) && $currentProduct->type != 'normal')
         {
             $branches     = $this->loadModel('branch')->getPairs($productID);
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];

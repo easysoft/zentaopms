@@ -650,7 +650,7 @@ class program extends control
         {
             foreach($recentProjects as $project)
             {
-                echo html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), '<i class="icon icon-menu-doc"></i>' . $project->name, '', "class='text-ellipsis' title='$project->name'");
+                echo html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->project), '<i class="icon icon-menu-doc"></i>' . $project->name, '', "class='text-ellipsis' title='$project->name'");
             }
         }
     }

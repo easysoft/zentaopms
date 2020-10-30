@@ -562,7 +562,7 @@ class commonModel extends model
             foreach($recentProjects as $key => $project)
             {
                 if($key == 5) continue;
-                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->parent), $project->name, '', "style='padding: 2px 8px 2px 8px;' class='main-recent-text' title='$project->name'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->project), $project->name, '', "style='padding: 2px 8px 2px 8px;' class='main-recent-text' title='$project->name'") . '</li>';
             }
             if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
         }
