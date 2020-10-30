@@ -305,7 +305,7 @@ class upgrade extends control
             $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->orderBy('id_desc')->fetchAll('id');
 
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->orderBy('id_desc')->fetchAll('id');
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
+            if(empty($productlines)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
 
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
