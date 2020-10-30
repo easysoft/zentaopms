@@ -30,7 +30,8 @@ $lang->cron->statusList['running'] = 'Đang chạy';
 $lang->cron->statusList['stop']    = 'Dừng';
 
 $lang->cron->typeList['zentao'] = 'Tự gọi';
-$lang->cron->typeList['system'] = 'Câu lệnh hệ thống';
+global $config;
+if($config->features->cronSystemCall) $lang->cron->typeList['system'] = 'Câu lệnh hệ thống';
 
 $lang->cron->toggleList['start'] = 'Kích hoạt';
 $lang->cron->toggleList['stop']  = 'Vô hiệu';

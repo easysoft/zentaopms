@@ -11,13 +11,13 @@
  */
 $lang->install = new stdclass();
 
-$lang->install->common  = 'Install';
-$lang->install->next    = 'Next';
-$lang->install->pre     = 'Back';
-$lang->install->reload  = 'Refresh';
-$lang->install->error   = 'Error ';
+$lang->install->common = 'Install';
+$lang->install->next   = 'Next';
+$lang->install->pre    = 'Back';
+$lang->install->reload = 'Refresh';
+$lang->install->error  = 'Error ';
 
-$lang->install->officeDomain     = 'https://www.zentao.pm';
+$lang->install->officeDomain = 'https://www.zentao.pm';
 
 $lang->install->start            = 'Start';
 $lang->install->keepInstalling   = 'Continue installing this version';
@@ -30,7 +30,7 @@ ZenTao ALM is an open source software released under <a href='http://zpl.pub/pag
 ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by EasyCorp. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
+ZenTao ALM is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
@@ -40,22 +40,22 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
-$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>: Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
-$lang->install->or         = 'Or';
-$lang->install->checking   = 'System Checkup';
-$lang->install->ok         = 'Passed(√)';
-$lang->install->fail       = 'Failed(×)';
-$lang->install->loaded     = 'Loaded';
-$lang->install->unloaded   = 'Not loaded';
-$lang->install->exists     = 'Found ';
-$lang->install->notExists  = 'Not found ';
-$lang->install->writable   = 'Writable ';
-$lang->install->notWritable= 'Not writable ';
-$lang->install->phpINI     = 'PHP ini File';
-$lang->install->checkItem  = 'Item';
-$lang->install->current    = 'Current Setting';
-$lang->install->result     = 'Result';
-$lang->install->action     = 'Action';
+$lang->install->newReleased = "<strong class='text-danger'>Notice</strong>: Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
+$lang->install->or          = 'Or';
+$lang->install->checking    = 'System Checkup';
+$lang->install->ok          = 'Passed(√)';
+$lang->install->fail        = 'Failed(×)';
+$lang->install->loaded      = 'Loaded';
+$lang->install->unloaded    = 'Not loaded';
+$lang->install->exists      = 'Found ';
+$lang->install->notExists   = 'Not found ';
+$lang->install->writable    = 'Writable ';
+$lang->install->notWritable = 'Not writable ';
+$lang->install->phpINI      = 'PHP ini File';
+$lang->install->checkItem   = 'Item';
+$lang->install->current     = 'Current Setting';
+$lang->install->result      = 'Result';
+$lang->install->action      = 'Action';
 
 $lang->install->phpVersion = 'PHP Version';
 $lang->install->phpFail    = 'PHP Version should be 5.2.0+';
@@ -115,18 +115,18 @@ $lang->install->errorTableExists    = 'The data table has existed. If ZenTao has
 $lang->install->errorCreateTable    = 'Failed to create the table.';
 $lang->install->errorImportDemoData = 'Failed to import the demo data.';
 
-$lang->install->setConfig  = 'Create config file';
-$lang->install->key        = 'Item';
-$lang->install->value      = 'Value';
-$lang->install->saveConfig = 'Save config file';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
-$lang->install->saved2File = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
+$lang->install->setConfig          = 'Create config file';
+$lang->install->key                = 'Item';
+$lang->install->value              = 'Value';
+$lang->install->saveConfig         = 'Save config file';
+$lang->install->save2File          = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
+$lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
 
-$lang->install->getPriv  = 'Set Admin';
-$lang->install->company  = 'Company Name';
-$lang->install->account  = 'Admin Account';
-$lang->install->password = 'Admin Password';
+$lang->install->getPriv            = 'Set Admin';
+$lang->install->company            = 'Company Name';
+$lang->install->account            = 'Admin Account';
+$lang->install->password           = 'Admin Password';
 $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
@@ -157,12 +157,12 @@ $lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Updat
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Daily Task Reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']         = 'Backup Data';
-$lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Asynchronize sending message';
+$lang->install->cronList['moduleName=backup&methodName=backup']         = 'Backup data&file';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Asynchronize sending emails';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']     = 'Asynchronize sending webhook';
-$lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Delete expired logs';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Delete overdue logs';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Create recurring todos';
-$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring Jenkins';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring tasks';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
 
@@ -176,12 +176,13 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
-$lang->install->promotion      = "Products also from EasyCorp:";
-$lang->install->chanzhi        = new stdclass();
-$lang->install->chanzhi->name  = 'ZSITE';
-$lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url   = 'http://www.zsite.net';
-$lang->install->chanzhi->desc  = <<<EOD
+$lang->install->promotion = "Products also from EasyCorp:";
+
+$lang->install->chanzhi       = new stdclass();
+$lang->install->chanzhi->name = 'ZSITE';
+$lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
+$lang->install->chanzhi->url  = 'https://www.zsite.net';
+$lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Article, Blog, Manual, Member, Shop, Forum, Feedback</li>
   <li>Customize page at will by Theme, Effect, Widget, CSS, JS and layout</li>
@@ -191,10 +192,10 @@ $lang->install->chanzhi->desc  = <<<EOD
 EOD;
 
 $lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name  = 'ZDOO';
-$lang->install->zdoo->logo  = 'images/main/zdoo.ico';
-$lang->install->zdoo->url   = 'http://www.zdoo.com';
-$lang->install->zdoo->desc  = <<<EOD
+$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->logo = 'images/main/zdoo.ico';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and more </li>
@@ -217,10 +218,10 @@ EOD;
 
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'YDisk';
-$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
-$lang->install->ydisk->url   = 'http://www.ydisk.cn';
-$lang->install->ydisk->desc  = <<<EOD
+$lang->install->ydisk->name = 'YDisk';
+$lang->install->ydisk->logo = 'images/main/ydisk.ico';
+$lang->install->ydisk->url  = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc = <<<EOD
 <ul>
   <li>Self-Hosted: deploy on your own machine</li>
   <li>Unlimited Storage: depend on your hard drive size</li>
@@ -230,10 +231,10 @@ $lang->install->ydisk->desc  = <<<EOD
 EOD;
 
 $lang->install->meshiot = new stdclass();
-$lang->install->meshiot->name  = 'MeshIoT';
-$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
-$lang->install->meshiot->url   = 'https://www.meshiot.com';
-$lang->install->meshiot->desc  = <<<EOD
+$lang->install->meshiot->name = 'MeshIoT';
+$lang->install->meshiot->logo = 'images/main/meshiot.ico';
+$lang->install->meshiot->url  = 'https://www.meshiot.com';
+$lang->install->meshiot->desc = <<<EOD
 <ul>
   <li>Performance: one gateway can monitor 65,536 equipments</li>
   <li>Accessibility: unique radio communication protocol covers 2,500m radius</li>

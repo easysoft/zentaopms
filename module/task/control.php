@@ -38,6 +38,9 @@ class task extends control
      */
     public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
+        $projects  = $this->project->getPairs('', $this->session->PRJ);
+        $projectID = $this->project->saveState($projectID, $projects);
+
         $this->project->getLimitedProject();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
         if(strpos(",{$limitedProjects},", ",$projectID,") !== false)
@@ -82,7 +85,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
+        $this->project->setMenu($projects, $project->id);
 
         if(!empty($_POST))
         {
@@ -250,6 +253,10 @@ class task extends control
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
+
+        /* When common task are child tasks, query whether common task are consumed. */
+        $taskConsumed = 0;
+        if($taskID) $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($taskID)->andWhere('parent')->eq(0)->fetch('consumed');
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;

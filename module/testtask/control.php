@@ -83,6 +83,9 @@ class testtask extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        /* Get tasks. */
+        $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
+
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testtask->common;

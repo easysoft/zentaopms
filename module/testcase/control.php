@@ -92,7 +92,7 @@ class testcase extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get test cases. */
@@ -210,10 +210,11 @@ class testcase extends control
      * @param string $from
      * @param int    $param
      * @param int    $storyID
+     * @param string $extras
      * @access public
      * @return void
      */
-    public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0)
+    public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;

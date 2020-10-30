@@ -60,6 +60,8 @@ class testsuite extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
 
+        $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
         $this->view->position[]  = $this->lang->testsuite->common;

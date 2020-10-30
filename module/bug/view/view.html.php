@@ -104,7 +104,7 @@
               <tbody>
                 <tr valign='middle'>
                   <th class='thWidth'><?php echo $lang->bug->product;?></th>
-                  <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
+                  <td><?php if(!common::printLink('product', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
                 </tr>
                 <?php if($this->session->currentProductType != 'normal'):?>
                 <tr>

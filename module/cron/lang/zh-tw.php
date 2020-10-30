@@ -30,7 +30,8 @@ $lang->cron->statusList['running'] = '運行中';
 $lang->cron->statusList['stop']    = '停止';
 
 $lang->cron->typeList['zentao'] = '禪道自調用';
-$lang->cron->typeList['system'] = '操作系統命令';
+global $config;
+if($config->features->cronSystemCall) $lang->cron->typeList['system'] = '操作系統命令';
 
 $lang->cron->toggleList['start'] = '激活';
 $lang->cron->toggleList['stop']  = '禁用';

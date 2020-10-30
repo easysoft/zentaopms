@@ -117,9 +117,9 @@ class group extends control
     }
 
     /**
-     * manageView 
-     * 
-     * @param  int    $groupID 
+     * Manage view.
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -133,7 +133,8 @@ class group extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $group = $this->group->getById($groupID);
+        /* Get the group data by id. */
+        $group = $this->group->getByID($groupID);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;

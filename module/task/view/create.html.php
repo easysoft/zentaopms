@@ -69,7 +69,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
-        <?php $this->printExtendFields('', 'table');?>
+        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <?php if(strpos(",$showFields,", ',story,') !== false and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
@@ -195,7 +195,7 @@
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=task&link=desc');?>
-            <?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?>
+            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='10' class='form-control'");?>
           </td>
         </tr>
         <tr>

@@ -11,6 +11,8 @@
  */
 class commonModel extends model
 {
+    static public $requestErrors = array();
+
     /**
      * The construc method, to do some auto things.
      *
@@ -43,6 +45,7 @@ class commonModel extends model
     public function sendHeader()
     {
         header("Content-Type: text/html; Language={$this->config->charset}");
+        header("X-Frame-Options: SAMEORIGIN");
         header("Cache-control: private");
     }
 
@@ -1600,6 +1603,20 @@ EOD;
     }
 
     /**
+     * Check safe file.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function checkSafeFile()
+    {
+        if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
+
+        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+    }
+
+    /**
      * Check upgrade's status file is ok or not.
      *
      * @access public
@@ -1607,9 +1624,10 @@ EOD;
      */
     public function checkUpgradeStatus()
     {
-        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        $statusFile = $this->checkSafeFile();
         if($statusFile)
         {
+            $this->app->loadLang('upgrade');
             $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
             $cmd = sprintf($cmd, $statusFile);
 
@@ -1904,6 +1922,7 @@ EOD;
     public static function getSysURL()
     {
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+        if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
     }
@@ -2091,16 +2110,21 @@ EOD;
      *
      * @param  string       $url
      * @param  string|array $data
-     * @param  bool         $optHeader
-     * @param  string       $userPWD
+     * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array        $headers   Set request headers.
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $optHeader = false, $userPWD = '')
+    public static function http($url, $data = null, $options = array(), $headers = array())
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        commonModel::$requestErrors = array();
+
+        if(!is_array($headers)) $headers = (array)$headers;
+        $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -2113,19 +2137,17 @@ EOD;
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($curl, CURLOPT_HEADER, FALSE);
-
-        $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
-        if($optHeader) curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
         if(!empty($data))
         {
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
-        if(!empty($userPWD)) curl_setopt($curl, CURLOPT_USERPWD, $userPWD);
+        if($options) curl_setopt_array($curl, $options);
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
@@ -2144,6 +2166,8 @@ EOD;
             if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
             fclose($fh);
         }
+
+        if($errors) commonModel::$requestErrors[] = $errors;
 
         return $response;
     }

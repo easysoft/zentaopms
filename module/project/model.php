@@ -114,6 +114,8 @@ class projectModel extends model
             unset($this->lang->project->menu->qa);
         }
 
+        if($projects and (!isset($projects[$projectID]) or !$this->checkPriv($projectID))) $this->accessDenied();
+
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
@@ -730,6 +732,7 @@ class projectModel extends model
 
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
+
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -2492,45 +2495,31 @@ class projectModel extends model
      */
     public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
     {
-        $begin = strtotime($begin);
-        $end   = strtotime($end);
+        $this->app->loadClass('date', true);
+        $dateList = date::getDateList($begin, $end, $format, $type, $this->config->project->weekend);
+        $days     = count($dateList);
 
-        $beginWeekDay = date('w', $begin);
-        $days = ($end - $begin) / 3600 / 24;
-        if($type == 'noweekend')
+        if(!$interval) $interval = floor(count($dateList) / $this->config->project->maxBurnDay);
+
+        /* Remove date by interval. */
+        if($interval)
         {
-            $allDays = $days;
-            $weekDay = $beginWeekDay;
-            for($i = 0; $i < $allDays; $i++, $weekDay++)
+            $spaces   = (int)$interval;
+            $counter  = $spaces;
+            foreach($dateList as $i => $date)
             {
-                $weekDay = $weekDay % 7;
-                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days--;
+                $counter ++;
+                if($counter <= $spaces)
+                {
+                    unset($dateList[$i]);
+                    continue;
+                }
+
+                $counter = 0;
             }
         }
 
-        if(!$interval) $interval = floor($days / $this->config->project->maxBurnDay);
-
-        $dateList = array();
-        $spaces   = (int)$interval;
-        $counter  = $spaces;
-        $weekDay  = $beginWeekDay;
-        for($date = $begin; $date <= $end; $date += 24 * 3600, $weekDay++)
-        {
-            /* Remove weekend when type is noweekend.*/
-            if($type == 'noweekend')
-            {
-                $weekDay = $weekDay % 7;
-                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) continue;
-            }
-
-            $counter ++;
-            if($counter <= $spaces) continue;
-
-            $counter    = 0;
-            $dateList[] = date($format, $date);
-        }
-
-        return array($dateList, $interval);
+        return array(array_values($dateList), $interval);
     }
 
     /**

@@ -41,7 +41,7 @@
       }
   }
   ?>
-  <form class='load-indicator main-form' method='post' target='hiddenwin' id='batchCreateForm'>
+  <form class='main-form' method='post' target='hiddenwin' id='batchCreateForm'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>

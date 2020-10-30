@@ -326,7 +326,7 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
-            $vars = "libID={$this->post->lib}&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
+            $vars = "libID=" . (int)$this->post->lib . "&browseType=byModule&moduleID=" . (int)$this->post->module . "&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
             if($this->app->getViewType() == 'xhtml') $link = $this->createLink('doc', 'view', "docID=$docID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));

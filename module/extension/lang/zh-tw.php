@@ -32,8 +32,8 @@ $lang->extension->agreeLicense     = '我同意該授權';
 $lang->extension->structure       = '目錄結構';
 $lang->extension->structureAction = '目錄結構';
 $lang->extension->installed       = '已安裝';
-$lang->extension->deactivated  = '被禁用';
-$lang->extension->available    = '已下載';
+$lang->extension->deactivated     = '被禁用';
+$lang->extension->available       = '已下載';
 
 $lang->extension->name        = '插件名稱';
 $lang->extension->code        = '代號';
@@ -121,4 +121,4 @@ $lang->extension->errorDepends                 = '以下依賴插件沒有安裝
 $lang->extension->errorIncompatible            = '該插件與您的禪道版本不兼容';
 $lang->extension->errorUninstallDepends        = '插件“%s”依賴該插件，不能卸載';
 $lang->extension->errorExtracted               = '包檔案 %s 解壓縮失敗，可能不是一個有效的zip檔案。錯誤信息如下：<br />%s';
-$lang->extension->errorFileNotEmpty            = '上傳文件不能為空';
+$lang->extension->errorFileNotEmpty            = '上傳檔案不能為空';

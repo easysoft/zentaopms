@@ -707,11 +707,6 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
-        if(empty($stories) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
-        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
@@ -967,7 +962,7 @@ class project extends control
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
         $chartData = $this->project->buildBurnData($projectID, $dateList, $type, $burnBy);
 
-        $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
+        $dayList = array_fill(1, floor((int)$project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
@@ -1171,6 +1166,7 @@ class project extends control
         $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->projectID     = $projectID;
+        $this->view->productID     = $productID;
         $this->view->products      = $products;
         $this->view->productPlan   = array(0 => '') + $productPlan;
         $this->view->productPlans  = array(0 => '') + $productPlans;
@@ -1941,11 +1937,20 @@ class project extends control
         $project        = $this->project->getById($projectID);
         $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
         $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
         $teams2Import   = array('' => '') + $teams2Import;
+
+        /* Append users for get users. */
+        $appendUsers = array();
+        foreach($currentMembers as $member) $appendUsers[$member->account] = $member->account;
+        foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
+        foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
+
+        $users = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', $appendUsers, $this->config->maxCount);
+        $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);

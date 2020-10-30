@@ -139,6 +139,7 @@ class testcaseModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
+            ->cleanInt('story,product,branch,module')
             ->join('stage', ',')
             ->get();
 
@@ -610,10 +611,20 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
+            ->cleanInt('story,product,branch,module')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
 
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
+        $requiredFields = $this->config->testcase->edit->requiredFields;
+        if($case->lib != 0)
+        {
+            /* Remove the require field named story when the case is a lib case.*/
+            $requiredFieldsArr = explode(',', $requiredFields);
+            $fieldIndex        = array_search('story', $requiredFieldsArr);
+            array_splice($requiredFieldsArr, $fieldIndex, 1);
+            $requiredFields    = implode(',', $requiredFieldsArr);
+        }
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             $isLibCase    = ($oldCase->lib and empty($oldCase->product));

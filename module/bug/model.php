@@ -2529,6 +2529,11 @@ class bugModel extends model
                 $class .= ' has-btn text-left';
                 if($bug->assignedTo == $account) $class .= ' red';
             }
+            if($id == 'resolvedBy')
+            {
+                $class .= ' c-user';
+                $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
+            }
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
             if(strpos(',type,project,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 

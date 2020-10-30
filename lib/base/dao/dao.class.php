@@ -712,8 +712,9 @@ class baseDAO
     /**
      * 将记录进行分页，自动设置limit语句。
      * Page the records, set the limit part auto.
-     * 
-     * @param  object $pager 
+     *
+     * @param  object $pager
+     * @param  string $distinctField
      * @access public
      * @return object the dao object self.
      */
@@ -722,15 +723,16 @@ class baseDAO
         if(!is_object($pager)) return $this;
 
         /*
-         * 如果$pager的总记录为0，需要计算总结果数。
-         * If the record total is 0, compute it. 
-         **/
-        if($pager->recTotal == 0)
-        {
-            $recTotal = $this->count($distinctField);
-            $pager->setRecTotal($recTotal);
-            $pager->setPageTotal();
-        }
+         * 重新计算分页数据，并判断是否需要返回上一页。
+         * Calculate pagination to determine whether to return to the previous page.
+         */
+        $originalPageID = $pager->pageID;
+        $recTotal       = $this->count($distinctField);
+
+        $pager->setRecTotal($recTotal);
+        $pager->setPageTotal();
+        if($originalPageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+
         $this->sqlobj->limit($pager->limit());
         return $this;
     }

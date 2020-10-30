@@ -151,7 +151,7 @@
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
+              <td><?php if(!common::printLink('product', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
             </tr>
             <?php if($this->session->currentProductType != 'normal'):?>
             <tr>
@@ -189,7 +189,8 @@
               <th><?php echo $lang->testcase->story;?></th>
               <td>
                 <?php
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story", '', true), "#$case->story:$case->storyTitle", '', "class='iframe' data-width='80%'");
+                $class = isonlybody() ? 'showinonlybody' : 'iframe';
+                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story", '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";

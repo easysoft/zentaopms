@@ -298,7 +298,7 @@ $(function()
     // Update table summary text
     <?php
     $storyCommon = $lang->storyCommon;
-    if($config->URAndSR) $storyCommon = $lang->SRCommon;
+    if(!empty($config->URAndSR)) $storyCommon = $lang->SRCommon;
     ?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#projectStoryForm').table(

@@ -191,6 +191,7 @@ class repoModel extends model
      */
     public function create()
     {
+        if(!$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
@@ -198,7 +199,6 @@ class repoModel extends model
             ->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-        if(empty($data->client)) $data->client = 'svn';
 
         if($data->SCM == 'Subversion')
         {
@@ -215,6 +215,9 @@ class repoModel extends model
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
+
+        if(!dao::isError()) $this->rmClientVersionFile();
+
         return $this->dao->lastInsertID();
     }
 
@@ -227,16 +230,17 @@ class repoModel extends model
      */
     public function update($id)
     {
-        if(!$this->checkConnection()) return false;
+        $repo = $this->getRepoByID($id);
+
         $data = fixer::input('post')
+            ->setDefault('client', 'svn')
+            ->setDefault('prefix', $repo->prefix)
+            ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
             ->join('program', ',')
             ->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
-        if(empty($data->client)) $data->client = 'svn';
-        $repo = $this->getRepoByID($id);
-        $data->prefix = $repo->prefix;
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
         {
             $scm = $this->app->loadClass('scm');
@@ -250,7 +254,8 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($data->path != $repo->path) $data->synced = 0;
+        if($data->client != $repo->client and !$this->checkClient()) return false;
+        if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data)
@@ -258,6 +263,8 @@ class repoModel extends model
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
+
+        $this->rmClientVersionFile();
 
         if($repo->path != $data->path)
         {
@@ -919,6 +926,61 @@ class repoModel extends model
             substr_count($blk, "^ -~")/512 > 0.3 ||
             substr_count($blk, "\x00") > 0
         ); 
+    }
+
+    /**
+     * Check svn/git client.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function checkClient()
+    {
+        if(!$this->config->features->checkClient) return true;
+        if(!$this->post->client) return true;
+
+        if(strpos($this->post->client, ' '))
+        {
+            dao::$errors['client'] = $this->lang->repo->error->clientPath;
+            return false;
+        }
+
+        $clientVersionFile = $this->session->clientVersionFile;
+        if(empty($clientVersionFile))
+        {
+            $clientVersionFile = $this->app->getLogRoot() . uniqid('version_') . '.log';
+
+            session_start();
+            $this->session->set('clientVersionFile', $clientVersionFile);
+            session_write_close();
+        }
+
+        if(file_exists($clientVersionFile)) return true;
+
+        $cmd = $this->post->client . " --version > $clientVersionFile";
+        dao::$errors['client'] = sprintf($this->lang->repo->error->safe, $clientVersionFile, $cmd);
+
+        return false;
+    }
+
+
+    /**
+     * remove client version file.
+     * 
+     * @access public
+     * @return void
+     */
+    public function rmClientVersionFile()
+    {
+        $clientVersionFile = $this->session->clientVersionFile;
+        if($clientVersionFile)
+        {
+            session_start();
+            $this->session->set('clientVersionFile', $clientVersionFile);
+            session_write_close();
+
+            if(file_exists($clientVersionFile)) unlink($clientVersionFile);
+        }
     }
 
     /**

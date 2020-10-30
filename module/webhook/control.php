@@ -317,6 +317,8 @@ class webhook extends control
             return true;
         }
 
+        $this->webhook->setSentStatus(array_keys($dataList), 'senting');
+
         $now  = helper::now();
         $diff = 0;
         foreach($dataList as $data)
@@ -334,7 +336,7 @@ class webhook extends control
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
             
-            $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq($now)->where('id')->eq($data->id)->exec();
+            $this->webhook->setSentStatus($data->id, 'sended', $now);
         }
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();

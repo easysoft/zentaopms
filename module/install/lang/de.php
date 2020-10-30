@@ -11,13 +11,13 @@
  */
 $lang->install = new stdclass();
 
-$lang->install->common  = 'Installieren';
-$lang->install->next    = 'Weiter';
-$lang->install->pre     = 'Zurück';
-$lang->install->reload  = 'Neu laden';
-$lang->install->error   = 'Fehler ';
+$lang->install->common = 'Installieren';
+$lang->install->next   = 'Weiter';
+$lang->install->pre    = 'Zurück';
+$lang->install->reload = 'Neu laden';
+$lang->install->error  = 'Fehler ';
 
-$lang->install->officeDomain     = 'https://www.zentao.pm';
+$lang->install->officeDomain = 'https://www.zentao.pm';
 
 $lang->install->start            = 'Start der Installation';
 $lang->install->keepInstalling   = 'Installation dieser Version fortsetzen.';
@@ -30,9 +30,9 @@ ZenTao Project Management Software ist eine Open Source Software veröffentlicht
 ZenTao PMS setzt auf PHP + MySQL und das ZenTaoPHP Framework, ein unabhängiges Framework von unserem Team entwickelt. Third party Entwickler/Unternhemen können Erweiterungen entwickeln oder nach Ihren Bedürfnissen anpassen.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM wurde entwickelt von <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
-Offizielle Website : <a href='http://www.zentao.pm' target='_blank'>http://www.zentao.pm</a>
-Technischer Support : <a href='http://www.zentao.pm/forum/' target='_blank'>http://www.zentao.pm/forum/</a>
+ZenTao ALM wurde entwickelt von <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+Offizielle Website : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
+Technischer Support : <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn:e<a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a>
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
@@ -40,22 +40,22 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 Sie Installieren ZenTao <strong class='text-danger'>%s</strong> Version.
 EOT;
 
-$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Offizielle Webseite hat die letzte Version<strong class='text-danger'>%s</strong>, veröffentlicht am %s.";
-$lang->install->or         = 'Oder';
-$lang->install->checking   = 'Systemprüfung';
-$lang->install->ok         = 'Bestanden(√)';
-$lang->install->fail       = 'Fehlgeschlagen(×)';
-$lang->install->loaded     = 'Geladen';
-$lang->install->unloaded   = 'Nicht geladen';
-$lang->install->exists     = 'Gefunden ';
-$lang->install->notExists  = 'Nicht gefunden ';
-$lang->install->writable   = 'Beschreibbar ';
-$lang->install->notWritable= 'Nicht beschreibbar ';
-$lang->install->phpINI     = 'PHP ini Datei';
-$lang->install->checkItem  = 'Eintrag';
-$lang->install->current    = 'Aktuelle Einstellung';
-$lang->install->result     = 'Ergebnisse';
-$lang->install->action     = 'Aktionen';
+$lang->install->newReleased = "<strong class='text-danger'>Notice</strong>：Offizielle Webseite hat die letzte Version<strong class='text-danger'>%s</strong>, veröffentlicht am %s.";
+$lang->install->or          = 'Oder';
+$lang->install->checking    = 'Systemprüfung';
+$lang->install->ok          = 'Bestanden(√)';
+$lang->install->fail        = 'Fehlgeschlagen(×)';
+$lang->install->loaded      = 'Geladen';
+$lang->install->unloaded    = 'Nicht geladen';
+$lang->install->exists      = 'Gefunden ';
+$lang->install->notExists   = 'Nicht gefunden ';
+$lang->install->writable    = 'Beschreibbar ';
+$lang->install->notWritable = 'Nicht beschreibbar ';
+$lang->install->phpINI      = 'PHP ini Datei';
+$lang->install->checkItem   = 'Eintrag';
+$lang->install->current     = 'Aktuelle Einstellung';
+$lang->install->result      = 'Ergebnisse';
+$lang->install->action      = 'Aktionen';
 
 $lang->install->phpVersion = 'PHP Version';
 $lang->install->phpFail    = 'PHP Version muss 5.2.0+ sein';
@@ -115,18 +115,18 @@ $lang->install->errorTableExists    = 'Die Tabellen existieren bereits. Wenn Zen
 $lang->install->errorCreateTable    = 'Erstellung der Tabellen fehlgeschlagen.';
 $lang->install->errorImportDemoData = 'Import der Demodaten fehlgeschlagen.';
 
-$lang->install->setConfig  = 'Konfigurationsdatei erstellen';
-$lang->install->key        = 'Eintrag';
-$lang->install->value      = 'Wert';
-$lang->install->saveConfig = 'Konfiguration speichern';
-$lang->install->save2File  = '<div class="alert alert-warning">Kopieren Sie den Inhalt aus der Textbox und speichern Sie diesen als "<strong> %s </strong>". Sie können die Konfiguration später ändern.</div>';
-$lang->install->saved2File = 'Die Konfigurationsdatei wurde gespeichert unter " <strong>%s</strong> ". Sie können die Konfiguration später ändern.';
+$lang->install->setConfig          = 'Konfigurationsdatei erstellen';
+$lang->install->key                = 'Eintrag';
+$lang->install->value              = 'Wert';
+$lang->install->saveConfig         = 'Konfiguration speichern';
+$lang->install->save2File          = '<div class="alert alert-warning">Kopieren Sie den Inhalt aus der Textbox und speichern Sie diesen als "<strong> %s </strong>". Sie können die Konfiguration später ändern.</div>';
+$lang->install->saved2File         = 'Die Konfigurationsdatei wurde gespeichert unter " <strong>%s</strong> ". Sie können die Konfiguration später ändern.';
 $lang->install->errorNotSaveConfig = 'Die Konfigurationsdatei wurde nicht gespeichert.';
 
-$lang->install->getPriv  = 'Als Admin setzen';
-$lang->install->company  = 'Firmenname';
-$lang->install->account  = 'Admin Konto';
-$lang->install->password = 'Admin Passwort';
+$lang->install->getPriv            = 'Als Admin setzen';
+$lang->install->company            = 'Firmenname';
+$lang->install->account            = 'Admin Konto';
+$lang->install->password           = 'Admin Passwort';
 $lang->install->errorEmptyPassword = 'Passwort sollte nicht leer sein.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
@@ -171,16 +171,17 @@ $lang->install->login    = 'Login ZenTao';
 $lang->install->register = 'Bei ZenTao registieren';
 
 $lang->install->joinZentao = <<<EOT
-<p>Sie haben ZenTao %s installiert.<strong class='text-danger'> Bitte löschen Sie die install.php schnellstmöglich</strong>.</p><p>Hinweis: Wenn Sie über ZenTao informiert bleiben möchten, registieren Sie sich bitte unter (<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>Sie haben ZenTao %s installiert.<strong class='text-danger'> Bitte löschen Sie die install.php schnellstmöglich</strong>.</p><p>Hinweis: Wenn Sie über ZenTao informiert bleiben möchten, registieren Sie sich bitte unter (<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');
 
-$lang->install->promotion     = "Produkte von Nature Easy Soft:";
+$lang->install->promotion = "Produkte von Nature Easy Soft:";
+
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url  = 'http://www.zsite.net';
+$lang->install->chanzhi->url  = 'https://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Artikel, Blog, Handbucher, Mitglieder, Shop, Forum, Feedback……</li>
@@ -193,7 +194,7 @@ EOD;
 $lang->install->zdoo = new stdclass();
 $lang->install->zdoo->name = 'ZDOO';
 $lang->install->zdoo->logo = 'images/main/zdoo.ico';
-$lang->install->zdoo->url  = 'http://www.zdoo.com';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
 $lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: Customer Management und Bestellvervollgung</li>
@@ -217,10 +218,10 @@ EOD;
 
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'Y Disk-Free NetDisk';
-$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
-$lang->install->ydisk->url   = 'http://www.ydisk.cn';
-$lang->install->ydisk->desc  = <<<EOD
+$lang->install->ydisk->name = 'Y Disk-Free NetDisk';
+$lang->install->ydisk->logo = 'images/main/ydisk.ico';
+$lang->install->ydisk->url  = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc = <<<EOD
 <ul>
   <li>Self-Hosted: deploy on your own machine</li>
   <li>Storage: depend on your hard drive size</li>
@@ -230,10 +231,10 @@ $lang->install->ydisk->desc  = <<<EOD
 EOD;
 
 $lang->install->meshiot = new stdclass();
-$lang->install->meshiot->name  = 'MeshIoT';
-$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
-$lang->install->meshiot->url   = 'https://www.meshiot.com';
-$lang->install->meshiot->desc  = <<<EOD
+$lang->install->meshiot->name = 'MeshIoT';
+$lang->install->meshiot->logo = 'images/main/meshiot.ico';
+$lang->install->meshiot->url  = 'https://www.meshiot.com';
+$lang->install->meshiot->desc = <<<EOD
 <ul>
   <li>Performance: one gateway can monitor 65,536 equipments</li>
   <li>Accessibility: unique radio communication protocol covers 2,500m radius</li>

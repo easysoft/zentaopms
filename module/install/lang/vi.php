@@ -11,13 +11,13 @@
  */
 $lang->install = new stdclass();
 
-$lang->install->common  = 'Cài đặt';
-$lang->install->next    = 'Tiếp';
-$lang->install->pre     = 'Trước';
-$lang->install->reload  = 'Refresh';
-$lang->install->error   = 'Lỗi ';
+$lang->install->common = 'Cài đặt';
+$lang->install->next   = 'Tiếp';
+$lang->install->pre    = 'Trước';
+$lang->install->reload = 'Refresh';
+$lang->install->error  = 'Lỗi ';
 
-$lang->install->officeDomain  = 'https://www.zentao.pm';
+$lang->install->officeDomain = 'https://www.zentao.pm';
 
 $lang->install->start            = 'Bắt đầu';
 $lang->install->keepInstalling   = 'Tiếp tục cài đặt với phiên bản này';
@@ -30,7 +30,7 @@ ZenTao ALM is an open source software released under <a href='http://zpl.pub/pag
 ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by EasyCorp. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
+ZenTao ALM is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
@@ -115,18 +115,18 @@ $lang->install->errorTableExists    = 'The data table has existed. If ZenTao has
 $lang->install->errorCreateTable    = 'Tạo thất bại the table.';
 $lang->install->errorImportDemoData = 'Thất bại nhập dữ liệu demo.';
 
-$lang->install->setConfig  = 'Tạo tập tin cấu hình';
-$lang->install->key        = 'Hạng mục';
-$lang->install->value      = 'Giá trị';
-$lang->install->saveConfig = 'Lưu tập tin cấu hình';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". Bạn có thể change this configuration file later.</div>';
-$lang->install->saved2File = 'The configuration file has been saved to " <strong>%s</strong> ". Bạn có thể change this file later.';
+$lang->install->setConfig          = 'Tạo tập tin cấu hình';
+$lang->install->key                = 'Hạng mục';
+$lang->install->value              = 'Giá trị';
+$lang->install->saveConfig         = 'Lưu tập tin cấu hình';
+$lang->install->save2File          = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". Bạn có thể change this configuration file later.</div>';
+$lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". Bạn có thể change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file không là saved.';
 
-$lang->install->getPriv  = 'Thiết lập Admin';
-$lang->install->company  = 'Tên doanh nghiệp';
-$lang->install->account  = 'Tài khoản quản trị';
-$lang->install->password = 'Mật khẩu quản trị';
+$lang->install->getPriv            = 'Thiết lập Admin';
+$lang->install->company            = 'Tên doanh nghiệp';
+$lang->install->account            = 'Tài khoản quản trị';
+$lang->install->password           = 'Mật khẩu quản trị';
 $lang->install->errorEmptyPassword = 'Mật khẩu không nên là blank.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Quản trị';
@@ -176,12 +176,13 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
-$lang->install->promotion   = "Sản phẩm từ EasyCorp:";
+$lang->install->promotion = "Sản phẩm từ EasyCorp:";
+
 $lang->install->chanzhi  = new stdclass();
-$lang->install->chanzhi->name  = 'ZSITE';
-$lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url   = 'http://www.zsite.net';
-$lang->install->chanzhi->desc  = <<<EOD
+$lang->install->chanzhi->name = 'ZSITE';
+$lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
+$lang->install->chanzhi->url  = 'https://www.zsite.net';
+$lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Article, Blog, Manual, Member, Shop, Forum, Feedback</li>
   <li>Customize page at will by Theme, Effect, Widget, CSS, JS and layout</li>
@@ -191,10 +192,10 @@ $lang->install->chanzhi->desc  = <<<EOD
 EOD;
 
 $lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name  = 'ZDOO';
-$lang->install->zdoo->logo  = 'images/main/zdoo.ico';
-$lang->install->zdoo->url   = 'http://www.zdoo.com';
-$lang->install->zdoo->desc  = <<<EOD
+$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->logo = 'images/main/zdoo.ico';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and more </li>
@@ -217,10 +218,10 @@ EOD;
 
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'YDisk';
-$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
-$lang->install->ydisk->url   = 'http://www.ydisk.cn';
-$lang->install->ydisk->desc  = <<<EOD
+$lang->install->ydisk->name = 'YDisk';
+$lang->install->ydisk->logo = 'images/main/ydisk.ico';
+$lang->install->ydisk->url  = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc = <<<EOD
 <ul>
   <li>Self-Hosted: deploy on your own machine</li>
   <li>Unlimited Storage: depend on your hard drive size</li>
@@ -230,10 +231,10 @@ $lang->install->ydisk->desc  = <<<EOD
 EOD;
 
 $lang->install->meshiot = new stdclass();
-$lang->install->meshiot->name  = 'MeshIoT';
-$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
-$lang->install->meshiot->url   = 'https://www.meshiot.com';
-$lang->install->meshiot->desc  = <<<EOD
+$lang->install->meshiot->name = 'MeshIoT';
+$lang->install->meshiot->logo = 'images/main/meshiot.ico';
+$lang->install->meshiot->url  = 'https://www.meshiot.com';
+$lang->install->meshiot->desc = <<<EOD
 <ul>
   <li>Performance: one gateway can monitor 65,536 equipments</li>
   <li>Accessibility: unique radio communication protocol covers 2,500m radius</li>

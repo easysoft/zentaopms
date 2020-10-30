@@ -12,8 +12,8 @@
 $lang->misc = new stdclass();
 $lang->misc->common = 'Sonstiges';
 $lang->misc->ping   = 'Ping';
-$lang->misc->api    = 'http://api.zentao.net';
-$lang->misc->enApi  = 'http://api.zentao.pm';
+$lang->misc->api    = 'https://api.zentao.net';
+$lang->misc->enApi  = 'https://api.zentao.pm';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
@@ -86,7 +86,10 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Letzte Version';
 $lang->misc->feature->detailed = 'Details';
 
-$lang->misc->releaseDate['20.0']        = '2020-09-01';
+$lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
+$lang->misc->releaseDate['12.4.4']      = '2020-10-30';
+$lang->misc->releaseDate['12.4.3']      = '2020-10-13';
+$lang->misc->releaseDate['12.4.2']      = '2020-09-18';
 $lang->misc->releaseDate['12.4.1']      = '2020-08-10';
 $lang->misc->releaseDate['12.4.stable'] = '2020-07-28';
 $lang->misc->releaseDate['12.3.3']      = '2020-07-02';
@@ -133,7 +136,11 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['20.0'][]   = array('title'=>'Add program, reset priv.', 'desc' => '');
+$lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'Add program, reset priv.', 'desc' => '');
+
+$lang->misc->feature->all['12.4.4'][] = array('title'=>'Compatible with professional and enterprise editions', 'desc' => '');
+$lang->misc->feature->all['12.4.3'][] = array('title'=>'Fix Bug', 'desc' => '');
+$lang->misc->feature->all['12.4.2'][] = array('title'=>'Fix Bug', 'desc' => '');
 $lang->misc->feature->all['12.4.1'][] = array('title'=>'Fix Bug', 'desc' => '');
 
 $lang->misc->feature->all['12.4.stable'][] = array('title'=>'Fix Bug', 'desc' => '');

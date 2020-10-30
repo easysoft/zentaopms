@@ -42,7 +42,7 @@
   }
   $columns = count($visibleFields) + 2;
   ?>
-  <form class='load-indicator main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID")?>" id='batchEditForm'>
+  <form class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID")?>" id='batchEditForm'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>

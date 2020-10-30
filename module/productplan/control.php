@@ -12,7 +12,7 @@
 class productplan extends control
 {
     /**
-     * Common actions
+     * Common actions.
      *
      * @param  int $productID
      * @param  int $branch

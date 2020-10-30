@@ -50,12 +50,12 @@
           <th class='c-name w-140px'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
-          <th class='c-user w-100px'><?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
-          <th class='c-hours w-50px'><?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='c-hours w-50px'>   <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='c-hours w-50px'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='c-status'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-6'><?php echo $lang->actions;?></th>
+          <th class='c-user w-100px'>     <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
+          <th class='c-hours w-50px'>     <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='c-hours w-50px'>     <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='c-hours w-50px'>     <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='c-status'>           <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-actions-6'>        <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -79,6 +79,8 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->program), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
+          <td><?php if($task->estStarted  != '0000-00-00') echo $task->estStarted;?></td>
+          <td <?php if(!empty($task->delay)) echo "class='delayed'";?>><?php if($task->deadline != '0000-00-00') echo $task->deadline;?></td>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>

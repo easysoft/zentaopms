@@ -62,6 +62,10 @@
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
         <th>                <?php echo $lang->productplan->desc;?></th>
+        <?php
+        $extendFields = $this->productplan->getFlowExtendFields();
+        foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
+        ?>
         <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
@@ -115,8 +119,10 @@
           <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
         </td>
+        <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
+          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "productID=&projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->project->create}'");
           if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
           if(common::hasPriv('productplan', 'linkBug')) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');

@@ -99,7 +99,8 @@ $('#jkHost').change(function()
         html += '</select>';
         $('#jkJobBox .loading').remove();
         $('#jkJobBox .input-group').append(html);
-        $('#jkJobBox #jkJob').chosen();
+
+        $('#jkJobBox #jkJob').chosen({drop_direction: 'auto'});
     })
 })
 

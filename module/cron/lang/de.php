@@ -30,7 +30,8 @@ $lang->cron->statusList['running'] = 'Läuft';
 $lang->cron->statusList['stop']    = 'Gestoppt';
 
 $lang->cron->typeList['zentao'] = 'Selbstaufruf';
-$lang->cron->typeList['system'] = 'System Kommando';
+global $config;
+if($config->features->cronSystemCall) $lang->cron->typeList['system'] = 'System Kommando';
 
 $lang->cron->toggleList['start'] = 'Aktivieren';
 $lang->cron->toggleList['stop']  = 'Deaktivieren';

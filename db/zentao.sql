@@ -259,6 +259,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `atTime` varchar(10) NOT NULL,
   `testtask` mediumint(8) unsigned NOT NULL,
   `tag` varchar(255) NOT NULL,
+  `times` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `updateDate` datetime NOT NULL,
@@ -640,6 +641,13 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
   KEY `account` (`account`),
   KEY `providerType` (`providerType`),
   KEY `providerID` (`providerID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_planstory`;
+CREATE TABLE IF NOT EXISTS `zt_planstory` (
+  `plan` mediumint(8) unsigned NOT NULL,
+  `story` mediumint(8) unsigned NOT NULL,
+  `order` mediumint(9) NOT NULL,
+  UNIQUE KEY `plan_story` (`plan`,`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
@@ -1426,6 +1434,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `extra` char(30) NOT NULL,
   UNIQUE KEY `relation` (`relation`,`AType`,`BType`, `AID`, `BID`)
 ) ENGINE='MyISAM' DEFAULT CHARSET=utf8;
+
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('30',   '23',   '*',    '*',    '*',    'moduleName=project&methodName=computeburn', '更新燃尽图',      'zentao', 1, 'normal', '0000-00-00 00:00:00'),

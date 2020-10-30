@@ -979,6 +979,12 @@ class userModel extends model
      */
     public function failPlus($account)
     {
+        /* Save session fails. */
+        $sessionFails  = (int)$this->session->loginFails;
+        $sessionFails += 1;
+        $this->session->set('loginFails', $sessionFails);
+        if($sessionFails >= $this->config->user->failTimes) $this->session->set('loginLocked', date('Y-m-d H:i:s'));
+
         $user  = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
         if(empty($user)) return 0;
 
@@ -991,10 +997,11 @@ class userModel extends model
         }
         else
         {
-            $locked    = date('Y-m-d H:i:s', time());
+            $locked    = date('Y-m-d H:i:s');
             $failTimes = 0;
         }
         $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec();
+
         return $fails;
     }
 
@@ -1007,10 +1014,12 @@ class userModel extends model
      */
     public function checkLocked($account)
     {
+        if($this->session->loginLocked and (time() - strtotime($this->session->loginLocked)) <= $this->config->user->lockMinutes * 60) return true;
+
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch();
         if(empty($user)) return false;
 
-        if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
+        if((time() - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
         return true;
     }
 
@@ -1024,6 +1033,9 @@ class userModel extends model
     public function cleanLocked($account)
     {
         $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec();
+
+        unset($_SESSION['loginFails']);
+        unset($_SESSION['loginLocked']);
     }
 
     /**

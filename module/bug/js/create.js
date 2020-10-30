@@ -119,7 +119,7 @@ $(function()
     });
 
     /* Get steps template. */
-    stepsTemplate = editor['steps'].html();
+    var stepsTemplate = editor['steps'].html();
 
     /* Judgment of required items for steps. */
     $('#submit').on('click', function()

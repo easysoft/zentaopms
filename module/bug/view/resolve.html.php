@@ -77,7 +77,7 @@ js::set('productID' , $bug->product);
           <th><?php echo $lang->bug->status;?></th>
           <td><?php echo html::hidden('status', 'resolved');?></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table');?>
+        <?php $this->printExtendFields($bug, 'table', "columns=3");?>
         <tr>
           <th><?php echo $lang->bug->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>

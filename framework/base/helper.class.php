@@ -628,15 +628,20 @@ class baseHelper
      * 获取远程IP。
      * Get remote ip. 
      * 
+     * @param  bool  $proxy 
      * @access public
      * @return string
      */
-    public static function getRemoteIp()
+    public static function getRemoteIp($proxy = false)
     {
         $ip = '';
-        if(!empty($_SERVER["REMOTE_ADDR"]))          $ip = $_SERVER["REMOTE_ADDR"];
-        if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-        if(!empty($_SERVER['HTTP_CLIENT_IP']))       $ip = $_SERVER['HTTP_CLIENT_IP'];
+        if(!empty($_SERVER["REMOTE_ADDR"])) $ip = $_SERVER["REMOTE_ADDR"];
+
+        if($proxy)
+        {
+            if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            if(!empty($_SERVER['HTTP_CLIENT_IP']))       $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
 
         return $ip;
     }

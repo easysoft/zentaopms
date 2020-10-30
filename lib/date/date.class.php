@@ -273,4 +273,33 @@ class date
         $end   = date(DT_DATE1, strtotime('1/1 this year -1 day')) . ' 23:59:59';  
         return array('begin' => $begin, 'end' => $end);
     }
+
+    /**
+     * Get date list 
+     * 
+     * @param  string $begin 
+     * @param  string $end 
+     * @param  string $format     m/d/Y|Y-m-d
+     * @param  string $type       noweekend|withweekend
+     * @param  int    $weekend    2|1
+     * @access public
+     * @return array
+     */
+    public static function getDateList($begin, $end, $format = 'm/d/Y', $type = 'noweekend', $weekend = 2)
+    {
+        $begin = strtotime($begin);
+        $end   = strtotime($end);
+        if($begin > $end) return array();
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600)
+        {
+            $weekDay = date('w', $date);
+            if($type == 'noweekend' and (($weekend == 2 and $weekDay == 6) or $weekDay == 0)) continue;
+
+            $dateList[] = date($format, $date);
+        }
+
+        return $dateList;
+    }
 }

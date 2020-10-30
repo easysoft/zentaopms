@@ -59,7 +59,7 @@ $lang->mail->statusList['wait']   = '待發送';
 $lang->mail->statusList['sended'] = '成功';
 $lang->mail->statusList['fail']   = '失敗';
 
-$lang->mail->turnonList[1]  = '打開';
+$lang->mail->turnonList[1] = '打開';
 $lang->mail->turnonList[0] = '關閉';
 
 $lang->mail->asyncList[1] = '是';
@@ -69,7 +69,7 @@ $lang->mail->debugList[0] = '關閉';
 $lang->mail->debugList[1] = '一般';
 $lang->mail->debugList[2] = '較高';
 
-$lang->mail->authList[1]  = '需要';
+$lang->mail->authList[1] = '需要';
 $lang->mail->authList[0] = '不需要';
 
 $lang->mail->secureList['']    = '不加密';

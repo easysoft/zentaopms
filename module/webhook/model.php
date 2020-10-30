@@ -118,7 +118,9 @@ class webhookModel extends model
      */
     public function getDataList()
     {
-        return $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('wait')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
+        $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('wait')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
+        $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('senting')->andWhere('sendTime')->ge(date('Y-m-d H:i:s', time() - 3 * 3600))->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
+        return $dataList;
     }
 
     /**
@@ -674,5 +676,20 @@ class webhookModel extends model
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Set sent status.
+     * 
+     * @param  array  $idList 
+     * @param  string $status 
+     * @param  string $time 
+     * @access public
+     * @return void
+     */
+    public function setSentStatus($idList, $status, $time = '')
+    {
+        if(empty($time)) $time = helper::now();
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq($status)->set('sendTime')->eq($time)->where('id')->in($idList)->exec();
     }
 }

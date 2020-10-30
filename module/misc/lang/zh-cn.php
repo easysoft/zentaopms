@@ -13,7 +13,7 @@ $lang->misc = new stdclass();
 $lang->misc->common = '杂项';
 $lang->misc->ping   = '防超时';
 $lang->misc->api    = 'https://api.zentao.net';
-$lang->misc->enApi  = 'http://api.zentao.pm';
+$lang->misc->enApi  = 'https://api.zentao.pm';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -54,7 +54,7 @@ $lang->misc->zentao->service['servicemore']= '更多服务...';
 
 global $config;
 $lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> 蝉知门户";
-$lang->misc->zentao->others['zdoo']     = "<img src='{$config->webRoot}theme/default/images/main/zdoo.ico' /> ZDOO";
+$lang->misc->zentao->others['zdoo']     = "<img src='{$config->webRoot}theme/default/images/main/zdoo.ico' /> ZDOO协同";
 $lang->misc->zentao->others['xuanxuan'] = "<img src='{$config->webRoot}theme/default/images/main/xuanxuan.ico' /> 喧喧聊天";
 $lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> 悦库网盘";
 $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> 易天物联";

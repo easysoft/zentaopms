@@ -101,7 +101,7 @@ class storyModel extends model
      */
     public function getTestStories($storyIdList, $projectID)
     {
-        return $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->fetchPairs('story', 'story');
+        return $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchPairs('story', 'story');
     }
 
     /**
@@ -478,6 +478,7 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
+
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
@@ -912,7 +913,7 @@ class storyModel extends model
         $plansTobeDelete = array_diff($oldPlanIDList, $planIDList);
 
         /* Delete old story sort of plan. */
-        if(!empty($plansTobeDelete)) $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->in($plansTobeDelete)->andWhere('story')->eq($storyID)->exec();
+        if(!empty($plansTobeDelete)) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in($plansTobeDelete)->exec();
 
         if(!empty($plansTobeInsert))
         {
@@ -922,6 +923,7 @@ class storyModel extends model
             foreach($plansTobeInsert as $planID)
             {
                 /* Set story order in new plan. */
+                $data = new stdClass();
                 $data->plan  = $planID;
                 $data->story = $storyID;
                 $data->order = zget($maxOrders, $planID, 0) + 1;
@@ -1061,7 +1063,7 @@ class storyModel extends model
 
                 if(!dao::isError())
                 {
-                    /* Update story sort of plan when the plan has changed. */
+                    /* Update story sort of plan when story plan has changed. */
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
                     $this->executeHooks($storyID);
@@ -1411,37 +1413,46 @@ class storyModel extends model
      */
     public function batchChangePlan($storyIdList, $planID, $oldPlanID = 0)
     {
+        /* Prepare data. */
         $now            = helper::now();
         $allChanges     = array();
         $oldStories     = $this->getByList($storyIdList);
         $plan           = $this->loadModel('productplan')->getById($planID);
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
+
+        /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
 
+            /* Ignore parent story, closed story and story linked to this plan already. */
+            if($oldStory->parent < 0) continue;
+            if($oldStory->status == 'closed') continue;
+            if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
+
+            /* Init story and set last edited data. */
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
-            if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
-            if($this->session->currentProductType == 'normal' or empty($oldPlanID) or $oldStory->branch)
-            {
-                $story->plan = $planID;
-                if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
-            }
-            elseif($oldPlanID)
-            {
-                $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
-                if(empty($story->branch)) $story->plan .= ",$planID";
-            }
+
+            /* Remove old plan from the plan field. */
+            if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
 
             /* Update the order of the story in the plan. */
             $this->updateStoryOrderOfPlan($storyID, $planID, $oldStory->plan);
 
-            /* Fix bug #3529. */
+            /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
+            if($this->session->currentProductType == 'normal') $story->plan = $planID;
+            if(empty($oldPlanID)) $story->plan = $planID;
+            if($oldStory->branch) $story->plan = $planID;
+
+            /* Append the plan id to plan field if product is multi and story is all branch. */
+            if($this->session->currentProductType != 'normal' and empty($story->branch)) $story->plan .= ",$planID";
+
+            /* Change stage. */
+            if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
             if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
             {
-                $story->plan = $oldStory->plan ? $oldStory->plan . ',' . $planID : $planID;
                 if(!isset($oldStoryStages[$storyID][$plan->branch]))
                 {
                     $story->stage = 'planned';
@@ -1453,9 +1464,11 @@ class storyModel extends model
                 }
             }
 
+            /* Update story and recompute stage. */
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
 
             if(!$planID) $this->setStage($storyID);
+
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         return $allChanges;
@@ -1880,6 +1893,7 @@ class storyModel extends model
             $branch = join(',', $branch);
             if($branch) $branch = "0,$branch";
         }
+
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
@@ -1889,7 +1903,10 @@ class storyModel extends model
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
         return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
@@ -2475,7 +2492,7 @@ class storyModel extends model
      */
     public function getVersion($storyID)
     {
-        return $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
+        return (int)$this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
     }
 
     /**
@@ -2967,6 +2984,67 @@ class storyModel extends model
     }
 
     /**
+     * Get mail subject.
+     *
+     * @param  object    $story
+     * @access public
+     * @return string
+     */
+    public function getSubject($story)
+    {
+        $productName = $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object    $story
+     * @param  string    $actionType
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($story, $actionType)
+    {
+        /* Set toList and ccList. */
+        $toList = $story->assignedTo;
+        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+
+        /* If the action is changed or reviewed, mail to the project team. */
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
+        {
+            $prjMembers = $this->getProjectMembers($story->id);
+            if($prjMembers)
+            {
+                $ccList .= ',' . join(',', $prjMembers);
+                $ccList = ltrim($ccList, ',');
+            }
+        }
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+        elseif($toList == 'closed')
+        {
+            $toList = $story->openedBy;
+        }
+
+        return array($toList, $ccList);
+    }
+
+    /**
      * Adjust the action clickable.
      *
      * @param  object $story
@@ -3427,64 +3505,42 @@ class storyModel extends model
     }
 
     /**
-     * Get mail subject.
+     * Update the story order according to the plan.
      *
-     * @param  object    $story
+     * @param  int    $planID
+     * @param  array  $sortIDList
+     * @param  string $orderBy
+     * @param  int    $pageID
+     * @param  int    $recPerPage
      * @access public
-     * @return string
+     * @return void
      */
-    public function getSubject($story)
+    public function sortStoriesOfPlan($planID, $sortIDList, $orderBy = 'id_desc', $pageID = 1, $recPerPage = 100)
     {
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
-    }
+        /* Append id for secend sort. */
+        $orderBy = $this->loadModel('common')->appendOrder($orderBy);
 
-    /**
-     * Get toList and ccList.
-     *
-     * @param  object    $story
-     * @param  string    $actionType
-     * @access public
-     * @return bool|array
-     */
-    public function getToAndCcList($story, $actionType)
-    {
-        /* Set toList and ccList. */
-        $toList = $story->assignedTo;
-        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+        /* Get all stories by plan. */
+        $stories     = $this->getPlanStories($planID, 'all', $orderBy);
+        $storyIDList = array_keys($stories);
 
-        /* If the action is changed or reviewed, mail to the project team. */
-        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
+        /* Calculate how many numbers there are before the sort list and after the sort list. */
+        $frontStoryCount   = $recPerPage * ($pageID - 1);
+        $behindStoryCount  = $recPerPage * $pageID;
+        $frontStoryIDList  = array_slice($storyIDList, 0, $frontStoryCount);
+        $behindStoryIDList = array_slice($storyIDList, $behindStoryCount, count($storyIDList) - $behindStoryCount);
+
+        /* Merge to get a new sort list. */
+        $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
+        if(strpos($orderBy, 'order_desc')) array_reverse($newSortIDList);
+
+        /* Loop update the story order of plan. */
+        $order = 1;
+        foreach($newSortIDList as $storyID)
         {
-            $prjMembers = $this->getProjectMembers($story->id);
-            if($prjMembers)
-            {
-                $ccList .= ',' . join(',', $prjMembers);
-                $ccList = ltrim($ccList, ',');
-            }
+            $this->dao->update(TABLE_PLANSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('plan')->eq($planID)->exec();
+            $order++;
         }
-
-        if(empty($toList))
-        {
-            if(empty($ccList)) return false;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
-        }
-        elseif($toList == 'closed')
-        {
-            $toList = $story->openedBy;
-        }
-
-        return array($toList, $ccList);
     }
 
     /**

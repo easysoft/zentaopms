@@ -606,12 +606,27 @@ class upgradeModel extends model
             $this->saveLogs('Execute 12_4');
             $this->execSQL($this->getUpgradeFile('12.4'));
             $this->appendExec('12_4');
-        case '20_0_alpha1':
-            $this->saveLogs('Execute 20_0_alpha1');
-            $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
-            $this->setWork2Full();
+        case '12_4_1':
+            $this->saveLogs('Execute 12_4_1');
+            $this->execSQL($this->getUpgradeFile('12.4.1'));
+            $this->appendExec('12_4_1');
+        case '12_4_2':
+            $this->saveLogs('Execute 12_4_2');
+            $this->execSQL($this->getUpgradeFile('12.4.2'));
+            $this->fixFromCaseVersion();
             $this->initStoryOfPlan();
-            $this->appendExec('20_0_alpha1');
+            $this->appendExec('12_4_2');
+        case '12_4_3':
+            $this->saveLogs('Execute 12_4_3');
+            $this->appendExec('12_4_3');
+        case '12_4_4':
+            $this->saveLogs('Execute 12_4_4');
+            $this->appendExec('12_4_4');
+        case '20_0_alpha':
+            $this->saveLogs('Execute 20_0_alpha');
+            $this->execSQL($this->getUpgradeFile('20.0.alpha'));
+            $this->setWork2Full();
+            $this->appendExec('20_0_alpha');
         }
 
         $this->deletePatch();
@@ -788,7 +803,11 @@ class upgradeModel extends model
             case '12_3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.2'));
             case '12_3_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.3.3'));
             case '12_4':   $confirmContent .= file_get_contents($this->getUpgradeFile('12.4'));
-            case '20_0': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0'));
+            case '12_4_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.1'));
+            case '12_4_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.2'));
+            case '12_4_3':
+            case '12_4_4':
+            case '20_0_alpha': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -918,16 +937,28 @@ class upgradeModel extends model
     public function deleteFiles()
     {
         $result = array();
+        $zfile  = $this->app->loadClass('zfile');
+
         foreach($this->config->delete as $deleteFiles)
         {
             $basePath = $this->app->getBasePath();
+
             foreach($deleteFiles as $file)
             {
                 if(isset($this->config->excludeFiles[$file])) continue;
+
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
-                if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
+                if(file_exists($fullPath))
+                {
+                    if((is_dir($fullPath)  and !$zfile->removeDir($fullPath)) or
+                       (is_file($fullPath) and !$zfile->removeFile($fullPath)))
+                    {
+                        $result[] = $fullPath;
+                    }
+                }
             }
         }
+
         return $result;
     }
 
@@ -2671,9 +2702,7 @@ class upgradeModel extends model
      */
     public function checkSafeFile()
     {
-        if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
-        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+        return $this->loadModel('common')->checkSafeFile();
     }
 
     /**
@@ -3823,6 +3852,35 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_REPO)->data($gitRepo)->exec();
             }
         }
+        return true;
+    }
+
+    /**
+     * Fix fromCaseVersion field for zt_case table.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixFromCaseVersion()
+    {
+        /* Get imported cases and cases version is null. */
+        $errorCasePairs = $this->dao->select('id,fromCaseID,fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->ne(0)->andWhere('fromCaseVersion')->eq(0)->fetchPairs('id', 'fromCaseID');
+        $this->saveLogs($this->dao->get());
+        if(empty($errorCasePairs)) return true;
+
+        /* Get from case versions by from cases. */
+        $fromCaseIdList   = array_unique(array_values($errorCasePairs));
+        $fromCaseVersions = $this->dao->select('id,version')->from(TABLE_CASE)->where('id')->in($fromCaseIdList)->fetchPairs('id', 'version');
+        $this->saveLogs($this->dao->get());
+
+        /* Fix fromCaseVersion field. */
+        foreach($errorCasePairs as $caseID => $fromCaseID)
+        {
+            $fromCaseVersion = zget($fromCaseVersions, $fromCaseID, 1);
+            $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($fromCaseVersion)->where('id')->eq($caseID)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
         return true;
     }
 

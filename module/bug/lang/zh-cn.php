@@ -336,7 +336,7 @@ $lang->bug->report->bugsPerResolution->graph     = new stdclass();
 $lang->bug->report->bugsPerStatus->graph         = new stdclass();
 $lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
 $lang->bug->report->bugsPerType->graph           = new stdclass();
-$lang->bug->report->bugsPerPri->graph           = new stdclass();
+$lang->bug->report->bugsPerPri->graph            = new stdclass();
 $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
@@ -371,7 +371,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '处理步骤';
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' .$lang->storyCommon. '</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' . $lang->storyCommon . '</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->planCommon . ' <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->planCommon . '  <strong>$extra</strong> 移除。');

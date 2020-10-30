@@ -75,8 +75,8 @@ class testtaskModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->TRActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
@@ -137,8 +137,8 @@ class testtaskModel extends model
         }
         $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav     = $pageNav;
-        $this->lang->TRActions = $pageActions;
+        $this->lang->modulePageNav = $pageNav;
+        $this->lang->TRActions     = $pageActions;
         if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
         foreach($this->lang->testtask->menu as $key => $value)
         {
@@ -427,6 +427,7 @@ class testtaskModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
                 ->andWhere('status')->ne('wait')
+                ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
@@ -1813,6 +1814,7 @@ class testtaskModel extends model
         $matchPaths = $rules['path'];
         $nameFields = $rules['name'];
         $failure    = $rules['failure'];
+        $skipped    = $rules['skipped'];
         $suiteField = $rules['suite'];
         $aliasSuite = zget($rules, 'aliasSuite', array());
         $aliasName  = zget($rules, 'aliasName', array());
@@ -1937,6 +1939,12 @@ class testtaskModel extends model
                         $failureAttrs = $matchNode->$failure->attributes();
                         $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
                     }
+                }
+                elseif(isset($matchNode->$skipped))
+                {
+                    $result->caseResult = 'n/a';
+                    $result->stepResults[0]['result'] = 'n/a';
+                    $result->stepResults[0]['real']   = '';
                 }
                 $result->stepResults = serialize($result->stepResults);
                 $case->lastRunner    = $this->app->user->account;

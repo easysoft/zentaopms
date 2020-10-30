@@ -23,12 +23,12 @@ $config->timezone   = 'Asia/Shanghai';      // 时区设置。        The time z
 $config->webRoot    = '';                   // URL根目录。       The root path of the url.
 
 /* 框架路由相关设置。Routing settings. */
-$config->requestType = 'PATH_INFO';         // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
-$config->requestFix  = '-';                 // PATH_INFO和PATH_INFO2模式的分隔符。    The divider in the url when PATH_INFO|PATH_INFO2.
-$config->moduleVar   = 'm';                 // 请求类型为GET：模块变量名。            requestType=GET: the module var name.
-$config->methodVar   = 'f';                 // 请求类型为GET：模块变量名。            requestType=GET: the method var name.
-$config->viewVar     = 't';                 // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
-$config->sessionVar  = 'zentaosid';         // 请求类型为GET：session变量名。         requestType=GET: the session var name.
+$config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
+$config->requestFix  = '-';                       // PATH_INFO和PATH_INFO2模式的分隔符。    The divider in the url when PATH_INFO|PATH_INFO2.
+$config->moduleVar   = 'm';                       // 请求类型为GET：模块变量名。            requestType=GET: the module var name.
+$config->methodVar   = 'f';                       // 请求类型为GET：模块变量名。            requestType=GET: the method var name.
+$config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
+$config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
@@ -39,6 +39,7 @@ $config->langs['en']       = 'English';
 $config->langs['de']       = 'Deutsch';
 $config->langs['fr']       = 'Français';
 $config->langs['vi']       = 'Tiếng Việt';
+$config->langs['ja']       = '日本語';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';
@@ -89,18 +90,21 @@ $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|edu
 
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();
-$config->framework->autoConnectDB  = true;  // 是否自动连接数据库。              Whether auto connect database or not.
-$config->framework->multiLanguage  = true; // 是否启用多语言功能。              Whether enable multi lanuage or not.
-$config->framework->multiTheme     = true; // 是否启用多风格功能。              Whether enable multi theme or not.
-$config->framework->multiSite      = false; // 是否启用多站点模式。              Whether enable multi site mode or not.
-$config->framework->extensionLevel = 1;     // 0=>无扩展,1=>公共扩展,2=>站点扩展 0=>no extension, 1=> common extension, 2=> every site has it's extension.
-$config->framework->jsWithPrefix   = false;  // js::set()输出的时候是否增加前缀。 When us js::set(), add prefix or not.
-$config->framework->filterBadKeys  = true;  // 是否过滤不合要求的键值。          Whether filter bad keys or not.
-$config->framework->filterTrojan   = true;  // 是否过滤木马攻击代码。            Whether strip trojan code or not.
-$config->framework->filterXSS      = true;  // 是否过滤XSS攻击代码。             Whether strip xss code or not.
-$config->framework->filterParam    = 2;     // 1=>默认过滤，2=>开启过滤参数功能。0=>default filter 2=>Whether strip param.
-$config->framework->purifier       = true;  // 是否对数据做purifier处理。        Whether purifier data or not.
-$config->framework->logDays        = 14;    // 日志文件保存的天数。              The days to save log files.
+$config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
+$config->framework->multiLanguage   = true; // 是否启用多语言功能。              Whether enable multi lanuage or not.
+$config->framework->multiTheme      = true; // 是否启用多风格功能。              Whether enable multi theme or not.
+$config->framework->multiSite       = false; // 是否启用多站点模式。              Whether enable multi site mode or not.
+$config->framework->extensionLevel  = 1;     // 0=>无扩展,1=>公共扩展,2=>站点扩展 0=>no extension, 1=> common extension, 2=> every site has it's extension.
+$config->framework->jsWithPrefix    = false;  // js::set()输出的时候是否增加前缀。 When us js::set(), add prefix or not.
+$config->framework->filterBadKeys   = true;  // 是否过滤不合要求的键值。          Whether filter bad keys or not.
+$config->framework->filterTrojan    = true;  // 是否过滤木马攻击代码。            Whether strip trojan code or not.
+$config->framework->filterXSS       = true;  // 是否过滤XSS攻击代码。             Whether strip xss code or not.
+$config->framework->filterParam     = 2;     // 1=>默认过滤，2=>开启过滤参数功能。0=>default filter 2=>Whether strip param.
+$config->framework->purifier        = true;  // 是否对数据做purifier处理。        Whether purifier data or not.
+$config->framework->logDays         = 14;    // 日志文件保存的天数。              The days to save log files.
+$config->framework->autoRepairTable = true;
+$config->framework->autoLang        = false;
+$config->framework->filterCSRF      = false;
 
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
@@ -109,10 +113,32 @@ $config->framework->detectDevice['de']    = true; // 在en语言情况下，是�
 $config->framework->detectDevice['fr']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 $config->framework->detectDevice['vi']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 
+/* IP white list settings.*/
+$config->ipWhiteList = '*';
+
+/* Switch for zentao features. */
+$config->features = new stdclass();
+$config->features->apiGetModel    = false;
+$config->features->apiSQL         = false;
+$config->features->cronSystemCall = false;
+$config->features->checkClient    = true;
+
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();
 $config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 $config->file->allowed = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql';
+
+/* Upload settings. */
+$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
+$config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
+$config->checkVersion = true;              // Auto check for new version or not.
+
+/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
+$config->wideSize      = 1400;
+$config->timeout       = 30000;
+$config->duplicateTime = 30;
+$config->maxCount      = 500;
+$config->moreLinks     = array();
 
 /* 配置参数过滤。Filter param settings. */
 $filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';

@@ -483,6 +483,7 @@ class productplanModel extends model
             else
             {
                 $plansOfStory = $story->plan . ',' . $planID;
+
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
 
                 $this->story->updateStoryOrderOfPlan($storyID, $planID);
@@ -491,8 +492,6 @@ class productplanModel extends model
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }
-
-        $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($currentOrder)->where('id')->eq((int)$planID)->exec();
     }
 
     /**

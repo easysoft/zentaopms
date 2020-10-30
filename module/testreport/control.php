@@ -64,11 +64,6 @@ class testreport extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
-        if(empty($reports) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
-        }
 
         if($objectType == 'project' and isset($_POST['taskIdList']))
         {

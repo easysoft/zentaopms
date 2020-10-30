@@ -121,7 +121,7 @@ class bug extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
         $projects = $this->loadModel('project')->getPairs('empty|withdelete', $this->session->PRJ);
@@ -421,9 +421,8 @@ class bug extends control
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
+        $builds[''] = '';
 
-
-        $moduleID    = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
         /* Set team members of the latest project as assignedTo list. */
@@ -459,7 +458,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
-        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
+        $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;

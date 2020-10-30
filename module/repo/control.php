@@ -576,6 +576,7 @@ class repo extends control
         {
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+
             if($this->post->arrange) 
             {
                 $arrange = $this->post->arrange;

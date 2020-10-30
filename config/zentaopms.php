@@ -10,23 +10,6 @@
 * @link        http://www.zentao.net
 */
 
-/* Framework settings. */
-$config->framework->autoRepairTable = true;
-$config->framework->autoLang        = false;
-$config->framework->filterCSRF      = false;
-
-/* Upload settings. */
-$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
-$config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
-$config->checkVersion = true;              // Auto check for new version or not.
-
-/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
-$config->wideSize      = 1400;
-$config->timeout       = 30000;
-$config->duplicateTime = 30;
-$config->maxCount      = 500;
-$config->moreLinks     = array();
-
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
 
@@ -144,16 +127,6 @@ $config->charsets['fr']['utf-8']    = 'UTF-8';
 $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
-
-/* IP white list settings.*/
-$config->ipWhiteList = '*';
-
-/* Switch for zentao features. */
-$config->features = new stdclass();
-$config->features->apiGetModel    = false;
-$config->features->apiSQL         = false;
-$config->features->cronSystemCall = false;
-$config->features->checkClient    = true;
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');

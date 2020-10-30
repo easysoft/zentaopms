@@ -30,6 +30,10 @@ php_value display_errors 1
 php_value max_input_vars 100000
 </IfModule>
 
+<IfModule mod_headers.c>
+Header always append X-Frame-Options SAMEORIGIN
+</IfModule>
+
 # yslow settings.
 <IfModule mod_expires.c>
 ExpiresActive On

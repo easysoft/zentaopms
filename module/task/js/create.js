@@ -145,7 +145,7 @@ function setStoryModule()
 /* Set the story priview link. */
 function setPreview()
 {
-    if(!$('#story').val())
+    if(!Number($('#story').val()))
     {
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
@@ -247,6 +247,8 @@ function toggleSelectTestStory()
         $('#estStarted').closest('tr').addClass('hidden');
         $('#estimate').closest('.table-col').addClass('hidden');
         $('#testStoryBox').removeClass('hidden');
+        $('#copyButton').addClass('hidden');
+        $('.colorpicker').css('right', '0');
     }
     else
     {
