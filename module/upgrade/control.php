@@ -23,11 +23,14 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        /* Judge upgrade step. */
-        $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
-        if($upgradeStep == 'mergeProgram') $this->locate(inlink('mergeProgram'));
+        if(version_compare($this->config->installedVersion, '20', '<')) 
+        {
+            /* Judge upgrade step. */
+            $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
+            if($upgradeStep == 'mergeProgram') $this->locate(inlink('mergeProgram'));
 
-        if(version_compare($this->config->installedVersion, '20', '<')) $this->locate(inlink('to20'));
+            $this->locate(inlink('to20'));
+        }
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }
@@ -145,16 +148,24 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(version_compare(str_replace('_', '.', $fromVersion), '20', '<') && !isset($this->config->qcVersion)) 
-            {
-                $this->loadModel('setting')->setItem('system.common.global.upgradeStep', 'mergeProgram');
-                $this->locate(inlink('mergeProgram'));
-            }
+            if(version_compare(str_replace('_', '.', $fromVersion), '20', '<') && !isset($this->config->qcVersion)) $this->locate(inlink('mergeTips'));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
         $this->view->result = 'fail';
         $this->view->errors = $this->upgrade->getError();
+        $this->display();
+    }
+
+    /**
+     * Merge program tips.
+     * 
+     * @access public
+     * @return void
+     */
+    public function mergeTips()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.upgradeStep', 'mergeProgram');
         $this->display();
     }
 
@@ -278,6 +289,7 @@ class upgrade extends control
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('key')->eq('productProject')->exec();
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=yes")));
         }
 
@@ -397,6 +409,7 @@ class upgrade extends control
             $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t2.product')->in($productPairs)
+                ->andWhere('t1.type')->eq('project')
                 ->fetchAll('productID');
 
             foreach($noMergedSprints as $sprintID => $sprint)
@@ -407,6 +420,8 @@ class upgrade extends control
                     $project = zget($projects, $productID, '');
                     if($project) $sprint->projects[$project->id] = $project->name;
                 }
+
+                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchPairs();
             }
 
             $this->view->noMergedSprints = $noMergedSprints;

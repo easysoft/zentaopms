@@ -23,6 +23,7 @@
       </div>
     </div>
   </div>
+  <div class='table-col divider strong'><i class='icon icon-angle-double-right'></i></div>
   <div class='table-col' id='source'>
     <div class='cell'>
       <div class='lineGroup-title'>
@@ -55,7 +56,7 @@
       <?php endforeach;?>
     </div>
   </div>
-  <div class='table-col divider strong'></div>
+  <div class='table-col divider strong'><i class='icon icon-angle-double-right'></i></div>
   <div class='table-col pgmWidth' id='programBox'>
     <div class='cell'> 
     <?php

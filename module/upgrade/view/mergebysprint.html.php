@@ -12,13 +12,13 @@
       <div class='sprint-group'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
         <tr>
-          <td><?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id);?></td>
+          <td><?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?></td>
         </tr>
         <?php endforeach;?>
       </div>
     </div>
   </div>
-  <div class='table-col divider strong'></div>
+  <div class='table-col divider strong'><i class='icon icon-angle-double-right'></i></div>
   <div class='table-col pgmWidth' id='programBox'>
     <div class='cell'><?php include "./createprogram.html.php";?></div>
   </div>

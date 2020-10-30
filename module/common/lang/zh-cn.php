@@ -120,6 +120,13 @@ $lang->typeAB       = '类型';
 $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
+global $config;
+if($config->URAndSR)
+{
+    $URCommon = zget($lang, 'URCommon', "用户需求");
+    $SRCommon = zget($lang, 'SRCommon', "软件需求");
+}
+
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
@@ -158,8 +165,8 @@ $lang->product->menu->home = '主页|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->requirement = array('link' => "$URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "$SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
@@ -269,11 +276,8 @@ $lang->my->menu->story            = array('link' => "需求|my|story|", 'subModu
 $lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic          = '动态|my|dynamic|';
 
-global $config;
 if($config->URAndSR)
 {
-    $URCommon = zget($lang, 'URCommon', "用户需求");
-    $SRCommon = zget($lang, 'SRCommon', "软件需求");
     $lang->my->menu->requirement = array('link' => "{$URCommon}|my|requirement|", 'subModule' => 'story');
     $lang->my->menu->story       = array('link' => "{$SRCommon}|my|story|", 'subModule' => 'story');
 }

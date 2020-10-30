@@ -7,6 +7,9 @@
 .divider{background:#f1f1f1 !important; width:20px !important; padding:1px !important;}
 .gray{background:#f1f1f1 !important}
 
+.side-col{padding-right: 0px}
+div.divider{vertical-align: middle;}
+
 .main-row{margin-top: 20px; padding: 20px; background: #f1f1f1}
 .main-row .side-col .nav li.active a{background: #006af1;color: #fff; border-radius: 4px}
 

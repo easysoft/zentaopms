@@ -47,7 +47,8 @@ $lang->upgrade->forbiddenExt   = '以下插件与新版本不兼容，已经自�
 $lang->upgrade->updateFile     = '需要更新附件信息。';
 $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
 $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
-$lang->upgrade->mergeProgram   = '数据归并';
+$lang->upgrade->mergeProgram   = '数据迁移';
+$lang->upgrade->mergeTips      = '数据迁移提示';
 $lang->upgrade->to20Demo       = '查看20版本Demo';
 $lang->upgrade->to20Tips       = '禅道20版本升级提示';
 $lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
@@ -62,9 +63,20 @@ $lang->upgrade->to20Desc       = <<<EOD
   </ol>
 </div>
 EOD;
+$lang->upgrade->mergeProgramDesc = <<<EOD
+<p>接下来我们会把之前历史产品和迭代数据迁移到项目集和项目下，迁移的方案如下：</p><br />
+<h4>方案一：以产品线组织的产品和迭代 </h4>
+<p>可以将整个产品线及其下面的产品和迭代迁移到一个项目集和项目中，当然您也可以根据需要分开迁移。</p>
+<h4>方案二：以产品组织的迭代 </h4>
+<p>可以选择多个产品及其下面的迭代迁移到一个项目集和项目中，也可以选择某一个产品和产品下面的迭代迁移到项目集和项目中。</p>
+<h4>方案三：独立的迭代</h4>
+<p>可以选择若干个迭代迁移到一个项目集中，也可以独立迁移。</p>
+<h4>方案四：关联多个产品的迭代</h4>
+<p>可以选择这些迭代归属于某个新项目下。</p>
+EOD;
 
 $lang->upgrade->line     = '产品线';
-$lang->upgrade->program  = '归并项目';
+$lang->upgrade->program  = '目标项目集和项目';
 $lang->upgrade->existPGM = '已有项目集';
 $lang->upgrade->existPRJ = '已有项目';
 $lang->upgrade->product  = $lang->productCommon;
