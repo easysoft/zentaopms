@@ -289,7 +289,7 @@ class upgrade extends control
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('key')->eq('productProject')->exec();
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=yes")));
         }
 
