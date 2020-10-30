@@ -160,12 +160,12 @@ $lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Updat
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Daily Task Reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']         = 'Backup Data';
-$lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Asynchronize sending message';
+$lang->install->cronList['moduleName=backup&methodName=backup']         = 'Backup data&file';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']        = 'Asynchronize sending emails';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']     = 'Asynchronize sending webhook';
-$lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Delete expired logs';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']       = 'Delete overdue logs';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Create recurring todos';
-$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring Jenkins';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring tasks';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
 
