@@ -1370,11 +1370,10 @@ class programModel extends model
                 case 'idAB':
                     printf('%03d', $project->id);
                     break;
-                case 'PRJCode':
-                    echo $project->code;
-                    break;
                 case 'PRJName':
-                    echo html::a(helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);
+                    $projectLink = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
+                    $projectCode = " <span class='label label-badge label-info label-outline'>$project->code</span>";
+                    echo html::a($projectLink, $project->name . $projectCode);
                     break;
                 case 'PRJModel':
                     echo zget($this->lang->program->modelList, $project->model);

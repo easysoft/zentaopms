@@ -133,7 +133,7 @@ class program extends control
     /**
      * Create a project.
      *
-     * @param  string $parentProgramID
+     * @param  int  $parentProgramID
      * @access public
      * @return void
      */
@@ -157,7 +157,7 @@ class program extends control
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : '';
+        $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
         $this->view->parents       = $this->program->getParentPairs();
 
         $this->display();
@@ -187,8 +187,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $url = $this->session->PRJList ? $this->session->PRJList : inlink('pgmbrowse');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('PGMBrowse')));
         }
 
         $parents = $this->program->getParentPairs();

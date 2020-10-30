@@ -1,12 +1,12 @@
 <?php
 /**
- * The create view of project module of ZenTaoPMS.
+ * The pgmcreate view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
+ * @version     $Id: pgmcreate.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -43,7 +43,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : '', "class='form-control chosen' onchange=setAclList(this.value)");?>
+          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setAclList(this.value)");?>
           <td></td>
         </tr>
         <tr>

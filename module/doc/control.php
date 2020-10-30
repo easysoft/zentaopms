@@ -108,7 +108,7 @@ class doc extends control
         /* According the from, set menus. */
         if($from == 'product')
         {
-            $this->lang->navGroup->doc  = 'program';
+            $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
@@ -116,7 +116,7 @@ class doc extends control
         }
         elseif($from == 'project')
         {
-            $this->lang->navGroup->doc  = 'program';
+            $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $lib->project);
@@ -853,7 +853,7 @@ class doc extends control
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
         if($from == 'product')
         {
-            $this->lang->navGroup->doc  = 'program';
+            $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
@@ -861,7 +861,7 @@ class doc extends control
         }
         elseif($from == 'project')
         {
-            $this->lang->navGroup->doc  = 'program';
+            $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $objectID);

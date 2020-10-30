@@ -33,7 +33,6 @@ $config->program->PRJEdit->requiredFields   = 'name,code,begin,end';
 
 $config->program->sortFields            = new stdclass();
 $config->program->sortFields->idAB      = 'id';
-$config->program->sortFields->PRJCode   = 'code';
 $config->program->sortFields->PRJModel  = 'model';
 $config->program->sortFields->begin     = 'begin';
 $config->program->sortFields->end       = 'end';
@@ -42,17 +41,12 @@ $config->program->sortFields->PRJBudget = 'budget';
 
 global $lang;
 $config->program->datatable = new stdclass();
-$config->program->datatable->defaultField = array('idAB', 'PRJCode', 'PRJName', 'PRJModel', 'PRJPM', 'begin', 'end', 'PRJStatus', 'PRJBudget', 'teamCount','PRJEstimate','PRJConsume', 'PRJProgress', 'actions');
+$config->program->datatable->defaultField = array('idAB', 'PRJName', 'PRJModel', 'PRJPM', 'begin', 'end', 'PRJStatus', 'PRJBudget', 'teamCount','PRJEstimate','PRJConsume', 'PRJProgress', 'actions');
 
 $config->program->datatable->fieldList['idAB']['title']    = 'idAB';
 $config->program->datatable->fieldList['idAB']['fixed']    = 'left';
 $config->program->datatable->fieldList['idAB']['width']    = '60';
 $config->program->datatable->fieldList['idAB']['required'] = 'yes';
-
-$config->program->datatable->fieldList['PRJCode']['title']    = 'PRJCode';
-$config->program->datatable->fieldList['PRJCode']['fixed']    = 'left';
-$config->program->datatable->fieldList['PRJCode']['width']    = '80';
-$config->program->datatable->fieldList['PRJCode']['required'] = 'yes';
 
 $config->program->datatable->fieldList['PRJName']['title']    = 'PRJName';
 $config->program->datatable->fieldList['PRJName']['fixed']    = 'left';
