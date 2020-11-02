@@ -27,6 +27,8 @@ $(function()
             loadPlans($(this), branchID);
         });
     }
+
+    $('[data-toggle="tooltip"]').tooltip({placement: 'right'});
 });
 
 function setParentProgram()

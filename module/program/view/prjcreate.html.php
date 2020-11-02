@@ -36,7 +36,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td><td></td><td></td>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td>
+            <icon class='icon icon-help' data-toggle='tooltip' data-placement='right' title=<?php echo $lang->program->PGMTips;?>></icon>
+          </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
@@ -74,7 +78,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-              <div class='col-sm-4'>
+                <div class='col-sm-4 <?php if($programID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>

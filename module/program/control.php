@@ -768,7 +768,6 @@ class program extends control
             $projectID = $this->program->PRJCreate();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
-            $this->project->updateProducts($projectID);
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             if($from == 'PGM')

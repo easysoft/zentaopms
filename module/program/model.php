@@ -1134,6 +1134,12 @@ class programModel extends model
 
                 if(dao::isError()) return false;
             }
+
+            if(!$_POST['products'][0]) 
+            {
+                dao::$errors[] = $this->lang->program->productNotEmpty;
+                return false;
+            }
         }
 
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
@@ -1151,9 +1157,38 @@ class programModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
+
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+            
+            /* If parent not empty, link products or create products. */
+            if($project->parent) 
+            {
+                $this->loadModel('project')->updateProducts($projectID);
+            }
+            else
+            {
+                $product = new stdclass();
+                $product->name        = $project->name;
+                $product->code        = $project->code;
+                $product->bind        = 1;
+                $product->acl         = $project->acl = 'open' ? 'open' : 'private';
+                $product->PO          = $project->PM;
+                $product->createdBy   = $this->app->user->account;
+                $product->createdDate = helper::now();
+                $product->status      = 'normal';
+
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                $productID = $this->dao->lastInsertId();
+                if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+                $projectProduct = new stdclass(); 
+                $projectProduct->project = $projectID;
+                $projectProduct->product = $productID;
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+            }
 
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();

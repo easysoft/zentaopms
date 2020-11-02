@@ -80,6 +80,8 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期项目';
 
+$lang->program->productNotEmpty = '关联产品不能为空！';
+
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
@@ -204,6 +206,7 @@ $lang->program->PGMLongTime  = '长期项目';
 
 $lang->program->noPGM         = '暂时没有项目集';
 $lang->program->PGMShowClosed = '显示已关闭';
+$lang->program->PGMTips       = '修改父项目集，可关联产品也会发生变化，并且变为必填，如果未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联到该项目。';
 
 $lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即可访问）";
 $lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问）";
