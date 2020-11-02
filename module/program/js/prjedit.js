@@ -12,6 +12,9 @@ $(function()
             $('#end').removeAttr('disabled');
         }
     });
+
+    adjustProductBoxMargin();
+    adjustPlanBoxMargin();
 });
 
 function setAclList(programID)
