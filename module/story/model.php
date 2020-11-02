@@ -3505,45 +3505,6 @@ class storyModel extends model
     }
 
     /**
-     * Update the story order according to the plan.
-     *
-     * @param  int    $planID
-     * @param  array  $sortIDList
-     * @param  string $orderBy
-     * @param  int    $pageID
-     * @param  int    $recPerPage
-     * @access public
-     * @return void
-     */
-    public function sortStoriesOfPlan($planID, $sortIDList, $orderBy = 'id_desc', $pageID = 1, $recPerPage = 100)
-    {
-        /* Append id for secend sort. */
-        $orderBy = $this->loadModel('common')->appendOrder($orderBy);
-
-        /* Get all stories by plan. */
-        $stories     = $this->getPlanStories($planID, 'all', $orderBy);
-        $storyIDList = array_keys($stories);
-
-        /* Calculate how many numbers there are before the sort list and after the sort list. */
-        $frontStoryCount   = $recPerPage * ($pageID - 1);
-        $behindStoryCount  = $recPerPage * $pageID;
-        $frontStoryIDList  = array_slice($storyIDList, 0, $frontStoryCount);
-        $behindStoryIDList = array_slice($storyIDList, $behindStoryCount, count($storyIDList) - $behindStoryCount);
-
-        /* Merge to get a new sort list. */
-        $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, 'order_desc')) array_reverse($newSortIDList);
-
-        /* Loop update the story order of plan. */
-        $order = 1;
-        foreach($newSortIDList as $storyID)
-        {
-            $this->dao->update(TABLE_PLANSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('plan')->eq($planID)->exec();
-            $order++;
-        }
-    }
-
-    /**
      * Get tracks.
      *
      * @param  int  $productID
