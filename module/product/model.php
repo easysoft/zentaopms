@@ -138,7 +138,7 @@ class productModel extends model
             if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
             if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
-            if($currentProduct->type != 'normal')
+            if($currentProduct->type != 'normal' && $currentModule != 'programplan')
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branchName[$currentProduct->type], $this->lang->product->branch);
@@ -358,9 +358,19 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getOrderedProducts($status, $num = 0)
+    public function getOrderedProducts($status, $num = 0, $projectID = 0)
     {
-        $products = $this->getList($this->session->program, $status);
+        $products = array();
+        if($projectID)
+        {
+            $pairs    = $this->getProductsByProject($this->session->PRJ);
+            $products = $this->getByIdList(array_keys($pairs));
+        }
+        else
+        {
+            $products = $this->getList('', $status, $num);
+        }
+
         if(empty($products)) return $products;
 
         $lines = $this->loadModel('tree')->getLinePairs($useShort = true);

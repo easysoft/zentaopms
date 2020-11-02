@@ -23,7 +23,7 @@ class testtask extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
+        $this->view->products = $this->products = $this->product->getProductsByProject($this->session->PRJ);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));
     }
 
@@ -72,6 +72,9 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Get tasks. */
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
         if(empty($tasks) and $pageID > 1)
@@ -79,9 +82,6 @@ class testtask extends control
             $pager = pager::init(0, $recPerPage, 1);
             $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
         }
-
-        /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get tasks. */
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);

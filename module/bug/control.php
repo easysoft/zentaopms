@@ -31,7 +31,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
+        $this->view->products = $this->products = $this->product->getProductsByProject($this->session->PRJ);
 
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
@@ -439,7 +439,7 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        $productList = $this->product->getOrderedProducts('all'); 
+        $productList = $this->product->getOrderedProducts('all', 40, $this->session->PRJ); 
         foreach($productList as $product) $products[$product->id] = $product->name;
 
         /* Set custom. */
