@@ -1,24 +1,69 @@
 <?php
-$lang->custom->common     = '自定義';
-$lang->custom->index      = '首頁';
-$lang->custom->set        = '自定義配置';
-$lang->custom->restore    = '恢復預設';
-$lang->custom->key        = '鍵';
-$lang->custom->value      = '值';
-$lang->custom->flow       = '流程';
-$lang->custom->working    = '工作方式';
-$lang->custom->select     = '請選擇流程：';
-$lang->custom->branch     = '多分支';
-$lang->custom->owner      = '所有者';
-$lang->custom->module     = '模組';
-$lang->custom->section    = '附加部分';
-$lang->custom->lang       = '所屬語言';
-$lang->custom->setPublic  = '設為公共';
-$lang->custom->required   = '必填項';
-$lang->custom->score      = '積分';
-$lang->custom->timezone   = '時區';
-$lang->custom->scoreReset = '重置積分';
-$lang->custom->scoreTitle = '積分功能';
+$lang->custom->common             = '自定義';
+$lang->custom->index              = '首頁';
+$lang->custom->set                = '自定義配置';
+$lang->custom->restore            = '恢復預設';
+$lang->custom->key                = '鍵';
+$lang->custom->value              = '值';
+$lang->custom->flow               = '流程';
+$lang->custom->working            = '工作方式';
+$lang->custom->select             = '請選擇流程：';
+$lang->custom->branch             = '多分支';
+$lang->custom->owner              = '所有者';
+$lang->custom->module             = '模組';
+$lang->custom->section            = '附加部分';
+$lang->custom->lang               = '所屬語言';
+$lang->custom->setPublic          = '設為公共';
+$lang->custom->required           = '必填項';
+$lang->custom->score              = '積分';
+$lang->custom->timezone           = '時區';
+$lang->custom->scoreReset         = '重置積分';
+$lang->custom->scoreTitle         = '積分功能';
+$lang->custom->setscrum           = '切換敏捷視圖';
+$lang->custom->setWaterfall       = '切換瀑布視圖';
+$lang->custom->estimate           = '估算配置';
+$lang->custom->estimateConfig     = '估算配置';
+$lang->custom->estimateUnit       = '估算單位';
+$lang->custom->estimateEfficiency = '生產率';
+$lang->custom->estimateCost       = '單位人工成本';
+$lang->custom->estimateHours      = '每日工時';
+$lang->custom->estimateDays       = '每週工作天數';
+$lang->custom->region             = '區間';
+$lang->custom->tips               = '提示語';
+$lang->custom->setTips            = '設置提示語';
+$lang->custom->isRange            = '是否目標控制範圍';
+$lang->custom->concept            = "概念";
+$lang->custom->URStory            = "用戶需求";
+$lang->custom->SRStory            = "軟件需求";
+$lang->custom->epic               = "史詩";
+$lang->custom->scrumStory         = "故事";
+$lang->custom->waterfallCommon    = "瀑布";
+$lang->custom->configureWaterfall = "瀑布自定義";
+$lang->custom->configureScrum     = "敏捷自定義";
+
+$lang->custom->object['program'] = '項目';
+$lang->custom->program->fields['unitList'] = '預算單位';
+
+$lang->custom->unitList['efficiency'] = '工時/';
+$lang->custom->unitList['manhour']    = '人時/';
+$lang->custom->unitList['cost']       = '元/小時';
+$lang->custom->unitList['hours']      = '小時';
+$lang->custom->unitList['days']       = '天';
+$lang->custom->unitList['loc']        = 'KLOC';
+
+$lang->custom->tipProgressList['SPI'] = '項目進度績效(SPI)';
+$lang->custom->tipProgressList['SV']  = '進度偏差率(SV%)';
+
+$lang->custom->tipCostList['CPI'] = '項目成本績效(CPI)';
+$lang->custom->tipCostList['CV']  = '成本偏差率(CV%)';
+
+$lang->custom->tipRangeList[0]  = '否';
+$lang->custom->tipRangeList[1]  = '是';
+
+$lang->custom->regionMustNumber = '區間必須是數字';
+$lang->custom->tipNotEmpty      = '提示語不能為空';
+
+$lang->custom->numberError = '區間必須大於零';
 
 $lang->custom->object['story']    = $lang->storyCommon;
 $lang->custom->object['task']     = '任務';
@@ -78,7 +123,7 @@ $lang->custom->user->fields['statusList']   = '狀態';
 $lang->custom->user->fields['contactField'] = '可用聯繫方式';
 $lang->custom->user->fields['deleted']      = '列出已刪除用戶';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'estimate');
 
 $lang->custom->block->fields['closed'] = '關閉的區塊';
 
@@ -125,15 +170,12 @@ $lang->custom->weekendList[2] = '雙休';
 $lang->custom->weekendList[1] = '單休';
 
 $lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = '產品 - 項目';
-$lang->custom->productProject->relation['0_1'] = '產品 - 迭代';
-$lang->custom->productProject->relation['1_1'] = '項目 - 迭代';
-$lang->custom->productProject->relation['0_2'] = '產品 - 衝刺';
-$lang->custom->productProject->relation['1_2'] = '項目 - 衝刺';
+$lang->custom->productProject->relation['0_0'] = '項目 - 產品 - 迭代';
+$lang->custom->productProject->relation['0_1'] = '項目 - 產品 - 衝刺';
 
 $lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
 
-$lang->custom->workingList['full']      = '完整研發管理工具';
+$lang->custom->workingList['full'] = '完整研發管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
@@ -158,6 +200,19 @@ $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
 $lang->custom->conceptOptions->hourPoint = array();
-$lang->custom->conceptOptions->hourPoint['0'] = '工時';
-$lang->custom->conceptOptions->hourPoint['1'] = '故事點';
-$lang->custom->conceptOptions->hourPoint['2'] = '功能點';
+$lang->custom->conceptOptions->hourPoint['0'] = '故事點';
+$lang->custom->conceptOptions->hourPoint['1'] = '功能點';
+$lang->custom->conceptOptions->hourPoint['2'] = '代碼行';
+
+$lang->custom->waterfall = new stdclass();
+$lang->custom->waterfall->URAndSR  = '是否啟用用戶需求概念？';
+$lang->custom->waterfall->URSRName = '用戶需求和軟件需求的概念定義？';
+
+$lang->custom->scrum = new stdclass();
+$lang->custom->scrum->URAndSR  = '是否啟用epic概念？';
+$lang->custom->scrum->URSRName = '需求的概念定義？';
+
+$lang->custom->waterfallOptions = new stdclass();
+$lang->custom->waterfallOptions->URAndSR = array();
+$lang->custom->waterfallOptions->URAndSR[0] = '否';
+$lang->custom->waterfallOptions->URAndSR[1] = '是';

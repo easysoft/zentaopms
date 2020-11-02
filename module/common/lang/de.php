@@ -191,16 +191,16 @@ $lang->system->menu->stage    = array('link' => 'Stage|stage|browse|', 'subModul
 $lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
 $lang->system->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
 $lang->system->menu->custom   = array('link' => 'Custom|custom|configurewaterfall|');
-$lang->system->dividerMenu    = ',auditcl,subject,';
+$lang->system->dividerMenu = ',auditcl,subject,';
 
 if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
 {
     $lang->system->menu = new stdclass();
-    $lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
-    $lang->system->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
-    $lang->system->menu->custom   = array('link' => 'Custom|custom|concept|');
+    $lang->system->menu->subject = array('link' => 'Subject|subject|browse|');
+    $lang->system->menu->holiday = array('link' => 'Holiday|holiday|browse|');
+    $lang->system->menu->custom  = array('link' => 'Custom|custom|configurescrum|');
 
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|settips|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|browse|';
     unset($lang->system->dividerMenu);
 }
 

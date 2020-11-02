@@ -191,7 +191,7 @@ $lang->system->menu->stage    = array('link' => 'Stage|stage|browse|', 'subModul
 $lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
 $lang->system->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
 $lang->system->menu->custom   = array('link' => 'Custom|custom|configurewaterfall|');
-$lang->system->dividerMenu    = ',auditcl,subject,';
+$lang->system->dividerMenu = ',auditcl,subject,';
 
 if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
 {
