@@ -731,17 +731,8 @@ class user extends control
 
             if($user)
             {
-                $this->user->cleanLocked($user->account);
-                /* Authorize him and save to session. */
-                $user->rights = $this->user->authorize($user->account);
-                $user->groups = $this->user->getGroups($user->account);
-                $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
-                $this->session->set('user', $user);
-                $this->app->user = $this->session->user;
-                $this->loadModel('action')->create('user', $user->id, 'login');
-                $this->loadModel('score')->create('user', 'login');
-                /* Keep login. */
-                if($this->post->keepLogin) $this->user->keepLogin($user);
+                /* Set user group, rights, view and aword login score. */
+                $user = $this->user->login($user);
 
                 /* Go to the referer. */
                 if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false and strpos($this->post->referer, 'block') === false)
@@ -1117,4 +1108,5 @@ class user extends control
 
         die(json_encode($newUsers));
     }
+
 }
