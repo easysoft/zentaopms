@@ -63,6 +63,8 @@ $lang->user->unlock        = "解锁用户";
 $lang->user->delete        = "删除用户";
 $lang->user->unbind        = "解除ZDOO绑定";
 $lang->user->login         = "用户登录";
+$lang->user->bind          = "绑定已有账户";
+$lang->user->oauthRegister = "注册新账号";
 $lang->user->mobileLogin   = "手机访问";
 $lang->user->editProfile   = "修改档案";
 $lang->user->deny          = "访问受限";
@@ -195,6 +197,7 @@ $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';
 $lang->user->contacts->listName = '列表名称';
 $lang->user->contacts->userList = '用户列表';
+
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
