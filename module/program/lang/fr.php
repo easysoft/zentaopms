@@ -203,7 +203,7 @@ $lang->program->PGMTeamCount = 'Team';
 $lang->program->PGMLongTime  = 'Long-Term';
 
 $lang->program->noPGM         = 'No program.';
-$lang->program->PGMShowClosed = 'Closed programs.';i 
+$lang->program->PGMShowClosed = 'Closed programs.';
 
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";

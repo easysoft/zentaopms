@@ -48,38 +48,39 @@ $lang->upgrade->updateFile    = 'Updateinformation wurden hinzugefügt.';
 $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
 $lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->mergeTips     = 'Data Migration Tips';
+$lang->upgrade->to20Demo      = 'View version 20 of the demo';
 $lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
 $lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
+$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information：</p><br />";
 $lang->upgrade->to20Desc      = <<<EOD
-<p>Dear users, thank you for your support of Zentao. Since version 20, Zentao Buddhism has been upgraded to a general purpose project management platform. Compared to previous versions, Zentao 20 adds the concept of a large project and management model. Next we will help you with this upgrade by using the wizard to go to. This upgrade is divided into two parts: Project data merge and permission reset.</p>
-<br />
-<h4>1、Project merge</h4>
-<p>We will merge the previous product and project data under the big project concept, and adjust the concept according to your choice of management model as follows：</p>
-<ul>
-  <li class='strong'>Scrum:Project > Product > Sprint > Task </li>
-  <li class='strong'>Waterfall:Project > Product > Stage > Task</li>
-  <li class='strong'>Kanban:Project > Product > Kanban > Card</li>
-</ul>
-<br />
-<h4>2、Permission Reset</h4>
-<p>Since the 20th version of Zentao, permissions are granted on a project basis, and the mechanism of authorization is:</p>
-<p class='strong'>The administrator delegates authority to the project manager > The project manager delegates authority to the project members</p>
-<br />
 <div class='text-warning'>
-  <p>Tips：</p>
+  <p>Friendly reminder：</p>
   <ol>
-    <li>You can start by installing a 20 version of Zen and experiencing the concepts and processes.</li>
-    <li>Zentao version 20 changes a lot, please make a backup before you upgrade.</li>
+    <li>You can start by installing a version 20 of ZenTao to experience the concepts and processes inside.</li>
+    <li>Version 20 of Zendo has made some major changes, please make a backup before upgrading.</li>
+    <li>Please feel free to upgrade, even if the first upgrade is not in place, subsequent adjustments can be made without affecting system data.</li>
   </ol>
 </div>
+EOD;
+$lang->upgrade->mergeProgramDesc = <<<EOD
+<p>Next, we will migrate the previous historical product and iteration data to the project set and under the project, with the following scenario for migration.</p><br />
+<h4>Option 1: Product and iteration organized by product line </h4>
+<p>It is possible to migrate the entire product line and its following products and iterations into one project set and project, although you can also migrate them separately as needed.</p>
+<h4>Option 2: Iteration of product-based organizations </h4>
+<p>You can select multiple products and the iterations below them to migrate to a project set and project, or you can select a particular product and the iterations below it to migrate to a project set and project.</p>
+<h4>Option 3: Independent iterations </h4>
+<p>Several iterations can be selected to migrate to a single project set, or independently.</p>
+<h4>Option 4: Iterations linked to multiple products.</h4>
+<p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
 $lang->upgrade->line     = 'Product Line';
 $lang->upgrade->program  = 'Merge Project';
-$lang->upgrade->existPGM = 'Existing projects';
-$lang->upgrade->PRJAdmin = 'Project Admin';
+$lang->upgrade->existPGM = 'Existing programs';
+$lang->upgrade->existPRJ = 'Existing projects';
 $lang->upgrade->product  = $lang->productCommon;
-$lang->upgrade->project  = $lang->projectCommon;
+$lang->upgrade->project  = 'Iteration';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s iterations in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";

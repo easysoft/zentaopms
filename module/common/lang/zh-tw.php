@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
@@ -120,19 +120,97 @@ $lang->typeAB       = '類型';
 $lang->common = new stdclass();
 $lang->common->common = '公有模組';
 
-/* 主導航菜單。*/
-$lang->menu = new stdclass();
-$lang->menu->my      = '<span> 我的地盤</span>|my|index';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = '測試|qa|index';
-$lang->menu->ci      = '整合|repo|browse';
-$lang->menu->doc     = '文檔|doc|index';
-$lang->menu->report  = '統計|report|index';
-$lang->menu->company = '組織|company|index';
-$lang->menu->admin   = '後台|admin|index';
+global $config;
+if($config->URAndSR)
+{
+    $URCommon = zget($lang, 'URCommon', "用戶需求");
+    $SRCommon = zget($lang, 'SRCommon', "軟件需求");
+}
 
-$lang->dividerMenu = ',qa,report,';
+/* 主導航菜單。*/
+$lang->mainNav = new stdclass();
+$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盤|my|index|';
+$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 項目集|program|pgmindex|';
+$lang->mainNav->product = '<i class="icon icon-menu-project"></i> 產品|product|index|';
+$lang->mainNav->project = '<i class="icon icon-file"></i> 項目|program|prjbrowse|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 組織|custom|estimate|';
+$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 後台|admin|index|';
+
+$lang->reporting = new stdclass();
+$lang->dividerMenu = ',admin,';
+
+/* Program set menu. */
+$lang->program = new stdclass();
+$lang->program->menu = new stdclass();
+$lang->program->menu->index   = '主頁|program|pgmindex|';
+$lang->program->menu->browse  = array('link' => '項目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
+
+$lang->program->viewMenu = new stdclass();
+$lang->program->viewMenu->view        = array('link' => '概況|program|pgmview|program=%s');
+$lang->program->viewMenu->product     = array('link' => '產品|program|pgmproduct|program=%s');
+$lang->program->viewMenu->project     = array('link' => "項目|program|pgmproject|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "人員|personnel|accessible|program=%s");
+$lang->program->viewMenu->stakeholder = array('link' => "干係人|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
+
+$lang->personnel = new stdClass();
+$lang->personnel->menu = new stdClass();
+$lang->personnel->menu->accessible = array('link' => "可訪問人員|personnel|accessible|program=%s");
+$lang->personnel->menu->whitelist  = array('link' => "白名單|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->putinto    = array('link' => "投入人員|personnel|putinto|program=%s");
+
+/* Scrum menu. */
+$lang->product = new stdclass();
+$lang->product->menu = new stdclass();
+$lang->product->menu->home = '主頁|product|index|';
+$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
+
+$lang->product->viewMenu = new stdclass();
+if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "$lang->storyCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->plan        = array('link' => "計劃|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->viewMenu->release     = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s';
+$lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->module      = '模組|tree|browse|productID=%s&view=story';
+$lang->product->viewMenu->view        = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->viewMenu->whitelist   = array('link' => '白名單|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
+
+$lang->release     = new stdclass();
+$lang->branch      = new stdclass();
+$lang->productplan = new stdclass();
+
+$lang->release->menu     = $lang->product->viewMenu;
+$lang->branch->menu      = $lang->product->menu;
+$lang->productplan->menu = $lang->product->menu;
+
+/* System menu. */
+$lang->system = new stdclass();
+$lang->system->menu = new stdclass();
+$lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
+$lang->system->menu->stage    = array('link' => '階段|stage|browse|', 'subModule' => 'stage');
+$lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+$lang->system->menu->holiday  = array('link' => '節假日|holiday|browse|');
+$lang->system->menu->custom   = array('link' => '自定義|custom|configurewaterfall|');
+$lang->system->dividerMenu    = ',auditcl,subject,';
+
+if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+    $lang->system->menu->holiday  = array('link' => '節假日|holiday|browse|');
+    $lang->system->menu->custom   = array('link' => '自定義|custom|configurescrum|');
+
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 組織|subject|browse|';
+    unset($lang->system->dividerMenu);
+}
+
+$lang->stage = new stdclass();
+$lang->stage->menu = new stdclass();
+$lang->stage->menu->browse  = array('link' => '階段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
+$lang->stage->menu->settype = '階段類型|stage|settype|';
+
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
 
 /* 查詢條中可以選擇的對象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -144,7 +222,7 @@ $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['user']        = '用戶';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '發佈';
-$lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
+$lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
 $lang->searchObjects['testtask']    = '測試單';
 $lang->searchObjects['doc']         = '文檔';
 $lang->searchObjects['caselib']     = '用例庫';
@@ -188,69 +266,70 @@ $lang->index->menu->project = "瀏覽{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index          = '首頁|my|index';
-$lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => '測試|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
-$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
-$lang->my->menu->dynamic        = '動態|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密碼|my|changepassword';
-$lang->my->menu->manageContacts = '聯繫人|my|managecontacts';
-$lang->my->menu->score          = array('link' => '積分|my|score', 'subModule' => 'score');
+$lang->my->menu->index            = '首頁|my|index';
+$lang->my->menu->calendar         = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->program          = array('link' => '項目|my|program|');
+$lang->my->menu->task             = array('link' => '任務|my|task|', 'subModule' => 'task');
+$lang->my->menu->bug              = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
+$lang->my->menu->testtask         = array('link' => '測試|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->story            = array('link' => "需求|my|story|", 'subModule' => 'story');
+$lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
+$lang->my->menu->dynamic          = '動態|my|dynamic|';
 
-$lang->my->dividerMenu = ',task,myProject,profile,';
+if($config->URAndSR)
+{
+    $lang->my->menu->requirement = array('link' => "{$URCommon}|my|requirement|", 'subModule' => 'story');
+    $lang->my->menu->story       = array('link' => "{$SRCommon}|my|story|", 'subModule' => 'story');
+}
+
+$lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->score       = new stdclass();
-$lang->score->menu = $lang->my->menu;
-
 /* 產品視圖設置。*/
-$lang->product = new stdclass();
-$lang->product->menu = new stdclass();
+$lang->scrumproduct = new stdclass();
+$lang->scrumproduct->menu = new stdclass();
 
-$lang->product->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->plan    = array('link' => '計劃|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
-$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->dynamic = '動態|product|dynamic|productID=%s';
-$lang->product->menu->doc     = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
-$lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
-$lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
+$lang->scrumproduct->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+//$lang->scrumproduct->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
+$lang->scrumproduct->menu->roadmap = '路線圖|product|roadmap|productID=%s';
+$lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->scrumproduct->menu->dynamic = '動態|product|dynamic|productID=%s';
+$lang->scrumproduct->menu->doc     = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->scrumproduct->menu->branch  = '@branch@|branch|manage|productID=%s';
+$lang->scrumproduct->menu->module  = '模組|tree|browse|productID=%s&view=story';
+$lang->scrumproduct->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 
-$lang->product->dividerMenu = ',plan,project,doc,';
+if($config->URAndSR)
+{
+    $lang->scrumproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+    $lang->scrumproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+}
 
-$lang->story       = new stdclass();
-$lang->productplan = new stdclass();
-$lang->release     = new stdclass();
-$lang->branch      = new stdclass();
+$lang->product->dividerMenu = ',project,doc,';
 
-$lang->branch->menu      = $lang->product->menu;
-$lang->story->menu       = $lang->product->menu;
-$lang->productplan->menu = $lang->product->menu;
-$lang->release->menu     = $lang->product->menu;
+$lang->story = new stdclass();
+
+$lang->story->menu = $lang->product->menu;
 
 /* 項目視圖菜單設置。*/
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task    = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->project->menu->kanban  = array('link' => '看板|project|kanban|projectID=%s');
-$lang->project->menu->burn    = array('link' => '燃盡圖|project|burn|projectID=%s');
-$lang->project->menu->list    = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story   = array('link' => "{$lang->storyCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa      = array('link' => '測試|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->doc     = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action  = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->product = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team    = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->view    = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->project->menu->kanban    = array('link' => '看板|project|kanban|projectID=%s');
+$lang->project->menu->burn      = array('link' => '燃盡圖|project|burn|projectID=%s');
+$lang->project->menu->list      = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->story     = array('link' => "{$lang->storyCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->project->menu->qa        = array('link' => '測試|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->doc       = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->action    = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->whitelist = array('link' => '白名單|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
@@ -370,7 +449,6 @@ $lang->job->menu     = $lang->ci->menu;
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加檔案夾|doc|createLib', 'float' => 'right');
 
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
@@ -390,34 +468,36 @@ $lang->report->notice->help = '註：統計報表的數據來源於列表頁面�
 
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
+$lang->dept    = new stdclass();
+$lang->group   = new stdclass();
+$lang->user    = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->browseUser  = array('link' => '用戶|company|browse', 'subModule' => 'user');
+$lang->dept->menu    = new stdclass();
+$lang->group->menu   = new stdclass();
+$lang->user->menu    = new stdclass();
+
+$lang->company = new stdclass();
+$lang->company->menu = new stdclass();
+$lang->company->menu->browseUser  = array('link' => '用戶|company|browse', 'subModule' => ',user,');
 $lang->company->menu->dept        = array('link' => '部門|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '權限|group|browse', 'subModule' => 'group');
 $lang->company->menu->dynamic     = '動態|company|dynamic|';
 $lang->company->menu->view        = array('link' => '公司|company|view');
 
-$lang->dept  = new stdclass();
-$lang->group = new stdclass();
-$lang->user  = new stdclass();
-
-$lang->dept->menu  = $lang->company->menu;
-$lang->group->menu = $lang->company->menu;
-$lang->user->menu  = $lang->company->menu;
-
 /* 後台管理菜單設置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => '首頁|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => '自定義|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '整合|admin|sso', 'subModule' => '');
-$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
-$lang->admin->menu->translate = array('link' => '翻譯|dev|translate');
-$lang->admin->menu->data      = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系統|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->index   = array('link' => '首頁|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company = array('link' => '人員|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->data    = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
+$lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
+$lang->admin->menu->system  = array('link' => '系統|cron|index', 'subModule' => 'cron,search');
+
+$lang->company->menu = $lang->company->menu;
+$lang->dept->menu    = $lang->company->menu;
+$lang->group->menu   = $lang->company->menu;
+$lang->user->menu    = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -457,19 +537,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->backup->menu    = $lang->admin->menu;
-$lang->cron->menu      = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->custom->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->dev->menu       = $lang->admin->menu;
-$lang->entry->menu     = $lang->admin->menu;
-$lang->webhook->menu   = $lang->admin->menu;
-$lang->message->menu   = $lang->admin->menu;
-
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
@@ -489,8 +556,8 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->doclib      = 'doc';
-$lang->menugroup->people      = 'company';
+$lang->menugroup->report      = 'reporting';
+$lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->score       = 'my';
@@ -509,6 +576,96 @@ $lang->menugroup->repo    = 'ci';
 $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
+
+/* Nav group.*/
+$lang->navGroup = new stdclass();
+$lang->navGroup->my     = 'my';
+$lang->navGroup->todo   = 'my';
+$lang->navGroup->effort = 'my';
+
+$lang->navGroup->personnel = 'program';
+
+$lang->navGroup->productplan = 'product';
+$lang->navGroup->release     = 'product';
+$lang->navGroup->branch      = 'product';
+$lang->navGroup->story       = 'product';
+
+$lang->navGroup->project     = 'project';
+$lang->navGroup->tree        = 'project';
+$lang->navGroup->task        = 'project';
+$lang->navGroup->qa          = 'project';
+$lang->navGroup->bug         = 'project';
+$lang->navGroup->doc         = 'project';
+$lang->navGroup->testcase    = 'project';
+$lang->navGroup->testtask    = 'project';
+$lang->navGroup->testreport  = 'project';
+$lang->navGroup->testsuite   = 'project';
+$lang->navGroup->caselib     = 'project';
+$lang->navGroup->feedback    = 'project';
+$lang->navGroup->deploy      = 'project';
+$lang->navGroup->stakeholder = 'project';
+
+$lang->navGroup->programplan    = 'project';
+$lang->navGroup->workestimation = 'project';
+$lang->navGroup->budget         = 'project';
+$lang->navGroup->review         = 'project';
+$lang->navGroup->reviewissue    = 'project';
+$lang->navGroup->weekly         = 'project';
+$lang->navGroup->milestone      = 'project';
+$lang->navGroup->pssp           = 'project';
+$lang->navGroup->design         = 'project';
+$lang->navGroup->repo           = 'project';
+$lang->navGroup->issue          = 'project';
+$lang->navGroup->risk           = 'project';
+$lang->navGroup->auditplan      = 'project';
+$lang->navGroup->cm             = 'project';
+$lang->navGroup->nc             = 'project';
+$lang->navGroup->job            = 'project';
+$lang->navGroup->jenkins        = 'project';
+$lang->navGroup->compile        = 'project';
+$lang->navGroup->build          = 'project';
+
+$lang->navGroup->durationestimation = 'project';
+
+$lang->navGroup->stage         = 'system';
+$lang->navGroup->measurement   = 'system';
+$lang->navGroup->report        = 'system';
+$lang->navGroup->sqlbuilder    = 'system';
+$lang->navGroup->auditcl       = 'system';
+$lang->navGroup->cmcl          = 'system';
+$lang->navGroup->process       = 'system';
+$lang->navGroup->activity      = 'system';
+$lang->navGroup->zoutput       = 'system';
+$lang->navGroup->classify      = 'system';
+$lang->navGroup->subject       = 'system';
+$lang->navGroup->baseline      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->reviewsetting = 'system';
+$lang->navGroup->holiday       = 'system';
+
+$lang->navGroup->attend   = 'attend';
+$lang->navGroup->leave    = 'attend';
+$lang->navGroup->makeup   = 'attend';
+$lang->navGroup->overtime = 'attend';
+$lang->navGroup->lieu     = 'attend';
+
+$lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->webhook   = 'admin';
+$lang->navGroup->sms       = 'admin';
+$lang->navGroup->message   = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->custom    = 'admin';
+$lang->navGroup->cron      = 'admin';
+$lang->navGroup->backup    = 'admin';
+$lang->navGroup->mail      = 'admin';
+$lang->navGroup->dev       = 'admin';
+$lang->navGroup->extension = 'admin';
+$lang->navGroup->action    = 'admin';
+$lang->navGroup->search    = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
@@ -692,5 +849,96 @@ $lang->icons['manage']             = 'cog';
 $lang->icons['unlock']             = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
+
+/* Scrum menu. */
+$lang->menu = new stdclass();
+$lang->menu->scrum = new stdclass();
+$lang->menu->scrum->program = '儀表盤|program|index|';
+//$lang->menu->scrum->product = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->scrum->project = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->doc     = '文檔|doc|index|';
+$lang->menu->scrum->qa      = '測試|qa|index';
+
+/* Waterfall menu. */
+$lang->menu->waterfall = new stdclass();
+$lang->menu->waterfall->programindex = array('link' => '儀表盤|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan  = array('link' => '計劃|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly       = array('link' => '報告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc          = array('link' => '文檔|doc|index|program={PROGRAM}');
+//$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->design       = '設計|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci           = '代碼|repo|browse|';
+$lang->menu->waterfall->qa           = array('link' => '測試|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+//$lang->menu->waterfall->release      = array('link' => '發佈|release|browse|product={PRODUCT}', 'subModule' => 'release');
+$lang->menu->waterfall->issue        = '問題|issue|browse|';
+$lang->menu->waterfall->risk         = '風險|risk|browse|';
+$lang->menu->waterfall->list         = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+
+$lang->waterfall = new stdclass();
+$lang->waterfall->subMenu = new stdclass();
+$lang->waterfall->subMenu->list = new stdclass();
+$lang->waterfall->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->list->stakeholder    = array('link' => '干係人|stakeholder|browse|', 'subModule' => 'stakeholder');
+$lang->waterfall->subMenu->list->program        = '項目|program|edit|';
+
+$lang->waterfallproduct   = new stdclass();
+$lang->workestimation     = new stdclass();
+$lang->budget             = new stdclass();
+$lang->programplan        = new stdclass();
+$lang->review             = new stdclass();
+$lang->weekly             = new stdclass();
+$lang->milestone          = new stdclass();
+$lang->design             = new stdclass();
+$lang->auditplan          = new stdclass();
+$lang->cm                 = new stdclass();
+$lang->nc                 = new stdclass();
+$lang->pssp               = new stdclass();
+$lang->issue              = new stdclass();
+$lang->risk               = new stdclass();
+$lang->stakeholder        = new stdclass();
+$lang->durationestimation = new stdclass();
+
+$lang->workestimation->menu     = new stdclass();
+$lang->budget->menu             = new stdclass();
+$lang->programplan->menu        = new stdclass();
+$lang->review->menu             = new stdclass();
+$lang->weekly->menu             = new stdclass();
+$lang->milestone->menu          = new stdclass();
+$lang->design->menu             = new stdclass();
+$lang->auditplan->menu          = new stdclass();
+$lang->cm->menu                 = new stdclass();
+$lang->pssp->menu               = new stdclass();
+$lang->issue->menu              = new stdclass();
+$lang->risk->menu               = new stdclass();
+$lang->stakeholder->menu        = new stdclass();
+$lang->waterfallproduct->menu   = new stdclass();
+$lang->durationestimation->menu = new stdclass();
+
+$lang->stakeholder->menu->list  = array('link' => '干係人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
+$lang->stakeholder->menu->issue = array('link' => '問題管理|stakeholder|issue|');
+
+$lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget   = array('link' => '費用估算|budget|summary|', 'subModule' => 'budget');
+
+$lang->durationestimation->menu = $lang->workestimation->menu;
+$lang->budget->menu = $lang->workestimation->menu;
+
+$lang->programplan->menu->gantt = array('link' => '甘特圖|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
+$lang->programplan->menu->lists = array('link' => '階段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
+
+$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
+$lang->waterfallproduct->menu->track = '跟蹤矩陣|story|track|product={PRODUCT}';
+
+if($config->URAndSR)
+{
+    $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
+    $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
+}
+
+$lang->nc->menu = $lang->auditplan->menu;
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

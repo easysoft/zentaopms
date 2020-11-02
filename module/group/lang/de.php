@@ -26,6 +26,7 @@ $lang->group->confirmDelete      = 'Möchten Sie die Gruppe löschen?';
 $lang->group->successSaved       = 'Gespeichert!';
 $lang->group->errorNotSaved      = 'Fehlgeschlagen. Bitte aktion und Gruppe wählen.';
 $lang->group->viewList           = 'Anzeige ist zulässig.';
+$lang->group->PRJ                = 'Manage Project';
 $lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Produkte sind zugänglich.';
 $lang->group->projectList        = 'Projekte sind zugänglich.';
