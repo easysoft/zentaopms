@@ -189,7 +189,6 @@ class storyModel extends model
             ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
-            ->setDefault('program', $this->session->PRJ)
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
@@ -383,7 +382,6 @@ class storyModel extends model
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
-            $story->program    = $this->session->PRJ;
             $story->openedBy   = $this->app->user->account;
             $story->openedDate = $now;
             $story->version    = 1;
@@ -2119,7 +2117,7 @@ class storyModel extends model
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+            $products = $this->loadModel('product')->getPairs();
         }
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -2419,13 +2417,12 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $programID = 0)
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story')
     {
         $stories = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
-            ->beginIF($programID)->andWhere('t1.PRJ')->eq($programID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
@@ -2734,7 +2731,7 @@ class storyModel extends model
             ->where($this->reportCondition())
             ->groupBy('product')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $products = $this->loadModel('product')->getPairs();
         foreach($datas as $productID => $data) $data->name = isset($products[$productID]) ? $products[$productID] : $this->lang->report->undefined;
         return $datas;
     }
@@ -3633,8 +3630,6 @@ class storyModel extends model
         {
             $requirement = $this->getByID($id);
             $data = new stdclass();
-            $data->program  = $this->session->PRJ;
-            $data->product  = $this->session->product;
             $data->AType    = 'requirement';
             $data->BType    = 'story';
             $data->relation = 'subdivideinto';

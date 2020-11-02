@@ -954,7 +954,7 @@ class projectModel extends model
 
         /* In case of a waterfall model, obtain sub-stage data. */
         $PRJData = $this->getById($this->session->PRJ);
-        if($PRJData->model == 'waterfall')
+        if($PRJData and $PRJData->model == 'waterfall')
         {
             $childrens = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('parent')->in(array_keys($projects))
@@ -1059,7 +1059,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        if($PRJData->model == 'waterfall')
+        if($PRJData and $PRJData->model == 'waterfall')
         {
             foreach($parents as $id => $project) $project->children = isset($children[$id]) ? $children[$id] : array();
         }

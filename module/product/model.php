@@ -32,11 +32,7 @@ class productModel extends model
         $product = $this->getByID($productID);
         if($product)
         {
-            $project = $this->loadModel('project')->getByID($product->program);
-
-            if(isset($project->id)) $this->loadModel('project')->setMenu($products, $project->id);
-
-            $this->lang->modulePageNav = $this->getModuleNav($products, $project, $product, $extra, $branch, $module, $moduleType);
+            $this->lang->modulePageNav = $this->getModuleNav($products, '', $product, $extra, $branch, $module, $moduleType);
         }
 
         $pageActions = '';

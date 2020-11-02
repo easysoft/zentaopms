@@ -133,7 +133,7 @@ class testcaseModel extends model
             ->add('status', $status)
             ->add('version', 1)
             ->add('fromBug', $bugID)
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
@@ -227,7 +227,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            $data[$i]->program      = $this->session->PRJ;
+            $data[$i]->PRJ          = $this->session->PRJ;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
