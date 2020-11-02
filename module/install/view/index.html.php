@@ -38,7 +38,7 @@
             <?php endif;?>
           </td>
         </tr> 
-        <!--tr>
+        <tr>
           <td colspan='2'>
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
@@ -55,7 +55,7 @@
               <?php endforeach;?>
             </div>
           </td>
-        </tr-->
+        </tr>
       </table>
     </div>
     <div class='modal-footer'>

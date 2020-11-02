@@ -50,6 +50,7 @@ $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！
 $lang->upgrade->mergeProgram   = '数据迁移';
 $lang->upgrade->mergeTips      = '数据迁移提示';
 $lang->upgrade->to20Demo       = '查看20版本Demo';
+$lang->upgrade->demoURL        = 'https://demo.qcmmi.com';
 $lang->upgrade->to20Tips       = '禅道20版本升级提示';
 $lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
 $lang->upgrade->to20TipsHeader = "<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。相关介绍请看如下视频：</p><br />";

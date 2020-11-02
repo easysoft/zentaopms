@@ -19,7 +19,7 @@
       <?php echo $lang->upgrade->to20Desc;?>
     </div>
     <div class='panel-footer text-center'>
-      <?php echo html::a('https://demo.qcmmi.com', $lang->upgrade->to20Demo, '_blank', "class='btn btn-secondary'");?>
+      <?php echo html::a($lang->upgrade->demoURL, $lang->upgrade->to20Demo, '_blank', "class='btn btn-secondary'");?>
       <?php echo html::a($this->createLink('upgrade', 'backup'), $lang->upgrade->to20Button, '', "class='btn btn-primary'");?>
     </div>
   </div>

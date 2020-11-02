@@ -654,6 +654,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `program` mediumint(8) unsigned NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
+  `bind` enum('0','1') NOT NULL DEFAULT '0',
   `line` mediumint(8) NOT NULL,
   `type` varchar(30) NOT NULL default 'normal',
   `status` varchar(30) NOT NULL default '',
