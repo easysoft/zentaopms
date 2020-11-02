@@ -320,7 +320,7 @@ class programModel extends model
                 $groupPriv  = new stdclass();
                 $groupPriv->account = $this->app->user->account;
                 $groupPriv->group   = $PRJAdminID;
-                $groupPriv->program = $programID;
+                $groupPriv->PRJ     = $programID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 

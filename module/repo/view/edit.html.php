@@ -28,7 +28,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->repo->program; ?></th>
-            <td class='required'><?php echo html::select('program[]', $programs, $repo->program, "class='form-control chosen' multiple"); ?></td>
+            <td class='required'><?php echo html::select('PRJ[]', $programs, $repo->program, "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>

@@ -144,7 +144,7 @@ class repoModel extends model
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->andWhere("CONCAT(',', program, ',')")->like("%,{$programID},%")
+            ->andWhere("CONCAT(',', PRJ, ',')")->like("%,{$programID},%")
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
 
@@ -195,7 +195,7 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
-            ->join('program', ',')
+            ->join('PRJ', ',')
             ->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -237,7 +237,7 @@ class repoModel extends model
             ->setDefault('prefix', $repo->prefix)
             ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
-            ->join('program', ',')
+            ->join('PRJ', ',')
             ->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -286,7 +286,7 @@ class repoModel extends model
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(',', program, ',')")->like("%,{$programID},%")
+            ->andWhere("CONCAT(',', PRJ, ',')")->like("%,{$programID},%")
             ->fetchAll();
 
         $repoPairs = array();

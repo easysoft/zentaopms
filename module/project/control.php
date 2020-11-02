@@ -25,7 +25,6 @@ class project extends control
         {
             $this->projects = $this->project->getPairs('nocode', $this->session->PRJ);
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
-            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() == 'mhtml') $this->locate($this->createLink('project', 'index'));
         }
     }
 

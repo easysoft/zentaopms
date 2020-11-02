@@ -175,7 +175,7 @@ class router extends baseRouter
             if(isset($model->model) && $model->model == 'waterfall')
             {
                 $projectIndex = 2;
-                $planIndex    = 1;
+                //$planIndex    = 1;
             }
 
             $config->storyCommon = $storyIndex;

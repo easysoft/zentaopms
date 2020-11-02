@@ -26,7 +26,7 @@ class design extends control
         parent::__construct($moduleName, $methodName);
         $products = array();
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getPairs('nocode', $this->session->PRJ);
+        $this->view->products = $this->products = $this->product->getProductsByProject($this->session->PRJ);
     }
 
     /**
@@ -46,7 +46,6 @@ class design extends control
     {
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true));
-        $productID = $this->product->saveState($productID, $this->products);
         $this->design->setProductMenu($productID);
 
         /* Build the search form. */
