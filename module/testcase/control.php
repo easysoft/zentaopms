@@ -205,10 +205,11 @@ class testcase extends control
      * @param string $from
      * @param int    $param
      * @param int    $storyID
+     * @param string $extras
      * @access public
      * @return void
      */
-    public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0)
+    public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;

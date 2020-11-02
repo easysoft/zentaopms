@@ -133,7 +133,7 @@ class wechatapi
      */
     public function queryAPI($url)
     {
-        $response = common::http($curl);
+        $response = common::http($url);
         $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);

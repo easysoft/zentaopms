@@ -955,7 +955,7 @@ class project extends control
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
         $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
 
-        $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
+        $dayList = array_fill(1, floor((int)$project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
