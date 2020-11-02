@@ -92,7 +92,7 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->program), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->PRJ), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
           <td><?php echo zget($users, $bug->resolvedBy);?></td>
@@ -100,11 +100,11 @@
           <td class='c-actions'>
             <?php
             $params = "bugID=$bug->id";
-            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true, '', '', $bug->program);
-            common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->program);
-            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true, '', '', $bug->program);
-            common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '', '', '', $bug->program);
-            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->program);
+            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true, '', '', $bug->PRJ);
+            common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->PRJ);
+            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true, '', '', $bug->PRJ);
+            common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '', '', '', $bug->PRJ);
+            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->PRJ);
             ?>
           </td>
         </tr>
@@ -124,13 +124,13 @@
         <?php
         if($canBatchConfirm)
         {
-          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->program);
+          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->PRJ);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->confirmBug, $misc);
         }
         if($canBatchClose)
         {
-          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->program);
+          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->PRJ);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->close, $misc);
         }
@@ -141,7 +141,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($memberPairs) > 10;
-          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->program);
+          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->PRJ);
           echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
           if($withSearch)
           {

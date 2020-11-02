@@ -71,12 +71,12 @@
             <?php printf('%03d', $task->id);?>
           </td>
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
-          <td class='c-project'><?php echo zget($programs, $task->program, '');?></td>
-          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID", '', '', $task->program), $task->projectName);?></td>
+          <td class='c-project'><?php echo zget($programs, $task->PRJ, '');?></td>
+          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID", '', '', $task->PRJ), $task->projectName);?></td>
           <td class='c-name' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->program), $task->name, null, "style='color: $task->color'");?>
+            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <td><?php if($task->estStarted  != '0000-00-00') echo $task->estStarted;?></td>
@@ -95,18 +95,18 @@
             if($task->needConfirm)
             {
                 $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide', '', '', '', $task->program);
+                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide', '', '', '', $task->PRJ);
             }
             else
             {
-                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
-                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
-                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
-                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->program);
+                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->PRJ);
+                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->PRJ);
+                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->PRJ);
+                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->PRJ);
 
-                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->program);
-                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', '', '', $task->program);
-                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children, $task->program);
+                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->PRJ);
+                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', '', '', $task->PRJ);
+                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children, $task->PRJ);
             }
             ?>
           </td>
@@ -122,7 +122,7 @@
       <?php
       if($canBatchClose)
       {
-          $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->program);
+          $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->PRJ);
           echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
       ?>
