@@ -130,7 +130,7 @@ if($config->URAndSR)
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmindex|';
+$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> 产品|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> 项目|program|prjbrowse|';
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
@@ -142,11 +142,11 @@ $lang->dividerMenu = ',admin,';
 /* Program set menu. */
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
-$lang->program->menu->index   = '主页|program|pgmindex|';
+//$lang->program->menu->index   = '主页|program|pgmindex|';
 $lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
 
 $lang->program->viewMenu = new stdclass();
-$lang->program->viewMenu->view        = array('link' => '概况|program|pgmview|program=%s');
+//$lang->program->viewMenu->view        = array('link' => '概况|program|pgmview|program=%s');
 $lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s');
 $lang->program->viewMenu->project     = array('link' => "项目|program|pgmproject|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "人员|personnel|accessible|program=%s");

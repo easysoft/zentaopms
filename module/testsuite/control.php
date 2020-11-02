@@ -41,13 +41,16 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true));
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
+        $this->view->products = $this->products = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $suites = $this->testsuite->getSuites($productID, $sort, $pager);
         if(empty($suites) and $pageID > 1)
@@ -56,10 +59,7 @@ class testsuite extends control
             $suites = $this->testsuite->getSuites($productID, $sort, $pager);
         }
 
-        /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-
         $suites = $this->testsuite->getSuites($productID, $sort, $pager);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;

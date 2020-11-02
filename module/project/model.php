@@ -736,7 +736,6 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('grade')->eq(1)
             ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
