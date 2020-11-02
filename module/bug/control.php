@@ -898,7 +898,7 @@ class bug extends control
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->position[] = $this->lang->bug->assignedTo;
 
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
+        $this->view->users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
         $this->view->actions = $this->action->getList('bug', $bugID);
