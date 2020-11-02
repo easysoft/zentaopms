@@ -172,7 +172,7 @@ $lang->product->viewMenu->release     = array('link' => "Release|release|browse|
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->module      = 'Module|tree|browse|productID=%s&view=story';
-$lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->viewMenu->view        = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->whitelist   = array('link' => 'Whitelist|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
 
 $lang->release     = new stdclass();
