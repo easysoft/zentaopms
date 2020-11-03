@@ -851,9 +851,6 @@ class program extends control
             $changes = $this->program->PRJUpdate($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
 
-            $this->project->updateProducts($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
-
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
@@ -864,16 +861,13 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
-        $project     = $this->program->getPRJByID($projectID);
-        $parents     = $this->program->getParentPairs();
-        $programID   = $this->program->getPRJProgramID($projectID);
+        $project = $this->program->getPRJByID($projectID);
+        $parents = $this->program->getParentPairs();
 
-
-        $linkedProducts = array();
         $linkedBranches = array();
         $productPlans   = array(0 => '');
         $allProducts    = $parentID ? $this->program->getPGMProduct($parentID) : $this->program->getPGMProduct($projectID);
-        $linkedProducts = $this->project->getProducts($projectID);
+        $linkedProducts = $parentID ? array() : $this->project->getProducts($projectID);
 
         foreach($linkedProducts as $product)
         {

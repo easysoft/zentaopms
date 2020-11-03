@@ -892,6 +892,10 @@ class story extends control
      */
     public function review($storyID)
     {
+        $this->loadModel('product');
+        $this->lang->product->menu         = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($this->session->product);
+
         if(!empty($_POST))
         {
             $changes = $this->story->review($storyID);
