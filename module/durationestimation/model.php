@@ -22,7 +22,7 @@ class durationestimationModel extends model
         foreach($this->post->stage as $i => $stage)
         {
             $estimation = new stdclass;
-            $estimation->program      = $program;
+            $estimation->PRJ          = $program;
             $estimation->stage        = $stage;
             $estimation->workload     = $this->post->workload[$i];
             $estimation->worktimeRate = $this->post->worktimeRate[$i];

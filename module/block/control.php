@@ -1735,7 +1735,10 @@ class block extends control
      */
     public function printRecentprogramBlock()
     {
-        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 3, 'order_desc');
+        /* load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 3, 1);
+        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 30, 'id_desc', $pager);
     }
 
     public function printProgramteamBlock()

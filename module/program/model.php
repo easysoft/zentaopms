@@ -122,17 +122,10 @@ class programModel extends model
     {
         /* Init vars. */
         $this->loadModel('project');
-        $programs = $this->getPRJList(0, $status, $orderBy, $pager);
-
+        $programs = $this->getPRJList(0, $status, 0, $orderBy, $pager);
         if(empty($programs)) return array();
 
         $programIdList = array_keys($programs);
-        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('id')->in($programIdList)
-            ->orderBy($orderBy)
-            ->limit($itemCounts)
-            ->fetchAll('id');
-
         $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
             ->where('root')->in($programIdList)
             ->groupBy('root')
