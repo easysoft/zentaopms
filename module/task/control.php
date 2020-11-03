@@ -738,11 +738,16 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        $members    = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
+        $assignedTo = in_array(zget($this->app->user->account, $users), $members) === TRUE ? $this->app->user->account : '';
+
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
 
-        $this->view->members    = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users      = $users;
+        $this->view->members    = $members;
+        $this->view->assignedTo = $task->assignedTo == '' ? $assignedTo : $task->assignedTo;
         $this->display();
     }
 
