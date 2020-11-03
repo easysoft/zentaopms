@@ -1261,7 +1261,6 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
-            ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', 'doing')

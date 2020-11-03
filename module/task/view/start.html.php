@@ -40,10 +40,17 @@
     <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
       <table class='table table-form'>
         <tr>
+          <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
+          <td class='w-p25-f'>
+            <?php echo html::select('assignedTo', $members, $this->app->user->account, "class='form-control chosen'");?>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <th class='w-90px'><?php echo $lang->task->realStarted;?></th>
           <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', $task->realStarted == '0000-00-00' ? helper::today() : $task->realStarted, "class='form-control form-date' data-picker-position='bottom-right'");?></div></td>
           <td></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->task->consumed;?></th>
           <td>
