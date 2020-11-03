@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class="main-content" id="mainCentent">
+<div class="main-content" id="mainCentent" <?php if(isonlybody()) echo 'style="margin-top: 40px;"';?>>
   <div class="center-block">
     <div class="main-header">
       <h2><?php echo $lang->issue->create;?></h2>

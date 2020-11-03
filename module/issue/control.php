@@ -73,8 +73,8 @@ class issue extends control
 
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->owners = $this->loadModel('stakeholder')->getStakeholders4Issue();
-        $this->view->from   = $from; 
-        $this->view->owner  = $owner; 
+        $this->view->from   = $from;
+        $this->view->owner  = $owner;
 
         $this->display();
     }

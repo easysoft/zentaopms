@@ -1937,10 +1937,11 @@ class project extends control
         $this->loadModel('user');
         $this->loadModel('dept');
 
-        $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
-        $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $project   = $this->project->getById($projectID);
+        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
+        $roles     = $this->user->getUserRoles(array_keys($users));
+        $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
+
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
