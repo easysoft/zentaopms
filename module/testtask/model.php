@@ -1450,6 +1450,7 @@ class testtaskModel extends model
         $account     = $this->app->user->account;
         $id          = $col->id;
         $caseChanged = $run->version < $run->caseVersion;
+        $fromCaseID  = $run->fromCaseID;
         if($col->show)
         {
             $class = "c-$id ";
@@ -1481,7 +1482,7 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
-                echo $canView ? html::a($caseLink, $run->title, null, "style='color: $run->color'") : $run->title;
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $run->title, null, "style='color: $run->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $run->title, null, "style='color: $run->color'")) : "<span style='color: $run->color'>$run->title</span>";
                 break;
             case 'branch':
                 echo $branches[$run->branch];
