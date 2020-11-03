@@ -44,7 +44,7 @@ class upgrade extends control
     public function to20()
     {
         $this->view->title = $this->lang->upgrade->to20Tips;
-        $this->view->video = $this->app->getWebRoot() . 'data/video/zentao20.mp4';
+        $this->view->video = $this->lang->upgrade->videoURL;
         $this->display();
     }
 

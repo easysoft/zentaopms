@@ -1158,7 +1158,7 @@ class project extends control
         $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->PRJ);
+        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getProductsByProject($this->session->PRJ);
         $this->view->acl           = $acl;
         $this->view->plan          = $plan;
         $this->view->name          = $name;

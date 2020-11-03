@@ -52,7 +52,7 @@ $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->to20Demo      = 'View version 20 of the demo';
 $lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
 $lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
-$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information：</p><br />";
+$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information(If the video can not play properly, please visit directly <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>Zentao20</u></a>)：</p><br />";
 $lang->upgrade->to20Desc      = <<<EOD
 <div class='text-warning'>
   <p>Friendly reminder：</p>
