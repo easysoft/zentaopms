@@ -120,7 +120,7 @@ class releaseModel extends model
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
         $release = fixer::input('post')
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
@@ -147,7 +147,7 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->program = $this->session->PRJ;
+                $build->PRJ = $this->session->PRJ;
                 $build->product = (int)$productID;
                 $build->branch  = (int)$branch;
                 $build->name    = $release->name;

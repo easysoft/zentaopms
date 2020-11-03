@@ -1234,7 +1234,10 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->edit;
 
-        $allProducts    = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode', $this->session->PRJ);
+        $allProducts     = array(0 => '');
+        $projectProsucts = $this->project->getProducts($project->project);
+        foreach($projectProsucts as $product) $allProducts[$product->id] = $product->name;
+
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedBranches = array();
         foreach($linkedProducts as $product)
@@ -1242,6 +1245,7 @@ class project extends control
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
             if($product->branch) $linkedBranches[$product->branch] = $product->branch;
         }
+
         $this->loadModel('productplan');
         $productPlans = array(0 => '');
         foreach($linkedProducts as $product)
