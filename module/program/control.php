@@ -840,7 +840,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJEdit($projectID = 0)
+    public function PRJEdit($projectID = 0, $parentID = 0)
     {
         $this->lang->navGroup->program = 'project';
         $this->app->loadLang('project');
@@ -867,24 +867,29 @@ class program extends control
         $project     = $this->program->getPRJByID($projectID);
         $parents     = $this->program->getParentPairs();
         $programID   = $this->program->getPRJProgramID($projectID);
-        $allProducts = $this->program->getPGMProduct($programID);
-        $linkedProducts = $this->project->getProducts($projectID);
-        $linkedBranches = array();
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
-        }
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
-        }
 
-        $productPlans = array(0 => '');
-        foreach($linkedProducts as $product)
+
+        $linkedProducts = array();
+        $linkedBranches = array();
+        $productPlans   = array(0 => '');
+        if($parentID)
         {
-            $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+            $allProducts = $this->program->getPGMProduct($parentID);
+        }
+        else
+        {
+            $allProducts    = $this->program->getPGMProduct($projectID);
+            $linkedProducts = $this->project->getProducts($projectID);
+            foreach($linkedProducts as $product)
+            {
+                if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+                if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+            }
+
+            foreach($linkedProducts as $product)
+            {
+                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
+            }
         }
 
         $this->view->title      = $this->lang->program->PRJEdit;
@@ -894,6 +899,7 @@ class program extends control
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project        = $project;
         $this->view->parents        = $parents;
+        $this->view->parentID       = $parentID;
         $this->view->allProducts    = array('0' => '') + $allProducts;
         $this->view->productPlans   = $productPlans;
         $this->view->linkedProducts = $linkedProducts;

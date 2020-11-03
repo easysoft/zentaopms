@@ -1135,6 +1135,7 @@ class programModel extends model
                 if(dao::isError()) return false;
             }
 
+            /* Judge products not empty. */
             if(!$_POST['products'][0]) 
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
@@ -1162,13 +1163,13 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
             
-            /* If parent not empty, link products or create products. */
             if($project->parent) 
             {
                 $this->loadModel('project')->updateProducts($projectID);
             }
             else
             {
+                /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name        = $project->name;
                 $product->code        = $project->code;
@@ -1258,6 +1259,13 @@ class programModel extends model
 
                 if(dao::isError()) return false;
             }
+
+            /* Judge products not empty. */
+            if(!$_POST['products'][0]) 
+            {
+                dao::$errors[] = $this->lang->program->productNotEmpty;
+                return false;
+            }
         }
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);
@@ -1278,6 +1286,8 @@ class programModel extends model
 
         if(!dao::isError())
         {
+            if($project->parent != $oldProject->parent) $this->loadModel('project')->updateProducts($projectID);
+
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);

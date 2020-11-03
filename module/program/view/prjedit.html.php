@@ -15,6 +15,10 @@
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('parentID', $parentID);?>
+<?php js::set('oldParent', $project->parent);?>
+<?php js::set('projectID', $project->id);?>
+<?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -30,7 +34,9 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo zget($parents, $project->parent, '/');?></td>
+          <td><?php echo html::select('parent', $parents, $parentID ? $parentID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJName;?></th>
@@ -68,7 +74,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-              <div class='col-sm-4'>
+                <div class='col-sm-4  <?php if($parentID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
