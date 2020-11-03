@@ -46,6 +46,8 @@ class design extends control
     {
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true));
+        $productKeys = array_keys($this->products);
+        if(!in_array($productID, $productKeys)) $productID = key($this->products);
         $this->design->setProductMenu($productID);
 
         /* Build the search form. */
