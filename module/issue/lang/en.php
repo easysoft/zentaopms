@@ -1,12 +1,12 @@
 <?php
 /**
- * The issue module English file of ZenTaoPMS.
+ * The issue module lang file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     issue
- * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 $lang->issue->common            = 'Issue';

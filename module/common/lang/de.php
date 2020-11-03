@@ -129,12 +129,12 @@ if($config->URAndSR)
 
 /* Main menu. */
 $lang->mainNav = new stdclass();
-$lang->mainNav->my          = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->program     = '<i class="icon icon-menu-project"></i> Program|program|browse|';
-$lang->mainNav->product     = '<i class="icon icon-menu-project"></i> Product|product|index|';
-$lang->mainNav->project     = '<i class="icon icon-menu-doc"></i> Project|program|prjbrowse|';
-$lang->mainNav->system      = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
-$lang->mainNav->admin       = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
+$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
+$lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
+$lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
+$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';

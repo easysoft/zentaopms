@@ -837,6 +837,7 @@ class program extends control
      * Edit a project.
      *
      * @param  int    $projectID
+     * @param  int    $parentID
      * @access public
      * @return void
      */
