@@ -479,9 +479,9 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentprogram  = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->statistic      = 'program|browse|';
-$lang->block->modules['program']->moreLinkList->program        = 'program|browse|';
+$lang->block->modules['program']->moreLinkList->recentprogram  = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->statistic      = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->program        = 'program|prjbrowse|';
 $lang->block->modules['program']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['program']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['program']->moreLinkList->cmmiissue      = 'issue|browse|';
@@ -493,7 +493,7 @@ $lang->block->modules['program']->moreLinkList->sprint         = 'project|all|';
 $lang->block->modules['program']->moreLinkList->programdynamic = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';
+$lang->block->modules['product']->moreLinkList->list  = 'product|all|';
 $lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
 
 $lang->block->modules['project']->moreLinkList       = new stdclass();

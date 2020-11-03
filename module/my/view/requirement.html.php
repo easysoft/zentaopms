@@ -46,7 +46,6 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-product'>  <?php common::printOrderLink('program',      $orderBy, $vars, $lang->story->program);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
           <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
@@ -70,7 +69,6 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-product'><?php echo zget($programs, $story->PRJ, '');?></td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
