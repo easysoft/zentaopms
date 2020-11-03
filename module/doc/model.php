@@ -618,6 +618,7 @@ class docModel extends model
             ->cleanInt('product,project,module,lib')
             ->join('groups', ',')
             ->join('users', ',')
+            ->join('mailto', ',')
             ->remove('files,labels,uid')
             ->get();
 
@@ -693,6 +694,7 @@ class docModel extends model
             ->cleanInt('module')
             ->join('groups', ',')
             ->join('users', ',')
+            ->join('mailto', ',')
             ->remove('comment,files,labels,uid')
             ->get();
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
@@ -1624,5 +1626,103 @@ class docModel extends model
         $actions .='</ul>';
 
         return $actions;
+    }
+
+    /**
+     * Send mail.
+     *
+     * @param  int    $docID
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function sendmail($docID, $actionID)
+    {
+        $this->loadModel('mail');
+        $doc   = $this->getById($docID);
+        $users = $this->loadModel('user')->getPairs('noletter');
+
+        /* Get action info. */
+        $action          = $this->loadModel('action')->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'doc');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        $sendUsers = $this->getToAndCcList($doc);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($doc, $action->action);
+
+        /* Send mail. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     *
+     * @param  object $doc
+     * @param  string $actionType created|edited
+     * @access public
+     * @return string
+     */
+    public function getSubject($doc, $actionType)
+    {
+        /* Set email title. */
+        if($actionType == 'created')
+        {
+            return sprintf($this->lang->doc->mail->create->title, $this->app->user->realname, $doc->id, $doc->title);
+        }
+        else
+        {
+            return sprintf($this->lang->doc->mail->edit->title, $this->app->user->realname, $doc->id, $doc->title);
+        }
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object     $doc
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($doc)
+    {
+        /* Set toList and ccList. */
+        $toList   = '';
+        $ccList   = str_replace(' ', '', trim($doc->mailto, ','));
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+        return array($toList, $ccList);
     }
 }
