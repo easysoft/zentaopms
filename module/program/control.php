@@ -872,24 +872,18 @@ class program extends control
         $linkedProducts = array();
         $linkedBranches = array();
         $productPlans   = array(0 => '');
-        if($parentID)
-        {
-            $allProducts = $this->program->getPGMProduct($parentID);
-        }
-        else
-        {
-            $allProducts    = $this->program->getPGMProduct($projectID);
-            $linkedProducts = $this->project->getProducts($projectID);
-            foreach($linkedProducts as $product)
-            {
-                if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-                if($product->branch) $linkedBranches[$product->branch] = $product->branch;
-            }
+        $allProducts    = $parentID ? $this->program->getPGMProduct($parentID) : $this->program->getPGMProduct($projectID);
+        $linkedProducts = $this->project->getProducts($projectID);
 
-            foreach($linkedProducts as $product)
-            {
-                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
-            }
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+        }
+
+        foreach($linkedProducts as $product)
+        {
+            $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
         }
 
         $this->view->title      = $this->lang->program->PRJEdit;
