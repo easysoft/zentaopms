@@ -232,7 +232,7 @@ class webhook extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $users = $this->loadModel('user')->getByQuery($query = '', $pager);
+        $users = $this->loadModel('user')->getByQuery('inside', $query = '', $pager);
 
         $unbindUsers = array();
         $bindedUsers = array();
