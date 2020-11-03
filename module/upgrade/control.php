@@ -44,6 +44,7 @@ class upgrade extends control
     public function to20()
     {
         $this->view->title = $this->lang->upgrade->to20Tips;
+        $this->view->video = $this->app->getWebRoot() . 'data/video/zentao20.mp4';
         $this->display();
     }
 
@@ -290,7 +291,7 @@ class upgrade extends control
             $this->upgrade->setDefaultPriv();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
             $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
-            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=yes")));
+            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
