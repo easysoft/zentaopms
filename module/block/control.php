@@ -1536,7 +1536,7 @@ class block extends control
         $normal = 0;
         $closed = 0;
 
-        $products = $this->loadModel('product')->getList($this->session->PRJ);
+        $products = $this->loadModel('product')->getList();
         foreach($products as $product)
         {
             if(!$this->product->checkPriv($product->id)) continue;

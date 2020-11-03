@@ -50,7 +50,6 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-product'>  <?php common::printOrderLink('program',      $orderBy, $vars, $lang->story->program);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
           <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
@@ -63,7 +62,7 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', '', $story->program);?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
@@ -75,7 +74,6 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-product'><?php echo zget($programs, $story->program, '');?></td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
             <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?>
@@ -89,18 +87,18 @@
           <td class='c-actions'>
             <?php
             $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $story->program);
-            common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $story->program);
-            common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $story->program);
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+            common::printIcon('story', 'edit',       $vars, $story, 'list');
+            common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
             ?>
           </td>
         </tr>
         <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
           <?php foreach($story->children as $key => $child):?>
-          <?php $storyLink = $this->createLink('story', 'view', "id=$child->id", '', '', $child->program);?>
+          <?php $storyLink = $this->createLink('story', 'view', "id=$child->id");?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
@@ -114,7 +112,6 @@
               <?php printf('%03d', $child->id);?>
             </td>
             <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
-            <td class='c-product'><?php echo zget($programs, $child->program, '');?></td>
             <td class='c-product'><?php echo $child->productTitle;?></td>
             <td class='c-name nobr'>
                 <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
@@ -127,11 +124,11 @@
             <td class='c-actions'>
               <?php
               $vars = "story={$child->id}";
-              common::printIcon('story', 'change',     $vars, $child, 'list', 'fork', '', '', '', '', '', $child->program);
-              common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses', '', '', '', '', '', $child->program);
-              common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true, '', '', $child->program);
-              common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', '', '', '', '', $child->program);
-              common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', '', '', '', '', $child->program);
+              common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
+              common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+              common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+              common::printIcon('story', 'edit',       $vars, $child, 'list');
+              common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
               ?>
             </td>
           </tr>
