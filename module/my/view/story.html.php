@@ -92,6 +92,40 @@
             ?>
           </td>
         </tr>
+        <?php if(!empty($story->children)):?>
+        <?php foreach($story->children as $child):?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$child->id");?>
+        <tr>
+          <td class="c-id">
+            <?php if($canBatchAction):?>
+            <div class="checkbox-primary">
+              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
+              <label></label>
+            </div>
+            <?php endif;?>
+            <?php printf('%03d', $child->id);?>
+          </td>
+          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
+          <td class='c-product'><?php echo $child->productTitle;?></td>
+          <td class='c-name nobr'><?php echo html::a($storyLink, $child->title, null, "style='color: $child->color'");?></td>
+          <td class='c-plan'><?php echo $child->planTitle;?></td>
+          <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
+          <td class='c-hours'><?php echo $child->estimate;?></td>
+          <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
+          <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
+          <td class='c-actions'>
+            <?php
+            $vars = "story={$child->id}";
+            common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
+            common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+            common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+            common::printIcon('story', 'edit',       $vars, $child, 'list');
+            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+            ?>
+          </td>
+        </tr>
+        <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
       </tbody>
     </table>
