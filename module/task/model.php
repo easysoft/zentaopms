@@ -1283,7 +1283,7 @@ class taskModel extends model
 
         /* Record consumed and left. */
         $estimate = new stdclass();
-        $estimate->date     = zget($task, 'realStarted', date(DT_DATE1));
+        $estimate->date     = zget($task, 'realStarted', $now);
         $estimate->task     = $taskID;
         $estimate->consumed = zget($_POST, 'consumed', 0);
         $estimate->left     = zget($_POST, 'left', 0);
