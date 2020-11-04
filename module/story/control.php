@@ -1219,10 +1219,10 @@ class story extends control
      * @access public
      * @return void
      */
-    public function bugs($storyID)
+    public function bugs($storyID, $projectID = 0)
     {
         $this->loadModel('bug');
-        $this->view->bugs  = $this->bug->getStoryBugs($storyID);
+        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $projectID);
         $this->view->users = $this->user->getPairs('noletter');
         $this->display();
     }
