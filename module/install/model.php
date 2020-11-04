@@ -445,8 +445,11 @@ class installModel extends model
      */
     public function createTable($version)
     {
+        $this->dbh->exec("USE {$this->config->db->name}");
+
         $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
         $tables = explode(';', file_get_contents($dbFile));
+        
         foreach($tables as $table)
         {
             $table = trim($table);
