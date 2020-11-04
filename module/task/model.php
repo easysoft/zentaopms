@@ -1475,7 +1475,7 @@ class taskModel extends model
 
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF($oldTask->realStarted == '0000-00-00', 'realStarted', $today)
+            ->setIF($oldTask->realStarted == '0000-00-00 00:00:00', 'realStarted', $today)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
