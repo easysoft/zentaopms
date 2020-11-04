@@ -664,6 +664,7 @@ class commonModel extends model
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjstart', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjactivate', "projectID={$app->session->PRJ}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjsuspend', "projectID={$app->session->PRJ}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
+                            $subProgram .= "</ul>";
                         }
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
