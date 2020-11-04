@@ -1603,11 +1603,12 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getStoryBugs($storyID)
+    public function getStoryBugs($storyID, $projectID = 0)
     {
         return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
             ->from(TABLE_BUG)
             ->where('story')->eq((int)$storyID)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }

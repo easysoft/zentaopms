@@ -47,6 +47,7 @@ $lang->doc->users          = 'Utilisateurs';
 $lang->doc->item           = ' Objets';
 $lang->doc->num            = 'Documents';
 $lang->doc->searchResult   = 'Résultat de Recherche';
+$lang->doc->mailto         = 'Mailto';
 
 $lang->doc->moduleDoc      = 'Par Module';
 $lang->doc->searchDoc      = 'Rechercher';
@@ -154,6 +155,12 @@ $lang->doc->customShowLibs = 'Paramétrage Affichage';
 $lang->doc->customShowLibsList['zero']     = 'Montrer Bibliothèques Vides';
 $lang->doc->customShowLibsList['children'] = 'Montrer sous-catégorie de Documents';
 $lang->doc->customShowLibsList['unclosed'] = "Montrer {$lang->projectCommon}s actifs seulement";
+
+$lang->doc->mail = new stdclass();
+$lang->doc->mail->create = new stdclass();
+$lang->doc->mail->edit   = new stdclass();
+$lang->doc->mail->create->title = "%s created document #%s:%s";
+$lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete      = "Voulez-vous supprimer ce document ?";
 $lang->doc->confirmDeleteLib   = "Voulez-vous supprimer cette Bibliothèque ?";

@@ -9,12 +9,14 @@ $config->message->objectTypes['bug']         = array('opened', 'edited', 'commen
 $config->message->objectTypes['case']        = array('opened', 'edited', 'commented', 'reviewed', 'confirmed');
 $config->message->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated');
 $config->message->objectTypes['todo']        = array('opened', 'edited');
+$config->message->objectTypes['doc']         = array('created', 'edited');
 
 $config->message->available = array();
 $config->message->available['mail']['story']    = $config->message->objectTypes['story'];
 $config->message->available['mail']['task']     = $config->message->objectTypes['task'];
 $config->message->available['mail']['bug']      = $config->message->objectTypes['bug'];
 $config->message->available['mail']['testtask'] = array('opened', 'edited', 'closed');
+$config->message->available['mail']['doc']      = $config->message->objectTypes['doc'];
 
 $config->message->available['webhook']  = $config->message->objectTypes;
 
@@ -23,6 +25,7 @@ $config->message->available['message']['story']    = $config->message->objectTyp
 $config->message->available['message']['task']     = $config->message->objectTypes['task'];
 $config->message->available['message']['testtask'] = $config->message->objectTypes['testtask'];
 $config->message->available['message']['todo']     = $config->message->objectTypes['todo'];
+$config->message->available['message']['doc']      = $config->message->objectTypes['doc'];
 
 $config->message->typeLink = array();
 $config->message->typeLink['mail']    = 'mail|index';

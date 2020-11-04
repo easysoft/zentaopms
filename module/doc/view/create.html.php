@@ -83,6 +83,17 @@
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->doc->mailto;?></th>
+            <td colspan="2">
+              <div class="input-group">
+              <?php
+              echo html::select('mailto[]', $users, '', "multiple class='form-control chosen'");
+              echo $this->fetch('my', 'buildContactLists');
+              ?>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='2'>
               <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>

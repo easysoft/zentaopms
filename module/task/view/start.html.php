@@ -42,7 +42,7 @@
         <tr>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'>
-            <?php echo html::select('assignedTo', $members, $this->app->user->account, "class='form-control chosen'");?>
+            <?php echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");?>
           </td>
           <td></td>
         </tr>

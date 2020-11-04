@@ -371,7 +371,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('nocode');
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
 
         $this->display();
     }
@@ -424,7 +424,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = 'withObject');
         $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('noletter', $doc->users);
+        $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
         $this->display();
     }
 
@@ -432,6 +432,7 @@ class doc extends control
      * View a doc.
      *
      * @param  int    $docID
+     * @param  int    $version
      * @access public
      * @return void
      */
@@ -445,6 +446,9 @@ class doc extends control
         {
             $hyperdown    = $this->app->loadClass('hyperdown');
             $doc->content = $hyperdown->makeHtml($doc->content);
+            /* Add a newline attribute to the table. */
+            $doc->content = str_replace("<th>", "<th style='word-break: break-word;'>", $doc->content);
+            $doc->content = str_replace("<td>", "<td style='word-break: break-word;'>", $doc->content);
             $doc->digest  = $hyperdown->makeHtml($doc->digest);
         }
 

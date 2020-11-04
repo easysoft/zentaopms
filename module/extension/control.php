@@ -26,6 +26,9 @@ class extension extends control
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
+            $this->view->title      = $this->lang->extension->browse;
+            $this->view->position[] = $this->lang->extension->browse;
+
             $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace('\\', '/', $statusFile));
             die($this->display('extension', 'safe'));
         }

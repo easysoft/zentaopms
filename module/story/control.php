@@ -412,7 +412,7 @@ class story extends control
         $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $project > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
         $this->display();
     }
@@ -1219,10 +1219,10 @@ class story extends control
      * @access public
      * @return void
      */
-    public function bugs($storyID)
+    public function bugs($storyID, $projectID = 0)
     {
         $this->loadModel('bug');
-        $this->view->bugs  = $this->bug->getStoryBugs($storyID);
+        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $projectID);
         $this->view->users = $this->user->getPairs('noletter');
         $this->display();
     }
