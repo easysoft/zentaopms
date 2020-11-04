@@ -1022,7 +1022,7 @@ class testtaskModel extends model
      */
     public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
     {
-        $orderBy = (strpos($orderBy, 'assignedTo') !== false or strpos($orderBy, 'lastRunResult') !== false) ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        $orderBy = (strpos($orderBy, 'assignedTo') !== false or strpos($orderBy, 'status') !== false or strpos($orderBy, 'lastRunResult') !== false or strpos($orderBy, 'lastRunner') !== false or strpos($orderBy, 'lastRunDate') !== false) ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1121,7 +1121,7 @@ class testtaskModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($queryProductID != 'all')->andWhere('t2.product')->eq($queryProductID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
-                ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
+                ->orderBy((strpos($sort, 'assignedTo') !== false or strpos($sort, 'status') !== false or strpos($sort, 'lastRunResult') !== false or strpos($sort, 'lastRunner') !== false or strpos($sort, 'lastRunDate') !== false) ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)
                 ->fetchAll('id');
         }
