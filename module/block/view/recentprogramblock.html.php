@@ -10,7 +10,7 @@
 #cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
 #cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
 #cards .program-type-label {padding: 1px 2px;}
-#cards .program-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#cards .program-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
 #cards .program-infos {font-size: 12px;}
 #cards .program-infos > span {display: inline-block; line-height: 12px;}
 #cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
@@ -68,14 +68,14 @@
           </div>
           <?php if($program->model === 'waterfall'): ?>
           <div class='program-detail program-stages'>
-            <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
+            <p class='text-muted'><?php echo $lang->program->ongoingStage;?></p>
             <?php
             $programProjects = array();
             foreach($program->projects as $project)
-            {   
-                if(!$project->parent) $programProjects[] = $project;
-            }   
-            ?>  
+            {
+                if($project->grade == 1) $programProjects[] = $project;
+            }
+            ?>
             <?php if(empty($programProjects)): ?>
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $program->status);?></div>
             <?php else: ?>
@@ -91,7 +91,7 @@
             <?php endif; ?>
           </div>
           <?php else: ?>
-          <?php $project = $program->projects ? current($program->projects) : '';?>
+          <?php $project = empty($program->projects) ? '' : end($program->projects);?>
           <div class='program-detail program-iteration'>
             <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
             <?php if($project):?>

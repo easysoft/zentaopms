@@ -55,7 +55,7 @@
         <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', '', $task->PRJ), $task->buildName));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
-        <td class='status-testtask status-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+        <td title='<?php echo $task->status?>'><span class="status-task status-blocked"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $task->PRJ);
