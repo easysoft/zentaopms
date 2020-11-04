@@ -1671,7 +1671,7 @@ class docModel extends model
 
         /* Send mail. */
         $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**
