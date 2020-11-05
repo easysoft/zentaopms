@@ -619,7 +619,7 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
-            ->remove('files,labels,uid')
+            ->remove('files,labels,uid,contactListMenu')
             ->get();
 
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
