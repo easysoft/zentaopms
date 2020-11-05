@@ -335,7 +335,7 @@ class stakeholderModel extends model
     public function getProcessGroup()
     {   
         $group = $this->dao->select('process, activity')->from(TABLE_PROGRAMACTIVITY)
-            ->where('program')->eq($this->session->PRJ)
+            ->where('PRJ')->eq($this->session->PRJ)
             ->andWhere('result')->eq('yes')
             ->fetchGroup('process');
 
@@ -365,7 +365,7 @@ class stakeholderModel extends model
     {
         return $this->dao->select('*')->from(TABLE_INTERVENTION)
             ->where('deleted')->eq(0)
-            ->andWhere('program')->eq($this->session->PRJ)
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->fetchAll('activity'); 
     }
 
@@ -441,7 +441,7 @@ class stakeholderModel extends model
         $data = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', date('Y-m-d'))
-            ->add('program', $this->session->PRJ)
+            ->add('PRJ', $this->session->PRJ)
             ->stripTags($this->config->stakeholder->editor->expect['id'], $this->config->allowedTags)
             ->get();
 
@@ -499,7 +499,7 @@ class stakeholderModel extends model
         $expects = $this->dao->select('t1.*,t2.key,t3.realname')->from(TABLE_EXPECT)->alias('t1')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t2')->on('t1.userID=t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t2.user=t3.account')
-            ->where('t1.program')->eq($this->session->PRJ)
+            ->where('t1.PRJ')->eq($this->session->PRJ)
             ->beginIF($browseType == 'bysearch')
             ->andWhere($stakeholderQuery)
             ->fi()
