@@ -144,10 +144,10 @@
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
 
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+            if(isonlybody()) $misc = '';
             $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
 
-            $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
             $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
 
