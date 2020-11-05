@@ -2486,6 +2486,31 @@ class projectModel extends model
     }
 
     /**
+     * Build version search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildVersionSearchForm($products, $queryID, $actionURL)
+    {
+        /* Load model and set products. */
+        $this->loadModel('build');
+        $products['0']    = '';
+        $products['all'] = $this->lang->product->allProduct;
+
+        /* Set search param. */
+        $this->config->build->search['module']    = 'projectBuild';
+        $this->config->build->search['actionURL'] = $actionURL;
+        $this->config->build->search['queryID']   = $queryID;
+        $this->config->build->search['params']['product']['values'] = $products;
+
+        $this->loadModel('search')->setSearchParams($this->config->build->search);
+    }
+
+    /**
      * Get Kanban tasks
      *
      * @param  int    $projectID

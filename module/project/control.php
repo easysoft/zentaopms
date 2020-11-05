@@ -856,33 +856,59 @@ class project extends control
      * Browse builds of a project.
      *
      * @param  int    $projectID
+     * @param  string $type      all|product|bysearch
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function build($projectID = 0)
+    public function build($projectID = 0, $type = 'all', $param = 0)
     {
+        /* Load module and set session. */
         $this->loadModel('testtask');
         $this->session->set('buildList', $this->app->getURI(true));
 
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
-        $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->build;
+        /* Get products' list. */
+        $products = $this->loadModel('product')->getPairs('nocode');
+        $products = array($this->lang->company->product) + $products;
 
-        $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $this->project->buildVersionSearchForm($products, $queryID, $actionURL);
+
+        /* Get builds. */
+        if($type == 'bysearch')
+        {
+            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, $param);
+        }
+        else
+        {
+            $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID, $type, $param);
+        }
+
+        /* Set project builds. */
         $projectBuilds = array();
         if(!empty($builds))
         {
             foreach($builds as $build) $projectBuilds[$build->product][] = $build;
         }
 
-        /* Get builds. */
+        /* Header and position. */
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
+        $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->build;
+
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->buildsTotal   = count($builds);
         $this->view->projectBuilds = $projectBuilds;
+        $this->view->projectID     = $projectID;
+        $this->view->product       = $type == 'product' ? $param : 'all';
+        $this->view->products      = $products;
+        $this->view->type          = $type;
 
         $this->display();
     }
