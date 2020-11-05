@@ -12,18 +12,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
+<?php js::set('projectID', $projectID)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->project->build;?></span>
-      <span class='label label-light label-badge'><?php echo $buildsTotal;?></span>
-    </span>
+    <?php
+    $label  = "<span class='text'>{$lang->project->build}</span>";
+    $active = '';
+    if($type == 'all')
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+    }
+    echo html::a(inlink('build', "projectID={$projectID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
+    ?>
+    <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
   </div>
+    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
+  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='projectBuild'></div>
   <?php if(empty($projectBuilds)):?>
   <div class="table-empty-tip">
     <p>

@@ -28,9 +28,19 @@ class taskModel extends model
             return false;
         }
 
-        $projectID  = (int)$projectID;
-        $taskIdList = array();
-        $taskFiles  = array();
+        $projectID      = (int)$projectID;
+        $taskIdList     = array();
+        $taskFiles      = array();
+        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+
+        if($this->post->selectTestStory)
+        {
+            $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
+            $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
+            $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+        }
+
         $this->loadModel('file');
         $task = fixer::input('post')
             ->setDefault('project', $projectID)
@@ -40,11 +50,11 @@ class taskModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'left') !== false, 'left', $this->post->left)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'story') !== false, 'story', $this->post->story)
+            ->setIF(strpos($requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
+            ->setIF(strpos($requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
+            ->setIF(strpos($requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
+            ->setIF(strpos($requiredFields, 'left') !== false, 'left', $this->post->left)
+            ->setIF(strpos($requiredFields, 'story') !== false, 'story', $this->post->story)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -80,19 +90,10 @@ class taskModel extends model
 
             /* Fix Bug #1525 */
             $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
-            $requiredFields = "," . $this->config->task->create->requiredFields . ",";
             if($projectType == 'ops')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
-            }
-
-            if($this->post->selectTestStory)
-            {
-                $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
-                $requiredFields = str_replace(",story,", ',', "$requiredFields");
-                $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
-                $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
             }
 
             if(strpos($requiredFields, ',estimate,') !== false)
