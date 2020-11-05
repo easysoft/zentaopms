@@ -1289,6 +1289,9 @@ class story extends control
      */
     public function track($productID)
     {   
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+
         $products  = $this->loadModel('product')->getPairs();
         $productID = $this->product->saveState($productID, $products);
         $this->product->setMenu($products, $productID, 0, 0, '');
