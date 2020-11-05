@@ -490,25 +490,28 @@ class productModel extends model
             ->check('code', 'unique', "deleted = '0'")
             ->exec();
 
-        $productID = $this->dao->lastInsertID();
-        $this->file->updateObjectID($this->post->uid, $productID, 'product');
-        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+        if(!dao::isError())
+        {
+            $productID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $productID, 'product');
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
-        $whitelist = explode(',', $product->whitelist);
-        $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+            $whitelist = explode(',', $product->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
+            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
-        /* Create doc lib. */
-        $this->app->loadLang('doc');
-        $lib = new stdclass();
-        $lib->product = $productID;
-        $lib->name    = $this->lang->doclib->main['product'];
-        $lib->type    = 'product';
-        $lib->main    = '1';
-        $lib->acl     = 'default';
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->product = $productID;
+            $lib->name    = $this->lang->doclib->main['product'];
+            $lib->type    = 'product';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-        return $productID;
+            return $productID;
+        }
     }
 
     /**

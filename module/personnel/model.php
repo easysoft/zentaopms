@@ -281,6 +281,8 @@ class personnelModel extends model
         if($objectType == 'product')
         {
             $product = $this->loadModel('product')->getById($objectID);
+            if(empty($product)) return false;
+
             $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
             $newWhitelist     = array_merge($programWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
@@ -294,6 +296,7 @@ class personnelModel extends model
         if($objectType == 'sprint')
         {
             $sprint = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+            if(empty($sprint)) return false;
 
             $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
