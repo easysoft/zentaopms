@@ -2329,11 +2329,11 @@ EOD;
      */
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
     {
-        return $this->dao->select('*')->from(table_relation)
-            ->where('atype')->eq($atype)
-            ->andwhere('aid')->eq($aid)
-            ->andwhere('btype')->eq($btype)
-            ->beginif($bid)->andwhere('bid')->eq($bid)->fi()
+        return $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq($AType)
+            ->andWhere('AID')->eq($AID)
+            ->andwhere('BType')->eq($BType)
+            ->beginif($BID)->andwhere('BID')->eq($BID)->fi()
             ->fetchAll();
     }
 
