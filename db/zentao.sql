@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_budget`;
-CREATE TABLE `zt_budget` (
+CREATE TABLE IF NOT EXISTS `zt_budget` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `PRJ` mediumint(8) NOT NULL,
   `stage` char(30) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_design`;
-CREATE TABLE `zt_design` (
+CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
@@ -344,7 +344,7 @@ CREATE TABLE `zt_design` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_designspec`;
-CREATE TABLE `zt_designspec` (
+CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `design` mediumint(8) NOT NULL,
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   KEY `project` (`project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
-CREATE TABLE `zt_durationestimation` (
+CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` mediumint(8) unsigned NOT NULL,
   `stage` mediumint(9) NOT NULL,
@@ -525,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_issue`;
-CREATE TABLE `zt_issue` (
+CREATE TABLE IF NOT EXISTS `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL,
   `PRJ` varchar(255) NOT NULL,
@@ -691,7 +691,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   KEY `end` (`end`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_project`;
-CREATE TABLE `zt_project` (
+CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL,
@@ -749,7 +749,7 @@ CREATE TABLE `zt_project` (
   KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectspec`;
-CREATE TABLE `zt_projectspec` (
+CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `project` mediumint(8) NOT NULL,
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -855,7 +855,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
   KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_risk`;
-CREATE TABLE `zt_risk` (
+CREATE TABLE IF NOT EXISTS `zt_risk` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -893,7 +893,7 @@ CREATE TABLE `zt_risk` (
    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
-CREATE TABLE `zt_stakeholder` (
+CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `objectID` mediumint(8) NOT NULL,
   `objectType` char(30) NOT NULL,
@@ -972,7 +972,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   KEY `story` (`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stage`;
-CREATE TABLE `zt_stage` (
+CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `percent` varchar(255) NOT NULL,
@@ -1043,7 +1043,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskspec`;
-CREATE TABLE `zt_taskspec` (
+CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` mediumint(8) NOT NULL,
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -1319,7 +1319,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   PRIMARY KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_expect`;
-CREATE TABLE `zt_expect` (
+CREATE TABLE IF NOT EXISTS `zt_expect` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userID` mediumint(8) NOT NULL,
   `program` mediumint(8) NOT NULL DEFAULT 0,
@@ -1352,7 +1352,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
-CREATE TABLE `zt_weeklyreport`(
+CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` mediumint(8) unsigned NOT NULL,
   `weekStart` date NOT NULL,
@@ -1368,7 +1368,7 @@ CREATE TABLE `zt_weeklyreport`(
   UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_workestimation`;
-CREATE TABLE `zt_workestimation` (
+CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` mediumint(8) unsigned NOT NULL,
   `scale` mediumint(8) unsigned NOT NULL,
@@ -1402,7 +1402,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   KEY `obejctID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_score`;
-CREATE TABLE `zt_score` (
+CREATE TABLE IF NOT EXISTS `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL DEFAULT '',
