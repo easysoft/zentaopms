@@ -871,7 +871,7 @@ class project extends control
         $projectID = $project->id;
 
         /* Get products' list. */
-        $products = $this->loadModel('product')->getPairs('nocode');
+        $products = $this->project->getProducts($projectID, false);
         $products = array($this->lang->company->product) + $products;
 
         /* Build the search form. */

@@ -102,7 +102,7 @@ class buildModel extends model
         }
 
         /* Distinguish between repeated fields. */
-        $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`');
+        $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
         foreach($fields as $field)
         {
             if(strpos($this->session->projectBuildQuery, $field) !== false)
