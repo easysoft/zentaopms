@@ -136,7 +136,7 @@
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyStory' and !isonlybody() and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($config->global->flow != 'onlyStory' and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group dropup'>";
