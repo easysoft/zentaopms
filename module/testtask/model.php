@@ -159,7 +159,7 @@ class testtaskModel extends model
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setDefault('program', $this->session->PRJ)
+            ->setDefault('PRJ', $this->session->PRJ)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
