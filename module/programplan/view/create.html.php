@@ -34,6 +34,9 @@
           <th class='w-110px required'><?php echo $lang->programplan->end;?></th>
           <th class='w-110px'><?php echo $lang->programplan->realBegan;?></th>
           <th class='w-110px'><?php echo $lang->programplan->realEnd;?></th>
+          <?php if(isset($this->config->qcVersion)):?>
+          <th class='w-110px'><?php echo $lang->programplan->output;?></th>
+          <?php endif;?>
           <th class="w-90px"> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -56,6 +59,9 @@
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='realBegan[]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <?php if(isset($this->config->qcVersion)):?>
+            <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
+            <?php endif;?>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -84,7 +90,10 @@
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
             <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
             <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
+            <?php if(isset($this->config->qcVersion)):?>
             <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
+            <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control chosen' multiple");?></td>
+            <?php endif;?>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             </td>
@@ -109,6 +118,9 @@
           <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <?php if(isset($this->config->qcVersion)):?>
+          <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
+          <?php endif;?>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -145,6 +157,9 @@
       <td><input type='text' name='end[]' id='end<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
+      <?php if(isset($this->config->qcVersion)):?>
+      <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen ' multiple");?></td>
+      <?php endif;?>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

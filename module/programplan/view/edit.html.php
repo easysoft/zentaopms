@@ -12,9 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php
-js::set('parentID', $plan->parent);
-?>
+<?php js::set('parentID', $plan->parent);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -77,6 +75,12 @@ js::set('parentID', $plan->parent);
             <th><?php echo $lang->programplan->realEnd;?> </th>
             <td><?php echo html::input('realEnd', $plan->realEnd, "class='form-control form-date'");?></td>
           </tr>
+          <?php if(isset($this->config->qcVersion)):?>
+          <tr>
+            <th><?php echo $lang->programplan->output;?> </th>
+            <td colspan='2'><?php echo html::select('output[]', $documentList, $plan->output, "class='form-control chosen ' multiple");?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <td colspan='4' class='form-actions text-center'><?php echo html::submitButton() . html::backButton()?></td>
           </tr>
