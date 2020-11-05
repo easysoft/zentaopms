@@ -695,7 +695,7 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid')
+            ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
