@@ -405,7 +405,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `program` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `PRJ` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` char(30) NOT NULL,
   `role` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
