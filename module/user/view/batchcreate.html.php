@@ -35,7 +35,7 @@
       if($field)
       {
           $requiredFields[$field] = '';
-          if(strpos(",{$config->user->custom->batchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+          if(strpos(",{$config->user->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
