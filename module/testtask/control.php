@@ -436,6 +436,7 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testtask->statusList;
+        $this->config->testcase->search['params']['lib']['values'] = $this->loadModel('caselib')->getLibraries();
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
