@@ -1638,10 +1638,19 @@ class docModel extends model
      */
     public function sendmail($docID, $actionID)
     {
+        /* Load module and get doc and users. */
         $this->loadModel('mail');
         $doc   = $this->getById($docID);
         $users = $this->loadModel('user')->getPairs('noletter');
 
+        /* When the content type is markdown format, add attributes to the table. */
+        if($doc->contentType == 'markdown')
+        {
+            $doc->content = $this->app->loadClass('hyperdown')->makeHtml($doc->content);
+            $doc->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $doc->content);
+            $doc->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $doc->content);
+            $doc->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $doc->content);
+        }
         /* Get action info. */
         $action          = $this->loadModel('action')->getById($actionID);
         $history         = $this->action->getHistory($actionID);
@@ -1664,6 +1673,7 @@ class docModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        /* Get sender and subject. */
         $sendUsers = $this->getToAndCcList($doc);
         if(!$sendUsers) return;
         list($toList, $ccList) = $sendUsers;
