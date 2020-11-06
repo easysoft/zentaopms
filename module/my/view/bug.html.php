@@ -73,11 +73,12 @@
       ?>
       <tbody>
         <?php foreach($bugs as $bug):?>
+        <?php $isClosedProject = common::checkParentObjectClosed('bug', $bug);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' />
+              <input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' <?php if($isClosedProject) echo 'disabled';?> />
               <label></label>
             </div>
             <?php endif;?>
@@ -99,12 +100,15 @@
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
-            $params = "bugID=$bug->id";
-            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-            common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-            common::printIcon('bug', 'edit',       $params, $bug, 'list');
-            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+            if(!$isClosedProject)
+            {
+                $params = "bugID=$bug->id";
+                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
+                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
+                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+                common::printIcon('bug', 'edit',       $params, $bug, 'list');
+                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+            }
             ?>
           </td>
         </tr>

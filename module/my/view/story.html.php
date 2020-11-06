@@ -62,12 +62,15 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php
+        $storyLink = $this->createLink('story', 'view', "id=$story->id");
+        $isClosedProject = common::checkParentObjectClosed('story', $story);
+        ?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
+              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' <?php if($isClosedProject) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -83,12 +86,15 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-            common::printIcon('story', 'edit',       $vars, $story, 'list');
-            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            if(!$isClosedProject)
+            {
+                $vars = "story={$story->id}";
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+                common::printIcon('story', 'edit',       $vars, $story, 'list');
+                if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            }
             ?>
           </td>
         </tr>
@@ -99,7 +105,7 @@
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
+              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' <?php if($isClosedProject) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -115,12 +121,15 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
-            $vars = "story={$child->id}";
-            common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
-            common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
-            common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
-            common::printIcon('story', 'edit',       $vars, $child, 'list');
-            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+            if(!$isClosedProject)
+            {
+                $vars = "story={$child->id}";
+                common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
+                common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+                common::printIcon('story', 'edit',       $vars, $child, 'list');
+                if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+            }
             ?>
           </td>
         </tr>

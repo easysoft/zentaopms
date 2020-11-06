@@ -71,6 +71,10 @@
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
+        <?php
+        $isClosedProject = common::checkParentObjectClosed('task', $task);
+        $disabled        = $isClosedProject ? 'disabled' : '';
+        ?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
@@ -80,7 +84,7 @@
           <?php endif;?>
           <td class="c-id">
             <?php if($canTestReport):?>
-            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
+            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)), '', $disabled);?>
             <?php else:?>
             <?php printf('%03d', $task->id);?>
             <?php endif;?>
@@ -96,14 +100,17 @@
           </td>
           <td class='c-actions'>
             <?php
-            common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-            common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-            common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-            common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-            if(common::hasPriv('testtask', 'delete', $task))
+            if(!$isClosedProject)
             {
-                $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+                common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+                common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+                common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
+                if(common::hasPriv('testtask', 'delete', $task))
+                {
+                    $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                }
             }
             ?>
           </td>

@@ -348,6 +348,46 @@ class custom extends control
     }
 
     /**
+     * Set whether the project is on read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function project()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.closedProjectStatus', $this->post->project);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->project;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->display();
+    }
+
+    /**
+     * Set whether the product is on read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function product()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.closedProductStatus', $this->post->product);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->product;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 

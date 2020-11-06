@@ -1408,6 +1408,9 @@ class testcaseModel extends model
      */
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
+        /* Check the product is closed. */
+        $isClosedProject = common::checkParentObjectClosed('case', $case);
+
         $canBatchRun                = common::hasPriv('testtask', 'batchRun');
         $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
         $canBatchDelete             = common::hasPriv('testcase', 'batchDelete');
@@ -1447,7 +1450,8 @@ class testcaseModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                    $disabled = $isClosedProject ? 'disabled' : '';
+                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
                 }
                 else
                 {
@@ -1543,18 +1547,21 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                if($case->needconfirm or $browseType == 'needconfirm')
+                if(!$isClosedProject)
                 {
-                    common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
-                    break;
-                }
+                    if($case->needconfirm or $browseType == 'needconfirm')
+                    {
+                        common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+                        break;
+                    }
 
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
-                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+                    common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
+                    common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                    common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
+                    if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
+                    common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                    common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+                }
 
                 break;
             }

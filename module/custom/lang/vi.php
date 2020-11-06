@@ -1,24 +1,30 @@
 <?php
-$lang->custom->common     = 'Tùy biến';
-$lang->custom->index      = 'Trang chủ';
-$lang->custom->set        = 'Tùy biến';
-$lang->custom->restore    = 'Thiết lập lại';
-$lang->custom->key        = 'Khóa';
-$lang->custom->value      = 'Giá trị';
-$lang->custom->flow       = 'Mô hình';
-$lang->custom->working    = 'Chế độ';
-$lang->custom->select     = 'Chọn mô hình';
-$lang->custom->branch     = 'Multi-Branch';
-$lang->custom->owner      = 'Sở hữu';
-$lang->custom->module     = 'Module';
-$lang->custom->section    = 'Section';
-$lang->custom->lang       = 'Ngôn ngữ';
-$lang->custom->setPublic  = 'Thiết lập Public';
-$lang->custom->required   = 'Trường bắt buộc';
-$lang->custom->score      = 'Điểm';
-$lang->custom->timezone   = 'Timezone';
-$lang->custom->scoreReset = 'Thiết lập lại điểm';
-$lang->custom->scoreTitle = 'Tính năng điểm';
+$lang->custom->common        = 'Tùy biến';
+$lang->custom->index         = 'Trang chủ';
+$lang->custom->set           = 'Tùy biến';
+$lang->custom->restore       = 'Thiết lập lại';
+$lang->custom->key           = 'Khóa';
+$lang->custom->value         = 'Giá trị';
+$lang->custom->flow          = 'Mô hình';
+$lang->custom->working       = 'Chế độ';
+$lang->custom->select        = 'Chọn mô hình';
+$lang->custom->branch        = 'Multi-Branch';
+$lang->custom->owner         = 'Sở hữu';
+$lang->custom->module        = 'Module';
+$lang->custom->section       = 'Section';
+$lang->custom->lang          = 'Ngôn ngữ';
+$lang->custom->setPublic     = 'Thiết lập Public';
+$lang->custom->required      = 'Trường bắt buộc';
+$lang->custom->score         = 'Điểm';
+$lang->custom->timezone      = 'Timezone';
+$lang->custom->scoreReset    = 'Thiết lập lại điểm';
+$lang->custom->scoreTitle    = 'Tính năng điểm';
+$lang->custom->projectTitle  = $lang->projectCommon . ' Feature';
+$lang->custom->productTitle  = $lang->productCommon . ' Feature';
+$lang->custom->project       = $lang->projectCommon;
+$lang->custom->product       = $lang->productCommon;
+$lang->custom->closedProject = 'Closed ' . $lang->projectCommon;
+$lang->custom->closedProduct = 'Closed ' . $lang->productCommon;
 
 $lang->custom->object['story']    = 'Câu chuyện';
 $lang->custom->object['task']     = 'Nhiệm vụ';
@@ -78,7 +84,7 @@ $lang->custom->user->fields['statusList']   = 'Tình trạng';
 $lang->custom->user->fields['contactField'] = 'Liên hệ có sẵn';
 $lang->custom->user->fields['deleted']      = 'Người dùng đã xóa';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'product', 'project');
 
 $lang->custom->block->fields['closed'] = 'Đã đóng Block';
 
@@ -100,6 +106,8 @@ $lang->custom->notice->noClosedBlock     = 'Bạn không có blocks mà đã đ�
 $lang->custom->notice->required          = 'Trường được chọn là bắt buộc.';
 $lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Sử dụng <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath       = 'Vào Quản trị -> Tùy biến -> Mô hình để thiết lập nó.';
+$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
+$lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ đã có trang Sản phẩm. Bạn có muốn tới trang Sản phẩm?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Bạn có muốn go to Project Home?";
@@ -144,6 +152,12 @@ $lang->custom->page     = '';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
+
+$lang->custom->closedProjectStatus[1] = 'Change Forbidden';
+$lang->custom->closedProjectStatus[0] = 'Change Allowed';
+
+$lang->custom->closedProductStatus[1] = 'Change Forbidden';
+$lang->custom->closedProductStatus[0] = 'Change Allowed';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Kế hoạch';

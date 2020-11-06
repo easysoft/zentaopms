@@ -64,8 +64,11 @@
         <td class='text-left' title='<?php echo $taskName?>'><?php echo $taskName;?></td>
         <td class='c-actions'>
           <?php
-          common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
-          common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'trash', 'hiddenwin');
+          if(!common::checkParentObjectClosed('report', $report))
+          {
+              common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
+              common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'trash', 'hiddenwin');
+          }
           ?>
         </td>
       </tr>

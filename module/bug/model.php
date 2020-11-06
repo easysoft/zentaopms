@@ -2500,6 +2500,9 @@ class bugModel extends model
      */
     public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
+        /* Check the product is closed. */
+        $isClosedProject = common::checkParentObjectClosed('bug', $bug);
+
         $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
         $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
         $canBatchClose        = common::hasPriv('bug', 'batchClose');
@@ -2569,7 +2572,8 @@ class bugModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
+                    $disabled = $isClosedProject ? 'disabled' : '';
+                    echo html::checkbox('bugIDList', array($bug->id => ''), '', $disabled) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
                 }
                 else
                 {
@@ -2720,12 +2724,15 @@ class bugModel extends model
                 echo substr($bug->lastEditedDate, 5, 11);
                 break;
             case 'actions':
-                $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list');
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                if(!$isClosedProject)
+                {
+                    $params = "bugID=$bug->id";
+                    common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
+                    common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
+                    common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+                    common::printIcon('bug', 'edit',       $params, $bug, 'list');
+                    common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                }
                 break;
             }
             echo '</td>';

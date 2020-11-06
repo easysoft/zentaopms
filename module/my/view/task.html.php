@@ -61,11 +61,12 @@
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
+        <?php $isClosedProject = common::checkParentObjectClosed('task', $task);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' />
+              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' <?php if($isClosedProject) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -92,21 +93,24 @@
           </td>
           <td class='c-actions'>
             <?php
-            if($task->needConfirm)
+            if(!$isClosedProject)
             {
-                $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
-            }
-            else
-            {
-                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                if($task->needConfirm)
+                {
+                    $this->lang->task->confirmStoryChange = $this->lang->confirm;
+                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                }
+                else
+                {
+                    if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
-                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children);
+                    common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+                    common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
+                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children);
+                }
             }
             ?>
           </td>
