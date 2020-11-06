@@ -1322,7 +1322,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
 CREATE TABLE IF NOT EXISTS `zt_expect` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userID` mediumint(8) NOT NULL,
-  `program` mediumint(8) NOT NULL DEFAULT 0,
+  `PRJ` mediumint(8) NOT NULL DEFAULT 0,
   `expect` text NOT NULL,
   `progress` text NOT NULL,
   `createdBy` char(30) NOT NULL,
