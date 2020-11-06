@@ -203,7 +203,7 @@ class testtaskModel extends model
 
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
-            ->andWhere('t1.project')->in("0,{$this->app->user->view->projects}") //Fix bug #3260.
+            ->andWhere('t1.project')->in("0,{$this->app->user->view->sprints}") //Fix bug #3260.
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()

@@ -77,18 +77,11 @@ class testtask extends control
 
         /* Get tasks. */
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
-        if(empty($tasks) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
-        }
 
-        /* Get tasks. */
-        $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testtask->common;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;

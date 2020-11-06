@@ -14,7 +14,7 @@
 #cards .program-infos {font-size: 12px;}
 #cards .program-infos > span {display: inline-block; line-height: 12px;}
 #cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
-#cards .program-infos > span + span {margin-left: 15px;}
+#cards .program-infos > span + span {margin-left: 10px;}
 #cards .program-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
 #cards .program-detail > p {margin-bottom: 8px;}
 #cards .program-detail .progress {height: 4px;}
