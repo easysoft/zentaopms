@@ -203,7 +203,6 @@ class designModel extends model
 
         $design = new stdclass();
         $design->commit     = $commit;
-        $design->commitDate = helper::now();
         $design->commitBy   = $this->app->user->account;
         $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
     }
