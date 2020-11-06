@@ -10,7 +10,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php $mailTitle = 'DOCUMENT #' . $doc->id . ' ' . $doc->title;?>
+<?php $mailTitle = '文档 #' . $doc->id . ' ' . $doc->title;?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.header.html.php';?>
 <tr>
   <td>
