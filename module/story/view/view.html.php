@@ -136,7 +136,7 @@
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyStory' and !isonlybody() and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($config->global->flow != 'onlyStory' and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group dropup'>";
@@ -144,10 +144,10 @@
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
 
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+            if(isonlybody()) $misc = '';
             $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
 
-            $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
             $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
 

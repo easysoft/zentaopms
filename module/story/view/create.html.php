@@ -24,6 +24,12 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
+    <?php
+    foreach(explode(',', $config->story->create->requiredFields) as $field)
+    {
+        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+    }
+    ?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>

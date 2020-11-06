@@ -972,7 +972,7 @@ class storyModel extends model
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
                     $this->executeHooks($storyID);
-                    $this->setStage($storyID);
+                    $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
                 }

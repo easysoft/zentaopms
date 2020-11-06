@@ -64,7 +64,7 @@
           <td colspan="2">
             <div class="input-group">
             <?php
-            echo html::select('mailto[]', $users, '', "multiple class='form-control chosen'");
+            echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control chosen'");
             echo $this->fetch('my', 'buildContactLists');
             ?>
             </div>
