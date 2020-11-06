@@ -872,7 +872,7 @@ class project extends control
 
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
-        $products = array($this->lang->company->product) + $products;
+        $products = array('' => '') + $products;
 
         /* Build the search form. */
         $type      = strtolower($type);
