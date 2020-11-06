@@ -29,7 +29,7 @@ echo js::set('resolveLink', $this->createLink('issue', 'ajaxGetResolveForm'));
       </div>
     </div>
     <div class="modal-body" style="min-height: 282px; overflow: auto;">
-    <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+    <form class='form-ajax' method='post'>
       <table class="table table-form" id="solutionTable">
         <tr>
           <th><?php echo $lang->issue->resolution;?></th>
