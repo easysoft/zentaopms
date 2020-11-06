@@ -54,6 +54,7 @@ $lang->extension->depends          = 'Dependency';
 $lang->extension->expireDate       = 'Expire';
 $lang->extension->zentaoCompatible = 'Compatible Version';
 $lang->extension->installedTime    = 'Installed Time';
+$lang->extension->life             = 'lifetime';
 
 $lang->extension->publicList[0] = 'Manual';
 $lang->extension->publicList[1] = 'Tự động';

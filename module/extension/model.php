@@ -910,6 +910,10 @@ class extensionModel extends model
                 $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
                 if($days) $expireDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
             }
+            else
+            {
+                $expireDate = $order->type;
+            }
         }
 
         return $expireDate;
