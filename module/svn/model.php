@@ -131,7 +131,7 @@ class svnModel extends model
         if(empty($lastInDB))
         {
             if($isPrintLog) $this->printLog("Please init repo {$repo->name}");
-            continue;
+            return false;
         }
 
         $version = $lastInDB->commit;
