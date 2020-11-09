@@ -256,7 +256,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -367,7 +367,7 @@ class story extends control
         }
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
+        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
         $plans['ditto']      = $this->lang->story->ditto;
         $priList             = (array)$this->lang->story->priList;
         $priList['ditto']    = $this->lang->story->ditto;
@@ -442,7 +442,7 @@ class story extends control
         $this->view->products         = $products;
         $this->view->story            = $story;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
 
@@ -542,7 +542,7 @@ class story extends control
             /* Set modules and productPlans. */
             $modules      = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
             $modules      = array('ditto' => $this->lang->story->ditto) + $modules;
-            $productPlans = $this->productplan->getPairs($productID, $branch);
+            $productPlans = $this->productplan->getPairs($productID, $branch, '', true);
             $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
 
 

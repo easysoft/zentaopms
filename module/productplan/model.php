@@ -157,10 +157,11 @@ class productplanModel extends model
      * @param  array|int    $product
      * @param  int          $branch
      * @param  string       $expired
+     * @param  bool         $skipParent
      * @access public
      * @return array
      */
-    public function getPairs($product = 0, $branch = 0, $expired = '')
+    public function getPairs($product = 0, $branch = 0, $expired = '', $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
@@ -168,6 +169,7 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -179,6 +181,7 @@ class productplanModel extends model
                 ->andWhere('end')->lt($date)
                 ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
                 ->beginIF($plans)->andWhere("id")->notIN(array_keys($plans))->fi()
+                ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
                 ->fetchAll('id');
@@ -207,10 +210,11 @@ class productplanModel extends model
      *
      * @param  array|int    $product
      * @param  int          $branch
+     * @param  bool         $skipParent
      * @access public
      * @return array
      */
-    public function getPairsForStory($product = 0, $branch = 0)
+    public function getPairsForStory($product = 0, $branch = 0, $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
@@ -218,6 +222,7 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('end')->ge($date)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -228,6 +233,7 @@ class productplanModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('end')->lt($date)
                 ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
                 ->fetchAll('id');

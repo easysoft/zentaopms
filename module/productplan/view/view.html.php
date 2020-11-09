@@ -62,7 +62,7 @@
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
         <div class='actions'>
-          <?php if(!$plan->deleted):?>
+          <?php if(!$plan->deleted and $plan->parent >= 0):?>
           <div class="btn-group">
             <div class='drop-down dropdown-hover'>
               <?php
@@ -82,7 +82,7 @@
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('productplan', 'linkStory')) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
+          <?php if(common::hasPriv('productplan', 'linkStory') and $plan->parent >= 0) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
