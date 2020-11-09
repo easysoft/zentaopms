@@ -211,7 +211,7 @@ class product extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
-        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
+        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
         $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);

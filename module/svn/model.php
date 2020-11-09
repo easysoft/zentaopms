@@ -67,78 +67,19 @@ class svnModel extends model
     public function run()
     {
         $this->setRepos();
+        $this->loadModel('job');
         if(empty($this->repos)) return false;
 
-        $this->loadModel('compile');
-        /* Get commit triggerType jobs by repoIdList */
-        $commentJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
-        $commentGroup = array();
-        foreach($commentJobs as $job) $commentGroup[$job->repo][$job->id] = $job;
+        /* Get commit triggerType jobs by repoIdList. */
+        $commentGroup = $this->job->getTriggerGroup('commit', array_keys($this->repos));
 
-        /* Get tag triggerType jobs by repoIdList */
-        $tagJobs  = $this->job->getListByTriggerType('tag', array_keys($this->repos));
-        $tagGroup = array();
-        foreach($tagJobs as $job) $tagGroup[$job->repo][$job->id] = $job;
+        /* Get tag triggerType jobs by repoIdList. */
+        $tagGroup = $this->job->getTriggerGroup('tag', array_keys($this->repos));
 
         $_COOKIE['repoBranch'] = '';
         foreach($this->repos as $repoID => $repo)
         {
-            $this->printLog("begin repo {$repo->name}");
-            if(!$this->setRepo($repo)) return false;
-
-            $this->printLog("get this repo logs.");
-            $lastInDB = $this->repo->getLatestCommit($repoID);
-            /* Ignore unsynced repo. */
-            if(empty($lastInDB))
-            {
-                $this->printLog("Please init repo {$repo->name}");
-                continue;
-            }
-
-            $version = $lastInDB->commit;
-            $logs    = $this->repo->getUnsyncCommits($repo);
-            $objects = array();
-            if(!empty($logs))
-            {
-                $this->printLog("get " . count($logs) . " logs");
-                $this->printLog('begin parsing logs');
-
-                foreach($logs as $log)
-                {
-                    $this->printLog("parsing log {$log->revision}");
-
-                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                    $objects = $this->repo->parseComment($log->msg);
-                    if($objects)
-                    {
-                        $this->printLog('extract' .
-                            ' story:' . join(' ', $objects['stories']) .
-                            ' task:' . join(' ', $objects['tasks']) .
-                            ' bug:'  . join(',', $objects['bugs']));
-                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
-                    }
-                    else
-                    {
-                        $this->printLog('no objects found' . "\n");
-                    }
-
-                    /* Create compile by comment. */
-                    $jobs = zget($commentGroup, $repoID, array());
-                    foreach($jobs as $job)
-                    {
-                        foreach(explode(',', $job->comment) as $comment)
-                        {
-                            if(strpos($log->msg, $comment) !== false) $this->compile->createByJob($job->id);
-                        }
-                    }
-
-                    $version = $this->repo->saveOneCommit($repoID, $log, $version);
-                }
-                $this->repo->updateCommitCount($repoID, $lastInDB->commit + count($logs));
-                $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
-
-                $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
-            }
+            $this->updateCommit($repo, $commentGroup, true);
 
             /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
@@ -158,10 +99,86 @@ class svnModel extends model
 
                     $lastTag = $dir;
                     $tag     = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
-                    $this->compile->createByJob($job->id, $tag, 'tag');
+                    $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
                 }
                 if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
+        }
+    }
+
+    /**
+     * Update commit.
+     *
+     * @param  object $repo
+     * @param  array  $commentGroup
+     * @param  bool   $isPrintLog
+     * @access public
+     * @return void
+     */
+    public function updateCommit($repo, $commentGroup, $isPrintLog = true)
+    {
+        /* Load mudule and print log. */
+        $this->loadModel('repo');
+        if($isPrintLog) $this->printLog("begin repo {$repo->name}");
+
+        if(!$this->setRepo($repo)) return false;
+
+        /* Print log and get lastInDB. */
+        if($isPrintLog) $this->printLog("get this repo logs.");
+        $lastInDB = $this->repo->getLatestCommit($repo->id);
+
+        /* Ignore unsynced repo. */
+        if(empty($lastInDB))
+        {
+            if($isPrintLog) $this->printLog("Please init repo {$repo->name}");
+            return false;
+        }
+
+        $version = $lastInDB->commit;
+        $logs    = $this->repo->getUnsyncCommits($repo);
+
+        /* Update code commit history. */
+        $objects = array();
+        if(!empty($logs))
+        {
+            if($isPrintLog) $this->printLog("get " . count($logs) . " logs");
+            if($isPrintLog) $this->printLog('begin parsing logs');
+
+            foreach($logs as $log)
+            {
+                if($isPrintLog) $this->printLog("parsing log {$log->revision}");
+                if($isPrintLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+
+                $objects = $this->repo->parseComment($log->msg);
+                if($objects)
+                {
+                    if($isPrintLog) $this->printLog('extract' .
+                        ' story:' . join(' ', $objects['stories']) .
+                        ' task:' . join(' ', $objects['tasks']) .
+                        ' bug:'  . join(',', $objects['bugs']));
+                    $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
+                }
+                else
+                {
+                    if($isPrintLog) $this->printLog('no objects found' . "\n");
+                }
+
+                /* Create compile by comment. */
+                $jobs = zget($commentGroup, $repo->id, array());
+                foreach($jobs as $job)
+                {
+                    foreach(explode(',', $job->comment) as $comment)
+                    {
+                        if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                    }
+                }
+
+                $version = $this->repo->saveOneCommit($repoID, $log, $version);
+            }
+            $this->repo->updateCommitCount($repoID, $lastInDB->commit + count($logs));
+            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
+
+            if($isPrintLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
         }
     }
 
