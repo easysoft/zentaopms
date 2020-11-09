@@ -584,7 +584,7 @@ class customModel extends model
      * @access public
      * @return void
      */
-    public function setURAndSR($template = 'waterfall')
+    public function setURAndSR()
     {
         $data = fixer::input('post')->get();
 
@@ -595,7 +595,7 @@ class customModel extends model
             $URSRName   = isset($this->config->custom->URSRName) ? json_decode($this->config->custom->URSRName, true) : array();
             $URSRName['URCommon'][$clientLang] = $data->URCommon[$clientLang];
             $URSRName['SRCommon'][$clientLang] = $data->SRCommon[$clientLang];
-            $this->setting->setItem("system.custom.$template.URSRName", json_encode($URSRName));
+            $this->setting->setItem("system.custom.common.URSRName", json_encode($URSRName));
         }
     }
 

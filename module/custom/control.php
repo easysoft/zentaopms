@@ -400,7 +400,7 @@ class custom extends control
         {   
             if($type == 'concept')
             {
-                $this->custom->setURAndSR('waterfall');
+                $this->custom->setURAndSR();
             }
 
             if($type == 'user' and isset($_POST['keys']))
@@ -457,11 +457,11 @@ class custom extends control
         {
             $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
                 ->where('module')->eq('custom')
-                ->andWhere('section')->eq('waterfall')
+                ->andWhere('section')->eq('common')
                 ->andWhere('`key`')->eq('URSRName')
                 ->fetch('value');
 
-            $this->view->URSRName   = json_decode($URSRName);
+            $this->view->URSRName = json_decode($URSRName);
         }
 
         $this->view->title      = $this->lang->custom->common;
@@ -487,7 +487,7 @@ class custom extends control
             if($type == 'concept')
             {
                 $this->custom->setConcept();
-                $this->custom->setURAndSR('scrum');
+                $this->custom->setURAndSR();
             }
 
             if($type == 'user' && isset($_POST['keys']))
@@ -518,11 +518,11 @@ class custom extends control
         {
             $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
                 ->where('module')->eq('custom')
-                ->andWhere('section')->eq('scrum')
+                ->andWhere('section')->eq('common')
                 ->andWhere('`key`')->eq('URSRName')
                 ->fetch('value');
 
-            $this->view->URSRName   = json_decode($URSRName);
+            $this->view->URSRName = json_decode($URSRName);
         }
 
         if($type == 'user')

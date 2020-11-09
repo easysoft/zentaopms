@@ -154,6 +154,11 @@ class router extends baseRouter
             $model->model = 'scrum';
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
+            if(isset($model->model) && $model->model == 'waterfall')
+            {
+                $projectIndex = 2;
+            }
+
             foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
@@ -163,19 +168,10 @@ class router extends baseRouter
 
                 if($setting->key == 'URSRName')
                 {
-                    if(isset($model->model) && $setting->section == $model->model)
-                    {
-                        $URSRName = json_decode($setting->value, true);
-                        if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
-                        if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
-                    }
+                    $URSRName = json_decode($setting->value, true);
+                    if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
+                    if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
                 }
-            }
-
-            if(isset($model->model) && $model->model == 'waterfall')
-            {
-                $projectIndex = 2;
-                //$planIndex    = 1;
             }
 
             $config->storyCommon = $storyIndex;
