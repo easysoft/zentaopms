@@ -29,7 +29,9 @@
   </div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
   <div class="btn-toolbar pull-right">
+    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
     <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent">

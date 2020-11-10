@@ -945,6 +945,7 @@ class project extends control
         $this->view->title       = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
         $this->view->position[]  = $this->lang->testtask->common;
+        $this->view->project     = $project;
         $this->view->projectID   = $projectID;
         $this->view->projectName = $this->projects[$projectID];
         $this->view->pager       = $pager;
@@ -1047,12 +1048,17 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         $title      = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->team;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }
@@ -1923,6 +1929,7 @@ class project extends control
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
+        $this->view->project        = $project;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 

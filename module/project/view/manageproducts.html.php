@@ -57,7 +57,7 @@
       </div>
       <div class="detail text-center form-actions">
         <?php echo html::hidden("post", 'post');?>
-        <?php echo html::submitButton();?>
+        <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed') echo html::submitButton();?>
       </div>
     </form>
   </div>
