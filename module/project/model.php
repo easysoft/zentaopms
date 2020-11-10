@@ -442,12 +442,17 @@ class projectModel extends model
         $allChanges  = array();
         $data        = fixer::input('post')->get();
         $oldProjects = $this->getByIdList($this->post->projectIDList);
+        $nameList    = array();
+        $codeList    = array();
         foreach($data->projectIDList as $projectID)
         {
+            $projectName = $data->names[$projectID];
+            $projectCode = $data->codes[$projectID];
+
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name   = $data->names[$projectID];
-            $projects[$projectID]->code   = $data->codes[$projectID];
+            $projects[$projectID]->name   = $projectName;
+            $projects[$projectID]->code   = $projectCode;
             $projects[$projectID]->PM     = $data->PMs[$projectID];
             $projects[$projectID]->PO     = $data->POs[$projectID];
             $projects[$projectID]->QD     = $data->QDs[$projectID];
@@ -460,7 +465,16 @@ class projectModel extends model
             $projects[$projectID]->desc   = htmlspecialchars_decode($data->descs[$projectID]);
             $projects[$projectID]->days   = $data->dayses[$projectID];
             $projects[$projectID]->order  = $data->orders[$projectID];
+
+            /* Check unique name for edited projects. */
+            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->name, $projectName);
+            $nameList[$projectName] = $projectName;
+
+            /* Check unique code for edited projects. */
+            if(isset($codeList[$projectCode])) dao::$errors['code'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->code, $projectCode);
+            $codeList[$projectCode] = $projectCode;
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($projects as $projectID => $project)
         {
@@ -473,11 +487,12 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('name', 'unique', "id!=$projectID and deleted='0'")
-                ->check('code', 'unique', "id!=$projectID and deleted='0'")
+                ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIDList) . " and deleted='0'")
+                ->check('code', 'unique', "id NOT " . helper::dbIN($data->projectIDList) . " and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->limit(1)
                 ->exec();
+            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
 
             foreach($project as $fieldName => $value)
             {
@@ -501,7 +516,6 @@ class projectModel extends model
             }
             $this->user->updateUserView($projectID, 'project', $changedAccounts);
 
-            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
         $this->fixOrder();

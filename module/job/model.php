@@ -26,8 +26,8 @@ class jobModel extends model
     /**
      * Get job list.
      * 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -45,7 +45,8 @@ class jobModel extends model
     /**
      * Get list by triggerType field
      * 
-     * @param  string    $triggerType 
+     * @param  string  $triggerType
+     * @param  array   $repoIdList
      * @access public
      * @return array
      */
@@ -58,6 +59,13 @@ class jobModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get trigger config.
+     *
+     * @param  object $job
+     * @access public
+     * @return string
+     */
     public function getTriggerConfig($job)
     {
           $triggerType = zget($this->lang->job->triggerTypeList, $job->triggerType);
@@ -81,10 +89,27 @@ class jobModel extends model
     }
 
     /**
-     * Create job
+     * Get trigger group.
+     *
+     * @param  string $triggerType
+     * @param  array  $repoIdList
+     * @access public
+     * @return array
+     */
+    public function getTriggerGroup($triggerType, $repoIdList)
+    {
+        $jobs  = $this->getListByTriggerType($triggerType, $repoIdList);
+        $group = array();
+        foreach($jobs as $job) $group[$job->repo][$job->id] = $job;
+
+        return $group;
+    }
+
+    /**
+     * Create a job.
      * 
      * @access public
-     * @return void
+     * @return bool
      */
     public function create()
     {
@@ -119,11 +144,11 @@ class jobModel extends model
     }
 
     /**
-     * Update job
+     * Update a job.
      * 
      * @param  int    $id 
      * @access public
-     * @return void
+     * @return bool
      */
     public function update($id)
     {
