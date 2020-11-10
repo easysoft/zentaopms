@@ -80,6 +80,8 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '項目成員';
 $lang->program->PRJLongTime        = '長期項目';
 
+$lang->program->productNotEmpty = '關聯產品不能為空！';
+
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
@@ -204,6 +206,8 @@ $lang->program->PGMLongTime  = '長期項目';
 
 $lang->program->noPGM         = '暫時沒有項目集';
 $lang->program->PGMShowClosed = '顯示已關閉';
+$lang->program->PGMTips       = '修改父項目集，可關聯產品也會發生變化，並且變為必填，如果未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯到該項目。';
+$lang->program->PGMChangeTips = '修改父項目集後，項目已關聯的產品會被清空，並且項目下的需求、bug等數據也會受影響，是否修改？';
 
 $lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
 $lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問）";

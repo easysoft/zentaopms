@@ -1457,7 +1457,7 @@ class program extends control
 
         $this->loadModel('product');
         $project   = $this->project->getById($projectID);
-        $programID = $this->program->getPRJProgramID($projectID);
+        $programID = $this->program->getTopProgramID($projectID);
 
         /* Title and position. */
         $title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;

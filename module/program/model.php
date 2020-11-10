@@ -174,7 +174,8 @@ class programModel extends model
      */
     public function getPGMProduct($programID = 0)
     {
-        if(!empty($programID)) $programID = $this->getPRJProgramID($programID);
+        if(!$programID) return array();
+        $programID = $this->getTopProgramID($programID);
         return $this->loadModel('product')->getPairs('noclosed', $programID);
     }
 
@@ -928,7 +929,7 @@ class programModel extends model
      * @access public
      * @return object
      */
-    public function getPRJProgramID($projectID)
+    public function getTopProgramID($projectID)
     {
         if(empty($projectID)) return 0;
         $program  = $this->getPGMByID($projectID);
