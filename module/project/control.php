@@ -1859,11 +1859,22 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm(sprintf($this->lang->project->confirmDelete, $this->projects[$projectID]), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
+            /* Get the number of unfinished tasks and unresolved bugs. */
+            $unfinishedTasks = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing')->fetch();
+            $unresolvedBugs  = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch();
+
+            /* Set prompt information. */
+            $tips = '';
+            if($unfinishedTasks->count) $tips  = sprintf($this->lang->project->unfinishedTask, $unfinishedTasks->count);
+            if($unresolvedBugs->count)  $tips .= sprintf($this->lang->project->unresolvedBug,  $unresolvedBugs->count);
+            if($tips)                   $tips  = $this->lang->project->unfinishedProject . $tips;
+
+            echo js::confirm($tips . sprintf($this->lang->project->confirmDelete, $this->projects[$projectID]), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
             exit;
         }
         else
         {
+            /* Delete project. */
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
