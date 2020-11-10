@@ -1,17 +1,18 @@
 /* If left = 0, warning. */
 function checkLeft()
 {
-    var left     = $("#left").val();
-    var consumed = $("#consumed").val();
-    if(isNaN(parseFloat(left)) || left == 0)
+    var left     = parseFloat($("#left").val());
+    var consumed = parseFloat($("#consumed").val());
+    if(!left)
     {
-        if(isNaN(parseFloat(consumed)) || consumed == 0)
+        var result;
+        if(!consumed)
         {
             alert(noticeTaskStart);
-            return false;
+            result = false;
         }
-        var result = confirm(confirmFinish);
-        if(!result) setTimeout(function() {$.enableForm()}, 500);
+        else result = confirm(confirmFinish);
+        if(!result) setTimeout(function() {$.enableForm()}, 50);
         return result;
     }
 }
