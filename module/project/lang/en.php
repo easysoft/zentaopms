@@ -275,6 +275,9 @@ $lang->project->noweekend             = 'Exclude Weekend';
 $lang->project->withweekend           = 'Include Weekend';
 $lang->project->interval              = 'Intervals ';
 $lang->project->fixFirstWithLeft      = 'Update hours left too';
+$lang->project->unfinishedProject     = "This {$lang->projectCommon} has ";
+$lang->project->unfinishedTask        = "[%s] unfinished tasks. ";
+$lang->project->unresolvedBug         = "[%s] unresolved bugs. ";
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> . $extra' . "\n";
