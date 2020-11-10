@@ -176,7 +176,7 @@ class svnModel extends model
                 $version = $this->repo->saveOneCommit($repo->id, $log, $version);
             }
             $this->repo->updateCommitCount($repo->id, $lastInDB->commit + count($logs));
-            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
+            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
 
             if($isPrintLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
         }
