@@ -32,6 +32,7 @@
     $link = common::hasPriv('task', 'report', $project) ?  $this->createLink('task', 'report', "project=$projectID&browseType=$browseType") : '#';
     echo html::a($link, "<i class='icon icon-bar-chart muted'></i> <span class='text'>{$lang->task->reportChart}</span>", '', 'class="btn btn-link"');
     ?>
+    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -46,6 +47,7 @@
         ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php
     $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $project) ? '' : ' disabled') . "' data-width='700'";
     $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=tree") : '#';

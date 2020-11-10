@@ -22,7 +22,9 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
     <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>

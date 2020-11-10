@@ -135,7 +135,7 @@
                 <div class='file-name'><a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>' title='<?php echo substr($file->addedDate, 0, 10)?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a></div>
               </div>
               <div class='actions'>
-                <?php if(common::hasPriv('file', 'delete')): ?>
+                <?php if(common::hasPriv('file', 'delete') and $changeAllowed): ?>
                 <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete btn btn-link'><i class='icon icon-trash'></i></a>
                 <?php endif?>
               </div>
