@@ -1,6 +1,8 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
+<?php if($config->debug):?>
 <?php css::import($jsRoot . 'zui/picker/zui.picker.min.css'); ?>
 <?php js::import($jsRoot . 'zui/picker/zui.picker.min.js'); ?>
+<?php endif;?>
 <style>
 .picker-single .picker-selection-remove{z-index: 1000;}
 .picker-selection-single:after, .picker-multi.picker-focus .picker-selections:before{font-family: ZentaoIcon !important; content: '\f0d7' !important;}
