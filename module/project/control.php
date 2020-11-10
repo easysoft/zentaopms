@@ -2412,8 +2412,8 @@ class project extends control
         $this->view->title         = $this->lang->project->allProject;
         $this->view->position[]    = $this->lang->project->allProject;
 
-        $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager, , $this->session->PRJ);
+        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductsByProjec($this->session->PRJ);
         $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
         $this->view->pager         = $pager;
