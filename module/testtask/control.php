@@ -90,6 +90,7 @@ class testtask extends control
         $this->view->branch      = $branch;
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -136,6 +137,7 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }

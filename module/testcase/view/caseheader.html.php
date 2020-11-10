@@ -102,6 +102,7 @@
       ?>
       </ul>
     </div>
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
@@ -150,6 +151,7 @@
         </li>
       </ul>
     </div>
+    <?php endif;?>
     <?php endif;?>
   </div>
 </div>

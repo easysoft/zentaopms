@@ -57,6 +57,11 @@ class testreport extends control
         if($extra) $task = $this->testtask->getById($extra);
         $name = $extra ? $task->name : $object->name;
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if($objectType == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $changeAllowed = false;
+        if($objectType == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $changeAllowed = false;
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -100,15 +105,16 @@ class testreport extends control
         $this->view->position[] = html::a(inlink('browse', "objectID=$objectID&objectType=$objectType&extra=$extra"), $extra ? $task->name : $object->name);
         $this->view->position[] = $this->lang->testreport->browse;
 
-        $this->view->reports    = $reports;
-        $this->view->orderBy    = $orderBy;
-        $this->view->objectID   = $objectID;
-        $this->view->objectType = $objectType;
-        $this->view->extra      = $extra;
-        $this->view->pager      = $pager;
-        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->tasks      = $tasks;
-        $this->view->projects   = $projects;
+        $this->view->reports       = $reports;
+        $this->view->orderBy       = $orderBy;
+        $this->view->objectID      = $objectID;
+        $this->view->objectType    = $objectType;
+        $this->view->extra         = $extra;
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->tasks         = $tasks;
+        $this->view->projects      = $projects;
+        $this->view->changeAllowed = $changeAllowed;
         $this->display();
     }
 

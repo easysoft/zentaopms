@@ -626,6 +626,7 @@ class bug extends control
         $this->view->actions     = $this->action->getList('bug', $bugID);
         $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
+        $this->view->product     = $this->loadModel('product')->getByID( $productID);
 
         $this->display();
     }

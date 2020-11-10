@@ -65,6 +65,7 @@ class testsuite extends control
         $this->view->suites      = $suites;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }

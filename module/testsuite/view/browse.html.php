@@ -21,9 +21,11 @@
       <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>
     </a>
   </div>
+  <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table' data-ride='table'>
@@ -31,7 +33,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span>
-      <?php if(common::hasPriv('testsuite', 'create')):?>
+      <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('testsuite', 'create')):?>
       <?php echo html::a($this->createLink('testsuite', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

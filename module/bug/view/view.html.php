@@ -30,7 +30,9 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
     <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>

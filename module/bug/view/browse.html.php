@@ -117,6 +117,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         ?>
       </ul>
     </div>
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
     <?php if(!common::checkNotCN()):?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
@@ -161,6 +162,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         </li>
       </ul>
     </div>
+    <?php endif;?>
     <?php endif;?>
   </div>
 </div>
