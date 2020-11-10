@@ -80,7 +80,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
           <?php if(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false) echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
         </div>
-        <?php if($viewType == 'story' and $allProduct):?>
+        <?php if($viewType == 'story' and $allProduct and $changeAllowed):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
         <?php endif;?>
       </div>
@@ -159,7 +159,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
               <td></td>
               <?php endif;?>
               <td colspan="2" class="form-actions">
-                <?php echo html::submitButton();?>
+                <?php if($changeAllowed) echo html::submitButton();?>
                 <?php echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
@@ -265,9 +265,10 @@ $(function()
         }
     };
 
-    if(<?php echo common::hasPriv('tree', 'updateorder') ? 'false' : 'true' ?>) options.actions["sort"] = false;
-    if(<?php echo common::hasPriv('tree', 'edit') ? 'false' : 'true' ?>) options.actions["edit"] = false;
-    if(<?php echo common::hasPriv('tree', 'delete') ? 'false' : 'true' ?>) options.actions["delete"] = false;
+    if(<?php echo (common::hasPriv('tree', 'updateorder') and $changeAllowed) ? 'false' : 'true' ?>) options.actions["sort"] = false;
+    if(<?php echo (common::hasPriv('tree', 'edit') and $changeAllowed) ? 'false' : 'true' ?>) options.actions["edit"] = false;
+    if(<?php echo (common::hasPriv('tree', 'delete') and $changeAllowed) ? 'false' : 'true' ?>) options.actions["delete"] = false;
+    if(<?php echo $changeAllowed ? 'false' : 'true' ?>) options.actions["subModules"] = false;
 
     var $tree = $('#modulesTree').tree(options);
 

@@ -1642,6 +1642,10 @@ class project extends control
         $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
         $kanbanSetting = $this->project->getKanbanSetting();
 
@@ -1658,9 +1662,10 @@ class project extends control
         $this->view->type          = $type;
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->kanbanColumns = $this->project->getKanbanColumns($kanbanSetting);
-        $this->view->statusMap     = $this->project->getKanbanStatusMap($kanbanSetting);
+        $this->view->statusMap     = $changeAllowed ? $this->project->getKanbanStatusMap($kanbanSetting) : array();
         $this->view->statusList    = $this->project->getKanbanStatusList($kanbanSetting);
         $this->view->colorList     = $this->project->getKanbanColorList($kanbanSetting);
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }
