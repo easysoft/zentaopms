@@ -42,7 +42,7 @@ var browseType = '<?php echo $browseType;?>';
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
           </div>
-          <?php if($libID):?>
+          <?php if($libID and !common::checkParentObjectClosed('doc', $currentLib)):?>
           <div class="dropdown">
             <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
             <ul class='dropdown-menu'>

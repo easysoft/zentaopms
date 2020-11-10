@@ -48,7 +48,7 @@ tbody tr td:first-child input{display:none;}
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if(!$build->deleted)
+    if(!$build->deleted and $changeAllowed)
     {
         echo $this->buildOperateMenu($build, 'view');
 
@@ -91,13 +91,13 @@ tbody tr td:first-child input{display:none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if(common::hasPriv('build', 'linkStory')):?>
+        <?php if($changeAllowed and common::hasPriv('build', 'linkStory')):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
-            <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkStory');?>
+            <?php $canBatchUnlink = $changeAllowed and common::hasPriv('build', 'batchUnlinkStory');?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -146,7 +146,7 @@ tbody tr td:first-child input{display:none;}
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('build', 'unlinkStory'))
+                  if($changeAllowed and common::hasPriv('build', 'unlinkStory'))
                   {
                       $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn btn-icon' title='{$lang->build->unlinkStory}'");
@@ -176,13 +176,13 @@ tbody tr td:first-child input{display:none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if(common::hasPriv('build', 'linkBug')):?>
+        <?php if($changeAllowed and common::hasPriv('build', 'linkBug')):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $changeAllowed and common::hasPriv('build', 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -227,7 +227,7 @@ tbody tr td:first-child input{display:none;}
                 <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('build', 'unlinkBug'))
+                  if($changeAllowed and common::hasPriv('build', 'unlinkBug'))
                   {
                       $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn btn-icon' title='{$lang->build->unlinkBug}'");

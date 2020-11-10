@@ -29,7 +29,9 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
+    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
     <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent">

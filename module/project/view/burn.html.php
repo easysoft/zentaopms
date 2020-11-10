@@ -25,7 +25,7 @@
     common::printLink('project', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary' id='computeBurn'");
     echo '<div class="space"></div>';
     echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn btn-link'");
-    common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
+    if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed') common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->project->howToUpdateBurn;
     ?>
     <?php if($interval):?>
