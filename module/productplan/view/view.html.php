@@ -42,9 +42,9 @@
     {
         echo $this->buildOperateMenu($plan, 'view');
 
-        if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
-        if(common::hasPriv('productplan', 'edit')) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('productplan', 'delete') and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
+        if(common::hasPriv('productplan', 'edit', $plan)) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('productplan', 'delete', $plan) and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>
@@ -62,7 +62,7 @@
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
         <div class='actions'>
-          <?php if(!$plan->deleted and $plan->parent >= 0):?>
+          <?php if(!$plan->deleted and $plan->parent >= 0 and !common::checkParentObjectClosed('plan', $plan)):?>
           <div class="btn-group">
             <div class='drop-down dropdown-hover'>
               <?php
@@ -82,7 +82,7 @@
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('productplan', 'linkStory') and $plan->parent >= 0) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
+          <?php if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
@@ -355,7 +355,7 @@
         </form>
       </div>
       <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
-        <?php if(common::hasPriv('productplan', 'linkBug')):?>
+        <?php if(common::hasPriv('productplan', 'linkBug', $plan)):?>
         <div class='actions'>
         <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-primary'");?>
         </div>

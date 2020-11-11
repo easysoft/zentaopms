@@ -65,6 +65,7 @@ class testsuite extends control
         $this->view->suites      = $suites;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -151,15 +152,16 @@ class testsuite extends control
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testsuite->view;
 
-        $this->view->productID = $productID;
-        $this->view->suite     = $suite;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->actions   = $this->loadModel('action')->getList('testsuite', $suiteID);
-        $this->view->cases     = $this->testsuite->getLinkedCases($suiteID, $sort, $pager);
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->modules   = $this->loadModel('tree')->getOptionMenu($suite->product, 'case');
-        $this->view->branches  = $this->loadModel('branch')->getPairs($suite->product, 'noempty');
+        $this->view->productID     = $productID;
+        $this->view->suite         = $suite;
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->actions       = $this->loadModel('action')->getList('testsuite', $suiteID);
+        $this->view->cases         = $this->testsuite->getLinkedCases($suiteID, $sort, $pager);
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
+        $this->view->modules       = $this->loadModel('tree')->getOptionMenu($suite->product, 'case');
+        $this->view->branches      = $this->loadModel('branch')->getPairs($suite->product, 'noempty');
+        $this->view->changeAllowed = common::checkParentObjectClosed('testsuite', $suite) ? false : true;
 
         $this->display();
     }

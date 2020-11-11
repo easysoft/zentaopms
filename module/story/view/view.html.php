@@ -47,7 +47,9 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'): ?>
     <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>
@@ -62,8 +64,8 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php if(!common::checkParentObjectClosed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
       <?php if(!empty($story->children)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->story->children;?></div>
@@ -136,7 +138,7 @@
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyStory' and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($config->global->flow != 'onlyStory' and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group dropup'>";

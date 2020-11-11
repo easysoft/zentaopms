@@ -46,37 +46,40 @@
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
 
-    $this->lang->story->create = $this->lang->project->createStory;
-    if($productID and !$this->loadModel('story')->checkForceReview())
+    if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed')
     {
-        echo "<div class='btn-group dropdown-hover'>";
-        echo "<button type='button' class='btn btn-link'>";
-        echo "<i class='icon-plus'></i> {$lang->story->create} <span class='caret'></span>";
-        echo '</button>';
-        echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
-        $storyModuleID = (int)$this->cookie->storyModuleParam;
-        if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->create) . '</li>';
-        if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
-        echo '</ul>';
-        echo '</div>';
-    }
+        $this->lang->story->create = $this->lang->project->createStory;
+        if($productID and !$this->loadModel('story')->checkForceReview())
+        {
+            echo "<div class='btn-group dropdown-hover'>";
+            echo "<button type='button' class='btn btn-link'>";
+            echo "<i class='icon-plus'></i> {$lang->story->create} <span class='caret'></span>";
+            echo '</button>';
+            echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
+            $storyModuleID = (int)$this->cookie->storyModuleParam;
+            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->create) . '</li>';
+            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
+            echo '</ul>';
+            echo '</div>';
+        }
 
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("project=$project->id");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->project->linkStory}",'', "class='btn btn-link link-story-btn'");
-    }
-    else
-    {
-        echo "<div class='btn-group dropdown-hover'>";
-        echo "<button type='button' class='btn btn-primary' id='linkButton'>";
-        echo "<i class='icon-link'></i> {$lang->project->linkStory} <span class='caret'></span>";
-        echo '</button>';
-        echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-        if(common::hasPriv('project', 'linkStory')) echo '<li>' . html::a(inlink('linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
-        if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
-        echo '</ul>';
-        echo '</div>';
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("project=$project->id");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->project->linkStory}",'', "class='btn btn-link link-story-btn'");
+        }
+        else
+        {
+            echo "<div class='btn-group dropdown-hover'>";
+            echo "<button type='button' class='btn btn-primary' id='linkButton'>";
+            echo "<i class='icon-link'></i> {$lang->project->linkStory} <span class='caret'></span>";
+            echo '</button>';
+            echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
+            if(common::hasPriv('project', 'linkStory')) echo '<li>' . html::a(inlink('linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
+            if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+            echo '</ul>';
+            echo '</div>';
+        }
     }
     ?>
   </div>

@@ -18,14 +18,17 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if(commonModel::isTutorialMode())
+    if($changeAllowed)
     {
-        $wizardParams = helper::safe64Encode("projectID=$project->id");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=manageMembers&params=$wizardParams"), "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
-    }
-    else
-    {
-        if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("projectID=$project->id");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=manageMembers&params=$wizardParams"), "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+        }
+        else
+        {
+            if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+        }
     }
     ?>
   </div>
@@ -52,7 +55,9 @@
           <th><?php echo $lang->team->hours;?></th>
           <th><?php echo $lang->team->totalHours;?></th>
           <th class='w-100px text-center'><?php echo $lang->team->limited;?></th>
+          <?php if($changeAllowed):?>
           <th class='c-actions-1 w-80px text-center'><?php echo $lang->actions;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <tbody>
@@ -72,6 +77,7 @@
           <td><?php echo $member->hours . $lang->project->workHour;?></td>
           <td><?php echo $memberHours . $lang->project->workHour;?></td>
           <td class="text-center"><?php echo $lang->team->limitedList[$member->limited];?></td>
+          <?php if($changeAllowed):?>
           <td class='c-actions text-center'>
             <?php
             if (common::hasPriv('project', 'unlinkMember', $member))
@@ -81,6 +87,7 @@
             }
             ?>
           </td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
       </tbody>

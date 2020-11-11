@@ -90,6 +90,7 @@ class testtask extends control
         $this->view->branch      = $branch;
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -136,6 +137,7 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -399,6 +401,9 @@ class testtask extends control
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = common::checkParentObjectClosed('testtask', $task) ? false : true;
+
         if($this->cookie->preTaskID != $taskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
@@ -472,6 +477,7 @@ class testtask extends control
         $this->view->pager          = $pager;
         $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
         $this->view->setModule      = false;
+        $this->view->changeAllowed  = $changeAllowed;
 
         $this->display();
     }
@@ -546,6 +552,9 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = common::checkParentObjectClosed('testtask', $task) ? false : true;
+
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
@@ -580,15 +589,16 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->productID   = $productID;
-        $this->view->task        = $task;
-        $this->view->taskID      = $taskID;
-        $this->view->browseType  = 'group';
-        $this->view->groupBy     = $groupBy;
-        $this->view->groupByList = $groupByList;
-        $this->view->cases       = $groupCases;
-        $this->view->account     = 'all';
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->productID     = $productID;
+        $this->view->task          = $task;
+        $this->view->taskID        = $taskID;
+        $this->view->browseType    = 'group';
+        $this->view->groupBy       = $groupBy;
+        $this->view->groupByList   = $groupByList;
+        $this->view->cases         = $groupCases;
+        $this->view->account       = 'all';
+        $this->view->changeAllowed = $changeAllowed;
         $this->display();
     }
 

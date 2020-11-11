@@ -754,7 +754,12 @@ class doc extends control
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $changeAllowed = false;
+        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $changeAllowed = false;
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -799,17 +804,18 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
+        $this->view->title         = $object->name;
+        $this->view->position[]    = $object->name;
 
-        $this->view->type       = $type;
-        $this->view->object     = $object;
-        $this->view->files      = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
-        $this->view->viewType   = $viewType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->objectID   = $objectID;
+        $this->view->type          = $type;
+        $this->view->object        = $object;
+        $this->view->files         = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager         = $pager;
+        $this->view->viewType      = $viewType;
+        $this->view->orderBy       = $orderBy;
+        $this->view->objectID      = $objectID;
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }

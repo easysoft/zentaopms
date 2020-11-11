@@ -22,7 +22,9 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
     <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
@@ -30,7 +32,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if(common::hasPriv('release', 'create')):?>
+      <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('release', 'create')):?>
       <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

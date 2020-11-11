@@ -46,7 +46,7 @@ window.v.showLog = <?php echo $config->xuanxuan->debug;?>;
       </tr>
       <tr>
         <th><?php echo $lang->im->url;?></th>
-        <td><?php echo commonModel::getSysURL() . $this->config->webRoot . 'x.php';?></td>
+        <td><?php echo $domain . $this->config->webRoot . 'x.php';?></td>
       </tr>
     </body>
   </table>

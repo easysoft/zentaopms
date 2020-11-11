@@ -46,9 +46,11 @@ $status = $this->session->testTaskVersionStatus;
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
     </div>
   </div>
+  <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table'>

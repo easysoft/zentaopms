@@ -185,7 +185,8 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
-        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision", "path=" . $this->repo->encodePath($info->path)));
+        $path = $entry ? $info->path : '';
+        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision", "path=" . $this->repo->encodePath($path)));
         $content  = $this->scm->cat($entry, $revision);
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry); 
