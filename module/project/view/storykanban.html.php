@@ -10,6 +10,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
+<?php js::set('changeAllowed', $changeAllowed)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $total = 0;?>
@@ -22,18 +23,21 @@
     <?php
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
-    if(commonModel::isTutorialMode())
+    if($changeAllowed)
     {
-        $wizardParams = helper::safe64Encode("project=$project->id");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->project->linkStory}",'', "class='btn btn-link link-story-btn'");
-    }
-    else
-    {
-        common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'btn-link link-story-btn');
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("project=$project->id");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->project->linkStory}",'', "class='btn btn-link link-story-btn'");
+        }
+        else
+        {
+            common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'btn-link link-story-btn');
+        }
     }
     ?>
     </div>
-    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary'");?>
+    <?php if($changeAllowed and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php
@@ -73,7 +77,7 @@ $account = $this->app->user->account;
                   <div class='info'>
                     <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
                     <span class='status status-story status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
-                    <?php if(common::hasPriv('project', 'unlinkStory')):?>
+                    <?php if($changeAllowed and common::hasPriv('project', 'unlinkStory')):?>
                     <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-unlink icon-sm'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
                     <?php endif;?>
                     <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>

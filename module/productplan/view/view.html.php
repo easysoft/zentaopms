@@ -62,7 +62,7 @@
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
         <div class='actions'>
-          <?php if(!$plan->deleted and $plan->parent >= 0 and !common::checkParentObjectClosed('plan', $plan)):?>
+          <?php if(!$plan->deleted and $plan->parent >= 0 and $changeAllowed):?>
           <div class="btn-group">
             <div class='drop-down dropdown-hover'>
               <?php
@@ -101,7 +101,7 @@
             $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
             $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
 
-            $canBatchAction = ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo);
+            $canBatchAction = ($changeAllowed and ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo));
             $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
             ?>
             <thead>
@@ -165,7 +165,7 @@
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('productplan', 'unlinkStory'))
+                  if($changeAllowed and common::hasPriv('productplan', 'unlinkStory'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkStory}'");
@@ -363,7 +363,7 @@
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = common::hasPriv('productplan', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $changeAllowed and common::hasPriv('productplan', 'batchUnlinkBug');?>
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>
@@ -404,7 +404,7 @@
                 </td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('productplan', 'unlinkBug'))
+                  if($changeAllowed and common::hasPriv('productplan', 'unlinkBug'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");
