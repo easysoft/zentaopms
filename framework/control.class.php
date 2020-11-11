@@ -331,7 +331,7 @@ class control extends baseControl
                 elseif($rule->type == 'system' and isset($_POST[$field->field]))
                 {
                     $checkFunc = 'check' . $rule->rule;
-                    if(!validater::$checkFunc($_POST[$field->field]))
+                    if(validater::$checkFunc($_POST[$field->field]) === false)
                     {
                         $error = zget($this->lang->error, $rule->rule, '');
                         if($error) $error = sprintf($error, $field->name);
@@ -342,7 +342,7 @@ class control extends baseControl
                 }
                 elseif($rule->type == 'regex' and isset($_POST[$field->field]))
                 {
-                    if(!validater::checkREG($_POST[$field->field], $rule->rule)) $message[$field->field][] = sprintf($this->lang->error->reg, $field->name, $rule->rule);
+                    if(validater::checkREG($_POST[$field->field], $rule->rule) === false) $message[$field->field][] = sprintf($this->lang->error->reg, $field->name, $rule->rule);
                 }
             }
         }
