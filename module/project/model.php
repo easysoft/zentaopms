@@ -883,13 +883,6 @@ class projectModel extends model
             {
                 if($project->parent and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
             }
-
-            $products = $this->loadModel('product')->getProductsByProject($program->id);
-            foreach($projects as $projectID => $project)
-            {
-                if(isset($products[$project->productID])) $projects[$projectID]->name = $products[$project->productID] . '/' . $project->name;
-            }
-
             foreach($projects as $project) if($project->grade == 2) unset($projects[$project->parent]);
         }
 
