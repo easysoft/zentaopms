@@ -797,6 +797,8 @@ class taskModel extends model
 
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
             ->setIF($oldTask->parent > 0 and !$this->post->parent, 'parent', 0)
+            ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
+            ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
