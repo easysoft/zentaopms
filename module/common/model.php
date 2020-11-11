@@ -1857,7 +1857,8 @@ EOD;
         /* Check the product is closed. */
         if(!empty($object->product) and !empty($config->global->closedProductStatus))
         {
-            $product = $app->control->loadModel('product')->getByID($object->product);
+            $productID = trim($object->product, ',');
+            $product   = $app->control->loadModel('product')->getByID($productID);
             if($product->status == 'closed') return true;
 
             /* Get the projects associated with the story. */

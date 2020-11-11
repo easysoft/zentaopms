@@ -29,9 +29,7 @@
   </div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
   <div class="btn-toolbar pull-right">
-    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
-    <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
-    <?php endif;?>
+    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed') common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -40,7 +38,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
-      <?php if(common::hasPriv('build', 'create')):?>
+      <?php if((empty($this->config->global->closedProjectStatus) or $project->status != 'closed') and common::hasPriv('build', 'create')):?>
       <?php echo html::a($this->createLink('build', 'create', "project=$project->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
