@@ -34,7 +34,7 @@ class holidayModel extends model
     {
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('1')
-            ->beginIf($year != '')
+            ->beginIf(!empty($year))
             ->andWhere('year', true)->eq($year)
             ->orWhere('begin')->like("$year-%")
             ->orWhere('end')->like("$year-%")
@@ -421,17 +421,17 @@ class holidayModel extends model
      */
     public function updateTaskRealDuration($beginDate, $endDate)
     {
-        $updateTaskList = $this->dao->select('id, realBegan, finishedDate')
+        $updateTaskList = $this->dao->select('id, realStarted, finishedDate')
             ->from(TABLE_TASK)
             ->where('realStarted')->between($beginDate, $endDate)
             ->orWhere("date_format(finishedDate,'%Y-%m-%d')")->between($beginDate, $endDate)
-            ->orWhere("(realBegan < '$beginDate' AND date_format(finishedDate,'%Y-%m-%d') > '$endDate')")
+            ->orWhere("(realStarted < '$beginDate' AND date_format(finishedDate,'%Y-%m-%d') > '$endDate')")
             ->andWhere('status')->ne('done')
             ->fetchAll();
 
         foreach($updateTaskList as $task)
         {
-            $realDuration = $this->getActualWorkingDays($task->realBegan, date('Y-m-d',strtotime($task->finishedDate)));
+            $realDuration = $this->getActualWorkingDays($task->realStarted, date('Y-m-d',strtotime($task->finishedDate)));
             $realDuration = count($realDuration);
 
             $this->dao->update(TABLE_TASK)

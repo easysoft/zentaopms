@@ -23,4 +23,5 @@ $lang->holiday->holiday = 'Holiday';
 $lang->holiday->typeList['holiday'] = 'Holiday';
 $lang->holiday->typeList['working'] = 'Working Day';
 
-$lang->holiday->emptyTip = 'No Holiday';
+$lang->holiday->emptyTip      = 'No Holiday';
+$lang->holiday->confirmDelete = 'Confirm removal of holidays?';

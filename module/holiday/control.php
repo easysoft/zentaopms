@@ -31,7 +31,6 @@ class holiday extends control
      */
     public function browse($year = '')
     {
-        if($year == '') $year = date('Y');
         $holidays = $this->holiday->getList($year);
         $yearList = $this->holiday->getYearPairs();
 
@@ -87,14 +86,22 @@ class holiday extends control
     /**
      * Delete holiday. 
      * 
-     * @param  int    $id 
+     * @param  int    $id
+     * @param  int    $confirm
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete($id, $confirm = 'no')
     {
-        $result = $this->holiday->delete($id);
-        if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        $this->send(array('result' => 'success'));
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->holiday->confirmDelete, inLink('delete', "id=$id&confirm=yes")));
+        }
+        else
+        {
+            $result = $this->holiday->delete($id);
+            if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            die(js::reload('parent'));
+        }
     }
 }

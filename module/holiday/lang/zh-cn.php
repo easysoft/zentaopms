@@ -23,4 +23,5 @@ $lang->holiday->holiday = '假期';
 $lang->holiday->typeList['holiday'] = '假期';
 $lang->holiday->typeList['working'] = '补班';
 
-$lang->holiday->emptyTip = '暂时没有节假日。';
+$lang->holiday->emptyTip      = '暂时没有节假日。';
+$lang->holiday->confirmDelete = '确认删除节假日？';

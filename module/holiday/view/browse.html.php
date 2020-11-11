@@ -1,13 +1,13 @@
 <?php
 /**
- * The browse view file of holiday module of Ranzhi.
+ * The browse view file of holiday module of ZenTao.
  *
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      chujilu <chujilu@cnezsoft.com>
  * @package     holiday
  * @version     $Id$
- * @link        http://www.ranzhi.org
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
@@ -37,9 +37,9 @@
   </div>
   <div class='main-col main-table'>
   <?php if(!empty($holidays)):?>
-    <table class='table text-center'>
+    <table class='table has-sort-head'>
       <thead>
-        <tr class='text-center'>
+        <tr>
           <th class='w-150px'><?php echo $lang->holiday->name;?></th>
           <th class='w-200px'><?php echo $lang->holiday->holiday;?></th>
           <th class='w-80px'><?php echo $lang->holiday->type;?></th>
@@ -53,22 +53,20 @@
         <td><?php echo formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);?></td>
         <td><?php echo zget($lang->holiday->typeList, $holiday->type);?></td>
         <td><?php echo $holiday->desc;?></td>
-        <td>
-          <?php common::printLink('holiday', 'edit', "id=$holiday->id", $lang->edit, '', "class='iframe'", '', true);?>
-          <?php common::printLink('holiday', 'delete', "id=$holiday->id", $lang->delete);?>
+        <td class=" c-actions">
+          <?php common::printIcon('holiday', 'edit', "id=$holiday->id", $holiday, 'list', '', '', 'iframe', 'yes');?>
+          <?php common::printIcon('holiday', 'delete', "id=$holiday->id", $holiday, 'list', '', 'hiddenwin');?>
         </td>
       </tr>
       <?php endforeach;?>
     </table>
-    <?php if(!$holidays):?>
-    <?php endif;?>
-  </div>
   <?php else:?>
-  <div class="table-empty-tip">
-    <p>
-      <span class="text-muted"><?php echo $lang->holiday->emptyTip;?></span>
-    </p>
-  </div>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->holiday->emptyTip;?></span>
+      </p>
+    </div>
   <?php endif;?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
