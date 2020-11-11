@@ -36,7 +36,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'button', 'link');
+    common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
     common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id", '', 'button', '', '', 'export');
     common::printIcon('testtask', 'report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID));
     common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'button', 'list-alt');

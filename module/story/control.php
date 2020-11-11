@@ -1275,6 +1275,7 @@ class story extends control
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
+        $this->view->product    = $this->product->getByID($productID);
         $this->display();
     }
 

@@ -279,13 +279,15 @@ class file extends control
      *
      * @param  array  $files
      * @param  string $fieldset
+     * @param  object $object
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset)
+    public function printFiles($files, $fieldset, $object = null)
     {
         $this->view->files    = $files;
         $this->view->fieldset = $fieldset;
+        $this->view->object   = $object;
         $this->display();
     }
 

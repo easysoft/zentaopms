@@ -64,8 +64,8 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php if(!common::checkParentObjectClosed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
       <?php if(!empty($story->children)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->story->children;?></div>

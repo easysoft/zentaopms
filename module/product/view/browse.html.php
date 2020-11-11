@@ -169,7 +169,7 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if(common::hasPriv('story', 'create')):?>
+        <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('story', 'create')):?>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>

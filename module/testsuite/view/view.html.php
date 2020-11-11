@@ -29,7 +29,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if(!$suite->deleted)
+    if(!$suite->deleted and $changeAllowed)
     {
         echo $this->buildOperateMenu($suite, 'view');
 
@@ -47,7 +47,7 @@
       <div class='panel'>
         <?php $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');?>
         <?php $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');?>
-        <?php $hasCheckbox    = ($canBatchEdit && $canBatchUnlink);?>
+        <?php $hasCheckbox    = ($changeAllowed and $canBatchEdit and $canBatchUnlink);?>
         <?php $vars = "suiteID=$suite->id&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <table class='table has-sort-head' id='caseList'>
           <thead>
@@ -97,13 +97,16 @@
               <td><?php echo $case->stepNumber;?></td>
               <td class='c-actions'>
                 <?php
-                if(common::hasPriv('testsuite', 'unlinkCase', $suite))
+                if($changeAllowed)
                 {
-                    $unlinkURL = $this->createLink('testsuite', 'unlinkCase', "suiteID=$suite->id&caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"caseList\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testsuite->unlinkCase}' class='btn'");
+                    if(common::hasPriv('testsuite', 'unlinkCase', $suite))
+                    {
+                        $unlinkURL = $this->createLink('testsuite', 'unlinkCase', "suiteID=$suite->id&caseID=$case->id&confirm=yes");
+                        echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"caseList\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testsuite->unlinkCase}' class='btn'");
+                    }
+                    if(common::hasPriv('testtask', 'runCase')) echo html::a($this->createLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version"), '<i class="icon-testtask-runCase icon-play"></i>', '', "class='btn runCase iframe' data-width='95%' title={$lang->testtask->runCase}");
+                    common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $suite, 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
                 }
-                if(common::hasPriv('testtask', 'runCase')) echo html::a($this->createLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version"), '<i class="icon-testtask-runCase icon-play"></i>', '', "class='btn runCase iframe' data-width='95%' title={$lang->testtask->runCase}");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $suite, 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
                 ?>
               </td>
             </tr>
@@ -112,7 +115,7 @@
           <?php endif;?>
         </table>
         <div class='table-footer'>
-          <?php if($cases):?>
+          <?php if($cases and $changeAllowed):?>
           <?php if($hasCheckbox):?>
           <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
           <?php endif;?>

@@ -57,8 +57,8 @@
           ?>
         </div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug));?>
+      <?php if(!common::checkParentObjectClosed('bug', $bug)) $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
     </div>
     <?php $this->printExtendFields($bug, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>

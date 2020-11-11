@@ -76,6 +76,7 @@
         <td><?php echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a($this->createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;?></td>
         <td><?php echo $run->stepNumber;?></td>
         <td class='c-actions'>
+          <?php if($changeAllowed):?>
           <?php common::printIcon('testtask', 'runCase', "runID=$run->id&caseID=$run->case&version=$run->caseVersion", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");?>
           <?php common::printIcon('testcase', 'edit', "caseID=$run->case", '', 'list');?>
           <?php
@@ -85,6 +86,7 @@
               echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
           }
           ?>
+          <?php endif;?>
         </td>
       </tr>
       <?php $i++;?>
