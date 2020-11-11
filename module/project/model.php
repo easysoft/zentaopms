@@ -869,25 +869,28 @@ class projectModel extends model
      */
     public function getProjectsByProgram($program)
     {
-        $projects = $this->dao->select('t1.*, t3.name as productName')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-            ->where('t1.parent')->eq((int)$program->id)
+        $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->where('t1.project')->eq((int)$program->id)
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy('t1.order desc')
+            ->orderBy('t1.id_desc')
             ->fetchAll('id');
 
+        /* The waterfall model displays hierarchies and associated products. */
         if($program->model == 'waterfall')
         {
             foreach($projects as $projectID => $project)
             {
-                if($project->parent and isset($projects[$project->id]) and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
+                if($project->parent and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
             }
-            if($program->product == 'multiple')
+
+            $products = $this->loadModel('product')->getProductsByProject($program->id);
+            foreach($projects as $projectID => $project)
             {
-                foreach($projects as $projectID => $project) $projects[$projectID]->name = $project->productName . '/' . $project->name;
+                if(isset($products[$project->productID])) $projects[$projectID]->name = $products[$project->productID] . '/' . $project->name;
             }
-            foreach($projects as $projectID => $project) unset($projects[$project->parent]);
+
+            foreach($projects as $project) if($project->grade == 2) unset($projects[$project->parent]);
         }
 
         return $projects;
