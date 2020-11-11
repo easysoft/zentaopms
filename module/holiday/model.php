@@ -423,7 +423,7 @@ class holidayModel extends model
     {
         $updateTaskList = $this->dao->select('id, realBegan, finishedDate')
             ->from(TABLE_TASK)
-            ->where('realBegan')->between($beginDate, $endDate)
+            ->where('realStarted')->between($beginDate, $endDate)
             ->orWhere("date_format(finishedDate,'%Y-%m-%d')")->between($beginDate, $endDate)
             ->orWhere("(realBegan < '$beginDate' AND date_format(finishedDate,'%Y-%m-%d') > '$endDate')")
             ->andWhere('status')->ne('done')
