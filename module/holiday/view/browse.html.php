@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class='main-col main-table'>
-  <?php if($holidays):?>
+  <?php if(!empty($holidays)):?>
     <table class='table text-center'>
       <thead>
         <tr class='text-center'>
