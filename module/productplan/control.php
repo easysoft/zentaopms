@@ -249,6 +249,9 @@ class productplan extends control
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = !common::checkParentObjectClosed('plan', $plan);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -276,19 +279,20 @@ class productplan extends control
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $planStories;
         $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->products    = $products;
-        $this->view->summary     = $this->product->summary($this->view->planStories);
-        $this->view->plan        = $plan;
-        $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans       = $this->productplan->getPairs($plan->product, $plan->branch);
-        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->link        = $link;
-        $this->view->param       = $param;
-        $this->view->storyPager  = $storyPager;
-        $this->view->bugPager    = $bugPager;
+        $this->view->products      = $products;
+        $this->view->summary       = $this->product->summary($this->view->planStories);
+        $this->view->plan          = $plan;
+        $this->view->actions       = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans         = $this->productplan->getPairs($plan->product, $plan->branch);
+        $this->view->modules       = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->type          = $type;
+        $this->view->orderBy       = $orderBy;
+        $this->view->link          = $link;
+        $this->view->param         = $param;
+        $this->view->storyPager    = $storyPager;
+        $this->view->bugPager      = $bugPager;
+        $this->view->changeAllowed = $changeAllowed;
         $this->display();
     }
 

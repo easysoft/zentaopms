@@ -1835,19 +1835,24 @@ class project extends control
         $stories = $this->loadModel('story')->getProjectStories($projectID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         /* Get project's product. */
         $productID = 0;
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
-        $this->view->title      = $this->lang->project->storyKanban;
-        $this->view->position[] = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->storyKanban;
-        $this->view->stories    = $this->story->getKanbanGroupData($stories);
-        $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projectID  = $projectID;
-        $this->view->project    = $project;
-        $this->view->productID  = $productID;
+        $this->view->title         = $this->lang->project->storyKanban;
+        $this->view->position[]    = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
+        $this->view->position[]    = $this->lang->project->storyKanban;
+        $this->view->stories       = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projectID     = $projectID;
+        $this->view->project       = $project;
+        $this->view->productID     = $productID;
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }
