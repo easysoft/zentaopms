@@ -57,7 +57,7 @@
             <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <div class="actions">
-              <?php if(common::checkParentObjectClosed('doc', $object)):?>
+              <?php if(common::checkObjectChangeAllowed('doc', $object)):?>
               <?php if(common::hasPriv('doc', 'collect')):?>
               <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$libID&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
               <?php endif;?>

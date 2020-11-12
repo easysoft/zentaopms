@@ -2971,7 +2971,7 @@ class storyModel extends model
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
         /* Check the product is closed. */
-        $isClosedProject = common::checkParentObjectClosed('story', $story);
+        $changeAllowed = common::checkObjectChangeAllowed('story', $story);
 
         $canBatchEdit         = common::hasPriv('story', 'batchEdit');
         $canBatchClose        = common::hasPriv('story', 'batchClose');
@@ -3046,7 +3046,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    $disabled = $isClosedProject ? 'disabled' : '';
+                    $disabled = $changeAllowed ? '' : 'disabled';
                     echo html::checkbox('storyIdList', array($story->id => ''), '', $disabled) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 }
                 else
@@ -3168,7 +3168,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if(!$isClosedProject)
+                if($changeAllowed)
                 {
                     $vars = "story={$story->id}";
                     common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');

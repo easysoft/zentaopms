@@ -402,7 +402,7 @@ class testtask extends control
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Determines whether an object is editable. */
-        $changeAllowed = common::checkParentObjectClosed('testtask', $task) ? false : true;
+        $changeAllowed = common::checkObjectChangeAllowed('testtask', $task);
 
         if($this->cookie->preTaskID != $taskID)
         {
@@ -553,7 +553,7 @@ class testtask extends control
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
         /* Determines whether an object is editable. */
-        $changeAllowed = common::checkParentObjectClosed('testtask', $task) ? false : true;
+        $changeAllowed = common::checkObjectChangeAllowed('testtask', $task);
 
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);

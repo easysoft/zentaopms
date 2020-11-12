@@ -64,7 +64,7 @@
         <td class='text-left' title='<?php echo $taskName?>'><?php echo $taskName;?></td>
         <td class='c-actions'>
           <?php
-          if(!common::checkParentObjectClosed('report', $report))
+          if(common::checkObjectChangeAllowed('report', $report))
           {
               common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
               common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'trash', 'hiddenwin');

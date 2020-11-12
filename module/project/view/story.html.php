@@ -148,8 +148,8 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $isClosedProject = common::checkParentObjectClosed('story', $story);
-          $disabled        = $isClosedProject ? 'disabled' : '';
+          $changeAllowed = common::checkObjectChangeAllowed('story', $story);
+          $disabled      = $changeAllowed ? '' : 'disabled';
 
           $storyLink       = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
           $totalEstimate  += $story->estimate;
@@ -198,7 +198,7 @@
             </td>
             <td class='c-actions'>
               <?php
-              if(!$isClosedProject)
+              if($changeAllowed)
               {
                   $hasDBPriv = common::hasDBPriv($project, 'project');
                   $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
