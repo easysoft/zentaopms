@@ -1,3 +1,4 @@
 .todoType {margin-top: 6px;}
 .dateSwitcher {margin-top: 6px;}
 .form-horizontal .required::after{right: -10px;}
+.tab-content .tab-pane .input-group{padding:5px 0px; width:310px}

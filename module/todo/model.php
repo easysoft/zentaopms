@@ -31,7 +31,7 @@ class todoModel extends model
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
             ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
             ->setIF($this->post->type == 'feedback' and $this->post->feedback, 'idvalue', $this->post->feedback)
-            ->setIF($this->post->date == false,  'date', date('Y-m-d'))
+            ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
@@ -47,6 +47,8 @@ class todoModel extends model
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
         {
+            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
             {
@@ -192,6 +194,8 @@ class todoModel extends model
 
         if(!empty($oldTodo->cycle))
         {
+            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
             {
@@ -530,7 +534,7 @@ class todoModel extends model
             if(!isset($activedUsers[$todo->account])) continue;
 
             $todo->config = json_decode($todo->config);
-            $begin      = isset($todo->config->appointDate) ? $today : $todo->config->begin;
+            $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
@@ -572,7 +576,7 @@ class todoModel extends model
                     if(isset($todo->config->appointDate))
                     {
                         $date        = $today;
-                        $appointDate = $todo->config->appoint->month .'-'. $todo->config->appoint->day;
+                        $appointDate = $todo->config->appoint->month . '-' . $todo->config->appoint->day;
 
                         if(!empty($lastCycle) and !isset($todo->config->cycleYear)) continue;
 

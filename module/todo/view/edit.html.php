@@ -47,11 +47,37 @@
           </ul>
           <div class="tab-content">
             <div class="tab-pane <?php if($todo->config->type == 'day') echo 'active'?>" id="day">
-              <div class='input-group w-150px'>
+              <div class='input-group w-250px'>
                 <span class='input-group-addon'><?php echo $lang->todo->every;?></span>
-                <?php echo html::input('config[day]', isset($todo->config->day) ? $todo->config->day : 1, "class='form-control'")?>
+                <?php echo html::input('config[day]', isset($todo->config->day) ? $todo->config->day : '', "class='form-control' id='dayInput'")?>
                 <span class='input-group-addon'><?php echo $lang->todo->cycleDay;?></span>
+                <span class='input-group-addon'>
+                  <div class='checkbox-primary w-50px'>
+                    <input type='checkbox' name='config[appointDate]' value='1' onclick='showAppointDate(this);' <?php if(isset($todo->config->appointDate)) echo 'checked';?>/>
+                    <label for='config[appointDate]'><?php echo $lang->todo->appoint;?></label>
+                  </div>
+                </span>
               </div>
+              <div class='input-group appoint hidden'>
+                <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
+                <?php echo html::select('config[appoint][month]', $lang->todo->appointMonth, isset($todo->config->appoint->month) ? $todo->config->appoint->month : '', "class='form-control' onchange='setDays(this.value);'");?>
+                <span class='input-group-addon'><?php echo $lang->todo->cycleMonth;?></span>
+                <?php echo html::select('config[appoint][day]', $lang->todo->appointDay, isset($todo->config->appoint->day) ? $todo->config->appoint->day : '', "class='form-control' id='appointDay'");?>
+                <span class='input-group-addon'><?php echo $lang->todo->day;?></span>
+                <span class='input-group-addon'>
+                  <div class='checkbox-primary w-50px'>
+                  <input type='checkbox' name='config[cycleYear]' value='1' <?php if(isset($todo->config->cycleYear)) echo 'checked';?> />
+                    <label for='config[cycleYear]'><?php echo $lang->todo->everyYear;?></label>
+                  </div>
+                </span>
+              </div>
+              <?php if(isset($todo->config->appointDate)):?>
+                <script>
+                  $('#date').attr('disabled','disabled');
+                  $('#dayInput').attr('disabled','disabled');
+                  $('.appoint').removeClass('hidden');
+                </script>
+              <?php endif;?>
             </div>
             <div class="tab-pane <?php if($todo->config->type == 'week') echo 'active'?>" id="week">
               <?php echo html::checkbox('config[week]', $lang->todo->dayNames, isset($todo->config->week) ? $todo->config->week : '')?>

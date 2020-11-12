@@ -149,7 +149,18 @@
                 <?php
                 if($todo->config->type == 'day')
                 {
-                    echo $lang->todo->every . $todo->config->day . $lang->day;
+                    if(isset($todo->config->day)) echo $lang->todo->every . $todo->config->day . $lang->day;
+
+                    if(isset($todo->config->appointDate))
+                    {
+                        $appointNotes = $lang->todo->appoint;
+
+                        if(isset($todo->config->cycleYear)) $appointNotes .= $lang->todo->everyYear;
+
+                        $appointNotes .= $todo->config->appoint->month . $lang->todo->cycleMonth . $todo->config->appoint->day . $lang->todo->day;
+
+                        echo $appointNotes;
+                    }
                 }
                 elseif($todo->config->type == 'week')
                 {
