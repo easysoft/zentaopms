@@ -853,8 +853,14 @@ class doc extends control
         setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
+
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $changeAllowed = false;
+        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $changeAllowed = false;
+
         if($from == 'product')
         {
             $this->lang->doc->menu      = $this->lang->product->menu;
@@ -891,10 +897,11 @@ class doc extends control
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
-        $this->view->type   = $type;
-        $this->view->object = $object;
-        $this->view->from   = $from;
-        $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->type          = $type;
+        $this->view->object        = $object;
+        $this->view->from          = $from;
+        $this->view->libs          = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->changeAllowed = $changeAllowed;
         $this->display();
     }
 }
