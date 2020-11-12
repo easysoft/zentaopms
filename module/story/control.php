@@ -1063,6 +1063,25 @@ class story extends control
     }
 
     /**
+     * Batch conversion of stories into tasks.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function batchToTask($projectID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->story->batchToTask($projectID);
+
+            if(dao::isError()) die(js::error(dao::getError()) . js::locate('back'));
+
+            if(!dao::isError()) die(js::alert($this->lang->saveSuccess) . js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+        }
+    }
+
+    /**
      * Batch change the plan of story.
      *
      * @param  int    $planID

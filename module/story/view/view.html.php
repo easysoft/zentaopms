@@ -65,7 +65,7 @@
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
-      <?php if(!common::checkParentObjectClosed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php if(common::checkObjectChangeAllowed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
       <?php if(!empty($story->children)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->story->children;?></div>
@@ -131,7 +131,7 @@
             $divideLang = ($story->type == 'story' || !$story->type) ? $lang->story->subdivide : $lang->story->splitRequirent; 
             $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
             $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
+            if(common::hasPriv('story', 'batchCreate', $story)) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
         }
 
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);

@@ -75,8 +75,8 @@
       <tbody>
       <?php foreach($bugs as $bug):?>
       <?php
-      $isClosedProject = common::checkParentObjectClosed('bug', $bug);
-      $disabled        = $isClosedProject ? 'disabled' : '';
+      $changeAllowed = common::checkObjectChangeAllowed('bug', $bug);
+      $disabled      = $changeAllowed ? '' : 'disabled';
       ?>
       <tr>
         <td class='cell-id'>
@@ -101,7 +101,7 @@
         <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
         <td class='c-actions'>
           <?php
-          if(!$isClosedProject)
+          if($changeAllowed)
           {
               $params = "bugID=$bug->id";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);

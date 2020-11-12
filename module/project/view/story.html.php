@@ -117,8 +117,9 @@
           $canBatchClose        = common::hasPriv('story', 'batchClose');
           $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
           $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
+          $canBatchToTask       = common::hasPriv('story', 'batchToTask');
 
-          $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink);
+          $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask);
           ?>
           <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
@@ -148,8 +149,8 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $isClosedProject = common::checkParentObjectClosed('story', $story);
-          $disabled        = $isClosedProject ? 'disabled' : '';
+          $changeAllowed = common::checkObjectChangeAllowed('story', $story);
+          $disabled      = $changeAllowed ? '' : 'disabled';
 
           $storyLink       = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
           $totalEstimate  += $story->estimate;
@@ -198,7 +199,7 @@
             </td>
             <td class='c-actions'>
               <?php
-              if(!$isClosedProject)
+              if($changeAllowed)
               {
                   $hasDBPriv = common::hasDBPriv($project, 'project');
                   $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
@@ -237,12 +238,21 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <?php endif;?>
         <div class='table-actions btn-toolbar'>
+          <div class='btn-group dropup'>
+            <?php
+            $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
+            echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
+            ?>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <ul class='dropdown-menu'>
+              <?php
+              $class = $canBatchToTask ? '' : "class='disabled'";
+              echo "<li $class>" . html::a('#batchToTask', $lang->story->toTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
+              ?>
+            </ul>
+          </div>
           <?php
-          if($canBatchEdit)
-          {
-              $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
-              echo html::commonButton($lang->edit, "data-form-action='$actionLink'");
-          }
           if($canBatchClose)
           {
               $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
@@ -294,6 +304,43 @@
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="batchToTask">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->story->batchToTask;?></h4><?php echo '(' . $lang->story->batchToTaskTips . ')';?>
+      </div>
+      <div class="modal-body">
+        <form method='post' action='<?php echo $this->createLink('story', 'batchToTask', "projectID=$project->id");?>'>
+          <table class='table table-form'>
+            <tr>
+              <th><?php echo $lang->task->type?></th>
+              <td><?php echo html::select('type', $lang->task->typeList, '', "class='form-control chosen' required");?></td>
+              <td></td>
+            </tr>
+            <?php if($lang->hourCommon !== $lang->workingHour):?>
+            <tr>
+              <th><?php echo $lang->story->oneUnit . $lang->hourCommon?></th>
+              <td class="col-main"><?php echo html::input('hourPointValue', '', "class='form-control' required");?></td>
+              <td><?php echo $lang->project->burnYUnit?></td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td><?php echo html::hidden('storyIdList', '');?></td>
+            </tr>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::submitButton($lang->story->toTask, '', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
   </div>

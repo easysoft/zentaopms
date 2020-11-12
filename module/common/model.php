@@ -1490,7 +1490,7 @@ EOD;
         global $app, $lang;
 
         /* Check the parent object is closed. */
-        if(commonModel::checkParentObjectClosed($module, $object)) return false;
+        if(!commonModel::checkObjectChangeAllowed($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -1850,7 +1850,7 @@ EOD;
      * @access public
      * @return bool
      */
-    public static function checkParentObjectClosed($module, $object = null)
+    public static function checkObjectChangeAllowed($module, $object = null)
     {
         global $app, $config;
 
@@ -1859,7 +1859,7 @@ EOD;
         {
             $productID = trim($object->product, ',');
             $product   = $app->control->loadModel('product')->getByID($productID);
-            if($product->status == 'closed') return true;
+            if($product->status == 'closed') return false;
 
             /* Get the projects associated with the story. */
             if($module == 'story' and empty($object->project))
@@ -1879,11 +1879,11 @@ EOD;
             $projects      = $app->control->loadModel('project')->getByIDList($projectIDList);
             foreach($projects as $project)
             {
-                if($project->status == 'closed') return true;
+                if($project->status == 'closed') return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**

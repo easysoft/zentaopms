@@ -75,8 +75,8 @@
       <?php $this->loadModel('file');?>
       <?php foreach($plans as $plan):?>
       <?php
-      $isClosedProject = common::checkParentObjectClosed('plan', $plan);
-      $disabled        = $isClosedProject ? 'disabled' : '';
+      $changeAllowed = common::checkObjectChangeAllowed('plan', $plan);
+      $disabled      = $changeAllowed ? '' : 'disabled';
 
       $plan = $this->file->replaceImgURL($plan, 'desc');
       if($plan->parent == '-1')

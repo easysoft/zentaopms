@@ -34,7 +34,7 @@
             <td class="c-name"><?php echo html::a($libLink, $lib->name);?></td>
             <td class="c-num"><?php echo  $lib->allCount . $lang->doc->item;?></td>
             <td class="c-actions">
-              <?php if($libID != 'project' and $libID != 'files'):?>
+              <?php if($changeAllowed and $libID != 'project' and $libID != 'files'):?>
               <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
               <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
               <?php if(common::hasPriv('doc', 'collect')):?>

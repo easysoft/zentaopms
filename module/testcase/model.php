@@ -1409,7 +1409,7 @@ class testcaseModel extends model
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
         /* Check the product is closed. */
-        $isClosedProject = common::checkParentObjectClosed('case', $case);
+        $changeAllowed = common::checkObjectChangeAllowed('case', $case);
 
         $canBatchRun                = common::hasPriv('testtask', 'batchRun');
         $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
@@ -1450,7 +1450,7 @@ class testcaseModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    $disabled = $isClosedProject ? 'disabled' : '';
+                    $disabled = $changeAllowed ? '' : 'disabled';
                     echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
                 }
                 else
@@ -1547,7 +1547,7 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                if(!$isClosedProject)
+                if($changeAllowed)
                 {
                     if($case->needconfirm or $browseType == 'needconfirm')
                     {

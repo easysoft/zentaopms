@@ -1413,6 +1413,51 @@ class storyModel extends model
     }
 
     /**
+     * Batch to task.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function batchToTask($projectID)
+    {
+        /* load Module and get the data from the post. */
+        $this->loadModel('action');
+        $data = fixer::input('post')->get();
+
+        /* Judge required. */
+        $message = '';
+        if(empty($data->type)) $message  = sprintf($this->lang->error->notempty, $this->lang->task->type);
+        if(isset($data->hourPointValue) and empty($data->hourPointValue)) $message .= sprintf($this->lang->error->notempty, $this->lang->workingHour);
+        if($message) die(js::error($message) . js::locate(helper::createLink('project', 'story', "projectID=$projectID"), 'parent'));
+
+        /* Create tasks. */
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($data->storyIdList)->fetchAll();
+        foreach($stories as $story)
+        {
+            $task = new stdclass();
+            $task->project    = $projectID;
+            $task->name       = $story->title;
+            $task->module     = $story->module;
+            $task->story      = $story->id;
+            $task->type       = $data->type;
+            $task->pri        = $story->pri;
+            $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
+            $task->openedBy   = $this->app->user->account;
+            $task->openedDate = helper::now();
+
+            $this->dao->insert(TABLE_TASK)->data($task)
+                ->autoCheck()
+                ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->exec();
+
+            if(dao::isError()) return false;
+            $taskID = $this->dao->lastInsertID();
+            $this->action->create('task', $taskID, 'Opened', '');
+        }
+    }
+
+    /**
      * Assign story.
      * 
      * @param  int    $storyID 
@@ -2971,7 +3016,7 @@ class storyModel extends model
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
         /* Check the product is closed. */
-        $isClosedProject = common::checkParentObjectClosed('story', $story);
+        $changeAllowed = common::checkObjectChangeAllowed('story', $story);
 
         $canBatchEdit         = common::hasPriv('story', 'batchEdit');
         $canBatchClose        = common::hasPriv('story', 'batchClose');
@@ -3046,7 +3091,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    $disabled = $isClosedProject ? 'disabled' : '';
+                    $disabled = $changeAllowed ? '' : 'disabled';
                     echo html::checkbox('storyIdList', array($story->id => ''), '', $disabled) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 }
                 else
@@ -3168,7 +3213,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if(!$isClosedProject)
+                if($changeAllowed)
                 {
                     $vars = "story={$story->id}";
                     common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');

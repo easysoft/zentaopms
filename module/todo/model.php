@@ -47,6 +47,8 @@ class todoModel extends model
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
         {
+            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
             {
@@ -192,6 +194,8 @@ class todoModel extends model
 
         if(!empty($oldTodo->cycle))
         {
+            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
             {
@@ -546,10 +550,10 @@ class todoModel extends model
             $newTodo->name       = $todo->name;
             $newTodo->desc       = $todo->desc;
             $newTodo->status     = 'wait';
-            $newTodo->private    = $todo->private;
-            $newTodo->assignedTo = $todo->assignedTo;
-            $newTodo->assignedBy = $todo->assignedBy;
-            if($todo->assignedTo) $newTodo->assignedDate = $now;
+            $newTodo->private    = isset($todo->private) ? $todo->private : '';
+            $newTodo->assignedTo = isset($todo->assignedTo) ? $todo->assignedTo : '';
+            $newTodo->assignedBy = isset($todo->assignedBy) ? $todo->assignedBy : '';
+            if(isset($todo->assignedTo) and $todo->assignedTo) $newTodo->assignedDate = $now;
 
             $start  = strtotime($begin);
             $finish = strtotime("$today +{$beforeDays} days");
@@ -561,11 +565,23 @@ class todoModel extends model
 
                 if($todo->config->type == 'day')
                 {
-                    $day = (int)$todo->config->day;
-                    if($day <= 0) continue;
+                    if(isset($todo->config->day))
+                    {
+                        $day = (int)$todo->config->day;
+                        if($day <= 0) continue;
 
-                    if(empty($lastCycle))        $date = date('Y-m-d', strtotime("{$today} +" . ($day - 1) . " days"));
-                    if(!empty($lastCycle->date)) $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
+                        if(empty($lastCycle))        $date = date('Y-m-d', strtotime("{$today} +" . $day . " days"));
+                        if(!empty($lastCycle->date)) $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
+                    }
+                    if(isset($todo->config->appointDate))
+                    {
+                        $date        = $today;
+                        $appointDate = $todo->config->appoint->month . '-' . $todo->config->appoint->day;
+
+                        if(!empty($lastCycle) and !isset($todo->config->cycleYear)) continue;
+
+                        if(date('m-d', strtotime($date)) != $appointDate) continue;
+                    }
                 }
                 elseif($todo->config->type == 'week')
                 {
@@ -586,11 +602,12 @@ class todoModel extends model
                     }
                 }
 
-                if(!$date)                         continue;
-                if($date < $todo->config->begin)   continue;
-                if($date < date('Y-m-d'))          continue;
-                if($date > date('Y-m-d', $finish)) continue;
-                if(!empty($end) && $date > $end)   continue;
+                if(!$date)                                     continue;
+                if($date < $todo->config->begin)               continue;
+                if($date < date('Y-m-d'))                      continue;
+                if($date > date('Y-m-d', $finish))             continue;
+                if(!empty($end) && $date > $end)               continue;
+                if($lastCycle and ($date == $lastCycle->date)) continue;
 
                 $newTodo->date = $date;
 

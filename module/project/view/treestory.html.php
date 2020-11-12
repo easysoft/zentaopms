@@ -32,7 +32,7 @@
     <?php echo !empty($story->verify) ? $story->verify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
-<?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
+<?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
 
 <details class="detail" open>
   <summary class="detail-title"><?php echo $lang->story->legendBasicInfo;?></summary>
@@ -341,7 +341,7 @@
     </table>
   </div>
 </details>
-<?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+<?php if(common::checkObjectChangeAllowed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
 <?php include '../../common/view/action.html.php';?>
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>

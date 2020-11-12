@@ -44,13 +44,16 @@
 
         echo "<div id='bysuiteTab' class='btn-group'>";
         echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
-        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
-
-        if(empty($suiteList))
+        if(empty($this->config->global->closedProductStatus) or $product->status != 'closed')
         {
-            echo '<li>';
-            echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
-            echo '</li>';
+            echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+
+            if(empty($suiteList))
+            {
+                echo '<li>';
+                echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
+                echo '</li>';
+            }
         }
 
         foreach($suiteList as $suiteID => $suite)

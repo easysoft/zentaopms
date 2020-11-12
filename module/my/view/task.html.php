@@ -61,12 +61,12 @@
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <?php $isClosedProject = common::checkParentObjectClosed('task', $task);?>
+        <?php $changeAllowed = common::checkObjectChangeAllowed('task', $task);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' <?php if($isClosedProject) echo 'disabled';?>/>
+              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' <?php if(!$changeAllowed) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -93,7 +93,7 @@
           </td>
           <td class='c-actions'>
             <?php
-            if(!$isClosedProject)
+            if($changeAllowed)
             {
                 if($task->needConfirm)
                 {

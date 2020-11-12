@@ -58,8 +58,12 @@ $lang->story->batchChangeStage  = "Thay đổi giai đoạn hàng loạt";
 $lang->story->batchAssignTo     = "Bàn giao hàng loạt";
 $lang->story->batchChangeModule = "Thay đổi Module hàng loạt";
 $lang->story->viewAll           = "Xem tất cả";
-$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
+$lang->story->toTask            = 'Convert to Task';
+$lang->story->batchToTask       = 'Batch Convert to Task';
+
+$lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory     = 'Story %s is closed and will not be closed.';
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task.";
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
@@ -121,6 +125,7 @@ $lang->story->allStories     = 'Tất cả câu chuyện';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
+$lang->story->oneUnit        = 'One Unit';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';

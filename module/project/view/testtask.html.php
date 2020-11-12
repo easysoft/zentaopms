@@ -74,8 +74,8 @@
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
         <?php
-        $isClosedProject = common::checkParentObjectClosed('task', $task);
-        $disabled        = $isClosedProject ? 'disabled' : '';
+        $changeAllowed = common::checkObjectChangeAllowed('task', $task);
+        $disabled      = $changeAllowed ? '' : 'disabled';
         ?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
           <?php if($task == reset($productTasks)):?>
@@ -102,7 +102,7 @@
           </td>
           <td class='c-actions'>
             <?php
-            if(!$isClosedProject)
+            if($changeAllowed)
             {
                 common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');

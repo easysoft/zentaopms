@@ -57,6 +57,7 @@ $lang->todo->private      = 'Privé';
 $lang->todo->cycleDay     = 'Jour';
 $lang->todo->cycleWeek    = 'Semaine';
 $lang->todo->cycleMonth   = 'Mois';
+$lang->todo->day          = 'Jour';
 $lang->todo->assignedTo   = 'AssignedTo';
 $lang->todo->assignedBy   = 'AssignedBy';
 $lang->todo->finishedBy   = 'FinishedBy';
@@ -65,9 +66,13 @@ $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
 
-$lang->todo->every      = 'Chaque';
-$lang->todo->beforeDays = "<span class='input-group-addon'>Créer automatiquement une alerte </span>%s<span class='input-group-addon'>jours avant</span>";
-$lang->todo->dayNames   = array(1 => 'Lundi', 2 => 'Mardi', 3 => 'Mercredi', 4 => 'Jeudi', 5 => 'Vendredi', 6 => 'Samedi', 0 => 'Dimanche');
+$lang->todo->every        = 'Chaque';
+$lang->todo->appoint      = 'Désigner';
+$lang->todo->everyYear    = 'Tous les ans';
+$lang->todo->beforeDays   = "<span class='input-group-addon'>Créer automatiquement une alerte </span>%s<span class='input-group-addon'>jours avant</span>";
+$lang->todo->dayNames     = array(1 => 'Lundi', 2 => 'Mardi', 3 => 'Mercredi', 4 => 'Jeudi', 5 => 'Vendredi', 6 => 'Samedi', 0 => 'Dimanche');
+$lang->todo->appointMonth = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+$lang->todo->appointDay   = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
 $lang->todo->confirmBug   = "Cette action est liée au Bug #%s. Voulez-vous l'éditer ?";
 $lang->todo->confirmTask  = "Cette action est liée à la Tâche #%s. Voulez-vous l'éditer ?";

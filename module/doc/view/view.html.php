@@ -135,7 +135,7 @@ js::set('docID', $doc->id);
           <?php endforeach;?>
         </div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -214,7 +214,7 @@ js::set('docID', $doc->id);
       </details>
     </div>
     <div class='cell'>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
+      <?php if(common::checkObjectChangeAllowed('doc', $doc)) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
