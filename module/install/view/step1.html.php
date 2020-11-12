@@ -117,7 +117,7 @@
             ?>
           </td>
         </tr>
-        <?php if($checkSession):?>
+        <?php if($checkSession and $sessionInfo['path']):?>
         <tr>
           <th><?php echo $lang->install->session;?></th>
           <td>
@@ -128,16 +128,9 @@
           </td>
           <td class='<?php echo $sessionResult;?>'><?php echo $lang->install->$sessionResult;?></td>
           <td class='text-left f-12px'>
-            <?php 
-            if($sessionInfo['path'])
-            {
-                if(!$sessionInfo['exists'])   printf($mkdir, $sessionInfo['path'], $sessionInfo['path']);
-                if(!$sessionInfo['writable']) printf($chmod, $sessionInfo['path'], $sessionInfo['path']);
-            }
-            else
-            {
-                echo $lang->install->sessionFail; 
-            }
+            <?php
+            if(!$sessionInfo['exists'])   printf($mkdir, $sessionInfo['path'], $sessionInfo['path']);
+            if(!$sessionInfo['writable']) printf($chmod, $sessionInfo['path'], $sessionInfo['path']);
             ?>
           </td>
         </tr>

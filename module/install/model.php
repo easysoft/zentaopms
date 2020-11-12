@@ -187,9 +187,9 @@ class installModel extends model
      */
     public function getTmpRoot()
     {
-        $result['path']    = $this->app->getTmpRoot();
-        $result['exists']  = is_dir($result['path']);
-        $result['writable']= is_writable($result['path']);
+        $result['path']     = $this->app->getTmpRoot();
+        $result['exists']   = is_dir($result['path']);
+        $result['writable'] = is_writable($result['path']);
         return $result;
     }
 
