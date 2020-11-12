@@ -150,15 +150,6 @@ class router extends baseRouter
             $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
             $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
-            $model = new stdclass();
-            $model->model = 'scrum';
-            if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
-
-            if(isset($model->model) && $model->model == 'waterfall')
-            {
-                $projectIndex = 2;
-            }
-
             foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
@@ -172,6 +163,15 @@ class router extends baseRouter
                     if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
                     if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
                 }
+            }
+
+            $model = new stdclass();
+            $model->model = 'scrum';
+            if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
+
+            if(isset($model->model) && $model->model == 'waterfall')
+            {
+                $projectIndex = 2;
             }
 
             $config->storyCommon = $storyIndex;

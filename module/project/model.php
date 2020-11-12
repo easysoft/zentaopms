@@ -872,6 +872,7 @@ class projectModel extends model
         $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t1.project')->eq((int)$program->id)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('t1.id_desc')
             ->fetchAll('id');
