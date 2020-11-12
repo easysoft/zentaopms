@@ -51,10 +51,29 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="day">
-                <div class='input-group w-150px'>
+                <div class='input-group w-250px'>
                   <span class='input-group-addon'><?php echo $lang->todo->every;?></span>
-                  <?php echo html::input('config[day]', 1, "class='form-control'")?>
+                  <?php echo html::input('config[day]', '', "class='form-control' id='dayInput'");?>
                   <span class='input-group-addon'><?php echo $lang->todo->cycleDay;?></span>
+                  <span class='input-group-addon'>
+                    <div class='checkbox-primary w-50px'>
+                      <input type='checkbox' name='config[appointDate]' value='1' onclick='showAppointDate(this);' />
+                      <label for='config[appointDate]'><?php echo $lang->todo->appoint;?></label>
+                    </div>
+                  </span>
+                </div>
+                <div class='input-group appoint hidden'>
+                  <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
+                  <?php echo html::select('config[appoint][month]', $lang->todo->appointMonth, '', "class='form-control' onchange='setDays(this.value);'");?>
+                  <span class='input-group-addon'><?php echo $lang->todo->cycleMonth;?></span>
+                  <?php echo html::select('config[appoint][day]', $lang->todo->appointDay, '', "class='form-control' id='appointDay'");?>
+                  <span class='input-group-addon'><?php echo $lang->todo->day;?></span>
+                  <span class='input-group-addon'>
+                    <div class='checkbox-primary w-50px'>
+                      <input type='checkbox' name='config[cycleYear]' value='1' />
+                      <label for='config[cycleYear]'><?php echo $lang->todo->everyYear;?></label>
+                    </div>
+                  </span>
                 </div>
               </div>
               <div class="tab-pane clearfix" id="week">

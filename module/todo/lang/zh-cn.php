@@ -57,6 +57,7 @@ $lang->todo->private      = '私人事务';
 $lang->todo->cycleDay     = '天';
 $lang->todo->cycleWeek    = '周';
 $lang->todo->cycleMonth   = '月';
+$lang->todo->day          = '日';
 $lang->todo->assignedTo   = '指派给';
 $lang->todo->assignedBy   = '由谁指派';
 $lang->todo->finishedBy   = '由谁完成';
@@ -65,9 +66,13 @@ $lang->todo->closedBy     = '由谁关闭';
 $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
 
-$lang->todo->every      = '间隔';
-$lang->todo->beforeDays = "<span class='input-group-addon'>提前</span>%s<span class='input-group-addon'>天生成待办</span>";
-$lang->todo->dayNames   = array(1 => '星期一', 2 => '星期二', 3 => '星期三', 4 => '星期四', 5 => '星期五', 6 => '星期六', 0 => '星期日');
+$lang->todo->every        = '间隔';
+$lang->todo->appoint      = '指定';
+$lang->todo->everyYear    = '每年';
+$lang->todo->beforeDays   = "<span class='input-group-addon'>提前</span>%s<span class='input-group-addon'>天生成待办</span>";
+$lang->todo->dayNames     = array(1 => '星期一', 2 => '星期二', 3 => '星期三', 4 => '星期四', 5 => '星期五', 6 => '星期六', 0 => '星期日');
+$lang->todo->appointMonth = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+$lang->todo->appointDay   = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
