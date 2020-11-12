@@ -58,7 +58,7 @@
   <div class='detail-content article-content'>
     <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
-  <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
+  <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false', 'object' => $task));?>
 </div>
 <div class='detail' open>
   <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
@@ -78,8 +78,8 @@
 </div>
 <?php endif;?>
 <?php endif;?>
-<?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
-<?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
+<?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
+<?php if(common::checkObjectChangeAllowed('task', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
 <?php include '../../common/view/action.html.php';?>
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>
