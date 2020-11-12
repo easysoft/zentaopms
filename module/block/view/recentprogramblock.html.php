@@ -48,14 +48,14 @@
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><?php common::printIcon('program', 'group', "programID=$program->id", $program, 'button', 'group');?></li>
-                <li><?php common::printIcon('program', 'manageMembers', "programID=$program->id", $program, 'button', 'persons');?></li>
-                <li><?php common::printicon('program', 'activate', "programid=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-                <li><?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "programID=$program->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
-                <li><?php common::printIcon('program', 'start',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'close',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-                <li><?php if(common::hasPriv('program', 'delete'))  echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i> " . $lang->delete, 'hiddenwin', "");?></li>
+                <li><?php common::printIcon('program', 'PRJGroup', "programID=$program->id", $program, 'button', 'group');?></li>
+                <li><?php common::printIcon('program', 'PRJManageMembers', "programID=$program->id", $program, 'button', 'persons');?></li>
+                <li><?php common::printicon('program', 'PRJActivate', "programid=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('program', 'PRJEdit',    "programID=$program->id", $program, 'button', ' icon-edit');?></li>
+                <li><?php common::printIcon('program', 'PRJStart',   "programID=$program->id", $program, 'button', ' icon-play', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'button', ' icon-pause', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('program', 'PRJClose',   "programID=$program->id", $program, 'button', ' icon-off', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('program', 'PRJDelete',  "programID=$program->id", $program, 'button', ' icon-trash', 'hiddenwin');?></li>
               </ul>
             </li>
           </nav>
