@@ -326,51 +326,6 @@ class program extends control
     }
 
     /**
-     * Manage program members.
-     *
-     * @param  int    $projectID
-     * @param  int    $dept
-     * @access public
-     * @return void
-     */
-    public function PGMManageMembers($projectID, $dept = '')
-    {
-        $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
-
-        $this->session->set('program', $projectID);
-        if(!empty($_POST))
-        {
-            $this->project->manageMembers($projectID);
-            die(js::locate($this->createLink('program', 'pgmbrowse'), 'parent'));
-        }
-
-        /* Load model. */
-        $this->loadModel('user');
-        $this->loadModel('dept');
-
-        $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
-        $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-        $currentMembers = $this->project->getTeamMembers($projectID);
-
-        $title      = $this->lang->program->PGMManageMembers . $this->lang->colon . $project->name;
-        $position[] = $this->lang->program->PGMManageMembers;
-
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->project        = $project;
-        $this->view->users          = $users;
-        $this->view->deptUsers      = $deptUsers;
-        $this->view->roles          = $roles;
-        $this->view->dept           = $dept;
-        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
-        $this->display();
-    }
-
-    /**
      * Program project list.
      *
      * @param  int    $programID
@@ -1078,8 +1033,7 @@ class program extends control
         $project        = $this->project->getById($projectID);
         $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-        $currentMembers = $this->project->getTeamMembers($projectID);
+        $deptUsers      = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
         $title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
         $position[] = $this->lang->program->PRJManageMembers;
@@ -1092,7 +1046,7 @@ class program extends control
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
+        $this->view->currentMembers = $this->project->getTeamMembers($projectID);;
         $this->display();
     }
 
