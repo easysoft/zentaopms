@@ -2050,8 +2050,8 @@ class storyModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
