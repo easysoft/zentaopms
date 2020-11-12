@@ -371,10 +371,12 @@ class treeModel extends model
      * @param  int    $startModule
      * @param  string $userFunc     the function used to create link
      * @param  string $extra        extra params
+     * @param  string $branch       product branch
+     * @param  string $extraParams  extra params
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
+    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0, $extraParams = '')
     {
         if($type == 'line') $rootID = 0;
 
@@ -408,7 +410,7 @@ class treeModel extends model
             {
                 $linkHtml = ($type == 'case' and !empty($extra)) ? '<a>' . $branch . '</a>' : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
-                if($type == 'story' or $type == 'bug') $linkHtml = html::a(inlink('browse', "productID=$rootID&branch=$branchID&browseType=bybranch"), $branch, "", "id=branch" . $branchID);
+                if($type == 'story' or $type == 'bug') $linkHtml = html::a(inlink('browse', "productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams), $branch, "", "id=branch" . $branchID);
                 if($firstBranch and $product->type != 'normal')
                 {
                     $linkHtml = '<a>' . $this->lang->product->branchName[$product->type] . '</a><ul><li>' . $linkHtml;

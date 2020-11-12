@@ -150,11 +150,11 @@ class product extends control
         {
             setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
             $browseType = 'unclosed';
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch, "&param=$param&storyType=$storyType");
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch);
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch, "&param=$param&storyType=$storyType");
         }
 
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);

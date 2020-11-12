@@ -452,6 +452,7 @@ class productModel extends model
         if(isset($currentProduct->type) && $currentProduct->type != 'normal')
         {
             $branches     = $this->loadModel('branch')->getPairs($productID);
+            $branch       = empty($branch) ? (int)$this->cookie->preBranch : $branch;
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 
