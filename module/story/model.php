@@ -1432,7 +1432,7 @@ class storyModel extends model
         if($message) die(js::error($message) . js::locate(helper::createLink('project', 'story', "projectID=$projectID"), 'parent'));
 
         /* Create tasks. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($data->storyIdList)->fetchAll();
+        $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
             $task = new stdclass();
@@ -1445,6 +1445,7 @@ class storyModel extends model
             $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
             $task->openedBy   = $this->app->user->account;
             $task->openedDate = helper::now();
+            $task->desc       = $story->spec;
 
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
