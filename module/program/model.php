@@ -276,6 +276,8 @@ class programModel extends model
             }
         }
 
+        $this->lang->project->name = $this->lang->program->PGMName;
+        $this->lang->project->code = $this->lang->program->PGMCode;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -1130,7 +1132,7 @@ class programModel extends model
             }
 
             /* Judge products not empty. */
-            if(!$_POST['products'][0]) 
+            if(!$_POST['products'][0])
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
@@ -1140,6 +1142,8 @@ class programModel extends model
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
         if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
+        $this->lang->project->name = $this->lang->program->PRJName;
+        $this->lang->project->code = $this->lang->program->PRJCode;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
