@@ -46,25 +46,16 @@ class workestimationModel extends model
      */
     public function save($program)
     {
-        $budget = $this->getBudget($program);
         $postBudget = fixer::input('post')->get();
         $postBudget->PRJ = $program;
 
-        if(empty($budget))
-        {
-            $this->dao->insert(TABLE_WORKESTIMATION)
-                ->batchcheck($this->config->workestimation->index->requiredFields, 'notempty')
-                ->data($postBudget)
-                ->exec();
-        }
-        else
-        {
-            $postBudget->id = $budget->id;
-            $this->dao->replace(TABLE_WORKESTIMATION)
-                ->batchcheck($this->config->workestimation->index->requiredFields, 'notempty')
-                ->data($postBudget)
-                ->exec();
-        }
+        $budget = $this->getBudget($program);
+        if(!empty($budget)) $postBudget->id = $budget->id;
+
+        $this->dao->replace(TABLE_WORKESTIMATION)->data($postBudget)
+            ->batchCheck($this->config->workestimation->index->requiredFields, 'notempty')
+            ->exec();
+
         return !dao::isError();
     }
 }

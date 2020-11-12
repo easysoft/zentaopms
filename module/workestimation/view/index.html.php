@@ -100,13 +100,15 @@ $(function()
 
     $(':input').keyup(function()
     {
-        duration = parseFloat($('#scale').val()) * parseFloat($('#productivity').val());
+        duration = parseFloat($('#scale').val()) * parseFloat($('#productivity').val()).toFixed(2);
+        duration = duration.toFixed(2);
         if(!isNaN(duration)) $('#duration').val(duration);
         if(isNaN(duration)) $('#duration').val('');
 
         totalLaborCost = parseFloat($('#unitLaborCost').val()) * parseFloat($('#duration').val());
+        totalLaborCost = totalLaborCost.toFixed(2);
         if(!isNaN(totalLaborCost)) $('#totalLaborCost').val(totalLaborCost);
-        if(isNaN(totalLaborCost)) $('#totalLaborCost').val(''); 
+        if(isNaN(totalLaborCost)) $('#totalLaborCost').val('');
     });
     $('#scale').change();
 });
