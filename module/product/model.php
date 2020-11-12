@@ -38,7 +38,8 @@ class productModel extends model
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            if($currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+            $method = ",create,batchcreate,batchclose,";
+            if(strpos($method, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
         if($currentMethod == 'report') $currentMethod = 'browse';

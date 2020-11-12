@@ -28,9 +28,27 @@ $(function()
             parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
         }
     })
+
+    /* Get checked stories. */
+    $('#batchToTaskButton').on('click', function ()
+    {
+        var storyIdList = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIdList += $(this).val() + ',';
+            $('#storyIdList').val(storyIdList);
+        });
+    })
+
     $('.sorter-false a').unwrap();
 });
 
+/**
+ * Show checked summary.
+ *
+ * @access public
+ * @return void
+ */
 function showCheckedSummary()
 {
     var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');
