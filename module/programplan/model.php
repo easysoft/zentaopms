@@ -503,6 +503,7 @@ class programplanModel extends model
 
         $this->loadModel('user');
         $this->loadModel('project');
+        $this->app->loadLang('doc');
         $account = $this->app->user->account;
         $now     = helper::now();
         foreach($datas as $data)
@@ -565,6 +566,15 @@ class programplanModel extends model
                 {
                     $stageID = $this->dao->lastInsertID();
                     $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($stageID * 5)->where('id')->eq($stageID)->exec();
+
+                    /* Create doc lib. */
+                    $lib = new stdclass();
+                    $lib->project = $stageID;
+                    $lib->name    = $this->lang->doclib->main['project'];
+                    $lib->type    = 'project';
+                    $lib->main    = '1';
+                    $lib->acl     = 'default';
+                    $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
                     /* Add creators to stage teams and project teams. */
                     $member = new stdclass();

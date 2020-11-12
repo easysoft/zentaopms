@@ -2317,14 +2317,13 @@ class project extends control
     public function ajaxGetDropMenu($projectID, $module, $method, $extra)
     {
         $project = $this->project->getByID($projectID);
-        $program = $this->project->getByID($project->project);
 
         $this->view->link      = $this->project->getProjectLink($module, $method, $extra);
         $this->view->projectID = $projectID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->project->getProjectsByProgram($program);
+        $this->view->projects  = $this->project->getProjectsByProgram($project->project);
         $this->display();
     }
 

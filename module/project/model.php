@@ -861,23 +861,47 @@ class projectModel extends model
     }
 
     /**
-     * Get projects by program.
+     * Get project id by program.
      *
-     * @param  object  $program
+     * @param  int  $programID
+     * @param  int  $status
      * @access public
      * @return array
      */
-    public function getProjectsByProgram($program)
+    public function getProjectIDByProgram($programID, $status = 'all')
     {
-        $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-            ->where('t1.project')->eq((int)$program->id)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t1.deleted')->eq('0')
-            ->orderBy('t1.id_desc')
+        return $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('project')->eq($programID)
+            ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs('id', 'id');
+    }
+
+    /**
+     * Get projects by program.
+     *
+     * @param  int     $programID
+     * @param  string  $status
+     * @param  int     $limit
+     * @access public
+     * @return array
+     */
+    public function getProjectsByProgram($programID, $status = 'all', $limit = 0)
+    {
+        $program = $this->getByID($programID);
+        if(empty($program)) return array();
+
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq((int)$program->id)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        /* The waterfall model displays hierarchies and associated products. */
         if($program->model == 'waterfall')
         {
             foreach($projects as $projectID => $project)

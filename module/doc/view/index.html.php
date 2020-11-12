@@ -141,7 +141,7 @@
               </thead>
               <tbody>
                 <?php foreach($doingProjects as $project):?>
-                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=project&objectID={$project->id}")?>">
+                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=project&objectID={$project->id}&programID=$programID")?>">
                   <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $project->name;?></td>
                   <td class="c-datetime"><?php echo formatTime($project->begin);?></td>
                   <td class="c-datetime"><?php echo formatTime($project->end);?></td>

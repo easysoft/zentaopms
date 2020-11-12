@@ -139,12 +139,17 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '')
     {
+        $projectID = $this->session->PRJ;
         if($type == 'product' or $type == 'project')
         {
+            $idList = array();
+            if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+            if($type == 'project') $idList = $this->loadModel('project')->getProjectIDByProgram($projectID);
+
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
-                ->where("t1.$type")->ne(0)
+                ->beginIF(!empty($idList))->andWhere('t2.id')->in($idList)->fi()
                 ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy("t2.order desc, t1.order, t1.id")
@@ -153,17 +158,19 @@ class docModel extends model
         elseif($type == 'all')
         {
             /* If extra have unclosedProject then ignore unclosed project libs. */
-            $unclosedProjects = array();
-            if(strpos($extra, 'unclosedProject') !== false) $unclosedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('status')->notin('done,closed')->fetchPairs('id', 'id');
+            $status   = (strpos($extra, 'unclosedProject') !== false) ? 'undone' : 'all';
+            $projects = $this->loadModel('project')->getProjectIDByProgram($projectID, $status);
+            $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
-                ->beginIF(strpos($extra, 'unclosedProject') !== false)
-                ->andWhere('project', true)->eq('0')
-                ->orWhere('project')->in($unclosedProjects)
+                ->andWhere()
+                ->markLeft(1)
+                ->where('`type`')->eq('custom')
+                ->orWhere('project')->in($projects)
+                ->orWhere('product')->in($products)
                 ->markRight(1)
-                ->fi()
-                ->orderBy('`order`,id desc')
+                ->orderBy('id_desc')
                 ->query();
         }
         else
@@ -176,7 +183,7 @@ class docModel extends model
 
         if(strpos($extra, 'withObject') !== false)
         {
-            $products = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+            $products = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
             $projects = $this->loadModel('project')->getPairs('', $this->session->PRJ);
         }
 
@@ -1098,10 +1105,16 @@ class docModel extends model
                 $nonzeroLibs = $this->dao->select('lib,count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->groupBy('lib')->having('count')->ne(0)->fetchPairs('lib', 'lib');
             }
 
+            $idList    = array();
+            $projectID = $this->session->PRJ;
+            if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+            if($type == 'project') $idList = $this->loadModel('project')->getProjectIDByProgram($projectID);
+
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
+                ->beginIF(!empty($idList))->andWhere('t2.id')->in($idList)->fi()
                 ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') === false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
                 ->orderBy("t2.`order` desc, t1.`order` asc, id desc")

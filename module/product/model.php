@@ -313,13 +313,14 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProductsByProject($projectID)
+    public function getProductsByProject($projectID, $status = 'all')
     {
         return $this->dao->select('t1.product, t2.name')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq($projectID)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.order desc')
             ->fetchPairs();
@@ -329,13 +330,14 @@ class productModel extends model
      * Get product id by project.
      *
      * @param  int    $projectID
+     * @param  int    $backFirst
      * @access public
      * @return array
      */
-    public function getProductIDByProject($projectID)
+    public function getProductIDByProject($projectID, $backFirst = true)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-
+        if($backFirst === false) return $products;
         return empty($products) ? 0 : current($products);
     }
 

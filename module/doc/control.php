@@ -53,13 +53,14 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');
 
-        $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->view->position[]       = $this->lang->doc->index;
+        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
+        $this->view->position[] = $this->lang->doc->index;
+
         $this->view->latestEditedDocs = $this->loadModel('doc')->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
         $this->view->myDocs           = $this->loadModel('doc')->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->doingProjects    = $this->loadModel('project')->getList('undone', 5);
+        $this->view->doingProjects    = $this->loadModel('project')->getProjectsByProgram($this->session->PRJ, 'undone', 5);
 
         $this->display();
     }
@@ -222,9 +223,12 @@ class doc extends control
                 echo js::error(dao::getError());
             }
         }
+
+        $programID = $this->session->PRJ;
+        $products  = $this->product->getProductsByProject($programID, 'noclosed');
+        $projects  = $this->project->getPairs('nocode', $programID);
+
         $libTypeList = $this->lang->doc->libTypeList;
-        $products    = $this->product->getPairs('nocode');
-        $projects    = $this->project->getPairs('nocode', $this->session->PRJ);
         if(empty($products)) unset($libTypeList['product']);
         if(empty($projects)) unset($libTypeList['project']);
 
