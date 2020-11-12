@@ -209,11 +209,11 @@ class actionModel extends model
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
-            ->andWhere('project')->eq($objectID)
+            ->andWhere('project')->eq((int)$objectID)
             ->fi()
             ->beginIF($objectType != 'project')
             ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq($objectID)
+            ->andWhere('objectID')->eq((int)$objectID)
             ->fi()
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
