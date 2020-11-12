@@ -1490,7 +1490,7 @@ EOD;
         global $app, $lang;
 
         /* Check the parent object is closed. */
-        if(commonModel::checkObjectChangeAllowed($module, $object)) return true;
+        if(!commonModel::checkObjectChangeAllowed($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
