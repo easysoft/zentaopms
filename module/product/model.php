@@ -42,7 +42,6 @@ class productModel extends model
         }
 
         $this->lang->TRActions = $pageActions;
-
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = array();
@@ -140,8 +139,9 @@ class productModel extends model
             if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
             if($currentProduct->type != 'normal' && $currentModule != 'programplan')
             {
-                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-                $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branchName[$currentProduct->type], $this->lang->product->branch);
+                $this->lang->product->branch = $this->lang->product->branchName[$currentProduct->type];
+                $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->branch);
+
                 $branches   = $this->loadModel('branch')->getPairs($productID);
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
                 if(!$isMobile)

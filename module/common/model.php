@@ -2213,15 +2213,15 @@ EOD;
             $lang->menu      = $lang->admin->menu;
             $lang->menuOrder = $lang->admin->menuOrder;
         }
-        if($group == 'program') 
+        if($group == 'program')
         {
             $lang->menu = $lang->program->menu;
         }
-        if($group == 'product') 
+        if($group == 'product')
         {
             $lang->menu = $lang->product->menu;
         }
-        if($group == 'project') 
+        if($group == 'project')
         {
             $lang->menu = self::getProgramMainMenu($moduleName);
         }
