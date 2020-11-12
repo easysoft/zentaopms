@@ -20,17 +20,17 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 
-$lang->zentaoPMS      = '渠成';
+$lang->zentaoPMS      = '禅道';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
 $lang->logout         = '退出';
 $lang->login          = '登录';
 $lang->help           = '帮助';
-$lang->aboutZenTao    = '关于渠成';
+$lang->aboutZenTao    = '关于禅道';
 $lang->profile        = '个人档案';
 $lang->changePassword = '更改密码';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
-$lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩渠成软件的任何标志及链接。</span>";
+$lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
 
 $lang->reset        = '重填';
@@ -248,7 +248,7 @@ $lang->lang = 'Language';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
-$lang->themes['default']    = '渠成蓝（默认）';
+$lang->themes['default']    = '禅道蓝（默认）';
 $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
 $lang->themes['purple']     = '玉烟紫';
