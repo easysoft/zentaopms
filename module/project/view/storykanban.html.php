@@ -49,7 +49,7 @@ $account = $this->app->user->account;
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-      <?php if(common::hasPriv('project', 'linkStory')):?>
+      <?php if($changeAllowed and common::hasPriv('project', 'linkStory')):?>
       <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
