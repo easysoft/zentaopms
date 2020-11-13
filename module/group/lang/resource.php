@@ -187,31 +187,32 @@ $lang->branch->methodOrder[10] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();
-$lang->resource->story->create      = 'create';
-$lang->resource->story->batchCreate = 'batchCreate';
-$lang->resource->story->edit        = 'edit';
-$lang->resource->story->linkStory   = 'linkStory';
-$lang->resource->story->batchEdit   = 'batchEdit';
-$lang->resource->story->export      = 'exportAction';
-$lang->resource->story->delete      = 'deleteAction';
-$lang->resource->story->view        = 'view';
-$lang->resource->story->change      = 'changeAction';
-$lang->resource->story->review      = 'reviewAction';
-$lang->resource->story->batchReview = 'batchReview';
-$lang->resource->story->assignTo    = 'assignAction';
-$lang->resource->story->close       = 'closeAction';
-$lang->resource->story->batchClose  = 'batchClose';
-$lang->resource->story->activate    = 'activateAction';
-$lang->resource->story->tasks       = 'tasks';
-$lang->resource->story->bugs        = 'bugs';
-$lang->resource->story->cases       = 'cases';
-$lang->resource->story->zeroCase    = 'zeroCase';
-$lang->resource->story->report      = 'reportAction';
+$lang->resource->story->create            = 'create';
+$lang->resource->story->batchCreate       = 'batchCreate';
+$lang->resource->story->edit              = 'edit';
+$lang->resource->story->linkStory         = 'linkStory';
+$lang->resource->story->batchEdit         = 'batchEdit';
+$lang->resource->story->export            = 'exportAction';
+$lang->resource->story->delete            = 'deleteAction';
+$lang->resource->story->view              = 'view';
+$lang->resource->story->change            = 'changeAction';
+$lang->resource->story->review            = 'reviewAction';
+$lang->resource->story->batchReview       = 'batchReview';
+$lang->resource->story->assignTo          = 'assignAction';
+$lang->resource->story->close             = 'closeAction';
+$lang->resource->story->batchClose        = 'batchClose';
+$lang->resource->story->activate          = 'activateAction';
+$lang->resource->story->tasks             = 'tasks';
+$lang->resource->story->bugs              = 'bugs';
+$lang->resource->story->cases             = 'cases';
+$lang->resource->story->zeroCase          = 'zeroCase';
+$lang->resource->story->report            = 'reportAction';
 $lang->resource->story->batchChangePlan   = 'batchChangePlan';
 $lang->resource->story->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage  = 'batchChangeStage';
 $lang->resource->story->batchAssignTo     = 'batchAssignTo';
 $lang->resource->story->batchChangeModule = 'batchChangeModule';
+$lang->resource->story->batchToTask       = 'batchToTask';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -237,6 +238,7 @@ $lang->story->methodOrder[105] = 'report';
 $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
+$lang->story->methodOrder[125] = 'batchToTask';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -1476,6 +1478,8 @@ $lang->changelog['12.3'][] = 'testtask-unitCases';
 $lang->changelog['12.3'][] = 'testtask-importUnitResult';
 $lang->changelog['12.3'][] = 'job-view';
 $lang->changelog['12.3'][] = 'ci-commitResult';
+
+$lang->changelog['12.4.5'][] = 'story-batchToTask';
 
 global $config;
 if($config->global->flow != 'full')

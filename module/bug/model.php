@@ -958,6 +958,7 @@ class bugModel extends model
             $bug->confirmed      = 1;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+            $this->executeHooks($bugID);
         }
     }
 
@@ -1168,6 +1169,7 @@ class bugModel extends model
             $bug->lastEditedDate = $now;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+            $this->executeHooks($bugID);
 
             $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
