@@ -56,7 +56,7 @@ $lang->upgrade->to20Tips       = '禅道20版本升级提示';
 $lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
 $lang->upgrade->to20TipsHeader = "<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。相关介绍请看如下视频(如视频无法正常播放，请直接访问 <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>禅道20版本介绍</u></a>)：</p><br />";
 $lang->upgrade->to20Desc       = <<<EOD
-<div class='text-warning'>
+<div class='text-warning' style='width:60%; margin: auto;'>
   <p>友情提示：</p>
   <ol>
     <li>您可以先安装一个20版本的禅道，体验一下里边的概念和流程。</li>

@@ -14,12 +14,12 @@
 <div class='container'>
   <div class='panel' style='padding:20px;'>
     <div class='panel-title text-center'><?php echo $lang->upgrade->to20Tips;?></div>
-    <div class='panel-body'>
+    <div class='panel-body text-center'>
       <?php echo $lang->upgrade->to20TipsHeader;?>
       <div class='video'>
         <video src=<?php echo $video;?> height='400px' controls='controls' width='60%'></video>
       </div>
-      <div class='desc' style='margin-top: 20px'><?php echo $lang->upgrade->to20Desc;?></div>
+      <div class='desc text-left' style='margin-top: 20px'><?php echo $lang->upgrade->to20Desc;?></div>
     </div>
     <div class='panel-footer text-center'>
       <?php echo html::a($lang->upgrade->demoURL, $lang->upgrade->to20Demo, '_blank', "class='btn btn-secondary'");?>

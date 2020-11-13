@@ -4,12 +4,9 @@
     <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
-        <th class='c-id w-80px'>
-          <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-        </th>
         <th class='table-nest-title'>
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
-          <?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PGMName);?>
+          <?php echo $lang->program->PGMName;?>
         </th>
         <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PGMStatus);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
@@ -47,15 +44,12 @@
       $trAttrs .= " class='$trClass'";
       ?>
       <tr <?php echo $trAttrs;?>>
-        <td class='c-id'>
-          <?php printf('%03d', $program->id);?>
-        </td>
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), "<i class='icon icon-folder-open-o'></i> " . $program->name);?>
+          <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), $program->name);?>
           <?php else:?>
-          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), "<i class='icon icon-file'></i> " . $program->name);?>
+          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
           <?php endif;?>
           <span class="label label-badge label-info label-outline"><?php echo $program->code;?></span>
         </td>

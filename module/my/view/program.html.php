@@ -67,9 +67,8 @@
               <?php common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
               <?php common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
-              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "edit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
-              <?php common::printIcon('program', 'create', "template=&projectID=$project->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PRJChildren);?>
-              <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "prjedit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+              <?php if(common::hasPriv('program', 'prjdelete')) echo html::a($this->createLink("program", "prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
             </td>
           </tr>
           <?php endforeach;?>
