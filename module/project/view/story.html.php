@@ -310,7 +310,7 @@
 </div>
 
 <div class="modal fade" id="batchToTask">
-  <div class="modal-dialog mw-500px">
+  <div class="modal-dialog mw-600px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
@@ -327,12 +327,16 @@
             <?php if($lang->hourCommon !== $lang->workingHour):?>
             <tr>
               <th><?php echo $lang->story->oneUnit . $lang->hourCommon?></th>
-              <td class="col-main"><?php echo html::input('hourPointValue', '', "class='form-control' required");?></td>
+              <td><?php echo html::input('hourPointValue', '', "class='form-control' required");?></td>
               <td><?php echo $lang->project->burnYUnit?></td>
             </tr>
             <?php endif;?>
             <tr>
               <td><?php echo html::hidden('storyIdList', '');?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->field;?></th>
+              <td colspan='2'><?php echo html::select('field[]', $lang->story->convertToTask->fieldList, array_keys($lang->story->convertToTask->fieldList), "class='form-control chosen' multiple");?></td>
             </tr>
             <tr>
               <td colspan='3' class='text-center'>

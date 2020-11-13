@@ -1421,9 +1421,10 @@ class storyModel extends model
      */
     public function batchToTask($projectID)
     {
-        /* load Module and get the data from the post. */
+        /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
         $data = fixer::input('post')->get();
+        $now  = helper::now();
 
         /* Judge required. */
         $message = '';
@@ -1435,17 +1436,29 @@ class storyModel extends model
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
+            if($story->status == 'closed') continue;
+
             $task = new stdclass();
             $task->project    = $projectID;
             $task->name       = $story->title;
-            $task->module     = $story->module;
             $task->story      = $story->id;
             $task->type       = $data->type;
-            $task->pri        = $story->pri;
             $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
             $task->openedBy   = $this->app->user->account;
-            $task->openedDate = helper::now();
-            $task->desc       = $story->spec;
+            $task->openedDate = $now;
+
+            foreach($data->field as $field)
+            {
+                $task->$field = $story->$field;
+
+                if($field == 'assignedTo') $task->assignedDate = $now;
+                if($field == 'spec')
+                {
+                    unset($task->$field);
+                    $task->desc = $story->$field;
+                }
+
+            }
 
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()

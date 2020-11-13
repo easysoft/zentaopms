@@ -1077,7 +1077,7 @@ class story extends control
 
             if(dao::isError()) die(js::error(dao::getError()) . js::locate('back'));
 
-            if(!dao::isError()) die(js::alert($this->lang->saveSuccess) . js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+            if(!dao::isError()) die(js::alert($this->lang->saveSuccess) . js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
         }
     }
 
