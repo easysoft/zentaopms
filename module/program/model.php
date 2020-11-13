@@ -1024,7 +1024,7 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function getPRJPairsByTemplate($model, $programID = 0)
+    public function getPRJPairsByModel($model, $programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('project')
