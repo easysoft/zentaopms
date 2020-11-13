@@ -51,7 +51,7 @@
               <?php printf('%03d', $project->id);?>
             </td>
             <td class='text-left'><?php echo $project->code;?></td>
-            <td class='text-left pgm-title table-nest-title' title='<?php echo $project->name?>'>
+            <td class='c-name text-left' title='<?php echo $project->name?>'>
               <span class="table-nest-icon"></span>
               <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
             </td>

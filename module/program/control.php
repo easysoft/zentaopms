@@ -751,7 +751,6 @@ class program extends control
             $acl         = $copyProgram->acl;
             $auth        = $copyProgram->auth;
             $whitelist   = $copyProgram->whitelist;
-            if(empty($model)) $model = $copyProgram->model;
 
             $products = $this->project->getProducts($copyProjectID);
             foreach($products as $product)

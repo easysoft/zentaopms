@@ -47,7 +47,7 @@
       <tr class='text-center'>
         <td><?php echo html::a($projectLink, $project->id);?></td>
         <td class='text-left'><?php echo $project->code;?></td>
-        <td class='text-left'><?php echo html::a($projectLink, $project->name);?></td>
+        <td class='c-name text-left'><?php echo html::a($projectLink, $project->name);?></td>
         <td><?php echo $project->begin;?></td>
         <td><?php echo $project->end;?></td>
         <td class="c-status">
