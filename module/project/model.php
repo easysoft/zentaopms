@@ -336,7 +336,7 @@ class projectModel extends model
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'gt', $sprint->begin)
-            ->check('code', 'unique', "deleted='0'")
+            ->checkIF(!empty($sprint->code), 'code', 'unique')
             ->exec();
 
         /* Add the creater to the team. */
@@ -864,7 +864,7 @@ class projectModel extends model
      * Get project id by program.
      *
      * @param  int  $programID
-     * @param  int  $status
+     * @param  int  $status    all|undone|wait|doing|suspended|closed
      * @access public
      * @return array
      */

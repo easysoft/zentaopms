@@ -310,6 +310,7 @@ class productModel extends model
      * Get products by project.
      *
      * @param  int    $projectID
+     * @param  int    $status   all|noclosed
      * @access public
      * @return array
      */

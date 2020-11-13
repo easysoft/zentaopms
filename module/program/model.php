@@ -282,8 +282,8 @@ class programModel extends model
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
             ->batchcheck($this->config->program->PGMCreate->requiredFields, 'notempty')
-            ->check('name', 'unique', "deleted='0'")
-            ->check('code', 'unique', "deleted='0'")
+            ->checkIF(!empty($program->name), 'name', 'unique')
+            ->checkIF(!empty($program->name), 'code', 'unique')
             ->exec();
 
         if(!dao::isError())
@@ -1148,8 +1148,8 @@ class programModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->check('name', 'unique', "deleted='0'")
-            ->check('code', 'unique', "deleted='0'")
+            ->checkIF(!empty($project->name), 'name', 'unique')
+            ->checkIF(!empty($project->name), 'code', 'unique')
             ->exec();
 
         /* Add the creater to the team. */
