@@ -7,7 +7,10 @@
         <th class='c-id w-80px'>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='table-nest-title'><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PGMName);?></th>
+        <th class='table-nest-title'>
+          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+          <?php common::printOrderLink('name', $orderBy, $vars, $lang->program->PGMName);?>
+        </th>
         <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PGMStatus);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
@@ -28,7 +31,7 @@
       {
           $trAttrs .= " data-nested='true'";
           if($program->parent == '0') $trClass .= ' is-top-level table-nest-child-hide';
-          else $trClass .= ' is-top-level table-nest-hide';
+          else $trClass .= ' table-nest-hide';
       }
 
       if($program->parent and isset($programs[$program->parent]))
@@ -37,7 +40,7 @@
           $trClass .= ' table-nest-hide';
           $trAttrs .= " data-nest-parent='$program->parent' data-nest-path='$program->path'";
       }
-      elseif($program->type != 'program') 
+      elseif($program->type != 'program')
       {
           $trClass .= ' no-nest';
       }
