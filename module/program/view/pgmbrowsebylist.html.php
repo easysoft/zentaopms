@@ -130,6 +130,7 @@ $(function()
             e.element.addClass('drop-success');
             setTimeout(function(){e.element.removeClass('drop-success');}, 800);
             $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
+            $('#programForm').table('initNestedList')
         }
     });
 });
