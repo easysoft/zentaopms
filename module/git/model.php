@@ -187,6 +187,7 @@ class gitModel extends model
             }
 
         }
+
         $this->repo->updateCommitCount($repo->id, $commits);
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
         if($isPrintLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
