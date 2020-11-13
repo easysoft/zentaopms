@@ -115,6 +115,11 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
+$lang->program->endList[31]  = '一个月';
+$lang->program->endList[93]  = '三个月';
+$lang->program->endList[186] = '半年';
+$lang->program->endList[365] = '一年';
+
 $lang->program->noPRJ             = 'No project.';
 $lang->program->accessDenied      = 'Access denied!';
 $lang->program->chooseProgramType = 'Select a method';

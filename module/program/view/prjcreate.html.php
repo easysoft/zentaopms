@@ -134,7 +134,7 @@
               </span>
             </div>
           </td>
-          <td class='muted'></td>
+          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($model == 'scrum'):?>
         <tr>

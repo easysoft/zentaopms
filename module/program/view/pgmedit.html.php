@@ -53,7 +53,14 @@
             <div class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', $program->end == '0000-00-00' ? '' : $program->end, "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
+              <?php $disabledEnd = $program->end == '2059-00-00' ? 'disabled' : '';?>
+              <?php echo html::input('end', $program->end == '2059-00-00' ? '' : $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
+              <span class='input-group-addon' id='longTimeBox'>
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="longTime" value="1" id="longTime" <?php echo $program->end == '2059-00-00' ? 'checked' : '';?>>
+                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
+                </div>
+              </span>
             </div>
           </td>
           <td colspan='2'></td>

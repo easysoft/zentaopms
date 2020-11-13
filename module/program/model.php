@@ -201,7 +201,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getPGMList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
+    public function getPGMList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->in('program,project')
@@ -252,10 +252,12 @@ class programModel extends model
             ->setDefault('parent', 0)
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF($this->post->longTime == 1, 'end', '2059-00-00')
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
+            ->remove('delta,longTime')
             ->get();
 
         if($program->parent)
@@ -276,7 +278,6 @@ class programModel extends model
             }
         }
 
-        $this->lang->project->name = $this->lang->program->PGMName;
         $this->lang->project->code = $this->lang->program->PGMCode;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
@@ -342,9 +343,10 @@ class programModel extends model
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
+            ->setIF($this->post->longTime == 1, 'end', '2059-00-00')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
-            ->remove('uid')
+            ->remove('uid,delta,longTime')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
@@ -1114,7 +1116,7 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('longTime,products,branch,plans')
+            ->remove('longTime,products,branch,plans,delta')
             ->get();
 
         if($project->parent)
@@ -1240,7 +1242,7 @@ class programModel extends model
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
-            ->remove('longTime,products,branch,plans')
+            ->remove('longTime,products,branch,plans,delta')
             ->get();
 
         if($project->parent)

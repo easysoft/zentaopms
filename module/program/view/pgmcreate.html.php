@@ -81,8 +81,15 @@
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
+              <span class='input-group-addon' id='longTimeBox'>
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="longTime" value="1" id="longTime">
+                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
+                </div>
+              </span>
             </div>
           </td>
+          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>

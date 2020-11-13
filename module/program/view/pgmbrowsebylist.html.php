@@ -55,7 +55,7 @@
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class='text-center'><?php echo $program->begin;?></td>
-        <td class='text-center'><?php echo $program->end == '0000-00-00' ? '' : $program->end;?></td>
+        <td class='text-center'><?php echo $program->end == '2059-00-00' ? '' : $program->end;?></td>
         <td class='text-left'><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-right c-actions'>

@@ -117,6 +117,11 @@ $lang->program->statusList['doing']     = '进行中';
 $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
+$lang->program->endList[31]  = '一个月';
+$lang->program->endList[93]  = '三个月';
+$lang->program->endList[186] = '半年';
+$lang->program->endList[365] = '一年';
+
 $lang->program->noPRJ             = '暂时没有项目';
 $lang->program->accessDenied      = '您无权访问该项目！';
 $lang->program->chooseProgramType = '选择项目管理方式';

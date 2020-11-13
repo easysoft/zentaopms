@@ -59,7 +59,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PGMBrowse($status = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function PGMBrowse($status = 'all', $orderBy = 'id_asc,order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
