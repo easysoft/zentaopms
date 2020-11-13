@@ -1472,6 +1472,28 @@ class docModel extends model
     }
 
     /**
+     * Get project-related document library IDs.
+     *
+     * @param  $projectID
+     * @access public
+     * @return array
+     */
+    public function getLibIDByProject($projectID = 0)
+    {
+        $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        $projects = $this->loadModel('project')->getProjectIDByProgram($projectID);
+
+        $projectLibs = array();
+        $productLibs = array();
+        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in($projects)->fetchPairs();
+        if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
+        $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
+
+        $libIDList = array_merge($customLibs, $projectLibs, $productLibs);
+        return $libIDList;
+    }
+
+    /**
      * Get statistic information.
      *
      * @access public
@@ -1479,7 +1501,9 @@ class docModel extends model
      */
     public function getStatisticInfo()
     {
-        $docIdList = $this->getPrivDocs();
+        $libID = 0;
+        if($this->session->PRJ) $libID = $this->getLibIDByProject($this->session->PRJ);
+        $docIdList = $this->getPrivDocs($libID);
 
         $today  = date('Y-m-d');
         $lately = date('Y-m-d', strtotime('-3 day'));
