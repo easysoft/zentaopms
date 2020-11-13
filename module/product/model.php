@@ -490,8 +490,8 @@ class productModel extends model
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.00
-            ->check('name', 'unique', "deleted = '0'")
-            ->check('code', 'unique', "deleted = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique')
+            ->checkIF(!empty($product->name), 'code', 'unique')
             ->exec();
 
         if(!dao::isError())
