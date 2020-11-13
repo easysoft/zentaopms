@@ -55,7 +55,7 @@
           <td class='c-actions'>
             <?php
             $deleteClass = common::hasPriv('program', 'unlinkStakeholder') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink('program', 'unlinkStakeholder', "id=$stakeholder->id&programID=$programID&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->delete}' class='{$deleteClass}'");
+            echo html::a($this->createLink('program', 'unlinkStakeholder', "id=$stakeholder->id&programID=$programID&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->program->unlinkStakeholder}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

@@ -14,9 +14,6 @@
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
         <th class='text-center w-250px'><?php echo $lang->actions;?></th>
-        <?php if($canOrder):?>
-        <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
-        <?php endif;?>
       </tr>
     </thead>
     <tbody id='programTableList'>
@@ -45,8 +42,9 @@
       $trAttrs .= " class='$trClass'";
       $originOrders[] = $program->order;
       ?>
+
       <tr <?php echo $trAttrs;?>>
-        <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
+        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), $program->name);?>
@@ -81,9 +79,6 @@
           <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "prjdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
           <?php endif;?>
         </td>
-        <?php if($canOrder):?>
-        <td class='sort-handler text-center'><i class="icon icon-move"></i></td>
-        <?php endif;?>
       </tr>
       <?php endforeach;?>
     </tbody>
@@ -124,19 +119,12 @@ $(function()
         },
         finish: function(e)
         {
-            var items = [];
+            var projects = '';
             e.list.each(function()
             {
-                var $item = $(this.item);
-                items.push({id: $item.data('id'), order: this.order});
+                projects += $(this.item).data('id') + ',' ;
             });
-            var orders = {};
-            items.sort(function(x, y) {return x.order - y.order;}).forEach(function(item, index)
-            {
-                var newOrder = ordersList[index];
-                orders[item.id] = typeof newOrder === 'number' ? newOrder : item.order * 5;
-            });
-            $.post(createLink('program', 'updateOrder'), {'programs' : orders, 'orderBy' : orderBy});
+            $.post(createLink('program', 'PRJUpdateOrder'), {'projects' : projects, 'orderBy' : orderBy});
 
             var $thead = $list.closest('table').children('thead');
             $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
