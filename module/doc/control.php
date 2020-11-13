@@ -446,9 +446,11 @@ class doc extends control
         {
             $hyperdown    = $this->app->loadClass('hyperdown');
             $doc->content = $hyperdown->makeHtml($doc->content);
+
             /* Add a newline attribute to the table. */
             $doc->content = str_replace("<th>", "<th style='word-break: break-word;'>", $doc->content);
             $doc->content = str_replace("<td>", "<td style='word-break: break-word;'>", $doc->content);
+
             $doc->digest  = $hyperdown->makeHtml($doc->digest);
         }
 
