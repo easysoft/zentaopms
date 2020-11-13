@@ -137,7 +137,7 @@ $(function()
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=0&moduleID={0}"); ?>',
-                title: '<?php echo $lang->tree->delete ?>',
+                title: '<?php echo $lang->delete . $lang->subject->common;?>',
                 template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:
