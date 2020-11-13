@@ -19,7 +19,7 @@ class qa extends control
      */
     public function index($locate = 'auto', $productID = 0)
     {
-        $this->products = $this->loadModel('product')->getPairs('nocode');
+        $this->products = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=qa")));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 

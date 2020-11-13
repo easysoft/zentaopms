@@ -1458,7 +1458,7 @@ class block extends control
         $status = isset($this->params->type)  ? $this->params->type : '';
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
 
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, $this->session->PRJ);
         $productIdList = array_keys($products);
 
         if(empty($products))

@@ -175,20 +175,6 @@ class testtask extends control
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($build)->andWhere('deleted')->eq(0)->fetchPairs('id');
         }
 
-        /* Create testtask from testtask of project.*/
-        if($projectID != 0 and $build == 0)
-        {
-            $products = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('id');
-
-            $productID = $productID ? $productID : key($products);
-            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('type')->ne('ops')->andWhere('deleted')->eq(0)->fetchPairs('id');
-            $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-        }
-
         /* Create testtask from testtask of test.*/
         if($projectID == 0)
         {
