@@ -48,7 +48,6 @@
       <tr <?php echo $trAttrs;?>>
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
-          <span class="label label-badge label-info label-outline"><?php echo $program->id;?>,<?php echo $program->order;?></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), $program->name);?>
           <?php else:?>
