@@ -79,7 +79,7 @@
                 <td class="c-actions">
                   <?php
                   common::printLink('file', 'download', "fileID=$file->id", '<i class="icon-import"></i>', "data-toggle='modal'", "class='btn' title={$lang->doc->download}", true, false, $file);
-                  common::printLink('file', 'delete',   "fileID=$file->id", '<i class="icon-trash"></i>', 'hiddenwin', "class='btn' title={$lang->delete}", true, false, $file);
+                  if($changeAllowed) common::printLink('file', 'delete',   "fileID=$file->id", '<i class="icon-trash"></i>', 'hiddenwin', "class='btn' title={$lang->delete}", true, false, $file);
                   ?>
                 </td>
               </tr>
