@@ -20,6 +20,7 @@
       </tr>
     </thead>
     <tbody id='programTableList'>
+      <?php $originOrders = array(); ?>
       <?php foreach($programs as $program):?>
       <?php
       $trClass = '';
@@ -42,10 +43,12 @@
           $trClass .= ' no-nest';
       }
       $trAttrs .= " class='$trClass'";
+      $originOrders[] = $program->order;
       ?>
       <tr <?php echo $trAttrs;?>>
         <td class='c-name text-left pgm-title table-nest-title' title='<?php echo $program->name?>'>
           <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
+          <span class="label label-badge label-info label-outline"><?php echo $program->id;?>,<?php echo $program->order;?></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), $program->name);?>
           <?php else:?>
@@ -96,9 +99,15 @@
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 </style>
+<?php js::set('originOrders', $originOrders);?>
 <script>
 $(function()
 {
+    /* Init orders numbers list */
+    var ordersList = [];
+    for(var i = 0; i < originOrders.length; ++i) ordersList.push(parseInt(originOrders[i]));
+    ordersList.sort(function(x, y){return x - y;});
+
     var $list = $('#programTableList');
     $list.addClass('sortable').sortable(
     {
@@ -116,10 +125,17 @@ $(function()
         },
         finish: function(e)
         {
-            var orders = {};
+            var items = [];
             e.list.each(function()
             {
-                orders[$(this.item).data('id')] = this.order;
+                var $item = $(this.item);
+                items.push({id: $item.data('id'), order: this.order});
+            });
+            var orders = {};
+            items.sort(function(x, y) {return x.order - y.order;}).forEach(function(item, index)
+            {
+                var newOrder = ordersList[index];
+                orders[item.id] = typeof newOrder === 'number' ? newOrder : item.order * 5;
             });
             $.post(createLink('project', 'updateOrder'), {'projects' : orders, 'orderBy' : orderBy});
 
