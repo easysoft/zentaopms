@@ -198,7 +198,6 @@ $lang->user->contacts->common   = '联系人';
 $lang->user->contacts->listName = '列表名称';
 $lang->user->contacts->userList = '用户列表';
 
-
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
 $lang->user->contacts->selectedUsers = '选择用户';
