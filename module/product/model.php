@@ -131,10 +131,10 @@ class productModel extends model
         if(!empty($products))
         {
             $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'>{$currentProduct->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
-            if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
             if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
             if($currentProduct->type != 'normal' && $currentModule != 'programplan')
@@ -355,7 +355,7 @@ class productModel extends model
 
     /**
      * Get ordered products.
-     * 
+     *
      * @param  string $status
      * @param  int    $num
      * @access public
@@ -396,11 +396,11 @@ class productModel extends model
         foreach($productList as $product)
         {
             if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
-            if($product->status == 'normal' and $product->PO == $this->app->user->account) 
+            if($product->status == 'normal' and $product->PO == $this->app->user->account)
             {
                 $mineProducts[$product->id] = $product;
             }
-            elseif($product->status == 'normal' and $product->PO != $this->app->user->account) 
+            elseif($product->status == 'normal' and $product->PO != $this->app->user->account)
             {
                 $otherProducts[$product->id] = $product;
             }
@@ -429,7 +429,7 @@ class productModel extends model
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
 
-        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'>{$this->lang->product->all} <span class='caret'></span></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'><span class='text'>{$this->lang->product->all}</span> <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('product', 'index'), "<i class='icon icon-home'></i> " . $this->lang->product->index) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('product', 'all'), "<i class='icon icon-cards-view'></i> " . $this->lang->product->all) . '</li>';
@@ -448,7 +448,7 @@ class productModel extends model
         }
 
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'>{$currentProductName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -459,7 +459,7 @@ class productModel extends model
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 
-            $output .= "<div class='btn-group header-angle-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= "<div class='btn-group header-angle-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
         }
@@ -1219,12 +1219,12 @@ class productModel extends model
             $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
         }
         elseif($module == 'programplan')
-        {   
+        {
             $extra = $extra ? $extra : 'gantt';
             return helper::createLink('programplan', 'browse', "programID=%s&productID=%s&type=$extra");
-        }   
+        }
         elseif($module == 'design')
-        {   
+        {
             return helper::createLink('design', 'browse', "productID=%s");
         }
 

@@ -30,12 +30,12 @@ class caselibModel extends model
         {
             if($isMobile)
             {
-                $selectHtml = "<a id='currentItem' href=\"javascript:showSearchMenu('caselib', '$libID', 'caselib', 'browse', '')\">{$currentLibName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+                $selectHtml = "<a id='currentItem' href=\"javascript:showSearchMenu('caselib', '$libID', 'caselib', 'browse', '')\"><span class='text'>{$currentLibName}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             }
             else
             {
                 $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
-                $selectHtml  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentLibName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $selectHtml  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'><span class='text'>{$currentLibName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $selectHtml .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                 $selectHtml .= "</div></div></div>";
             }

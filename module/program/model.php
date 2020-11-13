@@ -407,7 +407,7 @@ class programModel extends model
      */
     public function getPGMCommonAction($programID = 0)
     {
-        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'>{$this->lang->program->PGMCommon} <span class='caret'></span></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'><span class='text'>{$this->lang->program->PGMCommon}</span> <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
@@ -443,7 +443,7 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPGMDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
@@ -548,7 +548,7 @@ class programModel extends model
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account') 
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
             ->orderBy($orderBy)
@@ -576,19 +576,19 @@ class programModel extends model
      * Create stakeholder for a program.
      *
      * @param  int     $programID
-     * @access public 
+     * @access public
      * @return void
      */
     public function createStakeholder($programID = 0)
     {
-        $data = (array)fixer::input('post')->get(); 
+        $data = (array)fixer::input('post')->get();
 
         $accounts = array_unique($data['accounts']);
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->fetchPairs();
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->exec(); 
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->exec();
 
         foreach($accounts as $key => $account)
-        {    
+        {
             if(empty($account)) continue;
 
             $stakeholder = new stdclass();
@@ -814,7 +814,7 @@ class programModel extends model
      */
     public function printPRJCommonAction()
     {
-        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->program->PRJAll}'>{$this->lang->program->PRJAll} <span class='caret'></span></button>";
+        $output  = "<div class='btn-group header-angle-btn' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->program->PRJAll}'><span class='text'>{$this->lang->program->PRJAll}</span> <span class='caret'></span></button>";
         $output .= '<ul class="dropdown-menu">';
         $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
         $output .= '<li>' . html::a(helper::createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate, '', 'data-toggle="modal" data-target="#guideDialog"') . '</li>';
@@ -846,7 +846,7 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'>{$currentProjectName}<span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -1162,8 +1162,8 @@ class programModel extends model
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-            
-            if($project->parent) 
+
+            if($project->parent)
             {
                 $this->loadModel('project')->updateProducts($projectID);
             }
@@ -1184,7 +1184,7 @@ class programModel extends model
                 $productID = $this->dao->lastInsertId();
                 if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
-                $projectProduct = new stdclass(); 
+                $projectProduct = new stdclass();
                 $projectProduct->project = $projectID;
                 $projectProduct->product = $productID;
 
@@ -1261,7 +1261,7 @@ class programModel extends model
             }
 
             /* Judge products not empty. */
-            if(!$_POST['products'][0]) 
+            if(!$_POST['products'][0])
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
