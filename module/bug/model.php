@@ -1417,10 +1417,12 @@ class bugModel extends model
      * @param  int    $account
      * @param  bool   $appendProduct
      * @param  int    $limit
+     * @param  array  $skipProductIDList
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipProjectIDList = array())
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -1429,6 +1431,8 @@ class bugModel extends model
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
