@@ -15,6 +15,7 @@ $lang->personnel->search        = 'Search';
 $lang->personnel->program       = 'Program';
 $lang->personnel->emptyTip      = 'No data';
 $lang->personnel->childrenStage = 'Child stage';
+$lang->personnel->delete        = 'Remove';
 
 $lang->personnel->whitelist      = 'Whitelist';
 $lang->personnel->addWhitelist   = 'Add Whitelist';

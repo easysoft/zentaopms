@@ -15,6 +15,7 @@ $lang->personnel->search        = '搜索';
 $lang->personnel->program       = '項目集';
 $lang->personnel->emptyTip      = '暫無';
 $lang->personnel->childrenStage = '子階段';
+$lang->personnel->delete        = '移除';
 
 $lang->personnel->whitelist      = '白名單列表';
 $lang->personnel->addWhitelist   = '添加白名單';
