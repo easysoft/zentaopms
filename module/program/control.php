@@ -59,7 +59,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PGMBrowse($status = 'all', $orderBy = 'id_asc,order_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function PGMBrowse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
@@ -608,6 +608,26 @@ class program extends control
                 echo html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->project), '<i class="icon icon-menu-doc"></i>' . $project->name, '', "class='text-ellipsis' title='$project->name'");
             }
         }
+    }
+
+    /**
+     * Update program order.
+     *
+     * @access public
+     * @return string
+     */
+    public function updateOrder()
+    {
+        $programs = $this->post->programs;
+        foreach($programs as $id => $order)
+        {    
+            $this->dao->update(TABLE_PROJECT)
+                ->set('`order`')->eq($order)
+                ->where('id')->eq($id)
+                ->exec();
+        }
+
+        $this->send(array('result' => 'success'));
     }
 
     /**

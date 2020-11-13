@@ -2335,29 +2335,17 @@ class project extends control
      */
     public function updateOrder()
     {
-        $orderBy  = $this->post->orderBy;
-        if(strpos($orderBy, 'order') === false)
-        {
-            return $this->send(array('result' => 'fail'));
-        }
-
         $idList   = explode(',', trim($this->post->projects, ','));
-        $projects = $this->dao->select('id, `order`')->from(TABLE_PROJECT)
-            ->where('id')->in($idList)
-            ->fetchPairs('id', 'order');
+        $orderBy  = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
 
-        foreach($projects as $id => $order)
+        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($projects as $order => $id)
         {
-            $newOrder = $orders[$id];
-            if($order != $newOrder)
-            {
-                $this->dao->update(TABLE_PROJECT)
-                    ->set('`order`')->eq($newOrder)
-                    ->where('id')->eq($id)
-                    ->exec();
-            }
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
-        $this->send(array('result' => 'success'));
     }
 
     /**

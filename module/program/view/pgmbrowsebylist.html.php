@@ -136,7 +136,7 @@ $(function()
                 var newOrder = ordersList[index];
                 orders[item.id] = typeof newOrder === 'number' ? newOrder : item.order * 5;
             });
-            $.post(createLink('project', 'updateOrder'), {'projects' : orders, 'orderBy' : orderBy});
+            $.post(createLink('program', 'updateOrder'), {'programs' : orders, 'orderBy' : orderBy});
 
             var $thead = $list.closest('table').children('thead');
             $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
