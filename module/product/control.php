@@ -701,10 +701,17 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
-        $products = $this->product->getProductsByProject($this->session->PRJ);
-        $product = $this->product->getByID($productID);
+        if($module != 'product')
+        {
+            $products = $this->product->getProductIDByProject($this->session->PRJ);
+            $products = $this->product->getByIdList($products);
+        }
+        else
+        {
+            $products = $this->product->getList();
+        }
 
-        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->orderBy('`order` desc')->fetchAll('id');
+        $this->view->products  = $products;
         $this->view->programID = $this->session->PRJ;
 
         $this->display();

@@ -47,7 +47,7 @@ class story extends control
     {
         $this->replaceURLang($type);
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -300,7 +300,7 @@ class story extends control
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
@@ -444,7 +444,7 @@ class story extends control
 
         /* Set menu. */
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($product->id);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
         $this->product->setMenu($products, $product->id, $story->branch);
 
         $this->replaceURLang($story->type);
@@ -548,7 +548,7 @@ class story extends control
 
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
-        $product = $this->loadModel('product')->getById($story->product);
+        $product = $this->product->getById($story->product);
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent); 
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
@@ -574,6 +574,8 @@ class story extends control
      */
     public function batchEdit($productID = 0, $projectID = 0, $branch = 0, $storyType = 'story')
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
         $this->replaceURLang($storyType);
 
         /* Load model. */
@@ -810,7 +812,7 @@ class story extends control
 
         /* Set the menu. */
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($product->id);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
         $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
 
         if($from == 'project')
@@ -892,7 +894,7 @@ class story extends control
      */
     public function review($storyID)
     {
-        $this->loadModel('product');
+        $this->product;
         $this->lang->product->menu         = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($this->session->product);
 
@@ -1290,9 +1292,9 @@ class story extends control
     public function track($productID)
     {   
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
-        $products  = $this->loadModel('product')->getPairs();
+        $products  = $this->product->getPairs();
         $productID = $this->product->saveState($productID, $products);
         $this->product->setMenu($products, $productID, 0, 0, '');
         $tracks = $this->story->getTracks($productID);
@@ -1363,7 +1365,7 @@ class story extends control
     public function zeroCase($productID, $orderBy = 'id_desc')
     {
         $this->session->set('productList', $this->app->getURI(true));
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->product->getPairs();
 
         $this->lang->set('menugroup.story', 'qa');
         $this->lang->story->menu      = $this->lang->testcase->menu;
@@ -1422,7 +1424,7 @@ class story extends control
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
-        $this->loadModel('product')->buildSearchForm($story->product, $products, $queryID, $actionURL);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         /* Get stories to link. */
         $storyType    = $story->type;
@@ -1734,7 +1736,7 @@ class story extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode');
+            $products = $this->product->getPairs('nocode');
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
