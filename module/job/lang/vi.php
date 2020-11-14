@@ -26,6 +26,9 @@ $lang->job->atTime      = 'Vào lúc';
 $lang->job->lastStatus  = 'Tình trạng cuối';
 $lang->job->lastExec    = 'Xử lý cuối';
 $lang->job->comment     = 'Từ khóa phù hợp';
+$lang->job->customParam = 'Tham số tự chọn';
+$lang->job->paramName   = 'Tên';
+$lang->job->paramValue  = 'giá';
 
 $lang->job->lblBasic = 'Basic Info';
 
@@ -33,6 +36,7 @@ $lang->job->example    = 'ví dụ: ';
 $lang->job->commitEx   = "Used to match the keywords used to create a compile. Multiple keywords are separated by ','";
 $lang->job->cronSample = 'ví dụ:  0 0 2 * * 2-6/1 means 2:00 a.m. every weekday.';
 $lang->job->sendExec   = 'Gửi execute request success.';
+$lang->job->inputName  = 'Hãy nhập tên tham số.';
 
 $lang->job->buildTypeList['build']          = 'Chỉ bản dựng';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Bản dựng và triển khai';
