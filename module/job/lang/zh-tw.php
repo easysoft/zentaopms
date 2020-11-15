@@ -26,6 +26,9 @@ $lang->job->atTime      = '執行時間';
 $lang->job->lastStatus  = '最後執行狀態';
 $lang->job->lastExec    = '最後執行時間';
 $lang->job->comment     = '匹配關鍵字';
+$lang->job->customParam = '自定義構建參數';
+$lang->job->paramName   = '名稱';
+$lang->job->paramValue  = '值';
 
 $lang->job->lblBasic = '基本信息';
 
@@ -33,6 +36,7 @@ $lang->job->example    = '舉例';
 $lang->job->commitEx   = "用於匹配創建構建任務的關鍵字，多個關鍵字用','分割";
 $lang->job->cronSample = '如 0 0 2 * * 2-6/1 表示每個工作日凌晨2點';
 $lang->job->sendExec   = '發送執行請求成功！執行結果：%s';
+$lang->job->inputName  = '請輸入參數名稱。';
 
 $lang->job->buildTypeList['build']          = '僅構建';
 $lang->job->buildTypeList['buildAndDeploy'] = '構建部署';
