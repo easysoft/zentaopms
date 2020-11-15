@@ -49,7 +49,7 @@
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <?php $canTestReport = common::hasPriv('testreport', 'browse');?>
+        <?php $canTestReport = ($changeAllowed and common::hasPriv('testreport', 'browse'));?>
         <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
@@ -73,10 +73,6 @@
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
-        <?php
-        $changeAllowed = common::checkObjectChangeAllowed('task', $task);
-        $disabled      = $changeAllowed ? '' : 'disabled';
-        ?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
@@ -86,7 +82,7 @@
           <?php endif;?>
           <td class="c-id">
             <?php if($canTestReport):?>
-            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)), '', $disabled);?>
+            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
             <?php else:?>
             <?php printf('%03d', $task->id);?>
             <?php endif;?>

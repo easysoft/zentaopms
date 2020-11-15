@@ -211,14 +211,15 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
-      $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
+      $changeAllowed        = (empty($config->global->closedProductStatus) or $product->status != 'closed');
+      $canBatchEdit         = ($changeAllowed and common::hasPriv('bug', 'batchEdit'));
+      $canBatchConfirm      = ($changeAllowed and common::hasPriv('bug', 'batchConfirm'));
       $canBatchClose        = common::hasPriv('bug', 'batchClose');
-      $canBatchActivate     = common::hasPriv('bug', 'batchActivate');
-      $canBatchChangeBranch = common::hasPriv('bug', 'batchChangeBranch');
-      $canBatchChangeModule = common::hasPriv('bug', 'batchChangeModule');
-      $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
-      $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
+      $canBatchActivate     = ($changeAllowed and common::hasPriv('bug', 'batchActivate'));
+      $canBatchChangeBranch = ($changeAllowed and common::hasPriv('bug', 'batchChangeBranch'));
+      $canBatchChangeModule = ($changeAllowed and common::hasPriv('bug', 'batchChangeModule'));
+      $canBatchResolve      = ($changeAllowed and common::hasPriv('bug', 'batchResolve'));
+      $canBatchAssignTo     = ($changeAllowed and common::hasPriv('bug', 'batchAssignTo'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
       ?>

@@ -119,7 +119,7 @@
           $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
           $canBatchToTask       = common::hasPriv('story', 'batchToTask');
 
-          $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask);
+          $canBatchAction       = ($changeAllowed and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
           <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
@@ -149,16 +149,13 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $changeAllowed = common::checkObjectChangeAllowed('story', $story);
-          $disabled      = $changeAllowed ? '' : 'disabled';
-
           $storyLink       = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
           $totalEstimate  += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchAction):?>
-              <?php echo html::checkbox('storyIdList', array($story->id => ''), '', $disabled) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));?>
+              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));?>
               <?php else:?>
               <?php printf('%03d', $story->id);?>
               <?php endif;?>
@@ -199,9 +196,9 @@
             </td>
             <td class='c-actions'>
               <?php
+              $hasDBPriv = common::hasDBPriv($project, 'project');
               if($changeAllowed)
               {
-                  $hasDBPriv = common::hasDBPriv($project, 'project');
                   $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
                   $lang->task->create = $lang->project->wbs;
@@ -221,7 +218,7 @@
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
-                  if(common::hasPriv('project', 'unlinkStory', $project))
+                  if($changeAllowed and common::hasPriv('project', 'unlinkStory', $project))
                   {
                       $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");
