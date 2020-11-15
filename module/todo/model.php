@@ -47,7 +47,7 @@ class todoModel extends model
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
         {
-            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+            $todo->date = date('Y-m-d');
 
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
@@ -194,7 +194,7 @@ class todoModel extends model
 
         if(!empty($oldTodo->cycle))
         {
-            if(isset($todo->config['appointDate'])) $todo->date = date('Y-m-d');
+            $todo->date = date('Y-m-d');
 
             $todo->config['begin'] = $todo->date;
             if($todo->config['type'] == 'day')
@@ -537,7 +537,7 @@ class todoModel extends model
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
-            if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$today -{$beforeDays} days"));
+            if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
             if($today < $begin or (!empty($end) && $today > $end)) continue;
 
             $newTodo = new stdclass();
@@ -570,6 +570,7 @@ class todoModel extends model
                         $day = (int)$todo->config->day;
                         if($day <= 0) continue;
 
+                        /* If no data, judge the interval from the begin time. */
                         if(empty($lastCycle))
                         {
                             $todayTime = new DateTime($today);
@@ -581,6 +582,7 @@ class todoModel extends model
                             $date = $today;
                         }
 
+                        /* If have data, judge the interval from the last cycle time. */
                         if(!empty($lastCycle->date))
                         {
                             $todayTime     = new DateTime($today);
@@ -597,8 +599,10 @@ class todoModel extends model
                         $date        = $today;
                         $appointDate = $todo->config->appoint->month . '-' . $todo->config->appoint->day;
 
+                        // If not set cycle every year and have data, continue.
                         if(!empty($lastCycle) and !isset($todo->config->cycleYear)) continue;
 
+                        // If set appoint date, only judge month and day.
                         if(date('m-d', strtotime($date)) != $appointDate) continue;
                     }
                 }
