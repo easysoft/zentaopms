@@ -38,7 +38,7 @@ $(function()
             storyIdList += $(this).val() + ',';
             $('#storyIdList').val(storyIdList);
         });
-    })
+    });
 
     /* Judge required. */
     $('#batchToTask #submit').on('click', function ()
@@ -53,7 +53,7 @@ $(function()
             alert(message);
             return false;
         }
-    })
+    });
 
     $('.sorter-false a').unwrap();
 });
