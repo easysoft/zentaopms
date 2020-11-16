@@ -122,6 +122,14 @@
                   <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
               </div>
               <?php endforeach;?>
+              <div class='table-row input-group'>
+                  <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
+                  <?php echo html::input('paramName[]', '', "class='form-control'"); ?>
+                  <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
+                  <?php echo html::input('paramValue[]', '', "class='form-control'"); ?>
+                  <span class='input-group-addon w-40px'><a href='javascript:;' onclick='addItem(this);'><i class='icon icon-plus'></i></a></span>
+                  <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
+              </div>
             </td>
           </tr>
           <tr>
