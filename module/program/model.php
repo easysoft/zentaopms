@@ -278,7 +278,6 @@ class programModel extends model
             }
         }
 
-        $this->lang->project->code = $this->lang->program->PGMCode;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -375,6 +374,7 @@ class programModel extends model
             }
         }
         if(dao::isError()) return false;
+
 
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')

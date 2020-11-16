@@ -1139,7 +1139,6 @@ class docModel extends model
         }
 
         if($type == 'product' or $type == 'project') $libs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc')->fetchAll('id');
-
         return $libs;
     }
 

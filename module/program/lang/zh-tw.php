@@ -160,8 +160,8 @@ $lang->program->PRJParentBeginEnd    = "父項目起止時間：%s ~ %s";
 $lang->program->PRJParentBudget      = "父項目預算：%s";
 $lang->program->PRJBeginLetterParent = "父項目的開始日期：%s，開始日期不能小於父項目的開始日期";
 $lang->program->PRJEndGreaterParent  = "父項目的完成日期：%s，完成日期不能大於父項目的完成日期";
-$lang->program->PRJBeginGreateChild  = "項目的最小開始日期：%s，項目集的開始日期不能大於項目的最小開始日期";
-$lang->program->PRJEndLetterChild    = "項目的最大完成日期：%s，項目集的完成日期不能小於項目的最大完成日期";
+$lang->program->PRJBeginGreateChild  = "項目集的最小開始日期：%s，項目的開始日期不能小於項目集的最小開始日期";
+$lang->program->PRJEndLetterChild    = "項目集的最大完成日期：%s，項目的完成日期不能大於項目集的最大完成日期";
 $lang->program->PRJChildLongTime     = "子項目中有長期項目，父項目也應該是長期項目";
 
 /* Actions. */

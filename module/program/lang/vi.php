@@ -160,8 +160,8 @@ $lang->program->PRJParentBeginEnd    = "The begin and end date of the parent pro
 $lang->program->PRJParentBudget      = "The budget of the parent project: %s";
 $lang->program->PRJBeginLetterParent = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
 $lang->program->PRJEndGreaterParent  = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
-$lang->program->PRJBeginGreateChild  = "The earliest begin date of a child project: %s. The begin date of its parent project cannot be > the earliest begin date of a child project.";
-$lang->program->PRJEndLetterChild    = "The latest end date of a child project: %s. The end date of its parent project cannot be < the latest end date of child project.";
+$lang->program->PRJBeginGreateChild  = "The minimum start date of the project set: %s. The start date of the project cannot be less than the minimum start date of the program set.";
+$lang->program->PRJEndLetterChild    = "The maximum finish date for the project set: %s. The completion date of a project cannot be greater than the maximum completion date of the program set.";
 $lang->program->PRJChildLongTime     = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 
 /* Actions. */
