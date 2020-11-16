@@ -1863,7 +1863,8 @@ EOD;
         }
 
         /* Check the project is closed. */
-        if(strpos('story|bug|testtask', $module) === false and !empty($object->project) and is_numeric($object->project) and !empty($config->global->closedProjectStatus))
+        $productModuleList = array('story', 'bug', 'testtask');
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and !empty($config->global->closedProjectStatus))
         {
             $project = $app->control->loadModel('project')->getByID($object->project);
             if($project->status == 'closed') return false;
