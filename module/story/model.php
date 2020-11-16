@@ -1447,17 +1447,19 @@ class storyModel extends model
             $task->openedBy   = $this->app->user->account;
             $task->openedDate = $now;
 
-            foreach($data->field as $field)
+            if(isset($data->field))
             {
-                $task->$field = $story->$field;
-
-                if($field == 'assignedTo') $task->assignedDate = $now;
-                if($field == 'spec')
+                foreach($data->field as $field)
                 {
-                    unset($task->$field);
-                    $task->desc = $story->$field;
-                }
+                    $task->$field = $story->$field;
 
+                    if($field == 'assignedTo') $task->assignedDate = $now;
+                    if($field == 'spec')
+                    {
+                        unset($task->$field);
+                        $task->desc = $story->$field;
+                    }
+                }
             }
 
             $this->dao->insert(TABLE_TASK)->data($task)
