@@ -49,8 +49,8 @@ js::set('productID' , $bug->product);
             </div>
           </td>
           <td>
-            <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
-            <span id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></span>
+            <div id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></div>
+            <div id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></div>
           </td>
           <td>
             <?php if(common::hasPriv('build', 'create')):?>
