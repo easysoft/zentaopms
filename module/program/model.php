@@ -266,13 +266,13 @@ class programModel extends model
             if($parentProgram)
             {
                 /* Child program begin cannot less than parent. */
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginLetterParent, $parentProgram->begin);
 
                 /* When parent set end then child program end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
                 /* When parent set end then child program cannot set longTime. */
-                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
                 if(dao::isError()) return false;
             }
@@ -283,6 +283,9 @@ class programModel extends model
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
             ->batchcheck($this->config->program->PGMCreate->requiredFields, 'notempty')
+            ->checkIF($program->begin != '', 'begin', 'date')
+            ->checkIF($program->end != '', 'end', 'date')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
             ->checkIF(!empty($program->name), 'name', 'unique')
             ->checkIF(!empty($program->name), 'code', 'unique')
             ->exec();
@@ -357,8 +360,8 @@ class programModel extends model
             $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
             $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
-            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
+            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginGreateChild, $minChildBegin);
+            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->PGMEndLetterChild, $maxChildEnd);
         }
 
         if($program->parent)
@@ -366,9 +369,9 @@ class programModel extends model
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
-                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginLetterParent, $parentProgram->begin);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
             }
         }
         if(dao::isError()) return false;

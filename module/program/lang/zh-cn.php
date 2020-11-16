@@ -140,11 +140,6 @@ $lang->program->emptyPM           = '暂无';
 $lang->program->cannotChangeToCat = "该项目已经有实际的内容，无法修改为父项目";
 $lang->program->cannotCancelCat   = "该项目下已经有子项目，无法取消父项目标记";
 $lang->program->parentBeginEnd    = "父项目起止时间：%s ~ %s";
-$lang->program->parentBudget      = "父项目预算：%s";
-$lang->program->beginLetterParent = "父项目的开始日期：%s，开始日期不能小于父项目的开始日期";
-$lang->program->endGreaterParent  = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
-$lang->program->beginGreateChild  = "子项目的最小开始日期：%s，父项目的开始日期不能大于子项目的最小开始日期";
-$lang->program->endLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 $lang->program->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->program->readjustTime      = '重新调整项目起止时间';
 
@@ -191,6 +186,11 @@ $lang->program->createStakeholder    = '添加干系人';
 $lang->program->unlinkStakeholder    = '移除干系人';
 $lang->program->importStakeholder    = '从父项目集导入';
 $lang->program->PGMManageMembers     = '项目集团队';
+$lang->program->PGMParentBudget      = "父项目集预算：%s";
+$lang->program->PGMBeginLetterParent = "父项目集的开始日期：%s，开始日期不能小于父项目集的开始日期";
+$lang->program->PGMEndGreaterParent  = "父项目集的完成日期：%s，完成日期不能大于父项目集的完成日期";
+$lang->program->PGMBeginGreateChild  = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
+$lang->program->PGMEndLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 
 /* Fields. */
 $lang->program->PGMName      = '项目集名称';

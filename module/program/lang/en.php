@@ -80,6 +80,8 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = 'Team';
 $lang->program->PRJLongTime        = 'Long-Term Project';
 
+$lang->program->productNotEmpty = 'Affiliated products cannot be empty!';
+
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = 'Yuan';
 $lang->program->unitList['dollar'] = 'Dollars';
@@ -115,10 +117,10 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->endList[31]  = '一个月';
-$lang->program->endList[93]  = '三个月';
-$lang->program->endList[186] = '半年';
-$lang->program->endList[365] = '一年';
+$lang->program->endList[31]  = 'One month';
+$lang->program->endList[93]  = 'Trimester';
+$lang->program->endList[186] = 'Half yearly';
+$lang->program->endList[365] = 'One year';
 
 $lang->program->noPRJ             = 'No project.';
 $lang->program->accessDenied      = 'Access denied!';
@@ -138,11 +140,6 @@ $lang->program->emptyPM           = 'No manager';
 $lang->program->cannotChangeToCat = "It is not empty, so you cannot change it to a parent.";
 $lang->program->cannotCancelCat   = "It has child projects, so you cannot unmark the parent.";
 $lang->program->parentBeginEnd    = "Parent begin&end date: %s ~ %s";
-$lang->program->parentBudget      = "Parent budget: %s";
-$lang->program->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
-$lang->program->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
-$lang->program->beginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
-$lang->program->endLetterChild    = "Child latest end: %s, parent end date >= child latest end date.";
 $lang->program->childLongTime     = "If a child as long-term projects, the parent should be long-term too.";
 $lang->program->readjustTime      = 'Change the project begin&end date.';
 
@@ -189,6 +186,11 @@ $lang->program->createStakeholder    = 'Create Stakeholder';
 $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
+$lang->program->PGMParentBudget      = "Parent program budget：%s";
+$lang->program->PGMBeginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
+$lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
+$lang->program->PGMBeginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
+$lang->program->PGMEndLetterChild    = "Child latest end: %s, parent end date >= child latest end date.";
 
 /* Fields. */
 $lang->program->PGMName      = 'Name';
@@ -209,6 +211,8 @@ $lang->program->PGMLongTime  = 'Long-Term';
 
 $lang->program->noPGM         = 'No program.';
 $lang->program->PGMShowClosed = 'Closed programs.';
+$lang->program->PGMTips       = 'By modifying the parent item set, the associateable product also changes and becomes required. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
+$lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";

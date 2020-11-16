@@ -72,7 +72,7 @@
               <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'yuan' : $parentProgram->budgetUnit, "class='form-control'");?>
             </div>
           </td>
-          <td class='muted'><?php if($parentProgram) printf($lang->program->parentBudget, $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, ''));?></td>
+          <td class='muted'><?php if($parentProgram) printf($lang->program->PGMParentBudget, $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->dateRange;?></th>
