@@ -1417,10 +1417,12 @@ class bugModel extends model
      * @param  int    $account
      * @param  bool   $appendProduct
      * @param  int    $limit
+     * @param  array  $skipProductIDList
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipProjectIDList = array())
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -1429,6 +1431,8 @@ class bugModel extends model
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -2505,14 +2509,14 @@ class bugModel extends model
         /* Check the product is closed. */
         $changeAllowed = common::checkObjectChangeAllowed('bug', $bug);
 
-        $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
-        $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
+        $canBatchEdit         = ($changeAllowed and common::hasPriv('bug', 'batchEdit'));
+        $canBatchConfirm      = ($changeAllowed and common::hasPriv('bug', 'batchConfirm'));
         $canBatchClose        = common::hasPriv('bug', 'batchClose');
-        $canBatchActivate     = common::hasPriv('bug', 'batchActivate');
-        $canBatchChangeBranch = common::hasPriv('bug', 'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv('bug', 'batchChangeModule');
-        $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
-        $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
+        $canBatchActivate     = ($changeAllowed and common::hasPriv('bug', 'batchActivate'));
+        $canBatchChangeBranch = ($changeAllowed and common::hasPriv('bug', 'batchChangeBranch'));
+        $canBatchChangeModule = ($changeAllowed and common::hasPriv('bug', 'batchChangeModule'));
+        $canBatchResolve      = ($changeAllowed and common::hasPriv('bug', 'batchResolve'));
+        $canBatchAssignTo     = ($changeAllowed and common::hasPriv('bug', 'batchAssignTo'));
 
         $canBatchAction = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
 
@@ -2574,8 +2578,7 @@ class bugModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    $disabled = $changeAllowed ? '' : 'disabled';
-                    echo html::checkbox('bugIDList', array($bug->id => ''), '', $disabled) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
+                    echo html::checkbox('bugIDList', array($bug->id => ''), '') . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
                 }
                 else
                 {
@@ -2726,14 +2729,18 @@ class bugModel extends model
                 echo substr($bug->lastEditedDate, 5, 11);
                 break;
             case 'actions':
+                $params = "bugID=$bug->id";
                 if($changeAllowed)
                 {
-                    $params = "bugID=$bug->id";
                     common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                     common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                     common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
                     common::printIcon('bug', 'edit',       $params, $bug, 'list');
                     common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                }
+                else
+                {
+                    common::printIcon('bug', 'close', $params, $bug, 'list', '', '', 'iframe', true);
                 }
                 break;
             }

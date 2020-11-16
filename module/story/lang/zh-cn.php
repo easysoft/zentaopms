@@ -63,7 +63,7 @@ $lang->story->batchToTask       = '批量转任务';
 
 $lang->story->skipStory       = '需求：%s 为父需求，将不会被关闭。';
 $lang->story->closedStory     = '需求：%s 已关闭，将不会被关闭。';
-$lang->story->batchToTaskTips = "此操作会创建与所选{$lang->storyCommon}同名的任务，并将{$lang->storyCommon}关联到任务中";
+$lang->story->batchToTaskTips = "此操作会创建与所选{$lang->storyCommon}同名的任务，并将{$lang->storyCommon}关联到任务中，已关闭的需求不会转为任务。";
 
 $lang->story->common         = $lang->storyCommon;
 $lang->story->id             = '编号';
@@ -126,6 +126,7 @@ $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';
 $lang->story->released       = "已发布{$lang->storyCommon}数";
 $lang->story->oneUnit        = '一个单位';
+$lang->story->field          = '同步的字段';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->storyCommon}与上一{$lang->storyCommon}不属于同一产品！";
@@ -342,3 +343,11 @@ $lang->story->chosen->reviewedBy = '选择评审人...';
 
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed = "您选择的{$lang->storyCommon}已经被关闭了！";
+
+$lang->story->convertToTask = new stdClass();
+$lang->story->convertToTask->fieldList = array();
+$lang->story->convertToTask->fieldList['module']     = '所属模块';
+$lang->story->convertToTask->fieldList['spec']       = "{$lang->storyCommon}描述";
+$lang->story->convertToTask->fieldList['pri']        = '优先级';
+$lang->story->convertToTask->fieldList['mailto']     = '抄送给';
+$lang->story->convertToTask->fieldList['assignedTo'] = '指派给';

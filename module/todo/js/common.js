@@ -136,13 +136,11 @@ function showAppointDate(switcher)
 {
     if(switcher.checked)
     {
-        $('#date').attr('disabled','disabled');
         $('#dayInput').attr('disabled','disabled');
         $('.appoint').removeClass('hidden');
     }
     else
     {
-        $('#date').removeAttr('disabled');
         $('#dayInput').removeAttr('disabled');
         $('.appoint').addClass('hidden');
     }

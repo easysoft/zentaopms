@@ -97,6 +97,14 @@
               ?>
             </td>
           </tr>
+          <tr>
+            <th><?php echo $lang->job->customParam;?></th>
+            <td>
+              <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
+              <div><?php echo $paramName . ' : ' . $paramValue;?></div>
+              <?php endforeach;?>
+            </td>
+          </tr>
         </table>
       </div>
     </div>

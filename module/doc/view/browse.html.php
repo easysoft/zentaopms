@@ -74,7 +74,7 @@ var browseType = '<?php echo $browseType;?>';
         <p>
           <?php if($libID):?>
           <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
-          <?php if(common::hasPriv('doc', 'create')):?>
+          <?php if(common::hasPriv('doc', 'create') and common::checkObjectChangeAllowed('doc', $currentLib)):?>
           <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
           <?php endif;?>
           <?php elseif($browseType == 'byediteddate'):?>

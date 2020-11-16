@@ -26,6 +26,9 @@ $lang->job->atTime      = 'At Time';
 $lang->job->lastStatus  = 'Last Status';
 $lang->job->lastExec    = 'Last Executed';
 $lang->job->comment     = 'Match Keywords';
+$lang->job->customParam = 'Custom build parameters';
+$lang->job->paramName   = 'Name';
+$lang->job->paramValue  = 'Value';
 
 $lang->job->lblBasic = 'Basic Info';
 
@@ -33,6 +36,7 @@ $lang->job->example    = 'e.g.';
 $lang->job->commitEx   = "Used to match the keywords used to create a compile. Multiple keywords are separated by ','";
 $lang->job->cronSample = 'e.g. 0 0 2 * * 2-6/1 means 2:00 a.m. every weekday.';
 $lang->job->sendExec   = 'Send execute request success.';
+$lang->job->inputName  = 'Please enter parameter name.';
 
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';

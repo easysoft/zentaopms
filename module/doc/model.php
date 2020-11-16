@@ -1658,6 +1658,7 @@ class docModel extends model
             $doc->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $doc->content);
             $doc->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $doc->content);
         }
+
         /* Get action info. */
         $action          = $this->loadModel('action')->getById($actionID);
         $history         = $this->action->getHistory($actionID);

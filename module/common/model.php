@@ -1490,7 +1490,7 @@ EOD;
         global $app, $lang;
 
         /* Check the parent object is closed. */
-        if(!commonModel::checkObjectChangeAllowed($module, $object)) return false;
+        if(strpos('close|batchClose', $method) === false and !commonModel::checkObjectChangeAllowed($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -1855,32 +1855,18 @@ EOD;
         global $app, $config;
 
         /* Check the product is closed. */
-        if(!empty($object->product) and !empty($config->global->closedProductStatus))
+        if(!empty($object->product) and is_numeric($object->product) and !empty($config->global->closedProductStatus))
         {
             $productID = trim($object->product, ',');
             $product   = $app->control->loadModel('product')->getByID($productID);
             if($product->status == 'closed') return false;
-
-            /* Get the projects associated with the story. */
-            if($module == 'story' and empty($object->project))
-            {
-                $projects      = $app->dbh->query('SELECT project FROM ' . TABLE_PROJECTSTORY . " WHERE `story` = '$object->id'")->fetchAll();
-                $projectIDList = array();
-                foreach($projects as $project) $projectIDList[] = $project->project;
-
-                $object->project = implode(',', $projectIDList);
-            }
         }
 
         /* Check the project is closed. */
-        if(!empty($object->project) and !empty($config->global->closedProjectStatus))
+        if(strpos('story|bug|testtask', $module) === false and !empty($object->project) and is_numeric($object->project) and !empty($config->global->closedProjectStatus))
         {
-            $projectIDList = explode(',', $object->project);
-            $projects      = $app->control->loadModel('project')->getByIDList($projectIDList);
-            foreach($projects as $project)
-            {
-                if($project->status == 'closed') return false;
-            }
+            $project = $app->control->loadModel('project')->getByID($object->project);
+            if($project->status == 'closed') return false;
         }
 
         return true;

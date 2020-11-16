@@ -696,6 +696,10 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -756,24 +760,25 @@ class project extends control
         if($productPairs) $productID = key($productPairs);
 
         /* Assign. */
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->productID    = $productID;
-        $this->view->project      = $project;
-        $this->view->stories      = $stories;
-        $this->view->allPlans     = $allPlans;
-        $this->view->summary      = $this->product->summary($stories);
-        $this->view->orderBy      = $orderBy;
-        $this->view->type         = $this->session->projectStoryBrowseType;
-        $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
-        $this->view->tabID        = 'story';
-        $this->view->storyTasks   = $storyTasks;
-        $this->view->storyBugs    = $storyBugs;
-        $this->view->storyCases   = $storyCases;
-        $this->view->users        = $users;
-        $this->view->pager        = $pager;
-        $this->view->branchGroups = $branchGroups;
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->productID     = $productID;
+        $this->view->project       = $project;
+        $this->view->stories       = $stories;
+        $this->view->allPlans      = $allPlans;
+        $this->view->summary       = $this->product->summary($stories);
+        $this->view->orderBy       = $orderBy;
+        $this->view->type          = $this->session->projectStoryBrowseType;
+        $this->view->param         = $param;
+        $this->view->moduleTree    = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
+        $this->view->tabID         = 'story';
+        $this->view->storyTasks    = $storyTasks;
+        $this->view->storyBugs     = $storyBugs;
+        $this->view->storyCases    = $storyCases;
+        $this->view->users         = $users;
+        $this->view->pager         = $pager;
+        $this->view->branchGroups  = $branchGroups;
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }
@@ -933,6 +938,10 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -942,17 +951,18 @@ class project extends control
         $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
-        $this->view->title       = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]  = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
-        $this->view->position[]  = $this->lang->testtask->common;
-        $this->view->project     = $project;
-        $this->view->projectID   = $projectID;
-        $this->view->projectName = $this->projects[$projectID];
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $productTasks;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products    = $this->loadModel('product')->getPairs();
+        $this->view->title         = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]    = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
+        $this->view->position[]    = $this->lang->testtask->common;
+        $this->view->project       = $project;
+        $this->view->projectID     = $projectID;
+        $this->view->projectName   = $this->projects[$projectID];
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->tasks         = $productTasks;
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }

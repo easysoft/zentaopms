@@ -1995,10 +1995,11 @@ class taskModel extends model
      *
      * @param  string $account
      * @param  string $status
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all')
+    public function getUserTaskPairs($account, $status = 'all', $skipProjectIDList = array())
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TASK)->alias('t1')
@@ -2006,6 +2007,7 @@ class taskModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->query();
 
         $tasks = array();

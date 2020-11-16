@@ -34,7 +34,7 @@
               </span>
               <span class='input-group-addon'>
                 <div class='checkbox-primary'>
-                  <input type='checkbox' id='cycle' name='cycle' value='1' />
+                  <input type='checkbox' id='cycle' name='cycle' value='1' onclick='switchDateTodo(this);' />
                   <label for='cycle'><?php echo $lang->todo->cycle;?></label>
                 </div>
               </span>

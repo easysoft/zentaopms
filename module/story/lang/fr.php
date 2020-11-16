@@ -63,7 +63,7 @@ $lang->story->batchToTask       = 'Batch Convert to Task';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task.";
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -126,6 +126,7 @@ $lang->story->unclosed       = 'Non Fermées';
 $lang->story->deleted        = 'Supprimée';
 $lang->story->released       = 'Stories Versionnées';
 $lang->story->oneUnit        = 'One Unit';
+$lang->story->field          = 'Synchronized fields';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
@@ -342,3 +343,11 @@ $lang->story->chosen->reviewedBy = 'Choisir valideur';
 
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed = 'La Story que vous avez sélectionnée est malheureusement fermée !';
+
+$lang->story->convertToTask = new stdClass();
+$lang->story->convertToTask->fieldList = array();
+$lang->story->convertToTask->fieldList['module']     = 'Module';
+$lang->story->convertToTask->fieldList['spec']       = "Description";
+$lang->story->convertToTask->fieldList['pri']        = 'Priority';
+$lang->story->convertToTask->fieldList['mailto']     = 'Mailto';
+$lang->story->convertToTask->fieldList['assignedTo'] = 'AssignTo';

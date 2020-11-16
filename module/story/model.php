@@ -1421,9 +1421,10 @@ class storyModel extends model
      */
     public function batchToTask($projectID)
     {
-        /* load Module and get the data from the post. */
+        /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
         $data = fixer::input('post')->get();
+        $now  = helper::now();
 
         /* Judge required. */
         $message = '';
@@ -1432,19 +1433,32 @@ class storyModel extends model
         if($message) die(js::error($message) . js::locate(helper::createLink('project', 'story', "projectID=$projectID"), 'parent'));
 
         /* Create tasks. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($data->storyIdList)->fetchAll();
+        $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
+            if($story->status == 'closed') continue;
+
             $task = new stdclass();
             $task->project    = $projectID;
             $task->name       = $story->title;
-            $task->module     = $story->module;
             $task->story      = $story->id;
             $task->type       = $data->type;
-            $task->pri        = $story->pri;
             $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
             $task->openedBy   = $this->app->user->account;
-            $task->openedDate = helper::now();
+            $task->openedDate = $now;
+
+            foreach($data->field as $field)
+            {
+                $task->$field = $story->$field;
+
+                if($field == 'assignedTo') $task->assignedDate = $now;
+                if($field == 'spec')
+                {
+                    unset($task->$field);
+                    $task->desc = $story->$field;
+                }
+
+            }
 
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -2345,19 +2359,21 @@ class storyModel extends model
     /**
      * Get story pairs of a user.
      *
-     * @param  string    $account
-     * @param  string    $limit
-     * @param  string    $type requirement|story
+     * @param  string  $account
+     * @param  string  $limit
+     * @param  string  $type requirement|story
+     * @param  array   $skipProductIDList
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10, $type = 'story')
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array())
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($type)
             ->andWhere('assignedTo')->eq($account)
+            ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
             ->orderBy('id_desc')
             ->limit($limit)
             ->fetchPairs('id', 'title');
@@ -3091,8 +3107,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    $disabled = $changeAllowed ? '' : 'disabled';
-                    echo html::checkbox('storyIdList', array($story->id => ''), '', $disabled) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                    echo html::checkbox('storyIdList', array($story->id => ''), '') . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 }
                 else
                 {
@@ -3213,15 +3228,19 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
+                $vars = "story={$story->id}";
                 if($changeAllowed)
                 {
-                    $vars = "story={$story->id}";
                     common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                     common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                     common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit',       $vars, $story, 'list');
                     if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                     common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=0&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
+                }
+                else
+                {
+                    common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 }
                 break;
             }

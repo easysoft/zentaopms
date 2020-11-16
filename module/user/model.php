@@ -871,7 +871,7 @@ class userModel extends model
      * 
      * @param  object    $user 
      * @access public
-     * @return void
+     * @return bool|object
      */
     public function login($user)
     {
