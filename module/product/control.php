@@ -703,7 +703,7 @@ class product extends control
 
         if($module != 'product')
         {
-            $products = $this->product->getProductIDByProject($this->session->PRJ);
+            $products = $this->product->getProductIDByProject($this->session->PRJ, false);
             $products = $this->product->getByIdList($products);
         }
         else

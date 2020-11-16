@@ -1,6 +1,7 @@
 $(function()
 {
-    if(typeof(storyType) == 'undefined') storyType = ''; 
+    if(typeof(resetActive) != 'undefined') return false;
+    if(typeof(storyType) == 'undefined') storyType = '';
     $('#navbar .nav li').removeClass('active');
     $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
 })

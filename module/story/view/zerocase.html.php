@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../testcase/view/caseheader.html.php';?>
+<?php js::set('resetActive', false);?>
 <div id='mainContent' class='main-control'>
   <?php if(empty($stories)):?>
   <div class="table-empty-tip">

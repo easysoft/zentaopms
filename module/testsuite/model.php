@@ -143,6 +143,7 @@ class testsuiteModel extends model
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->andWhere('deleted')->eq(0)
             ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
             ->orderBy($orderBy)
@@ -251,6 +252,8 @@ class testsuiteModel extends model
         $cases = $this->dao->select('t1.*,t2.version as caseVersion')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
+            ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
@@ -293,6 +296,7 @@ class testsuiteModel extends model
         $linkedCases = $this->getLinkedCases($suite->id, 'id_desc', null, $append = false);
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
             ->andWhere('id')->notIN(array_keys($linkedCases))
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
@@ -329,6 +333,7 @@ class testsuiteModel extends model
     {
         $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
             ->where('product')->eq($productID)
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->andWhere('lib')->eq($libID)
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
@@ -362,6 +367,7 @@ class testsuiteModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->andWhere('product')->eq(0)
             ->andWhere('id')->notIN($importedCases)
             ->orderBy($orderBy)

@@ -19,7 +19,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->testtask->create;?></h2>
     </div>
-    <form method='post' target='hiddenwin' id='dataform'>
+    <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
         <?php if(isset($projectID)):?>
         <tr>

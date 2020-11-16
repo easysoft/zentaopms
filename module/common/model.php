@@ -2309,9 +2309,6 @@ EOD;
         if($program->model == 'waterfall') 
         {
             $lang->navGroup->product = 'project';
-            $lang->product->menu     = $lang->waterfallproduct->menu;
-            $lang->productplan->menu = $lang->waterfallproduct->menu;
-            $lang->story->menu       = $lang->waterfallproduct->menu;
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
     }

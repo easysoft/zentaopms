@@ -27,6 +27,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
@@ -304,6 +305,7 @@ class testcaseModel extends model
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
@@ -332,6 +334,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id=t3.case')
             ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
             ->andWhere('t3.suite')->eq((int)$suiteID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
@@ -421,6 +424,7 @@ class testcaseModel extends model
         {
             $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where("t2.status = 'active'")
+                ->andWhere('t1.PRJ')->eq($this->session->PRJ)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->andWhere('t1.product')->eq($productID)
@@ -1185,6 +1189,7 @@ class testcaseModel extends model
             }
             else
             {
+                $caseData->PRJ        = $this->session->PRJ;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;

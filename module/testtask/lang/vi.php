@@ -128,6 +128,7 @@ $lang->testtask->checkLinked       = "Vui lòng kiểm tra sản phẩm đó mà
 $lang->testtask->noImportData      = 'The imported XML does not parse the data.';
 $lang->testtask->unitXMLFormat     = 'Please select a file in JUnit XML format.';
 $lang->testtask->titleOfAuto       = "%s automated testing";
+$lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
 
 $lang->testtask->assignedToMe = 'Giao cho bạn';
 $lang->testtask->allCases     = 'Tất cả tình huống';

@@ -22,8 +22,8 @@
         <small class='text-muted'><?php echo $lang->arrow . $lang->testtask->edit;?></small>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' id='dataform'>
-      <table class='table table-form'> 
+    <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
+      <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->project;?></th>
           <td class='w-p35-f'>

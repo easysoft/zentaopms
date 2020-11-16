@@ -128,6 +128,7 @@ $lang->testtask->checkLinked       = "Vérifiez si le product auquel la campagne
 $lang->testtask->noImportData      = "Le XML importé ne parse pas les données.";
 $lang->testtask->unitXMLFormat     = 'Veuillez sélectionner un fichier au format XML JUnit.';
 $lang->testtask->titleOfAuto       = "%s tests automatisés";
+$lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
 
 $lang->testtask->assignedToMe  = 'Affecté à Moi';
 $lang->testtask->allCases      = 'Tous les CasTests';

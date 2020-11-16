@@ -157,6 +157,7 @@ class testreportModel extends model
     {
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
+            ->andWhere('PRJ')->eq($this->session->PRJ)
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()

@@ -56,7 +56,7 @@ class testtask extends control
         $this->session->set('testtaskList', $this->app->getURI(true));
         $this->session->set('buildList', $this->app->getURI(true));
 
-        $scopeAndStatus = explode(',',$type);
+        $scopeAndStatus = explode(',', $type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
         $this->session->set('testTaskVersionStatus', $scopeAndStatus[1]);
 
@@ -153,34 +153,17 @@ class testtask extends control
         if(!empty($_POST))
         {
             $taskID = $this->testtask->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
 
             $this->executeHooks($taskID);
-
-            die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
-        }
-
-        /* Create testtask from build of project.*/
-        if($projectID != 0 and $build != 0)
-        {
-            $products = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('id');
-
-            $productID = $productID ? $productID : key($products);
-            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('type')->ne('ops')->andWhere('deleted')->eq(0)->fetchPairs('id');
-            $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($build)->andWhere('deleted')->eq(0)->fetchPairs('id');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse', "productID=$productID")));
         }
 
         /* Create testtask from testtask of test.*/
-        if($projectID == 0)
-        {
-            $projects = $this->loadModel('product')->getProjectPairs($productID, 0, $params = 'nodeleted');
-            $builds   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
-        }
+        $productID = $productID ? $productID : key($this->products);
+        $projects  = empty($productID) ? array() : $this->product->getProjectPairs($productID, 0, $params = 'nodeleted');
+        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
@@ -191,17 +174,11 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
-        if($projectID != 0)
-        {
-            $this->app->loadLang('build');
-            $this->view->products  = $products;
-            $this->view->projectID = $projectID;
-        }
-        $this->view->projects     = $projects;
-        $this->view->productID    = $productID;
-        $this->view->builds       = $builds;
-        $this->view->build        = $build;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
+        $this->view->projects  = $projects;
+        $this->view->productID = $productID;
+        $this->view->builds    = $builds;
+        $this->view->build     = $build;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
     }
@@ -571,10 +548,14 @@ class testtask extends control
      */
     public function edit($taskID)
     {
+        /* Get task info. */
+        $task      = $this->testtask->getById($taskID);
+        $productID = $this->product->saveState($task->product, $this->products);
+
         if(!empty($_POST))
         {
             $changes = $this->testtask->update($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes or $this->post->comment)
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
@@ -583,12 +564,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
-
-        /* Get task info. */
-        $task      = $this->testtask->getById($taskID);
-        $productID = $this->product->saveState($task->product, $this->products);
 
         /* Set menu. */
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
@@ -598,9 +575,14 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->edit;
 
+        /* Create testtask from testtask of test.*/
+        $productID = $productID ? $productID : key($this->products);
+        $projects  = empty($productID) ? array() : $this->product->getProjectPairs($productID, 0, $params = 'nodeleted');
+        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+
         $this->view->task         = $task;
-        $this->view->projects     = $this->product->getProjectPairs($productID);
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = 'notrunk');
+        $this->view->projects     = $projects;
+        $this->view->builds       = $builds;
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
@@ -1153,13 +1135,6 @@ class testtask extends control
     {
         if($_POST)
         {
-            $file = $this->loadModel('file')->getUpload('resultFile');
-            $file = $file[0];
-
-            $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
-            move_uploaded_file($file['tmpname'], $fileName);
-            $this->session->set('resultFile', $fileName);
-
             $taskID = $this->testtask->importUnitResult($productID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -1170,22 +1145,17 @@ class testtask extends control
         $this->testtask->setMenu($this->products, $productID);
 
         $this->app->loadLang('job');
-        $projects = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
-            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq((int)$productID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF('0')->andWhere('t1.branch')->in('0')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('t2.type')->ne('ops')
-            ->orderBy('t1.project desc')
-            ->fetchPairs('id', 'name');
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
-        $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testtask->importUnitResult;
+        $productID = $productID ? $productID : key($this->products);
+        $projects  = empty($productID) ? array() : $this->product->getProjectPairs($productID, 0, $params = 'nodeleted');
+        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
-        $this->view->projects  = array('' => '') + $projects;
-        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
+        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->importUnitResult;
+
+        $this->view->projects  = $projects;
+        $this->view->builds    = $builds;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID = $productID;
         $this->display();

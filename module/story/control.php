@@ -1368,6 +1368,9 @@ class story extends control
         $products = $this->product->getPairs();
 
         $this->lang->set('menugroup.story', 'qa');
+
+        unset($this->lang->noMenuModule[6]);
+        $this->lang->navGroup->story  = 'project';
         $this->lang->story->menu      = $this->lang->testcase->menu;
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->lang->story->menu->testcase['subModule'] = 'story';

@@ -23,12 +23,13 @@ class testtaskModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $testtask = 0)
     {
+        $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
 
         if($testtask and $this->app->viewType != 'mhtml')
         {
-            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
+            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'), 0, 0, $this->session->PRJ);
             if(!isset($testtasks[$testtask])) $testtasks[$testtask] = $this->getById($testtask);
 
             $selectHtml .= "<div class='btn-group angle-btn'>";
@@ -186,14 +187,19 @@ class testtaskModel extends model
      * Get test tasks of a product.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  string $orderBy
      * @param  object $pager
+     * @param  array  $scopeAndStatus
+     * @param  int    $beginTime
+     * @param  int    $endTime
      * @access public
      * @return array
      */
     public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
+
         return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -202,8 +208,9 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
 
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
             ->andWhere('t1.auto')->ne('unit')
-            ->andWhere('t1.project')->in("0,{$this->app->user->view->sprints}") //Fix bug #3260.
+            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
@@ -237,6 +244,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
             ->andWhere('t1.auto')->eq('unit')
             ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
             ->andWhere('t1.end')->ge($beginAndEnd['begin'])
@@ -426,6 +434,7 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
+                ->andWhere('PRJ')->eq($this->session->PRJ)
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
@@ -452,7 +461,9 @@ class testtaskModel extends model
         $cases   = array();
         if($stories)
         {
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+            $cases = $this->dao->select('*')->from(TABLE_CASE)
+                ->where($query)
+                ->andWhere('PRJ')->eq($this->session->PRJ)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -485,6 +496,7 @@ class testtaskModel extends model
         if($bugs)
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('PRJ')->eq($this->session->PRJ)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -517,6 +529,7 @@ class testtaskModel extends model
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
+                ->andWhere('t1.PRJ')->eq($this->session->PRJ)
                 ->andWhere('t2.suite')->eq((int)$suite)
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
@@ -541,7 +554,12 @@ class testtaskModel extends model
     {
         $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
 
-        return $this->dao->select("*")->from(TABLE_CASE)->where($query)->andWhere('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
+        return $this->dao->select("*")->from(TABLE_CASE)->where($query)
+            ->andWhere('id')->in($caseList)
+            ->andWhere('PRJ')->eq($this->session->PRJ)
+            ->andWhere('status')->ne('wait')
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**
@@ -1595,10 +1613,25 @@ class testtaskModel extends model
      */
     public function importUnitResult($productID)
     {
+        $file = $this->loadModel('file')->getUpload('resultFile');
+        if(empty($file))
+        {
+            dao::$errors[] = $this->lang->testtask->unitXMLFormat;
+            die(js::error(dao::getError()));
+        }
+
+        $file     = $file[0];
+        $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
+        move_uploaded_file($file['tmpname'], $fileName);
+        if(simplexml_load_file($fileName) === false)
+        {
+            dao::$errors[] = $this->lang->testtask->cannotBeParsed;
+            die(js::error(dao::getError()));
+        }
+
         $frame = $this->post->frame;
         unset($_POST['frame']);
 
-        $fileName = $this->session->resultFile;
         $data     = $this->parseXMLResult($fileName, $productID, $frame);
         if($frame == 'cppunit' and empty($data['cases'])) $data = $this->parseCppXMLResult($fileName, $productID, $frame);
 
