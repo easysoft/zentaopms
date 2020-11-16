@@ -428,7 +428,6 @@ class upgradeModel extends model
             $this->saveLogs('Execute 10_3_1');
             $this->execSQL($this->getUpgradeFile('10.3.1'));
             $this->removeCustomMenu();
-            $this->initUserView();
             $this->appendExec('10_3_1');
         case '10_4':
             $this->saveLogs('Execute 10_4');
@@ -626,6 +625,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0_alpha');
             $this->execSQL($this->getUpgradeFile('20.0.alpha'));
             $this->setWork2Full();
+            $this->initUserView();
             $this->appendExec('20_0_alpha');
         }
 
