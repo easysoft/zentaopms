@@ -17,6 +17,8 @@
 <?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
+<?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
+<?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <div id="mainMenu" class="clearfix">
   <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
   <div id="sidebarHeader">
