@@ -80,7 +80,7 @@ $lang->program->sv                 = 'SV%';
 $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
-$lang->program->PRJLongTime        = '长期项目';
+$lang->program->PRJLongTime        = '长期';
 
 $lang->program->productNotEmpty = '关联产品不能为空！';
 
