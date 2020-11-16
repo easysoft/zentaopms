@@ -628,6 +628,7 @@ class storyModel extends model
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,stages')
             ->get();
+
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
         if(!empty($_POST['stages']))
@@ -659,6 +660,7 @@ class storyModel extends model
             }
             $story->stage = $minStage;
         }
+
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
         $this->dao->update(TABLE_STORY)

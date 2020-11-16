@@ -149,15 +149,7 @@ function loadProjectMembers(projectID)
         $('#assignedTo_chosen').remove();
         $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
-        $('#assignedTo').attr('name', 'assignedTo[]').chosen();
-
-        $('.modal-dialog #taskTeamEditor tr').each(function()
-        {
-            $(this).find('#team_chosen').remove();
-            $(this).find('#team').next('.picker').remove();
-            $(this).find('#team').replaceWith(data);
-            $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
-        });
+        $('#assignedTo').attr('name', 'assignedTo').chosen();
     });
 }
 </script>
