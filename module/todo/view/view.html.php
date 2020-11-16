@@ -141,7 +141,7 @@
           <table class='table table-data'>
             <tr>
               <th class='thWidth'><?php echo $lang->todo->beginAndEnd?></th>
-              <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
+              <td class='w-160px'><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>
             <tr>
               <th class='thWidth text-top'><?php echo $lang->todo->cycleConfig?></th>
