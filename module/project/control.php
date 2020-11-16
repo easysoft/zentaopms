@@ -128,6 +128,10 @@ class project extends control
         $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        /* Determines whether an object is editable. */
+        $changeAllowed = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
@@ -217,6 +221,7 @@ class project extends control
         $this->view->memberPairs   = $memberPairs;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule     = true;
+        $this->view->changeAllowed = $changeAllowed;
 
         $this->display();
     }
