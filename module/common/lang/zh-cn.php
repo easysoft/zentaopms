@@ -590,9 +590,9 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
+$lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';

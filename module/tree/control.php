@@ -62,7 +62,6 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $this->lang->navGroup->tree = 'product';
             $this->lang->product->menu  = $this->lang->product->viewMenu;
             $this->lang->noMenuModule[] = 'tree';
             $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
@@ -86,6 +85,7 @@ class tree extends control
         }
         elseif($viewType == 'bug')
         {
+            $this->lang->navGroup->tree = 'project';
             $this->loadModel('bug')->setMenu($this->product->getPairs('', $this->session->PRJ), $rootID);
             $this->lang->tree->menu      = $this->lang->bug->menu;
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
@@ -109,6 +109,7 @@ class tree extends control
         }
         elseif($viewType == 'case')
         {
+            $this->lang->navGroup->tree = 'project';
             $this->loadModel('testcase')->setMenu($this->product->getPairs('', $this->session->PRJ), $rootID);
             $this->lang->tree->menu      = $this->lang->testcase->menu;
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
@@ -120,6 +121,7 @@ class tree extends control
         }
         elseif($viewType == 'caselib')
         {
+            $this->lang->navGroup->tree = 'project';
             $this->caselib->setLibMenu($this->caselib->getLibraries(), $rootID);
             $this->lang->tree->menu      = $this->lang->caselib->menu;
             $this->lang->tree->menuOrder = $this->lang->caselib->menuOrder;
@@ -131,6 +133,7 @@ class tree extends control
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
+            $this->lang->navGroup->tree = 'project';
             $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
             $this->doc->setMenu($type, $rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
@@ -211,6 +214,7 @@ class tree extends control
      */
     public function browseTask($rootID, $productID = 0, $currentModuleID = 0)
     {
+        $this->lang->navGroup->tree = 'project';
         $project = $this->loadModel('project')->getById($rootID);
         $this->view->root = $project;
 
