@@ -31,6 +31,7 @@ $lang->program->PRJWhitelist         = '项目白名单';
 $lang->program->PRJAddWhitelist      = '项目添加白名单';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '项目关联产品';
+$lang->program->copyTitle            = '请选择一个项目来复制';
 
 /* Fields. */
 $lang->program->common             = '项目集';

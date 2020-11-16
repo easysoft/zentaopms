@@ -31,6 +31,7 @@ $lang->program->PRJWhitelist         = '項目白名單';
 $lang->program->PRJAddWhitelist      = '項目添加白名單';
 $lang->program->unbindWhielist       = '項目刪除白名單';
 $lang->program->PRJManageProducts    = '項目關聯產品';
+$lang->program->copyTitle            = '請選擇一個項目來複制';
 
 /* Fields. */
 $lang->program->common             = '項目集';

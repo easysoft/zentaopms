@@ -190,7 +190,7 @@
   <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
+      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->program->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
       <?php if(count($programs) == 1):?>
