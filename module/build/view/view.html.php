@@ -97,7 +97,7 @@ tbody tr td:first-child input{display:none;}
         <?php endif;?>
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('build', 'batchUnlinkStory');?>
+            <?php $canBatchUnlink = ($canBeChanged and common::hasPriv('build', 'batchUnlinkStory'));?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
