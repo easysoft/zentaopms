@@ -212,9 +212,6 @@ class build extends control
         $build = $this->build->getById((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = common::canBeChanged('build', $build);
-
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
@@ -261,6 +258,7 @@ class build extends control
         $this->executeHooks($buildID);
 
         /* Assign. */
+        $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->build        = $build;
         $this->view->buildPairs   = $this->build->getProjectBuildPairs($build->project, 0, 0, 'noempty,notrunk');
@@ -272,7 +270,6 @@ class build extends control
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
         $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
-        $this->view->canBeChanged = $canBeChanged;
         $this->display();
     }
  
