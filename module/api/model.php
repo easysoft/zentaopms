@@ -96,29 +96,46 @@ class apiModel extends model
     {
         if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
-        $sql  = trim($sql);
+        $sql = trim($sql);
         if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
-        a($sql);
-        if(empty($sql)) return '';
+
+        $result = array();
+        $result['status']  = 'fail';
+        $result['message'] = '';
+
+        if(empty($sql)) return $result;
 
         if(stripos($sql, 'select ') !== 0)
         {
-            return $this->lang->api->error->onlySelect;
+            $result['message'] = $this->lang->api->error->onlySelect;
+            return $result;
         }
         else
         {
             try
             {
-                $stmt = $this->dao->query($sql);
-                if(empty($keyField)) return $stmt->fetchAll();
+                $stmt = $this->dbh->query($sql);
+
                 $rows = array();
-                while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
-                return $rows;
+                if(empty($keyField))
+                {
+                    $rows = $stmt->fetchAll();
+                }
+                else
+                {
+                    while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
+                }
+
+                $result['status'] = 'success';
+                $result['data']   = $rows;
             }
             catch(PDOException $e)
             {
-                return $e->getMessage();
+                $result['status']  = 'fail';
+                $result['message'] = $e->getMessage();
             }
+
+            return $result;
         }
     }
 }
