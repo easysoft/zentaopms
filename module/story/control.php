@@ -1234,6 +1234,7 @@ class story extends control
      * Bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
