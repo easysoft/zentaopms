@@ -248,7 +248,6 @@ class programModel extends model
         $program = fixer::input('post')
             ->setDefault('status', 'wait')
             ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('end', '')
             ->setDefault('parent', 0)
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
@@ -1111,11 +1110,10 @@ class programModel extends model
     {
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setIF($this->post->longTime == 1, 'end', '')
+            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
             ->setIF($this->post->longTime == 1, 'days', 0)
             ->setIF($this->post->acl      == 'open', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('end', '')
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->add('type', 'project')
@@ -1241,7 +1239,7 @@ class programModel extends model
 
         $project = fixer::input('post')
             ->setDefault('team', substr($this->post->name, 0, 30))
-            ->setIF($this->post->longTime == 1, 'end', '')
+            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
             ->setIF($this->post->longTime == 1, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
@@ -1443,7 +1441,7 @@ class programModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end;
+                    echo $project->end == '2059-12-31' ? '' : $project->end;
                     break;
                 case 'PRJStatus':
                     echo zget($this->lang->program->statusList, $project->status);
