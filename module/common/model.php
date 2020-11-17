@@ -1857,8 +1857,7 @@ EOD;
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
         {
-            $productID = trim($object->product, ',');
-            $product   = $app->control->loadModel('product')->getByID($productID);
+            $product = $app->control->loadModel('product')->getByID($object->product);
             if($product->status == 'closed') return false;
         }
 
