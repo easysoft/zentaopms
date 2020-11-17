@@ -44,7 +44,7 @@
 
         echo "<div id='bysuiteTab' class='btn-group'>";
         echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
-        if(empty($this->config->global->closedProductStatus) or $product->status != 'closed')
+        if(!empty($this->config->CRProduct) or $product->status != 'closed')
         {
             echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
@@ -105,7 +105,7 @@
       ?>
       </ul>
     </div>
-    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>

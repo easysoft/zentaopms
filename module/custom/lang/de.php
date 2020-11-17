@@ -153,11 +153,11 @@ $lang->custom->page     = ' Page';
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
 
-$lang->custom->closedProjectStatus[1] = 'Change Forbidden';
-$lang->custom->closedProjectStatus[0] = 'Change Allowed';
+$lang->custom->CRProject[1] = 'Change Forbidden';
+$lang->custom->CRProject[0] = 'Change Allowed';
 
-$lang->custom->closedProductStatus[1] = 'Change Forbidden';
-$lang->custom->closedProductStatus[0] = 'Change Allowed';
+$lang->custom->CRProduct[1] = 'Change Forbidden';
+$lang->custom->CRProduct[0] = 'Change Allowed';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
