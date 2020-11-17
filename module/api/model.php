@@ -94,7 +94,7 @@ class apiModel extends model
      */
     public function sql($sql, $keyField = '')
     {
-        if(!$this->config->features->apiGetSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
+        if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
         $sql  = trim($sql);
         if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
