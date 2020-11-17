@@ -47,7 +47,7 @@
     <ol class='histories-list'>
       <?php $i = 1; ?>
       <?php foreach($actions as $action):?>
-      <?php $canEditComment = (isset($actionFormLink) and end($actions) == $action and strlen(trim(($action->comment))) != 0 and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
+      <?php $canEditComment = (!empty($canBeChanged) and end($actions) == $action and strlen(trim(($action->comment))) != 0 and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
       <li value='<?php echo $i ++;?>'>
         <?php
         $action->actor = zget($users, $action->actor);
