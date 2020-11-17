@@ -20,7 +20,7 @@ $(function()
     $(document).on('click', "#storyList tbody tr, .table-footer .check-all, #storyList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 
-    $('#toTaskButton').on('click', function ()
+    $('#toTaskButton').on('click', function()
     {
         var planID = $('#plan').val();
         if(planID)
@@ -30,7 +30,7 @@ $(function()
     })
 
     /* Get checked stories. */
-    $('#batchToTaskButton').on('click', function ()
+    $('#batchToTaskButton').on('click', function()
     {
         var storyIdList = '';
         $("input[name^='storyIdList']:checked").each(function()
@@ -38,21 +38,6 @@ $(function()
             storyIdList += $(this).val() + ',';
             $('#storyIdList').val(storyIdList);
         });
-    });
-
-    /* Judge required. */
-    $('#batchToTask #submit').on('click', function ()
-    {
-        var message = '';
-        if($('#batchToTask #type').val() == '') message = typeError;
-
-        if($('#batchToTask #hourPointValue').val() == '') message += workingHourError;
-
-        if(message)
-        {
-            alert(message);
-            return false;
-        }
     });
 
     $('.sorter-false a').unwrap();
