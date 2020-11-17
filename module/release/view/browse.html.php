@@ -58,7 +58,7 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
-      <?php $changeAllowed = common::checkObjectChangeAllowed('release', $release);?>
+      <?php $canBeChanged = common::checkObjectChangeAllowed('release', $release);?>
       <tr>
         <td><?php echo html::a(helper::createLink('release', 'view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
@@ -79,7 +79,7 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if($changeAllowed)
+          if($canBeChanged)
           {
               if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
               if(common::hasPriv('release', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");

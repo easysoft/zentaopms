@@ -73,12 +73,12 @@
       ?>
       <tbody>
         <?php foreach($bugs as $bug):?>
-        <?php $changeAllowed = common::checkObjectChangeAllowed('bug', $bug);?>
+        <?php $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' <?php if(!$changeAllowed) echo 'disabled';?> />
+              <input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' <?php if(!$canBeChanged) echo 'disabled';?> />
               <label></label>
             </div>
             <?php endif;?>
@@ -100,7 +100,7 @@
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
-            if($changeAllowed)
+            if($canBeChanged)
             {
                 $params = "bugID=$bug->id";
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);

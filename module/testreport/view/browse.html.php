@@ -20,7 +20,7 @@
     </span>
   </div>
   <div class='pull-right btn-toolbar'>
-    <?php if($objectType == 'product' and $changeAllowed) common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'");?>
+    <?php if($objectType == 'product' and $canBeChanged) common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>

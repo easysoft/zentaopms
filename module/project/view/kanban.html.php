@@ -18,7 +18,7 @@
     $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=kanban");
     if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
-    <?php if($changeAllowed):?>
+    <?php if($canBeChanged):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
         <i class='icon-import muted'></i> <?php echo $lang->import ?>
@@ -67,7 +67,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-      <?php if($changeAllowed and common::hasPriv('task', 'create')):?>
+      <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
       <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -117,7 +117,7 @@
                   echo "<span class='group-title' title='{$story->title}'>{$story->title}</span>";
               }
               ?>
-              <?php if($changeAllowed):?>
+              <?php if($canBeChanged):?>
               <nav class='board-actions nav nav-default'>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>

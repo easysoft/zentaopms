@@ -45,7 +45,7 @@ class tree extends control
             $this->view->root = $product;
 
             /* Determines whether an object is editable. */
-            $changeAllowed = (empty($this->config->global->closedProductStatus) or $product->status != 'closed') ? true : false;
+            $canBeChanged = (empty($this->config->global->closedProductStatus) or $product->status != 'closed') ? true : false;
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -195,7 +195,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
-        $this->view->changeAllowed   = isset($changeAllowed) ? $changeAllowed : true;
+        $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();
     }
 
@@ -219,7 +219,7 @@ class tree extends control
         $this->view->products = $products;
 
         /* Determines whether an object is editable. */
-        $changeAllowed = (empty($this->config->global->closedProjectStatus) or $project->status != 'closed') ? true : false;
+        $canBeChanged = (empty($this->config->global->closedProjectStatus) or $project->status != 'closed') ? true : false;
 
         /* Set menu. */
         $this->lang->set('menugroup.tree', 'project');
@@ -250,7 +250,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
-        $this->view->changeAllowed   = $changeAllowed;
+        $this->view->canBeChanged    = $canBeChanged;
         $this->display();
     } 
 

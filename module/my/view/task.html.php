@@ -61,12 +61,12 @@
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <?php $changeAllowed = common::checkObjectChangeAllowed('task', $task);?>
+        <?php $canBeChanged = common::checkObjectChangeAllowed('task', $task);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' <?php if(!$changeAllowed) echo 'disabled';?>/>
+              <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' <?php if(!$canBeChanged) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -93,7 +93,7 @@
           </td>
           <td class='c-actions'>
             <?php
-            if($changeAllowed)
+            if($canBeChanged)
             {
                 if($task->needConfirm)
                 {

@@ -49,7 +49,7 @@
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <?php $canTestReport = ($changeAllowed and common::hasPriv('testreport', 'browse'));?>
+        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
         <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
@@ -98,7 +98,7 @@
           </td>
           <td class='c-actions'>
             <?php
-            if($changeAllowed)
+            if($canBeChanged)
             {
                 common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');

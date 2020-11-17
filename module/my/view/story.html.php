@@ -63,14 +63,14 @@
       <tbody>
         <?php foreach($stories as $story):?>
         <?php
-        $storyLink     = $this->createLink('story', 'view', "id=$story->id");
-        $changeAllowed = common::checkObjectChangeAllowed('story', $story);
+        $storyLink    = $this->createLink('story', 'view', "id=$story->id");
+        $canBeChanged = common::checkObjectChangeAllowed('story', $story);
         ?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' <?php if(!$changeAllowed) echo 'disabled';?>/>
+              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' <?php if(!$canBeChanged) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -86,7 +86,7 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            if($changeAllowed)
+            if($canBeChanged)
             {
                 $vars = "story={$story->id}";
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
@@ -105,7 +105,7 @@
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' <?php if(!$changeAllowed) echo 'disabled';?>/>
+              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' <?php if(!$canBeChanged) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -121,7 +121,7 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
-            if($changeAllowed)
+            if($canBeChanged)
             {
                 $vars = "story={$child->id}";
                 common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
