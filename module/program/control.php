@@ -1025,7 +1025,8 @@ class program extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            die(js::reload('parent.parent'));
+            $link = $this->createLink('program', 'PRJManageMembers', "projectID=$projectID");
+            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
         /* Load model. */
