@@ -1379,6 +1379,8 @@ class testcaseModel extends model
     {
         $this->config->testcase->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
