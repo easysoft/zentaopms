@@ -23,7 +23,6 @@ class testtaskModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $testtask = 0)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
 

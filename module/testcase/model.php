@@ -27,7 +27,6 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
