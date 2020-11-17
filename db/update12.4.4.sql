@@ -12,3 +12,6 @@ ALTER TABLE `zt_bug` ADD INDEX `result` (`result`);
 ALTER TABLE `zt_history` ADD INDEX `action` (`action`);
 ALTER TABLE `zt_action` ADD INDEX `action` (`action`);
 ALTER TABLE `zt_action` DROP INDEX `product`;
+
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');

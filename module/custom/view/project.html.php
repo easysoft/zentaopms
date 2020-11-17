@@ -16,7 +16,7 @@
       <tr>
         <th class='w-300px'><?php echo $lang->custom->closedProject;?></th>
         <td class='w-250px text-center'>
-          <?php $checkedKey = isset($config->global->CRProject) ? $config->global->CRProject : 0;?>
+          <?php $checkedKey = isset($config->CRProject) ? $config->CRProject : 0;?>
           <?php foreach($lang->custom->CRProject as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="project" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="project<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
