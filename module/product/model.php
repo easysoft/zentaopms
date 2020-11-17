@@ -331,14 +331,14 @@ class productModel extends model
      * Get product id by project.
      *
      * @param  int    $projectID
-     * @param  int    $backFirst
+     * @param  int    $isFirst
      * @access public
      * @return array
      */
-    public function getProductIDByProject($projectID, $backFirst = true)
+    public function getProductIDByProject($projectID, $isFirst = true)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        if($backFirst === false) return $products;
+        if($isFirst === false) return $products;
         return empty($products) ? 0 : current($products);
     }
 
