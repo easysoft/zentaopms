@@ -1606,6 +1606,7 @@ class bugModel extends model
      * Get bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
