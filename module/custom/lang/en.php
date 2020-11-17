@@ -106,8 +106,8 @@ $lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed p
 $lang->custom->notice->required          = 'The selected field is required.';
 $lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
-$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
 $lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
+$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -153,11 +153,11 @@ $lang->custom->page     = ' Page';
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
 
-$lang->custom->CRProject[1] = 'Change Forbidden';
-$lang->custom->CRProject[0] = 'Change Allowed';
+$lang->custom->CRProduct[1] = 'Change Allowed';
+$lang->custom->CRProduct[0] = 'Change Forbidden';
 
-$lang->custom->CRProduct[1] = 'Change Forbidden';
-$lang->custom->CRProduct[0] = 'Change Allowed';
+$lang->custom->CRProject[1] = 'Change Allowed';
+$lang->custom->CRProject[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

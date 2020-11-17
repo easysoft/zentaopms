@@ -106,8 +106,8 @@ $lang->custom->notice->noClosedBlock               = '没有永久关闭的区�
 $lang->custom->notice->required                    = '页面提交时，选中的字段必填';
 $lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
-$lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->projectCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
 $lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->storyCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
+$lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->projectCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
 
 $lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -153,11 +153,11 @@ $lang->custom->page     = '页面';
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';
 
-$lang->custom->CRProject[1] = '禁止修改';
-$lang->custom->CRProject[0] = '允许修改';
+$lang->custom->CRProduct[1] = '允许修改';
+$lang->custom->CRProduct[0] = '禁止修改';
 
-$lang->custom->CRProduct[1] = '禁止修改';
-$lang->custom->CRProduct[0] = '允许修改';
+$lang->custom->CRProject[1] = '允许修改';
+$lang->custom->CRProject[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
