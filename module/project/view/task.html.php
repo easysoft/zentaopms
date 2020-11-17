@@ -118,7 +118,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       </ul>
     </div>
 
-    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProject) or $project->status != 'closed'):?>
     <div class="btn-group dropdown-hover">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>

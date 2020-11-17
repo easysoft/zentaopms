@@ -3103,7 +3103,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('storyIdList', array($story->id => ''), '') . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 }
                 else
                 {

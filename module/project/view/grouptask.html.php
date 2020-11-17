@@ -53,7 +53,7 @@
         ?>
       </ul>
     </div>
-    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProject) or $project->status != 'closed'):?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -209,7 +209,7 @@
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
         <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <td class="c-actions">
-          <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
+          <?php if(!empty($this->config->CRProject) or $project->status != 'closed'):?>
           <?php common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
           <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', 'trash', 'hiddenwin');?>
