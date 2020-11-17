@@ -13,7 +13,7 @@ global $lang;
 $config->build->search['module']             = 'build';
 $config->build->search['fields']['name']     = $lang->build->name;
 $config->build->search['fields']['id']       = $lang->build->id;
-$config->build->search['fields']['product']  = '所属' . $lang->build->product;
+$config->build->search['fields']['product']  = $lang->story->product;
 $config->build->search['fields']['scmPath']  = $lang->build->scmPath;
 $config->build->search['fields']['filePath'] = $lang->build->filePath;
 $config->build->search['fields']['date']     = $lang->build->date;
