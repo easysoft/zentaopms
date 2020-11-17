@@ -32,6 +32,7 @@ $lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
 $lang->program->unbindWhielist       = 'Project Remove Whitelist';
 $lang->program->PRJManageProducts    = 'Manage Products';
 $lang->program->copyTitle            = 'Please select an item to copy';
+$lang->program->errorSameProducts    = 'Project cannot be associated with multiple identical products.';
 
 /* Fields. */
 $lang->program->common             = 'Project';

@@ -18,7 +18,7 @@
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
-<?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

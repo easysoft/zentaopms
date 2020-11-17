@@ -32,6 +32,7 @@ $lang->program->PRJAddWhitelist      = '项目添加白名单';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '项目关联产品';
 $lang->program->copyTitle            = '请选择一个项目来复制';
+$lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 
 /* Fields. */
 $lang->program->common             = '项目集';

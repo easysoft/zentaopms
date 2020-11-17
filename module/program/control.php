@@ -145,7 +145,7 @@ class program extends control
         if($_POST)
         {
             $projectID = $this->program->PGMCreate();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('program', $projectID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmbrowse')));
@@ -180,7 +180,7 @@ class program extends control
         if($_POST)
         {
             $changes = $this->program->PGMUpdate($programID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('program', $programID, 'edited');
@@ -529,23 +529,6 @@ class program extends control
     }
 
     /**
-     * Process program errors.
-     *
-     * @param  array $errors
-     * @access public
-     * @return void
-     */
-    public function processErrors($errors)
-    {
-        foreach($errors as $field => $error)
-        {
-            $errors[$field] = str_replace($this->lang->program->stage, $this->lang->program->common, $error);
-        }
-
-        return $errors;
-    }
-
-    /**
      * Ajax get program drop menu.
      *
      * @param  int     $programID
@@ -741,7 +724,7 @@ class program extends control
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
@@ -824,7 +807,7 @@ class program extends control
         if($_POST)
         {
             $changes = $this->program->PRJUpdate($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {

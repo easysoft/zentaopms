@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->project->weekend);?>
-<?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
 <?php js::set('parentID', $parentID);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>

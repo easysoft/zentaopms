@@ -278,6 +278,8 @@ class programModel extends model
             }
         }
 
+        $this->lang->project->code = $this->lang->program->PGMCode;
+        $this->lang->project->name = $this->lang->program->PGMName;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -375,7 +377,8 @@ class programModel extends model
         }
         if(dao::isError()) return false;
 
-
+        $this->lang->project->code = $this->lang->program->PGMCode;
+        $this->lang->project->name = $this->lang->program->PGMName;
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->PGMEdit->requiredFields, 'notempty')
@@ -1276,6 +1279,8 @@ class programModel extends model
         $requiredFields = $this->config->program->PRJEdit->requiredFields;
         if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
+        $this->lang->project->name = $this->lang->program->PRJName;
+        $this->lang->project->code = $this->lang->program->PRJCode;
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')
