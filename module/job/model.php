@@ -333,7 +333,7 @@ class jobModel extends model
 
         $data->ZENTAO_DATA = "compile={$compileID}";
 
-        //Add custom parameters to the data.
+        /* Add custom parameters to the data. */
         foreach(json_decode($job->customParam) as $paramName => $paramValue) $data->$paramName = $paramValue;
 
         $compile = new stdclass();
