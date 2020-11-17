@@ -1022,7 +1022,10 @@ class testtaskModel extends model
      */
     public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
     {
-        $orderBy = (strpos($orderBy, 'assignedTo') !== false or strpos($orderBy, 'status') !== false or strpos($orderBy, 'lastRunResult') !== false or strpos($orderBy, 'lastRunner') !== false or strpos($orderBy, 'lastRunDate') !== false) ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        /* Select the table for these special fields. */
+        $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1046,7 +1049,10 @@ class testtaskModel extends model
      */
     public function getUserRuns($taskID, $user, $modules = '', $orderBy, $pager = null)
     {
-        $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        /* Select the table for these special fields. */
+        $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1113,6 +1119,12 @@ class testtaskModel extends model
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
+
+            /* Select the table for these special fields. */
+            $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+            $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
+            $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $sort) : ('t2.' . $sort);
+
             $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
@@ -1121,7 +1133,7 @@ class testtaskModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($queryProductID != 'all')->andWhere('t2.product')->eq($queryProductID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
-                ->orderBy((strpos($sort, 'assignedTo') !== false or strpos($sort, 'status') !== false or strpos($sort, 'lastRunResult') !== false or strpos($sort, 'lastRunner') !== false or strpos($sort, 'lastRunDate') !== false) ? ('t1.' . $sort) : ('t2.' . $sort))
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
