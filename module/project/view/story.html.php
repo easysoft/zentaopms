@@ -331,7 +331,6 @@
             </tr>
             <?php endif;?>
             <tr>
-              <td><?php echo html::hidden('storyIdList', '');?></td>
             </tr>
             <tr>
               <th><?php echo $lang->story->field;?></th>
@@ -339,6 +338,7 @@
             </tr>
             <tr>
               <td colspan='3' class='text-center'>
+                <?php echo html::hidden('storyIdList', '');?>
                 <?php echo html::submitButton($lang->story->toTask, '', 'btn btn-primary');?>
               </td>
             </tr>
