@@ -25,7 +25,7 @@
     }
     echo html::a(inlink('build', "projectID={$projectID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
-    <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange=changeProduct(this.value) class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
+    <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
   </div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
   <div class="btn-toolbar pull-right">
