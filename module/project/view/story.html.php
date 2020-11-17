@@ -246,7 +246,7 @@
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class = $canBatchToTask ? '' : "class='disabled'";
+              $class = $canBatchToTask ? '' : "class='hidden'";
               echo "<li $class>" . html::a('#batchToTask', $lang->story->toTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
               ?>
             </ul>
