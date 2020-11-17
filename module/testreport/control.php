@@ -59,8 +59,8 @@ class testreport extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if($objectType == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $canBeChanged = false;
-        if($objectType == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $canBeChanged = false;
+        if($objectType == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
+        if($objectType == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

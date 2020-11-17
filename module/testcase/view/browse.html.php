@@ -47,7 +47,7 @@ js::set('suiteID',        $suiteID);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-        <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('testcase', 'create')):?>
+        <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('testcase', 'create')):?>
         <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
         <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
         <?php endif;?>

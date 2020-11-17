@@ -756,8 +756,8 @@ class doc extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $canBeChanged = false;
-        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -856,8 +856,8 @@ class doc extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $canBeChanged = false;
-        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
 
         if($from == 'product')
         {
