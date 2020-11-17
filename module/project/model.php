@@ -2500,7 +2500,7 @@ class projectModel extends model
     }
 
     /**
-     * Build version search form.
+     * Build project build search form.
      *
      * @param  array  $products
      * @param  int    $queryID
@@ -2508,7 +2508,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function buildVersionSearchForm($products, $queryID, $actionURL)
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL)
     {
         $this->loadModel('build');
 

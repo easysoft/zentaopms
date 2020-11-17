@@ -888,7 +888,7 @@ class project extends control
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
-        $this->project->buildVersionSearchForm($products, $queryID, $actionURL);
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL);
 
         /* Get builds. */
         if($type == 'bysearch')
