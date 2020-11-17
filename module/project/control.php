@@ -130,7 +130,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         if($this->cookie->preProjectID != $projectID)
         {
@@ -703,7 +703,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -945,7 +945,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1065,7 +1065,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -1593,7 +1593,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         $products = $this->project->getProducts($project->id);
         $linkedBranches = array();
@@ -1664,7 +1664,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
         $kanbanSetting = $this->project->getKanbanSetting();
@@ -1857,7 +1857,7 @@ class project extends control
 
         /* Determines whether an object is editable. */
         $canBeChanged = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
 
         /* Get project's product. */
         $productID = 0;

@@ -28,7 +28,7 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(empty($this->config->global->closedProjectStatus) or $project->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProject) or $project->status != 'closed'):?>
     <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
     <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
@@ -39,7 +39,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
-      <?php if((empty($this->config->global->closedProjectStatus) or $project->status != 'closed') and common::hasPriv('testtask', 'create')):?>
+      <?php if((!empty($this->config->CRProject) or $project->status != 'closed') and common::hasPriv('testtask', 'create')):?>
       <?php echo html::a($this->createLink('testtask', 'create', "product=0&project=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
