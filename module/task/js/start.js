@@ -11,7 +11,10 @@ function checkLeft()
             alert(noticeTaskStart);
             result = false;
         }
-        else result = confirm(confirmFinish);
+        else
+        {
+            result = confirm(confirmFinish);
+        }
         if(!result) setTimeout(function() {$.enableForm()}, 50);
         return result;
     }
