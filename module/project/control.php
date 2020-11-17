@@ -1890,8 +1890,16 @@ class project extends control
         if($confirm == 'no')
         {
             /* Get the number of unfinished tasks and unresolved bugs. */
-            $unfinishedTasks = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing')->fetch();
-            $unresolvedBugs  = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('status')->eq('active')->fetch();
+            $unfinishedTasks = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->in('wait,doing,pause')
+                ->fetch();
+            $unresolvedBugs  = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->eq('active')
+                ->fetch();
 
             /* Set prompt information. */
             $tips = '';
