@@ -46,12 +46,6 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($project->model == 'scrum'):?>
-        <tr>
-          <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, $project->lifetime, "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <?php endif;?>
         <?php if($project->model == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
