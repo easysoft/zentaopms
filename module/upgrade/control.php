@@ -428,13 +428,27 @@ class upgrade extends control
             $this->view->noMergedSprints = $noMergedSprints;
         }
 
-        $this->view->title = $this->lang->upgrade->mergeProgram;
+        $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs('id', 'name');
 
-        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs('id', 'name');
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->fetchPairs('id', 'name');
+        $this->view->title    = $this->lang->upgrade->mergeProgram;
+        $this->view->programs = $programs;
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->andWhere('parent')->eq(key($programs))->fetchPairs('id', 'name');
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->display();
+    }
+
+    /**
+     * Gets the program under the project set.
+     *
+     * @param  int $programID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectByProgram($programID = 0)
+    {
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->andWhere('parent')->eq($programID)->fetchPairs('id', 'name');
+        die(html::select('projects', $projects, '', 'class="form-control"'));
     }
 
     /**

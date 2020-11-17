@@ -5,7 +5,7 @@
     <th><?php echo $lang->upgrade->existPGM;?></th>
     <td>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, '', "class='form-control'");?>
+        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='projectByProgram(this)'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -16,7 +16,6 @@
     </td>
   </tr>
   <?php endif;?>
-  <?php if($projects):?>
   <tr>
     <th><?php echo $lang->upgrade->existPRJ;?></th>
     <td>
@@ -31,7 +30,6 @@
       </div>
     </td>
   </tr>
-  <?php endif;?>
   <tr class='pgmParams'>
     <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
     <td class='required'><?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control'");?></td>

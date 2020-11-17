@@ -24,21 +24,29 @@ $(function()
         setPgmEnd(pgmEnd);
     })
 
+    var pgmOriginEnd = $('#end').val();
     $('#longTime').change(function()
     {
         if($(this).prop('checked'))
         {
+            pgmOriginEnd = $('#end').val();
             $('#end').val('').attr('disabled', 'disabled');
             $('#days').val('');
         }
         else
         {
-            $('#end').removeAttr('disabled');
+            $('#end').val(pgmOriginEnd).removeAttr('disabled');
         }
     });
 
     $('#lineList li a').click(function()
     {
+        if($('#longTime').is(':checked'))
+        {
+            $('#longTime').attr('checked', false);
+            $('#end').removeAttr('disabled');
+        }
+
         /* Active current li and remove active before li. */
         $(this).closest('ul').find('li').removeClass('active');
         $(this).closest('li').addClass('active');
@@ -100,6 +108,20 @@ $(function()
     toggleProgram($('form #newProgram0'));
     toggleProject($('form #newProject0'));
 });
+
+function projectByProgram(obj)
+{
+    var programID = $(obj).val();
+    var link = createLink('upgrade', 'ajaxGetProjectByProgram', 'programID=' + programID);
+    $.post(link, function(data)
+    {
+        $('#projects').replaceWith(data);
+        if($('#newProject0').is(':checked'))
+        {
+            $('#projects').attr('disabled', 'disabled');
+        }
+    })
+}
 
 function toggleProgram(obj)
 {
