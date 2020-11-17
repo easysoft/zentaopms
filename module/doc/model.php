@@ -111,7 +111,7 @@ class docModel extends model
             $docLib          = new stdClass();
             $docLib->product = $productID;
             $docLib->project = $projectID;
-            $canBeChanged    = common::checkObjectChangeAllowed('doc', $docLib);
+            $canBeChanged    = common::canBeChanged('doc', $docLib);
 
             $lib      = isset($lib) ? $lib : new stdClass();
             $actions  = $this->setFastMenu($fastLib);

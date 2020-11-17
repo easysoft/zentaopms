@@ -2508,7 +2508,7 @@ class bugModel extends model
     public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
         /* Check the product is closed. */
-        $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);
+        $canBeChanged = common::canBeChanged('bug', $bug);
 
         $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
         $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));

@@ -341,7 +341,7 @@
     </table>
   </div>
 </details>
-<?php if(common::checkObjectChangeAllowed('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+<?php if(common::canBeChanged('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
 <?php include '../../common/view/action.html.php';?>
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>

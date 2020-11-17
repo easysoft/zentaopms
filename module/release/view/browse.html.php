@@ -58,7 +58,7 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
-      <?php $canBeChanged = common::checkObjectChangeAllowed('release', $release);?>
+      <?php $canBeChanged = common::canBeChanged('release', $release);?>
       <tr>
         <td><?php echo html::a(helper::createLink('release', 'view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>

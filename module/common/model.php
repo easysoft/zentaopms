@@ -1490,7 +1490,7 @@ EOD;
         global $app, $lang;
 
         /* Check the parent object is closed. */
-        if(strpos('close|batchClose', $method) === false and !commonModel::checkObjectChangeAllowed($module, $object)) return false;
+        if(strpos('close|batchClose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -1842,7 +1842,7 @@ EOD;
     }
 
     /**
-     * Check the parent object is closed.
+     * Check the object can be changed.
      *
      * @param  string $module
      * @param  object $object
@@ -1850,7 +1850,7 @@ EOD;
      * @access public
      * @return bool
      */
-    public static function checkObjectChangeAllowed($module, $object = null)
+    public static function canBeChanged($module, $object = null)
     {
         global $app, $config;
 

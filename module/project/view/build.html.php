@@ -74,7 +74,7 @@
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
           <td class="c-actions">
             <?php
-            if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::checkObjectChangeAllowed('build', $build))
+            if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::canBeChanged('build', $build))
             {
                 echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}'");
             }

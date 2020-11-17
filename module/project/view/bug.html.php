@@ -75,7 +75,7 @@
       <tbody>
       <?php foreach($bugs as $bug):?>
       <?php
-      $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);
+      $canBeChanged = common::canBeChanged('bug', $bug);
       $arrtibute    = $canBeChanged ? '' : 'disabled';
       ?>
       <tr>

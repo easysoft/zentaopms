@@ -50,7 +50,7 @@
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
-    <?php if(common::checkObjectChangeAllowed('testcase', $case)) common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
+    <?php if(common::canBeChanged('testcase', $case)) common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
   </div>
   <?php endif;?>
 </div>

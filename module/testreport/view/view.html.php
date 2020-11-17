@@ -112,7 +112,7 @@
     <?php if(!$report->deleted):?>
     <div class='divider'></div>
     <?php
-    if(common::checkObjectChangeAllowed('report', $report))
+    if(common::canBeChanged('report', $report))
     {
         if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
         common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');

@@ -161,7 +161,7 @@ class testsuite extends control
         $this->view->pager        = $pager;
         $this->view->modules      = $this->loadModel('tree')->getOptionMenu($suite->product, 'case');
         $this->view->branches     = $this->loadModel('branch')->getPairs($suite->product, 'noempty');
-        $this->view->canBeChanged = common::checkObjectChangeAllowed('testsuite', $suite);
+        $this->view->canBeChanged = common::canBeChanged('testsuite', $suite);
 
         $this->display();
     }

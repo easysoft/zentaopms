@@ -64,7 +64,7 @@
         <?php foreach($stories as $story):?>
         <?php
         $storyLink    = $this->createLink('story', 'view', "id=$story->id");
-        $canBeChanged = common::checkObjectChangeAllowed('story', $story);
+        $canBeChanged = common::canBeChanged('story', $story);
         ?>
         <tr>
           <td class="c-id">

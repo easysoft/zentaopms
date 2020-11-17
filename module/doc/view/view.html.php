@@ -214,7 +214,7 @@ js::set('docID', $doc->id);
       </details>
     </div>
     <div class='cell'>
-      <?php if(common::checkObjectChangeAllowed('doc', $doc)) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
+      <?php if(common::canBeChanged('doc', $doc)) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>

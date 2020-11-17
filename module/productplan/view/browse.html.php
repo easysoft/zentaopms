@@ -75,7 +75,7 @@
       <?php $this->loadModel('file');?>
       <?php foreach($plans as $plan):?>
       <?php
-      $canBeChanged = common::checkObjectChangeAllowed('plan', $plan);
+      $canBeChanged = common::canBeChanged('plan', $plan);
       $attribute    = $canBeChanged ? '' : 'disabled';
 
       $plan = $this->file->replaceImgURL($plan, 'desc');

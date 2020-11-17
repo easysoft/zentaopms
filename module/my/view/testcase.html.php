@@ -69,7 +69,7 @@
         <?php
         $caseID       = $type == 'assigntome' ? $case->case : $case->id;
         $runID        = $type == 'assigntome' ? $case->id   : 0;
-        $canBeChanged = common::checkObjectChangeAllowed('testcase', $case);
+        $canBeChanged = common::canBeChanged('testcase', $case);
         ?>
         <tr>
           <td class="c-id">

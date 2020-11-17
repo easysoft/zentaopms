@@ -61,7 +61,7 @@
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <?php $canBeChanged = common::checkObjectChangeAllowed('task', $task);?>
+        <?php $canBeChanged = common::canBeChanged('task', $task);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>

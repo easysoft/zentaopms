@@ -1411,7 +1411,7 @@ class testcaseModel extends model
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
         /* Check the product is closed. */
-        $canBeChanged = common::checkObjectChangeAllowed('case', $case);
+        $canBeChanged = common::canBeChanged('case', $case);
 
         $canBatchRun                = common::hasPriv('testtask', 'batchRun');
         $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');

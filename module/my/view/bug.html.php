@@ -73,7 +73,7 @@
       ?>
       <tbody>
         <?php foreach($bugs as $bug):?>
-        <?php $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);?>
+        <?php $canBeChanged = common::canBeChanged('bug', $bug);?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>

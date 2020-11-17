@@ -39,7 +39,7 @@
         <div class="detail-content article-content"><?php echo $task->report;?></div>
       </div>
       <?php endif;?>
-      <?php if(common::checkObjectChangeAllowed('testtask', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
+      <?php if(common::canBeChanged('testtask', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
     </div>
     <?php $this->printExtendFields($task, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>

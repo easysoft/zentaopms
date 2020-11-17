@@ -250,7 +250,7 @@ class productplan extends control
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
         /* Determines whether an object is editable. */
-        $canBeChanged = common::checkObjectChangeAllowed('plan', $plan);
+        $canBeChanged = common::canBeChanged('plan', $plan);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

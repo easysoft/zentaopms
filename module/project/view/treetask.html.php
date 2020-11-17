@@ -79,7 +79,7 @@
 <?php endif;?>
 <?php endif;?>
 <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
-<?php if(common::checkObjectChangeAllowed('task', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
+<?php if(common::canBeChanged('task', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
 <?php include '../../common/view/action.html.php';?>
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>

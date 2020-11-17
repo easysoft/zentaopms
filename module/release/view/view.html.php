@@ -31,7 +31,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    $canBeChanged = common::checkObjectChangeAllowed('release', $release);
+    $canBeChanged = common::canBeChanged('release', $release);
 
     if(!$release->deleted and $canBeChanged)
     {

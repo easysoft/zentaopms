@@ -213,7 +213,7 @@ class build extends control
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Determines whether an object is editable. */
-        $canBeChanged = common::checkObjectChangeAllowed('build', $build);
+        $canBeChanged = common::canBeChanged('build', $build);
 
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
