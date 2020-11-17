@@ -189,15 +189,15 @@ js::set('foldAll',       $lang->project->treeLevel['root']);
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $changeAllowed        = (empty($config->global->closedProductStatus) or $product->status != 'closed');
-      $canBatchEdit         = ($changeAllowed and common::hasPriv('story', 'batchEdit'));
+      $canBeChanged         = (empty($config->global->closedProductStatus) or $product->status != 'closed');
+      $canBatchEdit         = ($canBeChanged and common::hasPriv('story', 'batchEdit'));
       $canBatchClose        = (common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
-      $canBatchReview       = ($changeAllowed and common::hasPriv('story', 'batchReview'));
-      $canBatchChangeStage  = ($changeAllowed and common::hasPriv('story', 'batchChangeStage'));
-      $canBatchChangeBranch = ($changeAllowed and common::hasPriv('story', 'batchChangeBranch'));
-      $canBatchChangeModule = ($changeAllowed and common::hasPriv('story', 'batchChangeModule'));
-      $canBatchChangePlan   = ($changeAllowed and common::hasPriv('story', 'batchChangePlan'));
-      $canBatchAssignTo     = ($changeAllowed and common::hasPriv('story', 'batchAssignTo'));
+      $canBatchReview       = ($canBeChanged and common::hasPriv('story', 'batchReview'));
+      $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage'));
+      $canBatchChangeBranch = ($canBeChanged and common::hasPriv('story', 'batchChangeBranch'));
+      $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
+      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
+      $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
       ?>

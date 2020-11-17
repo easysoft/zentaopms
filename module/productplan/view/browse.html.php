@@ -75,8 +75,8 @@
       <?php $this->loadModel('file');?>
       <?php foreach($plans as $plan):?>
       <?php
-      $changeAllowed = common::checkObjectChangeAllowed('plan', $plan);
-      $disabled      = $changeAllowed ? '' : 'disabled';
+      $canBeChanged = common::checkObjectChangeAllowed('plan', $plan);
+      $attribute    = $canBeChanged ? '' : 'disabled';
 
       $plan = $this->file->replaceImgURL($plan, 'desc');
       if($plan->parent == '-1')
@@ -100,7 +100,7 @@
       <tr class='<?php echo $class;?>'>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $disabled) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
+          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>

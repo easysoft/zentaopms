@@ -18,7 +18,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if($changeAllowed)
+    if($canBeChanged)
     {
         if(commonModel::isTutorialMode())
         {
@@ -55,7 +55,7 @@
           <th><?php echo $lang->team->hours;?></th>
           <th><?php echo $lang->team->totalHours;?></th>
           <th class='w-100px text-center'><?php echo $lang->team->limited;?></th>
-          <?php if($changeAllowed):?>
+          <?php if($canBeChanged):?>
           <th class='c-actions-1 w-80px text-center'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
@@ -77,7 +77,7 @@
           <td><?php echo $member->hours . $lang->project->workHour;?></td>
           <td><?php echo $memberHours . $lang->project->workHour;?></td>
           <td class="text-center"><?php echo $lang->team->limitedList[$member->limited];?></td>
-          <?php if($changeAllowed):?>
+          <?php if($canBeChanged):?>
           <td class='c-actions text-center'>
             <?php
             if (common::hasPriv('project', 'unlinkMember', $member))

@@ -121,7 +121,7 @@
           $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
           $canBatchToTask       = common::hasPriv('story', 'batchToTask');
 
-          $canBatchAction       = ($changeAllowed and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+          $canBatchAction       = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
           <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
@@ -199,7 +199,7 @@
             <td class='c-actions'>
               <?php
               $hasDBPriv = common::hasDBPriv($project, 'project');
-              if($changeAllowed)
+              if($canBeChanged)
               {
                   $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
@@ -220,7 +220,7 @@
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
-                  if($changeAllowed and common::hasPriv('project', 'unlinkStory', $project))
+                  if($canBeChanged and common::hasPriv('project', 'unlinkStory', $project))
                   {
                       $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");

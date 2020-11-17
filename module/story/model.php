@@ -3028,7 +3028,7 @@ class storyModel extends model
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
         /* Check the product is closed. */
-        $changeAllowed = common::checkObjectChangeAllowed('story', $story);
+        $canBeChanged = common::checkObjectChangeAllowed('story', $story);
 
         $canBatchEdit         = common::hasPriv('story', 'batchEdit');
         $canBatchClose        = common::hasPriv('story', 'batchClose');
@@ -3225,7 +3225,7 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                if($changeAllowed)
+                if($canBeChanged)
                 {
                     common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                     common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');

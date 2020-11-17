@@ -31,9 +31,9 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    $changeAllowed = common::checkObjectChangeAllowed('release', $release);
+    $canBeChanged = common::checkObjectChangeAllowed('release', $release);
 
-    if(!$release->deleted and $changeAllowed)
+    if(!$release->deleted and $canBeChanged)
     {
         echo $this->buildOperateMenu($release, 'view');
 
@@ -66,7 +66,7 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-            <?php if(common::hasPriv('release', 'linkStory') and $changeAllowed):?>
+            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -80,7 +80,7 @@
                 <thead>
                   <tr class='text-center'>
                     <th class='c-id text-left'>
-                      <?php if(($canBatchUnlink or $canBatchClose) and $changeAllowed):?>
+                      <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
                       </div>
@@ -101,7 +101,7 @@
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
-                      <?php if(($canBatchUnlink or $canBatchClose) and $changeAllowed):?>
+                      <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary">
                         <input type='checkbox' name='storyIdList[]'  value='<?php echo $story->id;?>'/>
                         <label></label>
@@ -124,7 +124,7 @@
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkStory') and $changeAllowed)
+                      if(common::hasPriv('release', 'unlinkStory') and $canBeChanged)
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
@@ -136,7 +136,7 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countStories and ($canBatchUnlink or $canBatchClose) and $changeAllowed):?>
+                <?php if($countStories and ($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php
@@ -164,7 +164,7 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $changeAllowed):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -175,7 +175,7 @@
                 <thead>
                   <tr class='text-center'>
                     <th class='c-id text-left'>
-                      <?php if($canBatchUnlink and $changeAllowed):?>
+                      <?php if($canBatchUnlink and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
                       </div>
@@ -196,7 +196,7 @@
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
-                      <?php if($canBatchUnlink and $changeAllowed):?>
+                      <?php if($canBatchUnlink and $canBeChanged):?>
                       <div class="checkbox-primary">
                         <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                         <label></label>
@@ -214,7 +214,7 @@
                     <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkBug') and $changeAllowed)
+                      if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
@@ -226,7 +226,7 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countBugs and $canBatchUnlink and $changeAllowed):?>
+                <?php if($countBugs and $canBatchUnlink and $canBeChanged):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
@@ -242,7 +242,7 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $changeAllowed):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -253,7 +253,7 @@
                 <thead>
                   <tr class='text-center'>
                     <th class='c-id text-left'>
-                      <?php if($canBatchUnlink and $changeAllowed):?>
+                      <?php if($canBatchUnlink and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
                       </div>
@@ -284,7 +284,7 @@
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
-                      <?php if($canBatchUnlink and $changeAllowed):?>
+                      <?php if($canBatchUnlink and $canBeChanged):?>
                       <div class="checkbox-primary">
                         <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                         <label></label>
@@ -305,7 +305,7 @@
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkBug') and $changeAllowed)
+                      if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"leftBugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
@@ -317,7 +317,7 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countLeftBugs and $canBatchUnlink and $changeAllowed):?>
+                <?php if($countLeftBugs and $canBatchUnlink and $canBeChanged):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>

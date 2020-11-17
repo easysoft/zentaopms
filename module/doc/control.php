@@ -755,9 +755,9 @@ class doc extends control
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $changeAllowed = false;
-        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $canBeChanged = false;
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -802,18 +802,18 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title         = $object->name;
-        $this->view->position[]    = $object->name;
+        $this->view->title        = $object->name;
+        $this->view->position[]   = $object->name;
 
-        $this->view->type          = $type;
-        $this->view->object        = $object;
-        $this->view->files         = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager         = $pager;
-        $this->view->viewType      = $viewType;
-        $this->view->orderBy       = $orderBy;
-        $this->view->objectID      = $objectID;
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->type         = $type;
+        $this->view->object       = $object;
+        $this->view->files        = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->viewType     = $viewType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->objectID     = $objectID;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -855,9 +855,9 @@ class doc extends control
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $changeAllowed = false;
-        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if($type == 'product' and !empty($this->config->global->closedProductStatus) and $object->status == 'closed') $canBeChanged = false;
+        if($type == 'project' and !empty($this->config->global->closedProjectStatus) and $object->status == 'closed') $canBeChanged = false;
 
         if($from == 'product')
         {
@@ -895,11 +895,11 @@ class doc extends control
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
-        $this->view->type          = $type;
-        $this->view->object        = $object;
-        $this->view->from          = $from;
-        $this->view->libs          = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->type         = $type;
+        $this->view->object       = $object;
+        $this->view->from         = $from;
+        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->canBeChanged = $canBeChanged;
         $this->display();
     }
 }

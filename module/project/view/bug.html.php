@@ -75,13 +75,13 @@
       <tbody>
       <?php foreach($bugs as $bug):?>
       <?php
-      $changeAllowed = common::checkObjectChangeAllowed('bug', $bug);
-      $disabled      = $changeAllowed ? '' : 'disabled';
+      $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);
+      $arrtibute    = $canBeChanged ? '' : 'disabled';
       ?>
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $disabled) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
@@ -101,7 +101,7 @@
         <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
         <td class='c-actions'>
           <?php
-          if($changeAllowed)
+          if($canBeChanged)
           {
               $params = "bugID=$bug->id";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);

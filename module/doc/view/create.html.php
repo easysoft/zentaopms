@@ -86,10 +86,10 @@
             <th><?php echo $lang->doc->mailto;?></th>
             <td colspan="2">
               <div class="input-group">
-              <?php
-              echo html::select('mailto[]', $users, '', "multiple class='form-control chosen'");
-              echo $this->fetch('my', 'buildContactLists');
-              ?>
+                <?php
+                echo html::select('mailto[]', $users, '', "multiple class='form-control chosen'");
+                echo $this->fetch('my', 'buildContactLists');
+                ?>
               </div>
             </td>
           </tr>

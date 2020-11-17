@@ -64,6 +64,7 @@ $lang->story->batchToTask       = 'Batch Convert to Task';
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
+$lang->story->successToTask   = "Converted to task."
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
