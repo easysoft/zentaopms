@@ -2027,6 +2027,7 @@ class userModel extends model
         if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            if(empty($parent)) return false;
             if($parent->PM == $account || $parent->openedBy == $account) return true;
         }
 
