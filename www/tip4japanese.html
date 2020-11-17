@@ -35,7 +35,7 @@
         pathName = location.pathname;
         pathName = pathName.substring(0, pathName.lastIndexOf ('/') + 1);
 
-        document.cookie = "lang=" + lang + "; path=" + pathName;
+        document.cookie = "lang=" + lang + "; path=" + pathName + "; HttpOnly;";
         location.href   = window.location.protocol + "//" + window.location.host + pathName;
     }
     </script>
