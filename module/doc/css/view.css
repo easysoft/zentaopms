@@ -19,3 +19,4 @@
 .doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
 .doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
 .right-icon a{color: #1183fb}
+.cell th,td {word-break: break-word;}

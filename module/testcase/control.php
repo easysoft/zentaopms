@@ -109,8 +109,6 @@ class testcase extends control
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $libs = $this->loadModel('caselib')->getLibraries();
-        $this->config->testcase->search['params']['lib']['values'] = $libs;
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
@@ -140,7 +138,6 @@ class testcase extends control
         $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
-        $this->view->libs          = $libs;
 
         $this->display();
     }

@@ -5,7 +5,7 @@ $(function()
     var $kanban = $('#kanban');
 
     var stageMap = new Object();
-    if(changeAllowed)
+    if(canBeChanged)
     {
         stageMap =
         {

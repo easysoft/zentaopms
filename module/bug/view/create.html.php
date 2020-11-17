@@ -268,10 +268,10 @@ js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
             <?php if($showMailto):?>
             <td>
               <div class='input-group' id='contactListGroup'>
-              <?php
-              echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
-              echo $this->fetch('my', 'buildContactLists');
-              ?>
+                <?php
+                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
+                echo $this->fetch('my', 'buildContactLists');
+                ?>
               </div>
             </td>
             <?php endif;?>

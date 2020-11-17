@@ -128,6 +128,10 @@ class project extends control
         $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        /* Determines whether an object is editable. */
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
+
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
@@ -197,26 +201,27 @@ class project extends control
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($projectID, 'task', $showModule) : array();
 
         /* Assign. */
-        $this->view->tasks         = $tasks;
-        $this->view->summary       = $this->project->summary($tasks);
-        $this->view->tabID         = 'task';
-        $this->view->pager         = $pager;
-        $this->view->recTotal      = $pager->recTotal;
-        $this->view->recPerPage    = $pager->recPerPage;
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->status        = $status;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param         = $param;
-        $this->view->projectID     = $projectID;
-        $this->view->project       = $project;
-        $this->view->productID     = $productID;
-        $this->view->modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
-        $this->view->moduleID      = $moduleID;
-        $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
-        $this->view->memberPairs   = $memberPairs;
-        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->view->setModule     = true;
+        $this->view->tasks        = $tasks;
+        $this->view->summary      = $this->project->summary($tasks);
+        $this->view->tabID        = 'task';
+        $this->view->pager        = $pager;
+        $this->view->recTotal     = $pager->recTotal;
+        $this->view->recPerPage   = $pager->recPerPage;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param        = $param;
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $project;
+        $this->view->productID    = $productID;
+        $this->view->modules      = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->moduleID     = $moduleID;
+        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->memberPairs  = $memberPairs;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->setModule    = true;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -697,8 +702,8 @@ class project extends control
         $projectID = $project->id;
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -760,25 +765,25 @@ class project extends control
         if($productPairs) $productID = key($productPairs);
 
         /* Assign. */
-        $this->view->title         = $title;
-        $this->view->position      = $position;
-        $this->view->productID     = $productID;
-        $this->view->project       = $project;
-        $this->view->stories       = $stories;
-        $this->view->allPlans      = $allPlans;
-        $this->view->summary       = $this->product->summary($stories);
-        $this->view->orderBy       = $orderBy;
-        $this->view->type          = $this->session->projectStoryBrowseType;
-        $this->view->param         = $param;
-        $this->view->moduleTree    = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
-        $this->view->tabID         = 'story';
-        $this->view->storyTasks    = $storyTasks;
-        $this->view->storyBugs     = $storyBugs;
-        $this->view->storyCases    = $storyCases;
-        $this->view->users         = $users;
-        $this->view->pager         = $pager;
-        $this->view->branchGroups  = $branchGroups;
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->productID    = $productID;
+        $this->view->project      = $project;
+        $this->view->stories      = $stories;
+        $this->view->allPlans     = $allPlans;
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->orderBy      = $orderBy;
+        $this->view->type         = $this->session->projectStoryBrowseType;
+        $this->view->param        = $param;
+        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
+        $this->view->tabID        = 'story';
+        $this->view->storyTasks   = $storyTasks;
+        $this->view->storyBugs    = $storyBugs;
+        $this->view->storyCases   = $storyCases;
+        $this->view->users        = $users;
+        $this->view->pager        = $pager;
+        $this->view->branchGroups = $branchGroups;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -939,8 +944,8 @@ class project extends control
         $projectID = $project->id;
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -951,18 +956,18 @@ class project extends control
         $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
-        $this->view->title         = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]    = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
-        $this->view->position[]    = $this->lang->testtask->common;
-        $this->view->project       = $project;
-        $this->view->projectID     = $projectID;
-        $this->view->projectName   = $this->projects[$projectID];
-        $this->view->pager         = $pager;
-        $this->view->orderBy       = $orderBy;
-        $this->view->tasks         = $productTasks;
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products      = $this->loadModel('product')->getPairs();
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->title        = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]   = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
+        $this->view->position[]   = $this->lang->testtask->common;
+        $this->view->project      = $project;
+        $this->view->projectID    = $projectID;
+        $this->view->projectName  = $this->projects[$projectID];
+        $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
+        $this->view->tasks        = $productTasks;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products     = $this->loadModel('product')->getPairs();
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -1059,16 +1064,16 @@ class project extends control
         $projectID = $project->id;
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->team;
 
-        $this->view->title         = $title;
-        $this->view->position      = $position;
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -1587,8 +1592,8 @@ class project extends control
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         $products = $this->project->getProducts($project->id);
         $linkedBranches = array();
@@ -1614,19 +1619,19 @@ class project extends control
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->view->title;
 
-        $this->view->project       = $project;
-        $this->view->products      = $products;
-        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
-        $this->view->planGroups    = $this->project->getPlans($products);
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->actions       = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->dynamics      = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->teamMembers   = $this->project->getTeamMembers($projectID);
-        $this->view->docLibs       = $this->loadModel('doc')->getLibsByObject('project', $projectID);
-        $this->view->statData      = $this->project->statRelatedData($projectID);
-        $this->view->chartData     = $chartData;
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->project      = $project;
+        $this->view->products     = $products;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
+        $this->view->planGroups   = $this->project->getPlans($products);
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
+        $this->view->statData     = $this->project->statRelatedData($projectID);
+        $this->view->chartData    = $chartData;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }
@@ -1658,8 +1663,8 @@ class project extends control
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
         $kanbanSetting = $this->project->getKanbanSetting();
@@ -1677,10 +1682,10 @@ class project extends control
         $this->view->type          = $type;
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->kanbanColumns = $this->project->getKanbanColumns($kanbanSetting);
-        $this->view->statusMap     = $changeAllowed ? $this->project->getKanbanStatusMap($kanbanSetting) : array();
+        $this->view->statusMap     = $canBeChanged ? $this->project->getKanbanStatusMap($kanbanSetting) : array();
         $this->view->statusList    = $this->project->getKanbanStatusList($kanbanSetting);
         $this->view->colorList     = $this->project->getKanbanColorList($kanbanSetting);
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
     }
@@ -1851,23 +1856,23 @@ class project extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         /* Determines whether an object is editable. */
-        $changeAllowed = true;
-        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $changeAllowed = false;
+        $canBeChanged = true;
+        if(!empty($this->config->global->closedProjectStatus) and $project->status == 'closed') $canBeChanged = false;
 
         /* Get project's product. */
         $productID = 0;
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
-        $this->view->title         = $this->lang->project->storyKanban;
-        $this->view->position[]    = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
-        $this->view->position[]    = $this->lang->project->storyKanban;
-        $this->view->stories       = $this->story->getKanbanGroupData($stories);
-        $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projectID     = $projectID;
-        $this->view->project       = $project;
-        $this->view->productID     = $productID;
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->title        = $this->lang->project->storyKanban;
+        $this->view->position[]   = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
+        $this->view->position[]   = $this->lang->project->storyKanban;
+        $this->view->stories      = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $project;
+        $this->view->productID    = $productID;
+        $this->view->canBeChanged = $canBeChanged;
 
         $this->display();
     }

@@ -40,7 +40,7 @@
       $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
       $canBatchRun    = common::hasPriv('testtask', 'batchRun');
 
-      $canBatchAction = ($changeAllowed and ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun));
+      $canBatchAction = ($canBeChanged and ($canBatchEdit or $canBatchUnlink or $canBatchAssign or $canBatchRun));
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
@@ -141,7 +141,7 @@
       </div>
       <?php else:?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php if($changeAllowed) common::printLink('testtask', 'linkCase', "taskID={$taskID}", "<i class='icon icon-plus'></i> " . $lang->testtask->linkCase, '', "class='btn btn-info'");?></p>
+        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php if($canBeChanged) common::printLink('testtask', 'linkCase', "taskID={$taskID}", "<i class='icon icon-plus'></i> " . $lang->testtask->linkCase, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>

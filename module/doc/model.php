@@ -111,11 +111,11 @@ class docModel extends model
             $docLib          = new stdClass();
             $docLib->product = $productID;
             $docLib->project = $projectID;
-            $changeAllowed   = common::checkObjectChangeAllowed('doc', $docLib);
+            $canBeChanged    = common::checkObjectChangeAllowed('doc', $docLib);
 
             $lib      = isset($lib) ? $lib : new stdClass();
             $actions  = $this->setFastMenu($fastLib);
-            $actions .= ($changeAllowed and common::hasPriv('doc', 'createLib', $lib)) ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
+            $actions .= ($canBeChanged and common::hasPriv('doc', 'createLib', $lib)) ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
             $this->lang->TRActions = $actions;
         }

@@ -24,7 +24,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -34,7 +34,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('productplan', 'create')):?>
+      <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('productplan', 'create')):?>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -75,8 +75,8 @@
       <?php $this->loadModel('file');?>
       <?php foreach($plans as $plan):?>
       <?php
-      $changeAllowed = common::checkObjectChangeAllowed('plan', $plan);
-      $disabled      = $changeAllowed ? '' : 'disabled';
+      $canBeChanged = common::checkObjectChangeAllowed('plan', $plan);
+      $attribute    = $canBeChanged ? '' : 'disabled';
 
       $plan = $this->file->replaceImgURL($plan, 'desc');
       if($plan->parent == '-1')
@@ -100,7 +100,7 @@
       <tr class='<?php echo $class;?>'>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $disabled) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
+          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>

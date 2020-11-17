@@ -21,8 +21,8 @@
       <tr>
         <th class='w-300px'><?php echo $lang->custom->closedProduct;?></th>
         <td class='w-250px text-center'>
-          <?php $checkedKey = isset($config->global->closedProductStatus) ? $config->global->closedProductStatus : 0;?>
-          <?php foreach($lang->custom->closedProductStatus as $key => $value):?>
+          <?php $checkedKey = isset($config->global->CRProduct) ? $config->global->CRProduct : 0;?>
+          <?php foreach($lang->custom->CRProduct as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="product" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="product<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>

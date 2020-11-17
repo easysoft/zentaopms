@@ -22,7 +22,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
     <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -32,7 +32,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('release', 'create')):?>
+      <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('release', 'create')):?>
       <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -58,7 +58,7 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
-      <?php $changeAllowed = common::checkObjectChangeAllowed('release', $release);?>
+      <?php $canBeChanged = common::checkObjectChangeAllowed('release', $release);?>
       <tr>
         <td><?php echo html::a(helper::createLink('release', 'view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
@@ -79,7 +79,7 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if($changeAllowed)
+          if($canBeChanged)
           {
               if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
               if(common::hasPriv('release', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");

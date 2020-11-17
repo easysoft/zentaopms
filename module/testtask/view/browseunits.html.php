@@ -23,7 +23,7 @@
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
   </div>
-  <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
+  <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
   </div>

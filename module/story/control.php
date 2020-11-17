@@ -1063,7 +1063,7 @@ class story extends control
     }
 
     /**
-     * Batch conversion of stories into tasks.
+     * Batch stories convert to tasks.
      *
      * @param  int    $projectID
      * @access public
@@ -1076,8 +1076,7 @@ class story extends control
             $this->story->batchToTask($projectID);
 
             if(dao::isError()) die(js::error(dao::getError()) . js::locate('back'));
-
-            if(!dao::isError()) die(js::alert($this->lang->saveSuccess) . js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
+            die(js::alert($this->lang->story->successToTask) . js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
         }
     }
 
@@ -1235,6 +1234,7 @@ class story extends control
      * Bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */

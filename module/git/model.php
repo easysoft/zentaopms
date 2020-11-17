@@ -111,15 +111,15 @@ class gitModel extends model
      *
      * @param  object $repo
      * @param  array  $commentGroup
-     * @param  bool   $isPrintLog
+     * @param  bool   $printLog
      * @access public
      * @return void
      */
-    public function updateCommit($repo, $commentGroup, $isPrintLog = true)
+    public function updateCommit($repo, $commentGroup, $printLog = true)
     {
         /* Load mudule and print log. */
         $this->loadModel('repo');
-        if($isPrintLog) $this->printLog("begin repo $repo->id");
+        if($printLog) $this->printLog("begin repo $repo->id");
 
         if(!$this->setRepo($repo)) return false;
 
@@ -130,17 +130,17 @@ class gitModel extends model
         /* Update code commit history. */
         foreach($branches as $branch)
         {
-            if($isPrintLog) $this->printLog("sync branch $branch logs.");
+            if($printLog) $this->printLog("sync branch $branch logs.");
             $_COOKIE['repoBranch'] = $branch;
 
-            if($isPrintLog) $this->printLog("get this repo logs.");
+            if($printLog) $this->printLog("get this repo logs.");
 
             $lastInDB = $this->repo->getLatestCommit($repo->id);
 
             /* Ignore unsynced branch. */
             if(empty($lastInDB))
             {
-                if($isPrintLog) $this->printLog("Please init repo {$repo->name}");
+                if($printLog) $this->printLog("Please init repo {$repo->name}");
                 continue;
             }
 
@@ -149,18 +149,18 @@ class gitModel extends model
             $objects = array();
             if(!empty($logs))
             {
-                if($isPrintLog) $this->printLog("get " . count($logs) . " logs");
-                if($isPrintLog) $this->printLog('begin parsing logs');
+                if($printLog) $this->printLog("get " . count($logs) . " logs");
+                if($printLog) $this->printLog('begin parsing logs');
 
                 foreach($logs as $log)
                 {
-                    if($isPrintLog) $this->printLog("parsing log {$log->revision}");
-                    if($isPrintLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+                    if($printLog) $this->printLog("parsing log {$log->revision}");
+                    if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
                     $objects = $this->repo->parseComment($log->msg);
                     if($objects)
                     {
-                        if($isPrintLog) $this->printLog('extract' .
+                        if($printLog) $this->printLog('extract' .
                             ' story:' . join(' ', $objects['stories']) .
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
@@ -169,7 +169,7 @@ class gitModel extends model
                     }
                     else
                     {
-                        if($isPrintLog) $this->printLog('no objects found' . "\n");
+                        if($printLog) $this->printLog('no objects found' . "\n");
                     }
 
                     /* Create compile by comment. */
@@ -190,7 +190,7 @@ class gitModel extends model
 
         $this->repo->updateCommitCount($repo->id, $commits);
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
-        if($isPrintLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
+        if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
     }
 
     /**

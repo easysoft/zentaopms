@@ -17,6 +17,8 @@
 <?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
+<?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
+<?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <div id="mainMenu" class="clearfix">
   <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
   <div id="sidebarHeader">
@@ -119,7 +121,7 @@
           $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
           $canBatchToTask       = common::hasPriv('story', 'batchToTask');
 
-          $canBatchAction       = ($changeAllowed and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+          $canBatchAction       = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
           <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
@@ -149,8 +151,8 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $storyLink       = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
-          $totalEstimate  += $story->estimate;
+          $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
+          $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
@@ -197,7 +199,7 @@
             <td class='c-actions'>
               <?php
               $hasDBPriv = common::hasDBPriv($project, 'project');
-              if($changeAllowed)
+              if($canBeChanged)
               {
                   $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
@@ -218,7 +220,7 @@
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
-                  if($changeAllowed and common::hasPriv('project', 'unlinkStory', $project))
+                  if($canBeChanged and common::hasPriv('project', 'unlinkStory', $project))
                   {
                       $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");

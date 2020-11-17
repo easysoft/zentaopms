@@ -886,16 +886,16 @@ class extensionModel extends model
 
     /**
      * Get extension expire date.
-     * 
+     *
      * @param  int    $extension 
      * @access public
-     * @return void
+     * @return string
      */
     public function getExpireDate($extension)
     {
         $licencePath = $this->app->getConfigRoot() . 'license/';
         $today       = date('Y-m-d');
-        $expireDate  = '';
+        $expiredDate = '';
 
         $licenceOrderFiles = glob($licencePath . 'order*' . $extension->code . $extension->version . '.txt');
         foreach($licenceOrderFiles as $licenceOrderFile)
@@ -908,14 +908,14 @@ class extensionModel extends model
                 if($order->type == 'demo') $days = 31;
                 if($order->type == 'year') $days = 365;
                 $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
-                if($days) $expireDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
+                if($days) $expiredDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
             }
             else
             {
-                $expireDate = $order->type;
+                $expiredDate = $order->type;
             }
         }
 
-        return $expireDate;
+        return $expiredDate;
     }
 }

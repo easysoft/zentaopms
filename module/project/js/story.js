@@ -38,7 +38,22 @@ $(function()
             storyIdList += $(this).val() + ',';
             $('#storyIdList').val(storyIdList);
         });
-    })
+    });
+
+    /* Judge required. */
+    $('#batchToTask #submit').on('click', function ()
+    {
+        var message = '';
+        if($('#batchToTask #type').val() == '') message = typeError;
+
+        if($('#batchToTask #hourPointValue').val() == '') message += workingHourError;
+
+        if(message)
+        {
+            alert(message);
+            return false;
+        }
+    });
 
     $('.sorter-false a').unwrap();
 });

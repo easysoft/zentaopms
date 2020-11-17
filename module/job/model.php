@@ -43,7 +43,7 @@ class jobModel extends model
     }
 
     /**
-     * Get list by triggerType field
+     * Get list by triggerType field.
      * 
      * @param  string  $triggerType
      * @param  array   $repoIdList

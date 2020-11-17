@@ -1606,6 +1606,7 @@ class bugModel extends model
      * Get bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -2507,16 +2508,16 @@ class bugModel extends model
     public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
         /* Check the product is closed. */
-        $changeAllowed = common::checkObjectChangeAllowed('bug', $bug);
+        $canBeChanged = common::checkObjectChangeAllowed('bug', $bug);
 
-        $canBatchEdit         = ($changeAllowed and common::hasPriv('bug', 'batchEdit'));
-        $canBatchConfirm      = ($changeAllowed and common::hasPriv('bug', 'batchConfirm'));
+        $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
+        $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));
         $canBatchClose        = common::hasPriv('bug', 'batchClose');
-        $canBatchActivate     = ($changeAllowed and common::hasPriv('bug', 'batchActivate'));
-        $canBatchChangeBranch = ($changeAllowed and common::hasPriv('bug', 'batchChangeBranch'));
-        $canBatchChangeModule = ($changeAllowed and common::hasPriv('bug', 'batchChangeModule'));
-        $canBatchResolve      = ($changeAllowed and common::hasPriv('bug', 'batchResolve'));
-        $canBatchAssignTo     = ($changeAllowed and common::hasPriv('bug', 'batchAssignTo'));
+        $canBatchActivate     = ($canBeChanged and common::hasPriv('bug', 'batchActivate'));
+        $canBatchChangeBranch = ($canBeChanged and common::hasPriv('bug', 'batchChangeBranch'));
+        $canBatchChangeModule = ($canBeChanged and common::hasPriv('bug', 'batchChangeModule'));
+        $canBatchResolve      = ($canBeChanged and common::hasPriv('bug', 'batchResolve'));
+        $canBatchAssignTo     = ($canBeChanged and common::hasPriv('bug', 'batchAssignTo'));
 
         $canBatchAction = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
 
@@ -2730,7 +2731,7 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
-                if($changeAllowed)
+                if($canBeChanged)
                 {
                     common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                     common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);

@@ -58,7 +58,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuilds($projectID, $type, $param)
+    public function getProjectBuilds($projectID, $type = '', $param = '')
     {
         return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')

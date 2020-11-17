@@ -117,7 +117,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         ?>
       </ul>
     </div>
-    <?php if(empty($this->config->global->closedProductStatus) or $product->status != 'closed'):?>
+    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
     <?php if(!common::checkNotCN()):?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
@@ -189,7 +189,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
-        <?php if((empty($this->config->global->closedProductStatus) or $product->status != 'closed') and common::hasPriv('bug', 'create')):?>
+        <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('bug', 'create')):?>
         <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -211,15 +211,15 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $changeAllowed        = (empty($config->global->closedProductStatus) or $product->status != 'closed');
-      $canBatchEdit         = ($changeAllowed and common::hasPriv('bug', 'batchEdit'));
-      $canBatchConfirm      = ($changeAllowed and common::hasPriv('bug', 'batchConfirm'));
+      $canBeChanged         = (!empty($config->CRProduct) or $product->status != 'closed');
+      $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
+      $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));
       $canBatchClose        = common::hasPriv('bug', 'batchClose');
-      $canBatchActivate     = ($changeAllowed and common::hasPriv('bug', 'batchActivate'));
-      $canBatchChangeBranch = ($changeAllowed and common::hasPriv('bug', 'batchChangeBranch'));
-      $canBatchChangeModule = ($changeAllowed and common::hasPriv('bug', 'batchChangeModule'));
-      $canBatchResolve      = ($changeAllowed and common::hasPriv('bug', 'batchResolve'));
-      $canBatchAssignTo     = ($changeAllowed and common::hasPriv('bug', 'batchAssignTo'));
+      $canBatchActivate     = ($canBeChanged and common::hasPriv('bug', 'batchActivate'));
+      $canBatchChangeBranch = ($canBeChanged and common::hasPriv('bug', 'batchChangeBranch'));
+      $canBatchChangeModule = ($canBeChanged and common::hasPriv('bug', 'batchChangeModule'));
+      $canBatchResolve      = ($canBeChanged and common::hasPriv('bug', 'batchResolve'));
+      $canBatchAssignTo     = ($canBeChanged and common::hasPriv('bug', 'batchAssignTo'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
       ?>

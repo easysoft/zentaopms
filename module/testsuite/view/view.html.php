@@ -29,7 +29,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if(!$suite->deleted and $changeAllowed)
+    if(!$suite->deleted and $canBeChanged)
     {
         echo $this->buildOperateMenu($suite, 'view');
 
@@ -47,7 +47,7 @@
       <div class='panel'>
         <?php $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');?>
         <?php $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');?>
-        <?php $hasCheckbox    = ($changeAllowed and $canBatchEdit and $canBatchUnlink);?>
+        <?php $hasCheckbox    = ($canBeChanged and $canBatchEdit and $canBatchUnlink);?>
         <?php $vars = "suiteID=$suite->id&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <table class='table has-sort-head' id='caseList'>
           <thead>
@@ -97,7 +97,7 @@
               <td><?php echo $case->stepNumber;?></td>
               <td class='c-actions'>
                 <?php
-                if($changeAllowed)
+                if($canBeChanged)
                 {
                     if(common::hasPriv('testsuite', 'unlinkCase', $suite))
                     {
@@ -115,7 +115,7 @@
           <?php endif;?>
         </table>
         <div class='table-footer'>
-          <?php if($cases and $changeAllowed):?>
+          <?php if($cases and $canBeChanged):?>
           <?php if($hasCheckbox):?>
           <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
           <?php endif;?>

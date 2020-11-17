@@ -1426,12 +1426,6 @@ class storyModel extends model
         $data = fixer::input('post')->get();
         $now  = helper::now();
 
-        /* Judge required. */
-        $message = '';
-        if(empty($data->type)) $message  = sprintf($this->lang->error->notempty, $this->lang->task->type);
-        if(isset($data->hourPointValue) and empty($data->hourPointValue)) $message .= sprintf($this->lang->error->notempty, $this->lang->workingHour);
-        if($message) die(js::error($message) . js::locate(helper::createLink('project', 'story', "projectID=$projectID"), 'parent'));
-
         /* Create tasks. */
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
@@ -1447,17 +1441,19 @@ class storyModel extends model
             $task->openedBy   = $this->app->user->account;
             $task->openedDate = $now;
 
-            foreach($data->field as $field)
+            if(isset($data->field))
             {
-                $task->$field = $story->$field;
-
-                if($field == 'assignedTo') $task->assignedDate = $now;
-                if($field == 'spec')
+                foreach($data->field as $field)
                 {
-                    unset($task->$field);
-                    $task->desc = $story->$field;
-                }
+                    $task->$field = $story->$field;
 
+                    if($field == 'assignedTo') $task->assignedDate = $now;
+                    if($field == 'spec')
+                    {
+                        unset($task->$field);
+                        $task->desc = $story->$field;
+                    }
+                }
             }
 
             $this->dao->insert(TABLE_TASK)->data($task)
@@ -3032,7 +3028,7 @@ class storyModel extends model
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
         /* Check the product is closed. */
-        $changeAllowed = common::checkObjectChangeAllowed('story', $story);
+        $canBeChanged = common::checkObjectChangeAllowed('story', $story);
 
         $canBatchEdit         = common::hasPriv('story', 'batchEdit');
         $canBatchClose        = common::hasPriv('story', 'batchClose');
@@ -3229,7 +3225,7 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                if($changeAllowed)
+                if($canBeChanged)
                 {
                     common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                     common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');

@@ -213,7 +213,7 @@ class build extends control
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Determines whether an object is editable. */
-        $changeAllowed = common::checkObjectChangeAllowed('build', $build);
+        $canBeChanged = common::checkObjectChangeAllowed('build', $build);
 
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
@@ -261,18 +261,18 @@ class build extends control
         $this->executeHooks($buildID);
 
         /* Assign. */
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build         = $build;
-        $this->view->buildPairs    = $this->build->getProjectBuildPairs($build->project, 0, 0, 'noempty,notrunk');
-        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->link          = $link;
-        $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
-        $this->view->bugs          = $bugs;
-        $this->view->type          = $type;
-        $this->view->bugPager      = $bugPager;
-        $this->view->branchName    = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
-        $this->view->changeAllowed = $changeAllowed;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->build        = $build;
+        $this->view->buildPairs   = $this->build->getProjectBuildPairs($build->project, 0, 0, 'noempty,notrunk');
+        $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->link         = $link;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->bugs         = $bugs;
+        $this->view->type         = $type;
+        $this->view->bugPager     = $bugPager;
+        $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+        $this->view->canBeChanged = $canBeChanged;
         $this->display();
     }
  

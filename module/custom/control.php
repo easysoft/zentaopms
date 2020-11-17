@@ -357,7 +357,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.global.closedProjectStatus', $this->post->project);
+            $this->loadModel('setting')->setItem('system.common.CRProject', $this->post->project);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
@@ -377,7 +377,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.global.closedProductStatus', $this->post->product);
+            $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 

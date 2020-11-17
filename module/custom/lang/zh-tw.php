@@ -153,11 +153,11 @@ $lang->custom->page     = '頁面';
 $lang->custom->scoreStatus[1] = '開啟';
 $lang->custom->scoreStatus[0] = '關閉';
 
-$lang->custom->closedProjectStatus[1] = '禁止修改';
-$lang->custom->closedProjectStatus[0] = '允許修改';
+$lang->custom->CRProject[1] = '禁止修改';
+$lang->custom->CRProject[0] = '允許修改';
 
-$lang->custom->closedProductStatus[1] = '禁止修改';
-$lang->custom->closedProductStatus[0] = '允許修改';
+$lang->custom->CRProduct[1] = '禁止修改';
+$lang->custom->CRProduct[0] = '允許修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';

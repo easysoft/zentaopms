@@ -1855,7 +1855,7 @@ EOD;
         global $app, $config;
 
         /* Check the product is closed. */
-        if(!empty($object->product) and is_numeric($object->product) and !empty($config->global->closedProductStatus))
+        if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
         {
             $productID = trim($object->product, ',');
             $product   = $app->control->loadModel('product')->getByID($productID);
@@ -1863,7 +1863,8 @@ EOD;
         }
 
         /* Check the project is closed. */
-        if(strpos('story|bug|testtask', $module) === false and !empty($object->project) and is_numeric($object->project) and !empty($config->global->closedProjectStatus))
+        $productModuleList = array('story', 'bug', 'testtask');
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
         {
             $project = $app->control->loadModel('project')->getByID($object->project);
             if($project->status == 'closed') return false;
