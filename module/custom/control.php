@@ -348,7 +348,7 @@ class custom extends control
     }
 
     /**
-     * Set whether the project is on read-only.
+     * Set whether the project is read-only.
      *
      * @access public
      * @return void
@@ -368,7 +368,7 @@ class custom extends control
     }
 
     /**
-     * Set whether the product is on read-only.
+     * Set whether the product is read-only.
      *
      * @access public
      * @return void
