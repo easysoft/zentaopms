@@ -31,7 +31,7 @@
       <table class='table table-fixed table-nested' id='programList'>
         <thead>
           <tr>
-            <th class='c-id w-80px'>
+            <th class='c-id w-50px'>
               <?php echo $lang->idAB;?>
             </th>
             <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>

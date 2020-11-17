@@ -98,7 +98,7 @@ class projectModel extends model
         $products = $this->loadModel('product')->getPairs();
 
         /* Unset story, bug, build and testtask if type is ops. */
-        if($project and $project->type == 'ops')
+        if($project and $project->lifetime == 'ops')
         {
             unset($this->lang->project->menu->story);
             unset($this->lang->project->menu->qa);
