@@ -12,11 +12,6 @@
 <?php include 'header.html.php';?>
 <div id='mainContent' class='main-content'>
   <form class="load-indicator main-form form-ajax" method='post'>
-    <div class='main-header'>
-      <div class='heading'>
-        <strong><?php echo $lang->custom->productTitle?></strong>
-      </div>
-    </div>
     <table class='table table-form'>
       <tr>
         <th class='w-300px'><?php echo $lang->custom->closedProduct;?></th>
