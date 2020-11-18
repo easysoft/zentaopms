@@ -47,7 +47,7 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'): ?>
+    <?php if(common::canModify('product', $product)): ?>
     <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
     <?php endif;?>
   </div>
@@ -65,7 +65,10 @@
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
-      <?php if(common::canBeChanged('story', $story)) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php
+      $canBeChanged = common::canBeChanged('story', $story);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");
+      ?>
       <?php if(!empty($story->children)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->story->children;?></div>

@@ -21,7 +21,7 @@
       <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>
     </a>
   </div>
-  <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
+  <?php if(common::canModify('product', $product)):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'");?>
   </div>
@@ -33,7 +33,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span>
-      <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('testsuite', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('testsuite', 'create')):?>
       <?php echo html::a($this->createLink('testsuite', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

@@ -30,7 +30,7 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
+    <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
     <?php endif;?>
   </div>
@@ -58,7 +58,10 @@
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug));?>
-      <?php if(common::canBeChanged('bug', $bug)) $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
+      <?php
+      $canBeChanged = common::canBeChanged('bug', $bug);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");
+      ?>
     </div>
     <?php $this->printExtendFields($bug, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>

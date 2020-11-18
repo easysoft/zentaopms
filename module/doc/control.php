@@ -754,11 +754,6 @@ class doc extends control
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if($type == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
-        if($type == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
-
         /* According the from, set menus. */
         if($this->from == 'product')
         {
@@ -813,7 +808,7 @@ class doc extends control
         $this->view->viewType     = $viewType;
         $this->view->orderBy      = $orderBy;
         $this->view->objectID     = $objectID;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -853,11 +848,6 @@ class doc extends control
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
-
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if($type == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
-        if($type == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
 
         if($from == 'product')
         {
@@ -899,7 +889,7 @@ class doc extends control
         $this->view->object       = $object;
         $this->view->from         = $from;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();
     }
 }

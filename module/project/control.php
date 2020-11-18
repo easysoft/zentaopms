@@ -128,10 +128,6 @@ class project extends control
         $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
@@ -221,7 +217,7 @@ class project extends control
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -701,10 +697,6 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -783,7 +775,7 @@ class project extends control
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -943,10 +935,6 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -967,7 +955,7 @@ class project extends control
         $this->view->tasks        = $productTasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products     = $this->loadModel('product')->getPairs();
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1063,17 +1051,13 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         $title      = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->team;
 
         $this->view->title        = $title;
         $this->view->position     = $position;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1591,10 +1575,6 @@ class project extends control
         $project = $this->project->getById($projectID, true);
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         $products = $this->project->getProducts($project->id);
         $linkedBranches = array();
         foreach($products as $product)
@@ -1631,7 +1611,7 @@ class project extends control
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
         $this->view->statData     = $this->project->statRelatedData($projectID);
         $this->view->chartData    = $chartData;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1663,8 +1643,7 @@ class project extends control
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
         /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
+        $canBeChanged = common::canModify('project', $project);
 
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
         $kanbanSetting = $this->project->getKanbanSetting();
@@ -1855,10 +1834,6 @@ class project extends control
         $stories = $this->loadModel('story')->getProjectStories($projectID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if(empty($this->config->CRProject) and $project->status == 'closed') $canBeChanged = false;
-
         /* Get project's product. */
         $productID = 0;
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
@@ -1872,7 +1847,7 @@ class project extends control
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
         $this->view->productID    = $productID;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }

@@ -60,11 +60,12 @@ $lang->story->batchChangeModule = "Thay đổi Module hàng loạt";
 $lang->story->viewAll           = "Xem tất cả";
 $lang->story->toTask            = 'Convert to Task';
 $lang->story->batchToTask       = 'Batch Convert to Task';
+$lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
-$lang->story->successToTask   = "Converted to task."
+$lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
@@ -126,7 +127,7 @@ $lang->story->allStories     = 'Tất cả câu chuyện';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
-$lang->story->oneUnit        = 'One Unit';
+$lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 
 $lang->story->ditto       = 'Như trên';

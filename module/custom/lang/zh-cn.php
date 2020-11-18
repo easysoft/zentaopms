@@ -24,6 +24,8 @@ $lang->custom->product       = $lang->productCommon;
 $lang->custom->closedProject = '已关闭' . $lang->projectCommon;
 $lang->custom->closedProduct = '已关闭' . $lang->productCommon;
 
+$lang->custom->object['product']  = $lang->productCommon;
+$lang->custom->object['project']  = $lang->projectCommon;
 $lang->custom->object['story']    = $lang->storyCommon;
 $lang->custom->object['task']     = '任务';
 $lang->custom->object['bug']      = 'Bug';
@@ -82,7 +84,7 @@ $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score', 'product', 'project');
+$lang->custom->system = array('flow', 'working', 'required', 'score');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 

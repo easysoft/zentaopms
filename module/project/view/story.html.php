@@ -48,7 +48,7 @@
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
 
-    if(!empty($this->config->CRProject) or $project->status != 'closed')
+    if(common::canModify('project', $project))
     {
         $this->lang->story->create = $this->lang->project->createStory;
         if($productID and !$this->loadModel('story')->checkForceReview())
@@ -100,7 +100,7 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if((!empty($this->config->CRProject) or $project->status != 'closed') and common::hasPriv('project', 'linkStory')):?>
+        <?php if(common::canModify('project', $project) and common::hasPriv('project', 'linkStory')):?>
         <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -247,7 +247,7 @@
             <ul class='dropdown-menu'>
               <?php
               $class = $canBatchToTask ? '' : "class='hidden'";
-              echo "<li $class>" . html::a('#batchToTask', $lang->story->toTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
+              echo "<li $class>" . html::a('#batchToTask', $lang->story->batchToTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
               ?>
             </ul>
           </div>
@@ -313,28 +313,31 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->story->batchToTask;?></h4><?php echo '(' . $lang->story->batchToTaskTips . ')';?>
+        <h4 class="modal-title"><?php echo $lang->story->batchToTask;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post' action='<?php echo $this->createLink('story', 'batchToTask', "projectID=$project->id");?>'>
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'batchToTask', "projectID=$project->id");?>'>
           <table class='table table-form'>
             <tr>
-              <th><?php echo $lang->task->type?></th>
+              <th class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-140px' : 'w-80px';?>"><?php echo $lang->task->type?></th>
               <td><?php echo html::select('type', $lang->task->typeList, '', "class='form-control chosen' required");?></td>
               <td></td>
             </tr>
             <?php if($lang->hourCommon !== $lang->workingHour):?>
             <tr>
-              <th><?php echo $lang->story->oneUnit . $lang->hourCommon?></th>
-              <td><?php echo html::input('hourPointValue', '', "class='form-control' required");?></td>
-              <td><?php echo $lang->project->burnYUnit?></td>
+              <th><?php echo $lang->story->one . $lang->hourCommon?></th>
+              <td><div class='input-group'><span class='input-group-addon'><?php echo "=";?></span><?php echo html::input('hourPointValue', '', "class='form-control' required");?> <span class='input-group-addon'><?php echo $lang->workingHour;?></span></div></td>
+              <td></td>
             </tr>
             <?php endif;?>
             <tr>
             </tr>
             <tr>
               <th><?php echo $lang->story->field;?></th>
-              <td colspan='2'><?php echo html::select('field[]', $lang->story->convertToTask->fieldList, array_keys($lang->story->convertToTask->fieldList), "class='form-control chosen' multiple");?></td>
+              <td colspan='2'><?php echo html::checkbox('fields', $lang->story->convertToTask->fieldList, '', 'checked');?></td>
+            </tr>
+            <tr>
+              <td colspan='3'><div class='alert alert-info no-margin'><?php echo $lang->story->batchToTaskTips?></div></td>
             </tr>
             <tr>
               <td colspan='3' class='text-center'>

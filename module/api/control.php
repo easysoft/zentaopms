@@ -109,8 +109,11 @@ class api extends control
     {
         if(!$this->config->features->apiSQL) die(sprintf($this->lang->api->error->disabled, '$config->features->apiSQL'));
 
-        $sql = isset($_POST['sql']) ? $this->post->sql : '';
-        $this->view->results = $this->api->sql($sql, $keyField);
-        die($this->display());
+        $sql    = isset($_POST['sql']) ? $this->post->sql : '';
+        $output = $this->api->sql($sql, $keyField);
+
+        $output['sql'] = $sql;
+        $this->output  = json_encode($output);
+        die($this->output);
     }
 }

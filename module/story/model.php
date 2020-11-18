@@ -1426,6 +1426,18 @@ class storyModel extends model
         $data = fixer::input('post')->get();
         $now  = helper::now();
 
+        /* Judgment of required items. */
+        if(empty($data->type))
+        {
+            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->task->type);
+        }
+
+        if(isset($data->hourPointValue) and empty($data->hourPointValue))
+        {
+            dao::$errors['hourPointValue'] = sprintf($this->lang->error->notempty, $this->lang->story->convertRelations);
+        }
+        if(dao::isError()) return false;
+
         /* Create tasks. */
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
@@ -1438,12 +1450,13 @@ class storyModel extends model
             $task->story      = $story->id;
             $task->type       = $data->type;
             $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
+            $task->left       = $task->estimate;
             $task->openedBy   = $this->app->user->account;
             $task->openedDate = $now;
 
-            if(isset($data->field))
+            if(isset($data->fields))
             {
-                foreach($data->field as $field)
+                foreach($data->fields as $field)
                 {
                     $task->$field = $story->$field;
 

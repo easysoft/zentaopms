@@ -24,6 +24,8 @@ $lang->custom->product       = $lang->productCommon;
 $lang->custom->closedProject = 'Closed ' . $lang->projectCommon;
 $lang->custom->closedProduct = 'Closed ' . $lang->productCommon;
 
+$lang->custom->object['product']  = $lang->productCommon;
+$lang->custom->object['project']  = $lang->projectCommon;
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Tâche';
 $lang->custom->object['bug']      = 'Bug';
@@ -82,7 +84,7 @@ $lang->custom->user->fields['statusList']   = 'Statut';
 $lang->custom->user->fields['contactField'] = 'Contact';
 $lang->custom->user->fields['deleted']      = 'Parti';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score', 'product', 'project');
+$lang->custom->system = array('flow', 'working', 'required', 'score');
 
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 

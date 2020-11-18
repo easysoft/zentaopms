@@ -142,8 +142,12 @@
         </div>
       </div>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
-      <?php if(common::canBeChanged('task', $task)) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
+      <?php
+      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));
+
+      $canBeChanged = common::canBeChanged('task', $task);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");
+      ?>
     </div>
     <?php $this->printExtendFields($task, 'div', "position=left&inForm=0&inCell=1");?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
