@@ -32,8 +32,8 @@ function computeEndDate(delta)
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
-    var currentBeginDate = beginDate.toString('yyyy-MM-dd');
-    var endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
+    var currentBeginDate = $.zui.formatDate(beginDate, 'yyyy-MM-dd');
+    var endDate = $.zui.formatDate(beginDate.addDays(delta - 1), 'yyyy-MM-dd');
 
     $('#begin').val(currentBeginDate);
     $('#end').val(endDate).datetimepicker('update');

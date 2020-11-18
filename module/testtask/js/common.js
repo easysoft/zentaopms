@@ -104,7 +104,7 @@ function suitEndDate()
     endDate = $('#end').val();
     if(endDate) return;
     
-    endDate = convertStringToDate(beginDate).addDays(1).toString('yyyy-MM-dd');
+    endDate = $.zui.formatDate(convertStringToDate(beginDate).addDays(1), 'yyyy-MM-dd');
     $('#end').val(endDate);
 }
 
