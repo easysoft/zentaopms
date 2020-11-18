@@ -218,7 +218,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "title=$module $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $module, '', "title='$module' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
               </div>
