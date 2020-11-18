@@ -367,7 +367,7 @@ class productModel extends model
         $products = array();
         if($projectID)
         {
-            $pairs    = $this->getProductsByProject($this->session->PRJ);
+            $pairs    = $this->getProductsByProject($projectID);
             $products = $this->getByIdList(array_keys($pairs));
         }
         else

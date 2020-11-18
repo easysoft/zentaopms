@@ -1,6 +1,6 @@
 <?php
 $sideLibs = array();
-foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType, 0, $this->session->PRJ);
+foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
 $allModules = $this->loadModel('tree')->getDocStructure();
 
 $sideSubLibs = array();

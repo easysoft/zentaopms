@@ -959,9 +959,9 @@ class programModel extends model
     }
 
     /**
-     * Get project name.
+     * Get project pairs.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return object
      */

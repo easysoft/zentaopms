@@ -12,16 +12,11 @@
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
-
 $config->productCommonList['zh-tw'][0] = '產品';
-
-$config->productCommonList['en'][0] = 'Product';
-
-$config->productCommonList['de'][0] = 'Produkt';
-
-$config->productCommonList['fr'][0] = 'Product';
-
-$config->productCommonList['vi'][0] = 'Sản phẩm';
+$config->productCommonList['en'][0]    = 'Product';
+$config->productCommonList['de'][0]    = 'Produkt';
+$config->productCommonList['fr'][0]    = 'Product';
+$config->productCommonList['vi'][0]    = 'Sản phẩm';
 
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '迭代';
