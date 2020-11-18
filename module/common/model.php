@@ -541,7 +541,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function getRecentProjects()
+    public static function getRecentExecutions()
     {
         global $dbh, $lang, $app;
         echo '<li><hr></li>';
@@ -555,16 +555,16 @@ class commonModel extends model
             return false;
         }
 
-        $recentProjects = $dbh->query('select * from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'close' and deleted = '0' order by id desc limit 6")->fetchAll();
+        $executions = $dbh->query('select id,name,code,project from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'closed' and code != '' and deleted = '0' order by id desc limit 6")->fetchAll();
 
-        if(!empty($recentProjects))
+        if(!empty($executions))
         {
-            foreach($recentProjects as $key => $project)
+            foreach($executions as $index => $execution)
             {
-                if($key == 5) continue;
-                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->project), $project->name, '', "style='padding: 2px 8px 2px 2px;' class='main-recent-text' title='$project->name'") . '</li>';
+                if($index == 5) break;
+                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project), $execution->code, '', "style='padding: 2px 8px 2px 8px;' class='main-recent-text' title='$execution->name'") . '</li>';
             }
-            if(count($recentProjects) > 5) echo '<li onclick="getMorePRJ();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
+            if(count($executions) > 5) echo '<li onclick="getExecutions();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
         }
 
         echo "</ul>\n";

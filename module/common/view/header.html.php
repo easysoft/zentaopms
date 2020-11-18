@@ -14,13 +14,13 @@ include 'chosen.html.php';
 <div id='menu'>
   <nav id='menuNav'>
     <?php commonModel::printMainNav($app->rawModule);?>
-    <?php commonModel::getRecentProjects();?>
+    <?php commonModel::getRecentExecutions();?>
   </nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
   </div>
-  <div class="table-col col-right" id="morePRJ">
-    <div class="list-group" id="morePRJList"></div>
+  <div class="table-col col-right" id="moreExecution">
+    <div class="list-group" id="executionList"></div>
   </div>
 </div>
 <header id='header'>
@@ -83,32 +83,32 @@ $("#searchInput").mouseout(function()
 
 $("#menuToggle").bind('click', function()
 {
-    $("#morePRJ").hide();
+    $("#moreExecution").hide();
 });
 
-$("#morePRJList").mouseover(function()
+$("#executionList").mouseover(function()
 {
-    $("#morePRJ").show();
+    $("#moreExecution").show();
 });
 
-$("#morePRJList").mouseout(function()
+$("#executionList").mouseout(function()
 {
-    $("#morePRJ").hide();
+    $("#moreExecution").hide();
 });
 
-function getMorePRJ()
+function getExecutions()
 {
-    $("#morePRJ").toggle();
-    if(!$("#morePRJ").is(':hidden'))
+    $("#moreExecution").toggle();
+    if(!$("#moreExecution").is(':hidden'))
     {
         $.ajax(
         {
-            url: createLink('program', 'ajaxGetRecentProjects'),
+            url: createLink('project', 'ajaxGetRecentExecutions'),
             dataType: 'html',
             type: 'post',
             success: function(data)
             {
-                $("#morePRJList").html(data);
+                $("#executionList").html(data);
             }
         })
     }

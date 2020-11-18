@@ -976,29 +976,6 @@ class programModel extends model
     }
 
     /**
-     * Get recent stage and sprint.
-     *
-     * @access public
-     * @return object
-     */
-    public function getPRJRecent()
-    {
-        if(!$this->app->user->admin && (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)))
-        {
-            return array();
-        }
-        return $this->dao->select('id,project,name')->from(TABLE_PROJECT)
-            ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
-            ->andWhere('status')->ne('status')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
-            ->limit('5,' . $this->config->program->PRJRecentQuantity)
-            ->fetchAll();
-    }
-
-    /**
      * Build the query.
      *
      * @param  int    $projectID

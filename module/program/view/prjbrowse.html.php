@@ -71,10 +71,7 @@ js::set('browseType', $browseType);
             <?php
               foreach($setting as $value)
               {
-                if($value->show)
-                {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                }
+                if($value->show) $this->datatable->printHead($value, $orderBy, $vars);
               }
             ?>
           </tr>

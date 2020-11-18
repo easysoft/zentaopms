@@ -1,6 +1,5 @@
 <?php
 $config->program = new stdclass();
-$config->program->PRJRecentQuantity = 15;
 
 $config->program->editor = new stdclass();
 $config->program->editor->pgmcreate   = array('id' => 'desc',    'tools' => 'simpleTools');

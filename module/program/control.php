@@ -576,24 +576,6 @@ class program extends control
     }
 
     /**
-     * Gets the most recently created project.
-     *
-     * @access public
-     * @return string
-     */
-    public function ajaxGetRecentProjects()
-    {
-        $recentProjects = $this->program->getPRJRecent();
-        if(!empty($recentProjects))
-        {
-            foreach($recentProjects as $project)
-            {
-                echo html::a(helper::createLink('project', 'task', 'projectID=' . $project->id, '', false, $project->project), '<i class="icon icon-menu-doc"></i>' . $project->name, '', "class='text-ellipsis' title='$project->name'");
-            }
-        }
-    }
-
-    /**
      * Update program order.
      *
      * @access public
@@ -1033,22 +1015,20 @@ class program extends control
         $this->loadModel('user');
         $this->loadModel('dept');
 
-        $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
-        $roles          = $this->user->getUserRoles(array_keys($users));
-        $deptUsers      = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
+        $project   = $this->project->getById($projectID);
+        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $roles     = $this->user->getUserRoles(array_keys($users));
+        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
-        $title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
-        $position[] = $this->lang->program->PRJManageMembers;
+        $this->view->title      = $this->lang->program->PRJManageMembers . $this->lang->colon . $project->name;
+        $this->view->position[] = $this->lang->program->PRJManageMembers;
 
-        $this->view->title          = $title;
-        $this->view->position       = $position;
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
-        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
+        $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
         $this->view->currentMembers = $this->project->getTeamMembers($projectID);;
         $this->display();
     }

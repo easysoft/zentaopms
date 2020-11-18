@@ -3341,4 +3341,27 @@ class projectModel extends model
         $products = $this->getProducts($projectID, $withBranch = false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
+
+    /**
+     * Get recent executions.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRecentExecutions()
+    {
+        $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
+        if(!$this->app->user->admin && $isView === false) return array();
+
+        return $this->dao->select('id,project,code,name')->from(TABLE_PROJECT)
+            ->where('type')->in('stage,sprint')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+            ->andWhere('status')->ne('closed')
+            ->andWhere('code')->ne('')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->limit('5,' . $this->config->project->recentQuantity)
+            ->fetchAll();
+    }
 }

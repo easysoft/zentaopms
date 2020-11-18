@@ -4,6 +4,7 @@ $config->project->defaultWorkhours = '7.0';
 $config->project->orderBy          = 'isDone,status,order_desc';
 $config->project->maxBurnDay       = '31';
 $config->project->weekend          = '2';
+$config->project->recentQuantity   = 15;
 
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';

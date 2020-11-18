@@ -2328,6 +2328,25 @@ class project extends control
     }
 
     /**
+     * Get recent executions.
+     *
+     * @access public
+     * @return string
+     */
+    public function ajaxGetRecentExecutions()
+    {
+        $executions = $this->project->getRecentExecutions();
+        if(!empty($executions))
+        {
+            foreach($executions as $execution)
+            {
+                $link = helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project);
+                echo html::a($link, '<i class="icon icon-menu-doc"></i>' . $execution->code, '', "class='text-ellipsis' title='$execution->name'");
+            }
+        }
+    }
+
+    /**
      * Update order.
      *
      * @access public
