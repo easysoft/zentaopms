@@ -15,13 +15,13 @@
     <table class='table table-form'>
       <tr>
         <th class='w-300px'><?php echo $lang->custom->closedProduct;?></th>
-        <td class='w-250px text-center'>
+        <td class='w-300px text-left'>
           <?php $checkedKey = isset($config->CRProduct) ? $config->CRProduct : 0;?>
           <?php foreach($lang->custom->CRProduct as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="product" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="product<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-        <td><span class='label label-info'><?php echo $lang->custom->notice->readOnlyOfProduct;?></span></td>
+        <td><span class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfProduct;?></span></td>
       </tr>
       <tr>
         <th></th>

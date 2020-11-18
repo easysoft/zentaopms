@@ -15,13 +15,13 @@
     <table class='table table-form'>
       <tr>
         <th class='w-300px'><?php echo $lang->custom->closedProject;?></th>
-        <td class='w-250px text-center'>
+        <td class='w-300px text-left'>
           <?php $checkedKey = isset($config->CRProject) ? $config->CRProject : 0;?>
           <?php foreach($lang->custom->CRProject as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="project" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="project<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-        <td><span class='label label-info'><?php echo $lang->custom->notice->readOnlyOfProject;?></span></td>
+        <td><span class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfProject;?></span></td>
       </tr>
       <tr>
         <th></th>
