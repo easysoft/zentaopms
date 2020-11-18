@@ -24,7 +24,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'):?>
+    <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -34,7 +34,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('productplan', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create')):?>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

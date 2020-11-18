@@ -32,7 +32,7 @@
     $link = common::hasPriv('task', 'report', $project) ?  $this->createLink('task', 'report', "project=$projectID&browseType=$browseType") : '#';
     echo html::a($link, "<i class='icon icon-bar-chart muted'></i> <span class='text'>{$lang->task->reportChart}</span>", '', 'class="btn btn-link"');
     ?>
-    <?php if(!empty($this->config->CRProject) or $project->status != 'closed'):?>
+    <?php if(common::canModify('project', $project)):?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">

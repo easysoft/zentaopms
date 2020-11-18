@@ -41,7 +41,7 @@
       <div class="table-empty-tip">
         <p>
           <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-          <?php if((!empty($this->config->CRProduct) or $product->status != 'closed') and common::hasPriv('release', 'create')):?>
+          <?php if(common::canModify('product', $product) and common::hasPriv('release', 'create')):?>
           <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branchKey"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
           <?php endif;?>
         </p>

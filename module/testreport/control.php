@@ -57,11 +57,6 @@ class testreport extends control
         if($extra) $task = $this->testtask->getById($extra);
         $name = $extra ? $task->name : $object->name;
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = true;
-        if($objectType == 'product' and empty($this->config->CRProduct) and $object->status == 'closed') $canBeChanged = false;
-        if($objectType == 'project' and empty($this->config->CRProject) and $object->status == 'closed') $canBeChanged = false;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -114,7 +109,7 @@ class testreport extends control
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->tasks        = $tasks;
         $this->view->projects     = $projects;
-        $this->view->canBeChanged = $canBeChanged;
+        $this->view->canBeChanged = common::canModify($objectType, $object); // Determines whether an object is editable.
         $this->display();
     }
 

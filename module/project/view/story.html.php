@@ -48,7 +48,7 @@
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
 
-    if(!empty($this->config->CRProject) or $project->status != 'closed')
+    if(common::canModify('project', $project))
     {
         $this->lang->story->create = $this->lang->project->createStory;
         if($productID and !$this->loadModel('story')->checkForceReview())
@@ -100,7 +100,7 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if((!empty($this->config->CRProject) or $project->status != 'closed') and common::hasPriv('project', 'linkStory')):?>
+        <?php if(common::canModify('project', $project) and common::hasPriv('project', 'linkStory')):?>
         <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
