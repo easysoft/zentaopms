@@ -53,9 +53,9 @@
           <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
-        <td class='text-center'><?php echo $program->begin;?></td>
-        <td class='text-center'><?php echo $program->end == '2059-12-31' ? '' : $program->end;?></td>
-        <td class='text-left'><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
+        <td><?php echo $program->begin;?></td>
+        <td><?php echo $program->end == '2059-12-31' ? '' : $program->end;?></td>
+        <td class='text-left'><?php echo $program->budget ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-right c-actions'>
           <?php if($program->type == 'program'):?>
@@ -82,9 +82,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'>
-    <?php $pager->show('right', 'pagerjs');?>
-  </div>
 </form>
 <style>
 .w-240px {width:240px;}

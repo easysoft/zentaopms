@@ -59,7 +59,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PGMBrowse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function PGMBrowse($status = 'all', $orderBy = 'order_asc')
     {
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
@@ -70,16 +70,13 @@ class program extends control
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         if($programType === 'bygrid')
         {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy, $pager);
+            $programs = $this->program->getProgramStats($status, 20, $orderBy);
         }
         else
         {
-            $programs = $this->program->getPGMList($status, $orderBy, $pager, true);
+            $programs = $this->program->getPGMList($status, $orderBy, null, true);
         }
 
         $this->view->title       = $this->lang->program->PGMBrowse;
@@ -88,7 +85,6 @@ class program extends control
         $this->view->programs    = $programs;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->programType = $programType;
 
