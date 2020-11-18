@@ -519,7 +519,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
+                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') // The value of product code can be 0 or 00.0.
                 ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
                 ->check('code', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
                 ->where('id')->eq($productID)
