@@ -152,7 +152,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <?php
     echo "<div class='btn-group dropdown-hover'>";
     $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
-    if($canBeChanged and common::hasPriv('task', 'create' $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
+    if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
     ?>
     <ul class='dropdown-menu'>
       <?php $disabled = common::hasPriv('task', 'batchCreate') ? '' : "class='disabled'";?>
