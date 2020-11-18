@@ -1023,9 +1023,9 @@ class testtaskModel extends model
     public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
     {
         /* Select the table for these special fields. */
-        $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
-        $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1050,9 +1050,9 @@ class testtaskModel extends model
     public function getUserRuns($taskID, $user, $modules = '', $orderBy, $pager = null)
     {
         /* Select the table for these special fields. */
-        $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
-        $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1121,9 +1121,9 @@ class testtaskModel extends model
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
 
             /* Select the table for these special fields. */
-            $specialFields = 'assignedTo,status,lastRunResult,lastRunner,lastRunDate';
+            $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
             $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
-            $orderBy       = strpos($specialFields, $fieldToSort) !== false ? ('t1.' . $sort) : ('t2.' . $sort);
+            $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $sort) : ('t2.' . $sort);
 
             $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
