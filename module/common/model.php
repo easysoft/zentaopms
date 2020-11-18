@@ -1874,13 +1874,13 @@ EOD;
     }
 
     /**
-     * check object can Modify.
+     * Check object can modify.
      *
      * @param  string $type    product|project
      * @param  object $object
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
     public static function canModify($type, $object)
     {
