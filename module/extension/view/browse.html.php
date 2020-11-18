@@ -60,7 +60,6 @@
             echo $lang->extension->expiredDate . ': ';
             echo $expiredDate != 'life' ? "<i>{$expiredDate}</i>" : "<i>{$lang->extension->life}</i>";
         }
-
         ?>
       </div>
     </div>
