@@ -67,12 +67,11 @@ $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
 
 $lang->todo->every        = 'Every';
-$lang->todo->appoint      = 'Appoint';
+$lang->todo->specify      = 'Specify';
 $lang->todo->everyYear    = 'Annually';
 $lang->todo->beforeDays   = "<span class='input-group-addon'>Auto create the todo</span>%s<span class='input-group-addon'>days before</span>";
 $lang->todo->dayNames     = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
-$lang->todo->appointMonth = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-$lang->todo->appointDay   = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
+$lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
 $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit it?';
 $lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';

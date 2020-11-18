@@ -151,15 +151,12 @@
                 {
                     if(isset($todo->config->day)) echo $lang->todo->every . $todo->config->day . $lang->day;
 
-                    if(isset($todo->config->appointDate))
+                    if(isset($todo->config->specifiedDate))
                     {
-                        $appointNotes = $lang->todo->appoint;
-
-                        if(isset($todo->config->cycleYear)) $appointNotes .= $lang->todo->everyYear;
-
-                        $appointNotes .= $todo->config->appoint->month . $lang->todo->cycleMonth . $todo->config->appoint->day . $lang->todo->day;
-
-                        echo $appointNotes;
+                        $specifiedNotes = $lang->todo->specify;
+                        if(isset($todo->config->cycleYear)) $specifiedNotes .= $lang->todo->everyYear;
+                        $specifiedNotes .= zget($lang->datepicker->monthNames, $todo->config->specify->month) . $todo->config->specify->day . $lang->todo->day;
+                        echo $specifiedNotes;
                     }
                 }
                 elseif($todo->config->type == 'week')
