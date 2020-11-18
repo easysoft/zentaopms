@@ -14,7 +14,7 @@
   <form class="load-indicator main-form form-ajax" method='post'>
     <table class='table table-form'>
       <tr>
-        <th class='w-300px'><?php echo $lang->custom->closedProject;?></th>
+        <th class='w-150px'><?php echo $lang->custom->closedProject;?></th>
         <td class='w-300px text-left'>
           <?php $checkedKey = isset($config->CRProject) ? $config->CRProject : 0;?>
           <?php foreach($lang->custom->CRProject as $key => $value):?>

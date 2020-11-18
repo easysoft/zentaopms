@@ -14,7 +14,7 @@
   <form class="load-indicator main-form form-ajax" method='post'>
     <table class='table table-form'>
       <tr>
-        <th class='w-300px'><?php echo $lang->custom->closedProduct;?></th>
+        <th class='w-150px'><?php echo $lang->custom->closedProduct;?></th>
         <td class='w-300px text-left'>
           <?php $checkedKey = isset($config->CRProduct) ? $config->CRProduct : 0;?>
           <?php foreach($lang->custom->CRProduct as $key => $value):?>
