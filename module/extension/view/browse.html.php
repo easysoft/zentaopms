@@ -58,7 +58,7 @@
         if(!empty($expiredDate))
         {
             echo $lang->extension->expiredDate . ': ';
-            $expiredDate != 'life' ? echo "<i>{$expiredDate}</i>" : echo "<i>{$lang->extension->life}</i>";
+            echo $expiredDate != 'life' ? "<i>{$expiredDate}</i>" : "<i>{$lang->extension->life}</i>";
         }
 
         ?>
