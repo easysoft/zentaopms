@@ -66,7 +66,7 @@
                   <span class='input-group-addon'><?php echo $lang->todo->specify;?></span>
                   <?php echo html::select('config[specify][month]', $lang->datepicker->monthNames, 0, "class='form-control w-80px' onchange='setDays(this.value);'");?>
                   <?php echo html::select('config[specify][day]', $lang->todo->specifiedDay, 1, "class='form-control w-60px' id='specifiedDay'");?>
-                  <span class='input-group-addon <?php echo strpos('|zh-cn|zh-tw|', '|' . $this->app->getClientLang() . '|') !== false ? '' : 'hidden';?>'><?php echo $lang->todo->day;?></span>
+                  <span class='input-group-addon <?php echo strpos($this->app->getClientLang(), 'zh') !== false ? '' : 'hidden';?>'><?php echo $lang->todo->day;?></span>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary w-50px'>
                       <input type='checkbox' name='config[cycleYear]' id='cycleYear' value='1' />
