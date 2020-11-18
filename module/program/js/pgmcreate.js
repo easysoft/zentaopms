@@ -1,18 +1,4 @@
-$(function()
-{
-    $('#parent').change();
-    $('#longTime').change(function()
-     {   
-         if($(this).prop('checked'))
-         {   
-             $('#end').attr('disabled', 'disabled');
-         }   
-         else
-         {   
-             $('#end').removeAttr('disabled');
-         }   
-     });
-})
+$(function(){$('#parent').change();})
 
 function setAclList(programID)
 {

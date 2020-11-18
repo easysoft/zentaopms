@@ -112,18 +112,13 @@
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php
-                $disabledEnd = empty($project->end) ? 'disabled' : '';
-                echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
+                $disabledEnd = $project->end == '2059-12-31' ? 'disabled' : '';
+                echo html::input('end', $project->end == '2059-12-31' ? '' : $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
               ?>
-              <span class='input-group-addon' id='longTimeBox'>
-                <div class="checkbox-primary">
-                  <input type="checkbox" name="longTime" value="1" <?php echo empty($project->end) ? 'checked' : '';?> id="longTime">
-                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
-                </div>
-              </span>
             </div>
           </td>
-          <td class='muted'></td>
+          <?php $deltaValue = $project->end == '2059-12-31' ? 999 : '';?>
+          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($project->model == 'scrum'):?>
         <tr>

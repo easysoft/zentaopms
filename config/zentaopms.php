@@ -157,7 +157,7 @@ define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
 
 define('TABLE_PROGRAM',       '`' . $config->db->prefix . 'project`');
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
-define('TABLE_PHASE',         '`' . $config->db->prefix . 'project`');
+define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');

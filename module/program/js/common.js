@@ -99,6 +99,17 @@ function computeEndDate(delta)
     if(!beginDate) return;
 
     delta     = parseInt(delta);
+    if(delta == 999)
+    {
+        $('#end').val('');
+        $('#end').attr('disabled', 'disabled');
+        return false;
+    }
+    else
+    {
+        $('#end').removeAttr('disabled');
+    }
+
     beginDate = convertStringToDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {

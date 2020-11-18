@@ -9,18 +9,3 @@ function setAclList(programID)
         $('.aclBox').html($('#PGMAcl').html());
     }
 }
-
-$(function()
-{
-    $('#longTime').change(function()
-    {   
-        if($(this).prop('checked'))
-        {   
-            $('#end').attr('disabled', 'disabled');
-        }   
-        else
-        {   
-            $('#end').removeAttr('disabled');
-        }   
-    });
-})

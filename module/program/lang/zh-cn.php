@@ -123,6 +123,7 @@ $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
 $lang->program->endList[186] = '半年';
 $lang->program->endList[365] = '一年';
+$lang->program->endList[999] = '长期';
 
 $lang->program->noPRJ             = '暂时没有项目';
 $lang->program->accessDenied      = '您无权访问该项目！';

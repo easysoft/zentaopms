@@ -719,14 +719,15 @@ class projectModel extends model
     }
 
     /**
-     * Get project pairs.
+     * Get execution pairs.
      *
-     * @param  string $mode     all|noclosed or empty
-     * @param  string $programID
+     * @param  int    $projectID
+     * @param  string $type all|sprint|stage|kanban
+     * @param  string $mode all|noclosed or empty
      * @access public
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0)
+    public function getExecutionPairs($projectID = 0, $type = 'all', $mode = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -734,26 +735,27 @@ class projectModel extends model
         $mode    .= $this->cookie->projectMode;
 
         /* Order by status's content whether or not done */
-        $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
+        $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
-        foreach($projects as $project)
+        foreach($executions as $execution)
         {
-            if(strpos($mode, 'noclosed') !== false and ($project->status == 'done' or $project->status == 'closed')) continue;
-            $pairs[$project->id] = $project->name;
+            if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
+            $pairs[$execution->id] = $execution->name;
         }
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
-        if(empty($pairs) and isset($projects[0]))
+        if(empty($pairs) and isset($executions[0]))
         {
-            $firstProject = $projects[0];
-            $pairs[$firstProject->id] = $firstProject->name;
+            $firstExecution = $executions[0];
+            $pairs[$firstExecution->id] = $firstExecution->name;
         }
 
         return $pairs;
@@ -762,25 +764,28 @@ class projectModel extends model
     /**
      * Get by idList.
      *
-     * @param  array    $projectIDList
+     * @param  array  $executionIdList
      * @access public
      * @return array
      */
-    public function getByIdList($projectIDList)
+    public function getByIdList($executionIdList = array())
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
     }
 
     /**
-     * Get project lists.
+     * Get execution lists.
      *
+     * @param  int    $projectID
+     * @param  string $type    all|sprint|stage|kanban
      * @param  string $status  all|undone|wait|running
      * @param  int    $limit
      * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $programID = 0)
+    public function getExecutionList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0)
     {
         if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
 
@@ -789,9 +794,10 @@ class projectModel extends model
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($productID)
-                ->andWhere('t2.type')->in('sprint,stage')
+                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+                ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
+                ->beginIF($type != 'all')->andWhere('t2.type')->eq($type)->fi()
                 ->andWhere('t2.deleted')->eq(0)
-                ->beginIF($programID)->andWhere('t2.project')->eq($programID)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
@@ -804,11 +810,12 @@ class projectModel extends model
         {
             return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
                 ->where('deleted')->eq(0)
-                ->andWhere('type')->in('sprint,stage')
+                ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
+                ->beginIF($type != 'all')->andWhere('t2.type')->eq($type)->fi()
+                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-                ->beginIF($programID)->andWhere('project')->eq($programID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -861,17 +868,17 @@ class projectModel extends model
     }
 
     /**
-     * Get project id by program.
+     * Get execution id list by project.
      *
-     * @param  int  $programID
-     * @param  int  $status    all|undone|wait|doing|suspended|closed
+     * @param  int  $projectID
+     * @param  int  $status all|undone|wait|doing|suspended|closed
      * @access public
      * @return array
      */
-    public function getProjectIDByProgram($programID, $status = 'all')
+    public function getExecutionIdList($projectID, $status = 'all')
     {
-        return $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('project')->eq($programID)
+        return $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('project')->eq($projectID)
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
@@ -879,21 +886,20 @@ class projectModel extends model
     }
 
     /**
-     * Get projects by program.
+     * Get executions by project.
      *
-     * @param  int     $programID
+     * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
      * @access public
      * @return array
      */
-    public function getProjectsByProgram($programID, $status = 'all', $limit = 0)
+    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0)
     {
-        $program = $this->getByID($programID);
-        if(empty($program)) return array();
+        if(!$projectID) return array();
 
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('project')->eq((int)$program->id)
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('project')->eq((int)$projectID)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
@@ -902,16 +908,17 @@ class projectModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if($program->model == 'waterfall')
+        $project = $this->loadModel('program')->getPRJByID($projectID);
+        if($project->model == 'waterfall')
         {
-            foreach($projects as $projectID => $project)
+            foreach($executions as $executionID => $execution)
             {
-                if($project->parent and isset($projects[$project->parent])) $projects[$project->id]->name = $projects[$project->parent]->name . '/' . $project->name;
+                if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
             }
-            foreach($projects as $project) if($project->grade == 2) unset($projects[$project->parent]);
+            foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
         }
 
-        return $projects;
+        return $executions;
     }
 
     /**

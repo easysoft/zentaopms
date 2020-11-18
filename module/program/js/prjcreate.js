@@ -1,17 +1,6 @@
 $(function()
 {
     $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
-    $('#longTime').change(function()
-    {
-        if($(this).prop('checked'))
-        {
-            $('#end').attr('disabled', 'disabled');
-        }
-        else
-        {
-            $('#end').removeAttr('disabled');
-        }
-    });
     setAclList($("#parent").val());
 
     if(typeof(currentPlanID) == 'undefined')

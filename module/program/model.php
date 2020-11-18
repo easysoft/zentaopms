@@ -251,12 +251,12 @@ class programModel extends model
             ->setDefault('parent', 0)
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
+            ->setIF($this->post->delta == 999, 'end', '2059-12-31')
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
-            ->remove('delta,longTime')
+            ->remove('delta')
             ->get();
 
         if($program->parent)
@@ -271,7 +271,7 @@ class programModel extends model
                 if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
                 /* When parent set end then child program cannot set longTime. */
-                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
                 if(dao::isError()) return false;
             }
@@ -346,10 +346,10 @@ class programModel extends model
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
+            ->setIF($this->post->delta == 999, 'end', '2059-12-31')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,longTime')
+            ->remove('uid,delta')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
@@ -361,7 +361,7 @@ class programModel extends model
             $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginGreateChild, $minChildBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and !$this->post->longTime) dao::$errors['end'] = sprintf($this->lang->program->PGMEndLetterChild, $maxChildEnd);
+            if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->PGMEndLetterChild, $maxChildEnd);
         }
 
         if($program->parent)
@@ -371,7 +371,7 @@ class programModel extends model
             {
                 if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginLetterParent, $parentProgram->begin);
                 if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
-                if(empty($program->end) and $this->post->longTime and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
             }
         }
         if(dao::isError()) return false;
@@ -1110,8 +1110,8 @@ class programModel extends model
     {
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
-            ->setIF($this->post->longTime == 1, 'days', 0)
+            ->setIF($this->post->delta == 999, 'end', '2059-12-31')
+            ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl      == 'open', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
@@ -1120,7 +1120,7 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('longTime,products,branch,plans,delta')
+            ->remove('products,branch,plans,delta')
             ->get();
 
         if($project->parent)
@@ -1146,7 +1146,7 @@ class programModel extends model
         }
 
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
-        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->project->name = $this->lang->program->PRJName;
         $this->lang->project->code = $this->lang->program->PRJCode;
@@ -1239,14 +1239,14 @@ class programModel extends model
 
         $project = fixer::input('post')
             ->setDefault('team', substr($this->post->name, 0, 30))
-            ->setIF($this->post->longTime == 1, 'end', '2059-12-31')
-            ->setIF($this->post->longTime == 1, 'days', 0)
+            ->setIF($this->post->delta == 999, 'end', '2059-12-31')
+            ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
-            ->remove('longTime,products,branch,plans,delta')
+            ->remove('products,branch,plans,delta')
             ->get();
 
         if($project->parent)
@@ -1275,7 +1275,7 @@ class programModel extends model
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);
 
         $requiredFields = $this->config->program->PRJEdit->requiredFields;
-        if($this->post->longTime) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->project->name = $this->lang->program->PRJName;
         $this->lang->project->code = $this->lang->program->PRJCode;

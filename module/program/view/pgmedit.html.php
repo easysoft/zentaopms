@@ -55,15 +55,10 @@
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php $disabledEnd = $program->end == '2059-12-31' ? 'disabled' : '';?>
               <?php echo html::input('end', $program->end == '2059-12-31' ? '' : $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
-              <span class='input-group-addon' id='longTimeBox'>
-                <div class="checkbox-primary">
-                  <input type="checkbox" name="longTime" value="1" id="longTime" <?php echo $program->end == '2059-12-31' ? 'checked' : '';?>>
-                  <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
-                </div>
-              </span>
             </div>
           </td>
-          <td colspan='2'></td>
+          <?php $endValue = $program->end == '2059-12-31' ? 999 : '';?>
+          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->realBegan;?></th>
