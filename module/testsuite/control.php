@@ -42,6 +42,7 @@ class testsuite extends control
 
         /* Set menu. */
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testsuite")));
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
