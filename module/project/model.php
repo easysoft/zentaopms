@@ -847,8 +847,8 @@ class projectModel extends model
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t3.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID)->andWhere('t3.project')->eq($projectID)->fi()
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
+                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -1271,40 +1271,40 @@ class projectModel extends model
     }
 
     /**
-     * Get ordered projects.
+     * Get ordered executions.
      *
+     * @param  int    $projectID
      * @param  string $status
      * @param  int    $num
-     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getOrderedProjects($status, $num = 0, $programID = 0)
+    public function getOrderedExecutions($projectID, $status, $num = 0)
     {
-        $projectList = $this->getList($status, 0, 0, 0, $programID);
-        if(empty($projectList)) return $projectList;
+        $executionList = $this->getExecutionList($projectID, $status);
+        if(empty($executionIdList)) return $executionList;
 
-        $projects = $mineProjects = $otherProjects = $closedProjects = array();
-        foreach($projectList as $project)
+        $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();
+        foreach($executionList as $execution)
         {
-            if(!$this->app->user->admin and !$this->checkPriv($project->id)) continue;
-            if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+            if(!$this->app->user->admin and !$this->checkPriv($execution->id)) continue;
+            if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
             {
-                $mineProjects[$project->id] = $project;
+                $mineExecutions[$execution->id] = $execution;
             }
-            elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+            elseif($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
             {
-                $otherProjects[$project->id] = $project;
+                $otherExecutions[$execution->id] = $execution;
             }
-            elseif($project->status == 'done' or $project->status == 'closed')
+            elseif($execution->status == 'done' or $execution->status == 'closed')
             {
-                $closedProjects[$project->id] = $project;
+                $closedExecutions[$execution->id] = $execution;
             }
         }
-        $projects = $mineProjects + $otherProjects + $closedProjects;
+        $executions = $mineExecutions + $otherExecutions + $closedExecutions;
 
-        if(empty($num)) return $projects;
-        return array_slice($projects, 0, $num, true);
+        if(empty($num)) return $executions;
+        return array_slice($executions, 0, $num, true);
     }
 
     /**

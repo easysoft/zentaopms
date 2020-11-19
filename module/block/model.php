@@ -221,11 +221,11 @@ class blockModel extends model
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
-        if($module == 'project') 
+        if($module == 'program') 
         {
             $blocks    = $this->lang->block->default[$type]['project'];
             $projectID = $this->session->PRJ;
-            $project   = $this->loadModel('project')->getByID($projectID);
+            $project   = $this->loadModel('program')->getPRJByID($projectID);
 
             /* Mark project block has init. */
             $this->loadModel('setting')->setItem("$account.$module.{$project->model}common.blockInited", true);

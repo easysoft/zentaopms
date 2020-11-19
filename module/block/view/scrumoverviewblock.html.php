@@ -32,23 +32,23 @@
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon-program-group icon-group"></i> <?php echo $lang->block->totalPeople;?></div>
           <div class="tile-amount">
-          <?php echo $totalData[$programID]->teamCount ? html::a($this->createLink('program', 'manageMembers', 'programID=' . $programID), $totalData[$programID]->teamCount) : 0;?>
+          <?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('program', 'manageMembers', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?>
           </div>
         </div>
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon icon-clock"></i> <?php echo $lang->block->consumedHours;?></div>
           <div class="tile-amount">
-          <?php echo $totalData[$programID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$programID]->consumed) : 0;?>
+          <?php echo $totalData[$projectID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$projectID]->consumed) : 0;?>
           </div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$programID]->estimate;?></span>
+          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$projectID]->estimate;?></span>
           </div>
         </div>
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
           <div class="tile-amount">￥0</div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$programID]->budget;?></span>
+          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$projectID]->budget;?></span>
           </div>
         </div>
       </div>
@@ -56,35 +56,35 @@
     <div class="col-3 total-block hide-in-sm">
       <div><strong><?php echo $lang->block->totalStory;?></strong></div>
       <div class="tile-amount">
-      <?php echo $totalData[$programID]->allStories ? html::a($this->createLink('project', 'story', 'projectID=' . $programID), $totalData[$programID]->allStories) : 0;?>
+      <?php echo $totalData[$projectID]->allStories ? html::a($this->createLink('project', 'story', 'projectID=' . $projectID), $totalData[$projectID]->allStories) : 0;?>
       </div>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$programID]->doneStories;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$programID]->allStories;?>" style="width: <?php echo floor(($totalData[$programID]->doneStories/$totalData[$programID]->allStories)*100).'%';?>"></div>
+        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$projectID]->doneStories;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$projectID]->allStories;?>" style="width: <?php echo floor(($totalData[$projectID]->doneStories/$totalData[$projectID]->allStories)*100).'%';?>"></div>
       </div>
       <div class="hours-statistics">
         <small><?php echo $lang->block->done;?></small>
-        <span><?php echo $totalData[$programID]->doneStories;?></span>
+        <span><?php echo $totalData[$projectID]->doneStories;?></span>
       </div>
       <div class="hours-statistics">
         <small><?php echo $lang->block->left;?></small>
-        <span><?php echo $totalData[$programID]->leftStories;?></span>
+        <span><?php echo $totalData[$projectID]->leftStories;?></span>
       </div>
     </div>
     <div class="col-3 total-block hide-in-sm">
       <div><strong><?php echo $lang->block->totalBug;?></strong></div>
       <div class="tile-amount">
-      <?php echo $totalData[$programID]->allBugs ? html::a($this->createLink('qa', 'index'), $totalData[$programID]->allBugs) : 0;?>
+      <?php echo $totalData[$projectID]->allBugs ? html::a($this->createLink('qa', 'index'), $totalData[$projectID]->allBugs) : 0;?>
       </div>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$programID]->doneBugs;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$programID]->allBugs;?>" style="width: <?php echo floor(($totalData[$programID]->doneBugs/$totalData[$programID]->allBugs)*100).'%';?>"></div>
+        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$projectID]->doneBugs;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$projectID]->allBugs;?>" style="width: <?php echo floor(($totalData[$projectID]->doneBugs/$totalData[$projectID]->allBugs)*100).'%';?>"></div>
       </div>
       <div class="hours-statistics">
         <small><?php echo $lang->block->done;?></small>
-        <span><?php echo $totalData[$programID]->doneBugs;?></span>
+        <span><?php echo $totalData[$projectID]->doneBugs;?></span>
       </div>
       <div class="hours-statistics">
         <small><?php echo $lang->block->left;?></small>
-        <span><?php echo $totalData[$programID]->leftBugs;?></span>
+        <span><?php echo $totalData[$projectID]->leftBugs;?></span>
       </div>
     </div>
   </div>
