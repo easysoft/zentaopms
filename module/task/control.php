@@ -252,7 +252,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
+        $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $project->id);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
@@ -450,7 +450,7 @@ class task extends control
         if($projectID)
         {
             $project = $this->project->getById($projectID);
-            $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $project->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
@@ -656,7 +656,7 @@ class task extends control
 
         /* Set menu. */
         $project = $this->project->getById($task->project);
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $project->id);
+        $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $project->id);
 
         $this->executeHooks($taskID);
 
@@ -1312,7 +1312,7 @@ class task extends control
             }
         }
 
-        $projects = $this->project->getPairs('', $this->session->PRJ);
+        $projects = $this->project->getExecutionPairs($this->session->PRJ);
 
         $this->project->setMenu($projects, $projectID);
         $this->projects            = $projects;

@@ -120,7 +120,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $lib->project);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -226,7 +226,7 @@ class doc extends control
 
         $programID = $this->session->PRJ;
         $products  = $this->product->getProductPairsByProject($programID, 'noclosed');
-        $projects  = $this->project->getPairs('nocode', $programID);
+        $projects  = $this->project->getExecutionPairs($programID, 'all', 'nocode');
 
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products)) unset($libTypeList['product']);
@@ -355,7 +355,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $lib->project);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -774,7 +774,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $objectID);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -868,7 +868,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode', $this->session->PRJ), $objectID);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else

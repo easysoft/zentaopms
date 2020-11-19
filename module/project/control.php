@@ -510,7 +510,7 @@ class project extends control
         $this->app->session->set('projectList', $uri);
 
         $this->loadModel('bug');
-        $projects = $this->project->getPairs('nocode', $this->session->PRJ);
+        $projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
         $this->project->setMenu($projects, $projectID);
 
         /* Load pager. */

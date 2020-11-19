@@ -629,7 +629,7 @@ class story extends control
         elseif($projectID)
         {
             $this->lang->story->menu = $this->lang->project->menu;
-            $this->project->setMenu($this->project->getPairs('nodeleted', $this->session->PRJ), $projectID);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
 
@@ -1092,7 +1092,7 @@ class story extends control
         {
             $this->lang->story->menu      = $this->lang->project->menu;
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nodeleted', $this->session->PRJ), $projectID);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $project = $this->project->getByID($projectID);
             $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);

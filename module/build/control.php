@@ -40,7 +40,7 @@ class build extends control
         $this->loadModel('user');
         
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $projectID);
+        $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $projectID);
 
         /* Get stories and bugs. */
         $orderBy  = 'status_asc, stage_asc, id_desc';
@@ -101,7 +101,7 @@ class build extends control
         $this->loadModel('project');
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $build->project);
+        $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project);
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -192,8 +192,8 @@ class build extends control
         $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
-        $this->loadModel('project')->setMenu($this->project->getPairs('', $this->session->PRJ), $build->project, $buildID);
-        $projects = $this->project->getPairs('empty', $this->session->PRJ);
+        $this->loadModel('project')->setMenu($this->projec->getExecutionPairs($this->session->PRJ), $build->project, $buildID);
+        $projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
         $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
@@ -389,7 +389,7 @@ class build extends control
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-        $this->loadModel('project')->setMenu($this->project->getPairs('', $this->session->PRJ), $build->project);
+        $this->loadModel('project')->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -508,7 +508,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('project')->setMenu($this->project->getPairs('', $this->session->PRJ), $build->project);
+        $this->loadModel('project')->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

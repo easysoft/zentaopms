@@ -221,7 +221,7 @@ class tree extends control
         $products = $this->project->getProducts($rootID);
         $this->view->products = $products;
 
-        $projects = $this->project->getPairs('', $this->session->PRJ);
+        $projects = $this->project->getExecutionPairs($this->session->PRJ);
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($projects, $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;

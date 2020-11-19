@@ -527,7 +527,7 @@ class testreport extends control
         }
         elseif($objectType == 'project')
         {
-            $this->projects = $this->project->getPairs('nocode', $this->session->PRJ);
+            $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             $projectID      = $this->project->saveState($objectID, $this->projects);
             $this->project->setMenu($this->projects, $projectID);
             $this->lang->testreport->menu = $this->lang->project->menu;
