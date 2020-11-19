@@ -13,5 +13,7 @@ ALTER TABLE `zt_history` ADD INDEX `action` (`action`);
 ALTER TABLE `zt_action` ADD INDEX `action` (`action`);
 ALTER TABLE `zt_action` DROP INDEX `product`;
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'xuanxuan', 'pollingInterval', '60');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'xuanxuan', 'aes', 'on');

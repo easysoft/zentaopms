@@ -827,6 +827,8 @@ $lang->mail->methodOrder[65] = 'ztCloud';
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index     = 'index';
 $lang->resource->custom->set       = 'set';
+$lang->resource->custom->project   = 'project';
+$lang->resource->custom->product   = 'product';
 $lang->resource->custom->restore   = 'restore';
 $lang->resource->custom->flow      = 'flow';
 $lang->resource->custom->working   = 'working';
@@ -835,11 +837,13 @@ $lang->resource->custom->timezone  = 'timezone';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
-$lang->custom->methodOrder[15] = 'restore';
-$lang->custom->methodOrder[20] = 'flow';
-$lang->custom->methodOrder[25] = 'working';
-$lang->custom->methodOrder[30] = 'setPublic';
-$lang->custom->methodOrder[35] = 'timezone';
+$lang->custom->methodOrder[15] = 'project';
+$lang->custom->methodOrder[10] = 'product';
+$lang->custom->methodOrder[25] = 'restore';
+$lang->custom->methodOrder[30] = 'flow';
+$lang->custom->methodOrder[35] = 'working';
+$lang->custom->methodOrder[40] = 'setPublic';
+$lang->custom->methodOrder[45] = 'timezone';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1479,7 +1483,9 @@ $lang->changelog['12.3'][] = 'testtask-importUnitResult';
 $lang->changelog['12.3'][] = 'job-view';
 $lang->changelog['12.3'][] = 'ci-commitResult';
 
-$lang->changelog['12.4.5'][] = 'story-batchToTask';
+$lang->changelog['12.5'][] = 'story-batchToTask';
+$lang->changelog['12.5'][] = 'custom-product';
+$lang->changelog['12.5'][] = 'custom-project';
 
 global $config;
 if($config->global->flow != 'full')

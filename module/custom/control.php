@@ -19,7 +19,14 @@ class custom extends control
      */
     public function index()
     {
-        die(js::locate(inlink('set')));
+        if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
+        if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
+        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set')));
+
+        foreach($this->lang->custom->system as $sysObject)
+        {
+            if(common::hasPriv('custom', $sysObject)) die(js::locate(inlink($sysObject)));
+        }
     }
 
     /**

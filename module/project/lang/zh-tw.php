@@ -275,6 +275,9 @@ $lang->project->noweekend             = '去除周末';
 $lang->project->withweekend           = '顯示周末';
 $lang->project->interval              = '間隔';
 $lang->project->fixFirstWithLeft      = '修改剩餘工時';
+$lang->project->unfinishedProject     = "該{$lang->projectCommon}下還有";
+$lang->project->unfinishedTask        = "[%s]個未完成的任務，";
+$lang->project->unresolvedBug         = "[%s]個未解決的bug，";
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 創建。$extra' . "\n";

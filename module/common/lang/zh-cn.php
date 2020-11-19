@@ -408,7 +408,7 @@ $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => '自定义|custom|product', 'subModule' => 'custom');
+$lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');

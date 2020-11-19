@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Dernière Version';
 $lang->misc->feature->detailed = 'Détail';
 
+$lang->misc->releaseDate['12.5.stable'] = '2020-11-19';
 $lang->misc->releaseDate['12.4.4']      = '2020-10-30';
 $lang->misc->releaseDate['12.4.3']      = '2020-10-13';
 $lang->misc->releaseDate['12.4.2']      = '2020-09-18';
@@ -134,6 +135,8 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['12.5.stable'][] = array('title' => 'Fix Bug. Complete high priority story.', 'desc' => '');
 
 $lang->misc->feature->all['12.4.4'][] = array('title'=>'Compatible with professional and enterprise editions', 'desc' => '');
 $lang->misc->feature->all['12.4.3'][] = array('title'=>'Fix Bug', 'desc' => '');
