@@ -975,6 +975,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `dept` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
+  `type` char(30) NOT NULL DEFAULT 'inside',
   `password` char(32) NOT NULL default '',
   `role` char(10) NOT NULL default '',
   `realname` varchar(100) NOT NULL default '',

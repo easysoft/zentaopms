@@ -983,6 +983,7 @@ CREATE TABLE `zt_user` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `dept` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL DEFAULT '',
+  `type` char(30) NOT NULL DEFAULT 'inside',
   `password` char(32) NOT NULL DEFAULT '',
   `role` char(10) NOT NULL DEFAULT '',
   `realname` varchar(100) NOT NULL DEFAULT '',
