@@ -175,14 +175,14 @@
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->program->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
-      <?php if(count($programs) == 1):?>
+      <?php if(empty($copyProjects)):?>
       <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->project->copyNoProject;?></div>
+        <div class='content'><?php echo $lang->program->copyNoProject;?></div>
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($programs as $id => $name):?>
+      <?php foreach ($copyProjects as $id => $name):?>
       <?php if(empty($id)):?>
       <?php if($copyProjectID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
