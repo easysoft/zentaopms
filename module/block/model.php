@@ -513,9 +513,10 @@ class blockModel extends model
      */
     public function getStatisticParams($module = 'product')
     {
-        if($module == 'product') return $this->getProductStatisticParams($module);
-        if($module == 'project') return $this->getProjectStatisticParams($module);
-        if($module == 'qa')      return $this->getQaStatisticParams($module);
+        if($module == 'product')   return $this->getProductStatisticParams($module);
+        if($module == 'project')   return $this->getProjectStatisticParams($module);
+        if($module == 'qa')        return $this->getQaStatisticParams($module);
+        if($module == 'execution') return $this->getExecutionStatisticParams($module);
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -549,6 +550,22 @@ class blockModel extends model
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
+        $params->type['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get execution statistic params.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getExecutionStatisticParams()
+    {
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->execution;
         $params->type['control'] = 'select';
 
         return json_encode($params);

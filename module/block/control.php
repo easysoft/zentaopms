@@ -1016,15 +1016,15 @@ class block extends control
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
 
-        $status  = isset($this->params->type)  ? $this->params->type : 'all';
+        $status  = isset($this->params->type)  ? $this->params->type : 'undone';
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
 
-        /* Get executions. */
+        /* Get projects. */
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $executions = $this->loadModel('project')->getOrderedExecutions($projectID, $status, $count);
         if(empty($executions))
         {
-            $this->view->projects = $executions;
+            $this->view->executions = $executions;
             return false;
         }
 

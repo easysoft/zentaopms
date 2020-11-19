@@ -74,17 +74,17 @@ $(function()
         e.preventDefault();
     });
 
-    var $projectLi = $('#activeProject');
-    if($projectLi.length)
+    var $executionLi = $('#activeExecution');
+    if($executionLi.length)
     {
-        var projectLi  = $projectLi[0];
-        $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
+        var executionLi  = $executionLi[0];
+        $(".col ul.nav").animate({scrollTop: executionLi.offsetTop}, "slow");
     }
 });
 </script>
 <div class="panel-body">
   <div class="table-row">
-    <?php if(empty($projects)):?>
+    <?php if(empty($executions)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
     </div>
@@ -92,51 +92,51 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['project'])  ? key($projects) : $this->session->project;?>
-        <?php $selected = !isset($projects[$selected]) ? key($projects) : $selected;?>
-        <?php foreach($projects as $project):?>
-        <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab" title='<?php echo $project->name;?>'><?php echo $project->name;?></a>
-          <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
+        <?php $selected = key($executions);?>
+        <?php $selected = !isset($executions[$selected]) ? key($executions) : $selected;?>
+        <?php foreach($executions as $execution):?>
+        <li <?php if($execution->id == $selected) echo "class='active' id='activeExecution'";?> executionID='<?php echo $execution->id;?>'>
+          <a href="###" data-target="#tab3Content<?php echo $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
+          <?php echo html::a(helper::createLink('project', 'task', "executionID=$execution->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
     <div class="col tab-content">
-      <?php foreach($projects as $project):?>
-      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
+      <?php foreach($executions as $execution):?>
+      <div class="tab-pane fade<?php if($execution->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $execution->id;?>">
         <div class="table-row">
           <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
+            <div class="progress-pie inline-block space" data-value="<?php echo $execution->progress;?>" data-doughnut-size="84">
               <canvas width="120" height="120"></canvas>
               <div class="progress-info">
                 <small><?php echo $lang->task->statusList['done'];?></small>
-                <strong><?php echo $project->progress;?><small><?php echo $lang->percent;?></small></strong>
+                <strong><?php echo $execution->progress;?><small><?php echo $lang->percent;?></small></strong>
               </div>
             </div>
             <div class="table-row text-center small text-muted with-padding">
               <div class="col-4 text-bottom">
                 <div><?php echo $lang->project->totalEstimate;?></div>
-                <div><?php echo $project->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo $execution->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-primary"></span>
                 <div><?php echo $lang->project->totalConsumed;?></div>
-                <div><?php echo $project->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo $execution->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-pale"></span>
                 <div><?php echo $lang->project->totalLeft;?></div>
-                <div><?php echo $project->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo $execution->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
             </div>
           </div>
           <div class="col-7">
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->task->yesterdayFinished;?></span> <strong><?php echo $project->yesterdayFinished;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->task->yesterdayFinished;?></span> <strong><?php echo $execution->yesterdayFinished;?></strong></div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->taskProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->taskProgress;?>%">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->taskProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->taskProgress;?>%">
                 </div>
               </div>
               <div class="type-info">
@@ -144,40 +144,40 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
-                      <td class='text-left'><?php echo empty($project->totalTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=all"), $project->totalTasks);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalTasks) ? 0 : html::a($this->createLink('project', 'task', "executionID={$execution->id}&status=all"), $execution->totalTasks);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
-                      <td class='text-left'><?php echo empty($project->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=undone"), $project->undoneTasks);?></td>
+                      <td class='text-left'><?php echo empty($execution->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "executionID={$execution->id}&status=undone"), $execution->undoneTasks);?></td>
                     </tr>
                   </table>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $project->releasedStories;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $execution->releasedStories;?></strong></div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->storyProgress;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->storyProgress;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->total;?> :</td>
-                      <td class='text-left'><?php echo empty($project->totalStories) ? 0 : html::a($this->createLink('project', 'story', "projectID={$project->id}&orderBy=order_desc&type=all"), $project->totalStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalStories) ? 0 : html::a($this->createLink('project', 'story', "executionID={$execution->id}&orderBy=order_desc&type=all"), $execution->totalStories);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
-                      <td class='text-left'><?php echo empty($project->unclosedStories) ? 0 : html::a($this->createLink('project', 'story', "projectID={$project->id}&orderBy=order_desc&type=unclosed"), $project->unclosedStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->unclosedStories) ? 0 : html::a($this->createLink('project', 'story', "executionID={$execution->id}&orderBy=order_desc&type=unclosed"), $execution->unclosedStories);?></td>
                     </tr>
                   </table>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $project->yesterdayResolved;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $execution->yesterdayResolved;?></strong></div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->bugProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->bugProgress;?>%">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->bugProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->bugProgress;?>%">
                 </div>
               </div>
               <div class="type-info">
@@ -185,11 +185,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo empty($project->totalBugs) ? 0 : html::a($this->createLink('project', 'bug', "projectID={$project->id}&orderBy=status,id_desc&build=0&type=all"), $project->totalBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('project', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo empty($project->activeBugs) ? 0 : html::a($this->createLink('project', 'bug', "projectID={$project->id}&orderBy=status,id_desc&build=0&type=unresolved"), $project->activeBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('project', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
                     </tr>
                   </table>
                 </div>

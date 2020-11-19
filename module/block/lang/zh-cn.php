@@ -363,6 +363,7 @@ $lang->block->modules['product']->availableBlocks->list      = $lang->productCom
 $lang->block->modules['product']->availableBlocks->story     = "{$lang->storyCommon}列表";
 $lang->block->modules['product']->availableBlocks->plan      = "{$lang->planCommon}列表";
 $lang->block->modules['product']->availableBlocks->release   = '发布列表';
+
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
 $lang->block->modules['execution']->availableBlocks->statistic = $lang->projectCommon . '统计';
@@ -370,6 +371,7 @@ $lang->block->modules['execution']->availableBlocks->overview  = $lang->projectC
 $lang->block->modules['execution']->availableBlocks->list      = $lang->projectCommon . '列表';
 $lang->block->modules['execution']->availableBlocks->task      = '任务列表';
 $lang->block->modules['execution']->availableBlocks->build     = '版本列表';
+
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
 $lang->block->modules['qa']->availableBlocks->statistic = '测试统计';
@@ -377,6 +379,7 @@ $lang->block->modules['qa']->availableBlocks->statistic = '测试统计';
 $lang->block->modules['qa']->availableBlocks->bug       = 'Bug列表';
 $lang->block->modules['qa']->availableBlocks->case      = '用例列表';
 $lang->block->modules['qa']->availableBlocks->testtask  = '版本列表';
+
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = '待办列表';
@@ -466,6 +469,11 @@ $lang->block->typeList->project['undone']   = '未完成';
 $lang->block->typeList->project['doing']    = '进行中';
 $lang->block->typeList->project['all']      = '全部';
 $lang->block->typeList->project['involved'] = '我参与的';
+
+$lang->block->typeList->execution['undone']   = '未完成';
+$lang->block->typeList->execution['doing']    = '进行中';
+$lang->block->typeList->execution['all']      = '全部';
+$lang->block->typeList->execution['involved'] = '我参与的';
 
 $lang->block->typeList->scrum['undone']   = '未完成';
 $lang->block->typeList->scrum['doing']    = '进行中';
