@@ -2,155 +2,6 @@
 class programModel extends model
 {
     /**
-     * Get program overview for block.
-     *
-     * @param  varchar     $queryType byId|byStatus
-     * @param  varchar|int $param
-     * @param  varchar     $orderBy
-     * @param  int         $limit
-     * @access public
-     * @return void
-     */
-    public function getProgramOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
-    {
-        $queryType = strtolower($queryType);
-        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
-            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
-            ->orderBy($orderBy)
-            ->limit($limit)
-            ->fetchAll('id');
-
-        if(empty($programs)) return array();
-        $programIdList = array_keys($programs);
-
-        $hours = $this->dao->select('PRJ,
-            cast(sum(consumed) as decimal(10,2)) as consumed,
-            cast(sum(estimate) as decimal(10,2)) as estimate')
-            ->from(TABLE_TASK)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($programIdList)
-            ->groupBy('root')
-            ->fetchAll('root');
-
-        $leftTasks = $this->dao->select('PRJ, count(*) as leftTasks')->from(TABLE_TASK)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->in('wait,doing,pause')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $allStories = $this->dao->select('PRJ, count(*) as allStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->ne('draft')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $doneStories = $this->dao->select('PRJ, count(*) as doneStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('closed')
-            ->andWhere('closedReason')->eq('done')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $leftStories = $this->dao->select('PRJ, count(*) as leftStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $leftBugs = $this->dao->select('PRJ, count(*) as leftBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $allBugs = $this->dao->select('PRJ, count(*) as allBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $doneBugs = $this->dao->select('PRJ, count(*) as doneBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('resolved')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        foreach($programs as $programID => $program)
-        {
-            $program->teamCount   = isset($teams[$programID]) ? $teams[$programID]->count : 0;
-            $program->consumed    = isset($hours[$programID]) ? $hours[$programID]->consumed : 0;
-            $program->estimate    = isset($hours[$programID]) ? $hours[$programID]->estimate : 0;
-            $program->leftTasks   = isset($leftTasks[$programID]) ? $leftTasks[$programID]->leftTasks : 0;
-            $program->allStories  = isset($allStories[$programID]) ? $allStories[$programID]->allStories : 0;
-            $program->doneStories = isset($doneStories[$programID]) ? $doneStories[$programID]->doneStories : 0;
-            $program->leftStories = isset($leftStories[$programID]) ? $leftStories[$programID]->leftStories : 0;
-            $program->leftBugs    = isset($leftBugs[$programID]) ? $leftBugs[$programID]->leftBugs : 0;
-            $program->allBugs     = isset($allBugs[$programID]) ? $allBugs[$programID]->allBugs : 0;
-            $program->doneBugs    = isset($doneBugs[$programID]) ? $doneBugs[$programID]->doneBugs : 0;
-        }
-
-        return $programs;
-    }
-
-    /**
-     * Get program stats.
-     *
-     * @param  string    $status
-     * @param  int       $itemCounts
-     * @param  string    $orderBy
-     * @param  int       $pager
-     * @access public
-     * @return void
-     */
-    public function getProgramStats($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
-    {
-        /* Init vars. */
-        $this->loadModel('project');
-        $programs = $this->getPRJList(0, $status, 0, $orderBy, $pager);
-        if(empty($programs)) return array();
-
-        $programIdList = array_keys($programs);
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($programIdList)
-            ->groupBy('root')
-            ->fetchAll('root');
-
-        $estimates = $this->dao->select('PRJ, sum(estimate) as estimate')->from(TABLE_TASK)
-            ->where('PRJ')->in($programIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        foreach($programs as $programID => $program)
-        {
-            $orderBy = $program->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $program->projects   = $this->project->getProjectStats($status, 0, 0, $itemCounts, $orderBy, '', $programID);
-            $program->teamCount  = isset($teams[$programID]) ? $teams[$programID]->count : 0;
-            $program->estimate   = isset($estimates[$programID]) ? $estimates[$programID]->estimate : 0;
-            $program->parentName = $this->project->getProjectParentName($program->parent);
-        }
-
-        return $programs;
-    }
-
-    /**
      * Get program pairs.
      *
      * @access public
@@ -932,6 +783,241 @@ class programModel extends model
     }
 
     /**
+     * Get project info.
+     *
+     * @param  string    $status
+     * @param  int       $itemCounts
+     * @param  string    $orderBy
+     * @param  int       $pager
+     * @access public
+     * @return void
+     */
+    public function getPRJInfo($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    {
+        /* Init vars. */
+        $this->loadModel('project');
+        $projects = $this->getPRJList(0, $status, 0, $orderBy, $pager);
+        if(empty($projects)) return array();
+
+        $projectIdList = array_keys($projects);
+        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->in($projectIdList)
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        $estimates = $this->dao->select('PRJ, sum(estimate) as estimate')->from(TABLE_TASK)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        foreach($projects as $projectID => $project)
+        {
+            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
+            $project->executions = $this->project->getExecutionStats($projectID, $status, 0, 0, $itemCounts, $orderBy);
+            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
+            $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
+            $project->parentName = $this->project->getProjectParentName($project->parent);
+        }
+
+        return $projects;
+    }
+
+    /**
+     * Get project overview for block.
+     *
+     * @param  varchar     $queryType byId|byStatus
+     * @param  varchar|int $param
+     * @param  varchar     $orderBy
+     * @param  int         $limit
+     * @access public
+     * @return void
+     */
+    public function getPRJOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
+    {
+        $queryType = strtolower($queryType);
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll('id');
+
+        if(empty($projects)) return array();
+        $projectIdList = array_keys($projects);
+
+        $hours = $this->dao->select('PRJ,
+            cast(sum(consumed) as decimal(10,2)) as consumed,
+            cast(sum(estimate) as decimal(10,2)) as estimate')
+            ->from(TABLE_TASK)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->in($projectIdList)
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        $leftTasks = $this->dao->select('PRJ, count(*) as leftTasks')->from(TABLE_TASK)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->in('wait,doing,pause')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $allStories = $this->dao->select('PRJ, count(*) as allStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('draft')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $doneStories = $this->dao->select('PRJ, count(*) as doneStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $leftStories = $this->dao->select('PRJ, count(*) as leftStories')->from(TABLE_STORY)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $leftBugs = $this->dao->select('PRJ, count(*) as leftBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $allBugs = $this->dao->select('PRJ, count(*) as allBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        $doneBugs = $this->dao->select('PRJ, count(*) as doneBugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('resolved')
+            ->groupBy('PRJ')
+            ->fetchAll('PRJ');
+
+        foreach($projects as $projectID => $project)
+        {
+            $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
+            $project->consumed    = isset($hours[$projectID]) ? $hours[$projectID]->consumed : 0;
+            $project->estimate    = isset($hours[$projectID]) ? $hours[$projectID]->estimate : 0;
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->leftTasks : 0;
+            $project->allStories  = isset($allStories[$projectID]) ? $allStories[$projectID]->allStories : 0;
+            $project->doneStories = isset($doneStories[$projectID]) ? $doneStories[$projectID]->doneStories : 0;
+            $project->leftStories = isset($leftStories[$projectID]) ? $leftStories[$projectID]->leftStories : 0;
+            $project->leftBugs    = isset($leftBugs[$projectID]) ? $leftBugs[$projectID]->leftBugs : 0;
+            $project->allBugs     = isset($allBugs[$projectID]) ? $allBugs[$projectID]->allBugs : 0;
+            $project->doneBugs    = isset($doneBugs[$projectID]) ? $doneBugs[$projectID]->doneBugs : 0;
+        }
+
+        return $projects;
+    }
+
+    /**
+     * Get project stats.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $programTitle
+     * @param  int    $PRJMine
+     * @access public
+     * @return void
+     */
+    public function getPRJStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    {
+        /* Init vars. */
+        $projects = $this->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $PRJMine);
+        if(empty($projects)) return array();
+
+        $projectKeys = array_keys($projects);
+        $stats       = array();
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('PRJ')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('PRJ', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        /* Get the number of project teams. */
+        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
+            ->where('root')->in($projectKeys)
+            ->andWhere('type')->eq('project')
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        /* Process projects. */
+        foreach($projects as $key => $project)
+        {
+            if($project->end == '0000-00-00') $project->end = '';
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+
+            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $stats[] = $project;
+        }
+        return $stats;
+    }
+
+    /**
      * Get the top program which the project belongs to.
      *
      * @param  int    $projectID
@@ -1275,92 +1361,6 @@ class programModel extends model
 
             return common::createChanges($oldProject, $project);
         }
-    }
-
-    /**
-     * Get project stats.
-     *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  string $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $programTitle
-     * @param  int    $PRJMine
-     * @access public
-     * @return void
-     */
-    public function getPRJStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
-    {
-        /* Init vars. */
-        $projects = $this->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $PRJMine);
-        if(empty($projects)) return array();
-
-        $projectKeys = array_keys($projects);
-        $stats       = array();
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('PRJ', 'id');
-
-        /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
-        {
-            $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
-            {
-                if($task->status != 'cancel')
-                {
-                    $hour->totalEstimate += $task->estimate;
-                    $hour->totalConsumed += $task->consumed;
-                }
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
-            }
-            $hours[$projectID] = $hour;
-        }
-
-        /* Compute totalReal and progress. */
-        foreach($hours as $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
-        }
-
-        /* Get the number of project teams. */
-        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectKeys)
-            ->andWhere('type')->eq('project')
-            ->groupBy('root')
-            ->fetchAll('root');
-
-        /* Process projects. */
-        foreach($projects as $key => $project)
-        {
-            if($project->end == '0000-00-00') $project->end = '';
-
-            /* Judge whether the project is delayed. */
-            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
-            {
-                $delay = helper::diffDate(helper::today(), $project->end);
-                if($delay > 0) $project->delay = $delay;
-            }
-
-            /* Process the hours. */
-            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
-
-            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
-            $stats[] = $project;
-        }
-        return $stats;
     }
 
     /**

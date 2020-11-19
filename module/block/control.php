@@ -65,7 +65,7 @@ class block extends control
         elseif(isset($this->lang->block->moduleList[$module]))
         {
             $this->get->set('mode', 'getblocklist');
-            if($module == 'program') $this->get->set('dashboard', 'program');
+            if($module == 'project') $this->get->set('dashboard', 'project');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -213,10 +213,10 @@ class block extends control
         $blocks = $this->block->getBlockList($module, $type);
 
         $commonField = 'common';
-        if($module == 'program')
+        if($module == 'project')
         {
-            $program     = $this->loadModel('project')->getByID($this->session->PRJ);
-            $commonField = $program->model . 'common';
+            $project     = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+            $commonField = $project->model . 'common';
         }
         $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
 
@@ -420,18 +420,18 @@ class block extends control
             $block     = $this->block->getByID($id);
             $dashboard = $this->get->dashboard;
 
-            /* Create a program block. */
-            if($dashboard == 'program')
+            /* Create a project block. */
+            if($dashboard == 'project')
             {
-                $program = $this->loadModel('project')->getByID($this->session->PRJ);
-                $model   = $program->model;
+                $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+                $model   = $project->model;
             }
 
-            /* Edit a program block. */
-            if($id and $block->module == 'program')
+            /* Edit a project block. */
+            if($id and $block->module == 'project')
             {
                 $model     = $block->type;
-                $dashboard = 'program';
+                $dashboard = 'project';
             }
 
             $blocks = $this->block->getAvailableBlocks($module, $dashboard, $model);
@@ -579,8 +579,8 @@ class block extends control
         $this->session->set('storyList', $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
-        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy, $programID);
+        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy, $projectID);
     }
 
     /**
@@ -594,8 +594,8 @@ class block extends control
         $this->session->set('bugList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
-        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $programID);
+        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
+        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $projectID);
     }
 
     /**
@@ -744,12 +744,12 @@ class block extends control
     }
 
     /**
-     * Print program block.
+     * Print project block.
      *
      * @access public
      * @return void
      */
-    public function printProgramBlock()
+    public function printProjectBlock()
     {
         $this->app->loadLang('project');
         $this->app->loadLang('task');
@@ -757,7 +757,7 @@ class block extends control
         $type    = isset($this->params->type)    ? $this->params->type    : 'all';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', $type, $orderBy, $count);
+        $this->view->projects = $this->loadModel('program')->getPRJOverview('byStatus', $type, $orderBy, $count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -808,7 +808,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printProgramStatisticBlock()
+    public function printProjectStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -822,11 +822,11 @@ class block extends control
         $status = isset($this->params->type)  ? $this->params->type       : 'all';
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
-        /* Get programs. */
-        $programs = $this->loadModel('program')->getProgramOverview('byStatus', $status, 'id_desc', $count);
-        if(empty($programs))
+        /* Get projects. */
+        $projects = $this->loadModel('program')->getPRJOverview('byStatus', $status, 'id_desc', $count);
+        if(empty($projects))
         {
-            $this->view->programs = $programs;
+            $this->view->projects = $projects;
             return false;
         }
 
@@ -836,40 +836,40 @@ class block extends control
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
             ->from(TABLE_TASK)
-            ->where('PRJ')->in(array_keys($programs))
+            ->where('PRJ')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->groupBy('PRJ')
             ->fetchAll('PRJ');
 
-        foreach($programs as $programID => $program)
+        foreach($projects as $projectID => $project)
         {
-            if($program->model == 'scrum')
+            if($project->model == 'scrum')
             {
-                $program->progress = $program->allStories == 0 ? 0 : round($program->doneStories / $program->allStories, 3) * 100;
-                $program->projects = $this->project->getProjectStats('all', 0, 0, 1, 'id_desc', null, $programID);
+                $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
+                $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 1, 'id_desc', null);
             }
-            elseif($program->model == 'waterfall')
+            elseif($project->model == 'waterfall')
             {
-                $begin   = $program->begin;
+                $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
                 $current = zget($weeks, $monday, '');
                 $current = substr($current, 0, -11) . substr($current, -6);
 
-                $program->pv = $this->weekly->getPV($programID, $today);
-                $program->ev = $this->weekly->getEV($programID, $today);
-                $program->ac = $this->weekly->getAC($programID, $today);
-                $program->sv = $this->weekly->getSV($program->ev, $program->pv);
-                $program->cv = $this->weekly->getCV($program->ev, $program->ac);
+                $project->pv = $this->weekly->getPV($projectID, $today);
+                $project->ev = $this->weekly->getEV($projectID, $today);
+                $project->ac = $this->weekly->getAC($projectID, $today);
+                $project->sv = $this->weekly->getSV($project->ev, $project->pv);
+                $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
-                $progress = isset($tasks[$programID]) ? (($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft)) ? round($tasks[$programID]->totalConsumed / ($tasks[$programID]->totalConsumed + $tasks[$programID]->totalLeft), 3) * 100 : 0 : 0;
+                $progress = isset($tasks[$projectID]) ? (($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft)) ? round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100 : 0 : 0;
 
-                $program->current  = $current;
-                $program->progress = $progress;
+                $project->current  = $current;
+                $project->progress = $progress;
             }
         }
 
-        $this->view->programs = $programs;
+        $this->view->projects = $projects;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -1003,12 +1003,12 @@ class block extends control
     }
 
     /**
-     * Print project statistic block.
+     * Print execution statistic block.
      *
      * @access public
      * @return void
      */
-    public function printProjectStatisticBlock()
+    public function printExecutionStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -1279,7 +1279,7 @@ class block extends control
     public function printScrumOverviewBlock()
     {
         $programID = $this->session->PRJ;
-        $totalData = $this->loadModel('program')->getProgramOverview('byId', $programID, 'id_desc', 1);
+        $totalData = $this->loadModel('program')->getProjectOverview('byId', $programID, 'id_desc', 1);
 
         $this->view->totalData = $totalData;
         $this->view->programID = $programID;
@@ -1364,7 +1364,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printProgramDynamicBlock()
+    public function printProjectDynamicBlock()
     {
         $programID = $this->session->PRJ;
 
@@ -1618,12 +1618,12 @@ class block extends control
     }
 
     /**
-     * Print project block.
+     * Print execution block.
      *
      * @access public
      * @return void
      */
-    public function printProjectBlock()
+    public function printExecutionBlock()
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
@@ -1728,20 +1728,20 @@ class block extends control
     }
 
     /**
-     * Print recent program block.
+     * Print recent project block.
      *
      * @access public
      * @return void
      */
-    public function printRecentprogramBlock()
+    public function printRecentProjectBlock()
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 3, 1);
-        $this->view->programs = $this->loadModel('program')->getProgramStats('all', 30, 'id_desc', $pager);
+        $this->view->projects = $this->loadModel('program')->getPRJInfo('all', 30, 'id_desc', $pager);
     }
 
-    public function printProgramteamBlock()
+    public function printProjectTeamBlock()
     {
         $this->loadModel('project');
 
@@ -1750,7 +1750,7 @@ class block extends control
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
         /* Get projects. */
-        $this->view->programs = $this->loadModel('program')->getProgramOverview('byStatus', $status, $orderBy, $count);
+        $this->view->projects = $this->loadModel('program')->getPRJOverview('byStatus', $status, $orderBy, $count);
     }
 
     /**

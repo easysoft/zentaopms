@@ -18,17 +18,17 @@ $config->block->longBlock = array();
 $config->block->longBlock['']['flowchart']              = 'flowchart';
 $config->block->longBlock['']['welcome']                = 'welcome';
 $config->block->longBlock['product']['statistic']       = 'statistic';
-$config->block->longBlock['project']['statistic']       = 'statistic';
+$config->block->longBlock['execution']['statistic']     = 'statistic';
 $config->block->longBlock['qa']['statistic']            = 'statistic';
-$config->block->longBlock['program']['waterfallreport'] = 'waterfallreport';
-$config->block->longBlock['program']['waterfallissue']  = 'waterfallissue';
-$config->block->longBlock['program']['waterfallrisk']   = 'waterfallrisk';
+$config->block->longBlock['project']['waterfallreport'] = 'waterfallreport';
+$config->block->longBlock['project']['waterfallissue']  = 'waterfallissue';
+$config->block->longBlock['project']['waterfallrisk']   = 'waterfallrisk';
 
 $config->block->shortBlock = array();
 $config->block->shortBlock['product']['overview']          = 'overview';
 $config->block->shortBlock['project']['overview']          = 'overview';
-$config->block->shortBlock['program']['waterfallestimate'] = 'waterfallestimate';
-$config->block->shortBlock['program']['waterfallprogress'] = 'waterfallprogress';
+$config->block->shortBlock['project']['waterfallestimate'] = 'waterfallestimate';
+$config->block->shortBlock['project']['waterfallprogress'] = 'waterfallprogress';
 $config->block->shortBlock['']['contribute'] = 'contribute';
 
 $config->statistic = new stdclass();

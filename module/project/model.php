@@ -787,7 +787,7 @@ class projectModel extends model
      */
     public function getExecutionList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0)
     {
-        if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
+        if($status == 'involved') return $this->getInvolvedList($projectID, $status, $limit, $productID, $branch);
 
         if($productID != 0)
         {
@@ -810,8 +810,8 @@ class projectModel extends model
         {
             return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
                 ->where('deleted')->eq(0)
-                ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
-                ->beginIF($type != 'all')->andWhere('t2.type')->eq($type)->fi()
+                ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
+                ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
@@ -825,6 +825,7 @@ class projectModel extends model
     /**
      * Get project lists.
      *
+     * @param  int    $projectID
      * @param  string $status  involved
      * @param  int    $limit
      * @param  int    $productID
@@ -832,7 +833,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getInvolvedList($status = 'involved', $limit = 0, $productID = 0, $branch = 0)
+    public function getInvolvedList($projectID = 0, $status = 'involved', $limit = 0, $productID = 0, $branch = 0)
     {
         if($productID != 0)
         {
@@ -846,7 +847,8 @@ class projectModel extends model
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t3.type')->eq('project')
+                ->andWhere('t3.type')->in('sprint,stage,kanban')
+                ->beginIF($projectID)->andWhere('t3.project')->eq($projectID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -860,7 +862,8 @@ class projectModel extends model
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t2.type')->eq('project')
+                ->andWhere('t1.type')->in('sprint,stage,kanban')
+                ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -954,8 +957,9 @@ class projectModel extends model
     }
 
     /**
-     * Get project stats.
+     * Get execution stats.
      *
+     * @param  int     $projectID
      * @param  string  $status
      * @param  int     $productID
      * @param  int     $itemCounts
@@ -964,51 +968,51 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null, $programID = 0)
+    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $projects = $this->getList($status, 0, $productID, $branch, $programID);
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('id')->in(array_keys($projects))
+        $executions = $this->getExecutionList($projectID, $status, 0, $productID, $branch);
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in(array_keys($executions))
             ->andWhere('grade')->eq(1)
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
 
-        if(empty($projects)) return array();
+        if(empty($executions)) return array();
 
         /* In case of a waterfall model, obtain sub-stage data. */
-        $PRJData = $this->getById($this->session->PRJ);
-        if($PRJData and $PRJData->model == 'waterfall')
+        $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
+        if($project and $project->model == 'waterfall')
         {
             $childrens = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->in(array_keys($projects))
+                ->where('parent')->in(array_keys($executions))
                 ->andWhere('grade')->eq(2)
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
-            $projects = $projects + $childrens;
+
+            $executions += $childrens;
         }
 
-        $projectKeys = array_keys($projects);
         $hours       = array();
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
+            ->where('project')->in(array_keys($executions))
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('project', 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
+        foreach($tasks as $executionID => $executionTasks)
         {
             $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
+            foreach($executionTasks as $task)
             {
                 if($task->status != 'cancel')
                 {
@@ -1017,7 +1021,7 @@ class projectModel extends model
                 }
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
-            $hours[$projectID] = $hour;
+            $hours[$executionID] = $hour;
         }
 
         /* Compute totalReal and progress. */
@@ -1033,61 +1037,61 @@ class projectModel extends model
         /* Get burndown charts datas. */
         $burns = $this->dao->select('project, date AS name, `left` AS value')
             ->from(TABLE_BURN)
-            ->where('project')->in($projectKeys)
+            ->where('project')->in(array_keys($executions))
             ->andWhere('task')->eq(0)
             ->orderBy('date desc')
             ->fetchGroup('project', 'name');
 
-        foreach($burns as $projectID => $projectBurns)
+        foreach($burns as $executionID => $executionBurns)
         {
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            $begin = $projects[$projectID]->begin;
-            $end   = $projects[$projectID]->end;
-            if($begin == '0000-00-00') $begin = $projects[$projectID]->openedDate;
-            $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
+            $begin = $executions[$executionID]->begin;
+            $end   = $executions[$executionID]->end;
+            if($begin == '0000-00-00') $begin = $executions[$executionID]->openedDate;
+            $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
-            foreach($projectBurns as $projectBurn)
+            foreach($executionBurns as $executionBurn)
             {
-                $projectBurn->name = substr($projectBurn->name, 5);
-                unset($projectBurn->project);
+                $executionBurn->name = substr($executionBurn->name, 5);
+                unset($executionBurn->project);
             }
 
-            ksort($projectBurns);
-            $burns[$projectID] = $projectBurns;
+            ksort($executionBurns);
+            $burns[$executionID] = $executionBurns;
         }
 
-        /* Process projects. */
+        /* Process executions. */
         $parents  = array();
         $children = array();
-        foreach($projects as $key => $project)
+        foreach($executions as $key => $execution)
         {
             /* Process the end time. */
-            $project->end = date(DT_DATE1, strtotime($project->end));
+            $execution->end = date(DT_DATE1, strtotime($execution->end));
 
-            /* Judge whether the project is delayed. */
-            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            /* Judge whether the execution is delayed. */
+            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
             {
-                $delay = helper::diffDate(helper::today(), $project->end);
-                if($delay > 0) $project->delay = $delay;
+                $delay = helper::diffDate(helper::today(), $execution->end);
+                if($delay > 0) $execution->delay = $delay;
             }
 
             /* Process the burns. */
-            $project->burns = array();
-            $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
-            foreach($burnData as $data) $project->burns[] = $data->value;
+            $execution->burns = array();
+            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
+            foreach($burnData as $data) $execution->burns[] = $data->value;
 
             /* Process the hours. */
-            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
 
-            $project->children = array();
-            $project->grade == 1 ? $parents[$project->id] = $project : $children[$project->parent][] = $project;
+            $execution->children = array();
+            $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        if($PRJData and $PRJData->model == 'waterfall')
+        if($project and $project->model == 'waterfall')
         {
-            foreach($parents as $id => $project) $project->children = isset($children[$id]) ? $children[$id] : array();
+            foreach($parents as $id => $execution) $execution->children = isset($children[$id]) ? $children[$id] : array();
         }
 
         return $parents;

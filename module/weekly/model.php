@@ -84,25 +84,25 @@ class weeklyModel extends model
     }
 
     /**
-     * Save
+     * Save data.
      *
-     * @param  int    $program
+     * @param  int    $project
      * @param  int    $date
      * @access public
      * @return void
      */
-    public function save($program, $date)
+    public function save($project, $date)
     {
         $report = new stdclass;
-        $report->pv        = $this->getPV($program, $date);
-        $report->ev        = $this->getEV($program, $date);
-        $report->ac        = $this->getAC($program, $date);
+        $report->pv        = $this->getPV($project, $date);
+        $report->ev        = $this->getEV($project, $date);
+        $report->ac        = $this->getAC($project, $date);
         $report->sv        = $this->getSV($report->ev, $report->pv);
         $report->cv        = $this->getCV($report->ev, $report->ac);
-        $report->PRJ       = $program;
+        $report->PRJ       = $project;
         $report->weekStart = $this->getThisMonday($date);
-        $report->staff     = $this->getStaff($program);
-        $report->workload  = json_encode($this->getWorkloadByType($program, $date));
+        $report->staff     = $this->getStaff($project);
+        $report->workload  = json_encode($this->getWorkloadByType($project, $date));
         $this->dao->replace(TABLE_WEEKLYREPORT)->data($report)->exec();
     }
 
@@ -339,12 +339,10 @@ class weeklyModel extends model
      * @access public
      * @return int
      */
-    public function getPV($program, $date = '')
+    public function getPV($projectID, $date = '')
     {
-        $report = $this->getFromDB($program, $date);
+        $report = $this->getFromDB($projectID, $date);
         if(!empty($report)) return $report->pv;
-
-        $program = $this->loadModel('project')->getByID($program);
 
         if(!$date) $date = date('Y-m-d');
         $monday     = $this->getThisMonday($date);
@@ -353,11 +351,11 @@ class weeklyModel extends model
         $nextMonday = date('Y-m-d', strtotime("$sunday +1 days"));
         $workdays   = $this->loadModel('holiday')->getActualWorkingDays($monday, $sunday);
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program->id);
-        $projectIdList = array_keys($projects);
+        $executions = $this->loadModel('project')->getExecutionList($projectID);
+        $executionIdList = array_keys($executions);
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
+            ->where('project')->in($executionIdList)
             ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
             ->fetchAll('id');
 
@@ -381,20 +379,20 @@ class weeklyModel extends model
     }
 
     /**
-     * GetEV
+     * Get EV data.
      *
-     * @param  int    $program
+     * @param  int    $projectID
      * @param  string $date
      * @access public
      * @return int
      */
-    public function getEV($program, $date = '')
+    public function getEV($projectID, $date = '')
     {
-        $report = $this->getFromDB($program, $date);
+        $report = $this->getFromDB($projectID, $date);
         if(!empty($report)) return $report->ev;
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
-        $projectIdList = array_keys($projects);
+        $executions      = $this->loadModel('project')->getExecutionList($projectID);
+        $executionIdList = array_keys($executions);
 
         if(!$date) $date = date('Y-m-d');
         $monday     = $this->getThisMonday($date);
@@ -404,7 +402,7 @@ class weeklyModel extends model
 
         $tasks = $this->dao->select('*')
             ->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
+            ->where('project')->in($executionIdList)
             ->andWhere('consumed')->gt(0)
             ->andWhere('status')->ne('cancel')
             ->fetchAll('id');
@@ -426,29 +424,28 @@ class weeklyModel extends model
     }
 
     /**
-     * GetAC
+     * Get AC data.
      *
-     * @param  int    $program
+     * @param  int    $projectID
      * @param  string $date
      * @access public
      * @return int
      */
-    public function getAC($program, $date = '')
+    public function getAC($projectID, $date = '')
     {
-        $report = $this->getFromDB($program, $date);
+        $report = $this->getFromDB($projectID, $date);
         if(!empty($report)) return $report->ac;
 
         if(!$date) $date = date('Y-m-d');
-
-        $monday        = $this->getThisMonday($date);
-        $nextMonday    = date('Y-m-d', strtotime("$monday +7 days"));
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
-        $projectIdList = array_keys($projects);
+        $monday          = $this->getThisMonday($date);
+        $nextMonday      = date('Y-m-d', strtotime("$monday +7 days"));
+        $executions      = $this->loadModel('project')->getExecutionList($projectID);
+        $executionIdList = array_keys($executions);
 
         $AC = $this->dao->select('sum(t1.consumed) as consumed')
             ->from(TABLE_TASKESTIMATE)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
-            ->where('t2.project')->in($projectIdList)
+            ->where('t2.project')->in($executionIdList)
             ->andWhere('t1.date')->ge($monday)
             ->andWhere('t1.date')->lt($nextMonday)
             ->fetch('consumed');
@@ -457,7 +454,7 @@ class weeklyModel extends model
     }
 
     /**
-     * GetSV
+     * Get SV data.
      *
      * @param  int    $ev
      * @param  int    $pv

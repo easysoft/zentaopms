@@ -221,14 +221,14 @@ class blockModel extends model
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
-        if($module == 'program') 
+        if($module == 'project') 
         {
-            $blocks    = $this->lang->block->default[$type]['program'];
-            $programID = $this->session->PRJ;
-            $program   = $this->loadModel('project')->getByID($programID);
+            $blocks    = $this->lang->block->default[$type]['project'];
+            $projectID = $this->session->PRJ;
+            $project   = $this->loadModel('project')->getByID($projectID);
 
-            /* Mark program block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$program->model}common.blockInited", true);
+            /* Mark project block has init. */
+            $this->loadModel('setting')->setItem("$account.$module.{$project->model}common.blockInited", true);
         }
         else 
         {
@@ -259,7 +259,7 @@ class blockModel extends model
      *
      * @param  string $module
      * @param  string $dashboard
-     * @param  object $program
+     * @param  object $model
      *
      * @access public
      * @return string
@@ -267,7 +267,7 @@ class blockModel extends model
     public function getAvailableBlocks($module = '', $dashboard = '', $model = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($dashboard == 'program')
+        if($dashboard == 'project')
         {
             $blocks = $this->lang->block->modules[$model]['index']->availableBlocks;
         }
@@ -440,12 +440,12 @@ class blockModel extends model
     }
 
     /**
-     * Get program params.
+     * Get project params.
      * 
      * @access public
      * @return json
      */
-    public function getProgramParams()
+    public function getProjectParams()
     {
         $this->app->loadLang('program');
         $params->type['name']    = $this->lang->block->type;
@@ -460,12 +460,12 @@ class blockModel extends model
     }
 
     /**
-     * Get programteam params.
+     * Get project team params.
      *
      * @access public
      * @return json
      */
-    public function getProgramTeamParams()
+    public function getProjectTeamParams()
     {
         $this->app->loadLang('program');
         $params->type['name']    = $this->lang->block->type;
@@ -571,12 +571,12 @@ class blockModel extends model
     }
 
     /**
-     * Get recent program pararms.
+     * Get recent project pararms.
      *
      * @access public
      * @return string
      */
-    public function getRecentProgramParams()
+    public function getRecentProjectParams()
     {
         return false;
     }
@@ -593,7 +593,7 @@ class blockModel extends model
     }
 
     /**
-     * Get waterfall program report pararms.
+     * Get waterfall project report pararms.
      *
      * @access public
      * @return string
@@ -604,7 +604,7 @@ class blockModel extends model
     }
 
     /**
-     * Get program estimate pararms.
+     * Get project estimate pararms.
      *
      * @access public
      * @return string
@@ -615,7 +615,7 @@ class blockModel extends model
     }
 
     /**
-     * Get program gantt pararms.
+     * Get project gantt pararms.
      *
      * @access public
      * @return string
@@ -626,7 +626,7 @@ class blockModel extends model
     }
 
     /**
-     * Get program progress pararms.
+     * Get project progress pararms.
      *
      * @access public
      * @return string
@@ -682,12 +682,12 @@ class blockModel extends model
     }
 
     /**
-     * Get project params.
+     * Get execution params.
      * 
      * @access public
      * @return json
      */
-    public function getProjectParams()
+    public function getExecutionParams()
     {
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
@@ -877,13 +877,13 @@ class blockModel extends model
 
 
     /**
-     * Get program dynamic params.
+     * Get project dynamic params.
      *
      * @param  string $module
      * @access public
      * @return string
      */
-    public function getProgramDynamicParams($module = '')
+    public function getProjectDynamicParams($module = '')
     {
         $params = $this->appendCountParams();
 

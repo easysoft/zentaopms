@@ -55,21 +55,9 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view {width: auto; left: 0; right: 0;}
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view > i {display: none;}
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view:hover {cursor: pointer; background: rgba(0,0,0,.1)}
-.block-statistic .program-info .info span+span{margin-left: 15px}
-.block-statistic .project-info{margin-top: 25px}
-.block-statistic .project-info .col-xs-5, .block-statistic .project-info .col-xs-7{margin-top: 8px}
-.block-statistic .project-info .col-xs-5{padding-left: 0px;}
 
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
-
-.block-statistic .progress-group{margin-top: 20px; margin-bottom: 10px; height: 65px;}
-.block-statistic .weekly-title{font-weight: bold; font-size:14px; color: #3C4253;}
-.block-statistic .weekly-small{font-size:12px; color: #838A9D;}
-.block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
-.block-statistic .weekly-name{font-size:14px; color: #838A9D;}
-.block-statistic .weekly-value{font-size:14px;}
-.block-statistic .col-6 .stage{margin-left: 10px}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -86,17 +74,17 @@ $(function()
         e.preventDefault();
     });
 
-    var $programLi = $('#activeProject');
-    if($programLi.length)
+    var $projectLi = $('#activeProject');
+    if($projectLi.length)
     {
-        var programLi  = $programLi[0];
-        $(".col ul.nav").animate({scrollTop: programLi.offsetTop}, "slow");
+        var projectLi  = $projectLi[0];
+        $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
     }
 });
 </script>
 <div class="panel-body">
   <div class="table-row">
-    <?php if(empty($programs)):?>
+    <?php if(empty($projects)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
     </div>
@@ -104,139 +92,110 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['program']) ? key($programs) : $this->session->PRJ;?>
-        <?php foreach($programs as $program):?>
-        <li <?php if($program->id == $selected) echo "class='active' id='activeProject'";?> programID='<?php echo $program->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $program->id;?>" data-toggle="tab"><?php echo $program->name;?></a>
-          <?php echo html::a(helper::createLink('program', 'pgmindex', "programID=$program->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->program->PGMIndex}");?>
+        <?php $selected = empty($_SESSION['project'])  ? key($projects) : $this->session->project;?>
+        <?php $selected = !isset($projects[$selected]) ? key($projects) : $selected;?>
+        <?php foreach($projects as $project):?>
+        <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
+          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab" title='<?php echo $project->name;?>'><?php echo $project->name;?></a>
+          <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
     <div class="col tab-content">
-      <?php foreach($programs as $program):?>
-      <div class="tab-pane fade<?php if($program->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $program->id;?>">
+      <?php foreach($projects as $project):?>
+      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
         <div class="table-row">
-        <?php if($program->model == 'scrum'):?>
           <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space" data-value="<?php echo $program->progress;?>" data-doughnut-size="84">
+            <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
               <canvas width="120" height="120"></canvas>
               <div class="progress-info">
-                <small><?php echo $lang->story->common . $lang->program->doneStories;?></small>
-                <strong><?php echo $program->doneStories;?></strong>
+                <small><?php echo $lang->task->statusList['done'];?></small>
+                <strong><?php echo $project->progress;?><small><?php echo $lang->percent;?></small></strong>
               </div>
             </div>
             <div class="table-row text-center small text-muted with-padding">
               <div class="col-4 text-bottom">
-                <div><?php echo $lang->program->allStories;?></div>
-                <div><?php echo $program->allStories;?></div>
+                <div><?php echo $lang->project->totalEstimate;?></div>
+                <div><?php echo $project->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-primary"></span>
-                <div><?php echo $lang->program->doneStories;?></div>
-                <div><?php echo $program->doneStories;?></div>
+                <div><?php echo $lang->project->totalConsumed;?></div>
+                <div><?php echo $project->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-pale"></span>
-                <div><?php echo $lang->program->leftStories;?></div>
-                <div><?php echo $program->leftStories;?></div>
+                <div><?php echo $lang->project->totalLeft;?></div>
+                <div><?php echo $project->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
             </div>
           </div>
           <div class="col-7">
-            <div class="program-info">
-              <h4><?php echo $lang->program->allInput;?></h4>
-              <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->program->membersUnit, $program->teamCount);?></span>
-                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->program->hoursUnit, $program->estimate);?></span>
-                <span><i class='icon icon-cost'></i> <?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></span>
-              </div>
-            </div>
-            <div class="project-info">
-              <?php $i = 0;?>
-              <h4><?php echo $lang->program->lastIteration;?></h4>
-              <?php foreach($program->projects as $project):?>
-              <?php $i ++;?>
-              <?php if($i > 3) break;?>
-              <div class='col-xs-5'><?php echo $project->name;?></div>
-              <div class='col-xs-7'>
-                <div class='progress progress-text-left'>
-                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-                    <span class='progress-text'><?php echo $project->hours->progress . '%';?></span>
-                  </div>
+            <div class="product-info">
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->task->yesterdayFinished;?></span> <strong><?php echo $project->yesterdayFinished;?></strong></div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->taskProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->taskProgress;?>%">
                 </div>
               </div>
-              <?php endforeach;?>
+              <div class="type-info">
+                <div class="type-label">
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
+                      <td class='text-left'><?php echo empty($project->totalTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=all"), $project->totalTasks);?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
+                      <td class='text-left'><?php echo empty($project->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=undone"), $project->undoneTasks);?></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $project->releasedStories;?></strong></div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->storyProgress;?>%"></div>
+              </div>
+              <div class="type-info">
+                <div class="type-label">
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->total;?> :</td>
+                      <td class='text-left'><?php echo empty($project->totalStories) ? 0 : html::a($this->createLink('project', 'story', "projectID={$project->id}&orderBy=order_desc&type=all"), $project->totalStories);?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
+                      <td class='text-left'><?php echo empty($project->unclosedStories) ? 0 : html::a($this->createLink('project', 'story', "projectID={$project->id}&orderBy=order_desc&type=unclosed"), $project->unclosedStories);?></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $project->yesterdayResolved;?></strong></div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->bugProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->bugProgress;?>%">
+                </div>
+              </div>
+              <div class="type-info">
+                <div class="type-label">
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
+                      <td class='text-left'><?php echo empty($project->totalBugs) ? 0 : html::a($this->createLink('project', 'bug', "projectID={$project->id}&orderBy=status,id_desc&build=0&type=all"), $project->totalBugs);?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
+                      <td class='text-left'><?php echo empty($project->activeBugs) ? 0 : html::a($this->createLink('project', 'bug', "projectID={$project->id}&orderBy=status,id_desc&build=0&type=unresolved"), $project->activeBugs);?></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        <?php else:?>
-          <div class="col-6">
-            <div class='table-row text-left weekly-row with-padding'>
-              <span class='weekly-title'><?php echo $lang->program->weekly;?></span>
-              <span class='stage text-muted'><?php echo $program->current;?></span>
-            </div>
-            <div class='progress-group col-10 center-block'>
-              <div class='progress-num text-center'>
-                <div class='weekly-title'><?php echo $lang->program->PRJProgress;?></div>
-                <div class='weekly-progress'><?php echo $program->progress . '%';?></div>
-              </div>
-              <div class='progress'>
-                <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $program->progress;?>%"></div>
-              </div>
-            </div>
-            <div class="table-row text-center small with-padding col-10 center-block">
-              <div class="col-4 text-bottom">
-                <div class='weekly-name'><?php echo $lang->program->pv;?></div>
-                <div class='weekly-value'><?php echo $program->pv;?></div>
-              </div>
-              <div class="col-4">
-                <div class='weekly-name'><?php echo $lang->program->ev;?></div>
-                <div class='weekly-value'><?php echo $program->ev;?></div>
-              </div>
-              <div class="col-4">
-                <div class='weekly-name'><?php echo $lang->program->sv;?></div>
-                <div class='weekly-value'><?php echo $program->sv;?></div>
-              </div>
-            </div>
-          </div>
-          <div class='col-6'>
-            <div class='table-row weekly-row with-padding'>
-              <div class='col-4 text-center'>
-                <span class='weekly-title'><?php echo $lang->program->allInput;?></span>
-              </div>
-              <div class='col-8'></div>
-            </div>
-            <div class='progress-group'>
-              <div class="table-row text-center small with-padding">
-                <div class="col-4 text-bottom">
-                  <div class='weekly-name'><?php echo $lang->program->PRJPM;?></div>
-                  <div class='weekly-value'><?php echo $program->PM ? zget($users, $program->PM) : $lang->program->emptyPM;?></div>
-                </div>
-                <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->teamCount;?></div>
-                  <div class='weekly-value'><?php echo $program->teamCount;?></div>
-                </div>
-                <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->PRJBudget;?></div>
-                  <div class='weekly-value'><?php echo $program->budget;?></div>
-                </div>
-              </div>
-            </div>
-            <div class="table-row text-center small with-padding">
-                <div class="col-4 text-bottom">
-                  <div class='weekly-name'><?php echo $lang->program->ac;?></div>
-                  <div class='weekly-value'><?php echo $program->ac;?></div>
-                </div>
-                <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->cv;?></div>
-                  <div class='weekly-value'><?php echo $program->cv;?></div>
-                </div>
-                <div>
-                </div>
-              </div>
-            </div>
-        <?php endif;?>
         </div>
       </div>
       <?php endforeach;?>
