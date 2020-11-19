@@ -184,7 +184,7 @@ class docModel extends model
         if(strpos($extra, 'withObject') !== false)
         {
             $products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-            $projects = $this->loadModel('project')->getPairs('', $this->session->PRJ);
+            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
         }
 
         $libPairs = array();

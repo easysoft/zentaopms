@@ -83,7 +83,7 @@ class report extends control
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $project);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->projects   = array('' => '') + $this->loadModel('project')->getPairs('', $this->session->PRJ);
+        $this->view->projects   = array('' => '') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $this->view->project    = $project;
         $this->view->product    = $product;

@@ -840,7 +840,7 @@ class story extends control
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $users;
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->projects    = $this->loadModel('project')->getPairs('nocode');
+        $this->view->projects    = $this->loadModel('project')->getExecutionPairs(0, 'all', 'nocode');
         $this->view->program     = $this->project->getByID($story->PRJ);
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;

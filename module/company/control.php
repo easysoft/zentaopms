@@ -191,7 +191,7 @@ class company extends control
         $this->view->products = $products;
 
         /* Get projects' list.*/
-        $projects = $this->loadModel('project')->getPairs('nocode');
+        $projects = $this->loadModel('project')->getExecutionPairs(0, 'all', 'nocode');
         $projects = array($this->lang->company->project) + $projects;
         $this->view->projects = $projects; 
 

@@ -2509,7 +2509,7 @@ class taskModel extends model
 
         $datas    = $this->processData4Report($tasks, '', 'project');
 
-        $projects = $this->loadModel('project')->getPairs('all', $this->session->PRJ);
+        $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'all');
         foreach($datas as $projectID => $data)
         {
             $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;

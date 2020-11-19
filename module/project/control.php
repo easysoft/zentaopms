@@ -2674,7 +2674,7 @@ class project extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->projects   = $this->loadModel('project')->getPairs('nocode', $this->session->PRJ);
+        $this->view->projects   = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;
