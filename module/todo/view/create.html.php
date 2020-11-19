@@ -51,27 +51,32 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="day">
-                <div class='input-group w-250px'>
+                <div class='input-group every w-250px'>
                   <span class='input-group-addon'><?php echo $lang->todo->every;?></span>
-                  <?php echo html::input('config[day]', '', "class='form-control' id='dayInput'");?>
+                  <?php echo html::input('config[day]', '', "class='form-control' id='everyInput'");?>
                   <span class='input-group-addon'><?php echo $lang->todo->cycleDay;?></span>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary w-50px'>
-                      <input type='checkbox' name='config[appointDate]' value='1' onclick='showAppointDate(this);' />
-                      <label for='config[appointDate]'><?php echo $lang->todo->appoint;?></label>
+                      <input type='checkbox' name='config[specifiedDate]' id='configSpecify' value='1' onclick='showSpecifiedDate(this);' />
+                      <label for='config[specifiedDate]'><?php echo $lang->todo->specify;?></label>
                     </div>
                   </span>
                 </div>
-                <div class='input-group appoint hidden'>
-                  <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
-                  <?php echo html::select('config[appoint][month]', $lang->todo->appointMonth, '', "class='form-control' onchange='setDays(this.value);'");?>
-                  <span class='input-group-addon'><?php echo $lang->todo->cycleMonth;?></span>
-                  <?php echo html::select('config[appoint][day]', $lang->todo->appointDay, '', "class='form-control' id='appointDay'");?>
-                  <span class='input-group-addon'><?php echo $lang->todo->day;?></span>
+                <div class='input-group specify hidden'>
+                  <span class='input-group-addon'><?php echo $lang->todo->specify;?></span>
+                  <?php echo html::select('config[specify][month]', $lang->datepicker->monthNames, 0, "class='form-control w-80px' onchange='setDays(this.value);'");?>
+                  <?php echo html::select('config[specify][day]', $lang->todo->specifiedDay, 1, "class='form-control w-60px' id='specifiedDay'");?>
+                  <span class='input-group-addon <?php echo strpos($this->app->getClientLang(), 'zh') !== false ? '' : 'hidden';?>'><?php echo $lang->todo->day;?></span>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary w-50px'>
-                      <input type='checkbox' name='config[cycleYear]' value='1' />
+                      <input type='checkbox' name='config[cycleYear]' id='cycleYear' value='1' />
                       <label for='config[cycleYear]'><?php echo $lang->todo->everyYear;?></label>
+                    </div>
+                  </span>
+                  <span class='input-group-addon'>
+                    <div class='checkbox-primary w-50px'>
+                      <input type='checkbox' name='configEvery' id='configEvery' value='1' onclick='showEvery(this);' />
+                      <label for='configEvery'><?php echo $lang->todo->every;?></label>
                     </div>
                   </span>
                 </div>

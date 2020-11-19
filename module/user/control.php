@@ -462,7 +462,7 @@ class user extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchCreateFields) as $field)
+        foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
         }
@@ -546,7 +546,7 @@ class user extends control
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchEditFields) as $field)
+        foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
         }

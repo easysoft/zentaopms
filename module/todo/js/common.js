@@ -126,46 +126,64 @@ function switchDateFeature(switcher)
 }
 
 /**
- * Show appoint date.
+ * Show specified date.
  *
  * @param  switcher $switcher
  * @access public
  * @return void
  */
-function showAppointDate(switcher)
+function showSpecifiedDate(switcher)
 {
     if(switcher.checked)
     {
-        $('#dayInput').attr('disabled','disabled');
-        $('.appoint').removeClass('hidden');
-    }
-    else
-    {
-        $('#dayInput').removeAttr('disabled');
-        $('.appoint').addClass('hidden');
+        $('#everyInput').attr('disabled','disabled');
+        $('.specify').removeClass('hidden');
+        $('.every').addClass('hidden')
+        $('#configEvery').removeAttr('checked');
     }
 }
 
 /**
- * Set days by appoint month.
+ * Show every.
  *
- * @param  int $appointMonth
+ * @param  switcher $switcher
  * @access public
  * @return void
  */
-function setDays(appointMonth)
+function showEvery(switcher)
 {
-    /* Get last day in appoint month. */
-    var date = new Date();
-    date.setMonth(appointMonth);
-    date.setDate(0);
-    var appointMonthLastDay = date.getDate();
+    if(switcher.checked)
+    {
+        $('#everyInput').removeAttr('disabled');
+        $('.specify').addClass('hidden');
+        $('.every').removeClass('hidden');
+        $('#configSpecify').removeAttr('checked');
+        $('#cycleYear').removeAttr('checked');
+    }
+}
 
-    $('#appointDay').empty('');
-    for(var i = 1; i <= appointMonthLastDay ; i++)
+/**
+ * Set days by specified month.
+ *
+ * @param  int $specifiedMonth
+ * @access public
+ * @return void
+ */
+function setDays(specifiedMonth)
+{
+    /* Get last day in specified month. */
+    var date = new Date();
+    date.setMonth(specifiedMonth);
+    var month = date.getMonth() + 1;
+    date.setMonth(month);
+    date.setDate(0);
+    var specifiedMonthLastDay = date.getDate();
+
+    $('#specifiedDay').empty('');
+    for(var i = 1; i <= specifiedMonthLastDay; i++)
     {
         html = "<option value='" + i + "' title='" + i + "' data-keys='" + i + "'>" + i + "</option>";
 
-        $('#appointDay').append(html);
+        $('#specifiedDay').append(html);
     }
 }

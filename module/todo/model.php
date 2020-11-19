@@ -594,16 +594,16 @@ class todoModel extends model
                             $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
                         }
                     }
-                    if(isset($todo->config->appointDate))
+                    if(isset($todo->config->specifiedDate))
                     {
-                        $date        = $today;
-                        $appointDate = $todo->config->appoint->month . '-' . $todo->config->appoint->day;
+                        $date          = $today;
+                        $specifiedDate = $todo->config->specify->month + 1 . '-' . $todo->config->specify->day;
 
-                        // If not set cycle every year and have data, continue.
+                        /* If not set cycle every year and have data, continue. */
                         if(!empty($lastCycle) and !isset($todo->config->cycleYear)) continue;
 
-                        // If set appoint date, only judge month and day.
-                        if(date('m-d', strtotime($date)) != $appointDate) continue;
+                        /* If set specified date, only judge month and day. */
+                        if(date('m-d', strtotime($date)) != $specifiedDate) continue;
                     }
                 }
                 elseif($todo->config->type == 'week')

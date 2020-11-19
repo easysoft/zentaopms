@@ -94,13 +94,6 @@ class buildModel extends model
             }
         }
 
-        $allProduct = "`product` = 'all'";
-        $buildQuery   = $this->session->projectBuildQuery;
-        if(strpos($this->session->projectBuildQuery, $allProduct) !== false)
-        {
-            $buildQuery = str_replace($allProduct, '1', $this->session->projectBuildQuery);
-        }
-
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
         foreach($fields as $field)

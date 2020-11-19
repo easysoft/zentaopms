@@ -60,6 +60,7 @@ $lang->story->batchChangeModule = "批量修改模块";
 $lang->story->viewAll           = '查看全部';
 $lang->story->toTask            = '转任务';
 $lang->story->batchToTask       = '批量转任务';
+$lang->story->convertRelations  = '换算关系';
 
 $lang->story->skipStory       = '需求：%s 为父需求，将不会被关闭。';
 $lang->story->closedStory     = '需求：%s 已关闭，将不会被关闭。';
@@ -126,7 +127,7 @@ $lang->story->allStories     = "所有{$lang->storyCommon}";
 $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';
 $lang->story->released       = "已发布{$lang->storyCommon}数";
-$lang->story->oneUnit        = '一个单位';
+$lang->story->one            = '一个';
 $lang->story->field          = '同步的字段';
 
 $lang->story->ditto       = '同上';

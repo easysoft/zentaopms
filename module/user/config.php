@@ -6,8 +6,8 @@ $config->user->edit   = new stdclass();
 $config->user->create->requiredFields = 'account,realname,password,password1,password2';
 $config->user->edit->requiredFields   = 'account,realname';
 
-$config->user->customBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
-$config->user->customBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
+$config->user->availableBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
+$config->user->availableBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 
 $config->user->custom = new stdclass();
 $config->user->custom->batchCreateFields = 'dept,join,email,gender';

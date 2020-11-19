@@ -57,7 +57,7 @@
       </div>
       <div class="detail text-center form-actions">
         <?php echo html::hidden("post", 'post');?>
-        <?php if(!empty($this->config->CRProject) or $project->status != 'closed') echo html::submitButton();?>
+        <?php if(common::canModify('project', $project)) echo html::submitButton();?>
       </div>
     </form>
   </div>

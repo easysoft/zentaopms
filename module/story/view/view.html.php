@@ -47,7 +47,7 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($this->config->CRProduct) or $product->status != 'closed'): ?>
+    <?php if(common::canModify('product', $product)): ?>
     <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
     <?php endif;?>
   </div>

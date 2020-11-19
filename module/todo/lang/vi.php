@@ -67,12 +67,11 @@ $lang->todo->closedDate   = 'Ngày đóng';
 $lang->todo->deadline     = 'Quá hạn';
 
 $lang->todo->every        = 'Mọi';
-$lang->todo->appoint      = 'bổ nhiệm';
+$lang->todo->specify      = 'bổ nhiệm';
 $lang->todo->everyYear    = 'mỗi năm';
 $lang->todo->beforeDays   = "<span class='input-group-addon'>Tự động tạo việc làm </span>%s<span class='input-group-addon'> ngày trước </span>";
 $lang->todo->dayNames     = array(1 => 'Thứ hai', 2 => 'Thứ ba', 3 => 'Thứ tư', 4 => 'Thứ năm', 5 => 'Thứ sáu', 6 => 'Thứ bảy', 0 => 'Chủ nhật');
-$lang->todo->appointMonth = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-$lang->todo->appointDay   = array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
+$lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
 $lang->todo->confirmBug   = 'Việc này được liên kết tới Bug #%s. Bạn có muốn sửa nó?';
 $lang->todo->confirmTask  = 'Việc này được liên kết tới Nhiệm vụ #%s，Bạn có muốn sửa nó?';

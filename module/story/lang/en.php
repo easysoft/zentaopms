@@ -60,11 +60,12 @@ $lang->story->batchChangeModule = "Batch Change Modules";
 $lang->story->viewAll           = "See All";
 $lang->story->toTask            = 'Convert to Task';
 $lang->story->batchToTask       = 'Batch Convert to Task';
+$lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
-$lang->story->successToTask   = "Converted to task."
+$lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -126,7 +127,7 @@ $lang->story->allStories     = 'All Stories';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 $lang->story->released       = 'Released Stories';
-$lang->story->oneUnit        = 'One Unit';
+$lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 
 $lang->story->ditto       = 'Ditto';

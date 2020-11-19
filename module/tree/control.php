@@ -45,7 +45,7 @@ class tree extends control
             $this->view->root = $product;
 
             /* Determines whether an object is editable. */
-            $canBeChanged = (!empty($this->config->CRProduct) or $product->status != 'closed') ? true : false;
+            $canBeChanged = common::canModify('product', $product);
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -218,9 +218,6 @@ class tree extends control
         $products = $this->project->getProducts($rootID);
         $this->view->products = $products;
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = (!empty($this->config->CRProject) or $project->status != 'closed') ? true : false;
-
         /* Set menu. */
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($this->project->getPairs(), $rootID);
@@ -250,7 +247,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
-        $this->view->canBeChanged    = $canBeChanged;
+        $this->view->canBeChanged    = common::canModify('product', $product); // Determines whether an object is editable.
         $this->display();
     } 
 

@@ -1074,10 +1074,20 @@ class story extends control
     {
         if(!empty($_POST))
         {
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->story->successToTask;
+
             $this->story->batchToTask($projectID);
 
-            if(dao::isError()) die(js::error(dao::getError()) . js::locate('back'));
-            die(js::alert($this->lang->story->successToTask) . js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $response['locate'] = $this->createLink('project', 'task', "projectID=$projectID");
+            $this->send($response);
         }
     }
 

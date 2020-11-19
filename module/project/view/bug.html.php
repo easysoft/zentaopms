@@ -22,7 +22,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&projectID=$project->id", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php if(!empty($this->config->CRProject) or $project->status != 'closed') common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('project', $project)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -31,7 +31,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
-      <?php if((!empty($this->config->CRProject) or $project->status != 'closed') and common::hasPriv('bug', 'create')):?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('bug', 'create')):?>
       <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

@@ -1489,16 +1489,17 @@ EOD;
     {
         global $app, $lang;
 
+        $module  = strtolower($module);
+        $method  = strtolower($method);
+
         /* Check the parent object is closed. */
-        if(strpos('close|batchClose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+        if(strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];
         $acls    = $app->user->rights['acls'];
-        $module  = strtolower($module);
-        $method  = strtolower($method);
 
         if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
@@ -1868,6 +1869,25 @@ EOD;
             $project = $app->control->loadModel('project')->getByID($object->project);
             if($project->status == 'closed') return false;
         }
+
+        return true;
+    }
+
+    /**
+     * Check object can modify.
+     *
+     * @param  string $type    product|project
+     * @param  object $object
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function canModify($type, $object)
+    {
+        global $config;
+
+        if($type == 'product' and empty($config->CRProduct) and $object->status == 'closed') return false;
+        if($type == 'project' and empty($config->CRProject) and $object->status == 'closed') return false;
 
         return true;
     }
