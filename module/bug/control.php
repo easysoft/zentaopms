@@ -435,7 +435,6 @@ class bug extends control
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         $productList = $this->product->getOrderedProducts('all', 40, $this->session->PRJ); 
-        $products    = array();
         foreach($productList as $product) $products[$product->id] = $product->name;
 
         /* Set custom. */
