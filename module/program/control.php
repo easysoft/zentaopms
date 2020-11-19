@@ -725,13 +725,13 @@ class program extends control
 
         if($copyProjectID)
         {
-            $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
-            $name        = $copyProgram->name;
-            $code        = $copyProgram->code;
-            $team        = $copyProgram->team;
-            $acl         = $copyProgram->acl;
-            $auth        = $copyProgram->auth;
-            $whitelist   = $copyProgram->whitelist;
+            $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
+            $name        = $copyProject->name;
+            $code        = $copyProject->code;
+            $team        = $copyProject->team;
+            $acl         = $copyProject->acl;
+            $auth        = $copyProject->auth;
+            $whitelist   = $copyProject->whitelist;
 
             $products = $this->project->getProducts($copyProjectID);
             foreach($products as $product)

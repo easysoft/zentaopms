@@ -50,12 +50,6 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($model == 'waterfall'):?>
-        <tr>
-          <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('product', $lang->program->PRJCategoryList, '', "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
