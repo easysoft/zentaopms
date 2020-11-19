@@ -321,7 +321,7 @@ class task extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->project->setMenu($this->project->getPairs('', $this->session->PRJ), $this->view->project->id);
+        $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $this->view->project->id);
         $this->view->position[] = html::a($this->createLink('project', 'browse', "project={$this->view->task->project}"), $this->view->project->name);
     }
 
@@ -381,7 +381,7 @@ class task extends control
             }
         }
 
-        $noclosedProjects = $this->project->getPairs('noclosed,nocode', $this->session->PRJ);
+        $noclosedProjects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'noclosed,nocode');
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
         $tasks = $this->task->getParentTaskPairs($this->view->project->id, $this->view->task->parent);
