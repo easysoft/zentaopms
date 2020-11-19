@@ -1520,6 +1520,7 @@ class block extends control
      */
     public function printOverviewBlock($module = 'product')
     {
+        if($module == 'project') $module = 'execution';
         $func = 'print' . ucfirst($module) . 'OverviewBlock';
         $this->view->module = $module;
         $this->$func();
@@ -1554,21 +1555,21 @@ class block extends control
     }
 
     /**
-     * Print project overview block.
+     * Print execution overview block.
      *
      * @access public
      * @return void
      */
-    public function printProjectOverviewBlock()
+    public function printExecutionOverviewBlock()
     {
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
-        $projects  = $this->loadModel('project')->getList('all', 0, 0, 0, $programID);
+        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
+        $executions = $this->loadModel('project')->getExecutionList($projectID);
 
         $total = 0;
-        foreach($projects as $project)
+        foreach($executions as $execution)
         {
-            if(!isset($overview[$project->status])) $overview[$project->status] = 0;
-            $overview[$project->status]++;
+            if(!isset($overview[$execution->status])) $overview[$execution->status] = 0;
+            $overview[$execution->status]++;
             $total++;
         }
 
