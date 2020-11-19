@@ -139,6 +139,12 @@ class jobModel extends model
                 return false;
             }
 
+            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
+            {
+                dao::$errors[] = $this->lang->job->invalidName;
+                return false;
+            }
+
             if(!empty($paramName)) $customParam[$paramName] = $paramValue;
         }
         unset($job->paramName);
@@ -196,6 +202,12 @@ class jobModel extends model
             if(empty($paramName) and !empty($paramValue))
             {
                 dao::$errors[] = $this->lang->job->inputName;
+                return false;
+            }
+
+            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
+            {
+                dao::$errors[] = $this->lang->job->invalidName;
                 return false;
             }
 

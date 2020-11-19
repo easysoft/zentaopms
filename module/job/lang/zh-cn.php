@@ -32,11 +32,12 @@ $lang->job->paramValue  = '值';
 
 $lang->job->lblBasic = '基本信息';
 
-$lang->job->example    = '举例';
-$lang->job->commitEx   = "用于匹配创建构建任务的关键字，多个关键字用','分割";
-$lang->job->cronSample = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
-$lang->job->sendExec   = '发送执行请求成功！执行结果：%s';
-$lang->job->inputName  = '请输入参数名称。';
+$lang->job->example     = '举例';
+$lang->job->commitEx    = "用于匹配创建构建任务的关键字，多个关键字用','分割";
+$lang->job->cronSample  = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
+$lang->job->sendExec    = '发送执行请求成功！执行结果：%s';
+$lang->job->inputName   = '请输入参数名称。';
+$lang->job->invalidName = '参数名称应该是英文字母、数字或下划线的组合。';
 
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';

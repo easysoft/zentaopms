@@ -32,11 +32,12 @@ $lang->job->paramValue  = 'PH';
 
 $lang->job->lblBasic = 'Infos de Base';
 
-$lang->job->example    = 'ex.';
-$lang->job->commitEx   = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
-$lang->job->cronSample = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';
-$lang->job->sendExec   = "Envoi de la demande d'ex閏ution r閡ssie.";
-$lang->job->inputName  = 'Veuillez saisir le nom du paramètre.';
+$lang->job->example     = 'ex.';
+$lang->job->commitEx    = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
+$lang->job->cronSample  = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';
+$lang->job->sendExec    = "Envoi de la demande d'ex閏ution r閡ssie.";
+$lang->job->inputName   = 'Veuillez saisir le nom du paramètre.';
+$lang->job->invalidName = 'Les noms des paramètres doivent être alphabétiques, numériques ou soulignés.';
 
 $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
