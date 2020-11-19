@@ -1080,7 +1080,7 @@ class programModel extends model
     }
 
     /**
-     * Get project pairs by model.
+     * Get project pairs by model and program.
      *
      * @param  string $model
      * @param  int    $programID
@@ -1089,9 +1089,9 @@ class programModel extends model
      */
     public function getPRJPairsByModel($model, $programID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->andWhere('parent')->eq($programID)
             ->andWhere('model')->eq($model)
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()

@@ -33,6 +33,7 @@ $lang->program->unbindWhielist       = '項目刪除白名單';
 $lang->program->PRJManageProducts    = '項目關聯產品';
 $lang->program->copyTitle            = '請選擇一個項目來複制';
 $lang->program->errorSameProducts    = '項目不能關聯多個相同的產品。';
+$lang->program->copyNoProject        = '沒有可用的項目來複制';
 
 /* Fields. */
 $lang->program->common             = '項目集';
@@ -80,7 +81,7 @@ $lang->program->sv                 = 'SV%';
 $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '項目成員';
-$lang->program->PRJLongTime        = '長期項目';
+$lang->program->PRJLongTime        = '長期';
 
 $lang->program->productNotEmpty = '關聯產品不能為空！';
 
@@ -123,6 +124,7 @@ $lang->program->endList[31]  = '一個月';
 $lang->program->endList[93]  = '三個月';
 $lang->program->endList[186] = '半年';
 $lang->program->endList[365] = '一年';
+$lang->program->endList[999] = '長期';
 
 $lang->program->noPRJ             = '暫時沒有項目';
 $lang->program->accessDenied      = '您無權訪問該項目！';
