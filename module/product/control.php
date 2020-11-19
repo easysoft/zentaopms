@@ -636,7 +636,7 @@ class product extends control
     {
         if($productID == 0)
         {
-            $projects = array(0 => '') + $this->loadModel('project')->getPairs();
+            $projects = array(0 => '') + $this->loadModel('project')->getExecutionPairs();
         }
         else
         {

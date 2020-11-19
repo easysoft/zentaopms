@@ -1390,7 +1390,7 @@ class task extends control
 
             /* Get users and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $projects = $this->loadModel('project')->getPairs('all|nocode', $this->session->PRJ);
+            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'all|nocode');
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();

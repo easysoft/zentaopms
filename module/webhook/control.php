@@ -70,7 +70,7 @@ class webhook extends control
         $this->app->loadLang('action');
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->projects   = $this->loadModel('project')->getExecutionPairs();
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->create;
@@ -101,7 +101,7 @@ class webhook extends control
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->edit;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->projects   = $this->loadModel('project')->getExecutionPairs();
         $this->view->webhook    = $webhook;
 
         $this->display();
