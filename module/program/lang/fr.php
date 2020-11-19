@@ -34,6 +34,8 @@ $lang->program->PRJManageProducts    = 'Manage Products';
 $lang->program->copyTitle            = 'Please select an project to copy';
 $lang->program->errorSameProducts    = 'Project cannot be associated with multiple identical products.';
 $lang->program->copyNoProject        = 'There are no items available to copy.';
+$lang->program->PRJSource            = 'Project source：';
+$lang->program->PRJStandalone        = 'Standalone Projects';
 
 /* Fields. */
 $lang->program->common             = 'Project';

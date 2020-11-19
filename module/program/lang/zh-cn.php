@@ -34,6 +34,8 @@ $lang->program->PRJManageProducts    = '项目关联产品';
 $lang->program->copyTitle            = '请选择一个项目来复制';
 $lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 $lang->program->copyNoProject        = '没有可用的项目来复制';
+$lang->program->PRJSource            = '项目来源：';
+$lang->program->PRJStandalone        = '独立项目';
 
 /* Fields. */
 $lang->program->common             = '项目集';

@@ -172,7 +172,11 @@
   <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->program->copyTitle;?></h4>
+      <h4 class='modal-title' id='myModalLabel'>
+        <?php echo $lang->program->copyTitle;?> 
+        <?php if($programID) $lang->program->PRJStandalone = zget($programList, $programID, $lang->noData);?>
+        <span class="label label-primary label-outline"><?php echo $lang->program->PRJSource . $lang->program->PRJStandalone;?></span>
+      </h4>
     </div>
     <div class='modal-body'>
       <?php if(empty($copyProjects)):?>
@@ -184,9 +188,9 @@
       <div id='copyProjects' class='row'>
       <?php foreach ($copyProjects as $id => $name):?>
       <?php if(empty($id)):?>
-      <?php if($copyProjectID != 0):?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
-      <?php endif;?>
+        <?php if($copyProjectID != 0):?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
+        <?php endif;?>
       <?php else: ?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endif; ?>

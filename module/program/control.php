@@ -747,7 +747,7 @@ class program extends control
 
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects  = $this->program->getPRJPairsByModel($model, $programID);
+        $this->view->copyProjects  = array('' => '') + $this->program->getPRJPairsByModel($model, $programID);
         $this->view->products      = $products;
         $this->view->allProducts   = array('0' => '') + $allProducts;
         $this->view->productPlans  = array('0' => '') + $productPlans;

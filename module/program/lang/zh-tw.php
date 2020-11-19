@@ -34,6 +34,8 @@ $lang->program->PRJManageProducts    = '項目關聯產品';
 $lang->program->copyTitle            = '請選擇一個項目來複制';
 $lang->program->errorSameProducts    = '項目不能關聯多個相同的產品。';
 $lang->program->copyNoProject        = '沒有可用的項目來複制';
+$lang->program->PRJSource            = '項目來源：';
+$lang->program->PRJStandalone        = '獨立項目';
 
 /* Fields. */
 $lang->program->common             = '項目集';
