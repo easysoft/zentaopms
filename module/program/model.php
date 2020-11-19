@@ -932,7 +932,7 @@ class programModel extends model
     }
 
     /**
-     * Get the program to which the project belongs.
+     * Get the top program which the project belongs to.
      *
      * @param  int    $projectID
      * @access public
@@ -941,19 +941,14 @@ class programModel extends model
     public function getTopProgramID($projectID)
     {
         if(empty($projectID)) return 0;
-        $program  = $this->getPGMByID($projectID);
+        $project = $this->getPRJByID($projectID);
+
+        if($project->parent == 0) return 0;
 
         $programID = 0;
-        if($program->parent > 0)
-        {
-            $path = explode(',', $program->path);
-            $path = array_filter($path);
-            $programID = current($path);
-        }
-        elseif($program->parent == 0)
-        {
-            $programID = $program->id;
-        }
+        $path      = explode(',', $project->path);
+        $path      = array_filter($path);
+        $programID = current($path);
 
         return $programID;
     }

@@ -21,7 +21,6 @@
     <?php foreach($lang->program->PGMFeatureBar as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
-    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('pgmbrowse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>

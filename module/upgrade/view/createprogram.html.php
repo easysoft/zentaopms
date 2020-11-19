@@ -1,5 +1,6 @@
 <table class='table table-form'>
   <caption class='strong'><?php echo $lang->upgrade->program;?></caption>
+  <?php if($programs):?>
   <tr>
     <th><?php echo $lang->upgrade->existPGM;?></th>
     <td>
@@ -14,6 +15,8 @@
       </div>
     </td>
   </tr>
+  <?php endif;?>
+  <?php if($projects):?>
   <tr>
     <th><?php echo $lang->upgrade->existPRJ;?></th>
     <td>
@@ -28,6 +31,7 @@
       </div>
     </td>
   </tr>
+  <?php endif;?>
   <tr class='pgmParams'>
     <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
     <td class='required'><?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control'");?></td>

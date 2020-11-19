@@ -1,7 +1,7 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
-    <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+    <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
       <tr>
         <th class='table-nest-title'>
@@ -25,8 +25,7 @@
       if($program->type == 'program')
       {
           $trAttrs .= " data-nested='true'";
-          if($program->parent == '0') $trClass .= ' is-top-level table-nest-child-hide';
-          else $trClass .= ' table-nest-hide';
+          $trClass .= $program->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
       }
 
       if($program->parent and isset($programs[$program->parent]))
