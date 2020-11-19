@@ -148,7 +148,7 @@ class story extends control
         /* Set products, users and module. */
         if($projectID != 0)
         {
-            $products = $this->product->getProductsByProject($projectID);
+            $products = $this->product->getProductPairsByProject($projectID);
             $product  = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
         }
         else

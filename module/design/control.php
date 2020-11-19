@@ -26,7 +26,7 @@ class design extends control
         parent::__construct($moduleName, $methodName);
         $products = array();
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getProductsByProject($this->session->PRJ);
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
     }
 
     /**

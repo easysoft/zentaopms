@@ -125,7 +125,7 @@ class project extends control
         /* Get products by project. */
         $project   = $this->commonAction($projectID, $status);
         $projectID = $project->id;
-        $products  = $this->loadModel('product')->getProductsByProject($projectID);
+        $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($this->cookie->preProjectID != $projectID)
@@ -757,7 +757,7 @@ class project extends control
 
         /* Get project's product. */
         $productID    = 0;
-        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
         /* Assign. */
@@ -1158,7 +1158,7 @@ class project extends control
         $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getProductsByProject($this->session->PRJ);
+        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->acl           = $acl;
         $this->view->plan          = $plan;
         $this->view->name          = $name;
@@ -1813,7 +1813,7 @@ class project extends control
 
         /* Get project's product. */
         $productID = 0;
-        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
         $this->view->title      = $this->lang->project->storyKanban;
@@ -1896,7 +1896,7 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->manageProducts;
 
-        $allProducts     = $this->product->getProductsByProject($project->project);
+        $allProducts     = $this->product->getProductPairsByProject($project->project);
         $linkedProducts  = $this->project->getProducts($project->id);
         $linkedBranches  = array();
         // Merge allProducts and linkedProducts for closed product.
@@ -2419,7 +2419,7 @@ class project extends control
         $this->view->position[]    = $this->lang->project->allProject;
 
         $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager, $this->session->PRJ);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductsByProject($this->session->PRJ);
+        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
         $this->view->pager         = $pager;

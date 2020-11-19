@@ -23,7 +23,7 @@ class testtask extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getProductsByProject($this->session->PRJ);
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));
     }
 

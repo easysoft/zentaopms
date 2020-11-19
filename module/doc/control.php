@@ -225,7 +225,7 @@ class doc extends control
         }
 
         $programID = $this->session->PRJ;
-        $products  = $this->product->getProductsByProject($programID, 'noclosed');
+        $products  = $this->product->getProductPairsByProject($programID, 'noclosed');
         $projects  = $this->project->getPairs('nocode', $programID);
 
         $libTypeList = $this->lang->doc->libTypeList;

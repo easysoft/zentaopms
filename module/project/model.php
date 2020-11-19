@@ -2052,7 +2052,7 @@ class projectModel extends model
         if($projectType == 'project')
         {
             $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-            $linkedProducts = $this->loadModel('product')->getProductsByProject($project->id);
+            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($project->id);
 
             if(!empty($childSprints))  $this->loadModel('user')->updateUserView($childSprints, 'sprint', $changedAccounts);
             if(!empty($linkedProducts)) $this->loadModel('user')->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
@@ -2097,7 +2097,7 @@ class projectModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductsByProject($projectID);
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 
@@ -2128,7 +2128,7 @@ class projectModel extends model
             {
                 $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
                 $this->loadModel('user')->updateUserView($sprint->project, 'project', array($account));
-                $linkedProducts = $this->loadModel('product')->getProductsByProject($sprint->project);
+                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->project);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
             }
         }

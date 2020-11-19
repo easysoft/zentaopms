@@ -170,7 +170,7 @@ class treeModel extends model
     {
         if($viewType == 'task')
         {
-            $products = array_keys($this->loadModel('product')->getProductsByProject($rootID));
+            $products = array_keys($this->loadModel('product')->getProductPairsByProject($rootID));
             if(!$this->isMergeModule($rootID, $viewType) or !$products)
             {
                 $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -232,7 +232,7 @@ class treeModel extends model
     public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '')
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
-        $products       = $this->loadModel('product')->getProductsByProject($rootID);
+        $products       = $this->loadModel('product')->getProductPairsByProject($rootID);
         $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
 
         if(!$this->isMergeModule($rootID, 'task') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule);
@@ -445,7 +445,7 @@ class treeModel extends model
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
-        $products      = $this->loadModel('product')->getProductsByProject($rootID);
+        $products      = $this->loadModel('product')->getProductPairsByProject($rootID);
         $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
 
         if(!$this->isMergeModule($rootID, 'task') or !$products)
@@ -543,7 +543,7 @@ class treeModel extends model
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
-        $products      = $this->loadModel('product')->getProductsByProject($rootID);
+        $products      = $this->loadModel('product')->getProductPairsByProject($rootID);
         $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
 
         if(!$this->isMergeModule($rootID, 'task') or !$products)
@@ -639,7 +639,7 @@ class treeModel extends model
             ->fetchPairs();
 
         /* Get module according to product. */
-        $products     = $this->loadModel('product')->getProductsByProject($rootID);
+        $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $productNum   = count($products);
         foreach($products as $id => $product)

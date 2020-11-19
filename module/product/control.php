@@ -695,25 +695,15 @@ class product extends control
      */
     public function ajaxGetDropMenu($productID, $module, $method, $extra)
     {
+        $products = ($module == 'product') ? $this->product->getList() : $this->product->getProductPairsByProject($this->session->PRJ);
+
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-
-        if($module != 'product')
-        {
-            $products = $this->product->getProductIDByProject($this->session->PRJ, false);
-            $products = $this->product->getByIdList($products);
-        }
-        else
-        {
-            $products = $this->product->getList();
-        }
-
         $this->view->products  = $products;
-        $this->view->programID = $this->session->PRJ;
-
+        $this->view->projectID = $this->session->PRJ;
         $this->display();
     }
 

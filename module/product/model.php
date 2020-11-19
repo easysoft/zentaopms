@@ -315,9 +315,29 @@ class productModel extends model
      * @access public
      * @return array
      */
+    public function getProductPairsByProject($projectID, $status = 'all')
+    {
+        $products = $this->getProductsByProject($projectID, $status);
+        $pairs    = array();
+        if(!empty($products))
+        {
+            foreach($products as $product) $pairs[$product->id] = $product->name;
+        }
+
+        return $pairs;
+    }
+
+    /**
+     * Get products by project.
+     *
+     * @param  int    $projectID
+     * @param  int    $status   all|noclosed
+     * @access public
+     * @return array
+     */
     public function getProductsByProject($projectID, $status = 'all')
     {
-        return $this->dao->select('t1.product, t2.name')
+        return $this->dao->select('t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
@@ -325,7 +345,7 @@ class productModel extends model
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.order desc')
-            ->fetchPairs();
+            ->fetchAll();
     }
 
     /**
@@ -1195,7 +1215,7 @@ class productModel extends model
             elseif($module == 'programplan')
             {
                 $extra = $extra ? $extra : 'gantt';
-                $link  = helper::createLink($module, 'browse', "programID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
+                $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
             }
             else
             {
@@ -1218,11 +1238,6 @@ class productModel extends model
         else if($module == 'doc')
         {
             $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
-        }
-        elseif($module == 'programplan')
-        {
-            $extra = $extra ? $extra : 'gantt';
-            return helper::createLink('programplan', 'browse', "programID=%s&productID=%s&type=$extra");
         }
         elseif($module == 'design')
         {

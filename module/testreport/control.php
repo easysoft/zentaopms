@@ -520,7 +520,7 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $this->products = $this->product->getProductsByProject($this->session->PRJ);
+            $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
             return $productID;

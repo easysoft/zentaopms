@@ -183,7 +183,7 @@ class docModel extends model
 
         if(strpos($extra, 'withObject') !== false)
         {
-            $products = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
+            $products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
             $projects = $this->loadModel('project')->getPairs('', $this->session->PRJ);
         }
 
@@ -1477,7 +1477,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibIDByProject($projectID = 0)
+    public function getLibIdListByProject($projectID = 0)
     {
         $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
         $projects = $this->loadModel('project')->getProjectIDByProgram($projectID);
@@ -1488,8 +1488,8 @@ class docModel extends model
         if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
         $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
 
-        $libIDList = array_merge($customLibs, $projectLibs, $productLibs);
-        return $libIDList;
+        $libIdList = array_merge($customLibs, $projectLibs, $productLibs);
+        return $libIdList;
     }
 
     /**
@@ -1501,7 +1501,7 @@ class docModel extends model
     public function getStatisticInfo()
     {
         $libID = 0;
-        if($this->session->PRJ) $libID = $this->getLibIDByProject($this->session->PRJ);
+        if($this->session->PRJ) $libID = $this->getLibIdListByProject($this->session->PRJ);
         $docIdList = $this->getPrivDocs($libID);
 
         $today  = date('Y-m-d');

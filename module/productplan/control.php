@@ -260,7 +260,7 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductsByProject($this->session->PRJ);
+        $products = $this->product->getProductPairsByProject($this->session->PRJ);
 
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
@@ -361,7 +361,7 @@ class productplan extends control
         $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductsByProject($this->session->PRJ);
+        $products = $this->product->getProductPairsByProject($this->session->PRJ);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -499,7 +499,7 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductsByProject($this->session->PRJ);
+        $products = $this->product->getProductPairsByProject($this->session->PRJ);
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 

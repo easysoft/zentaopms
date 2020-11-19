@@ -36,7 +36,7 @@ class programplan extends control
      */
     public function commonAction($projectID, $productID = 0, $extra = '')
     {
-        $products  = $this->loadModel('product')->getProductsByProject($projectID);
+        $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
         $productID = $this->product->saveState($productID, $products);
         $this->productID = $productID;
         $this->product->setMenu($products, $productID, 0, 0, '', $extra);
