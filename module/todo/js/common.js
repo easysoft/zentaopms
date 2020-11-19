@@ -159,6 +159,7 @@ function showEvery(switcher)
         $('.every').removeClass('hidden');
         $('#configSpecify').removeAttr('checked');
         $('#cycleYear').removeAttr('checked');
+        $('#configEvery').removeAttr('checked');
     }
 }
 
