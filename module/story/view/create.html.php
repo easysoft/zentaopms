@@ -116,7 +116,7 @@
               <?php endif;?>
             <?php endif;?>
           </tr>
-          <?php if($type == 'story'):?>
+          <?php if($config->URAndSR and $type == 'story'):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
             <td colspan=2><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>

@@ -489,7 +489,7 @@ class projectModel extends model
         $projects    = array();
         $allChanges  = array();
         $data        = fixer::input('post')->get();
-        $oldProjects = $this->getByIdList($this->post->projectIDList);
+        $oldProjects = $this->getExecutionByIdList($this->post->projectIDList);
         foreach($data->projectIDList as $projectID)
         {
             $projectID = (int)$projectID;
@@ -762,13 +762,13 @@ class projectModel extends model
     }
 
     /**
-     * Get by idList.
+     * Get execution by idList.
      *
      * @param  array  $executionIdList
      * @access public
      * @return array
      */
-    public function getByIdList($executionIdList = array())
+    public function getExecutionByIdList($executionIdList = array())
     {
         return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
     }
@@ -787,7 +787,7 @@ class projectModel extends model
      */
     public function getExecutionList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0)
     {
-        if($status == 'involved') return $this->getInvolvedList($projectID, $status, $limit, $productID, $branch);
+        if($status == 'involved') return $this->getInvolvedExecutionList($projectID, $status, $limit, $productID, $branch);
 
         if($productID != 0)
         {
@@ -823,7 +823,7 @@ class projectModel extends model
     }
 
     /**
-     * Get project lists.
+     * Get involved execution list.
      *
      * @param  int    $projectID
      * @param  string $status  involved
@@ -833,7 +833,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getInvolvedList($projectID = 0, $status = 'involved', $limit = 0, $productID = 0, $branch = 0)
+    public function getInvolvedExecutionList($projectID = 0, $status = 'involved', $limit = 0, $productID = 0, $branch = 0)
     {
         if($productID != 0)
         {
@@ -922,38 +922,6 @@ class projectModel extends model
         }
 
         return $executions;
-    }
-
-    /**
-     * Get projects lists grouped by product.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProductGroupList()
-    {
-        $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->fetchGroup('product');
-
-        $noProducts = array();
-        foreach($list as $id => $product)
-        {
-            foreach($product as $ID => $project)
-            {
-                if(!$project->product)
-                {
-                    if($this->checkPriv($project->id)) $noProducts[] = $project;
-                    unset($list[$id][$ID]);
-                }
-            }
-        }
-        unset($list['']);
-        $list[''] = $noProducts;
-
-        return $list;
     }
 
     /**
@@ -1095,6 +1063,38 @@ class projectModel extends model
         }
 
         return $parents;
+    }
+
+    /**
+     * Get projects lists grouped by product.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductGroupList()
+    {
+        $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->fetchGroup('product');
+
+        $noProducts = array();
+        foreach($list as $id => $product)
+        {
+            foreach($product as $ID => $project)
+            {
+                if(!$project->product)
+                {
+                    if($this->checkPriv($project->id)) $noProducts[] = $project;
+                    unset($list[$id][$ID]);
+                }
+            }
+        }
+        unset($list['']);
+        $list[''] = $noProducts;
+
+        return $list;
     }
 
     /**
