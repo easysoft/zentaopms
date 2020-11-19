@@ -345,7 +345,7 @@ class productModel extends model
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.order desc')
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
