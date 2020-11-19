@@ -5,7 +5,7 @@
     <th><?php echo $lang->upgrade->existPGM;?></th>
     <td>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='projectByProgram(this)'");?>
+        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='getProjectByProgram(this)'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />

@@ -109,10 +109,10 @@ $(function()
     toggleProject($('form #newProject0'));
 });
 
-function projectByProgram(obj)
+function getProjectByProgram(obj)
 {
     var programID = $(obj).val();
-    var link = createLink('upgrade', 'ajaxGetProjectByProgram', 'programID=' + programID);
+    var link = createLink('upgrade', 'ajaxGetProjectPairsByProgram', 'programID=' + programID);
     $.post(link, function(data)
     {
         $('#projects').replaceWith(data);
