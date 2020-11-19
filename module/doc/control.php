@@ -60,7 +60,7 @@ class doc extends control
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->doingProjects    = $this->loadModel('project')->getProjectsByProgram($this->session->PRJ, 'undone', 5);
+        $this->view->doingProjects    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'undone', 5);
 
         $this->display();
     }

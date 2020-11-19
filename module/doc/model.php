@@ -767,7 +767,7 @@ class docModel extends model
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'nocode') + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
@@ -1108,7 +1108,7 @@ class docModel extends model
             $idList    = array();
             $projectID = $this->session->PRJ;
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getProjectIDByProgram($projectID);
+            if($type == 'project') $idList = $this->loadModel('project')->getExecutionsByProject($projectID);
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
@@ -1480,7 +1480,7 @@ class docModel extends model
     public function getLibIdListByProject($projectID = 0)
     {
         $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
-        $projects = $this->loadModel('project')->getProjectIDByProgram($projectID);
+        $projects = $this->loadModel('project')->getExecutionsByProject($projectID);
 
         $projectLibs = array();
         $productLibs = array();
