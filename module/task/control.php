@@ -38,7 +38,7 @@ class task extends control
      */
     public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        $projects  = $this->project->getPairs('', $this->session->PRJ);
+        $projects  = $this->project->getExecutionPairs($this->session->PRJ);
         $projectID = $this->project->saveState($projectID, $projects);
 
         $this->project->getLimitedProject();
@@ -213,7 +213,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
-        $this->view->projects         = $this->loadModel('project')->getPairs('', $this->session->PRJ);
+        $this->view->projects         = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
