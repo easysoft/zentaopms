@@ -267,15 +267,15 @@ $lang->index->menu->project = "浏览{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index            = '首页|my|index';
-$lang->my->menu->calendar         = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->program          = array('link' => '项目|my|program|');
-$lang->my->menu->task             = array('link' => '任务|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug              = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
-$lang->my->menu->testtask         = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story            = array('link' => "需求|my|story|", 'subModule' => 'story');
-$lang->my->menu->myProject        = "{$lang->projectCommon}|my|project|";
-$lang->my->menu->dynamic          = '动态|my|dynamic|';
+$lang->my->menu->index       = '首页|my|index';
+$lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->myProject   = array('link' => '项目|my|project|');
+$lang->my->menu->task        = array('link' => '任务|my|task|', 'subModule' => 'task');
+$lang->my->menu->bug         = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
+$lang->my->menu->testtask    = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
+$lang->my->menu->myExecution = "执行|my|execution|";
+$lang->my->menu->dynamic     = '动态|my|dynamic|';
 
 if($config->URAndSR)
 {

@@ -266,15 +266,15 @@ $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index          = 'Accueil|my|index';
-$lang->my->menu->calendar       = 'Todo|my|todo|';
-$lang->my->menu->program        = array('link' => 'Program|my|program|');
-$lang->my->menu->task           = array('link' => 'Tâche|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => 'Recette|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
-$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
-$lang->my->menu->dynamic        = 'Historique|my|dynamic|';
+$lang->my->menu->index       = 'Accueil|my|index';
+$lang->my->menu->calendar    = 'Todo|my|todo|';
+$lang->my->menu->myProject   = array('link' => 'Project|my|project|');
+$lang->my->menu->task        = array('link' => 'Tâche|my|task|', 'subModule' => 'task');
+$lang->my->menu->bug         = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
+$lang->my->menu->testtask    = array('link' => 'Recette|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->story       = array('link' => 'Story|my|story|',   'subModule' => 'story');
+$lang->my->menu->myExecution = "Execution|my|execution|";
+$lang->my->menu->dynamic     = 'Historique|my|dynamic|';
 
 if($config->URAndSR)
 {
