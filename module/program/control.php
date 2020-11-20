@@ -1375,6 +1375,11 @@ class program extends control
 
         if(!empty($_POST))
         {
+            if(!isset($_POST['products']))
+            {
+                die(js::alert($this->lang->program->errorNoProducts) . js::locate(inlink('PRJManageProducts', "projectID=$projectID&programID=$programID&from=$from")));
+            }
+
             $oldProducts = $this->project->getProducts($projectID);
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));

@@ -1484,7 +1484,7 @@ class docModel extends model
 
         $projectLibs = array();
         $productLibs = array();
-        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in($projects)->fetchPairs();
+        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in(array_keys($projects))->fetchPairs();
         if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
         $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
 
