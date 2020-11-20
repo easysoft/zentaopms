@@ -31,8 +31,8 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[12] = 'program';
-$lang->my->menuOrder[20] = 'myProject';
+$lang->my->menuOrder[12] = 'myProject';
+$lang->my->menuOrder[20] = 'myExecution';
 $lang->my->menuOrder[25] = 'review';
 $lang->my->menuOrder[29] = 'requirement';
 $lang->my->menuOrder[31] = 'story';

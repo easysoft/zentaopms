@@ -1,12 +1,12 @@
 <?php
 /**
- * The project view file of dashboard module of ZenTaoPMS.
+ * The program view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
- * @version     $Id: project.html.php 5095 2013-07-11 06:03:40Z chencongzhi520@gmail.com $
+ * @version     $Id: program.html.php 5095 2013-07-11 06:03:40Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -20,51 +20,71 @@
   <?php if(empty($projects)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->project->noProject;?></span>
-      <?php if(common::hasPriv('program', 'createguide')):?>
-      <?php echo html::a($this->createLink('program', 'createguide'), "<i class='icon icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-info' data-toggle='modal' data-type='ajax'");?>
+      <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
+      <?php if(common::hasPriv('program', 'createGuide')):?>
+      <?php echo html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <table class="table has-sort-head table-fixed" id='projectList'>
-    <thead>
-      <tr class='text-center'>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th class='w-160px text-left'><?php echo $lang->project->code;?></th>
-        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
-        <th class='c-date'><?php echo $lang->project->begin;?></th>
-        <th class='c-date'><?php echo $lang->project->end;?></th>
-        <th class='c-status'><?php echo $lang->statusAB;?></th>
-        <th class='c-user'><?php echo $lang->team->role;?></th>
-        <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='w-110px'><?php echo $lang->team->hours;?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($projects as $project):?>
-      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id", '', '', $project->project);?>
-      <tr class='text-center'>
-        <td><?php echo html::a($projectLink, $project->id);?></td>
-        <td class='text-left'><?php echo $project->code;?></td>
-        <td class='c-name text-left'><?php echo html::a($projectLink, $project->name);?></td>
-        <td><?php echo $project->begin;?></td>
-        <td><?php echo $project->end;?></td>
-        <td class="c-status">
-          <?php if(isset($project->delay)):?>
-          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'> <?php echo $lang->project->delayed;?></span>
-          <?php else:?>
-          <?php $statusName = $this->processStatus('project', $project);?>
-          <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'> <?php echo $statusName;?></span>
-          <?php endif;?>
-        </td>
-        <td><?php echo $project->role;?></td>
-        <td><?php echo $project->join;?></td>
-        <td><?php echo $project->hours;?></td>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-  </table>
+    <form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
+      <table class='table table-fixed table-nested' id='programList'>
+        <thead>
+          <tr>
+            <th class='c-id w-50px'>
+              <?php echo $lang->idAB;?>
+            </th>
+            <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
+            <th class='table-nest-title'><?php echo $lang->program->PRJName;?></th>
+            <th class='w-80px'><?php  echo $lang->program->PRJStatus;?></th>
+            <th class='w-100px'><?php echo $lang->program->begin;?></th>
+            <th class='w-100px'><?php echo $lang->program->end;?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJPM;?></th>
+            <th class='text-center w-240px'><?php echo $lang->actions;?></th>
+          </tr>
+        </thead>
+        <tbody id='programTableList'>
+          <?php foreach($projects as $project):?>
+          <tr>
+            <td class='c-id'>
+              <?php printf('%03d', $project->id);?>
+            </td>
+            <td class='text-left'><?php echo $project->code;?></td>
+            <td class='c-name text-left' title='<?php echo $project->name?>'>
+              <span class="table-nest-icon"></span>
+              <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
+            </td>
+            <td class='c-status'><span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+            <td class='text-center'><?php echo $project->begin;?></td>
+            <td class='text-center'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
+            <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
+            <td><?php echo zget($users, $project->PM);?></td>
+            <td class='text-center c-actions'>
+              <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'group');?>
+              <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
+              <?php common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'start', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
+              <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "prjedit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
+              <?php if(common::hasPriv('program', 'prjdelete')) echo html::a($this->createLink("program", "prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$lang->delete}'");?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <div class='table-footer'>
+        <?php $pager->show('right', 'pagerjs');?>
+      </div>
+    </form>
+    <style>
+    .w-240px {width:240px;}
+    #programTableList.sortable-sorting > tr {opacity: 0.7}
+    #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
+    #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
+    </style>
   <?php endif;?>
 </div>
+
 <?php include '../../common/view/footer.html.php';?>
