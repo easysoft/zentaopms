@@ -144,7 +144,7 @@ class docModel extends model
         {
             $idList = array();
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getProjectIDByProgram($projectID);
+            if($type == 'project') $idList = $this->loadModel('project')->getExecutionsByProject($projectID);
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
