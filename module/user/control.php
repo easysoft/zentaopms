@@ -1101,7 +1101,7 @@ class user extends control
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($realname, $search) === false) continue;
+            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }
