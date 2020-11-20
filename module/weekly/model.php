@@ -177,7 +177,7 @@ class weeklyModel extends model
         if(!$date) $date = date('Y-m-d');
         $monday = $this->getThisMonday($date);
         $sunday = $this->getThisSunday($date);
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
+        $projects = $this->loadModel('project')->getExecutionList($program, $status = 'all', $limit = 0, $productID = 0, $branch = 0);
         $projectIdList = array_keys($projects);
 
         return $this->dao->select('count(distinct t1.account) as count')
@@ -204,7 +204,7 @@ class weeklyModel extends model
         $monday = $this->getThisMonday($date);
         $sunday = $this->getThisSunday($date);
 
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
+        $projects = $this->loadModel('project')->getExecutionList($program, $status = 'all', $limit = 0, $productID = 0, $branch = 0);
         $projectIdList = array_keys($projects);
 
         $tasks = $this->dao->select('*')
@@ -232,7 +232,7 @@ class weeklyModel extends model
         $sunday = $this->getThisSunday($date);
         $nextMonday = date('Y-m-d', strtotime("$sunday +1 days"));
 
-        $projects = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
+        $projects = $this->loadModel('project')->getExecutionList($program, $status = 'all', $limit = 0, $productID = 0, $branch = 0);
         $projectIdList = array_keys($projects);
         $unFinished = $this->dao->select('*')
             ->from(TABLE_TASK)
@@ -269,7 +269,7 @@ class weeklyModel extends model
         $nextMonday   = date('Y-m-d', strtotime("$sunday +1 days"));
         $sencondMondy = date('Y-m-d', strtotime("$sunday +8 days"));
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
+        $projects      = $this->loadModel('project')->getExecutionList($program, $status = 'all', $limit = 0, $productID = 0, $branch = 0);
         $projectIdList = array_keys($projects);
 
         $tasks = $this->dao->select('*')
@@ -297,7 +297,7 @@ class weeklyModel extends model
         $nextMonday   = date('Y-m-d', strtotime("$sunday +1 days"));
         $sencondMondy = date('Y-m-d', strtotime("$sunday +8 days"));
 
-        $projects      = $this->loadModel('project')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $program);
+        $projects      = $this->loadModel('project')->getExecutionList($program, $status = 'all', $limit = 0, $productID = 0, $branch = 0);
         $projectIdList = array_keys($projects);
 
         return $this->dao->select('type, sum(cast(estimate as decimal(10,2))) as workload')
