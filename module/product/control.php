@@ -737,12 +737,20 @@ class product extends control
      */
     public function showErrorNone($fromModule = 'bug')
     {
+        if($fromModule != 'product') 
+        {
+            $this->lang->navGroup->product = 'project';
+            unset($this->lang->noMenuModule[4]);
+            $this->view->project = $this->loadModel('program')->getPRJById($this->session->PRJ);
+        }
+
         $this->loadModel($fromModule)->setMenu($this->products, key($this->products));
         $this->lang->set('menugroup.product', 'qa');
         $this->lang->product->menu      = $this->lang->$fromModule->menu;
         $this->lang->product->menuOrder = $this->lang->$fromModule->menuOrder;
 
-        $this->view->title = $this->lang->$fromModule->common;
+        $this->view->title      = $this->lang->$fromModule->common;
+        $this->view->fromModule = $fromModule;
         $this->display();
     }
 

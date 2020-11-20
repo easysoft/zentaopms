@@ -1414,6 +1414,29 @@ class upgradeModel extends model
     }
 
     /**
+     * Gets program key-value pairs.
+     *
+     * @access public
+     * @return string
+     */
+    public function getProgramPairs()
+    {
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->orderBy('id_asc')->fetchPairs('id', 'name');
+    }
+
+    /**
+     * Get the project of the program it belongs to.
+     *
+     * @param  string $programID
+     * @access public
+     * @return string
+     */
+    public function getProjectPairsByProgram($programID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->andWhere('parent')->eq($programID)->fetchPairs('id', 'name');
+    }
+
+    /**
      * Execute a sql.
      *
      * @param  string  $sqlFile
@@ -3938,7 +3961,7 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_PROJECT)->data($program)
                 ->batchcheck('name,begin', 'notempty')
                 ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-                ->check('name', 'unique', "deleted='0'")
+                ->check('name', 'unique', "deleted='0' and type= 'program'")
                 ->exec();
             if(dao::isError()) return false;
 
@@ -3976,7 +3999,7 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_PROJECT)->data($project)
                 ->batchcheck('name', 'notempty')
-                ->check('name', 'unique', "deleted='0'")
+                ->check('name', 'unique', "deleted='0' and type = 'project'")
                 ->exec();
             if(dao::isError()) return false;
 

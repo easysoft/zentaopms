@@ -521,6 +521,7 @@ class testreport extends control
         if($objectType == 'product')
         {
             $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testreport")));
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
             return $productID;

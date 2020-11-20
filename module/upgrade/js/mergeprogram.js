@@ -4,10 +4,10 @@ $(function()
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
-    pgmBegin = $('.pgmParams #begin').val();
-    pgmEnd   = $('.pgmParams #end').val();
-    setPgmBegin(pgmBegin);
-    setPgmEnd(pgmEnd);
+    PGMBegin = $('.programParams #begin').val();
+    PGMEnd   = $('.programParams #end').val();
+    setPGMBegin(PGMBegin);
+    setPGMEnd(PGMEnd);
 
     $('[name^=lines]').change(function()
     {
@@ -20,22 +20,22 @@ $(function()
         {
             $('[data-line=' + value + ']').prop('checked', false)
         }
-        setPgmBegin(pgmBegin);
-        setPgmEnd(pgmEnd);
+        setPGMBegin(PGMBegin);
+        setPGMEnd(PGMEnd);
     })
 
-    var pgmOriginEnd = $('#end').val();
+    var PGMOriginEnd = $('#end').val();
     $('#longTime').change(function()
     {
         if($(this).prop('checked'))
         {
-            pgmOriginEnd = $('#end').val();
+            PGMOriginEnd = $('#end').val();
             $('#end').val('').attr('disabled', 'disabled');
             $('#days').val('');
         }
         else
         {
-            $('#end').val(pgmOriginEnd).removeAttr('disabled');
+            $('#end').val(PGMOriginEnd).removeAttr('disabled');
         }
     });
 
@@ -69,8 +69,8 @@ $(function()
             $('#PRJName').val(data);
         })
 
-        setPgmBegin(pgmBegin);
-        setPgmEnd(pgmEnd);
+        setPGMBegin(PGMBegin);
+        setPGMEnd(PGMEnd);
     })
 
     $('[name^=products]').change(function()
@@ -87,8 +87,8 @@ $(function()
         {
             $('[data-product=' + value + ']').prop('checked', false)
         }
-        setPgmBegin(pgmBegin);
-        setPgmEnd(pgmEnd);
+        setPGMBegin(PGMBegin);
+        setPGMEnd(PGMEnd);
     })
 
     $('[name^=sprints]').change(function()
@@ -101,18 +101,18 @@ $(function()
             var productID = $(this).attr('data-product');
             if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
         }
-        setPgmBegin(pgmBegin);
-        setPgmEnd(pgmEnd);
+        setPGMBegin(PGMBegin);
+        setPGMEnd(PGMEnd);
     })
 
     toggleProgram($('form #newProgram0'));
     toggleProject($('form #newProject0'));
 });
 
-function projectByProgram(obj)
+function getProjectByProgram(obj)
 {
     var programID = $(obj).val();
-    var link = createLink('upgrade', 'ajaxGetProjectByProgram', 'programID=' + programID);
+    var link = createLink('upgrade', 'ajaxGetProjectPairsByProgram', 'programID=' + programID);
     $.post(link, function(data)
     {
         $('#projects').replaceWith(data);
@@ -129,7 +129,7 @@ function toggleProgram(obj)
     if($obj.length == 0) return false;
 
     var $programs  = $obj.closest('table').find('#programs');
-    var $pgmParams = $obj.closest('table').find('.pgmParams');
+    var $programParams = $obj.closest('table').find('.programParams');
     if($obj.prop('checked'))
     {
         $('form #newProject0').prop('checked', true);
@@ -137,13 +137,13 @@ function toggleProgram(obj)
 
         $('#PGMName').closest('tr').show();
         $programs.attr('disabled', 'disabled');
-        $pgmParams.removeClass('hidden');
+        $programParams.removeClass('hidden');
     }
     else
     {
         $('#PGMName').closest('tr').hide();
         $programs.removeAttr('disabled');
-        $pgmParams.addClass('hidden');
+        $programParams.addClass('hidden');
 
         toggleProject($('form #newProject0'));
     }
@@ -155,49 +155,49 @@ function toggleProject(obj)
     if($obj.length == 0) return false;
 
     var $projects  = $obj.closest('table').find('#projects');
-    var $pgmParams = $obj.closest('table').find('.pgmParams');
+    var $programParams = $obj.closest('table').find('.programParams');
     if($obj.prop('checked'))
     {
         $projects.attr('disabled', 'disabled');
-        $pgmParams.removeClass('hidden');
+        $programParams.removeClass('hidden');
         if(!$('form #newProgram0').prop('checked')) $('#PGMName').closest('tr').hide();
     }
     else
     {
         $projects.removeAttr('disabled');
-        $pgmParams.addClass('hidden');
+        $programParams.addClass('hidden');
 
         $('form #newProgram0').prop('checked', false);
         $('#programs').removeAttr('disabled');
     }
 }
 
-function setPgmBegin(pgmBegin)
+function setPGMBegin(PGMBegin)
 {
     $(':checkbox:checked[data-begin]').each(function()
     {
         begin = $(this).attr('data-begin').substr(0, 10);
         if(begin == '0000-00-00') return true;
 
-        if(begin < pgmBegin)
+        if(begin < PGMBegin)
         {
-            pgmBegin = begin;
-            $('.pgmParams #begin').val(pgmBegin);
+            PGMBegin = begin;
+            $('.programParams #begin').val(PGMBegin);
         }
     });
 }
 
-function setPgmEnd(pgmEnd)
+function setPGMEnd(PGMEnd)
 {
     $(':checkbox:checked[data-end]').each(function()
     {
         end = $(this).attr('data-end').substr(0, 10);
         if(end == '0000-00-00') return true;
 
-        if(end > pgmEnd)
+        if(end > PGMEnd)
         {
-            pgmEnd = end;
-            $('.pgmParams #end').val(pgmEnd);
+            PGMEnd = end;
+            $('.programParams #end').val(PGMEnd);
         }
     });
 }
