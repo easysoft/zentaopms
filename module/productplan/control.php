@@ -275,7 +275,7 @@ class productplan extends control
 
         $this->loadModel('datatable');
         $this->view->modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story');
-        $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
+        $this->view->title       = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $planStories;
         $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);

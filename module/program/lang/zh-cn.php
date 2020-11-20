@@ -30,7 +30,7 @@ $lang->program->PRJSort              = '项目排序';
 $lang->program->PRJWhitelist         = '项目白名单';
 $lang->program->PRJAddWhitelist      = '项目添加白名单';
 $lang->program->unbindWhielist       = '项目删除白名单';
-$lang->program->PRJManageProducts    = '项目关联产品';
+$lang->program->PRJManageProducts    = '关联产品';
 $lang->program->copyTitle            = '请选择一个项目来复制';
 $lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 $lang->program->copyNoProject        = '没有可用的项目来复制';
@@ -220,12 +220,12 @@ $lang->program->PGMShowClosed = '显示已关闭';
 $lang->program->PGMTips       = '修改父项目集，可关联产品也会发生变化，并且变为必填，如果未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联到该项目。';
 $lang->program->PGMChangeTips = '修改父项目集后，项目已关联的产品会被清空，并且项目下的需求、bug等数据也会受影响，是否修改？';
 
-$lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即可访问）";
 $lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问）";
+$lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即可访问）";
 
+$lang->program->subPGMAclList['private'] = "私有（本项目集负责人和干系人可访问）";
 $lang->program->subPGMAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
 $lang->program->subPGMAclList['program'] = "项目集内公开 (所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
-$lang->program->subPGMAclList['private'] = "私有（本项目集负责人和干系人可访问）";
 
 $lang->program->PGMAuthList['extend'] = '继承(取项目权限与组织权限的并集)';
 $lang->program->PGMAuthList['reset']  = '重新定义(只取项目权限)';

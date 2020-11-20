@@ -5,7 +5,7 @@
     <th><?php echo $lang->upgrade->existPGM;?></th>
     <td>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='projectByProgram(this)'");?>
+        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='getProjectByProgram(this)'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -32,23 +32,23 @@
     </td>
   </tr>
   <?php endif;?>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
     <td class='required'><?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control'");?></td>
   </tr>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->program->PRJName;?></th>
     <td class='required'><?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control'");?></td>
   </tr>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->program->PRJCode;?></th>
     <td><?php echo html::input("code", '', "class='form-control'");?></td>
   </tr>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
     <td><?php echo html::select('PM', array('' => '') + $users, '', "class='form-control chosen'");?></td>
   </tr>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->program->dateRange;?></th>
     <td>
       <div class='input-group'>
@@ -64,7 +64,7 @@
       </div>
     </td>
   </tr>
-  <tr class='pgmParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->project->acl;?></th>
     <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
   </tr>
