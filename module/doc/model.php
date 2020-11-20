@@ -159,7 +159,7 @@ class docModel extends model
         {
             /* If extra have unclosedProject then ignore unclosed project libs. */
             $status          = (strpos($extra, 'unclosedProject') !== false) ? 'undone' : 'all';
-            $executionPairs  = $this->loadModel('project')->getExecutionIdList($projectID, $status);
+            $executionIdList = $this->loadModel('project')->getExecutionIdList($projectID, $status);
             $productIdList   = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -167,7 +167,7 @@ class docModel extends model
                 ->andWhere()
                 ->markLeft(1)
                 ->where('`type`')->eq('custom')
-                ->orWhere('project')->in($executionPairs)
+                ->orWhere('project')->in($executionIdList)
                 ->orWhere('product')->in($productIdList)
                 ->markRight(1)
                 ->orderBy('id_desc')
