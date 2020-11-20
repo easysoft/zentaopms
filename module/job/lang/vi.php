@@ -29,6 +29,7 @@ $lang->job->comment     = 'Từ khóa phù hợp';
 $lang->job->customParam = 'Tham số tự chọn';
 $lang->job->paramName   = 'Tên';
 $lang->job->paramValue  = 'giá';
+$lang->job->custom      = 'Custom';
 
 $lang->job->lblBasic = 'Basic Info';
 
@@ -56,3 +57,9 @@ $lang->job->frameList['jtest']   = 'JTest';
 $lang->job->frameList['cppunit'] = 'CppUnit';
 $lang->job->frameList['gtest']   = 'GTest';
 $lang->job->frameList['qtest']   = 'QTest';
+
+$lang->job->paramValueList['']                 = '';
+$lang->job->paramValueList['$zentao_version']  = 'Current version';
+$lang->job->paramValueList['$zentao_account']  = 'Current user';
+$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';

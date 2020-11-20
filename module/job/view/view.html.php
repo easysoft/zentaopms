@@ -101,6 +101,12 @@
             <th><?php echo $lang->job->customParam;?></th>
             <td>
               <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
+              <?php
+              $paramValue = str_replace('$zentao_version', zget($lang->job->paramValueList, $paramValue). '(' . $this->config->version . ')', $paramValue);
+              $paramValue = str_replace('$zentao_account', zget($lang->job->paramValueList, $paramValue). '(' . $this->app->user->account . ')', $paramValue);
+              $paramValue = str_replace('$zentao_product', zget($lang->job->paramValueList, $paramValue). '(' . $job->product . ')', $paramValue);
+              $paramValue = str_replace('$zentao_repopath', zget($lang->job->paramValueList, $paramValue). '(' . $repo->path . ')', $paramValue);
+              ?>
               <div><?php echo $paramName . ' : ' . $paramValue;?></div>
               <?php endforeach;?>
             </td>

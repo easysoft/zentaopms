@@ -149,6 +149,7 @@ class jobModel extends model
         }
         unset($job->paramName);
         unset($job->paramValue);
+        unset($job->custom);
         $job->customParam = json_encode($customParam);
 
         $this->dao->insert(TABLE_JOB)->data($job)
@@ -215,6 +216,7 @@ class jobModel extends model
         }
         unset($job->paramName);
         unset($job->paramValue);
+        unset($job->custom);
         $job->customParam = json_encode($customParam);
 
         $this->dao->update(TABLE_JOB)->data($job)
@@ -286,7 +288,7 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($id)
@@ -300,10 +302,10 @@ class jobModel extends model
         $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
+        $repo = $this->loadModel('repo')->getRepoById($job->repo);
         $data->PARAM_TAG = '';
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getRepoById($job->repo);
             $lastTag = '';
             if($repo->SCM == 'Subversion')
             {
@@ -346,7 +348,14 @@ class jobModel extends model
         $data->ZENTAO_DATA = "compile={$compileID}";
 
         /* Add custom parameters to the data. */
-        foreach(json_decode($job->customParam) as $paramName => $paramValue) $data->$paramName = $paramValue;
+        foreach(json_decode($job->customParam) as $paramName => $paramValue)
+        {
+            $paramValue = str_replace('$zentao_version', $this->config->version, $paramValue);
+            $paramValue = str_replace('$zentao_account', $this->app->user->account, $paramValue);
+            $paramValue = str_replace('$zentao_product', $job->product, $paramValue);
+            $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
+            $data->$paramName = $paramValue;
+        }
 
         $compile = new stdclass();
         $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);

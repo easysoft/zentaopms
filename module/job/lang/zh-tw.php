@@ -29,6 +29,7 @@ $lang->job->comment     = '匹配關鍵字';
 $lang->job->customParam = '自定義構建參數';
 $lang->job->paramName   = '名稱';
 $lang->job->paramValue  = '值';
+$lang->job->custom      = '自定義';
 
 $lang->job->lblBasic = '基本信息';
 
@@ -56,3 +57,9 @@ $lang->job->frameList['jtest']   = 'JTest';
 $lang->job->frameList['cppunit'] = 'CppUnit';
 $lang->job->frameList['gtest']   = 'GTest';
 $lang->job->frameList['qtest']   = 'QTest';
+
+$lang->job->paramValueList['']                 = '';
+$lang->job->paramValueList['$zentao_version']  = '當前版本號';
+$lang->job->paramValueList['$zentao_account']  = '當前用戶名';
+$lang->job->paramValueList['$zentao_product']  = '當前產品ID';
+$lang->job->paramValueList['$zentao_repopath'] = '當前版本庫路徑';

@@ -29,6 +29,7 @@ $lang->job->comment     = 'Corres Mots cl閟';
 $lang->job->customParam = 'Paramètres de construction personnalisés';
 $lang->job->paramName   = 'Nom';
 $lang->job->paramValue  = 'PH';
+$lang->job->custom      = 'Custom';
 
 $lang->job->lblBasic = 'Infos de Base';
 
@@ -56,3 +57,9 @@ $lang->job->frameList['jtest']   = 'JTest';
 $lang->job->frameList['cppunit'] = 'CppUnit';
 $lang->job->frameList['gtest']   = 'GTest';
 $lang->job->frameList['qtest']   = 'QTest';
+
+$lang->job->paramValueList['']                 = '';
+$lang->job->paramValueList['$zentao_version']  = 'Current version';
+$lang->job->paramValueList['$zentao_account']  = 'Current user';
+$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';

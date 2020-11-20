@@ -91,9 +91,16 @@
             <td colspan='2' id='paramDiv'>
               <div class='table-row input-group'>
                 <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
-                <?php echo html::input('paramName[]', '', "class='form-control id='test''"); ?>
+                <?php echo html::input('paramName[]', '', "class='form-control'"); ?>
                 <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
-                <?php echo html::input('paramValue[]', '', "class='form-control'"); ?>
+                <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control' onchange='setParamName(this)'"); ?>
+                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
+                <span class='input-group-addon w-90px'>
+                  <div class='checkbox-primary'>
+                    <input type='checkbox' name='custom' id='custom' value='1' onclick='setValueInput(this);' />
+                    <label for='custom'><?php echo $lang->job->custom;?></label>
+                  </div>
+                </span>
                 <span class='input-group-addon w-40px'><a href='javascript:;' onclick='addItem(this);'><i class='icon icon-plus'></i></a></span>
                 <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
               </div>
