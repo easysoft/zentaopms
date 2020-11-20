@@ -1114,7 +1114,7 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
-                ->andWhere('t2.id')->in($idList)
+                ->andWhere('t2.id')->in(array_keys($idList))
                 ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') === false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
                 ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
