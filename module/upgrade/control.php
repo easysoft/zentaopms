@@ -272,6 +272,7 @@ class upgrade extends control
                     $this->upgrade->processMergedData(0, $projectID, array(), array($sprintID));
                 }
             }
+
             die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type"), 'parent'));
         }
 
