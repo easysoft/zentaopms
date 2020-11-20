@@ -445,7 +445,7 @@ class project extends control
         $toProject = $project->id;
         $branches  = $this->project->getExecutionBranches($toProject);
         $tasks     = $this->project->getTasks2Imported($toProject, $branches);
-        $projects  = $this->project->getProjectsToImport(array_keys($tasks));
+        $projects  = $this->project->getExecutionsToImport(array_keys($tasks));
         unset($projects[$toProject]);
         unset($tasks[$toProject]);
 
@@ -2323,7 +2323,7 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->project->getProjectsByProgram($project->project);
+        $this->view->projects  = $this->project->getExecutionsByProject($project->project);
         $this->display();
     }
 

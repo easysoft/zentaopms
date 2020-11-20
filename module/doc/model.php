@@ -144,7 +144,7 @@ class docModel extends model
         {
             $idList = array();
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getExecutionsByProject($projectID);
+            if($type == 'project') $idList = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
@@ -1484,7 +1484,7 @@ class docModel extends model
 
         $projectLibs = array();
         $productLibs = array();
-        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in($projects)->fetchPairs();
+        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in(array_keys($projects))->fetchPairs();
         if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
         $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
 

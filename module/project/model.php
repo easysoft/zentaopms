@@ -1517,16 +1517,16 @@ class projectModel extends model
     }
 
     /**
-     * Get projects to import
+     * Get executions to import
      *
-     * @param  array  $projectIds
+     * @param  array  $executionIds
      * @access public
      * @return array
      */
-    public function getProjectsToImport($projectIds)
+    public function getExecutionsToImport($executionIds)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('id')->in($projectIds)
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in($executionIds)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
@@ -1534,7 +1534,7 @@ class projectModel extends model
 
         $pairs = array();
         $now   = date('Y-m-d');
-        foreach($projects as $id => $project) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
+        foreach($executions as $id => $execution) $pairs[$id] = ucfirst(substr($execution->code, 0, 1)) . ':' . $execution->name;
         return $pairs;
     }
 
