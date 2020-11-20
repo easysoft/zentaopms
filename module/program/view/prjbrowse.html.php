@@ -93,5 +93,7 @@ js::set('browseType', $browseType);
     <?php endif;?>
   </div>
 </div>
+<?php if($projectStats):?>
 <script> $('.datatable').datatable(); </script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
