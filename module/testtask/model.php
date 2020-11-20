@@ -1084,6 +1084,7 @@ class testtaskModel extends model
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->taskCaseBrowseType and $this->session->taskCaseBrowseType != 'bysearch') ? $this->session->taskCaseBrowseType : $browseType;
+        $browseType = strtolower($browseType);
 
         if($browseType == 'bymodule' or $browseType == 'all')
         {

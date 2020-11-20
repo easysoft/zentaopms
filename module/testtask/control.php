@@ -394,9 +394,13 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Set the browseType and moduleID. */
+        $browseType = strtolower($browseType);
+
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
+
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -409,11 +413,11 @@ class testtask extends control
             $_COOKIE['taskCaseModule'] = 0;
             setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', false, true);
         }
+
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
         /* Set the browseType, moduleID and queryID. */
-        $browseType = strtolower($browseType);
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
