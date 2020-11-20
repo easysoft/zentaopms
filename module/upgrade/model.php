@@ -3937,6 +3937,7 @@ class upgradeModel extends model
     {
         $this->app->loadLang('program');
         $data = fixer::input('post')->get();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
         if(!isset($data->programs))
         {
@@ -3949,7 +3950,7 @@ class upgradeModel extends model
             $program->status        = 'wait';
             $program->begin         = $data->begin;
             $program->end           = isset($data->end) ? $data->end : '';
-            $program->openedBy      = $this->app->user->account;
+            $program->openedBy      = $account;
             $program->openedDate    = helper::now();
             $program->openedVersion = $this->config->version;
             $program->acl           = 'open';
@@ -3989,7 +3990,7 @@ class upgradeModel extends model
             $project->end           = isset($data->end) ? $data->end : '';
             $project->PM            = $data->PM;
             $project->auth          = 'extend';
-            $project->openedBy      = $this->app->user->account;
+            $project->openedBy      = $account;
             $project->openedDate    = helper::now();
             $project->openedVersion = $this->config->version;
             $project->acl           = $data->acl;
@@ -4041,7 +4042,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
 
         /* Compute product acl. */
-        $products = $this->dao->select('id, acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
         foreach($products as $product)
         {
             if($product->program) continue;

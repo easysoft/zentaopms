@@ -260,11 +260,7 @@ class upgrade extends control
                 list($programID, $projectID) = $this->upgrade->createProgram(array(), $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
-                //$productID = $this->upgrade->createProduct4Program($programID);
                 $this->upgrade->processMergedData($programID, $projectID, array(), $linkedSprints);
-
-                /* Link product. */
-                foreach($linkedSprints as $sprintID) $this->dao->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($sprintID)->set('product')->eq($productID)->exec();
             }
             elseif($type == 'moreLink')
             {
@@ -276,7 +272,6 @@ class upgrade extends control
                     $this->upgrade->processMergedData(0, $projectID, array(), array($sprintID));
                 }
             }
-
             die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type"), 'parent'));
         }
 

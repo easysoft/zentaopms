@@ -4,8 +4,8 @@ $(function()
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
-    PGMBegin = $('.programParams #begin').val();
-    PGMEnd   = $('.programParams #end').val();
+    PGMBegin = $('.PGMParams #begin').val();
+    PGMEnd   = $('.PGMParams #end').val();
     setPGMBegin(PGMBegin);
     setPGMEnd(PGMEnd);
 
@@ -129,7 +129,7 @@ function toggleProgram(obj)
     if($obj.length == 0) return false;
 
     var $programs  = $obj.closest('table').find('#programs');
-    var $programParams = $obj.closest('table').find('.programParams');
+    var $PGMParams = $obj.closest('table').find('.PGMParams');
     if($obj.prop('checked'))
     {
         $('form #newProject0').prop('checked', true);
@@ -137,13 +137,13 @@ function toggleProgram(obj)
 
         $('#PGMName').closest('tr').show();
         $programs.attr('disabled', 'disabled');
-        $programParams.removeClass('hidden');
+        $PGMParams.removeClass('hidden');
     }
     else
     {
         $('#PGMName').closest('tr').hide();
         $programs.removeAttr('disabled');
-        $programParams.addClass('hidden');
+        $PGMParams.addClass('hidden');
 
         toggleProject($('form #newProject0'));
     }
@@ -155,17 +155,17 @@ function toggleProject(obj)
     if($obj.length == 0) return false;
 
     var $projects  = $obj.closest('table').find('#projects');
-    var $programParams = $obj.closest('table').find('.programParams');
+    var $PGMParams = $obj.closest('table').find('.PGMParams');
     if($obj.prop('checked'))
     {
         $projects.attr('disabled', 'disabled');
-        $programParams.removeClass('hidden');
+        $PGMParams.removeClass('hidden');
         if(!$('form #newProgram0').prop('checked')) $('#PGMName').closest('tr').hide();
     }
     else
     {
         $projects.removeAttr('disabled');
-        $programParams.addClass('hidden');
+        $PGMParams.addClass('hidden');
 
         $('form #newProgram0').prop('checked', false);
         $('#programs').removeAttr('disabled');
@@ -182,7 +182,7 @@ function setPGMBegin(PGMBegin)
         if(begin < PGMBegin)
         {
             PGMBegin = begin;
-            $('.programParams #begin').val(PGMBegin);
+            $('.PGMParams #begin').val(PGMBegin);
         }
     });
 }
@@ -197,7 +197,7 @@ function setPGMEnd(PGMEnd)
         if(end > PGMEnd)
         {
             PGMEnd = end;
-            $('.programParams #end').val(PGMEnd);
+            $('.PGMParams #end').val(PGMEnd);
         }
     });
 }
