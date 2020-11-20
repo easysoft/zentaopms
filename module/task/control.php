@@ -41,7 +41,7 @@ class task extends control
         $projects  = $this->project->getExecutionPairs($this->session->PRJ);
         $projectID = $this->project->saveState($projectID, $projects);
 
-        $this->project->getLimitedProject();
+        $this->project->getLimitedExecution();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
         if(strpos(",{$limitedProjects},", ",$projectID,") !== false)
         {
@@ -236,7 +236,7 @@ class task extends control
      */
     public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
     {
-        $this->project->getLimitedProject();
+        $this->project->getLimitedExecution();
         $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
         if(strpos(",{$limitedProjects},", ",$projectID,") !== false)
         {
