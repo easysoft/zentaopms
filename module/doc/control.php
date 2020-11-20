@@ -224,9 +224,9 @@ class doc extends control
             }
         }
 
-        $programID = $this->session->PRJ;
-        $products  = $this->product->getProductPairsByProject($programID, 'noclosed');
-        $projects  = $this->project->getExecutionPairs($programID, 'all', 'nocode');
+        $projectID = $this->session->PRJ;
+        $products  = $this->product->getProductPairsByProject($projectID, 'noclosed');
+        $projects  = $this->project->getExecutionPairs($projectID, 'all', 'nocode');
 
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products)) unset($libTypeList['product']);
