@@ -818,10 +818,27 @@ class programModel extends model
             $project->executions = $this->project->getExecutionStats($projectID, $status, 0, 0, $itemCounts, $orderBy);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
-            $project->parentName = $this->project->getProjectParentName($project->parent);
+            $project->parentName = $this->getPRJParentName($project->parent);
         }
 
         return $projects;
+    }
+
+    /**
+     * Gets the top-level project name.
+     *
+     * @access private
+     * @return void
+     */
+    public function getPRJParentName($parentID = 0)
+    {
+        if($parentID == 0) return '';
+
+        static $parent;
+        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
+        if($parent->parent) $this->getPRJParentName($parent->parent);
+
+        return $parent->name;
     }
 
     /**

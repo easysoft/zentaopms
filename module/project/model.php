@@ -383,7 +383,7 @@ class projectModel extends model
                 $member->hours   = $this->config->project->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addProjectMembers($this->session->PRJ, array($member));
+                $this->addExecutionMembers($this->session->PRJ, array($member));
             }
 
             /* Create doc lib. */
@@ -1066,6 +1066,147 @@ class projectModel extends model
     }
 
     /**
+     * Create the link from module,method,extra
+     *
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mix     $extra
+     * @access public
+     * @return void
+     */
+    public function getExecutionLink($module, $method, $extra)
+    {
+        $link = '';
+        if($module == 'task' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        {
+            $module = 'project';
+            $method = 'task';
+        }
+        if($module == 'build' and ($method == 'edit' || $method= 'view'))
+        {
+            $module = 'project';
+            $method = 'build';
+        }
+
+        if($module == 'project' and $method == 'create') return;
+        if($extra != '')
+        {
+            $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
+        }
+        elseif($module == 'project' && ($method == 'index' or $method == 'all'))
+        {
+            $link = helper::createLink($module, 'task', "projectID=%s");
+        }
+        else
+        {
+            $link = helper::createLink($module, $method, "projectID=%s");
+        }
+
+        if($module == 'doc') $link = helper::createLink('doc', 'objectLibs', "type=project&objectID=%s&from=project");
+        return $link;
+    }
+
+    /**
+     * Get branches of execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getExecutionBranches($executionID)
+    {
+        $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($executionID)
+            ->fetchPairs();
+        $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
+        foreach($productBranchPairs as $product => $branch)
+        {
+            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = join(',', array_keys($branches[$product]));
+        }
+
+        return $productBranchPairs;
+    }
+
+    /**
+     * Get executions tree data
+     * @param  int     $executionID
+     * @access public
+     * @return array
+     */
+    public function getExecutionTree($executionID)
+    {
+        $fullTrees = $this->loadModel('tree')->getTaskStructure($executionID, 0);
+        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $executionID));
+        foreach($fullTrees as $i => $tree)
+        {
+            $tree = (object)$tree;
+            if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
+            $fullTree = $this->fillTasksInTree($tree, $executionID);
+            if(empty($fullTree->children))
+            {
+                unset($fullTrees[$i]);
+            }
+            else
+            {
+                $fullTrees[$i] = $fullTree;
+            }
+        }
+        if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
+        return array_values($fullTrees);
+    }
+
+    /**
+     * Get related executions
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getRelatedExecutions($executionID)
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchAll('product');
+        // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
+        if(!$products) return array();
+        $products = array_keys($products);
+        return $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
+            ->on('t1.id = t2.project')
+            ->where('t2.product')->in($products)
+            ->andWhere('t1.id')->ne((int)$executionID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.id')
+            ->fetchPairs();
+    }
+
+    /**
+     * Get child executions.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function getChildExecutions($executionID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('parent')->eq((int)$executionID)->fetchPairs();
+    }
+
+    /**
+     * Check the privilege.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getLimitedExecution()
+    {
+        /* If is admin, return true. */
+        if($this->app->user->admin) return true;
+
+        /* Get all teams of all executions and group by executions, save it as static. */
+        $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('root asc')->fetchPairs('root', 'root');
+        $_SESSION['limitedProjects'] = join(',', $executions);
+    }
+
+    /**
      * Get projects lists grouped by product.
      *
      * @access public
@@ -1376,16 +1517,16 @@ class projectModel extends model
     }
 
     /**
-     * Get projects to import
+     * Get executions to import
      *
-     * @param  array  $projectIds
+     * @param  array  $executionIds
      * @access public
      * @return array
      */
-    public function getProjectsToImport($projectIds)
+    public function getExecutionsToImport($executionIds)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('id')->in($projectIds)
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in($executionIds)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
@@ -1393,7 +1534,7 @@ class projectModel extends model
 
         $pairs = array();
         $now   = date('Y-m-d');
-        foreach($projects as $id => $project) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
+        foreach($executions as $id => $execution) $pairs[$id] = ucfirst(substr($execution->code, 0, 1)) . ':' . $execution->name;
         return $pairs;
     }
 
@@ -1446,29 +1587,6 @@ class projectModel extends model
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
-    }
-
-    /**
-     * Get related projects
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getRelatedProjects($projectID)
-    {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchAll('product');
-        // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
-        if(!$products) return array();
-        $products = array_keys($products);
-        return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
-            ->on('t1.id = t2.project')
-            ->where('t2.product')->in($products)
-            ->andWhere('t1.id')->ne((int)$projectID)
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.id')
-            ->fetchPairs();
     }
 
     /**
@@ -1740,18 +1858,6 @@ class projectModel extends model
         }
 
         return $mails;
-    }
-
-    /**
-     * Get child projects.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function getChildProjects($projectID)
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)->where('parent')->eq((int)$projectID)->fetchPairs();
     }
 
     /**
@@ -2069,23 +2175,23 @@ class projectModel extends model
         /* Add iteration or phase team members to the project team. */
         if($projectType == 'stage' || $projectType == 'sprint')
         {
-            $this->addProjectMembers($project->project, $projectMember);
+            $this->addExecutionMembers($project->project, $projectMember);
             if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);
         }
     }
 
     /**
-     * Add iteration or phase team members to the project team.
+     * Add iteration or phase team members to the execution team.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  array  $members
      * @access public
      * @return void
      */
-    public function  addProjectMembers($projectID = 0, $members = array())
+    public function  addExecutionMembers($executionID = 0, $members = array())
     {
-        $projectType = 'project';
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
+        $executionType = 'project';
+        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
 
         $accounts = array();
         foreach($members as $account => $member)
@@ -2093,8 +2199,8 @@ class projectModel extends model
             if(isset($oldJoin[$member->account])) continue;
 
             $accounts[]   = $member->account;
-            $member->root = $projectID;
-            $member->type = $projectType;
+            $member->root = $executionID;
+            $member->type = $executionType;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
@@ -2104,8 +2210,8 @@ class projectModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->loadModel('user')->updateUserView($executionID, $executionType, $changedAccounts);
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($executionID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 
@@ -2480,47 +2586,6 @@ class projectModel extends model
     }
 
     /**
-     * Create the link from module,method,extra
-     *
-     * @param  string  $module
-     * @param  string  $method
-     * @param  mix     $extra
-     * @access public
-     * @return void
-     */
-    public function getProjectLink($module, $method, $extra)
-    {
-        $link = '';
-        if($module == 'task' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
-        {
-            $module = 'project';
-            $method = 'task';
-        }
-        if($module == 'build' and ($method == 'edit' || $method= 'view'))
-        {
-            $module = 'project';
-            $method = 'build';
-        }
-
-        if($module == 'project' and $method == 'create') return;
-        if($extra != '')
-        {
-            $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
-        }
-        elseif($module == 'project' && ($method == 'index' or $method == 'all'))
-        {
-            $link = helper::createLink($module, 'task', "projectID=%s");
-        }
-        else
-        {
-            $link = helper::createLink($module, $method, "projectID=%s");
-        }
-
-        if($module == 'doc') $link = helper::createLink('doc', 'objectLibs', "type=project&objectID=%s&from=project");
-        return $link;
-    }
-
-    /**
      * Get no weekend date
      *
      * @param  string     $begin
@@ -2574,23 +2639,6 @@ class projectModel extends model
     }
 
     /**
-     * Check the privilege.
-     *
-     * @param  object    $project
-     * @access public
-     * @return bool
-     */
-    public function getLimitedProject()
-    {
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-
-        /* Get all teams of all projects and group by projects, save it as static. */
-        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('root asc')->fetchPairs('root', 'root');
-        $_SESSION['limitedProjects'] = join(',', $projects);
-    }
-
-    /**
      * Fix order.
      *
      * @access public
@@ -2608,27 +2656,6 @@ class projectModel extends model
             if($order == $newOrder) continue;
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
         }
-    }
-
-    /**
-     * Get branches of project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getProjectBranches($projectID)
-    {
-        $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->eq($projectID)
-            ->fetchPairs();
-        $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
-        foreach($productBranchPairs as $product => $branch)
-        {
-            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = join(',', array_keys($branches[$product]));
-        }
-
-        return $productBranchPairs;
     }
 
     /**
@@ -3024,23 +3051,6 @@ class projectModel extends model
     }
 
     /**
-     * Gets the top-level project name.
-     *
-     * @access private
-     * @return void
-     */
-    public function getProjectParentName($parentID = 0)
-    {
-        if($parentID == 0) return '';
-
-        static $parent;
-        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
-        if($parent->parent) $this->getProjectParentName($parent->parent);
-
-        return $parent->name;
-    }
-
-    /**
      * Fill tasks in tree.
      * @param  object $tree
      * @param  int    $projectID
@@ -3233,34 +3243,6 @@ class projectModel extends model
         }
 
         return $taskItems;
-    }
-
-    /**
-     * Get projects tree data
-     * @param  int     $projectID
-     * @access public
-     * @return array
-     */
-    public function getProjectTree($projectID)
-    {
-        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0);
-        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
-        foreach($fullTrees as $i => $tree)
-        {
-            $tree = (object)$tree;
-            if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
-            $fullTree = $this->fillTasksInTree($tree, $projectID);
-            if(empty($fullTree->children))
-            {
-                unset($fullTrees[$i]);
-            }
-            else
-            {
-                $fullTrees[$i] = $fullTree;
-            }
-        }
-        if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
-        return array_values($fullTrees);
     }
 
     /**

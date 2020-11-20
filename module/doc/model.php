@@ -144,7 +144,7 @@ class docModel extends model
         {
             $idList = array();
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getExecutionsByProject($projectID);
+            if($type == 'project') $idList = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
@@ -159,7 +159,7 @@ class docModel extends model
         {
             /* If extra have unclosedProject then ignore unclosed project libs. */
             $status          = (strpos($extra, 'unclosedProject') !== false) ? 'undone' : 'all';
-            $executionIdList = $this->loadModel('project')->getExecutionIdList($projectID, $status);
+            $executionPairs  = $this->loadModel('project')->getExecutionIdList($projectID, $status);
             $productIdList   = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -167,7 +167,7 @@ class docModel extends model
                 ->andWhere()
                 ->markLeft(1)
                 ->where('`type`')->eq('custom')
-                ->orWhere('project')->in($executionIdList)
+                ->orWhere('project')->in($executionPairs)
                 ->orWhere('product')->in($productIdList)
                 ->markRight(1)
                 ->orderBy('id_desc')
@@ -184,7 +184,7 @@ class docModel extends model
         if(strpos($extra, 'withObject') !== false)
         {
             $products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
+            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'noclosed');
         }
 
         $libPairs = array();
@@ -767,7 +767,7 @@ class docModel extends model
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'nocode') + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'noclosed') + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
@@ -1108,7 +1108,7 @@ class docModel extends model
             $idList    = array();
             $projectID = $this->session->PRJ;
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getExecutionsByProject($projectID);
+            if($type == 'project') $idList = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
@@ -1480,11 +1480,11 @@ class docModel extends model
     public function getLibIdListByProject($projectID = 0)
     {
         $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
-        $projects = $this->loadModel('project')->getExecutionsByProject($projectID);
+        $projects = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
 
         $projectLibs = array();
         $productLibs = array();
-        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in($projects)->fetchPairs();
+        if($projects) $projectLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('project')->in(array_keys($projects))->fetchPairs();
         if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
         $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
 

@@ -302,11 +302,11 @@ class block extends control
 
         $data = $this->block->getWelcomeBlockData();
 
-        $this->view->tasks     = $data['tasks'];
-        $this->view->doneTasks = $data['doneTasks'];
-        $this->view->bugs      = $data['bugs'];
-        $this->view->stories   = $data['stories'];
-        $this->view->projects  = $data['projects'];
+        $this->view->tasks      = $data['tasks'];
+        $this->view->doneTasks  = $data['doneTasks'];
+        $this->view->bugs       = $data['bugs'];
+        $this->view->stories    = $data['stories'];
+        $this->view->executions = $data['executions'];
 
         $this->view->delay['task'] = $data['delayTask'];
         $this->view->delay['bug']  = $data['delayBug'];

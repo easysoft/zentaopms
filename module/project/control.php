@@ -79,7 +79,7 @@ class project extends control
         $projectID     = $this->project->saveState($projectID, $this->projects);
         $project       = $this->project->getById($projectID);
         $products      = $this->project->getProducts($projectID);
-        $childProjects = $this->project->getChildProjects($projectID);
+        $childProjects = $this->project->getChildExecutions($projectID);
         $teamMembers   = $this->project->getTeamMembers($projectID);
         $actions       = $this->loadModel('action')->getList('project', $projectID);
 
@@ -117,7 +117,7 @@ class project extends control
 
         if(common::hasPriv('project', 'create')) $this->lang->TRActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
-        $this->project->getLimitedProject();
+        $this->project->getLimitedExecution();
 
         /* Set browse type. */
         $browseType = strtolower($status);
@@ -443,9 +443,9 @@ class project extends control
 
         $project   = $this->commonAction($toProject);
         $toProject = $project->id;
-        $branches  = $this->project->getProjectBranches($toProject);
+        $branches  = $this->project->getExecutionBranches($toProject);
         $tasks     = $this->project->getTasks2Imported($toProject, $branches);
-        $projects  = $this->project->getProjectsToImport(array_keys($tasks));
+        $projects  = $this->project->getExecutionsToImport(array_keys($tasks));
         unset($projects[$toProject]);
         unset($tasks[$toProject]);
 
@@ -644,7 +644,7 @@ class project extends control
         $this->loadModel('user');
         $this->app->loadLang('testcase');
 
-        $this->project->getLimitedProject();
+        $this->project->getLimitedExecution();
 
         $type = strtolower($type);
         setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -1659,7 +1659,7 @@ class project extends control
     {
         $this->project->setMenu($this->projects, $projectID);
         $project = $this->loadModel('project')->getById($projectID);
-        $tree    = $this->project->getProjectTree($projectID);
+        $tree    = $this->project->getExecutionTree($projectID);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -2318,12 +2318,12 @@ class project extends control
     {
         $project = $this->project->getByID($projectID);
 
-        $this->view->link      = $this->project->getProjectLink($module, $method, $extra);
+        $this->view->link      = $this->project->getExecutionLink($module, $method, $extra);
         $this->view->projectID = $projectID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->project->getProjectsByProgram($project->project);
+        $this->view->projects  = $this->project->getExecutionsByProject($project->project);
         $this->display();
     }
 
