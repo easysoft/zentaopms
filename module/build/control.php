@@ -192,7 +192,7 @@ class build extends control
         $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
-        $this->loadModel('project')->setMenu($this->projec->getExecutionPairs($this->session->PRJ), $build->project, $buildID);
+        $this->loadModel('project')->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project, $buildID);
         $projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
