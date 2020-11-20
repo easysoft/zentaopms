@@ -331,8 +331,6 @@
             </tr>
             <?php endif;?>
             <tr>
-            </tr>
-            <tr>
               <th><?php echo $lang->story->field;?></th>
               <td colspan='2'><?php echo html::checkbox('fields', $lang->story->convertToTask->fieldList, '', 'checked');?></td>
             </tr>
