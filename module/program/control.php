@@ -1369,7 +1369,7 @@ class program extends control
     public function PRJManageProducts($projectID, $programID)
     {
         $this->lang->navGroup->program = 'project';
-        $browseProjectLink = inLink('PRJBrowse', "programID=$programID");
+        $browseProjectLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
 
         if(!empty($_POST))
         {
@@ -1395,10 +1395,6 @@ class program extends control
         $this->loadModel('product');
         $project = $this->project->getById($projectID);
 
-        /* Title and position. */
-        $title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $position[] = html::a($browseProjectLink, $project->name);
-        $position[] = $this->lang->project->manageProducts;
 
         $allProducts    = $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
         $linkedProducts = $this->project->getProducts($project->id);
@@ -1412,8 +1408,8 @@ class program extends control
         }
 
         /* Assign. */
-        $this->view->title          = $title;
-        $this->view->position       = $position;
+        $this->view->title          = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->position[]     = $this->lang->project->manageProducts;
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);

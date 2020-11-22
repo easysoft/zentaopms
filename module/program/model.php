@@ -1361,9 +1361,9 @@ class programModel extends model
 
         if(!dao::isError())
         {
-            if($project->parent != $oldProject->parent) $this->loadModel('project')->updateProducts($projectID);
-
+            $this->loadModel('project')->updateProducts($projectID);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
