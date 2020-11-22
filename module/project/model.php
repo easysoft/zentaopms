@@ -1412,11 +1412,7 @@ class projectModel extends model
     }
 
     /**
-<<<<<<< Updated upstream
      * Get ordered executions.
-=======
-     * Get ordered execution.
->>>>>>> Stashed changes
      *
      * @param  int    $projectID
      * @param  string $status

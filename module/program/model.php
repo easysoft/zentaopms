@@ -17,17 +17,33 @@ class programModel extends model
     }
 
     /**
-     * Get the product associated with the project.
+     * Get the product associated with the program.
      *
-     * @param  int  $programID
+     * @param  int     $programID
+     * @param  int     $mode       all|assign
+     * @param  string  $status     all|noclosed
      * @access public
      * @return array
      */
-    public function getPGMProduct($programID = 0)
+    public function getPGMProductPairs($programID = 0, $mode = 'assign', $status = 'all')
     {
-        if(!$programID) return array();
-        $programID = $this->getTopProgramID($programID);
-        return $this->loadModel('product')->getPairs('noclosed', $programID);
+        /* Get the top programID. */
+        if($programID)
+        {
+            $program   = $this->getPGMByID($programID);
+            $path      = explode(',', $program->path);
+            $path      = array_filter($path);
+            $programID = current($path);
+        }
+
+        /* When mode equals assign and programID equals 0, you can query the standalone product. */
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->fetchPairs('id', 'name');
+        return $products;
     }
 
     /**
@@ -1032,28 +1048,6 @@ class programModel extends model
             $stats[] = $project;
         }
         return $stats;
-    }
-
-    /**
-     * Get the top program which the project belongs to.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function getTopProgramID($projectID)
-    {
-        if(empty($projectID)) return 0;
-        $project = $this->getPRJByID($projectID);
-
-        if($project->parent == 0) return 0;
-
-        $programID = 0;
-        $path      = explode(',', $project->path);
-        $path      = array_filter($path);
-        $programID = current($path);
-
-        return $programID;
     }
 
     /**

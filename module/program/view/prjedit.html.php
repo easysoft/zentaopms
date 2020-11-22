@@ -15,7 +15,6 @@
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
-<?php js::set('parentID', $parentID);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
@@ -34,7 +33,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, $parentID ? $parentID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td><?php echo html::select('parent', $programList, $programID ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td></td>
           <td></td>
         </tr>
@@ -68,7 +67,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-                <div class='col-sm-4  <?php if($parentID) echo 'required';?>'>
+                <div class='col-sm-4  <?php if($programID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
@@ -92,7 +91,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
-          <td><?php echo html::select('PM', $pmUsers, $project->PM, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJBudget;?></th>

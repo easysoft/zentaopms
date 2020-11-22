@@ -18,7 +18,7 @@
 </div>
 <div id='mainContent'>
   <div class='cell'>
-    <form id='productsBox' method='post'>
+    <form class='main-form form-ajax' method='post' id='productsBox' enctype='multipart/form-data'>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->linkedProducts;?></div>
         <div class='detail-content row'>
