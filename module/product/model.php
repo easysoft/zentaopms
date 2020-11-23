@@ -36,13 +36,6 @@ class productModel extends model
             $this->lang->modulePageNav = $this->getModuleNav($products, '', $product, $extra, $branch, $module, $moduleType);
         }
 
-        $pageActions = '';
-        if($this->app->moduleName == 'programplan' and isset($product->program))
-        {
-            $pageActions .= html::a(helper::createLink('programplan', 'create', "program=$product->program&productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->programplan->create}", '', "class='btn btn-primary'");
-        }
-
-        $this->lang->TRActions = $pageActions;
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = array();
