@@ -445,35 +445,44 @@ class installModel extends model
      */
     public function createTable($version)
     {
-        $this->dbh->exec("USE {$this->config->db->name}");
-
-        $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
-        $tables = explode(';', file_get_contents($dbFile));
-        
-        foreach($tables as $table)
+        /* Add exception handling to ensure that all SQL is executed successfully. */
+        try
         {
-            $table = trim($table);
-            if(empty($table)) continue;
+            $this->dbh->exec("USE {$this->config->db->name}");
 
-            if(strpos($table, 'CREATE') !== false and $version <= 4.1)
+            $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+            $tables = explode(';', file_get_contents($dbFile));
+
+            foreach($tables as $table)
             {
-                $table = str_replace('DEFAULT CHARSET=utf8', '', $table);
+                $table = trim($table);
+                if(empty($table)) continue;
+
+                if(strpos($table, 'CREATE') !== false and $version <= 4.1)
+                {
+                    $table = str_replace('DEFAULT CHARSET=utf8', '', $table);
+                }
+                elseif(strpos($table, 'DROP') !== false and $this->post->clearDB != false)
+                {
+                    $table = str_replace('--', '', $table);
+                }
+
+                $table = str_replace('__DELIMITER__', ';', $table);
+                $table = str_replace('__TABLE__', $this->config->db->name, $table);
+
+                /* Skip sql that is note. */
+                if(strpos($table, '--') === 0) continue;
+
+                $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+                $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
+                $table = str_replace('zt_', $this->config->db->prefix, $table);
+                if(!$this->dbh->query($table)) return false;
             }
-            elseif(strpos($table, 'DROP') !== false and $this->post->clearDB != false)
-            {
-                $table = str_replace('--', '', $table);
-            }
-
-            $table = str_replace('__DELIMITER__', ';', $table);
-            $table = str_replace('__TABLE__', $this->config->db->name, $table);
-
-            /* Skip sql that is note. */
-            if(strpos($table, '--') === 0) continue;
-
-            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
-            $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
-            if(!$this->dbh->query($table)) return false;
+        }
+        catch (PDOException $exception)
+        {
+            echo $exception->getMessage();
+            die();
         }
         return true;
     }
