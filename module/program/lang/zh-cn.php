@@ -23,7 +23,7 @@ $lang->program->PRJManagePriv        = '项目维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->export               = '导出';
 $lang->program->PRJManageGroupMember = '维护分组用户';
-$lang->program->PRJModuleSetting     = '项目集设置';
+$lang->program->PRJModuleSetting     = '项目设置';
 $lang->program->PRJModuleOpen        = '显示项目集名';
 $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '项目排序';
@@ -40,6 +40,7 @@ $lang->program->PRJStandalone        = '独立项目';
 
 /* Fields. */
 $lang->program->common             = '项目集';
+$lang->program->project            = '项目';
 $lang->program->stage              = '阶段';
 $lang->program->PRJName            = '项目名称';
 $lang->program->PRJModel           = '管理类型';

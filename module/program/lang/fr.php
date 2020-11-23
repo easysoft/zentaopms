@@ -23,7 +23,7 @@ $lang->program->PRJManagePriv        = 'Manage Privilege';
 $lang->program->PRJManageMembers     = 'Manage Team';
 $lang->program->export               = 'Export';
 $lang->program->PRJManageGroupMember = 'Manage Group';
-$lang->program->PRJModuleSetting     = 'Program Settings';
+$lang->program->PRJModuleSetting     = 'Project Settings';
 $lang->program->PRJModuleOpen        = 'Program Name';
 $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
@@ -39,7 +39,8 @@ $lang->program->PRJSource            = 'Project source：';
 $lang->program->PRJStandalone        = 'Standalone Projects';
 
 /* Fields. */
-$lang->program->common             = 'Project';
+$lang->program->common             = 'Program';
+$lang->program->project            = 'Project';
 $lang->program->stage              = 'Stage';
 $lang->program->PRJName            = 'Name';
 $lang->program->PRJModel           = 'Template';
