@@ -87,7 +87,7 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期';
 
-$lang->program->productNotEmpty = '关联产品不能为空！';
+$lang->program->productNotEmpty = '请关联产品或创建产品。';
 
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';
