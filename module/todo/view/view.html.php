@@ -141,7 +141,7 @@
           <table class='table table-data'>
             <tr>
               <th class='thWidth'><?php echo $lang->todo->beginAndEnd?></th>
-              <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
+              <td class='w-160px'><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>
             <tr>
               <th class='thWidth text-top'><?php echo $lang->todo->cycleConfig?></th>
@@ -149,7 +149,15 @@
                 <?php
                 if($todo->config->type == 'day')
                 {
-                    echo $lang->todo->every . $todo->config->day . $lang->day;
+                    if(isset($todo->config->day)) echo $lang->todo->every . $todo->config->day . $lang->day;
+
+                    if(isset($todo->config->specifiedDate))
+                    {
+                        $specifiedNotes = $lang->todo->specify;
+                        if(isset($todo->config->cycleYear)) $specifiedNotes .= $lang->todo->everyYear;
+                        $specifiedNotes .= zget($lang->datepicker->monthNames, $todo->config->specify->month) . $todo->config->specify->day . $lang->todo->day;
+                        echo $specifiedNotes;
+                    }
                 }
                 elseif($todo->config->type == 'week')
                 {

@@ -47,7 +47,9 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
+    <?php if(common::canModify('product', $product)): ?>
     <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>
@@ -114,8 +116,11 @@
         <?php endif;?>
       <?php endif;?>
       -->
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php
+      $canBeChanged = common::canBeChanged('story', $story);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");
+      ?>
       <?php if(!empty($story->children)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->story->children;?></div>
@@ -181,14 +186,14 @@
             $divideLang = $lang->story->subdivide;
             $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
             $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
+            if(common::hasPriv('story', 'batchCreate', $story)) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
         }
 
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
-        if(!isonlybody() and $story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group dropup'>";
@@ -196,10 +201,10 @@
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
 
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+            if(isonlybody()) $misc = '';
             $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
 
-            $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
             $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
 

@@ -101,15 +101,16 @@ class testreport extends control
         $this->view->position[] = html::a(inlink('browse', "objectID=$objectID&objectType=$objectType&extra=$extra"), $title);
         $this->view->position[] = $this->lang->testreport->browse;
 
-        $this->view->reports    = $reports;
-        $this->view->orderBy    = $orderBy;
-        $this->view->objectID   = $objectID;
-        $this->view->objectType = $objectType;
-        $this->view->extra      = $extra;
-        $this->view->pager      = $pager;
-        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->tasks      = $tasks;
-        $this->view->projects   = $projects;
+        $this->view->reports      = $reports;
+        $this->view->orderBy      = $orderBy;
+        $this->view->objectID     = $objectID;
+        $this->view->objectType   = $objectType;
+        $this->view->extra        = $extra;
+        $this->view->pager        = $pager;
+        $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->tasks        = $tasks;
+        $this->view->projects     = $projects;
+        $this->view->canBeChanged = common::canModify($objectType, $object); // Determines whether an object is editable.
         $this->display();
     }
 

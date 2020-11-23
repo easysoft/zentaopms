@@ -194,7 +194,7 @@ EOD;
 $lang->install->zdoo = new stdclass();
 $lang->install->zdoo->name = 'ZDOO';
 $lang->install->zdoo->logo = 'images/main/zdoo.ico';
-$lang->install->zdoo->url  = 'https://www.zdoo.com';
+$lang->install->zdoo->url  = 'https://www.zdoo.co/';
 $lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>

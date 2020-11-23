@@ -420,6 +420,7 @@ $lang->resource->story->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage   = 'batchChangeStage';
 $lang->resource->story->batchAssignTo      = 'batchAssignTo';
 $lang->resource->story->batchChangeModule  = 'batchChangeModule';
+$lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'track';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 
@@ -447,8 +448,9 @@ $lang->story->methodOrder[105] = 'report';
 $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
-$lang->story->methodOrder[125] = 'track';
-$lang->story->methodOrder[130] = 'processStoryChange';
+$lang->story->methodOrder[125] = 'batchToTask';
+$lang->story->methodOrder[130] = 'track';
+$lang->story->methodOrder[135] = 'processStoryChange';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -1099,6 +1101,8 @@ $lang->holiday->methodOrder[20] = 'delete';
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';
 $lang->resource->custom->set                = 'set';
+$lang->resource->custom->project            = 'project';
+$lang->resource->custom->product            = 'product';
 $lang->resource->custom->restore            = 'restore';
 $lang->resource->custom->flow               = 'flow';
 $lang->resource->custom->working            = 'working';
@@ -1112,16 +1116,18 @@ $lang->resource->custom->setscrum           = 'setscrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
-$lang->custom->methodOrder[15] = 'restore';
-$lang->custom->methodOrder[20] = 'flow';
-$lang->custom->methodOrder[25] = 'working';
-$lang->custom->methodOrder[30] = 'setPublic';
-$lang->custom->methodOrder[35] = 'timezone';
-$lang->custom->methodOrder[40] = 'estimate';
-$lang->custom->methodOrder[45] = 'configureWaterfall';
-$lang->custom->methodOrder[50] = 'configureScrum';
-$lang->custom->methodOrder[55] = 'setWaterfall';
-$lang->custom->methodOrder[60] = 'setscrum';
+$lang->custom->methodOrder[15] = 'project';
+$lang->custom->methodOrder[20] = 'product';
+$lang->custom->methodOrder[25] = 'restore';
+$lang->custom->methodOrder[30] = 'flow';
+$lang->custom->methodOrder[35] = 'working';
+$lang->custom->methodOrder[40] = 'setPublic';
+$lang->custom->methodOrder[45] = 'timezone';
+$lang->custom->methodOrder[50] = 'estimate';
+$lang->custom->methodOrder[55] = 'configureWaterfall';
+$lang->custom->methodOrder[60] = 'configureScrum';
+$lang->custom->methodOrder[65] = 'setWaterfall';
+$lang->custom->methodOrder[70] = 'setscrum';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1810,3 +1816,105 @@ $lang->changelog['12.3'][] = 'testtask-unitCases';
 $lang->changelog['12.3'][] = 'testtask-importUnitResult';
 $lang->changelog['12.3'][] = 'job-view';
 $lang->changelog['12.3'][] = 'ci-commitResult';
+
+$lang->changelog['12.5'][] = 'story-batchToTask';
+$lang->changelog['12.5'][] = 'custom-product';
+$lang->changelog['12.5'][] = 'custom-project';
+
+global $config;
+if($config->global->flow != 'full')
+{
+    unset($lang->moduleOrder[10]);
+    unset($lang->resource->qa);
+    unset($lang->moduleOrder[50]);
+    unset($lang->resource->report);
+    unset($lang->moduleOrder[90]);
+}
+
+if($config->global->flow == 'onlyStory' || $config->global->flow == 'onlyTask')
+{
+    unset($lang->resource->build);
+    unset($lang->moduleOrder[45]);
+    unset($lang->resource->bug);
+    unset($lang->moduleOrder[55]);
+    unset($lang->resource->testcase);
+    unset($lang->moduleOrder[60]);
+    unset($lang->resource->testtask);
+    unset($lang->moduleOrder[65]);
+
+    unset($lang->resource->my->bug);
+    unset($lang->resource->my->testTask);
+    unset($lang->resource->my->testCase);
+}
+
+if($config->global->flow == 'onlyStory' || $config->global->flow == 'onlyTest')
+{
+    unset($lang->resource->project);
+    unset($lang->moduleOrder[35]);
+    unset($lang->resource->task);
+    unset($lang->moduleOrder[40]);
+
+    unset($lang->resource->my->task);
+    unset($lang->resource->my->project);
+
+    unset($lang->resource->product->project);
+}
+
+if($config->global->flow == 'onlyTask' || $config->global->flow == 'onlyTest')
+{
+    unset($lang->resource->story);
+    unset($lang->moduleOrder[20]);
+    unset($lang->resource->productplan);
+    unset($lang->moduleOrder[25]);
+    unset($lang->resource->release);
+    unset($lang->moduleOrder[30]);
+
+    unset($lang->resource->my->story);
+}
+
+if($config->global->flow == 'onlyStory')
+{
+    unset($lang->resource->svn);
+    unset($lang->moduleOrder[150]);
+    unset($lang->resource->git);
+    unset($lang->moduleOrder[155]);
+
+    unset($lang->resource->story->tasks);
+}
+
+if($config->global->flow == 'onlyTask')
+{
+    unset($lang->resource->product);
+    unset($lang->moduleOrder[15]);
+    unset($lang->resource->bug);
+    unset($lang->moduleOrder[55]);
+
+    unset($lang->resource->project->importbug);
+    unset($lang->resource->project->story);
+    unset($lang->resource->project->bug);
+    unset($lang->resource->project->linkStory);
+    unset($lang->resource->project->unlinkStory);
+    unset($lang->resource->project->ajaxGetProducts);
+}
+
+if($config->global->flow == 'onlyTest')
+{
+    unset($lang->resource->product->browse);
+    unset($lang->resource->product->roadmap);
+    unset($lang->resource->product->dynamic);
+    unset($lang->resource->product->ajaxGetProjects);
+    unset($lang->resource->product->ajaxGetPlans);
+
+    unset($lang->resource->build->ajaxGetProjectBuilds);
+    unset($lang->build->methodOrder[30]);
+
+    unset($lang->resource->bug->confirmStoryChange);
+    unset($lang->bug->methodOrder[60]);
+
+    unset($lang->resource->testcase->confirmStoryChange);
+    unset($lang->testcase->methodOrder[40]);
+
+    $lang->resource->product->build = 'build';
+    $lang->product->methodOrder[5]  = 'build';
+}
+>>>>>>> 12.x

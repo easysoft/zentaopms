@@ -54,8 +54,12 @@
         <?php
         echo "{$lang->extension->version}:    <i>{$extension->version}</i> ";
         echo "{$lang->extension->author}:     <i>{$extension->author}</i> ";
-        $expireDate = $this->extension->getExpireDate($extension);
-        if(!empty($expireDate)) echo "{$lang->extension->expireDate}:     <i>{$expireDate}</i>";
+        $expiredDate = $this->extension->getExpireDate($extension);
+        if(!empty($expiredDate))
+        {
+            echo $lang->extension->expiredDate . ': ';
+            echo $expiredDate != 'life' ? "<i>{$expiredDate}</i>" : "<i>{$lang->extension->life}</i>";
+        }
         ?>
       </div>
     </div>

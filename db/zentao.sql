@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   KEY `date` (`date`),
   KEY `actor` (`actor`),
   KEY `project` (`project`),
+  KEY `action` (`action`),
   KEY `objectID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_block`;
@@ -120,6 +121,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   KEY `plan` (`plan`),
   KEY `story` (`story`),
   KEY `case` (`case`),
+  KEY `toStory` (`toStory`),
+  KEY `result` (`result`),
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_budget`;
@@ -217,6 +220,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `story` (`story`),
+  KEY `fromBug` (`fromBug`),
   KEY `module` (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_casestep`;
@@ -369,6 +373,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `addedDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `mailto` text,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL,
   `users` text NOT NULL,
@@ -584,6 +589,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `svnDir` varchar(255) NOT NULL,
   `atDay` varchar(255) DEFAULT NULL,
   `atTime` varchar(10) DEFAULT NULL,
+  `customParam` text NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -617,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
-  `id` mediumint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(50) NOT NULL,
   `objectID` mediumint unsigned NOT NULL,
   `action` mediumint NOT NULL,
@@ -629,7 +635,9 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `createdDate` datetime NOT NULL,
   `sendTime` datetime NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text NOT NULL
+  `failReason` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `objectType_toList_status` (`objectType`,`toList`,`status`)
 ) ENGINE='MyISAM' COLLATE 'utf8_general_ci';
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
@@ -1022,7 +1030,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `assignedTo` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `estStarted` date NOT NULL,
-  `realStarted` date NOT NULL,
+  `realStarted` datetime NOT NULL,
   `finishedBy` varchar(30) NOT NULL,
   `finishedDate` datetime NOT NULL,
   `finishedList` text NOT NULL,
@@ -1040,6 +1048,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
    PRIMARY KEY (`id`),
   KEY `project` (`project`),
   KEY `story` (`story`),
+  KEY `parent` (`parent`),
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskspec`;
@@ -1213,6 +1222,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `type` char(30) NOT NULL default 'inside',
   `dept` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
+  `type` char(30) NOT NULL DEFAULT 'inside',
   `password` char(32) NOT NULL default '',
   `role` char(10) NOT NULL default '',
   `realname` varchar(100) NOT NULL default '',
@@ -1249,7 +1259,8 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   UNIQUE KEY `account` (`account`),
   KEY `dept` (`dept`),
   KEY `email` (`email`),
-  KEY `commiter` (`commiter`)
+  KEY `commiter` (`commiter`),
+  KEY `deleted` (`deleted`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usercontact`;
 CREATE TABLE IF NOT EXISTS `zt_usercontact` (
@@ -1544,6 +1555,8 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'custom', 'working'),
 (1, 'custom', 'index'),
 (1, 'custom', 'restore'),
+(1, 'custom', 'project'),
+(1, 'custom', 'product'),
 (1, 'custom', 'set'),
 (1, 'dept', 'browse'),
 (1, 'dept', 'delete'),
@@ -1754,6 +1767,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'story', 'change'),
 (1, 'story', 'close'),
 (1, 'story', 'create'),
+(1, 'story', 'batchToTask'),
 (1, 'story', 'delete'),
 (1, 'story', 'edit'),
 (1, 'story', 'assignTo'),
@@ -2027,6 +2041,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2, 'story', 'bugs'),
 (2, 'story', 'cases'),
 (2, 'story', 'view'),
+(2, 'story', 'batchToTask'),
 (2, 'svn', 'apiSync'),
 (2, 'svn', 'cat'),
 (2, 'svn', 'diff'),
@@ -2222,6 +2237,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (3, 'story', 'cases'),
 (3, 'story', 'view'),
 (3, 'story', 'zeroCase'),
+(3, 'story', 'batchToTask'),
 (3, 'svn', 'apiSync'),
 (3, 'svn', 'cat'),
 (3, 'svn', 'diff'),
@@ -2509,6 +2525,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4, 'story', 'cases'),
 (4, 'story', 'view'),
 (4, 'story', 'zeroCase'),
+(4, 'story', 'batchToTask'),
 (4, 'svn', 'apiSync'),
 (4, 'svn', 'cat'),
 (4, 'svn', 'diff'),
@@ -3045,6 +3062,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6, 'story', 'cases'),
 (6, 'story', 'view'),
 (6, 'story', 'zeroCase'),
+(6, 'story', 'batchToTask'),
 (6, 'svn', 'apiSync'),
 (6, 'svn', 'cat'),
 (6, 'svn', 'diff'),
@@ -3522,6 +3540,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8, 'story', 'cases'),
 (8, 'story', 'view'),
 (8, 'story', 'zeroCase'),
+(8, 'story', 'batchToTask'),
 (8, 'svn', 'apiSync'),
 (8, 'svn', 'cat'),
 (8, 'svn', 'diff'),
@@ -4056,3 +4075,5 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES
 ('system','custom','','hourPoint','1'),
 ('system','custom','','URAndSR','1'),
 ('system','custom','common','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');

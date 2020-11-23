@@ -620,7 +620,12 @@ class upgradeModel extends model
             $this->appendExec('12_4_3');
         case '12_4_4':
             $this->saveLogs('Execute 12_4_4');
+            $this->execSQL($this->getUpgradeFile('12.4.4'));
+            $this->adjustPriv12_5();
             $this->appendExec('12_4_4');
+        case '12_5':
+            $this->saveLogs('Execute 12_5');
+            $this->appendExec('12_5');
         case '20_0_alpha':
             $this->saveLogs('Execute 20_0_alpha');
             $this->execSQL($this->getUpgradeFile('20.0.alpha'));
@@ -806,7 +811,8 @@ class upgradeModel extends model
             case '12_4_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.1'));
             case '12_4_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.2'));
             case '12_4_3':
-            case '12_4_4':
+            case '12_4_4': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.4'));
+            case '12_5':
             case '20_0_alpha': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -3901,6 +3907,45 @@ class upgradeModel extends model
         {
             $fromCaseVersion = zget($fromCaseVersions, $fromCaseID, 1);
             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($fromCaseVersion)->where('id')->eq($caseID)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust priv 12.5. 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv12_5()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('custom')->andWhere('method')->eq('set')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'custom';
+            $groupPriv->method = 'product';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+
+            $groupPriv->method = 'project';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('task')->andWhere('method')->eq('create')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'story';
+            $groupPriv->method = 'batchToTask';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
             $this->saveLogs($this->dao->get());
         }
 

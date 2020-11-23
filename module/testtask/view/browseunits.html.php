@@ -23,9 +23,11 @@
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
   </div>
+  <?php if(common::canModify('product', $product)):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent' class='main-table' data-ride='table'>
   <?php if(empty($tasks)):?>

@@ -22,7 +22,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&projectID=$project->id", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('project', $project)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -31,7 +31,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
-      <?php if(common::hasPriv('bug', 'create')):?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('bug', 'create')):?>
       <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -74,10 +74,14 @@
       ?>
       <tbody>
       <?php foreach($bugs as $bug):?>
+      <?php
+      $canBeChanged = common::canBeChanged('bug', $bug);
+      $arrtibute    = $canBeChanged ? '' : 'disabled';
+      ?>
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
@@ -97,12 +101,15 @@
         <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
         <td class='c-actions'>
           <?php
-          $params = "bugID=$bug->id";
-          common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-          common::printIcon('bug', 'resolve', $params, $bug, 'list', 'checked', '', 'iframe', true);
-          common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
-          common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
-          common::printIcon('bug', 'edit',   $params, $bug, 'list');
+          if($canBeChanged)
+          {
+              $params = "bugID=$bug->id";
+              common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
+              common::printIcon('bug', 'resolve', $params, $bug, 'list', 'checked', '', 'iframe', true);
+              common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
+              common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+              common::printIcon('bug', 'edit',   $params, $bug, 'list');
+          }
           ?>
         </td>
       </tr>

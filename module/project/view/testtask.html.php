@@ -28,8 +28,10 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::canModify('project', $project)):?>
     <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
     <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent">
@@ -37,7 +39,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
-      <?php if(common::hasPriv('testtask', 'create')):?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('testtask', 'create')):?>
       <?php echo html::a($this->createLink('testtask', 'create', "product=0&project=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -47,7 +49,7 @@
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <?php $canTestReport = common::hasPriv('testreport', 'browse');?>
+        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
         <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
@@ -96,14 +98,17 @@
           </td>
           <td class='c-actions'>
             <?php
-            common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-            common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-            common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-            common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-            if(common::hasPriv('testtask', 'delete', $task))
+            if($canBeChanged)
             {
-                $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+                common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+                common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+                common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
+                if(common::hasPriv('testtask', 'delete', $task))
+                {
+                    $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                }
             }
             ?>
           </td>

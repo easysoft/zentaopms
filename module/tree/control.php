@@ -43,6 +43,9 @@ class tree extends control
                 $this->view->branches = $branches;
             }
             $this->view->root = $product;
+
+            /* Determines whether an object is editable. */
+            $canBeChanged = common::canModify('product', $product);
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -200,6 +203,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
+        $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();
     }
 
@@ -215,13 +219,18 @@ class tree extends control
     public function browseTask($rootID, $productID = 0, $currentModuleID = 0)
     {
         $this->lang->navGroup->tree = 'project';
+
+        /* Get project. */
         $project = $this->loadModel('project')->getById($rootID);
         $this->view->root = $project;
 
+        /* Get all associated products. */
         $products = $this->project->getProducts($rootID);
         $this->view->products = $products;
 
         $projects = $this->project->getExecutionPairs($this->session->PRJ);
+
+        /* Set menu. */
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($projects, $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;
@@ -249,6 +258,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
+        $this->view->canBeChanged    = common::canModify('product', $product); // Determines whether an object is editable.
         $this->display();
     } 
 

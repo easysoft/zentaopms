@@ -22,7 +22,9 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
@@ -30,7 +32,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if(common::hasPriv('release', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('release', 'create')):?>
       <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -56,6 +58,7 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
+      <?php $canBeChanged = common::canBeChanged('release', $release);?>
       <tr>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
@@ -76,18 +79,21 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
-          if(common::hasPriv('release', 'linkBug')) echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");
-          if(common::hasPriv('release', 'changeStatus', $release))
+          if($canBeChanged)
           {
-              $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-              echo html::a($this->createLink('release', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
-          }
-          common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
-          if(common::hasPriv('release', 'delete', $release))
-          {
-              $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
+              if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
+              if(common::hasPriv('release', 'linkBug')) echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");
+              if(common::hasPriv('release', 'changeStatus', $release))
+              {
+                  $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+                  echo html::a($this->createLink('release', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
+              }
+              common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
+              if(common::hasPriv('release', 'delete', $release))
+              {
+                  $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
+              }
           }
           ?>
         </td>

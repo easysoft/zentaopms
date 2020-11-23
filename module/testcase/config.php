@@ -47,6 +47,7 @@ $config->testcase->search['fields']['branch']         = '';
 $config->testcase->search['fields']['stage']          = $lang->testcase->stage;
 $config->testcase->search['fields']['module']         = $lang->testcase->module;
 $config->testcase->search['fields']['pri']            = $lang->testcase->pri;
+$config->testcase->search['fields']['lib']            = $lang->testcase->lib;
 
 $config->testcase->search['fields']['lastRunner']     = $lang->testcase->lastRunner;
 $config->testcase->search['fields']['lastRunResult']  = $lang->testcase->lastRunResult;
@@ -66,6 +67,7 @@ $config->testcase->search['params']['status']       = array('operator' => '=',  
 $config->testcase->search['params']['product']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testcase->search['params']['branch']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
+$config->testcase->search['params']['lib']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 
 $config->testcase->search['params']['lastRunner']     = array('operator' => '=', 'control' => 'select', 'values' => 'users');
 $config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => array_diff($lang->testcase->resultList, array('n/a' => $lang->testcase->resultList['n/a'])));

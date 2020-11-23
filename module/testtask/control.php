@@ -91,6 +91,7 @@ class testtask extends control
         $this->view->branch      = $branch;
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -137,6 +138,7 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getByID($productID);
 
         $this->display();
     }
@@ -340,23 +342,30 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Set the browseType and moduleID. */
+        $browseType = strtolower($browseType);
+
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
+
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        /* Determines whether an object is editable. */
+        $canBeChanged = common::canBeChanged('testtask', $task);
 
         if($this->cookie->preTaskID != $taskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
             setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', false, true);
         }
+
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
         /* Set the browseType, moduleID and queryID. */
-        $browseType = strtolower($browseType);
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -384,6 +393,7 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testtask->statusList;
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
@@ -402,23 +412,24 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->productID      = $productID;
-        $this->view->productName    = $this->products[$productID];
-        $this->view->task           = $task;
-        $this->view->runs           = $runs;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst');
-        $this->view->assignedToList = $assignedToList;
-        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->orderBy        = $orderBy;
-        $this->view->taskID         = $taskID;
-        $this->view->moduleID       = $moduleID;
-        $this->view->moduleName     = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->treeClass      = $browseType == 'bymodule' ? '' : 'hidden';
-        $this->view->pager          = $pager;
-        $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
-        $this->view->setModule      = false;
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->task          = $task;
+        $this->view->runs          = $runs;
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|qafirst');
+        $this->view->assignedToList= $assignedToList;
+        $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->browseType    = $browseType;
+        $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
+        $this->view->taskID        = $taskID;
+        $this->view->moduleID      = $moduleID;
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->pager         = $pager;
+        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->setModule     = false;
+        $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
     }
@@ -493,6 +504,9 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
+        /* Determines whether an object is editable. */
+        $canBeChanged = common::canBeChanged('testtask', $task);
+
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
@@ -527,15 +541,16 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->productID   = $productID;
-        $this->view->task        = $task;
-        $this->view->taskID      = $taskID;
-        $this->view->browseType  = 'group';
-        $this->view->groupBy     = $groupBy;
-        $this->view->groupByList = $groupByList;
-        $this->view->cases       = $groupCases;
-        $this->view->account     = 'all';
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->productID    = $productID;
+        $this->view->task         = $task;
+        $this->view->taskID       = $taskID;
+        $this->view->browseType   = 'group';
+        $this->view->groupBy      = $groupBy;
+        $this->view->groupByList  = $groupByList;
+        $this->view->cases        = $groupCases;
+        $this->view->account      = 'all';
+        $this->view->canBeChanged = $canBeChanged;
         $this->display();
     }
 

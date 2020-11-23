@@ -28,9 +28,19 @@ class taskModel extends model
             return false;
         }
 
-        $projectID  = (int)$projectID;
-        $taskIdList = array();
-        $taskFiles  = array();
+        $projectID      = (int)$projectID;
+        $taskIdList     = array();
+        $taskFiles      = array();
+        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+
+        if($this->post->selectTestStory)
+        {
+            $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
+            $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
+            $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+        }
+
         $this->loadModel('file');
         $task = fixer::input('post')
             ->setDefault('project', $projectID)
@@ -41,11 +51,11 @@ class taskModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'left') !== false, 'left', $this->post->left)
-            ->setIF(strpos($this->config->task->create->requiredFields, 'story') !== false, 'story', $this->post->story)
+            ->setIF(strpos($requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
+            ->setIF(strpos($requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
+            ->setIF(strpos($requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
+            ->setIF(strpos($requiredFields, 'left') !== false, 'left', $this->post->left)
+            ->setIF(strpos($requiredFields, 'story') !== false, 'story', $this->post->story)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -83,19 +93,10 @@ class taskModel extends model
 
             /* Fix Bug #1525 */
             $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
-            $requiredFields = "," . $this->config->task->create->requiredFields . ",";
             if($projectType == 'ops')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
-            }
-
-            if($this->post->selectTestStory)
-            {
-                $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
-                $requiredFields = str_replace(",story,", ',', "$requiredFields");
-                $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
-                $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
             }
 
             if(strpos($requiredFields, ',estimate,') !== false)
@@ -830,6 +831,8 @@ class taskModel extends model
 
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
             ->setIF($oldTask->parent > 0 and !$this->post->parent, 'parent', 0)
+            ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
+            ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -1328,7 +1331,6 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
-            ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', 'doing')
@@ -1351,7 +1353,7 @@ class taskModel extends model
 
         /* Record consumed and left. */
         $estimate = new stdclass();
-        $estimate->date     = zget($task, 'realStarted', date(DT_DATE1));
+        $estimate->date     = zget($task, 'realStarted', $now);
         $estimate->task     = $taskID;
         $estimate->consumed = zget($_POST, 'consumed', 0);
         $estimate->left     = zget($_POST, 'left', 0);
@@ -1543,7 +1545,7 @@ class taskModel extends model
 
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF($oldTask->realStarted == '0000-00-00', 'realStarted', $today)
+            ->setIF($oldTask->realStarted == '0000-00-00 00:00:00', 'realStarted', $now)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -2075,10 +2077,11 @@ class taskModel extends model
      *
      * @param  string $account
      * @param  string $status
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all')
+    public function getUserTaskPairs($account, $status = 'all', $skipProjectIDList = array())
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TASK)->alias('t1')
@@ -2086,6 +2089,7 @@ class taskModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->query();
 
         $tasks = array();
@@ -3024,7 +3028,7 @@ class taskModel extends model
             case 'actions':
                 if($storyChanged)
                 {
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", $task, 'list', '', 'hiddenwin');
                     break;
                 }
 
@@ -3116,7 +3120,7 @@ class taskModel extends model
 
         /* Send emails. */
         $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

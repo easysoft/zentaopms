@@ -66,90 +66,23 @@ class gitModel extends model
      */
     public function run()
     {
+        /* Get repos and load module. */
         $this->setRepos();
+        $this->loadModel('job');
+
         if(empty($this->repos)) return false;
 
-        $this->loadModel('compile');
         /* Get commit triggerType jobs by repoIdList. */
-        $commentJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
-        $commentGroup = array();
-        foreach($commentJobs as $job) $commentGroup[$job->repo][$job->id] = $job;
+        $commentGroup = $this->job->getTriggerGroup('commit', array_keys($this->repos));
 
         /* Get tag triggerType jobs by repoIdList. */
-        $tagJobs  = $this->job->getListByTriggerType('tag', array_keys($this->repos));
-        $tagGroup = array();
-        foreach($tagJobs as $job) $tagGroup[$job->repo][$job->id] = $job;
+        $tagGroup = $this->job->getTriggerGroup('tag', array_keys($this->repos));
 
         foreach($this->repos as $repoID => $repo)
         {
-            $this->printLog("begin repo $repo->id");
-            if(!$this->setRepo($repo)) return false;
+            $this->updateCommit($repo, $commentGroup, true);
 
-            $branches = $this->repo->getBranches($repo);
-            $commits  = $repo->commits;
-            foreach($branches as $branch)
-            {
-                $this->printLog("sync branch $branch logs.");
-                $_COOKIE['repoBranch'] = $branch;
-
-                $this->printLog("get this repo logs.");
-
-                $lastInDB = $this->repo->getLatestCommit($repoID);
-                /* Ignore unsynced branch. */
-                if(empty($lastInDB))
-                {
-                    $this->printLog("Please init repo {$repo->name}");
-                    continue;
-                }
-
-                $version = $lastInDB->commit;
-                $logs    = $this->repo->getUnsyncCommits($repo);
-                $objects = array();
-                if(!empty($logs))
-                {
-                    $this->printLog("get " . count($logs) . " logs");
-                    $this->printLog('begin parsing logs');
-
-                    foreach($logs as $log)
-                    {
-                        $this->printLog("parsing log {$log->revision}");
-
-                        $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                        $objects = $this->repo->parseComment($log->msg);
-                        if($objects)
-                        {
-                            $this->printLog('extract' .
-                                ' story:' . join(' ', $objects['stories']) .
-                                ' task:' . join(' ', $objects['tasks']) .
-                                ' bug:'  . join(',', $objects['bugs']));
-
-                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
-                        }
-                        else
-                        {
-                            $this->printLog('no objects found' . "\n");
-                        }
-
-                        /* Create compile by comment. */
-                        $jobs = zget($commentGroup, $repoID, array());
-                        foreach($jobs as $job)
-                        {
-                            foreach(explode(',', $job->comment) as $comment)
-                            {
-                                if(strpos($log->msg, $comment) !== false) $this->compile->createByJob($job->id);
-                            }
-                        }
-                        $version  = $this->repo->saveOneCommit($repoID, $log, $version, $branch);
-                        $commits += count($logs);
-                    }
-                }
-
-            }
-            $this->repo->updateCommitCount($repoID, $commits);
-            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
-            $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
-
-            // Create compile by tag.
+            /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
@@ -166,11 +99,98 @@ class gitModel extends model
                     if(!$isNew) continue;
 
                     $lastTag = $tag;
-                    $this->compile->createByJob($job->id, $lastTag, 'tag');
+                    $this->loadModel('compile')->createByJob($job->id, $lastTag, 'tag');
                 }
                 if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
+    }
+
+    /**
+     * Update commit.
+     *
+     * @param  object $repo
+     * @param  array  $commentGroup
+     * @param  bool   $printLog
+     * @access public
+     * @return void
+     */
+    public function updateCommit($repo, $commentGroup, $printLog = true)
+    {
+        /* Load mudule and print log. */
+        $this->loadModel('repo');
+        if($printLog) $this->printLog("begin repo $repo->id");
+
+        if(!$this->setRepo($repo)) return false;
+
+        /* Get branches and commits. */
+        $branches = $this->repo->getBranches($repo);
+        $commits  = $repo->commits;
+
+        /* Update code commit history. */
+        foreach($branches as $branch)
+        {
+            if($printLog) $this->printLog("sync branch $branch logs.");
+            $_COOKIE['repoBranch'] = $branch;
+
+            if($printLog) $this->printLog("get this repo logs.");
+
+            $lastInDB = $this->repo->getLatestCommit($repo->id);
+
+            /* Ignore unsynced branch. */
+            if(empty($lastInDB))
+            {
+                if($printLog) $this->printLog("Please init repo {$repo->name}");
+                continue;
+            }
+
+            $version = $lastInDB->commit;
+            $logs    = $this->repo->getUnsyncCommits($repo);
+            $objects = array();
+            if(!empty($logs))
+            {
+                if($printLog) $this->printLog("get " . count($logs) . " logs");
+                if($printLog) $this->printLog('begin parsing logs');
+
+                foreach($logs as $log)
+                {
+                    if($printLog) $this->printLog("parsing log {$log->revision}");
+                    if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+
+                    $objects = $this->repo->parseComment($log->msg);
+                    if($objects)
+                    {
+                        if($printLog) $this->printLog('extract' .
+                            ' story:' . join(' ', $objects['stories']) .
+                            ' task:' . join(' ', $objects['tasks']) .
+                            ' bug:'  . join(',', $objects['bugs']));
+
+                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
+                    }
+                    else
+                    {
+                        if($printLog) $this->printLog('no objects found' . "\n");
+                    }
+
+                    /* Create compile by comment. */
+                    $jobs = zget($commentGroup, $repo->id, array());
+                    foreach($jobs as $job)
+                    {
+                        foreach(explode(',', $job->comment) as $comment)
+                        {
+                            if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                        }
+                    }
+                    $version  = $this->repo->saveOneCommit($repo->id, $log, $version, $branch);
+                    $commits += count($logs);
+                }
+            }
+
+        }
+
+        $this->repo->updateCommitCount($repo->id, $commits);
+        $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
+        if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
     }
 
     /**

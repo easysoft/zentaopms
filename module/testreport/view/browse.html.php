@@ -20,7 +20,7 @@
     </span>
   </div>
   <div class='pull-right btn-toolbar'>
-    <?php if($objectType == 'product') common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'");?>
+    <?php if($objectType == 'product' and $canBeChanged) common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>
@@ -60,8 +60,11 @@
         <td class='text-left' title='<?php echo $taskName?>'><?php echo $taskName;?></td>
         <td class='c-actions'>
           <?php
-          common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
-          common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'trash', 'hiddenwin');
+          if(common::canBeChanged('report', $report))
+          {
+              common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
+              common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'trash', 'hiddenwin');
+          }
           ?>
         </td>
       </tr>

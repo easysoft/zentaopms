@@ -19,7 +19,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-      <?php if(common::hasPriv('testcase', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('testcase', 'create')):?>
       <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -91,8 +91,8 @@
         <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
         <td><?php echo $case->stepNumber;?></td>
         <td class='c-actions'>
-          <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
-          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>
+          <?php common::printIcon('testcase', 'edit', "caseID=$case->id", $case, 'list');?>
+          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'list', '', 'hiddenwin');?>
         </td>
       </tr>
       <?php $i++;?>

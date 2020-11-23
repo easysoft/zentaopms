@@ -4,3 +4,4 @@ tbody > tr > td > .btn-icon {margin-right: 4px}
 @media (max-width: 1200px) {#storyList .c-user, #storyList .c-estimate {display: none!important;}}
 @media (max-width: 1000px) {#storyList .c-status, #storyList .c-pri {display: none!important;}}
 @media (max-width: 820px) {#storyList .c-sort, #storyList .c-stage {display: none!important;}}
+#batchToTask .checkbox-primary {display: inline-block; margin-left: 10px;}

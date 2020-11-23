@@ -51,6 +51,7 @@ $whiteList[] = 'testtask-sendmail';
 $whiteList[] = 'user-login';
 $whiteList[] = 'im-login';
 $whiteList[] = 'im-debug';
+$whiteList[] = 'im-sysgetserverinfo';
 $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';
 $whiteList[] = 'user-setreferer';

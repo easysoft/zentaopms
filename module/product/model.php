@@ -65,8 +65,9 @@ class productModel extends model
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            if($currentMethod != 'track' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
-            if($currentMethod == 'view') $currentMethod = 'browse';
+            $storyMethods = ",track,create,batchcreate,batchclose,";
+            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
+            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
@@ -581,12 +582,17 @@ class productModel extends model
         $allChanges  = array();
         $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
+        $nameList    = array();
+        $codeList    = array();
         foreach($data->productIDList as $productID)
         {
+            $productName = $data->names[$productID];
+            $productCode = $data->codes[$productID];
+
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            $products[$productID]->name   = $data->names[$productID];
-            $products[$productID]->code   = $data->codes[$productID];
+            $products[$productID]->name   = $productName;
+            $products[$productID]->code   = $productCode;
             $products[$productID]->PO     = $data->POs[$productID];
             $products[$productID]->QD     = $data->QDs[$productID];
             $products[$productID]->RD     = $data->RDs[$productID];
@@ -595,7 +601,16 @@ class productModel extends model
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->order  = $data->orders[$productID];
+
+            /* Check unique name for edited products. */
+            if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
+            $nameList[$productName] = $productName;
+
+            /* Check unique code for edited products. */
+            if(isset($codeList[$productCode])) dao::$errors['code'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->code, $productCode);
+            $codeList[$productCode] = $productCode;
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($products as $productID => $product)
         {
@@ -604,9 +619,9 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
-                ->check('name', 'unique', "id != $productID and deleted = '0'")
-                ->check('code', 'unique', "id != $productID and deleted = '0'")
+                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') // The value of product code can be 0 or 00.0.
+                ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
+                ->check('code', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));

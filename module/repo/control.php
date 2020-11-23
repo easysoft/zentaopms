@@ -193,7 +193,8 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
-        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision", "path=" . $this->repo->encodePath($info->path)));
+        $path = $entry ? $info->path : '';
+        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision", "path=" . $this->repo->encodePath($path)));
         $content  = $this->scm->cat($entry, $revision);
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry); 
@@ -271,19 +272,25 @@ class repo extends control
      */
     public function browse($repoID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
+        /* Get path and refresh. */
         if($this->get->path) $path = $this->get->path;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
+
+        /* Set menu and session. */
         $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession('list', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
+        /* Get repo and synchronous commit. */
         $repo = $this->repo->getRepoByID($repoID);
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
 
+        /* Decrypt path and get cacheFile. */
         $path      = $this->repo->decodePath($path);
         $cacheFile = $this->repo->getCacheFile($repoID, $path, $revision);
         $this->scm->setEngine($repo);
 
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 8, 1);
 
@@ -298,10 +305,22 @@ class repo extends control
         /* Cache infos. */
         if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
         {
+            /* Get cache infos. */
             $infos = $this->scm->ls($path, $revision);
 
-            if($infos and $repo->SCM == 'Subversion')
+            if($infos)
             {
+                /* Update code commit history. */
+                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
+
+                if($refresh and $repo->SCM == 'Git')
+                {
+                    $branch = $this->cookie->repoBranch;
+                    $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                    $_COOKIE['repoBranch'] = $branch;
+                }
+                if($refresh and $repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
+
                 $revisionList = array();
                 foreach($infos as $info) $revisionList[$info->revision] = $info->revision;
                 $comments = $this->repo->getHistory($repoID, $revisionList);
@@ -331,9 +350,12 @@ class repo extends control
         }
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
 
+        /* Set logType and revisions and synchronous commit. */
         $logType   = 'dir';
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
         if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&branch=" . base64_encode($this->cookie->repoBranch)));
+
+        /* Set committers. */
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
         foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);

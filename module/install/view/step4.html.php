@@ -10,7 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>.modal-body table tr th{text-align: left}</style>
+<style>.modal-body table tr th{text-align: right}</style>
 <div class='container'>
   <div class='modal-dialog'>
   <?php if(isset($error)):?>
@@ -47,7 +47,7 @@
       <form method='post' target='hiddenwin'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
-            <th class='w-160px'><?php echo $lang->install->company;?></th>
+            <th class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-150px' : 'w-80px';?>"><?php echo $lang->install->company;?></th>
             <td class='w-300px'><?php echo html::input('company', '', "class='form-control'");?></td>
           </tr>
           <tr class='hidden'>

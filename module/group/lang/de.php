@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = 'Rechte kopieren';
 $lang->group->copyOptions['copyUser'] = 'Benutzer kopieren';
 
 $lang->group->versions['']          = 'Verlauf';
+$lang->group->versions['12_5']      = 'ZenTao12.5';
 $lang->group->versions['12_3']      = 'ZenTao12.3';
 $lang->group->versions['11_6_2']    = 'ZenTao11.6.2';
 $lang->group->versions['10_6']      = 'ZenTao10.6';

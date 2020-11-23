@@ -19,6 +19,8 @@ $lang->custom->score              = '積分';
 $lang->custom->timezone           = '時區';
 $lang->custom->scoreReset         = '重置積分';
 $lang->custom->scoreTitle         = '積分功能';
+$lang->custom->project            = $lang->projectCommon;
+$lang->custom->product            = $lang->productCommon;
 $lang->custom->setscrum           = '切換敏捷視圖';
 $lang->custom->setWaterfall       = '切換瀑布視圖';
 $lang->custom->estimate           = '估算配置';
@@ -65,6 +67,11 @@ $lang->custom->tipNotEmpty      = '提示語不能為空';
 
 $lang->custom->numberError = '區間必須大於零';
 
+$lang->custom->closedProject = '已關閉' . $lang->projectCommon;
+$lang->custom->closedProduct = '已關閉' . $lang->productCommon;
+
+$lang->custom->object['product']  = $lang->productCommon;
+$lang->custom->object['project']  = $lang->projectCommon;
 $lang->custom->object['story']    = $lang->storyCommon;
 $lang->custom->object['task']     = '任務';
 $lang->custom->object['bug']      = 'Bug';
@@ -145,6 +152,8 @@ $lang->custom->notice->noClosedBlock               = '沒有永久關閉的區�
 $lang->custom->notice->required                    = '頁面提交時，選中的欄位必填';
 $lang->custom->notice->conceptResult               = '我們已經根據您的選擇為您設置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：後台 -> 自定義 -> 流程頁面修改。';
+$lang->custom->notice->readOnlyOfProduct           = '禁止修改後，已關閉' . $lang->productCommon . '下的' . $lang->storyCommon . '、Bug、用例、日誌、發佈、計劃都禁止修改。';
+$lang->custom->notice->readOnlyOfProject           = '禁止修改後，已關閉' . $lang->projectCommon . '下的任務、版本、日誌以及關聯需求都禁止修改。';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
@@ -183,6 +192,12 @@ $lang->custom->page     = '頁面';
 
 $lang->custom->scoreStatus[1] = '開啟';
 $lang->custom->scoreStatus[0] = '關閉';
+
+$lang->custom->CRProduct[1] = '允許修改';
+$lang->custom->CRProduct[0] = '禁止修改';
+
+$lang->custom->CRProject[1] = '允許修改';
+$lang->custom->CRProject[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';

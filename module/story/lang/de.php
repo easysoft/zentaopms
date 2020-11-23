@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->story->create            = "Create Story";
-$lang->story->createStory       = 'Create Story';
+$lang->story->create            = "Story hinzufügen";
+$lang->story->createStory       = "Story hinzufügen";
 $lang->story->createRequirement = 'Create Requirement';
 
 if(!empty($config->URAndSR))
@@ -75,8 +75,14 @@ $lang->story->batchChangeStage  = "Mehere Phasen ändern";
 $lang->story->batchAssignTo     = "Mehere zuordnen";
 $lang->story->batchChangeModule = "Mehere Module ändern";
 $lang->story->viewAll           = "Alle";
-$lang->story->skipStory         = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory       = 'Story %s is closed and will not be closed.';
+$lang->story->toTask            = 'Convert to Task';
+$lang->story->batchToTask       = 'Batch Convert to Task';
+$lang->story->convertRelations  = 'Convert Relations';
+
+$lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory     = 'Story %s is closed and will not be closed.';
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
+$lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -145,6 +151,8 @@ $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';
 $lang->story->repoCommit     = 'Commits';
 $lang->story->noRequirement  = 'No Requirements';
+$lang->story->one            = 'One';
+$lang->story->field          = 'Synchronized fields';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';
@@ -366,3 +374,11 @@ $lang->story->chosen->reviewedBy = 'Prüfer wählen';
 
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed = 'Die ausgewählten Storys wurden bereits geschlossen!';
+
+$lang->story->convertToTask = new stdClass();
+$lang->story->convertToTask->fieldList = array();
+$lang->story->convertToTask->fieldList['module']     = 'Module';
+$lang->story->convertToTask->fieldList['spec']       = "Description";
+$lang->story->convertToTask->fieldList['pri']        = 'Priority';
+$lang->story->convertToTask->fieldList['mailto']     = 'Mailto';
+$lang->story->convertToTask->fieldList['assignedTo'] = 'AssignTo';

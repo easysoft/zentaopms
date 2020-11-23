@@ -1,5 +1,6 @@
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}
+tbody > tr > td   .icon-share{font-size: 9px;}
 
 .table-footer .table-actions .input-group {float: left;}
 .table-footer .table-actions #assignedTo_chosen a.chosen-default{height:28px;line-height:15px}

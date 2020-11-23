@@ -110,6 +110,49 @@
             </td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->customParam;?></th>
+            <td colspan='2' id='paramDiv'>
+              <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
+              <div class='table-row input-group'>
+                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
+                <?php echo html::input('paramName[]', $paramName, "class='form-control'"); ?>
+                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
+                <?php $isCustom = zget($lang->job->paramValueList, $paramValue, '') ? false : true; ?>
+                <?php if($isCustom):?>
+                <?php echo html::input('paramValue[]', $paramValue, "class='form-control'"); ?>
+                <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control hidden' onchange='setParamName(this)' disabled");?>
+                <?php else:?>
+                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
+                <?php echo html::select('paramValue[]', $lang->job->paramValueList, $paramValue, "class='form-control' onchange='setParamName(this)'");?>
+                <?php endif;?>
+                <span class='input-group-addon w-90px'>
+                  <div class='checkbox-primary'>
+                  <input type='checkbox' name='custom' id='custom' value='1' onclick='setValueInput(this);' <?php if($isCustom) echo 'checked';?> />
+                    <label for='custom'><?php echo $lang->job->custom;?></label>
+                  </div>
+                </span>
+                <span class='input-group-addon w-40px'><a href='javascript:;' onclick='addItem(this);'><i class='icon icon-plus'></i></a></span>
+                <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
+              </div>
+              <?php endforeach;?>
+              <div class='table-row input-group'>
+                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
+                <?php echo html::input('paramName[]', '', "class='form-control' id='paramName'"); ?>
+                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
+                <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control' onchange='setParamName(this)'");?>
+                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
+                <span class='input-group-addon w-90px'>
+                  <div class='checkbox-primary'>
+                    <input type='checkbox' name='custom' id='custom' value='1' onclick='setValueInput(this);' />
+                    <label for='custom'><?php echo $lang->job->custom;?></label>
+                  </div>
+                </span>
+                <span class='input-group-addon w-40px'><a href='javascript:;' onclick='addItem(this);'><i class='icon icon-plus'></i></a></span>
+                <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th></th>
             <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton(); ?>

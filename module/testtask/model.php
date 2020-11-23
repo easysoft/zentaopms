@@ -951,7 +951,10 @@ class testtaskModel extends model
      */
     public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
     {
-        $orderBy = (strpos($orderBy, 'assignedTo') !== false or strpos($orderBy, 'lastRunResult') !== false) ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        /* Select the table for these special fields. */
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -975,7 +978,10 @@ class testtaskModel extends model
      */
     public function getUserRuns($taskID, $user, $modules = '', $orderBy, $pager = null)
     {
-        $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+        /* Select the table for these special fields. */
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -1007,6 +1013,7 @@ class testtaskModel extends model
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->taskCaseBrowseType and $this->session->taskCaseBrowseType != 'bysearch') ? $this->session->taskCaseBrowseType : $browseType;
+        $browseType = strtolower($browseType);
 
         if($browseType == 'bymodule' or $browseType == 'all')
         {
@@ -1042,6 +1049,12 @@ class testtaskModel extends model
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
+
+            /* Select the table for these special fields. */
+            $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
+            $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
+            $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $sort) : ('t2.' . $sort);
+
             $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
@@ -1050,7 +1063,7 @@ class testtaskModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($queryProductID != 'all')->andWhere('t2.product')->eq($queryProductID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
-                ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -1349,7 +1362,7 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-        if($action == 'runcase' and $testtask->auto == 'unit')  return false;
+        if($action == 'runcase' and isset($testtask->auto) and $testtask->auto == 'unit')  return false;
         if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
         return true;
     }
@@ -1379,6 +1392,8 @@ class testtaskModel extends model
         $account     = $this->app->user->account;
         $id          = $col->id;
         $caseChanged = $run->version < $run->caseVersion;
+        $fromCaseID  = $run->fromCaseID;
+
         if($col->show)
         {
             $class = "c-$id ";
@@ -1410,7 +1425,21 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
-                echo $canView ? html::a($caseLink, $run->title, null, "style='color: $run->color'") : $run->title;
+                if($canView)
+                {
+                    if($fromCaseID)
+                    {
+                        echo html::a($caseLink, $run->title, null, "style='color: $run->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]");
+                    }
+                    else
+                    {
+                        echo html::a($caseLink, $run->title, null, "style='color: $run->color'");
+                    }
+                }
+                else
+                {
+                    echo "<span style='color: $run->color'>$run->title</span>";
+                }
                 break;
             case 'branch':
                 echo $branches[$run->branch];
@@ -1544,7 +1573,7 @@ class testtaskModel extends model
 
         /* Send mail. */
         $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

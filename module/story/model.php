@@ -1067,7 +1067,7 @@ class storyModel extends model
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
                     $this->executeHooks($storyID);
-                    $this->setStage($storyID);
+                    $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
                 }
@@ -1539,6 +1539,74 @@ class storyModel extends model
         }
         if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
         return $allChanges;
+    }
+
+    /**
+     * Batch to task.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function batchToTask($projectID)
+    {
+        /* load Module and get the data from the post and get the current time. */
+        $this->loadModel('action');
+        $data = fixer::input('post')->get();
+        $now  = helper::now();
+
+        /* Judgment of required items. */
+        if(empty($data->type))
+        {
+            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->task->type);
+        }
+
+        if(isset($data->hourPointValue) and empty($data->hourPointValue))
+        {
+            dao::$errors['hourPointValue'] = sprintf($this->lang->error->notempty, $this->lang->story->convertRelations);
+        }
+        if(dao::isError()) return false;
+
+        /* Create tasks. */
+        $stories = $this->getByList($data->storyIdList);
+        foreach($stories as $story)
+        {
+            if($story->status == 'closed') continue;
+
+            $task = new stdclass();
+            $task->project    = $projectID;
+            $task->name       = $story->title;
+            $task->story      = $story->id;
+            $task->type       = $data->type;
+            $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
+            $task->left       = $task->estimate;
+            $task->openedBy   = $this->app->user->account;
+            $task->openedDate = $now;
+
+            if(isset($data->fields))
+            {
+                foreach($data->fields as $field)
+                {
+                    $task->$field = $story->$field;
+
+                    if($field == 'assignedTo') $task->assignedDate = $now;
+                    if($field == 'spec')
+                    {
+                        unset($task->$field);
+                        $task->desc = $story->$field;
+                    }
+                }
+            }
+
+            $this->dao->insert(TABLE_TASK)->data($task)
+                ->autoCheck()
+                ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->exec();
+
+            if(dao::isError()) return false;
+            $taskID = $this->dao->lastInsertID();
+            $this->action->create('task', $taskID, 'Opened', '');
+        }
     }
 
     /**
@@ -2192,8 +2260,8 @@ class storyModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -2446,19 +2514,21 @@ class storyModel extends model
     /**
      * Get story pairs of a user.
      *
-     * @param  string    $account
-     * @param  string    $limit
-     * @param  string    $type requirement|story
+     * @param  string  $account
+     * @param  string  $limit
+     * @param  string  $type requirement|story
+     * @param  array   $skipProductIDList
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10, $type = 'story')
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array())
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($type)
             ->andWhere('assignedTo')->eq($account)
+            ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
             ->orderBy('id_desc')
             ->limit($limit)
             ->fetchPairs('id', 'title');
@@ -3166,6 +3236,9 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
+        /* Check the product is closed. */
+        $canBeChanged = common::canBeChanged('story', $story);
+
         $canBatchEdit         = common::hasPriv('story', 'batchEdit');
         $canBatchClose        = common::hasPriv('story', 'batchClose');
         $canBatchReview       = common::hasPriv('story', 'batchReview');
@@ -3366,18 +3439,25 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                if($story->URChanged)
+                if($canBeChanged)
                 {
-                    common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->confirm);
-                    break;
-                }
+                    if($story->URChanged)
+                    {
+                        common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->confirm);
+                        break;
+                    }
 
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list');
-                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
-                common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
+                    common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                    common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+                    common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+                    common::printIcon('story', 'edit',       $vars, $story, 'list');
+                    common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+                    common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
+                }
+                else
+                {
+                    common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+                }
                 break;
             }
             echo '</td>';
@@ -3500,7 +3580,7 @@ class storyModel extends model
 
         /* Send it. */
         $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

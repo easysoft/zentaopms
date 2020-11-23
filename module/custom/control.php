@@ -19,7 +19,14 @@ class custom extends control
      */
     public function index()
     {
-        die(js::locate(inlink('set')));
+        if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
+        if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
+        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set')));
+
+        foreach($this->lang->custom->system as $sysObject)
+        {
+            if(common::hasPriv('custom', $sysObject)) die(js::locate(inlink($sysObject)));
+        }
     }
 
     /**
@@ -554,6 +561,48 @@ class custom extends control
         $this->view->title      = $this->lang->custom->configureScrum;
         $this->view->position[] = $this->lang->custom->configureScrum;
         $this->view->type = $type; 
+
+        $this->display();
+    }
+
+    /**
+     * Set whether the project is read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function project()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.CRProject', $this->post->project);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->project;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+
+        $this->display();
+    }
+
+    /**
+     * Set whether the product is read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function product()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->product;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
 
         $this->display();
     }

@@ -26,7 +26,7 @@
   $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
-      if(strpos(",{$config->user->customBatchCreateFields},", ",{$field},") === false) continue;
+      if(strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") === false) continue;
       if($field) $visibleFields[$field] = '';
   }
 
@@ -35,7 +35,7 @@
       if($field)
       {
           $requiredFields[$field] = '';
-          if(strpos(",{$config->user->custom->batchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+          if(strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';

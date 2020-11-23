@@ -42,9 +42,9 @@
     {
         echo $this->buildOperateMenu($plan, 'view');
 
-        if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
-        if(common::hasPriv('productplan', 'edit')) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('productplan', 'delete') and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
+        if(common::hasPriv('productplan', 'edit', $plan)) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('productplan', 'delete', $plan) and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>
@@ -60,7 +60,7 @@
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
         <div class='actions'>
-          <?php if(!$plan->deleted):?>
+          <?php if(!$plan->deleted and $plan->parent >= 0 and $canBeChanged):?>
           <div class="btn-group">
             <div class='drop-down dropdown-hover'>
               <?php
@@ -80,7 +80,7 @@
             </div>
           </div>
           <?php endif;?>
-          <?php if(common::hasPriv('productplan', 'linkStory')) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
+          <?php if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
@@ -99,7 +99,7 @@
             $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
             $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
 
-            $canBatchAction = ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo);
+            $canBatchAction = ($canBeChanged and ($canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo));
             $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
             ?>
             <thead>
@@ -163,7 +163,7 @@
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('productplan', 'unlinkStory'))
+                  if($canBeChanged and common::hasPriv('productplan', 'unlinkStory'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkStory}'");
@@ -353,7 +353,7 @@
         </form>
       </div>
       <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
-        <?php if(common::hasPriv('productplan', 'linkBug')):?>
+        <?php if(common::hasPriv('productplan', 'linkBug', $plan)):?>
         <div class='actions'>
         <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-primary'");?>
         </div>
@@ -361,7 +361,7 @@
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = common::hasPriv('productplan', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('productplan', 'batchUnlinkBug');?>
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>
@@ -402,7 +402,7 @@
                 </td>
                 <td class='c-actions'>
                   <?php
-                  if(common::hasPriv('productplan', 'unlinkBug'))
+                  if($canBeChanged and common::hasPriv('productplan', 'unlinkBug'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");

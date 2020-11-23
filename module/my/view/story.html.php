@@ -62,12 +62,15 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php
+        $storyLink    = $this->createLink('story', 'view', "id=$story->id");
+        $canBeChanged = common::canBeChanged('story', $story);
+        ?>
         <tr>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
+              <input type='checkbox' name='storyIdList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' <?php if(!$canBeChanged) echo 'disabled';?>/>
               <label></label>
             </div>
             <?php endif;?>
@@ -86,54 +89,60 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            $vars = "story={$story->id}";
-            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-            common::printIcon('story', 'edit',       $vars, $story, 'list');
-            common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            if($canBeChanged)
+            {
+                $vars = "story={$story->id}";
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+                common::printIcon('story', 'edit',       $vars, $story, 'list');
+                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+            }
             ?>
           </td>
         </tr>
         <?php if(!empty($story->children)):?>
-          <?php $i = 0;?>
-          <?php foreach($story->children as $key => $child):?>
-          <?php $storyLink = $this->createLink('story', 'view', "id=$child->id");?>
-          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
-          <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
-          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
-            <td class="c-id">
-              <?php if($canBatchAction):?>
-              <div class="checkbox-primary">
-                <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
-                <label></label>
-              </div>
-              <?php endif;?>
-              <?php printf('%03d', $child->id);?>
-            </td>
-            <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
-            <td class='c-product'><?php echo $child->productTitle;?></td>
-            <td class='c-name nobr'>
-                <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
-            </td>
-            <td class='c-plan'><?php echo $child->planTitle;?></td>
-            <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
-            <td class='c-hours'><?php echo $child->estimate;?></td>
-            <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
-            <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
-            <td class='c-actions'>
-              <?php
-              $vars = "story={$child->id}";
-              common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
-              common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
-              common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
-              common::printIcon('story', 'edit',       $vars, $child, 'list');
-              common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
-              ?>
-            </td>
-          </tr>
-          <?php $i ++;?>
-          <?php endforeach;?>
+        <?php $i = 0;?>
+        <?php foreach($story->children as $key => $child):?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$child->id");?>
+        <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+        <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
+        <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
+          <td class="c-id">
+            <?php if($canBatchAction):?>
+            <div class="checkbox-primary">
+              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
+              <label></label>
+            </div>
+            <?php endif;?>
+            <?php printf('%03d', $child->id);?>
+          </td>
+          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
+          <td class='c-product'><?php echo $child->productTitle;?></td>
+          <td class='c-name nobr'>
+              <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
+          </td>
+          <td class='c-plan'><?php echo $child->planTitle;?></td>
+          <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
+          <td class='c-hours'><?php echo $child->estimate;?></td>
+          <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
+          <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
+          <td class='c-actions'>
+            <?php
+            if($canBeChanged)
+            {
+                $vars = "story={$child->id}";
+                common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
+                common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+                common::printIcon('story', 'edit',       $vars, $child, 'list');
+                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+            }
+            ?>
+          </td>
+        </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
         <?php endif;?>
         <?php endforeach;?>
       </tbody>

@@ -32,6 +32,12 @@ js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
+    <?php
+    foreach(explode(',', $config->bug->create->requiredFields) as $field)
+    {
+        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+    }
+    ?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
@@ -262,10 +268,10 @@ js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
             <?php if($showMailto):?>
             <td>
               <div class='input-group' id='contactListGroup'>
-              <?php
-              echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
-              echo $this->fetch('my', 'buildContactLists');
-              ?>
+                <?php
+                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
+                echo $this->fetch('my', 'buildContactLists');
+                ?>
               </div>
             </td>
             <?php endif;?>

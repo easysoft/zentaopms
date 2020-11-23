@@ -16,6 +16,7 @@ $jsFiles[] = $jqueryRoot . 'lib.js';
 $jsFiles[] = $jqueryRoot . 'tablesorter/min.js';
 $jsFiles[] = $jqueryRoot . 'tablesorter/metadata.js';
 $jsFiles[] = $jsRoot     . 'zui/min.js'; 
+$jsFiles[] = $jsRoot     . 'zui/picker/zui.picker.min.js'; 
 $jsFiles[] = $jsRoot     . 'my.full.js';
 
 /* Combine these js files. */
@@ -46,6 +47,7 @@ $themes = array_keys($lang->themes);
 
 /* Create css files for every them and every lang. */
 $zuiCode  = str_replace(array('/*!', '../fonts'), array('/*', '../zui/fonts'), file_get_contents($themeRoot . 'zui/css/min.css'));
+$zuiCode .= "\n" . str_replace('/*!', '/*', file_get_contents($jsRoot . 'zui/picker/zui.picker.min.css')) . "\n";
 foreach($langs as $lang)
 {
     foreach($themes as $theme)
@@ -55,7 +57,7 @@ foreach($langs as $lang)
         $cssCode .= file_get_contents($themeRoot  . 'default/style.css');
 
         /* Css file for current lang and current them. */
-        $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
+        if(file_exists($themeRoot . "lang/$lang.css")) $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
         if($theme != 'default')
         {
             $themCode = file_get_contents($themeRoot . $theme . '/style.css');

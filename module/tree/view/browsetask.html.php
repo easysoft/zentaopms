@@ -112,7 +112,7 @@ li.story-item > .tree-actions .tree-action[data-type=delete]{display:none;}
               <td></td>
               <td colspan='2' class="form-actions">
                 <?php
-                echo html::submitButton();
+                if($canBeChanged) echo html::submitButton();
                 echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");
                 echo html::hidden('parentModuleID', $currentModuleID);
                 echo html::hidden('maxOrder', $maxOrder);
@@ -216,9 +216,10 @@ $(function()
         }
     };
 
-    if(<?php echo common::hasPriv('tree', 'updateorder') ? 'false' : 'true' ?>) options.actions["sort"] = false;
-    if(<?php echo common::hasPriv('tree', 'edit') ? 'false' : 'true' ?>) options.actions["edit"] = false;
-    if(<?php echo common::hasPriv('tree', 'delete') ? 'false' : 'true' ?>) options.actions["delete"] = false;
+    if(<?php echo (common::hasPriv('tree', 'updateorder') and $canBeChanged) ? 'false' : 'true' ?>) options.actions["sort"] = false;
+    if(<?php echo (common::hasPriv('tree', 'edit') and $canBeChanged) ? 'false' : 'true' ?>) options.actions["edit"] = false;
+    if(<?php echo (common::hasPriv('tree', 'delete') and $canBeChanged) ? 'false' : 'true' ?>) options.actions["delete"] = false;
+    if(<?php echo $canBeChanged ? 'false' : 'true' ?>) options.actions["subModules"] = false;
 
     var $tree = $('#modulesTree').tree(options);
 
