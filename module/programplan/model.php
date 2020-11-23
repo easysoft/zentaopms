@@ -57,21 +57,19 @@ class programplanModel extends model
      *
      * @param  int     $projectID
      * @param  int     $productID
-     * @param  int     $planID
-     * @param  string  $browseType
+     * @param  string  $browseType all|parent
      * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getStage($projectID = 0, $productID = 0, $planID = 0, $browseType = 'all', $orderBy = 'id_asc')
+    public function getStage($projectID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        $projects = $this->getProjectsByProduct($productID);
+        if($productID) $projects = $this->getProjectsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
             ->beginIF($browseType == 'all')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($projectID)->fi()
-            ->beginIF($browseType == 'children')->andWhere('parent')->eq($planID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($productID)->andWhere('id')->in($projects)->fi()
             ->andWhere('deleted')->eq(0)
@@ -137,7 +135,7 @@ class programplanModel extends model
      */
     public function getPlans($projectID = 0, $productID = 0, $orderBy = 'id_asc')
     {
-        $plans = $this->getStage($projectID, $productID, 0, 'all', $orderBy);
+        $plans = $this->getStage($projectID, $productID, 'all', $orderBy);
 
         $parents  = array();
         $children = array();
@@ -192,7 +190,7 @@ class programplanModel extends model
     {
         $this->loadModel('stage');
 
-        $plans = $this->getStage($projectID, $productID, 0, 'all');
+        $plans = $this->getStage($projectID, $productID);
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
@@ -328,9 +326,11 @@ class programplanModel extends model
      * @access public
      * @return int
      */
-    public function getTotalPercent($plan)
+    public function getTotalPercent($plan, $parent = false)
     {
-        $plans = $this->getStage($plan->project, $plan->product, $plan->parent, 'parent');
+        /* When parent is equal to true, query the total workload of the subphase. */
+        $projectID = $parent ? $plan->id : $plan->project;
+        $plans = $this->getStage($projectID, $plan->product, 'parent');
 
         $totalPercent = 0;
         foreach($plans as $id => $stage)
@@ -428,11 +428,13 @@ class programplanModel extends model
         if(!$this->isCreateTask($parentID)) return dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
 
         /* The child phase type setting is the same as the parent phase. */
-        $parentStageType = '';
+        $parentAttribute = '';
+        $parentPercent   = 0;
         if($parentID)
         {
-            $parentData      = $this->getByID($parentID);
-            $parentStageType = $parentData->attribute;
+            $parentStage     = $this->getByID($parentID);
+            $parentAttribute = $parentStage->attribute;
+            $parentPercent   = $parentStage->percent;
         }
 
         $attributes = array_values($attributes);
@@ -449,7 +451,7 @@ class programplanModel extends model
             $plan->parent    = $parentID ? $parentID : $projectID;
             $plan->name      = $names[$key];
             $plan->percent   = $percents[$key];
-            $plan->attribute = empty($parentID) ? $attributes[$key] : $parentStageType;
+            $plan->attribute = empty($parentID) ? $attributes[$key] : $parentAttribute;
             $plan->milestone = $milestone[$key];
             $plan->begin     = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
             $plan->end       = empty($end[$key]) ? '0000-00-00' : $end[$key];
@@ -495,11 +497,14 @@ class programplanModel extends model
             if($plan->milestone) $milestone = 1;
         }
 
-        if($totalPercent > 100)
+        /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
+        if($parentID && $totalPercent > $parentPercent)
         {
-            dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
+            dao::$errors['message'][] = sprintf($this->lang->programplan->error->parentWorkload, $parentPercent . '%');
             return false;
         }
+
+        if($totalPercent > 100) return dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
 
         $this->loadModel('user');
         $this->loadModel('project');
@@ -662,19 +667,29 @@ class programplanModel extends model
 
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
-        /* Judge whether the workload ratio exceeds 100%. */
-        $oldPlan->parent = $plan->parent;
-        $totalPercent  = $this->getTotalPercent($oldPlan);
-        $totalPercent += (float)$plan->percent;
-        if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
-
         if($plan->parent > 0)
         {
-            /* If child plans has milestone, update parent plan set milestone eq 0 . */
             $parentPlan = $this->getByID($plan->parent);
-            if($plan->milestone and $parentPlan->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
             $plan->attribute = $parentPlan->attribute;
+            $parentPercent   = $parentPlan->percent;
+
+            $childrenTotalPercent = $this->getTotalPercent($parentPlan, true);
+            $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+            if($childrenTotalPercent > $parentPercent)
+            {
+                dao::$errors['message'][] = sprintf($this->lang->programplan->error->parentWorkload, $parentPercent . '%');
+                return false;
+            }
+
+            /* If child plan has milestone, update parent plan set milestone eq 0 . */
+            if($plan->milestone and $parentPlan->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
         }
+
+        /* The workload of the parent plan cannot exceed 100%. */
+        $oldPlan->parent = $plan->parent;
+        $totalPercent    = $this->getTotalPercent($oldPlan);
+        $totalPercent    = $totalPercent + $plan->percent;
+        if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
 
         /* Set planDuration and realDuration. */
         $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
