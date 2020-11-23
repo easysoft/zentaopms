@@ -401,8 +401,8 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
-        $this->view->position[] = $this->lang->my->myProject;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->position[] = $this->lang->my->project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $pager);
         $this->view->pager      = $pager;
@@ -420,8 +420,8 @@ class my extends control
     {
         $this->app->loadLang('project');
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
-        $this->view->position[] = $this->lang->my->myProject;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
+        $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
         $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution');
 

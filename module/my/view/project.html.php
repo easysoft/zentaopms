@@ -1,19 +1,19 @@
 <?php
 /**
- * The program view file of dashboard module of ZenTaoPMS.
+ * The project view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     dashboard
- * @version     $Id: program.html.php 5095 2013-07-11 06:03:40Z chencongzhi520@gmail.com $
+ * @package     my
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProject;?></span></span>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->project;?></span></span>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
