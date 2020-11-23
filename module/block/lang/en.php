@@ -140,29 +140,21 @@ $lang->block->default['scrum']['project']['2']['title'] = $lang->projectCommon .
 $lang->block->default['scrum']['project']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['project']['2']['grid']  = 8;
 
-$lang->block->default['scrum']['project']['3']['title'] = $lang->productCommon . ' Road Map';
-$lang->block->default['scrum']['project']['3']['block'] = 'scrumroadmap';
+$lang->block->default['scrum']['project']['3']['title'] = 'Test Version';
+$lang->block->default['scrum']['project']['3']['block'] = 'scrumtest';
 $lang->block->default['scrum']['project']['3']['grid']  = 8;
 
-$lang->block->default['scrum']['project']['4']['title'] = 'Test Version';
-$lang->block->default['scrum']['project']['4']['block'] = 'scrumtest';
-$lang->block->default['scrum']['project']['4']['grid']  = 8;
+$lang->block->default['scrum']['project']['3']['params']['type']    = 'wait';
+$lang->block->default['scrum']['project']['3']['params']['count']   = '15';
+$lang->block->default['scrum']['project']['3']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['project']['4']['params']['type']    = 'wait';
-$lang->block->default['scrum']['project']['4']['params']['count']   = '15';
-$lang->block->default['scrum']['project']['4']['params']['orderBy'] = 'id_desc';
+$lang->block->default['scrum']['project']['4']['title'] = $lang->projectCommon . ' Overview';
+$lang->block->default['scrum']['project']['4']['block'] = 'sprint';
+$lang->block->default['scrum']['project']['4']['grid']  = 4;
 
-$lang->block->default['scrum']['project']['5']['title'] = $lang->productCommon . ' Overview';
-$lang->block->default['scrum']['project']['5']['block'] = 'scrumproduct';
+$lang->block->default['scrum']['project']['5']['title'] = 'Dynamic';
+$lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
-
-$lang->block->default['scrum']['project']['6']['title'] = $lang->projectCommon . ' Overview';
-$lang->block->default['scrum']['project']['6']['block'] = 'sprint';
-$lang->block->default['scrum']['project']['6']['grid']  = 4;
-
-$lang->block->default['scrum']['project']['7']['title'] = 'Dynamic';
-$lang->block->default['scrum']['project']['7']['block'] = 'projectdynamic';
-$lang->block->default['scrum']['project']['7']['grid']  = 4;
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -339,9 +331,7 @@ $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . ' List';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumroadmap   = $lang->productCommon . ' Rode Map';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . ' Overview';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumproduct   = $lang->productCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
