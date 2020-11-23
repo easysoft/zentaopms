@@ -39,6 +39,7 @@ class block extends control
 
         $title = $id == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
 
+        $module = zget($this->config->block->moduleIndex, $module, $module);
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
@@ -69,7 +70,6 @@ class block extends control
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
-
         $this->view->title   = $title;
         $this->view->block   = $this->block->getByID($id);
         $this->view->blockID = $id;
