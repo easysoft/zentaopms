@@ -36,11 +36,13 @@ $(function()
         $titleInput = $blockParams.find('#title');
         if($titleInput.length && $('#blockParams #paramstype').length)
         {
-            blockTitle = $titleInput.val();
-            preValue = $('#blockParams #paramstype').find('option:selected').text();
+            blockTitle   = $titleInput.val();
+            preValue     = $('#blockParams #paramstype').find('option:selected').text();
             var preIndex = blockTitle.indexOf(' - ' + preValue);
             if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
-            $titleInput.val(blockTitle + ' - ' + preValue);
+
+            var lang = config.clientLang;
+            lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + ' - ' + preValue);
         }
     };
 

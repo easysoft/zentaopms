@@ -60,6 +60,7 @@ $lang->block->consumedHours  = '已消耗';
 $lang->block->time           = '第';
 $lang->block->week           = '周';
 $lang->block->selectProduct  = '選擇產品';
+$lang->block->of             = '的';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '參數名稱';
