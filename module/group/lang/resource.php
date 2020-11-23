@@ -1917,4 +1917,3 @@ if($config->global->flow == 'onlyTest')
     $lang->resource->product->build = 'build';
     $lang->product->methodOrder[5]  = 'build';
 }
->>>>>>> 12.x
