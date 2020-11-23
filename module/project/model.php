@@ -907,7 +907,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
+            ->orderBy('begin_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
