@@ -144,8 +144,10 @@ class programModel extends model
             }
         }
 
+        /* Redefines the language entries for the fields in the project table. */
         $this->lang->project->code = $this->lang->program->PGMCode;
         $this->lang->project->name = $this->lang->program->PGMName;
+
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -243,6 +245,7 @@ class programModel extends model
         }
         if(dao::isError()) return false;
 
+        /* Redefines the language entries for the fields in the project table. */
         $this->lang->project->code = $this->lang->program->PGMCode;
         $this->lang->project->name = $this->lang->program->PGMName;
         $this->dao->update(TABLE_PROGRAM)->data($program)
@@ -1217,6 +1220,7 @@ class programModel extends model
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
+        /* Redefines the language entries for the fields in the project table. */
         $this->lang->project->name = $this->lang->program->PRJName;
         $this->lang->project->code = $this->lang->program->PRJCode;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
@@ -1346,6 +1350,7 @@ class programModel extends model
         $requiredFields = $this->config->program->PRJEdit->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
+        /* Redefines the language entries for the fields in the project table. */
         $this->lang->project->name = $this->lang->program->PRJName;
         $this->lang->project->code = $this->lang->program->PRJCode;
         $this->dao->update(TABLE_PROJECT)->data($project)
