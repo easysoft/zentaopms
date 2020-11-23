@@ -10,7 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>.modal-body table tr th{text-align: left}</style>
+<style>.modal-body table tr th{text-align: right}</style>
 <div class='container'>
   <div class='modal-dialog'>
   <?php if(isset($error)):?>
