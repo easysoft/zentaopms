@@ -64,14 +64,14 @@ class programplanModel extends model
      */
     public function getStage($projectID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        if($productID) $projects = $this->getProjectsByProduct($productID);
+        $stageIdList = empty($projectID) ? array() : $this->getProjectsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
             ->beginIF($browseType == 'all')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($productID)->andWhere('id')->in($projects)->fi()
+            ->beginIF($productID)->andWhere('id')->in($stageIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
