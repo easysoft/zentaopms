@@ -400,6 +400,7 @@ class custom extends control
      */
     public function configureWaterfall($type = 'concept')
     {   
+        $this->app->loadLang('custom');
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
@@ -407,7 +408,8 @@ class custom extends control
         {   
             if($type == 'concept')
             {
-                $this->custom->setURAndSR();
+                $result = $this->custom->setURAndSR();
+                if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
             }
 
             if($type == 'user' and isset($_POST['keys']))
@@ -486,6 +488,7 @@ class custom extends control
      */
     public function configureScrum($type = 'concept')
     {
+        $this->app->loadLang('custom');
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
@@ -494,7 +497,8 @@ class custom extends control
             if($type == 'concept')
             {
                 $this->custom->setConcept();
-                $this->custom->setURAndSR();
+                $result = $this->custom->setURAndSR();
+                if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
             }
 
             if($type == 'user' && isset($_POST['keys']))
