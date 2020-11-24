@@ -47,6 +47,7 @@ $lang->doc->users          = '用戶';
 $lang->doc->item           = '項';
 $lang->doc->num            = '文檔數量';
 $lang->doc->searchResult   = '搜索結果';
+$lang->doc->mailto         = '抄送給';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
@@ -148,6 +149,12 @@ $lang->doc->customShowLibs                 = '顯示設置';
 $lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
 $lang->doc->customShowLibsList['children'] = '顯示子分類的文檔';
 $lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的項目';
+
+$lang->doc->mail = new stdclass();
+$lang->doc->mail->create = new stdclass();
+$lang->doc->mail->edit   = new stdclass();
+$lang->doc->mail->create->title = "%s創建了文檔 #%s:%s";
+$lang->doc->mail->edit->title   = "%s編輯了文檔 #%s:%s";
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";

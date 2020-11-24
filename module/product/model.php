@@ -65,8 +65,9 @@ class productModel extends model
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            if($currentMethod != 'track' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
-            if($currentMethod == 'view') $currentMethod = 'browse';
+            $storyMethods = ",track,create,batchcreate,batchclose,";
+            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
+            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
@@ -581,12 +582,17 @@ class productModel extends model
         $allChanges  = array();
         $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
+        $nameList    = array();
+        $codeList    = array();
         foreach($data->productIDList as $productID)
         {
+            $productName = $data->names[$productID];
+            $productCode = $data->codes[$productID];
+
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            $products[$productID]->name   = $data->names[$productID];
-            $products[$productID]->code   = $data->codes[$productID];
+            $products[$productID]->name   = $productName;
+            $products[$productID]->code   = $productCode;
             $products[$productID]->PO     = $data->POs[$productID];
             $products[$productID]->QD     = $data->QDs[$productID];
             $products[$productID]->RD     = $data->RDs[$productID];
@@ -595,7 +601,16 @@ class productModel extends model
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->order  = $data->orders[$productID];
+
+            /* Check unique name for edited products. */
+            if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
+            $nameList[$productName] = $productName;
+
+            /* Check unique code for edited products. */
+            if(isset($codeList[$productCode])) dao::$errors['code'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->code, $productCode);
+            $codeList[$productCode] = $productCode;
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($products as $productID => $product)
         {
@@ -604,9 +619,9 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
-                ->check('name', 'unique', "id != $productID and deleted = '0'")
-                ->check('code', 'unique', "id != $productID and deleted = '0'")
+                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') // The value of product code can be 0 or 00.0.
+                ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
+                ->check('code', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
@@ -739,33 +754,30 @@ class productModel extends model
     }
 
     /**
-     * Get projects of a product in pairs.
+     * Get executions by product and project.
      *
      * @param  int    $productID
-     * @param  string $param    all|nodeleted
+     * @param  int    $branch
+     * @param  string $status    all|nodeleted
      * @access public
      * @return array
      */
-    public function getProjectPairs($productID, $branch = 0, $param = 'all')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $status = 'all')
     {
-        $projects = array();
-        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
+        if(!$this->session->PRJ || !$productID) return array();
+
+        $executions = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq((int)$productID)
-            ->andWhere('t2.project')->eq((int)$this->session->PRJ)
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.project')->eq($this->session->PRJ)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($status == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
             ->orderBy('t1.project desc')
-            ->fetchAll();
+            ->fetchPairs();
 
-        foreach($datas as $data)
-        {
-            if($param == 'nodeleted' and $data->deleted) continue;
-            $projects[$data->id] = $data->name;
-        }
-        $projects = array('' => '') +  $projects;
-        return $projects;
+        $executions = array('' => '') + $executions;
+        return $executions;
     }
 
     /**

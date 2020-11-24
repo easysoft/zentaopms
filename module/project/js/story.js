@@ -20,7 +20,7 @@ $(function()
     $(document).on('click', "#storyList tbody tr, .table-footer .check-all, #storyList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 
-    $('#toTaskButton').on('click', function ()
+    $('#toTaskButton').on('click', function()
     {
         var planID = $('#plan').val();
         if(planID)
@@ -28,9 +28,27 @@ $(function()
             parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
         }
     })
+
+    /* Get checked stories. */
+    $('#batchToTaskButton').on('click', function()
+    {
+        var storyIdList = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIdList += $(this).val() + ',';
+            $('#storyIdList').val(storyIdList);
+        });
+    });
+
     $('.sorter-false a').unwrap();
 });
 
+/**
+ * Show checked summary.
+ *
+ * @access public
+ * @return void
+ */
 function showCheckedSummary()
 {
     var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');

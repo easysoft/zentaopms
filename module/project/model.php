@@ -490,12 +490,17 @@ class projectModel extends model
         $allChanges  = array();
         $data        = fixer::input('post')->get();
         $oldProjects = $this->getExecutionByIdList($this->post->projectIDList);
+        $nameList    = array();
+        $codeList    = array();
         foreach($data->projectIDList as $projectID)
         {
+            $projectName = $data->names[$projectID];
+            $projectCode = $data->codes[$projectID];
+
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name     = $data->names[$projectID];
-            $projects[$projectID]->code     = $data->codes[$projectID];
+            $projects[$projectID]->name     = $projectName;
+            $projects[$projectID]->code     = $projectCode;
             $projects[$projectID]->PM       = $data->PMs[$projectID];
             $projects[$projectID]->PO       = $data->POs[$projectID];
             $projects[$projectID]->QD       = $data->QDs[$projectID];
@@ -508,7 +513,16 @@ class projectModel extends model
             $projects[$projectID]->desc     = htmlspecialchars_decode($data->descs[$projectID]);
             $projects[$projectID]->days     = $data->dayses[$projectID];
             $projects[$projectID]->order    = $data->orders[$projectID];
+
+            /* Check unique name for edited projects. */
+            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->name, $projectName);
+            $nameList[$projectName] = $projectName;
+
+            /* Check unique code for edited projects. */
+            if(isset($codeList[$projectCode])) dao::$errors['code'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->code, $projectCode);
+            $codeList[$projectCode] = $projectCode;
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($projects as $projectID => $project)
         {
@@ -521,10 +535,11 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('code', 'unique', "id!=$projectID and deleted='0'")
+                ->check('code', 'unique', "id NOT " . helper::dbIN($data->projectIDList) . " and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->limit(1)
                 ->exec();
+            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
 
             $changedAccounts = array();
             foreach($project as $fieldName => $value)
@@ -549,7 +564,6 @@ class projectModel extends model
             }
             if(!empty($changedAccounts)) $this->updateUserView($projectID, 'sprint', $changedAccounts);
 
-            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
         $this->fixOrder();
@@ -1317,7 +1331,7 @@ class projectModel extends model
     }
 
     /**
-     * Get project by id.
+     * Get the execution by ID.
      *
      * @param  int    $projectID
      * @param  bool   $setImgSize
@@ -1364,6 +1378,20 @@ class projectModel extends model
         if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
 
         return $project;
+    }
+
+    /**
+     * Get the execution by ID.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function getExecutionById($executionID = 0)
+    {
+        /* TODO: The getbyid method queries too much information that is not actually needed. */
+        if(empty($executionID)) return array();
+        return $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
     }
 
     /**
@@ -2752,6 +2780,28 @@ class projectModel extends model
         $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
+    }
+
+    /**
+     * Build project build search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL)
+    {
+        $this->loadModel('build');
+
+        /* Set search param. */
+        $this->config->build->search['module']    = 'projectBuild';
+        $this->config->build->search['actionURL'] = $actionURL;
+        $this->config->build->search['queryID']   = $queryID;
+        $this->config->build->search['params']['product']['values'] = $products;
+
+        $this->loadModel('search')->setSearchParams($this->config->build->search);
     }
 
     /**

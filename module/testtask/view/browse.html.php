@@ -45,16 +45,18 @@ $status = $this->session->testTaskVersionStatus;
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
     </div>
   </div>
+  <?php if(common::canModify('product', $product)):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent' class='main-table'>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
-      <?php if(common::hasPriv('testtask', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('testtask', 'create')):?>
       <?php echo html::a($this->createLink('testtask', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

@@ -420,6 +420,7 @@ $lang->resource->story->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage   = 'batchChangeStage';
 $lang->resource->story->batchAssignTo      = 'batchAssignTo';
 $lang->resource->story->batchChangeModule  = 'batchChangeModule';
+$lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'track';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 
@@ -447,8 +448,9 @@ $lang->story->methodOrder[105] = 'report';
 $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
-$lang->story->methodOrder[125] = 'track';
-$lang->story->methodOrder[130] = 'processStoryChange';
+$lang->story->methodOrder[125] = 'batchToTask';
+$lang->story->methodOrder[130] = 'track';
+$lang->story->methodOrder[135] = 'processStoryChange';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -1099,6 +1101,8 @@ $lang->holiday->methodOrder[20] = 'delete';
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';
 $lang->resource->custom->set                = 'set';
+$lang->resource->custom->project            = 'project';
+$lang->resource->custom->product            = 'product';
 $lang->resource->custom->restore            = 'restore';
 $lang->resource->custom->flow               = 'flow';
 $lang->resource->custom->working            = 'working';
@@ -1112,16 +1116,18 @@ $lang->resource->custom->setscrum           = 'setscrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
-$lang->custom->methodOrder[15] = 'restore';
-$lang->custom->methodOrder[20] = 'flow';
-$lang->custom->methodOrder[25] = 'working';
-$lang->custom->methodOrder[30] = 'setPublic';
-$lang->custom->methodOrder[35] = 'timezone';
-$lang->custom->methodOrder[40] = 'estimate';
-$lang->custom->methodOrder[45] = 'configureWaterfall';
-$lang->custom->methodOrder[50] = 'configureScrum';
-$lang->custom->methodOrder[55] = 'setWaterfall';
-$lang->custom->methodOrder[60] = 'setscrum';
+$lang->custom->methodOrder[15] = 'project';
+$lang->custom->methodOrder[20] = 'product';
+$lang->custom->methodOrder[25] = 'restore';
+$lang->custom->methodOrder[30] = 'flow';
+$lang->custom->methodOrder[35] = 'working';
+$lang->custom->methodOrder[40] = 'setPublic';
+$lang->custom->methodOrder[45] = 'timezone';
+$lang->custom->methodOrder[50] = 'estimate';
+$lang->custom->methodOrder[55] = 'configureWaterfall';
+$lang->custom->methodOrder[60] = 'configureScrum';
+$lang->custom->methodOrder[65] = 'setWaterfall';
+$lang->custom->methodOrder[70] = 'setscrum';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1810,3 +1816,7 @@ $lang->changelog['12.3'][] = 'testtask-unitCases';
 $lang->changelog['12.3'][] = 'testtask-importUnitResult';
 $lang->changelog['12.3'][] = 'job-view';
 $lang->changelog['12.3'][] = 'ci-commitResult';
+
+$lang->changelog['12.5'][] = 'story-batchToTask';
+$lang->changelog['12.5'][] = 'custom-product';
+$lang->changelog['12.5'][] = 'custom-project';

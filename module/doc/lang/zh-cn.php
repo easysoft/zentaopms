@@ -47,6 +47,7 @@ $lang->doc->users          = '用户';
 $lang->doc->item           = '项';
 $lang->doc->num            = '文档数量';
 $lang->doc->searchResult   = '搜索结果';
+$lang->doc->mailto         = '抄送给';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -148,6 +149,12 @@ $lang->doc->customShowLibs                 = '显示设置';
 $lang->doc->customShowLibsList['zero']     = '显示空文档的库';
 $lang->doc->customShowLibsList['children'] = '显示子分类的文档';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的' . $lang->projectCommon;
+
+$lang->doc->mail = new stdclass();
+$lang->doc->mail->create = new stdclass();
+$lang->doc->mail->edit   = new stdclass();
+$lang->doc->mail->create->title = "%s创建了文档 #%s:%s";
+$lang->doc->mail->edit->title   = "%s编辑了文档 #%s:%s";
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";

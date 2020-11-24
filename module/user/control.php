@@ -459,7 +459,7 @@ class user extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchCreateFields) as $field)
+        foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
         }
@@ -543,7 +543,7 @@ class user extends control
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchEditFields) as $field)
+        foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
         }
@@ -728,17 +728,8 @@ class user extends control
 
             if($user)
             {
-                $this->user->cleanLocked($user->account);
-                /* Authorize him and save to session. */
-                $user->rights = $this->user->authorize($user->account);
-                $user->groups = $this->user->getGroups($user->account);
-                $user->view   = $this->user->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
-                $this->session->set('user', $user);
-                $this->app->user = $this->session->user;
-                $this->loadModel('action')->create('user', $user->id, 'login');
-                $this->loadModel('score')->create('user', 'login');
-                /* Keep login. */
-                if($this->post->keepLogin) $this->user->keepLogin($user);
+                /* Set user group, rights, view and aword login score. */
+                $user = $this->user->login($user);
 
                 /* Go to the referer. */
                 if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false and strpos($this->post->referer, 'block') === false)
@@ -1107,11 +1098,12 @@ class user extends control
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($realname, $search) === false) continue;
+            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }
 
         die(json_encode($newUsers));
     }
+
 }

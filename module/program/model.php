@@ -1210,7 +1210,12 @@ class programModel extends model
             }
 
             /* Judge products not empty. */
-            if(!$_POST['products'][0])
+            $linkedProductsCount = 0;
+            foreach($_POST['products'] as $product)
+            {
+                if(!empty($product)) $linkedProductsCount++;
+            }
+            if(empty($linkedProductsCount))
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
@@ -1336,13 +1341,18 @@ class programModel extends model
 
                 if(dao::isError()) return false;
             }
+        }
 
-            /* Judge products not empty. */
-            if(!$_POST['products'][0])
-            {
-                dao::$errors[] = $this->lang->program->productNotEmpty;
-                return false;
-            }
+        /* Judge products not empty. */
+        $linkedProductsCount = 0;
+        foreach($_POST['products'] as $product)
+        {
+            if(!empty($product)) $linkedProductsCount++;
+        }
+        if(empty($linkedProductsCount))
+        {
+            dao::$errors[] = $this->lang->program->productNotEmpty;
+            return false;
         }
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);

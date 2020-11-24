@@ -57,6 +57,7 @@ $lang->todo->private      = 'Privat';
 $lang->todo->cycleDay     = 'Tag';
 $lang->todo->cycleWeek    = 'Woche';
 $lang->todo->cycleMonth   = 'Monat';
+$lang->todo->day          = 'Tag';
 $lang->todo->assignedTo   = 'AssignedTo';
 $lang->todo->assignedBy   = 'AssignedBy';
 $lang->todo->finishedBy   = 'FinishedBy';
@@ -65,9 +66,12 @@ $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Fällig';
 
-$lang->todo->every      = 'Jeden';
-$lang->todo->beforeDays = "%s<span class='input-group-addon'>early in advance to be done</span>";
-$lang->todo->dayNames   = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
+$lang->todo->every        = 'Jeden';
+$lang->todo->specify      = 'ernennen';
+$lang->todo->everyYear    = 'jährlich';
+$lang->todo->beforeDays   = "%s<span class='input-group-addon'>early in advance to be done</span>";
+$lang->todo->dayNames     = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
+$lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
 $lang->todo->confirmBug   = 'Dieser Todo steht in Beziehung mit Bug #%s. Möchten Sie das bearbeiten?';
 $lang->todo->confirmTask  = 'Dieser Todo steht in Beziehung mit Task #%s， Möchten Sie das bearbeiten?';

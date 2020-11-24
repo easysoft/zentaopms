@@ -90,7 +90,7 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = 'Team';
 $lang->program->PRJLongTime        = 'Long-Term Project';
 
-$lang->program->productNotEmpty = 'Affiliated products cannot be empty!';
+$lang->program->productNotEmpty = 'Please link products or create products.';
 
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = 'Yuan';

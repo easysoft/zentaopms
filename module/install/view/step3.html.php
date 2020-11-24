@@ -29,6 +29,7 @@ if(!isset($error))
 \$config->webRoot         = getWebRoot();
 \$config->default->lang   = '$defaultLang';
 EOT;
+    if($customSession) $configContent .= "\n\$config->customSession = true;";
 }
 ?>
 <div class='container'>

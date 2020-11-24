@@ -901,6 +901,35 @@ class userModel extends model
     }
 
     /**
+     * login function.
+     * 
+     * @param  object    $user 
+     * @access public
+     * @return bool|object
+     */
+    public function login($user)
+    {
+        if(!$user) return false;
+
+        $this->cleanLocked($user->account);
+
+        /* Authorize him and save to session. */
+        $user->rights = $this->authorize($user->account);
+        $user->groups = $this->getGroups($user->account);
+        $user->view   = $this->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
+
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
+
+        /* Keep login. */
+        if($this->post->keepLogin) $this->keepLogin($user);
+
+        return $user;
+    }
+
+    /**
      * Keep the user in login state.
      *
      * @param  string    $account

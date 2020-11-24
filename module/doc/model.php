@@ -107,7 +107,15 @@ class docModel extends model
                 }
             }
 
+            /* Determines whether the doc lib is editable. */
+            $docLib          = new stdClass();
+            $docLib->product = $productID;
+            $docLib->project = $projectID;
+            $canBeChanged    = common::canBeChanged('doc', $docLib);
+
+            $lib      = isset($lib) ? $lib : new stdClass();
             $actions  = $this->setFastMenu($fastLib);
+            $actions .= ($canBeChanged and common::hasPriv('doc', 'createLib', $lib)) ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
             $this->lang->TRActions = $actions;
         }
@@ -616,7 +624,8 @@ class docModel extends model
             ->cleanInt('product,project,module,lib')
             ->join('groups', ',')
             ->join('users', ',')
-            ->remove('files,labels,uid')
+            ->join('mailto', ',')
+            ->remove('files,labels,uid,contactListMenu')
             ->get();
 
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
@@ -691,7 +700,8 @@ class docModel extends model
             ->cleanInt('module')
             ->join('groups', ',')
             ->join('users', ',')
-            ->remove('comment,files,labels,uid')
+            ->join('mailto', ',')
+            ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
@@ -1611,5 +1621,114 @@ class docModel extends model
         $actions .='</ul>';
 
         return $actions;
+    }
+
+    /**
+     * Send mail.
+     *
+     * @param  int    $docID
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function sendmail($docID, $actionID)
+    {
+        /* Load module and get doc and users. */
+        $this->loadModel('mail');
+        $doc   = $this->getById($docID);
+        $users = $this->loadModel('user')->getPairs('noletter');
+
+        /* When the content type is markdown format, add attributes to the table. */
+        if($doc->contentType == 'markdown')
+        {
+            $doc->content = $this->app->loadClass('hyperdown')->makeHtml($doc->content);
+            $doc->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $doc->content);
+            $doc->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $doc->content);
+            $doc->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $doc->content);
+        }
+
+        /* Get action info. */
+        $action          = $this->loadModel('action')->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'doc');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        /* Get sender and subject. */
+        $sendUsers = $this->getToAndCcList($doc);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($doc, $action->action);
+
+        /* Send mail. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     *
+     * @param  object $doc
+     * @param  string $actionType created|edited
+     * @access public
+     * @return string
+     */
+    public function getSubject($doc, $actionType)
+    {
+        /* Set email title. */
+        if($actionType == 'created')
+        {
+            return sprintf($this->lang->doc->mail->create->title, $this->app->user->realname, $doc->id, $doc->title);
+        }
+        else
+        {
+            return sprintf($this->lang->doc->mail->edit->title, $this->app->user->realname, $doc->id, $doc->title);
+        }
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object     $doc
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($doc)
+    {
+        /* Set toList and ccList. */
+        $toList   = '';
+        $ccList   = str_replace(' ', '', trim($doc->mailto, ','));
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+        return array($toList, $ccList);
     }
 }

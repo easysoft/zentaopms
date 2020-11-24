@@ -271,7 +271,7 @@ $lang->block->default['full']['my']['5']['block']  = 'contribute';
 $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
-$lang->block->default['full']['my']['6']['title']  = '我的近期项目';
+$lang->block->default['full']['my']['6']['title']  = '我近期参与的项目';
 $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;

@@ -26,13 +26,19 @@ $lang->job->atTime      = 'heure';
 $lang->job->lastStatus  = 'Dern Statut';
 $lang->job->lastExec    = 'Dern Exec';
 $lang->job->comment     = 'Corres Mots cl閟';
+$lang->job->customParam = 'Paramètres de construction personnalisés';
+$lang->job->paramName   = 'Nom';
+$lang->job->paramValue  = 'PH';
+$lang->job->custom      = 'Custom';
 
 $lang->job->lblBasic = 'Infos de Base';
 
-$lang->job->example    = 'ex.';
-$lang->job->commitEx   = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
-$lang->job->cronSample = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';
-$lang->job->sendExec   = "Envoi de la demande d'ex閏ution r閡ssie.";
+$lang->job->example     = 'ex.';
+$lang->job->commitEx    = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
+$lang->job->cronSample  = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';
+$lang->job->sendExec    = "Envoi de la demande d'ex閏ution r閡ssie.";
+$lang->job->inputName   = 'Veuillez saisir le nom du paramètre.';
+$lang->job->invalidName = 'Les noms des paramètres doivent être alphabétiques, numériques ou soulignés.';
 
 $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
@@ -51,3 +57,9 @@ $lang->job->frameList['jtest']   = 'JTest';
 $lang->job->frameList['cppunit'] = 'CppUnit';
 $lang->job->frameList['gtest']   = 'GTest';
 $lang->job->frameList['qtest']   = 'QTest';
+
+$lang->job->paramValueList['']                 = '';
+$lang->job->paramValueList['$zentao_version']  = 'Current version';
+$lang->job->paramValueList['$zentao_account']  = 'Current user';
+$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';

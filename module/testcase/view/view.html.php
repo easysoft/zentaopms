@@ -50,7 +50,7 @@
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
-    <?php common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
+    <?php if(common::canBeChanged('testcase', $case)) common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
   </div>
   <?php endif;?>
 </div>
@@ -105,7 +105,7 @@
         <div class="detail-content article-content"><?php echo nl2br(htmlspecialchars($case->xml));?></div>
       </div>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
@@ -194,7 +194,7 @@
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                    if(common::hasPriv('testcase', 'confirmStoryChange')) echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                    if(common::hasPriv('testcase', 'confirmStoryChange', $case)) echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
                     echo ")";
                 }
                 ?>

@@ -4,7 +4,8 @@
   <?php
   foreach($lang->custom->object as $object => $name)
   {
-      common::printLink('custom', 'set', "module=$object", "<span class='text'>{$name}</span>", '', "class='btn btn-link' id='{$object}Tab'"); 
+      if(strpos('project|product', $object) !== false) common::printLink('custom', $object, "", "<span class='text'>{$lang->custom->$object}</span>", '', "class='btn btn-link' id='{$object}Tab'");
+      if(strpos('project|product', $object) === false) common::printLink('custom', 'set', "module=$object", "<span class='text'>{$name}</span>", '', "class='btn btn-link' id='{$object}Tab'");
   }
 
   foreach($lang->custom->system as $sysObject)

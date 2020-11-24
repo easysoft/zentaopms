@@ -831,6 +831,7 @@ class baseRouter
         {
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);
+            if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
             session_start();
 
             $this->sessionID = session_id();

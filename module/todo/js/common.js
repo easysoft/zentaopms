@@ -124,3 +124,67 @@ function switchDateFeature(switcher)
         $('#end').removeAttr('disabled').trigger('chosen:updated');
     }
 }
+
+/**
+ * Show specified date.
+ *
+ * @param  switcher $switcher
+ * @access public
+ * @return void
+ */
+function showSpecifiedDate(switcher)
+{
+    if(switcher.checked)
+    {
+        $('#everyInput').attr('disabled','disabled');
+        $('.specify').removeClass('hidden');
+        $('.every').addClass('hidden')
+        $('#configEvery').removeAttr('checked');
+    }
+}
+
+/**
+ * Show every.
+ *
+ * @param  switcher $switcher
+ * @access public
+ * @return void
+ */
+function showEvery(switcher)
+{
+    if(switcher.checked)
+    {
+        $('#everyInput').removeAttr('disabled');
+        $('.specify').addClass('hidden');
+        $('.every').removeClass('hidden');
+        $('#configSpecify').removeAttr('checked');
+        $('#cycleYear').removeAttr('checked');
+        $('#configEvery').removeAttr('checked');
+    }
+}
+
+/**
+ * Set days by specified month.
+ *
+ * @param  int $specifiedMonth
+ * @access public
+ * @return void
+ */
+function setDays(specifiedMonth)
+{
+    /* Get last day in specified month. */
+    var date = new Date();
+    date.setMonth(specifiedMonth);
+    var month = date.getMonth() + 1;
+    date.setMonth(month);
+    date.setDate(0);
+    var specifiedMonthLastDay = date.getDate();
+
+    $('#specifiedDay').empty('');
+    for(var i = 1; i <= specifiedMonthLastDay; i++)
+    {
+        html = "<option value='" + i + "' title='" + i + "' data-keys='" + i + "'>" + i + "</option>";
+
+        $('#specifiedDay').append(html);
+    }
+}

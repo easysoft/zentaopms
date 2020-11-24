@@ -1427,23 +1427,17 @@ class program extends control
     }
 
     /**
-     * When create a project, help the user.
+     * View a program.
      *
-     * @param  string $mode
-     * @param  int    $programID
-     * @param  string $from PRJ|PGM
-     * @param  int    $projectID
+     * @param int $programID
      * @access public
      * @return void
      */
-    public function tips($model = 'waterfall', $programID = 0, $from = 'PRJ', $projectID)
+    public function view($programID)
     {
-        $this->view->model     = $model;
-        $this->view->programID = $programID;
-        $this->view->from      = $from;
-        $this->view->projectID = $projectID;
-        $this->view->project   = $this->project->getById($projectID);
+        $program = $this->program->getPGMByID($programID);
+        if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->display('program', 'tips');
+        echo $this->fetch('program', 'PGMProduct', "programID=$programID");
     }
 }

@@ -94,6 +94,7 @@ $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang
         ?>
       </ul>
     </div>
+    <?php if(common::canModify('product', $product)):?>
     <?php if(!common::checkNotCN()):?>
     <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
@@ -141,6 +142,7 @@ $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang
       </ul>
     </div>
     <?php endif;?>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -167,7 +169,7 @@ $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if(common::hasPriv('story', 'create')):?>
+        <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -187,14 +189,15 @@ $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $canBatchEdit         = common::hasPriv('story', 'batchEdit');
-      $canBatchClose        = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
-      $canBatchReview       = common::hasPriv('story', 'batchReview');
-      $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
-      $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
-      $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
-      $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
-      $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+      $canBeChanged         = common::canModify('product', $product);
+      $canBatchEdit         = ($canBeChanged and common::hasPriv('story', 'batchEdit'));
+      $canBatchClose        = (common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+      $canBatchReview       = ($canBeChanged and common::hasPriv('story', 'batchReview'));
+      $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage'));
+      $canBatchChangeBranch = ($canBeChanged and common::hasPriv('story', 'batchChangeBranch'));
+      $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
+      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
+      $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
       ?>

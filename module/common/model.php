@@ -1150,6 +1150,7 @@ EOD;
         }
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $class = "icon-$module-$method";
+
         if(!$clickable) $class .= ' disabled';
         if($icon)       $class .= ' icon-' . $icon;
 
@@ -1697,6 +1698,12 @@ EOD;
         $module = strtolower($module);
         $method = strtolower($method);
 
+        $module  = strtolower($module);
+        $method  = strtolower($method);
+
+        /* Check the parent object is closed. */
+        if(strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
@@ -2088,6 +2095,56 @@ EOD;
     {
         global $app;
         return strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') === false;
+    }
+
+    /**
+     * Check the object can be changed.
+     *
+     * @param  string $module
+     * @param  object $object
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function canBeChanged($module, $object = null)
+    {
+        global $app, $config;
+
+        /* Check the product is closed. */
+        if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
+        {
+            $product = $app->control->loadModel('product')->getByID($object->product);
+            if($product->status == 'closed') return false;
+        }
+
+        /* Check the project is closed. */
+        $productModuleList = array('story', 'bug', 'testtask');
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        {
+            $project = $app->control->loadModel('project')->getByID($object->project);
+            if($project->status == 'closed') return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check object can modify.
+     *
+     * @param  string $type    product|project
+     * @param  object $object
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function canModify($type, $object)
+    {
+        global $config;
+
+        if($type == 'product' and empty($config->CRProduct) and $object->status == 'closed') return false;
+        if($type == 'project' and empty($config->CRProject) and $object->status == 'closed') return false;
+
+        return true;
     }
 
     /**

@@ -260,7 +260,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -377,7 +377,7 @@ class story extends control
         }
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
+        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
         $plans['ditto']      = $this->lang->story->ditto;
         $priList             = (array)$this->lang->story->priList;
         $priList['ditto']    = $this->lang->story->ditto;
@@ -422,7 +422,8 @@ class story extends control
         $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $this->config->story->needReview == 0) ? 0 : 1;
+        /* When the user is product owner or add story in project or not set review, the default is not to review. */
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $project > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
         $this->display();
     }
@@ -456,7 +457,7 @@ class story extends control
         $this->view->products         = $products;
         $this->view->story            = $story;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
 
@@ -614,7 +615,7 @@ class story extends control
             /* Set modules and productPlans. */
             $modules      = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
             $modules      = array('ditto' => $this->lang->story->ditto) + $modules;
-            $productPlans = $this->productplan->getPairs($productID, $branch);
+            $productPlans = $this->productplan->getPairs($productID, $branch, '', true);
             $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
 
 
@@ -801,7 +802,7 @@ class story extends control
         $this->replaceURLang($story->type);
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
@@ -1151,6 +1152,34 @@ class story extends control
     }
 
     /**
+     * Batch stories convert to tasks.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function batchToTask($projectID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->story->successToTask;
+
+            $this->story->batchToTask($projectID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $response['locate'] = $this->createLink('project', 'task', "projectID=$projectID");
+            $this->send($response);
+        }
+    }
+
+    /**
      * Batch change the plan of story.
      *
      * @param  int    $planID
@@ -1327,13 +1356,14 @@ class story extends control
      * Bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function bugs($storyID)
+    public function bugs($storyID, $projectID = 0)
     {
         $this->loadModel('bug');
-        $this->view->bugs  = $this->bug->getStoryBugs($storyID);
+        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $projectID);
         $this->view->users = $this->user->getPairs('noletter');
         $this->display();
     }
@@ -1389,6 +1419,7 @@ class story extends control
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
+        $this->view->product    = $this->product->getByID($productID);
         $this->display();
     }
 

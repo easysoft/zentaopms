@@ -26,13 +26,19 @@ $lang->job->atTime      = '執行時間';
 $lang->job->lastStatus  = '最後執行狀態';
 $lang->job->lastExec    = '最後執行時間';
 $lang->job->comment     = '匹配關鍵字';
+$lang->job->customParam = '自定義構建參數';
+$lang->job->paramName   = '名稱';
+$lang->job->paramValue  = '值';
+$lang->job->custom      = '自定義';
 
 $lang->job->lblBasic = '基本信息';
 
-$lang->job->example    = '舉例';
-$lang->job->commitEx   = "用於匹配創建構建任務的關鍵字，多個關鍵字用','分割";
-$lang->job->cronSample = '如 0 0 2 * * 2-6/1 表示每個工作日凌晨2點';
-$lang->job->sendExec   = '發送執行請求成功！執行結果：%s';
+$lang->job->example     = '舉例';
+$lang->job->commitEx    = "用於匹配創建構建任務的關鍵字，多個關鍵字用','分割";
+$lang->job->cronSample  = '如 0 0 2 * * 2-6/1 表示每個工作日凌晨2點';
+$lang->job->sendExec    = '發送執行請求成功！執行結果：%s';
+$lang->job->inputName   = '請輸入參數名稱。';
+$lang->job->invalidName = '參數名稱應該是英文字母、數字或下劃綫的組合。';
 
 $lang->job->buildTypeList['build']          = '僅構建';
 $lang->job->buildTypeList['buildAndDeploy'] = '構建部署';
@@ -51,3 +57,9 @@ $lang->job->frameList['jtest']   = 'JTest';
 $lang->job->frameList['cppunit'] = 'CppUnit';
 $lang->job->frameList['gtest']   = 'GTest';
 $lang->job->frameList['qtest']   = 'QTest';
+
+$lang->job->paramValueList['']                 = '';
+$lang->job->paramValueList['$zentao_version']  = '當前版本號';
+$lang->job->paramValueList['$zentao_account']  = '當前用戶名';
+$lang->job->paramValueList['$zentao_product']  = '當前產品ID';
+$lang->job->paramValueList['$zentao_repopath'] = '當前版本庫路徑';

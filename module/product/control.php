@@ -221,7 +221,7 @@ class product extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
-        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
+        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
         $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);
@@ -640,7 +640,7 @@ class product extends control
         }
         else
         {
-            $projects = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : $branch, $params = 'nodeleted');
+            $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'nodeleted');
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 

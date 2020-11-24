@@ -1,3 +1,8 @@
+$(function()
+{
+    loadModuleRelated();
+});
+
 /**
  * Set duplicate field.
  * 

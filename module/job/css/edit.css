@@ -5,3 +5,4 @@
 #jkHost_chosen .chosen-single{border-right:0px;}
 #jkJobBox{width:385px;}
 #svnDirBox .input-group{width:unset !important}
+#paramDiv .input-group{padding:3px}

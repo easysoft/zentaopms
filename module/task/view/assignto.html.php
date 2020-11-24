@@ -37,7 +37,7 @@
           <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, empty($task->team) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
         </tr>  
-        <?php if($task->status != 'done' and $task->status != 'closed'):?>
+        <?php if($task->status != 'done' and $task->status != 'closed' and $task->parent >= 0):?>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>

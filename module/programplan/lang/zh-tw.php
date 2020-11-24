@@ -63,3 +63,4 @@ $lang->programplan->error->percentNumber   = '"工作量比例"必須為數字';
 $lang->programplan->error->planFinishSmall = '"計劃完成時間"必須大於"計劃開始時間"';
 $lang->programplan->error->percentOver     = '"工作量比例"累計不應當超過100%';
 $lang->programplan->error->createdTask     = '已分解任務,不可添加子階段';
+$lang->programplan->error->parentWorkload  = '子階段的工作量之和不能大於父階段的工作量:%s';

@@ -933,6 +933,7 @@ class bugModel extends model
             $bug->confirmed      = 1;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+            $this->executeHooks($bugID);
         }
     }
 
@@ -1143,6 +1144,7 @@ class bugModel extends model
             $bug->lastEditedDate = $now;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+            $this->executeHooks($bugID);
 
             $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
@@ -1271,7 +1273,7 @@ class bugModel extends model
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
@@ -1391,10 +1393,12 @@ class bugModel extends model
      * @param  int    $account
      * @param  bool   $appendProduct
      * @param  int    $limit
+     * @param  array  $skipProductIDList
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipProjectIDList = array())
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -1403,6 +1407,8 @@ class bugModel extends model
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1576,14 +1582,16 @@ class bugModel extends model
      * Get bugs of a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getStoryBugs($storyID)
+    public function getStoryBugs($storyID, $projectID = 0)
     {
         return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
             ->from(TABLE_BUG)
             ->where('story')->eq((int)$storyID)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -2475,14 +2483,17 @@ class bugModel extends model
      */
     public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
-        $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
-        $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
+        /* Check the product is closed. */
+        $canBeChanged = common::canBeChanged('bug', $bug);
+
+        $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
+        $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));
         $canBatchClose        = common::hasPriv('bug', 'batchClose');
-        $canBatchActivate     = common::hasPriv('bug', 'batchActivate');
-        $canBatchChangeBranch = common::hasPriv('bug', 'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv('bug', 'batchChangeModule');
-        $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
-        $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
+        $canBatchActivate     = ($canBeChanged and common::hasPriv('bug', 'batchActivate'));
+        $canBatchChangeBranch = ($canBeChanged and common::hasPriv('bug', 'batchChangeBranch'));
+        $canBatchChangeModule = ($canBeChanged and common::hasPriv('bug', 'batchChangeModule'));
+        $canBatchResolve      = ($canBeChanged and common::hasPriv('bug', 'batchResolve'));
+        $canBatchAssignTo     = ($canBeChanged and common::hasPriv('bug', 'batchAssignTo'));
 
         $canBatchAction = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
 
@@ -2696,11 +2707,18 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list');
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                if($canBeChanged)
+                {
+                    common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
+                    common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
+                    common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+                    common::printIcon('bug', 'edit',       $params, $bug, 'list');
+                    common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                }
+                else
+                {
+                    common::printIcon('bug', 'close', $params, $bug, 'list', '', '', 'iframe', true);
+                }
                 break;
             }
             echo '</td>';
@@ -2786,7 +2804,7 @@ class bugModel extends model
 
         /* Send it. */
         $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

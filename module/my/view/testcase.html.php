@@ -63,8 +63,9 @@
       <tbody>
         <?php foreach($cases as $case):?>
         <?php
-        $caseID = $type == 'assigntome' ? $case->case : $case->id;
-        $runID  = $type == 'assigntome' ? $case->id   : 0;
+        $caseID       = $type == 'assigntome' ? $case->case : $case->id;
+        $runID        = $type == 'assigntome' ? $case->id   : 0;
+        $canBeChanged = common::canBeChanged('testcase', $case);
         ?>
         <tr>
           <td class="c-id">
@@ -82,11 +83,14 @@
           <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', '', '', $case->PRJ);
-            common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->PRJ);
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->PRJ);
-            common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->PRJ);
-            common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->PRJ);
+            if($canBeChanged)
+            {
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', '', '', $case->PRJ);
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->PRJ);
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->PRJ);
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->PRJ);
+                common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->PRJ);
+            }
             ?>
           </td>
         </tr>

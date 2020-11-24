@@ -379,7 +379,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('nocode');
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
 
         $this->display();
     }
@@ -432,7 +432,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = 'withObject');
         $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('noletter', $doc->users);
+        $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
         $this->display();
     }
 
@@ -440,6 +440,7 @@ class doc extends control
      * View a doc.
      *
      * @param  int    $docID
+     * @param  int    $version
      * @access public
      * @return void
      */
@@ -453,6 +454,7 @@ class doc extends control
         {
             $hyperdown    = $this->app->loadClass('hyperdown');
             $doc->content = $hyperdown->makeHtml($doc->content);
+
             $doc->digest  = $hyperdown->makeHtml($doc->digest);
         }
 
@@ -758,7 +760,7 @@ class doc extends control
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -805,17 +807,18 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
+        $this->view->title        = $object->name;
+        $this->view->position[]   = $object->name;
 
-        $this->view->type       = $type;
-        $this->view->object     = $object;
-        $this->view->files      = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
-        $this->view->viewType   = $viewType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->objectID   = $objectID;
+        $this->view->type         = $type;
+        $this->view->object       = $object;
+        $this->view->files        = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->viewType     = $viewType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->objectID     = $objectID;
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -853,8 +856,9 @@ class doc extends control
         setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create'));
+
         if($from == 'product')
         {
             $this->lang->navGroup->doc  = 'product';
@@ -893,10 +897,11 @@ class doc extends control
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
-        $this->view->type   = $type;
-        $this->view->object = $object;
-        $this->view->from   = $from;
-        $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->type         = $type;
+        $this->view->object       = $object;
+        $this->view->from         = $from;
+        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();
     }
 }

@@ -19,6 +19,8 @@ $lang->custom->score              = 'Point';
 $lang->custom->timezone           = 'Timezone';
 $lang->custom->scoreReset         = 'Réinit Points';
 $lang->custom->scoreTitle         = 'Fonctionnalité des Points';
+$lang->custom->project            = $lang->projectCommon;
+$lang->custom->product            = $lang->productCommon;
 $lang->custom->setscrum           = 'Switch the scrum view';
 $lang->custom->setWaterfall       = 'Switch the waterfall view';
 $lang->custom->estimate           = 'Estimated configuration';
@@ -65,6 +67,11 @@ $lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
+$lang->custom->closedProject = 'Closed ' . $lang->projectCommon;
+$lang->custom->closedProduct = 'Closed ' . $lang->productCommon;
+
+$lang->custom->object['product']  = $lang->productCommon;
+$lang->custom->object['project']  = $lang->projectCommon;
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Tâche';
 $lang->custom->object['bug']      = 'Bug';
@@ -145,6 +152,8 @@ $lang->custom->notice->noClosedBlock     = "Vous n'avez aucun bloc fermé défin
 $lang->custom->notice->required          = 'Le champ sélectionné est obligatoire.';
 $lang->custom->notice->conceptResult     = 'Selon votre préférence, <b> %s-%s </b> peut être fixé pour vous. Utilisez <b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath       = 'Allez à Admin -> Custom -> Concept pour le paramétrer.';
+$lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
+$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
@@ -183,6 +192,12 @@ $lang->custom->page     = ' Page';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
+
+$lang->custom->CRProduct[1] = 'Change Allowed';
+$lang->custom->CRProduct[0] = 'Change Forbidden';
+
+$lang->custom->CRProject[1] = 'Change Allowed';
+$lang->custom->CRProject[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

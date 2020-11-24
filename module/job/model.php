@@ -26,8 +26,8 @@ class jobModel extends model
     /**
      * Get job list.
      * 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -43,9 +43,10 @@ class jobModel extends model
     }
 
     /**
-     * Get list by triggerType field
+     * Get list by triggerType field.
      * 
-     * @param  string    $triggerType 
+     * @param  string  $triggerType
+     * @param  array   $repoIdList
      * @access public
      * @return array
      */
@@ -58,6 +59,13 @@ class jobModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get trigger config.
+     *
+     * @param  object $job
+     * @access public
+     * @return string
+     */
     public function getTriggerConfig($job)
     {
           $triggerType = zget($this->lang->job->triggerTypeList, $job->triggerType);
@@ -81,10 +89,27 @@ class jobModel extends model
     }
 
     /**
-     * Create job
+     * Get trigger group.
+     *
+     * @param  string $triggerType
+     * @param  array  $repoIdList
+     * @access public
+     * @return array
+     */
+    public function getTriggerGroup($triggerType, $repoIdList)
+    {
+        $jobs  = $this->getListByTriggerType($triggerType, $repoIdList);
+        $group = array();
+        foreach($jobs as $job) $group[$job->repo][$job->id] = $job;
+
+        return $group;
+    }
+
+    /**
+     * Create a job.
      * 
      * @access public
-     * @return void
+     * @return bool
      */
     public function create()
     {
@@ -103,6 +128,30 @@ class jobModel extends model
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
         }
 
+        $customParam = array();
+        foreach($job->paramName as $key => $paramName)
+        {
+            $paramValue = zget($job->paramValue, $key, '');
+
+            if(empty($paramName) and !empty($paramValue))
+            {
+                dao::$errors[] = $this->lang->job->inputName;
+                return false;
+            }
+
+            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
+            {
+                dao::$errors[] = $this->lang->job->invalidName;
+                return false;
+            }
+
+            if(!empty($paramName)) $customParam[$paramName] = $paramValue;
+        }
+        unset($job->paramName);
+        unset($job->paramValue);
+        unset($job->custom);
+        $job->customParam = json_encode($customParam);
+
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
 
@@ -119,11 +168,11 @@ class jobModel extends model
     }
 
     /**
-     * Update job
+     * Update a job.
      * 
      * @param  int    $id 
      * @access public
-     * @return void
+     * @return bool
      */
     public function update($id)
     {
@@ -145,6 +194,30 @@ class jobModel extends model
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
         }
+
+        $customParam = array();
+        foreach($job->paramName as $key => $paramName)
+        {
+            $paramValue = zget($job->paramValue, $key, '');
+
+            if(empty($paramName) and !empty($paramValue))
+            {
+                dao::$errors[] = $this->lang->job->inputName;
+                return false;
+            }
+
+            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
+            {
+                dao::$errors[] = $this->lang->job->invalidName;
+                return false;
+            }
+
+            if(!empty($paramName)) $customParam[$paramName] = $paramValue;
+        }
+        unset($job->paramName);
+        unset($job->paramValue);
+        unset($job->custom);
+        $job->customParam = json_encode($customParam);
 
         $this->dao->update(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
@@ -215,7 +288,7 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($id)
@@ -229,10 +302,10 @@ class jobModel extends model
         $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
+        $repo = $this->loadModel('repo')->getRepoById($job->repo);
         $data->PARAM_TAG = '';
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getRepoById($job->repo);
             $lastTag = '';
             if($repo->SCM == 'Subversion')
             {
@@ -273,6 +346,17 @@ class jobModel extends model
         $compileID = $this->dao->lastInsertId();
 
         $data->ZENTAO_DATA = "compile={$compileID}";
+
+        /* Add custom parameters to the data. */
+        foreach(json_decode($job->customParam) as $paramName => $paramValue)
+        {
+            $paramValue = str_replace('$zentao_version', $this->config->version, $paramValue);
+            $paramValue = str_replace('$zentao_account', $this->app->user->account, $paramValue);
+            $paramValue = str_replace('$zentao_product', $job->product, $paramValue);
+            $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
+            $data->$paramName = $paramValue;
+        }
+
         $compile = new stdclass();
         $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
         $compile->status = $compile->queue ? 'created' : 'create_fail';

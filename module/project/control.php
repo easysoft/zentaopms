@@ -202,26 +202,27 @@ class project extends control
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($projectID, 'task', $showModule) : array();
 
         /* Assign. */
-        $this->view->tasks         = $tasks;
-        $this->view->summary       = $this->project->summary($tasks);
-        $this->view->tabID         = 'task';
-        $this->view->pager         = $pager;
-        $this->view->recTotal      = $pager->recTotal;
-        $this->view->recPerPage    = $pager->recPerPage;
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->status        = $status;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param         = $param;
-        $this->view->projectID     = $projectID;
-        $this->view->project       = $project;
-        $this->view->productID     = $productID;
-        $this->view->modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
-        $this->view->moduleID      = $moduleID;
-        $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
-        $this->view->memberPairs   = $memberPairs;
-        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->view->setModule     = true;
+        $this->view->tasks        = $tasks;
+        $this->view->summary      = $this->project->summary($tasks);
+        $this->view->tabID        = 'task';
+        $this->view->pager        = $pager;
+        $this->view->recTotal     = $pager->recTotal;
+        $this->view->recPerPage   = $pager->recPerPage;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param        = $param;
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $project;
+        $this->view->productID    = $productID;
+        $this->view->modules      = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->moduleID     = $moduleID;
+        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->memberPairs  = $memberPairs;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->setModule    = true;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -779,6 +780,7 @@ class project extends control
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -861,33 +863,59 @@ class project extends control
      * Browse builds of a project.
      *
      * @param  int    $projectID
+     * @param  string $type      all|product|bysearch
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function build($projectID = 0)
+    public function build($projectID = 0, $type = 'all', $param = 0)
     {
+        /* Load module and set session. */
         $this->loadModel('testtask');
         $this->session->set('buildList', $this->app->getURI(true));
 
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
-        $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->build;
+        /* Get products' list. */
+        $products = $this->project->getProducts($projectID, false);
+        $products = array('' => '') + $products;
 
-        $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL);
+
+        /* Get builds. */
+        if($type == 'bysearch')
+        {
+            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, $param);
+        }
+        else
+        {
+            $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID, $type, $param);
+        }
+
+        /* Set project builds. */
         $projectBuilds = array();
         if(!empty($builds))
         {
             foreach($builds as $build) $projectBuilds[$build->product][] = $build;
         }
 
-        /* Get builds. */
+        /* Header and position. */
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
+        $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->build;
+
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->buildsTotal   = count($builds);
         $this->view->projectBuilds = $projectBuilds;
+        $this->view->projectID     = $projectID;
+        $this->view->product       = $type == 'product' ? $param : 'all';
+        $this->view->products      = $products;
+        $this->view->type          = $type;
 
         $this->display();
     }
@@ -921,16 +949,18 @@ class project extends control
         $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
-        $this->view->title       = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]  = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
-        $this->view->position[]  = $this->lang->testtask->common;
-        $this->view->projectID   = $projectID;
-        $this->view->projectName = $this->projects[$projectID];
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $productTasks;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products    = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->title        = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]   = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
+        $this->view->position[]   = $this->lang->testtask->common;
+        $this->view->project      = $project;
+        $this->view->projectID    = $projectID;
+        $this->view->projectName  = $this->projects[$projectID];
+        $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
+        $this->view->tasks        = $productTasks;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products     = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1032,8 +1062,9 @@ class project extends control
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->team;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1593,6 +1624,7 @@ class project extends control
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
         $this->view->statData     = $this->project->statRelatedData($projectID);
         $this->view->chartData    = $chartData;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1623,6 +1655,9 @@ class project extends control
         $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
+        /* Determines whether an object is editable. */
+        $canBeChanged = common::canModify('project', $project);
+
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
         $kanbanSetting = $this->project->getKanbanSetting();
 
@@ -1639,9 +1674,10 @@ class project extends control
         $this->view->type          = $type;
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->kanbanColumns = $this->project->getKanbanColumns($kanbanSetting);
-        $this->view->statusMap     = $this->project->getKanbanStatusMap($kanbanSetting);
+        $this->view->statusMap     = $canBeChanged ? $this->project->getKanbanStatusMap($kanbanSetting) : array();
         $this->view->statusList    = $this->project->getKanbanStatusList($kanbanSetting);
         $this->view->colorList     = $this->project->getKanbanColorList($kanbanSetting);
+        $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
     }
@@ -1816,14 +1852,15 @@ class project extends control
         $productPairs = $this->loadModel('product')->getProductPairsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
-        $this->view->title      = $this->lang->project->storyKanban;
-        $this->view->position[] = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->storyKanban;
-        $this->view->stories    = $this->story->getKanbanGroupData($stories);
-        $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projectID  = $projectID;
-        $this->view->project    = $project;
-        $this->view->productID  = $productID;
+        $this->view->title        = $this->lang->project->storyKanban;
+        $this->view->position[]   = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
+        $this->view->position[]   = $this->lang->project->storyKanban;
+        $this->view->stories      = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $project;
+        $this->view->productID    = $productID;
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1840,11 +1877,30 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm(sprintf($this->lang->project->confirmDelete, $this->projects[$projectID]), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
+            /* Get the number of unfinished tasks and unresolved bugs. */
+            $unfinishedTasks = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->in('wait,doing,pause')
+                ->fetch();
+            $unresolvedBugs  = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->eq('active')
+                ->fetch();
+
+            /* Set prompt information. */
+            $tips = '';
+            if($unfinishedTasks->count) $tips  = sprintf($this->lang->project->unfinishedTask, $unfinishedTasks->count);
+            if($unresolvedBugs->count)  $tips .= sprintf($this->lang->project->unresolvedBug,  $unresolvedBugs->count);
+            if($tips)                   $tips  = $this->lang->project->unfinishedProject . $tips;
+
+            echo js::confirm($tips . sprintf($this->lang->project->confirmDelete, $this->projects[$projectID]), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
             exit;
         }
         else
         {
+            /* Delete project. */
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
@@ -1910,6 +1966,7 @@ class project extends control
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
+        $this->view->project        = $project;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 

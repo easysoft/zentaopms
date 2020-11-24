@@ -4,17 +4,21 @@ $(function()
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
 
-    var stageMap =
+    var stageMap = new Object();
+    if(canBeChanged)
     {
-        story:
+        stageMap =
         {
-            projected   : {verified: 'batchChangeStage'},
-            developing  : {verified: 'batchChangeStage'},
-            developed   : {verified: 'batchChangeStage'},
-            testing     : {verified: 'batchChangeStage'},
-            tested      : {verified: 'batchChangeStage'},
-        }
-    };
+            story:
+            {
+                projected   : {verified: 'batchChangeStage'},
+                developing  : {verified: 'batchChangeStage'},
+                developed   : {verified: 'batchChangeStage'},
+                testing     : {verified: 'batchChangeStage'},
+                tested      : {verified: 'batchChangeStage'},
+            }
+        };
+    }
 
     var fixBoardWidth = function()
     {

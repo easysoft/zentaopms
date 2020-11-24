@@ -147,7 +147,7 @@ $lang->program->menu->browse  = array('link' => '項目集|program|pgmbrowse|', 
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->view        = array('link' => '概況|program|pgmview|program=%s');
-$lang->program->viewMenu->product     = array('link' => '產品|program|pgmproduct|program=%s');
+$lang->program->viewMenu->product     = array('link' => '產品|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "項目|program|pgmproject|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "人員|personnel|accessible|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干係人|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
@@ -227,6 +227,7 @@ $lang->searchObjects['testtask']    = '測試單';
 $lang->searchObjects['doc']         = '文檔';
 $lang->searchObjects['caselib']     = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
+$lang->searchObjects['program']     = '項目集';
 $lang->searchTips                   = '編號(ctrl+g)';
 
 /* 導入支持的編碼格式。*/
