@@ -237,7 +237,7 @@ $(function()
     $('#dashboard').sortable(
     {
         selector: '.panel',
-        trigger: '.panel-heading,.panel-move-handler',
+        trigger: '.panel-heading:not(.not-move-handler),.panel-move-handler',
         containerSelector: '.col-main,.col-side',
         start: function()
         {
