@@ -764,7 +764,7 @@ class productModel extends model
      */
     public function getExecutionPairsByProduct($productID, $branch = 0, $status = 'all')
     {
-        if(!$this->session->PRJ) return array();
+        if(!$this->session->PRJ || !$productID) return array();
 
         $executions = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
