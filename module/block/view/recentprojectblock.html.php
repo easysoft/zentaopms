@@ -46,7 +46,7 @@
           <?php endif; ?>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
-              <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
+              <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
                 <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group');?></li>
                 <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
