@@ -868,6 +868,7 @@ $lang->menu->waterfall->programplan  = array('link' => '计划|programplan|brows
 $lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly       = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc          = array('link' => '文档|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->projectstory = array('link' => '需求|projectstory|requirement|product={PRODUCT}', 'subModule' => 'requirement,story,');
 //$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
 $lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci           = '代码|repo|browse|';

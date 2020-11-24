@@ -758,26 +758,38 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
-     * @param  string $status    all|nodeleted
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $status = 'all')
+    public function getExecutionPairsByProduct($productID, $branch = 0)
     {
         if(!$this->session->PRJ || !$productID) return array();
 
-        $executions = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
-            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($this->session->PRJ)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($status == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
-            ->orderBy('t2.begin asc')
-            ->fetchPairs();
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy('t2.id desc')
+            ->fetchAll('id');
 
-        $executions = array('0' => '') + $executions;
-        return $executions;
+        /* The waterfall project needs to show the hierarchy and remove the parent stage. */
+        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        if($project->model == 'waterfall')
+        {
+            foreach($executions as $execution)
+            {
+                if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
+            }
+
+            foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+        }
+
+        $executionList = array('0' => '');
+        foreach($executions as $execution) $executionList[$execution->id] = $execution->name;
+        return $executionList;
     }
 
     /**

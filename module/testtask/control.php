@@ -164,7 +164,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $params = 'nodeleted');
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */
@@ -592,7 +592,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $params = 'nodeleted');
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         $this->view->task         = $task;
@@ -1162,7 +1162,7 @@ class testtask extends control
         $this->app->loadLang('job');
 
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $params = 'nodeleted');
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;

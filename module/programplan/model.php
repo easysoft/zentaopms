@@ -52,15 +52,16 @@ class programplanModel extends model
      */
     public function getStage($projectID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        $executions = empty($projectID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID);
+        if(empty($projectID) || empty($productID)) return array();
 
-        $plans = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('stage')
-            ->beginIF($browseType == 'all')->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($browseType == 'parent')->andWhere('parent')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($productID)->andWhere('id')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
+        $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('stage')
+            ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($projectID)->fi()
+            ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($projectID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
 
@@ -663,6 +664,8 @@ class programplanModel extends model
 
             $childrenTotalPercent = $this->getTotalPercent($parentPlan, true);
             $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+
+            /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
             if($childrenTotalPercent > $parentPercent)
             {
                 dao::$errors['message'][] = sprintf($this->lang->programplan->error->parentWorkload, $parentPercent . '%');
