@@ -640,7 +640,7 @@ class product extends control
         }
         else
         {
-            $projects = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : $branch, $params = 'nodeleted');
+            $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'nodeleted');
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 

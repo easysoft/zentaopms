@@ -754,33 +754,30 @@ class productModel extends model
     }
 
     /**
-     * Get projects of a product in pairs.
+     * Get executions by product and project.
      *
      * @param  int    $productID
-     * @param  string $param    all|nodeleted
+     * @param  int    $branch
+     * @param  string $status    all|nodeleted
      * @access public
      * @return array
      */
-    public function getProjectPairs($productID, $branch = 0, $param = 'all')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $status = 'all')
     {
-        $projects = array();
-        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
+        if(!$this->session->PRJ) return array();
+
+        $executions = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq((int)$productID)
-            ->andWhere('t2.project')->eq((int)$this->session->PRJ)
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.project')->eq($this->session->PRJ)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($status == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
             ->orderBy('t1.project desc')
-            ->fetchAll();
+            ->fetchPairs();
 
-        foreach($datas as $data)
-        {
-            if($param == 'nodeleted' and $data->deleted) continue;
-            $projects[$data->id] = $data->name;
-        }
-        $projects = array('' => '') +  $projects;
-        return $projects;
+        $executions = array('' => '') + $executions;
+        return $executions;
     }
 
     /**

@@ -1331,7 +1331,7 @@ class projectModel extends model
     }
 
     /**
-     * Get project by id.
+     * Get the execution by ID.
      *
      * @param  int    $projectID
      * @param  bool   $setImgSize
@@ -1378,6 +1378,20 @@ class projectModel extends model
         if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
 
         return $project;
+    }
+
+    /**
+     * Get the execution by ID.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function getExecutionById($executionID = 0)
+    {
+        /* TODO: The getbyid method queries too much information that is not actually needed. */
+        if(empty($executionID)) return array();
+        return $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
     }
 
     /**

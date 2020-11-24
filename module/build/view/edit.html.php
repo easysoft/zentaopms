@@ -45,7 +45,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->build->project;?></th>
-          <td id='projectsBox'><?php echo html::select('project', $projects, $build->project, "class='form-control chosen' required");?></td>
+          <td id='projectsBox'><?php echo html::select('project', $executions, $build->project, "class='form-control chosen' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>
