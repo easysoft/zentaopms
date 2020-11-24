@@ -476,6 +476,12 @@ class customModel extends model
                 if($moduleName == 'user' and $method == 'edit' and strpos($this->config->user->contactField, $fieldName) === false) continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
+
+                if($moduleName == 'program')
+                {
+                    $fieldKey = substr($method, 0, 3) . ucfirst($fieldName);
+                    if(isset($moduleLang->$fieldKey) and is_string($moduleLang->$fieldKey)) $fields[$fieldName] = $moduleLang->$fieldKey;
+                }
             }
         }
         return $fields;
@@ -502,7 +508,6 @@ class customModel extends model
         {
             foreach($data->requiredFields as $method => $fields)
             {
-                $method      = strtolower($method);
                 $systemField = $this->config->$moduleName->$method->requiredFields;
 
                 $fields = join(',', $fields);

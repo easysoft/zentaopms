@@ -145,8 +145,11 @@ class programModel extends model
         }
 
         /* Redefines the language entries for the fields in the project table. */
-        $this->lang->project->code = $this->lang->program->PGMCode;
-        $this->lang->project->name = $this->lang->program->PGMName;
+        foreach(explode(',', $this->config->program->PGMCreate->requiredFields) as $fieldName)
+        {
+            $fieldKey = 'PGM' . ucfirst($fieldName);
+            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+        }
 
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
@@ -246,8 +249,12 @@ class programModel extends model
         if(dao::isError()) return false;
 
         /* Redefines the language entries for the fields in the project table. */
-        $this->lang->project->code = $this->lang->program->PGMCode;
-        $this->lang->project->name = $this->lang->program->PGMName;
+        foreach(explode(',', $this->config->program->PGMCreate->requiredFields) as $fieldName)
+        {
+            $fieldKey = 'PGM' . ucfirst($fieldName);
+            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+        }
+
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->PGMEdit->requiredFields, 'notempty')
@@ -1226,8 +1233,12 @@ class programModel extends model
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         /* Redefines the language entries for the fields in the project table. */
-        $this->lang->project->name = $this->lang->program->PRJName;
-        $this->lang->project->code = $this->lang->program->PRJCode;
+        foreach(explode(',', $requiredFields) as $fieldName)
+        {
+            $fieldKey = 'PRJ' . ucfirst($fieldName);
+            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+        }
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -1361,8 +1372,12 @@ class programModel extends model
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         /* Redefines the language entries for the fields in the project table. */
-        $this->lang->project->name = $this->lang->program->PRJName;
-        $this->lang->project->code = $this->lang->program->PRJCode;
+        foreach(explode(',', $requiredFields) as $fieldName)
+        {
+            $fieldKey = 'PRJ' . ucfirst($fieldName);
+            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+        }
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')

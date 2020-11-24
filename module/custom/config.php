@@ -12,6 +12,7 @@ $config->custom->canAdd['program']  = 'unitList';
 
 $config->custom->noModuleMenu = array();
 
+$config->custom->requiredModules[10] = 'program';
 $config->custom->requiredModules[15] = 'product';
 $config->custom->requiredModules[20] = 'story';
 $config->custom->requiredModules[25] = 'productplan';
@@ -32,8 +33,12 @@ $config->custom->requiredModules[80] = 'doc';
 
 $config->custom->requiredModules[85] = 'user';
 
-$config->custom->fieldList['product']['create']      = 'line,PO,QD,RD,type,desc';
-$config->custom->fieldList['product']['edit']        = 'line,PO,QD,RD,type,desc,status';
+$config->custom->fieldList['program']['PGMCreate']   = 'budget,PM,desc';
+$config->custom->fieldList['program']['PGMEdit']     = 'budget,PM,desc';
+$config->custom->fieldList['program']['PRJCreate']   = 'budget,PM,desc';
+$config->custom->fieldList['program']['PRJEdit']     = 'budget,PM,desc';
+$config->custom->fieldList['product']['create']      = 'PO,QD,RD,type,desc';
+$config->custom->fieldList['product']['edit']        = 'PO,QD,RD,type,desc,status';
 $config->custom->fieldList['story']['create']        = 'module,plan,source,pri,estimate,keywords';
 $config->custom->fieldList['story']['change']        = 'comment';
 $config->custom->fieldList['story']['close']         = 'comment';

@@ -45,6 +45,7 @@ else
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
+<?php $requiredFields = $config->program->PRJCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -120,13 +121,13 @@ else
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
-          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', '', "class='form-control'");?>
+              <?php echo html::input('budget', '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'yuan' : $parentProgram->budgetUnit, "class='form-control'");?>
             </div>
@@ -160,7 +161,7 @@ else
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
-            <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
+            <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>
         <tr>
