@@ -2398,6 +2398,7 @@ class project extends control
             foreach($executions as $execution)
             {
                 $link = helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project);
+                $execution->code = empty($execution->code) ? $execution->name : $execution->code;
                 echo html::a($link, '<i class="icon icon-menu-doc"></i>' . $execution->code, '', "class='text-ellipsis' title='$execution->name'");
             }
         }
