@@ -110,64 +110,6 @@ $lang->doc->libIconList['custom']  = 'icon-folder-o';
 $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
 
-<<<<<<< HEAD
-$lang->doc->aclList['open']           = 'Công khai';
-$lang->doc->aclList['custom']            = 'Tùy biến';
-$lang->doc->aclList['private']           = 'Riêng tư';
-
-$lang->doc->typeList['html']            = 'Html';
-$lang->doc->typeList['markdown']           = 'Markdown';
-$lang->doc->typeList['url']             = 'URL';
-$lang->doc->typeList['word']            = 'Word';
-$lang->doc->typeList['ppt']             = 'PPT';
-$lang->doc->typeList['excel']           = 'Excel';
-
-$lang->doc->types['text']           = 'Text';
-$lang->doc->types['url']            = 'URL';
-
-$lang->doc->contentTypeList['html']            = 'HTML';
-$lang->doc->contentTypeList['markdown']           = 'MarkDown';
-
-$lang->doc->browseType              = 'Danh mục';
-$lang->doc->browseTypeList['list']           = 'Danh sách';
-$lang->doc->browseTypeList['grid']           = 'Card';
-
-$lang->doc->fastMenuList['byediteddate']            = 'Recent Edited';
-//$lang->doc->fastMenuList['visiteddate']             = 'Recently Visited';
-$lang->doc->fastMenuList['openedbyme']           = 'My tài liệu';
-$lang->doc->fastMenuList['collectedbyme']           = 'My Favorites';
-
-$lang->doc->fastMenuIconList['byediteddate']            = 'icon-folder-upload';
-//$lang->doc->fastMenuIconList['visiteddate']             = 'icon-folder-move';
-$lang->doc->fastMenuIconList['openedbyme']           = 'icon-folder-account';
-$lang->doc->fastMenuIconList['collectedbyme']           = 'icon-folder-star';
-
-$lang->doc->customObjectLibs['files']              = 'Hiện Attachment thư viện';
-$lang->doc->customObjectLibs['customFiles']           = 'Hiện Custom thư viện';
-
-$lang->doc->orderLib           = 'Đánh giá Thiết lập';
-$lang->doc->customShowLibs           = 'Display Thiết lập';
-$lang->doc->customShowLibsList['zero']            = 'Display Empty thư viện';
-$lang->doc->customShowLibsList['children']           = 'Display Child-category tài liệu';
-$lang->doc->customShowLibsList['unclosed']           = "Display Active {$lang->projectCommon} Only";
-
-$lang->doc->confirmDelete             = "Bạn có muốn xóa this document?";
-$lang->doc->confirmDeleteLib             = "Bạn có muốn xóa this document library?";
-$lang->doc->errorEditSystemDoc           = "You don't have to change system document library.";
-$lang->doc->errorEmptyProduct            = "Không có {$lang->productCommon}. It cannot be created.";
-$lang->doc->errorEmptyProject            = "Không có {$lang->projectCommon}. It cannot be created.";
-$lang->doc->errorMainSysLib           = "This library không thể xóa.";
-$lang->doc->accessDenied              = "Access bị từ chối!";
-$lang->doc->versionNotFount           = 'Nó does not exist in bản dựng này.';
-$lang->doc->noDoc               = 'Không có documents. ';
-$lang->doc->cannotCreateOffice           = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
-=======
-global $config;
-if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
-if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->libTypeList['project']);
-if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
-if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
-
 $lang->doc->aclList['open']    = 'Công khai';
 $lang->doc->aclList['custom']  = 'Tùy biến';
 $lang->doc->aclList['private'] = 'Riêng tư';
@@ -188,6 +130,11 @@ $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 $lang->doc->browseType             = 'Danh mục';
 $lang->doc->browseTypeList['list'] = 'Danh sách';
 $lang->doc->browseTypeList['grid'] = 'Card';
+
+$lang->doc->fastMenuList['byediteddate']  = 'Recent Edited';
+//$lang->doc->fastMenuList['visiteddate'] = 'Recently Visited';
+$lang->doc->fastMenuList['openedbyme']    = 'My tài liệu';
+$lang->doc->fastMenuList['collectedbyme'] = 'My Favorites';
 
 $lang->doc->fastMenuList['byediteddate']  = 'Recent Edited';
 //$lang->doc->fastMenuList['visiteddate'] = 'Recently Visited';
@@ -224,7 +171,6 @@ $lang->doc->accessDenied       = "Access bị từ chối!";
 $lang->doc->versionNotFount    = 'Nó does not exist in bản dựng này.';
 $lang->doc->noDoc              = 'Không có documents. ';
 $lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
->>>>>>> 12.x
 $lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc      = 'Không có documents found.';
 $lang->doc->noEditedDoc        = 'Bạn có not edited any documents.';
