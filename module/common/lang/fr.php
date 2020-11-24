@@ -147,7 +147,7 @@ $lang->program->menu->browse  = array('link' => 'Program|program|pgmbrowse|', 'a
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->view        = array('link' => 'View|program|pgmview|program=%s');
-$lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s');
+$lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "Project|program|pgmproject|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "Member|personnel|accessible|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
@@ -227,6 +227,7 @@ $lang->searchObjects['testtask']    = 'Recette';
 $lang->searchObjects['doc']         = 'Document';
 $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'CR de Test';
+$lang->searchObjects['program']     = 'Program';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
