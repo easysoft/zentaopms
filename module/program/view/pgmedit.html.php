@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php $aclList = $program->parent ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
+<?php $requiredFields = $config->program->PGMEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -36,7 +37,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMPM;?></th>
-          <td><?php echo html::select('PM', $pmUsers, $program->PM, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('PM', $pmUsers, $program->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PO;?></th>
@@ -44,7 +45,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
-          <td><?php echo html::input('budget', $program->budget, "class='form-control'");?></td>
+          <td><?php echo html::input('budget', $program->budget, "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?></td>
           <td style='float:left'><?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?></td><td></td>
         </tr>
         <tr>
@@ -68,7 +69,7 @@
           <th><?php echo $lang->program->PGMDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=program&link=desc');?>
-            <?php echo html::textarea('desc', $program->desc, "rows='6' class='form-control kindeditor' hidefocus='true'");?>
+            <?php echo html::textarea('desc', $program->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>
         <tr>

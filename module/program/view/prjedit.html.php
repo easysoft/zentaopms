@@ -19,6 +19,7 @@
 <?php js::set('projectID', $project->id);?>
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
+<?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -91,13 +92,13 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
-          <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', $project->budget, "class='form-control'");?>
+              <?php echo html::input('budget', $project->budget, "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, $project->budgetUnit, "class='form-control'");?>
             </div>
@@ -136,7 +137,7 @@
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
-            <?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control kindeditor' hidefocus='true'");?>
+            <?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>
         <tr>

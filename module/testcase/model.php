@@ -1275,6 +1275,7 @@ class testcaseModel extends model
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
+        $libFiles = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
         foreach($libCases as $libCaseID => $case)
         {
             $case->fromCaseID      = $case->id;
@@ -1298,16 +1299,17 @@ class testcaseModel extends model
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
                 }
+
                 /* Fix bug #1518. */
-                $oldFile = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($case->fromCaseID)->fetchAll();
-                foreach($oldFile as $fileID => $File)
+                $oldFiles = zget($libFiles, $libCaseID, array());
+                foreach($oldFiles as $fileID => $file)
                 {
-                    $File->objectID  = $caseID;
-                    $File->addedBy   = $this->app->user->account;
-                    $File->addedDate = helper::today();
-                    $File->downloads = 0;
-                    unset($File->id);
-                    $this->dao->insert(TABLE_FILE)->data($File)->exec();
+                    $file->objectID  = $caseID;
+                    $file->addedBy   = $this->app->user->account;
+                    $file->addedDate = helper::now();
+                    $file->downloads = 0;
+                    unset($file->id);
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
                 }
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
