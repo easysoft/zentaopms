@@ -1,6 +1,7 @@
 <style>
-#cards {margin: 0 10px;}
+#cards {margin: 0; padding: 0 10px 10px 10px;}
 #cards > .col {width: 33.33%;}
+.col-side #cards > .col {width: 100%;}
 #cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
@@ -11,7 +12,7 @@
 #cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
 #cards .project-type-label {padding: 1px 2px;}
 #cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .project-infos {font-size: 12px;}
+#cards .project-infos {font-size: 12px; padding: 0 15px;}
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 10px;}
@@ -29,7 +30,7 @@
 #cards .project-stage-item + .project-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
 #cards .project-stage-item.is-going {color: #333;}
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
-.block-recentproject .panel-body{padding: 0;}
+#dashboard .block-recentproject .panel-body {padding: 0;}
 </style>
 <div class="panel-body">
   <div class='row' id='cards'>
