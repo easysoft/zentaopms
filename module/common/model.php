@@ -555,13 +555,14 @@ class commonModel extends model
             return false;
         }
 
-        $executions = $dbh->query('select id,name,code,project from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'closed' and code != '' and deleted = '0' order by id desc limit 6")->fetchAll();
+        $executions = $dbh->query('select id,name,code,project from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'closed' and deleted = '0' order by id desc limit 6")->fetchAll();
 
         if(!empty($executions))
         {
             foreach($executions as $index => $execution)
             {
                 if($index == 5) break;
+                $execution->code = empty($execution->code) ? $execution->name : $execution->code;
                 echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project), $execution->code, '', "style='padding: 2px 8px 2px 8px;' class='main-recent-text' title='$execution->name'") . '</li>';
             }
             if(count($executions) > 5) echo '<li onclick="getExecutions();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';

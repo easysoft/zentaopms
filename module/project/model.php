@@ -3394,7 +3394,6 @@ class projectModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('closed')
-            ->andWhere('code')->ne('')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->limit('5,' . $this->config->project->recentQuantity)
