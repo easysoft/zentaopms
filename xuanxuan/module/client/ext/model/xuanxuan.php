@@ -12,7 +12,7 @@ public function downloadZipPackage($version, $link)
     $decodeLink = helper::safe64Decode($link);
     if(!preg_match('/^https?\:\/\//', $decodeLink)) return false;
 
-    $file      = basename($link);
+    $file      = basename($decodeLink);
     $extension = substr($file, strrpos($file, '.') + 1);
     if(strpos(",{$this->config->file->allowed},", ",{$extension},") === false) return false;
 
