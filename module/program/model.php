@@ -1208,18 +1208,18 @@ class programModel extends model
 
                 if(dao::isError()) return false;
             }
-        }
 
-        /* Judge products not empty. */
-        $linkedProductsCount = 0;
-        foreach($_POST['products'] as $product)
-        {
-            if(!empty($product)) $linkedProductsCount++;
-        }
-        if(empty($linkedProductsCount))
-        {
-            dao::$errors[] = $this->lang->program->productNotEmpty;
-            return false;
+            /* Judge products not empty. */
+            $linkedProductsCount = 0;
+            foreach($_POST['products'] as $product)
+            {
+                if(!empty($product)) $linkedProductsCount++;
+            }
+            if(empty($linkedProductsCount))
+            {
+                dao::$errors[] = $this->lang->program->productNotEmpty;
+                return false;
+            }
         }
 
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
