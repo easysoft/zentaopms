@@ -147,7 +147,7 @@ $lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 
 
 $lang->program->viewMenu = new stdclass();
 //$lang->program->viewMenu->view        = array('link' => '概况|program|pgmview|program=%s');
-$lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s');
+$lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|pgmproject|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "人员|personnel|accessible|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
@@ -228,6 +228,7 @@ $lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['caselib']     = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
+$lang->searchObjects['program']     = '项目集';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/

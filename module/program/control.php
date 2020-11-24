@@ -1416,4 +1416,19 @@ class program extends control
 
         $this->display();
     }
+
+    /**
+     * View a program.
+     *
+     * @param int $programID
+     * @access public
+     * @return void
+     */
+    public function view($programID)
+    {
+        $program = $this->program->getPGMByID($programID);
+        if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        echo $this->fetch('program', 'PGMProduct', "programID=$programID");
+    }
 }

@@ -37,8 +37,7 @@
     <div class='col' data-id='<?php echo $projectID?>'>
       <div class='panel' data-url='<?php echo $this->createLink('project', 'index', "projectID=$project->id");?>'>
         <div class='panel-heading'>
-          <?php $parentName = $project->parentName ? $project->parentName . '/' : '';?>
-          <strong class='project-name' title='<?php echo $parentName . $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $parentName . $project->name);?> </strong>
+          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?> </strong>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
           <?php else: ?>

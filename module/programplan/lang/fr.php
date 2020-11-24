@@ -63,3 +63,4 @@ $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
 $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub phases cannot be added.';
+$lang->programplan->error->parentWorkload  = 'The sum of the workload of the child phase cannot be greater than that of the parent phase: %s.';
