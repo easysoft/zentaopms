@@ -1222,7 +1222,6 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `type` char(30) NOT NULL default 'inside',
   `dept` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
-  `type` char(30) NOT NULL DEFAULT 'inside',
   `password` char(32) NOT NULL default '',
   `role` char(10) NOT NULL default '',
   `realname` varchar(100) NOT NULL default '',
@@ -1379,14 +1378,14 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_workestimation`;
-CREATE TABLE IF NOT EXISTS `zt_workestimation` (
+CREATE TABLE `zt_workestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` mediumint(8) unsigned NOT NULL,
-  `scale` mediumint(8) unsigned NOT NULL,
-  `productivity` smallint(3) unsigned NOT NULL,
-  `duration` mediumint(8) unsigned NOT NULL,
-  `unitLaborCost` mediumint(8) unsigned NOT NULL,
-  `totalLaborCost` mediumint(8) unsigned NOT NULL,
+  `scale` decimal(10,2) unsigned NOT NULL,
+  `productivity` decimal(10,2) unsigned NOT NULL,
+  `duration` decimal(10,2) unsigned NOT NULL,
+  `unitLaborCost` decimal(10,2) unsigned NOT NULL,
+  `totalLaborCost` decimal(10,2) unsigned NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
@@ -1394,7 +1393,7 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `assignedTo` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `dayHour` float(5,2) DEFAULT NULL,
+  `dayHour` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_log`;
