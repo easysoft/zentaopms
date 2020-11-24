@@ -41,18 +41,6 @@ class programplanModel extends model
     }
 
     /**
-     * Get projects by productID.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return array
-     */
-    public function getProjectsByProduct($productID)
-    {
-        return $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-    }
-
-    /**
      * Get plans list.
      *
      * @param  int     $projectID
@@ -64,14 +52,14 @@ class programplanModel extends model
      */
     public function getStage($projectID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        $stageIdList = empty($projectID) ? array() : $this->getProjectsByProduct($productID);
+        $executions = empty($projectID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID);
 
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('stage')
             ->beginIF($browseType == 'all')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('parent')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($productID)->andWhere('id')->in($stageIdList)->fi()
+            ->beginIF($productID)->andWhere('id')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -926,14 +914,17 @@ class programplanModel extends model
      */
     public function getParentStageList($projectID, $planID, $productID)
     {
-        $projects = $this->getProjectsByProduct($productID);
-        unset($projects[$planID]);
+        $parentStage = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
+            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.project')->eq($projectID)
+            ->andWhere('t2.grade')->eq(1)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->orderBy('t2.id desc')
+            ->fetchPairs();
 
-        $parentStage = $this->dao->select('id,name')->from(TABLE_PROJECT)
-            ->where('type')->eq('stage')
-            ->andWhere('parent')->eq($projectID)
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs('id');
+        /* Remove the currently edited stage. */
+        if(isset($parentStage[$planID])) unset($parentStage[$planID]);
 
         foreach($parentStage as $key => $stage)
         {
