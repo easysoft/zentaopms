@@ -14,6 +14,7 @@ class program extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('project');
+        $this->loadModel('programplan');
         $this->loadModel('group');
     }
 
@@ -684,10 +685,11 @@ class program extends control
      * @param  int    $programID
      * @param  string $from PRJ|PGM
      * @param  int    $copyProjectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
+    public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '', $projectID = 0)
     {
         if($from == 'PRJ')
         {
@@ -699,6 +701,17 @@ class program extends control
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
         }
 
+        if($projectID)
+        {
+            $this->view->title     = $this->lang->program->tips;
+            $this->view->tips      = $this->fetch('program', 'tips', "model=$model&programID=$programID&from=$from&projectID=$projectID");
+            $this->view->programID = $programID;
+            $this->view->from      = $from;
+            $this->view->projectID = $projectID;
+            $this->display();
+            exit;
+        }
+
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
@@ -706,11 +719,7 @@ class program extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
-            if($from == 'PGM')
-            {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
-            }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJBrowse', array('programID' => $programID, 'browseType' => 'all'))));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'PRJCreate', "model=$model&programID=$programID&from=$from&copyProjectID=&projectID=$projectID", '', '',$projectID)));
         }
 
         $name      = '';
@@ -1415,5 +1424,26 @@ class program extends control
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
+    }
+
+    /**
+     * When create a project, help the user.
+     *
+     * @param  string $mode
+     * @param  int    $programID
+     * @param  string $from PRJ|PGM
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function tips($model = 'waterfall', $programID = 0, $from = 'PRJ', $projectID)
+    {
+        $this->view->model     = $model;
+        $this->view->programID = $programID;
+        $this->view->from      = $from;
+        $this->view->projectID = $projectID;
+        $this->view->project   = $this->project->getById($projectID);
+
+        $this->display('program', 'tips');
     }
 }

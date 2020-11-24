@@ -37,6 +37,9 @@ $lang->program->errorNoProducts      = '项目最少关联一个产品。';
 $lang->program->copyNoProject        = '没有可用的项目来复制';
 $lang->program->PRJSource            = '项目来源：';
 $lang->program->PRJStandalone        = '独立项目';
+$lang->program->tips                 = '提示';
+$lang->program->setTeam              = '设置团队';
+$lang->program->goback               = '返回项目列表';
 
 /* Fields. */
 $lang->program->common             = '项目集';
@@ -150,6 +153,7 @@ $lang->program->cannotCancelCat   = "该项目下已经有子项目，无法取�
 $lang->program->parentBeginEnd    = "父项目起止时间：%s ~ %s";
 $lang->program->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->program->readjustTime      = '重新调整项目起止时间';
+$lang->program->afterInfo         = "项目添加成功，您现在可以进行以下操作：";
 
 $lang->program->PRJProgramTitle['0']    = '不显示';
 $lang->program->PRJProgramTitle['base'] = '只显示一级项目集';

@@ -37,6 +37,9 @@ $lang->program->errorNoProducts      = 'At least one product is linked with the 
 $lang->program->copyNoProject        = 'There are no items available to copy.';
 $lang->program->PRJSource            = 'Project source：';
 $lang->program->PRJStandalone        = 'Standalone Projects';
+$lang->program->tips                 = 'Note';
+$lang->program->setTeam              = 'Set Team';
+$lang->program->goback               = 'Go Back';
 
 /* Fields. */
 $lang->program->common             = 'Program';
@@ -149,6 +152,7 @@ $lang->program->cannotCancelCat   = "It has child projects, so you cannot unmark
 $lang->program->parentBeginEnd    = "Parent begin&end date: %s ~ %s";
 $lang->program->childLongTime     = "If a child as long-term projects, the parent should be long-term too.";
 $lang->program->readjustTime      = 'Change the project begin&end date.';
+$lang->program->afterInfo         = "Project is created. Next you can ";
 
 $lang->program->PRJProgramTitle['0']    = 'Hide';
 $lang->program->PRJProgramTitle['base'] = 'Base-level program only';
