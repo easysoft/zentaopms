@@ -534,7 +534,7 @@ class programModel extends model
         if(empty($program)) return true;
         if(!isset($program->type)) return true;
 
-        if($program->type == 'program' && ($action == 'prjstart' || $action == 'prjsuspend')) return false;
+        if($program->type == 'program' && $action == 'prjsuspend') return false;
 
         if($action == 'pgmclose')    return $program->status != 'closed';
         if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
