@@ -675,12 +675,15 @@ class programplanModel extends model
             /* If child plan has milestone, update parent plan set milestone eq 0 . */
             if($plan->milestone and $parentPlan->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
         }
+        else
+        {
+            /* The workload of the parent plan cannot exceed 100%. */
+            $oldPlan->parent = $plan->parent;
+            $totalPercent    = $this->getTotalPercent($oldPlan);
+            $totalPercent    = $totalPercent + $plan->percent;
+            if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+        }
 
-        /* The workload of the parent plan cannot exceed 100%. */
-        $oldPlan->parent = $plan->parent;
-        $totalPercent    = $this->getTotalPercent($oldPlan);
-        $totalPercent    = $totalPercent + $plan->percent;
-        if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
 
         /* Set planDuration and realDuration. */
         $plan->planDuration = $this->getDuration($plan->begin, $plan->end);

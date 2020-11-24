@@ -911,10 +911,11 @@ class projectModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
+     * @param  string  $pairs
      * @access public
      * @return array
      */
-    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0)
+    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
         if(!$projectID) return array();
 
@@ -924,7 +925,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('begin_asc')
+            ->orderBy('path_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -935,7 +936,15 @@ class projectModel extends model
             {
                 if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
             }
+
             foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+        }
+
+        if($pairs)
+        {
+            $executionPairs = array();
+            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            $executions = $executionPairs;
         }
 
         return $executions;
