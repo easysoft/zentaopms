@@ -773,10 +773,10 @@ class productModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
-            ->orderBy('t2.begin asc')
+            ->orderBy('t2.id desc')
             ->fetchPairs();
 
-        $executions = array('' => '') + $executions;
+        $executions = array('0' => '') + $executions;
         return $executions;
     }
 

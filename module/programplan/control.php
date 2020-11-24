@@ -116,23 +116,19 @@ class programplan extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('programplan', 'browse', "projectID=$projectID");
-
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $stages     = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
-        $browseType = empty($planID) ? 'parent' : 'children';
+        $stages = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
 
         $this->app->loadLang('stage');
         $project = $this->loadModel('project')->getById($projectID);
-        $plans   = $this->programplan->getStage($projectID, $this->productID, $planID, $browseType);
+        $plans   = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
 
-        $title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
-        $position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
-        $position[] = $this->lang->programplan->create;
+        $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
+        $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->programplan->create;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
         $this->view->project  = $project;
         $this->view->stages   = $stages;
         $this->view->plans    = $plans;

@@ -804,25 +804,25 @@ class actionModel extends model
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
-            $objectNames[$objectType] = array();
-            $objectPRJs[$objectType]  = array();
             if($table != TABLE_TODO)
             {
-                $specialTables = "task,bug,build,issue";
-                foreach(explode(',', $specialTables) as $specialTable)
+                if(strpos($table, 'task') !== false or strpos($table, 'bug') !== false or strpos($table, 'build') !== false or strpos($table, 'issue') !== false)
                 {
-                    if(strpos($table, $specialTable) !== false)
+                    $objectInfo = $this->dao->select("id, PRJ, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
+                    foreach($objectInfo as $object)
                     {
-                        $objectInfo = $this->dao->select("id, PRJ, $field AS name")->from($table)->where('id')->in($objectIds)->fetch();
-                        $objectName = array($objectInfo->id => $objectInfo->name);
-                        $objectPRJ  = array($objectInfo->id => $objectInfo->PRJ);
+                        $objectName[$object->id] = $object->name;
+                        $objectPRJ[$object->id]  = $object->PRJ;
                     }
                 }
-                if(strpos($table, 'project') !== false)
+                elseif(strpos($table, 'project') !== false)
                 {
-                    $objectInfo = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetch();
-                    $objectName = array($objectInfo->id => $objectInfo->name);
-                    $objectPRJ  = array($objectInfo->id => $objectInfo->id);
+                    $objectInfo = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
+                    foreach($objectInfo as $object)
+                    {
+                        $objectName[$object->id] = $object->name;
+                        $objectPRJ[$object->id]  = $object->id;
+                    }
                 }
                 else
                 {
@@ -858,7 +858,7 @@ class actionModel extends model
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
-            $objectPRJ = isset($objectPRJs[$action->objectType][$action->objectID]) ? $objectPRJs[$action->objectType][$action->objectID] : 0;
+            $PRJ = isset($objectPRJs[$action->objectType][$action->objectID]) ? $objectPRJs[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
@@ -894,7 +894,7 @@ class actionModel extends model
                     continue;
                 }
 
-                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $objectPRJ);
+                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $PRJ);
                 if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectName));
                 $action->objectLabel = $objectLabel;
             }
