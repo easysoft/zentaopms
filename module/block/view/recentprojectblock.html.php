@@ -1,4 +1,8 @@
 <style>
+.cards-menu > li > a {padding-left: 5px; text-align: left;}
+.cards-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
+.cards-menu > li > a:hover > i {opacity: 1;}
+
 #cards {margin: 0; padding: 0 10px 10px 10px;}
 #cards > .col {width: 33.33%;}
 .col-side #cards > .col {width: 100%;}
@@ -7,9 +11,6 @@
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
-#cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
-#cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
-#cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
 #cards .project-type-label {padding: 1px 2px;}
 #cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
 #cards .project-infos {font-size: 12px; padding: 0 15px;}
@@ -47,7 +48,7 @@
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
-              <ul class='dropdown-menu pull-right'>
+              <ul class='dropdown-menu pull-right cards-menu'>
                 <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group');?></li>
                 <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
                 <li><?php common::printicon('program', 'PRJActivate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
