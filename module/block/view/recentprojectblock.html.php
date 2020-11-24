@@ -5,7 +5,7 @@
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
-#cards .panel-actions {padding: 7px 0;}
+#cards .panel-actions {padding: 7px 0; z-index: 0}
 #cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
 #cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
 #cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
