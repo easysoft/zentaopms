@@ -1440,4 +1440,25 @@ class program extends control
 
         echo $this->fetch('program', 'PGMProduct', "programID=$programID");
     }
+
+    /**
+     * When create a project, help the user.
+     *
+     * @param  string $model
+     * @param  int    $programID
+     * @param  string $from PRJ|PGM
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function tips($model = 'waterfall', $programID = 0, $from = 'PRJ', $projectID)
+    {
+        $this->view->model     = $model;
+        $this->view->programID = $programID;
+        $this->view->from      = $from;
+        $this->view->projectID = $projectID;
+        $this->view->project   = $this->project->getById($projectID);
+
+        $this->display('program', 'tips');
+    }
 }
