@@ -63,7 +63,6 @@
           <div class='project-infos'>
             <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $project->teamCount); ?></span>
             <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->estimate); ?></span>
-            <span><i class='icon icon-cost'></i> <?php echo $project->budget . '' . zget($lang->program->unitList, $project->budgetUnit);?></span>
           </div>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
