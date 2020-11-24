@@ -155,10 +155,6 @@ else
           </td><td></td><td></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
-        </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>

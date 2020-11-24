@@ -133,10 +133,6 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', $project->team, "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
