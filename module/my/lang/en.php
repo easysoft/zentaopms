@@ -27,7 +27,7 @@ $lang->my->score          = 'My Points';
 $lang->my->scoreRule      = 'Point Rules';
 $lang->my->noTodo         = 'No todos yet. ';
 
-$lang->my->myExecutions = 'My Stage/Sprint/Kanban';
+$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';

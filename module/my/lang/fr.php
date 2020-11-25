@@ -27,7 +27,7 @@ $lang->my->score          = 'Mes Points';
 $lang->my->scoreRule      = 'Règles Point';
 $lang->my->noTodo         = "Je n'ai rien à faire pour l'instant.";
 
-$lang->my->myExecutions = 'My Stage/Sprint/Kanban';
+$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
