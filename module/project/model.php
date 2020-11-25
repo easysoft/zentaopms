@@ -332,18 +332,11 @@ class projectModel extends model
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
-        /* Check the workload format and total. */
-        if(!empty($sprint->percent))
+        /* Check the workload format. */
+        if(!empty($sprint->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
         {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            $percentTotal  = $this->dao->select('SUM(percent) as percent')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('type')->eq('stage')->andWhere('deleted')->eq('0')->fetch('percent');
-            $percentTotal += $sprint->percent;
-            if($percentTotal > 100) return dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
         }
 
         /* Set planDuration and realDuration. */
@@ -452,17 +445,11 @@ class projectModel extends model
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
-        /* Check the workload format and total. */
-        if(!empty($project->percent))
+        /* Check the workload format. */
+        if(!empty($project->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
         {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            $percentTotal = $this->dao->select('SUM(percent) as percent')->from(TABLE_PROJECT)->where('project')->eq($this->session->PRJ)->andWhere('type')->eq('stage')->andWhere('deleted')->eq('0')->fetch('percent');
-            if($percentTotal > 100) return dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
         }
 
         /* Set planDuration and realDuration. */
