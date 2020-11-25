@@ -313,6 +313,7 @@ $lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
 $lang->block->availableBlocks->testtask = 'Requests';
 $lang->block->availableBlocks->risk     = 'My Risks';
+$lang->block->availableBlocks->issue    = 'My Issues';
 
 $lang->block->moduleList['project']   = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -424,10 +425,12 @@ $lang->block->orderByList->story['status_desc'] = 'Story Status DESC';
 $lang->block->orderByList->story['stage_asc']   = 'Story Phase ASC';
 $lang->block->orderByList->story['stage_desc']  = 'Story Phase DESC';
 
-$lang->block->todoNum = 'Todo';
-$lang->block->taskNum = 'Task';
-$lang->block->bugNum  = 'Bug';
-$lang->block->riskNum = 'Risk';
+$lang->block->todoNum  = 'Todo';
+$lang->block->taskNum  = 'Task';
+$lang->block->bugNum   = 'Bug';
+$lang->block->riskNum  = 'Risk';
+$lang->block->issueNum = 'Issues';
+$lang->block->storyNum = 'Stories';
 
 $lang->block->typeList = new stdclass();
 

@@ -713,6 +713,12 @@ class blockModel extends model
         return json_encode($this->appendCountParams($params));
     }
 
+    /**
+     * Get assign to me params.
+     *
+     * @access public
+     * @return json
+     */
     public function getAssignToMeParams()
     {
         $params->todoNum['name']    = $this->lang->block->todoNum;
@@ -730,6 +736,14 @@ class blockModel extends model
         $params->riskNum['name']    = $this->lang->block->riskNum;
         $params->riskNum['default'] = 20;
         $params->riskNum['control'] = 'input';
+
+        $params->issueNum['name']    = $this->lang->block->issueNum;
+        $params->issueNum['default'] = 20;
+        $params->issueNum['control'] = 'input';
+
+        $params->storyNum['name']    = $this->lang->block->storyNum;
+        $params->storyNum['default'] = 20;
+        $params->storyNum['control'] = 'input';
 
         return json_encode($params);
     }

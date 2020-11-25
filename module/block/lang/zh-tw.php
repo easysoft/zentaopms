@@ -314,6 +314,7 @@ $lang->block->availableBlocks->release  = '發佈列表';
 $lang->block->availableBlocks->build    = '版本列表';
 $lang->block->availableBlocks->testtask = '測試版本列表';
 $lang->block->availableBlocks->risk     = '我的風險';
+$lang->block->availableBlocks->issue    = '我的問題';
 
 $lang->block->moduleList['project']   = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -425,10 +426,12 @@ $lang->block->orderByList->story['status_desc'] = '狀態倒序';
 $lang->block->orderByList->story['stage_asc']   = '階段正序';
 $lang->block->orderByList->story['stage_desc']  = '階段倒序';
 
-$lang->block->todoNum = '待辦數';
-$lang->block->taskNum = '任務數';
-$lang->block->bugNum  = 'Bug數';
-$lang->block->riskNum = '風險數';
+$lang->block->todoNum  = '待辦數';
+$lang->block->taskNum  = '任務數';
+$lang->block->bugNum   = 'Bug數';
+$lang->block->riskNum  = '風險數';
+$lang->block->issueNum = '問題數';
+$lang->block->storyNum = '需求數';
 
 $lang->block->typeList = new stdclass();
 
