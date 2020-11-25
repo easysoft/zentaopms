@@ -867,7 +867,7 @@ $lang->menu->scrum->program     = '仪表盘|program|index|';
 $lang->menu->scrum->project     = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->scrum->doc         = '文档|doc|index|';
 $lang->menu->scrum->qa          = '测试|qa|index';
-$lang->menu->scrum->stakeholder = '干系人|stakeholder|browse|';
+$lang->menu->scrum->stakeholder = '干系人|stakeholder|browse';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
