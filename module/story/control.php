@@ -1315,10 +1315,12 @@ class story extends control
      * Story track.
      *
      * @param  int    $productID
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track($productID)
+    public function track($productID, $recPerPage = 10, $pageID = 1)
     {   
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
@@ -1326,11 +1328,17 @@ class story extends control
         $products  = $this->product->getPairs();
         $productID = $this->product->saveState($productID, $products);
         $this->product->setMenu($products, $productID, 0, 0, '');
-        $tracks = $this->story->getTracks($productID);
 
-        $this->view->tracks     = $tracks;
+        /* Load pager and get tracks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, $recPerPage, $pageID);
+        $tracks = $this->story->getTracks($productID, $pager);
+
         $this->view->title      = $this->lang->story->track;
         $this->view->posision[] = $this->lang->story->track;
+
+        $this->view->tracks = $tracks;
+        $this->view->pager  = $pager;
         $this->display();
     }
 
