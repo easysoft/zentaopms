@@ -1362,7 +1362,7 @@ class programModel extends model
         }
         if(empty($linkedProductsCount))
         {
-            dao::$errors[] = $this->lang->program->productNotEmpty;
+            dao::$errors[] = $this->lang->program->errorNoProducts;
             return false;
         }
 
