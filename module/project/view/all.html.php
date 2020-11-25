@@ -83,7 +83,7 @@
           <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
             <?php
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
-            echo html::a($this->createLink('project', 'view', 'project=' . $execution->id), $execution->name);
+            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('project', 'view', 'project=' . $execution->id), $execution->name);
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
