@@ -14,7 +14,7 @@ foreach($products as $product)
     if($product->status == 'closed') $closeds++;
     $productNames[] = $product->name;
 }
-$productsPinYin = common::convert2Pinyin($productNames);
+$productsPinYin     = common::convert2Pinyin($productNames);
 $myProductsHtml     = '';
 $normalProductsHtml = '';
 $closedProductsHtml = '';
@@ -23,43 +23,21 @@ foreach($products as $product)
 {
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
-        if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
-            $myProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
-        else
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $product->id) : sprintf($link, $product->id);
-            $myProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
+        $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
+        $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
+        $myProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
-        if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
-            $normalProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
-        else
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $product->id) : sprintf($link, $product->id);
-            $normalProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
+        $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
+        $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
+        $normalProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
     else if($product->status == 'closed')
     {
-
-        if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
-            $closedProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
-        else
-        {
-            $linkHtml = $module == 'programplan' ? sprintf($link, $projectID, $product->id) : sprintf($link, $product->id);
-            $closedProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
-        }
+        $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
+        $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $objectID);
+        $closedProductsHtml .= html::a($linkHtml, "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
 }
 ?>
