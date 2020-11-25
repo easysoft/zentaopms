@@ -81,8 +81,30 @@
         <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('lifetime', $lang->program->PRJLifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");?></td>
+          <td>
+          <?php
+          if($isStage)
+          {
+              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control'");
+          }
+          else
+          {
+              echo html::select('lifetime', $lang->program->PRJLifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
+          }
+          ?>
+          </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->project->typeDesc;?></div></td>
+        </tr>
+        <?php endif;?>
+        <?php if($isStage):?>
+        <tr>
+          <th><?php echo $lang->programplan->percent;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('percent', '', "class='form-control'");?>
+              <span class='input-group-addon'>%</span>
+            </div>
+          </td>
         </tr>
         <?php endif;?>
         <tr class='hide'>
