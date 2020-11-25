@@ -21,12 +21,12 @@ $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量編輯';
 
 $lang->productplan->batchUnlink      = "批量移除";
-$lang->productplan->linkStory        = "關聯{$lang->storyCommon}";
-$lang->productplan->unlinkStory      = "移除{$lang->storyCommon}";
+$lang->productplan->linkStory        = "關聯{$lang->productSRCommon}";
+$lang->productplan->unlinkStory      = "移除{$lang->productSRCommon}";
 $lang->productplan->unlinkStoryAB    = "移除";
-$lang->productplan->batchUnlinkStory = "批量移除{$lang->storyCommon}";
-$lang->productplan->linkedStories    = $lang->storyCommon;
-$lang->productplan->unlinkedStories  = "未關聯{$lang->storyCommon}";
+$lang->productplan->batchUnlinkStory = "批量移除{$lang->productSRCommon}";
+$lang->productplan->linkedStories    = $lang->productSRCommon;
+$lang->productplan->unlinkedStories  = "未關聯{$lang->productSRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "創建子計劃";
 
@@ -39,7 +39,7 @@ $lang->productplan->unexpired        = '未過期計劃';
 $lang->productplan->all              = '所有計劃';
 
 $lang->productplan->confirmDelete      = "您確認刪除該計劃嗎？";
-$lang->productplan->confirmUnlinkStory = "您確認移除該{$lang->storyCommon}嗎？";
+$lang->productplan->confirmUnlinkStory = "您確認移除該{$lang->productSRCommon}嗎？";
 $lang->productplan->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 $lang->productplan->noPlan             = '暫時沒有計劃。';
 $lang->productplan->cannotDeleteParent = '不能刪除父計劃';
@@ -53,7 +53,7 @@ $lang->productplan->begin      = '開始日期';
 $lang->productplan->end        = '結束日期';
 $lang->productplan->last       = '上次計劃';
 $lang->productplan->future     = '待定';
-$lang->productplan->stories    = "{$lang->storyCommon}數";
+$lang->productplan->stories    = "{$lang->productSRCommon}數";
 $lang->productplan->bugs       = 'Bug數';
 $lang->productplan->hour       = $lang->hourCommon;
 $lang->productplan->project    = $lang->projectCommon;

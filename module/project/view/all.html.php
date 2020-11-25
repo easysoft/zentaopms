@@ -69,54 +69,54 @@
         </tr>
       </thead>
       <tbody class='sortable' id='projectTableList'>
-        <?php foreach($projectStats as $project):?>
-        <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->order ?>'>
+        <?php foreach($executionStats as $execution):?>
+        <tr data-id='<?php echo $execution->id ?>' data-order='<?php echo $execution->order ?>'>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' />
+              <input type='checkbox' name='projectIDList[<?php echo $execution->id;?>]' value='<?php echo $execution->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
-            <?php printf('%03d', $project->id);?>
+            <?php printf('%03d', $execution->id);?>
           </td>
-          <td class='text-left <?php if(!empty($project->children)) echo 'has-child';?>' title='<?php echo $project->name?>'>
+          <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
             <?php
-            if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
-            echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);
+            if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
+            echo html::a($this->createLink('project', 'view', 'project=' . $execution->id), $execution->name);
             ?>
-            <?php if(!empty($project->children)):?>
-              <a class="plan-toggle" data-id="<?php echo $project->id;?>"><i class="icon icon-angle-double-right"></i></a>
+            <?php if(!empty($execution->children)):?>
+              <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
-          <td><?php echo zget($users, $project->PM);?></td>
-          <td><?php echo $project->end;?></td>
-          <?php $projectStatus = $this->processStatus('project', $project);?>
+          <td class='text-left' title="<?php echo $execution->code;?>"><?php echo $execution->code;?></td>
+          <td><?php echo zget($users, $execution->PM);?></td>
+          <td><?php echo $execution->end;?></td>
+          <?php $projectStatus = $this->processStatus('project', $execution);?>
           <td class='c-status' title='<?php echo $projectStatus;?>'>
-            <span class="status-project status-<?php echo $project->status?>"><?php echo $projectStatus;?></span>
+            <span class="status-project status-<?php echo $execution->status?>"><?php echo $projectStatus;?></span>
           </td>
-          <td><?php echo $project->hours->totalEstimate;?></td>
-          <td><?php echo $project->hours->totalConsumed;?></td>
-          <td><?php echo $project->hours->totalLeft;?></td>
+          <td><?php echo $execution->hours->totalEstimate;?></td>
+          <td><?php echo $execution->hours->totalConsumed;?></td>
+          <td><?php echo $execution->hours->totalLeft;?></td>
           <td class="c-progress">
             <div class="progress progress-text-left">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-              <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
+              <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
               </div>
             </div>
           </td>
-          <td id='spark-<?php echo $project->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $project->burns);?>'></td>
+          <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
           <?php if($canOrder):?>
           <td class='sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>
         </tr>
-        <?php if(!empty($project->children)):?>
+        <?php if(!empty($execution->children)):?>
          <?php $i = 0;?>
-           <?php foreach($project->children as $key => $child):?>
+           <?php foreach($execution->children as $key => $child):?>
            <?php $class  = $i == 0 ? ' table-child-top' : '';?>
-           <?php $class .= ($i + 1 == count($project->children)) ? ' table-child-bottom' : '';?>
-           <tr class='table-children<?php echo $class;?> parent-<?php echo $project->id;?>' data-id='<?php echo $child->id?>'>
+           <?php $class .= ($i + 1 == count($execution->children)) ? ' table-child-bottom' : '';?>
+           <tr class='table-children<?php echo $class;?> parent-<?php echo $execution->id;?>' data-id='<?php echo $child->id?>'>
              <td class='c-id'>
                <?php if($canBatchEdit):?>
                <div class="checkbox-primary">
@@ -161,7 +161,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($projectStats):?>
+    <?php if($executionStats):?>
     <div class='table-footer'>
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>

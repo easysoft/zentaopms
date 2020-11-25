@@ -81,7 +81,7 @@ $lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->storyCommon} and link {$lang->storyCommon} to the task. The closed {$lang->storyCommon} will not be converted into tasks.";
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->productSRCommon} and link {$lang->productSRCommon} to the task. The closed {$lang->productSRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Câu chuyện';
@@ -128,7 +128,7 @@ $lang->story->version        = 'Phiên bản';
 $lang->story->plan           = 'Kế hoạch liên kết';
 $lang->story->planAB         = 'Kế hoạch';
 $lang->story->comment        = 'Nhận xét';
-$lang->story->children       = "$lang->storyCommon} con";
+$lang->story->children       = "$lang->productSRCommon} con";
 $lang->story->childrenAB     = "C";
 $lang->story->linkStories    = 'Câu chuyện liên kết';
 $lang->story->childStories   = 'Câu chuyện được phân rã';
@@ -262,8 +262,8 @@ $lang->story->mustChooseResult     = 'Chọn kết quả';
 $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển thành.';
 $lang->story->noStory              = 'Không có câu chuyện nào';
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent   = "Không thể xóa {$lang->storyCommon} mẹ";
-$lang->story->moveChildrenTips     = "Its Child {$lang->storyCommon} will be moved to the selected product when editing the linked product of Parent {$lang->storyCommon}.";
+$lang->story->cannotDeleteParent   = "Không thể xóa {$lang->productSRCommon} mẹ";
+$lang->story->moveChildrenTips     = "Its Child {$lang->productSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->productSRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();

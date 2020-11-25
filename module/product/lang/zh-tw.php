@@ -11,7 +11,7 @@
  */
 $lang->product->common       = $lang->productCommon . '視圖';
 $lang->product->index        = $lang->productCommon . '主頁';
-$lang->product->browse       = "{$lang->storyCommon}列表";
+$lang->product->browse       = "{$lang->productSRCommon}列表";
 $lang->product->dynamic      = '產品動態';
 $lang->product->view         = "{$lang->productCommon}概況";
 $lang->product->edit         = "編輯{$lang->productCommon}";
@@ -48,14 +48,14 @@ $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有與此產品關聯的{$lang->projectCommon}";
 
 $lang->product->currentProject        = '當前' . $lang->projectCommon;
-$lang->product->activeStories         = "激活{$lang->storyCommon}";
-$lang->product->activeStoriesTitle    = "激活{$lang->storyCommon}";
-$lang->product->changedStories        = "已變更{$lang->storyCommon}";
-$lang->product->changedStoriesTitle   = "已變更{$lang->storyCommon}";
-$lang->product->draftStories          = "草稿{$lang->storyCommon}";
-$lang->product->draftStoriesTitle     = "草稿{$lang->storyCommon}";
-$lang->product->closedStories         = "已關閉{$lang->storyCommon}";
-$lang->product->closedStoriesTitle    = "已關閉{$lang->storyCommon}";
+$lang->product->activeStories         = "激活{$lang->productSRCommon}";
+$lang->product->activeStoriesTitle    = "激活{$lang->productSRCommon}";
+$lang->product->changedStories        = "已變更{$lang->productSRCommon}";
+$lang->product->changedStoriesTitle   = "已變更{$lang->productSRCommon}";
+$lang->product->draftStories          = "草稿{$lang->productSRCommon}";
+$lang->product->draftStoriesTitle     = "草稿{$lang->productSRCommon}";
+$lang->product->closedStories         = "已關閉{$lang->productSRCommon}";
+$lang->product->closedStoriesTitle    = "已關閉{$lang->productSRCommon}";
 $lang->product->unResolvedBugs        = '未解決Bug';
 $lang->product->unResolvedBugsTitle   = '未解決Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';

@@ -43,24 +43,20 @@ $config->projectCommonList['vi'][0] = 'Lặp lại';
 $config->projectCommonList['vi'][1] = 'Sprint';
 $config->projectCommonList['vi'][2] = 'Giai đoạn';
 
-/* Story common list. */
-$config->storyCommonList['zh-cn'][0] = '需求';
-$config->storyCommonList['zh-cn'][1] = '故事';
+$config->URStory['zh-cn'] = '用户需求';
+$config->SRStory['zh-cn'] = '软件需求';
 
-$config->storyCommonList['zh-tw'][0] = '需求';
-$config->storyCommonList['zh-tw'][1] = '故事';
+$config->URStory['en'] = 'Requirement';
+$config->SRStory['en'] = 'Story';
 
-$config->storyCommonList['en'][0] = 'Story';
-$config->storyCommonList['en'][1] = 'Story';
+$config->URStory['vi'] = 'Requirement';
+$config->SRStory['vi'] = 'Story';
 
-$config->storyCommonList['de'][0] = 'Story';
-$config->storyCommonList['de'][1] = 'Story';
+$config->URStory['fr'] = 'Requirement';
+$config->SRStory['fr'] = 'Story';
 
-$config->storyCommonList['fr'][0] = 'Story';
-$config->storyCommonList['fr'][1] = 'Story';
-
-$config->storyCommonList['vi'][0] = 'Câu chuyện';
-$config->storyCommonList['vi'][1] = 'Câu chuyện';
+$config->URStory['de'] = 'Requirement';
+$config->SRStory['de'] = 'Story';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '故事点';

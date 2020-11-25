@@ -40,7 +40,7 @@ $lang->block->contribute   = '我的贡献';
 
 $lang->block->leftToday      = '今天剩余工作总计';
 $lang->block->myTask         = '我的任务';
-$lang->block->myStory        = "我的{$lang->storyCommon}";
+$lang->block->myStory        = "我的{$lang->productSRCommon}";
 $lang->block->myBug          = '我的BUG';
 $lang->block->myProject      = '未关闭的' . $lang->projectCommon;
 $lang->block->myProduct      = '未关闭的' . $lang->productCommon;
@@ -81,7 +81,7 @@ $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
 $lang->block->productName  = $lang->productCommon . '名称';
-$lang->block->totalStory   = '总' . $lang->storyCommon;
+$lang->block->totalStory   = '总' . $lang->productSRCommon;
 $lang->block->totalBug     = '总Bug';
 $lang->block->totalRelease = '发布次数';
 
@@ -175,7 +175,7 @@ $lang->block->default['product']['3']['grid']  = 8;
 $lang->block->default['product']['3']['params']['count'] = 15;
 $lang->block->default['product']['3']['params']['type']  = 'noclosed';
 
-$lang->block->default['product']['4']['title'] = "指派给我的{$lang->storyCommon}";
+$lang->block->default['product']['4']['title'] = "指派给我的{$lang->productSRCommon}";
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
@@ -306,7 +306,7 @@ $lang->block->availableBlocks->todo     = '我的待办';
 $lang->block->availableBlocks->task     = '我的任务';
 $lang->block->availableBlocks->bug      = '我的Bug';
 $lang->block->availableBlocks->case     = '我的用例';
-$lang->block->availableBlocks->story    = "我的{$lang->storyCommon}";
+$lang->block->availableBlocks->story    = "我的{$lang->productSRCommon}";
 $lang->block->availableBlocks->product  = $lang->productCommon . '列表';
 $lang->block->availableBlocks->project  = $lang->projectCommon . '列表';
 $lang->block->availableBlocks->plan     = "{$lang->planCommon}列表";
@@ -351,7 +351,7 @@ $lang->block->modules['product']->availableBlocks = new stdclass();
 $lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . '总览';
 $lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks->story     = "{$lang->storyCommon}列表";
+$lang->block->modules['product']->availableBlocks->story     = "{$lang->productSRCommon}列表";
 $lang->block->modules['product']->availableBlocks->plan      = "{$lang->planCommon}列表";
 $lang->block->modules['product']->availableBlocks->release   = '发布列表';
 
@@ -521,7 +521,7 @@ $lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护公司', '添加用户', '维护权限');
-$lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护{$lang->planCommon}", "维护{$lang->storyCommon}", '创建发布');
-$lang->block->flowchart['project'] = array($lang->projectCommon . '经理', '创建' . $lang->projectCommon, '维护团队', '关联' . $lang->productCommon, "关联{$lang->storyCommon}", '分解任务');
+$lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护{$lang->planCommon}", "维护{$lang->productSRCommon}", '创建发布');
+$lang->block->flowchart['project'] = array($lang->projectCommon . '经理', '创建' . $lang->projectCommon, '维护团队', '关联' . $lang->productCommon, "关联{$lang->productSRCommon}", '分解任务');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '更新状态', '完成任务和Bug');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');

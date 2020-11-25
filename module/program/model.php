@@ -838,15 +838,16 @@ class programModel extends model
             ->groupBy('PRJ')
             ->fetchAll('PRJ');
 
+        $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $project->executions = $this->project->getExecutionStats($projectID, $status, 0, 0, $itemCounts, $orderBy);
+            $orderBy = $project->model == 'waterfall' ? 'path_asc,id_asc' : 'id_desc';
+            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
+            $project->executions = $this->project->getExecutionStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
             $project->parentName = $this->getPRJParentName($project->parent);
         }
-
         return $projects;
     }
 

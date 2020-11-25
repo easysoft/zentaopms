@@ -332,18 +332,11 @@ class projectModel extends model
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
-        /* Check the workload format and total. */
-        if(!empty($sprint->percent))
+        /* Check the workload format. */
+        if(!empty($sprint->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
         {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            $percentTotal  = $this->dao->select('SUM(percent) as percent')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('type')->eq('stage')->andWhere('deleted')->eq('0')->fetch('percent');
-            $percentTotal += $sprint->percent;
-            if($percentTotal > 100) return dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
         }
 
         /* Set planDuration and realDuration. */
@@ -452,17 +445,11 @@ class projectModel extends model
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
-        /* Check the workload format and total. */
-        if(!empty($project->percent))
+        /* Check the workload format. */
+        if(!empty($project->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
         {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            $percentTotal = $this->dao->select('SUM(percent) as percent')->from(TABLE_PROJECT)->where('project')->eq($this->session->PRJ)->andWhere('type')->eq('stage')->andWhere('deleted')->eq('0')->fetch('percent');
-            if($percentTotal > 100) return dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
         }
 
         /* Set planDuration and realDuration. */
@@ -962,7 +949,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('path_asc')
+            ->orderBy('path_asc,id_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -999,15 +986,16 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'path_asc,id_asc', $pager = null)
     {
         if(empty($productID))
         {
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
-                ->andWhere('type')->eq('stage')
+                ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
                 ->andWhere('deleted')->eq('0')
-                ->orderBy('path_desc,id_asc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -1017,15 +1005,16 @@ class projectModel extends model
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.project')->eq($projectID)
-                ->andWhere('t2.type')->eq('stage')
+                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->andWhere('t2.deleted')->eq('0')
-                ->orderBy('t2.parent_desc,t2.id_asc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
 
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $hours     = array();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
@@ -1496,7 +1485,7 @@ class projectModel extends model
      */
     public function getOrderedExecutions($projectID, $status, $num = 0)
     {
-        $executionList = $this->getExecutionList($projectID, $status);
+        $executionList = $this->getExecutionList($projectID, 'all', $status);
         if(empty($executionIdList)) return $executionList;
 
         $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();

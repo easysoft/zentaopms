@@ -804,14 +804,16 @@ class programplanModel extends model
                 break;
             case 'actions':
                 common::printIcon('project', 'start', "projectID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'create', "projectID={$plan->id}", $plan, 'list');
-                if($this->isCreateTask($plan->id))
+                $class = !empty($plan->children) ? 'disabled' : '';
+                common::printIcon('task', 'create', "projectID={$plan->id}", $plan, 'list', '', '', $class);
+
+                if($plan->grade == 1 && $this->isCreateTask($plan->id))
                 {
                     common::printIcon('programplan', 'create', "program={$plan->parent}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'treemap', '', '', '', '', $this->lang->programplan->createSubPlan);
                 }
                 else
                 {
-                    $disabled = ($plan->parent == 0) ? ' disabled' : '';
+                    $disabled = ($plan->grade == 2) ? ' disabled' : '';
                     echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-treemap"></i>', '', 'class="btn ' . $disabled . '"');
                 }
 

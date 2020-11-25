@@ -179,7 +179,7 @@ $lang->misc->feature->all['11.5.stable'][] = array('title'=>'集成新版本客�
 
 $lang->misc->feature->all['11.4.1'][]      = array('title'=>'完善细节，修复Bug', 'desc' => '');
 
-$lang->misc->feature->all["11.4.stable"][] = array("title"=>"完善细节，修复Bug", "desc" => "<p>增强测试任务管理</p><p>优化计划、发布、版本关联{$lang->storyCommon}和bug的交互</p><p>文档库可以自定义是否显示子分类里的文档</p><p>修复bug，完善细节</p>");
+$lang->misc->feature->all["11.4.stable"][] = array("title"=>"完善细节，修复Bug", "desc" => "<p>增强测试任务管理</p><p>优化计划、发布、版本关联{$lang->productSRCommon}和bug的交互</p><p>文档库可以自定义是否显示子分类里的文档</p><p>修复bug，完善细节</p>");
 
 $lang->misc->feature->all['11.3.stable'][] = array('title'=>'完善细节，修复Bug', 'desc' => '<p>计划添加子计划功能</p><p>优化chosen交互</p><p>添加时区设置</p><p>优化文档库和文档</p>');
 
@@ -231,14 +231,14 @@ $lang->misc->feature->all['8.3.stable'][] = array('title'=>'调整文档功能',
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'首页自定义', 'desc' => '<p>我的地盘由我做主。现在开始，你可以向首页添加多种多样的内容区块，而且还可以决定如何排列和显示他们。</p><p>我的地盘、产品、项目、测试模块下均支持首页自定义功能。</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'导航定制', 'desc' => '<p>导航上显示的项目现在完全由你来决定，不仅仅可以决定在导航上展示哪些内容，还可以决定展示的顺序。</p><p>将鼠标悬浮在导航上稍后会在右侧显示定制按钮，点击打开定制对话框，通过点击切换是否显示，拖放操作来更改显示顺序。</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'批量添加、编辑自定义', 'desc' => '<p>可以在批量添加和批量编辑页面自定义操作的字段。</p>');
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>"添加{$lang->storyCommon}、任务、Bug、用例自定义", 'desc' => "<p>可以在添加{$lang->storyCommon}、任务、Bug、用例页面，自定义部分字段是否显示。</p>");
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>'导出自定义', 'desc' => "<p>在导出{$lang->storyCommon}、任务、Bug、用例的时候，用户可以自定义导出的字段，也可以保存模板方便每次导出。</p>");
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>"{$lang->storyCommon}、任务、Bug、用例组合检索功能", 'desc' => "<p>在{$lang->storyCommon}、任务、Bug、用例列表页面，可以实现模块和标签的组合检索。</p>");
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>"添加{$lang->productSRCommon}、任务、Bug、用例自定义", 'desc' => "<p>可以在添加{$lang->productSRCommon}、任务、Bug、用例页面，自定义部分字段是否显示。</p>");
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>'导出自定义', 'desc' => "<p>在导出{$lang->productSRCommon}、任务、Bug、用例的时候，用户可以自定义导出的字段，也可以保存模板方便每次导出。</p>");
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>"{$lang->productSRCommon}、任务、Bug、用例组合检索功能", 'desc' => "<p>在{$lang->productSRCommon}、任务、Bug、用例列表页面，可以实现模块和标签的组合检索。</p>");
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'增加新手教程', 'desc' => '<p>增加新手教程，方便新用户了解禅道使用。</p>');
 
-$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加分支/平台类型，相应的{$lang->storyCommon}、计划、Bug、用例、模块等都增加分支。</p>");
+$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加分支/平台类型，相应的{$lang->productSRCommon}、计划、Bug、用例、模块等都增加分支。</p>");
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>'调整发布模块', 'desc' => '<p>发布增加停止维护操作，当发布停止维护时，创建Bug将不显示这个发布。</p><p>发布中遗留的bug改为手工关联。</p>');
-$lang->misc->feature->all['7.4.beta'][] = array('title'=>"调整{$lang->storyCommon}和Bug的创建页面", 'desc' => '');
+$lang->misc->feature->all['7.4.beta'][] = array('title'=>"调整{$lang->productSRCommon}和Bug的创建页面", 'desc' => '');
 
 $lang->misc->feature->all['7.2.stable'][] = array('title'=>'增强安全', 'desc' => '<p>加强对管理员弱口令的检查。</p><p>写插件，上传插件的时候需要创建ok文件。</p><p>敏感操作增加管理员口令的检查</p><p>对输入内容做striptags, specialchars处理。</p>');
 $lang->misc->feature->all['7.2.stable'][] = array('title'=>'完善细节', 'desc' => '');

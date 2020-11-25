@@ -691,6 +691,7 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '', $projectID = 0)
     {
+        $this->app->loadLang('custom');
         if($from == 'PRJ')
         {
             $this->lang->navGroup->program = 'project';

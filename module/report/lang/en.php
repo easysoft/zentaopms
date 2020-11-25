@@ -113,9 +113,9 @@ $lang->report->annualData->foundBugs        = "Bug Reported";
 $lang->report->annualData->createdCases     = "Case Created";
 $lang->report->annualData->involvedProducts = "{$lang->productCommon} Involved";
 $lang->report->annualData->createdPlans     = "Plan Created";
-$lang->report->annualData->createdStories   = "{$lang->storyCommon} Created";
+$lang->report->annualData->createdStories   = "{$lang->productSRCommon} Created";
 
-$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->storyCommon} Count and Percent";
+$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->productSRCommon} Count and Percent";
 $lang->report->annualData->qaOverview      = "{$lang->productCommon} Bug Count and Percent";
 $lang->report->annualData->projectOverview = "{$lang->projectCommon} Overview";
 $lang->report->annualData->doneProject     = "Done {$lang->projectCommon}";
@@ -123,13 +123,13 @@ $lang->report->annualData->doingProject    = "Ongoing {$lang->projectCommon}";
 $lang->report->annualData->suspendProject  = "Suspended {$lang->projectCommon}";
 
 $lang->report->annualData->projectName   = "{$lang->projectCommon}";
-$lang->report->annualData->finishedStory = "{$lang->storyCommon} Finished";
+$lang->report->annualData->finishedStory = "{$lang->productSRCommon} Finished";
 $lang->report->annualData->finishedTask  = 'Task Finished';
 $lang->report->annualData->foundBug      = 'Bug Reported';
 $lang->report->annualData->resolvedBug   = 'Bug Resolved';
 $lang->report->annualData->productName   = "{$lang->productCommon}";
 $lang->report->annualData->planCount     = 'Plan';
-$lang->report->annualData->storyCount    = "{$lang->storyCommon}";
+$lang->report->annualData->storyCount    = "{$lang->productSRCommon}";
 
 $lang->report->annualData->qaData           = "Bug Reported and Case Created";
 $lang->report->annualData->totalCreatedBug  = 'Bug Reported';
@@ -140,12 +140,12 @@ $lang->report->annualData->totalFinishedTask = 'Task Finished';
 $lang->report->annualData->totalResolvedBug  = 'Bug Resolved';
 $lang->report->annualData->totalConsumed     = 'Hour Cost';
 
-$lang->report->annualData->poData          = "{$lang->storyCommon} Created, Priority and Status";
-$lang->report->annualData->totalStoryPri   = "{$lang->storyCommon} Priority";
-$lang->report->annualData->totalStoryStage = "{$lang->storyCommon} Stage";
+$lang->report->annualData->poData          = "{$lang->productSRCommon} Created, Priority and Status";
+$lang->report->annualData->totalStoryPri   = "{$lang->productSRCommon} Priority";
+$lang->report->annualData->totalStoryStage = "{$lang->productSRCommon} Stage";
 
 $lang->report->annualData->qaStatistics  = "Monthly Created Bug and Case";
-$lang->report->annualData->poStatistics  = "Monthly Created {$lang->storyCommon}";
+$lang->report->annualData->poStatistics  = "Monthly Created {$lang->productSRCommon}";
 $lang->report->annualData->devStatistics = "Monthly Finished Task, Hour, and Resolved Bug";
 
 $lang->report->annualData->unit = " ";
