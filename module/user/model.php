@@ -977,26 +977,36 @@ class userModel extends model
     public function getProjects($account, $type = 'project', $pager = null)
     {
         if($type == 'execution') $type = 'sprint,stage';
-        $projects = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
+        $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->in($type)
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.id_desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchGroup('project');
 
-        /* Judge whether the project is delayed. */
-        foreach($projects as $project)
+        $projectIdList = array_keys($myProjectsList);
+        $projectList   = $this->loadModel('program')->getPRJByIdList($projectIdList);
+
+        $myProjects = array();
+        foreach($myProjectsList as $projects)
         {
-            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            foreach($projects as $project)
             {
-                $delay = helper::diffDate(helper::today(), $project->end);
-                if($delay > 0) $project->delay = $delay;
+                /* Judge whether the project is delayed. */
+                if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+                {
+                    $delay = helper::diffDate(helper::today(), $project->end);
+                    if($delay > 0) $project->delay = $delay;
+                }
+
+                $project->parentName = $projectList[$project->project]->name;
+                $myProjects[$project->id] = $project;
             }
         }
 
-        return $projects;
+        return $myProjects;
     }
 
     /**

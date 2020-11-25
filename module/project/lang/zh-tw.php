@@ -342,6 +342,11 @@ $lang->printKanban->taskStatus = '狀態';
 $lang->printKanban->typeList['all']       = '全部';
 $lang->printKanban->typeList['increment'] = '增量';
 
+$lang->project->typeList['']       = '';
+$lang->project->typeList['stage']  = '階段';
+$lang->project->typeList['sprint'] = '衝刺';
+$lang->project->typeList['kanban'] = '看板';
+
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;

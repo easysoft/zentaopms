@@ -23,23 +23,27 @@ $lang->program->PRJManagePriv        = '項目維護權限';
 $lang->program->PRJManageMembers     = '項目團隊';
 $lang->program->export               = '導出';
 $lang->program->PRJManageGroupMember = '維護分組用戶';
-$lang->program->PRJModuleSetting     = '項目集設置';
+$lang->program->PRJModuleSetting     = '列表設置';
 $lang->program->PRJModuleOpen        = '顯示項目集名';
 $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '項目排序';
 $lang->program->PRJWhitelist         = '項目白名單';
 $lang->program->PRJAddWhitelist      = '項目添加白名單';
 $lang->program->unbindWhielist       = '項目刪除白名單';
-$lang->program->PRJManageProducts    = '項目關聯產品';
+$lang->program->PRJManageProducts    = '關聯產品';
 $lang->program->copyTitle            = '請選擇一個項目來複制';
 $lang->program->errorSameProducts    = '項目不能關聯多個相同的產品。';
 $lang->program->errorNoProducts      = '最少關聯一個產品';
 $lang->program->copyNoProject        = '沒有可用的項目來複制';
 $lang->program->PRJSource            = '項目來源：';
-$lang->program->PRJStandalone        = '獨立項目';
+$lang->program->PRJStandalone        = '沒有所屬項目集的項目';
+$lang->program->tips                 = '提示';
+$lang->program->setTeam              = '設置團隊';
+$lang->program->goback               = '返回項目列表';
 
 /* Fields. */
 $lang->program->common             = '項目集';
+$lang->program->project            = '項目';
 $lang->program->stage              = '階段';
 $lang->program->PRJName            = '項目名稱';
 $lang->program->PRJModel           = '管理類型';
@@ -149,6 +153,7 @@ $lang->program->cannotCancelCat   = "該項目下已經有子項目，無法取�
 $lang->program->parentBeginEnd    = "父項目起止時間：%s ~ %s";
 $lang->program->childLongTime     = "子項目中有長期項目，父項目也應該是長期項目";
 $lang->program->readjustTime      = '重新調整項目起止時間';
+$lang->program->afterInfo         = "項目添加成功，您現在可以進行以下操作：";
 
 $lang->program->PRJProgramTitle['0']    = '不顯示';
 $lang->program->PRJProgramTitle['base'] = '只顯示一級項目集';
@@ -221,12 +226,12 @@ $lang->program->PGMShowClosed = '顯示已關閉';
 $lang->program->PGMTips       = '修改父項目集，可關聯產品也會發生變化，並且變為必填，如果未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯到該項目。';
 $lang->program->PGMChangeTips = '修改父項目集後，項目已關聯的產品會被清空，並且項目下的需求、bug等數據也會受影響，是否修改？';
 
-$lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
 $lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問）";
+$lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
 
+$lang->program->subPGMAclList['private'] = "私有（本項目集負責人和干係人可訪問）";
 $lang->program->subPGMAclList['open']    = "全部公開（有項目集視圖權限，即可訪問）";
 $lang->program->subPGMAclList['program'] = "項目集內公開 (所有上級項目集負責人和干係人、本項目集負責人和干係人可訪問）";
-$lang->program->subPGMAclList['private'] = "私有（本項目集負責人和干係人可訪問）";
 
 $lang->program->PGMAuthList['extend'] = '繼承(取項目權限與組織權限的並集)';
 $lang->program->PGMAuthList['reset']  = '重新定義(只取項目權限)';
