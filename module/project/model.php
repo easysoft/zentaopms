@@ -962,7 +962,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('path_asc')
+            ->orderBy('path_asc,id_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -1005,7 +1005,8 @@ class projectModel extends model
         {
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
-                ->andWhere('type')->eq('stage')
+                ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1017,15 +1018,16 @@ class projectModel extends model
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.project')->eq($projectID)
-                ->andWhere('t2.type')->eq('stage')
+                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
 
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $hours     = array();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
