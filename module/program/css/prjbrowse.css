@@ -33,3 +33,6 @@
 #projectTree ul > li.item-meas a.selected{color: #0c64eb;}
 .side-col {padding-right: 20px; width: 18%}
 #sidebar>.cell {width: 100%;}
+
+td.c-actions{overflow: visible}
+.c-actions .btn{overflow: visible}

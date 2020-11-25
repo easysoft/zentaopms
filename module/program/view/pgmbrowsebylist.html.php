@@ -13,7 +13,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
-        <th class='text-center w-250px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-200px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody id='programTableList'>
@@ -53,7 +53,7 @@
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
-        <td><?php echo $program->end == '2059-12-31' ? '' : $program->end;?></td>
+        <td><?php echo $program->end;?></td>
         <td class='text-left'><?php echo $program->budget ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
         <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-right c-actions'>
@@ -61,7 +61,7 @@
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if(common::hasPriv('program', 'PGMEdit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
-          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown'></button>
+          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title="<?php echo $this->lang->more;?>"></button>
           <div class='dropdown-menu pull-right w-120px'>
             <?php common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe btn-action', true);?>
             <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe btn-action', true);?>
@@ -74,7 +74,7 @@
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if(common::hasPriv('program','PRJEdit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'PRJCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
-          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown'></button>
+          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title="<?php echo $this->lang->more;?>"></button>
           <div class='dropdown-menu pull-right w-120px'>
             <?php common::printIcon('program', 'PRJActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe btn-action', true);?>
             <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe btn-action', true);?>
