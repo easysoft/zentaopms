@@ -764,7 +764,7 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed or empty
+     * @param  string $mode all|noclosed|noParentStage or empty
      * @access public
      * @return array
      */
@@ -790,6 +790,12 @@ class projectModel extends model
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
             $pairs[$execution->id] = $execution->name;
         }
+
+        foreach($executions as $execution)
+        {
+            if(strpos($mode, 'noParentStage') !== false and $execution->grade > 1) unset($pairs[$execution->parent]);
+        }
+
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
