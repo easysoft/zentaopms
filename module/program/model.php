@@ -1276,37 +1276,14 @@ class programModel extends model
             {
                 $this->loadModel('project')->updateProducts($projectID);
             }
-            else
+
+            if(isset($this->post->newProduct) || !$project->parent)
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name        = $project->name;
-                $product->code        = $project->code;
-                $product->bind        = 1;
-                $product->acl         = $project->acl = 'open' ? 'open' : 'private';
-                $product->PO          = $project->PM;
-                $product->createdBy   = $this->app->user->account;
-                $product->createdDate = helper::now();
-                $product->status      = 'normal';
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertId();
-                if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-                $projectProduct = new stdclass();
-                $projectProduct->project = $projectID;
-                $projectProduct->product = $productID;
-
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
-            }
-
-            /* If add product. */
-            if(isset($this->post->newProduct))
-            {
-                /* If parent not empty, link products or create products. */
-                $product = new stdclass();
-                $product->name        = $this->post->productName;
-                $product->code        = $this->post->productName;
+                $product->name        = $this->post->productName ? $this->post->productName : $project->name;
+                $product->code        = $this->post->productName ? $this->post->productName : $project->code;
+                $product->bind        = $this->post->productName ? 0 : 1;
                 $product->acl         = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO          = $project->PM;
                 $product->createdBy   = $this->app->user->account;
