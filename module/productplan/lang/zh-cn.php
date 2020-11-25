@@ -21,12 +21,12 @@ $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量编辑';
 
 $lang->productplan->batchUnlink      = "批量移除";
-$lang->productplan->linkStory        = "关联{$lang->storyCommon}";
-$lang->productplan->unlinkStory      = "移除{$lang->storyCommon}";
+$lang->productplan->linkStory        = "关联{$lang->productSRCommon}";
+$lang->productplan->unlinkStory      = "移除{$lang->productSRCommon}";
 $lang->productplan->unlinkStoryAB    = "移除";
-$lang->productplan->batchUnlinkStory = "批量移除{$lang->storyCommon}";
-$lang->productplan->linkedStories    = $lang->storyCommon;
-$lang->productplan->unlinkedStories  = "未关联{$lang->storyCommon}";
+$lang->productplan->batchUnlinkStory = "批量移除{$lang->productSRCommon}";
+$lang->productplan->linkedStories    = $lang->productSRCommon;
+$lang->productplan->unlinkedStories  = "未关联{$lang->productSRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "创建子{$lang->planCommon}";
 
@@ -39,7 +39,7 @@ $lang->productplan->unexpired        = "未过期{$lang->planCommon}";
 $lang->productplan->all              = "所有{$lang->planCommon}";
 
 $lang->productplan->confirmDelete      = "您确认删除该{$lang->planCommon}吗？";
-$lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->storyCommon}吗？";
+$lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->productSRCommon}吗？";
 $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->productplan->noPlan             = "暂时没有{$lang->planCommon}。";
 $lang->productplan->cannotDeleteParent = "不能删除父{$lang->planCommon}";
@@ -53,7 +53,7 @@ $lang->productplan->begin      = '开始日期';
 $lang->productplan->end        = '结束日期';
 $lang->productplan->last       = "上次{$lang->planCommon}";
 $lang->productplan->future     = '待定';
-$lang->productplan->stories    = "{$lang->storyCommon}数";
+$lang->productplan->stories    = "{$lang->productSRCommon}数";
 $lang->productplan->bugs       = 'Bug数';
 $lang->productplan->hour       = $lang->hourCommon;
 $lang->productplan->project    = $lang->projectCommon;

@@ -1172,11 +1172,11 @@ class productModel extends model
         $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
         $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        $storyCommon = $this->lang->storyCommon;
+        $storyCommon = $this->lang->productSRCommon;
         if($this->config->URAndSR)
         {
-            if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
-            if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
+            if($storyType == 'requirement') $storyCommon = $this->lang->productURCommon;
+            if($storyType == 'story')       $storyCommon = $this->lang->productSRCommon;
         }
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");

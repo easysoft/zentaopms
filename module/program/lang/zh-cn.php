@@ -29,6 +29,7 @@ $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '项目排序';
 $lang->program->PRJWhitelist         = '项目白名单';
 $lang->program->PRJAddWhitelist      = '项目添加白名单';
+$lang->program->PRJStoryConcept      = '需求概念组合';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '关联产品';
 $lang->program->copyTitle            = '请选择一个项目来复制';

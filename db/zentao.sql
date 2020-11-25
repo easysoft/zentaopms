@@ -671,6 +671,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `PO` varchar(30) NOT NULL,
   `QD` varchar(30) NOT NULL,
   `RD` varchar(30) NOT NULL,
+  `storyConcept` smallint(5) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
@@ -723,6 +724,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `realBegan` date NOT NULL,
   `realEnd` date NOT NULL,
   `days` smallint(5) unsigned NOT NULL,
+  `storyConcept` smallint(5) unsigned NOT NULL,
   `status` varchar(10) NOT NULL,
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `statge` enum('1','2','3','4','5') NOT NULL DEFAULT '1',
@@ -4070,9 +4072,18 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
+INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
+('zh-cn', 'custom', 'URList', '1', '用户需求', '1'),
+('zh-cn', 'custom', 'URList', '2', '用需', '1'),
+('zh-cn', 'custom', 'URList', '3', '需求', '1'),
+('zh-cn', 'custom', 'URList', '4', '史诗', '1'),
+('zh-cn', 'custom', 'SRList', '1', '软件需求', '1'),
+('zh-cn', 'custom', 'SRList', '2', '软需', '1'),
+('zh-cn', 'custom', 'SRList', '3', '故事', '1'),
+('zh-cn', 'custom', 'SRList', '4', '故事', '1');
+
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
 ('system','custom','','hourPoint','1'),
-('system','custom','','URAndSR','1'),
-('system','custom','common','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}');
+('system','custom','','URAndSR','1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');

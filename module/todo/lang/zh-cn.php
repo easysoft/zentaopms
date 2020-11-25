@@ -34,7 +34,7 @@ $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
 
-$lang->todo->reasonList['story'] = "转{$lang->storyCommon}";
+$lang->todo->reasonList['story'] = "转{$lang->productSRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
 $lang->todo->reasonList['bug']   = "转Bug";
 $lang->todo->reasonList['done']  = "完成";
@@ -94,7 +94,7 @@ $lang->todo->typeList['custom']   = '自定义';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = $lang->projectCommon . '任务';
-$lang->todo->typeList['story']    = $lang->projectCommon . $lang->storyCommon;
+$lang->todo->typeList['story']    = $lang->projectCommon . $lang->productSRCommon;
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';

@@ -1496,7 +1496,7 @@ class projectModel extends model
      */
     public function getOrderedExecutions($projectID, $status, $num = 0)
     {
-        $executionList = $this->getExecutionList($projectID, $status);
+        $executionList = $this->getExecutionList($projectID, 'all', $status);
         if(empty($executionIdList)) return $executionList;
 
         $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();
