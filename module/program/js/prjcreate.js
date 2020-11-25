@@ -30,6 +30,19 @@ function setCopyProject(copyProjectID)
     location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
 
+function addNewProduct(obj)
+{
+    if($(obj).attr('checked'))
+    {
+        $('#productName').closest('tr').removeClass('hidden');
+    }
+    else
+    {
+        $('#productName').closest('tr').addClass('hidden');
+    }
+}
+
+
 function setAclList(programID)
 {
     if(programID != 0)
@@ -66,7 +79,9 @@ function loadBranches(product)
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
+        var $html  = $('#productsBox .col-sm-4:last').html();
+        $('#productsBox .col-sm-4:last').find('.input-group-addon').remove();
+        $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
         $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);

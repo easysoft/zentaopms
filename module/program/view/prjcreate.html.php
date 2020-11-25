@@ -49,7 +49,7 @@ else
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->program->PRJCreate;?></h2>
+      <h2><?php echo $lang->program->PRJCreate . ' - ' . zget($lang->program->modelList, $model, '');?></h2>
       <div class="pull-right btn-toolbar">
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->program->PRJCopy;?></button>
       </div>
@@ -57,12 +57,7 @@ else
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
-          <td><?php echo zget($lang->program->modelList, $model, '');?></td><td></td><td>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PGMParent;?></th>
+          <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td>
             <icon class='icon icon-help' data-toggle='tooltip' data-placement='right' title=<?php echo $lang->program->PGMTips;?>></icon>
@@ -76,6 +71,10 @@ else
         <tr>
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
+        </tr>
+        <tr class='hidden'>
+          <th><?php echo $lang->product->name;?></th>
+          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
@@ -96,7 +95,7 @@ else
                 <div class='col-sm-4 <?php if($programID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
-                  <span class='input-group-addon fix-border'></span>
+                  <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->program->addProduct, '', "onchange=addNewProduct(this);");?></span>
                 </div>
               </div>
             </div>

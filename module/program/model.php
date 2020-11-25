@@ -1215,7 +1215,7 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta')
+            ->remove('products,branch,plans,delta,newProduct,productName')
             ->get();
 
         if($project->parent)
@@ -1238,7 +1238,7 @@ class programModel extends model
             {
                 if(!empty($product)) $linkedProductsCount++;
             }
-            if(empty($linkedProductsCount))
+            if(empty($linkedProductsCount) and !$this->post->productName)
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
@@ -1283,6 +1283,30 @@ class programModel extends model
                 $product->name        = $project->name;
                 $product->code        = $project->code;
                 $product->bind        = 1;
+                $product->acl         = $project->acl = 'open' ? 'open' : 'private';
+                $product->PO          = $project->PM;
+                $product->createdBy   = $this->app->user->account;
+                $product->createdDate = helper::now();
+                $product->status      = 'normal';
+
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                $productID = $this->dao->lastInsertId();
+                if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+                $projectProduct = new stdclass();
+                $projectProduct->project = $projectID;
+                $projectProduct->product = $productID;
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+            }
+
+            /* If add product. */
+            if(isset($this->post->newProduct))
+            {
+                /* If parent not empty, link products or create products. */
+                $product = new stdclass();
+                $product->name        = $this->post->productName;
+                $product->code        = $this->post->productName;
                 $product->acl         = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO          = $project->PM;
                 $product->createdBy   = $this->app->user->account;
