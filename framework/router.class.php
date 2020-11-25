@@ -115,7 +115,7 @@ class router extends baseRouter
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common')
         {
-            $productProject = $storyRequirement = $hourPoint = false;
+            $productProject = $hourPoint = false;
             if($this->dbh and !empty($this->config->db->name))
             {
                 global $config;
@@ -126,7 +126,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','hourPoint','URAndSR')")->fetchAll();
                 }
                 catch (PDOException $exception)
                 {
@@ -147,22 +147,14 @@ class router extends baseRouter
                 }
             }
 
-            $productIndex = $storyIndex = $hourIndex = $planIndex = $URAndSR = 0;
+            $productIndex = $hourIndex = $planIndex = $URAndSR = 0;
             $projectIndex = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
-                if($setting->key == 'storyRequirement') $storyIndex = $setting->value;
                 if($setting->key == 'hourPoint')        $hourIndex  = $setting->value;
                 if($setting->key == 'URAndSR')          $URAndSR    = $setting->value;
-
-                if($setting->key == 'URSRName')
-                {
-                    $URSRName = json_decode($setting->value, true);
-                    if(isset($URSRName['URCommon'][$this->clientLang])) $lang->URCommon = $URSRName['URCommon'][$this->clientLang];
-                    if(isset($URSRName['SRCommon'][$this->clientLang])) $lang->SRCommon = $URSRName['SRCommon'][$this->clientLang];
-                }
             }
 
             $model = new stdclass();
@@ -174,21 +166,43 @@ class router extends baseRouter
                 $projectIndex = 2;
             }
 
-            $config->storyCommon = $storyIndex;
-            $config->URAndSR     = $URAndSR;
+            $config->URAndSR = $URAndSR;
 
-            /* Set productCommon, projectCommon, storyCommon, hourCommon and planCommon. Default english lang. */
+            /* Set productCommon, projectCommon, hourCommon and planCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productIndex]) ? $this->config->productCommonList[$this->clientLang][(int)$productIndex] : $this->config->productCommonList['en'][(int)$productIndex];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectIndex]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectIndex] : $this->config->projectCommonList['en'][(int)$$projectIndex];
-            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyIndex])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyIndex]     : $this->config->storyCommonList['en'][(int)$storyIndex];
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex]  : $this->config->hourPointCommonList['en'][(int)$hourIndex];
             $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planIndex])       ? $this->config->planCommonList[$this->clientLang][(int)$planIndex]       : $this->config->planCommonList['en'][(int)$planIndex];
 
-            if($storyIndex == 0 and isset($URAndSR))
-            {
-                $config->URAndSR = $URAndSR;
-                if(!empty($URAndSR) and !empty($lang->SRCommon)) $lang->storyCommon = $lang->SRCommon;
+            $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
+            $SRLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'SRList' and lang = \"{$this->clientLang}\"")->fetchAll();
+
+            $URList  = array();
+            $SRList  = array();
+            foreach($URLists as $pair) $URList[$pair->key] = $pair->value;
+            foreach($SRLists as $pair) $SRList[$pair->key] = $pair->value;
+
+            $lang->projectURCommon = $config->URStory[$this->clientLang];
+            $lang->productURCommon = $config->URStory[$this->clientLang];
+            $lang->projectSRCommon = $config->SRStory[$this->clientLang];
+            $lang->productSRCommon = $config->SRStory[$this->clientLang];
+
+            $projectID = $this->session->PRJ;
+            if($projectID)
+            {    
+                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
+                $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $config->URStory[$this->clientLang]);
+                $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRStory[$this->clientLang]);
+            }    
+
+            $productID = $this->session->product;
+            if($productID)
+            {    
+                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
+                $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $config->URStory[$this->clientLang]);
+                $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRStory[$this->clientLang]);
             }
+
         }
 
         parent::loadLang($moduleName, $appName);
@@ -216,6 +230,7 @@ class router extends baseRouter
                 unset($nullValue);
             }
         }
+
         return $lang;
     }
 

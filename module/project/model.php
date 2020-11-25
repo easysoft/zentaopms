@@ -332,6 +332,17 @@ class projectModel extends model
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
+        /* Check the workload format. */
+        if(!empty($sprint->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
+        {
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
+        }
+
+        /* Set planDuration and realDuration. */
+        $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
+        if(!empty($sprint->realBegan) and !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
+
         $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
@@ -433,6 +444,18 @@ class projectModel extends model
             ->get();
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
+
+        /* Check the workload format. */
+        if(!empty($project->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
+        {
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
+        }
+
+        /* Set planDuration and realDuration. */
+        $project->planDuration = $this->loadModel('programplan')->getDuration($project->begin, $project->end);
+        if(!empty($project->realBegan) and !empty($project->realEnd)) $project->realDuration = $this->loadModel('programplan')->getDuration($project->realBegan, $project->realEnd);
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
@@ -502,20 +525,21 @@ class projectModel extends model
 
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name     = $projectName;
-            $projects[$projectID]->code     = $projectCode;
-            $projects[$projectID]->PM       = $data->PMs[$projectID];
-            $projects[$projectID]->PO       = $data->POs[$projectID];
-            $projects[$projectID]->QD       = $data->QDs[$projectID];
-            $projects[$projectID]->RD       = $data->RDs[$projectID];
-            $projects[$projectID]->lifetime = $data->lifetimes[$projectID];
-            $projects[$projectID]->status   = $data->statuses[$projectID];
-            $projects[$projectID]->begin    = $data->begins[$projectID];
-            $projects[$projectID]->end      = $data->ends[$projectID];
-            $projects[$projectID]->team     = $data->teams[$projectID];
-            $projects[$projectID]->desc     = htmlspecialchars_decode($data->descs[$projectID]);
-            $projects[$projectID]->days     = $data->dayses[$projectID];
-            $projects[$projectID]->order    = $data->orders[$projectID];
+            $projects[$projectID]->name      = $projectName;
+            $projects[$projectID]->code      = $projectCode;
+            $projects[$projectID]->PM        = $data->PMs[$projectID];
+            $projects[$projectID]->PO        = $data->POs[$projectID];
+            $projects[$projectID]->QD        = $data->QDs[$projectID];
+            $projects[$projectID]->RD        = $data->RDs[$projectID];
+            $projects[$projectID]->lifetime  = $data->lifetimes[$projectID];
+            $projects[$projectID]->attribute = $data->attributes[$projectID];
+            $projects[$projectID]->status    = $data->statuses[$projectID];
+            $projects[$projectID]->begin     = $data->begins[$projectID];
+            $projects[$projectID]->end       = $data->ends[$projectID];
+            $projects[$projectID]->team      = $data->teams[$projectID];
+            $projects[$projectID]->desc      = htmlspecialchars_decode($data->descs[$projectID]);
+            $projects[$projectID]->days      = $data->dayses[$projectID];
+            $projects[$projectID]->order     = $data->orders[$projectID];
 
             /* Check unique name for edited projects. */
             if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->name, $projectName);
@@ -911,10 +935,11 @@ class projectModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
+     * @param  string  $pairs
      * @access public
      * @return array
      */
-    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0)
+    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
         if(!$projectID) return array();
 
@@ -924,7 +949,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('begin_asc')
+            ->orderBy('path_asc,id_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -935,7 +960,15 @@ class projectModel extends model
             {
                 if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
             }
+
             foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+        }
+
+        if($pairs)
+        {
+            $executionPairs = array();
+            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            $executions = $executionPairs;
         }
 
         return $executions;
@@ -953,37 +986,35 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'path_asc,id_asc', $pager = null)
     {
-        /* Init vars. */
-        $executions = $this->getExecutionList($projectID, $status, 0, $productID, $branch);
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('id')->in(array_keys($executions))
-            ->andWhere('grade')->eq(1)
-            ->andWhere('deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-
-        if(empty($executions)) return array();
-
-        /* In case of a waterfall model, obtain sub-stage data. */
-        $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
-        if($project and $project->model == 'waterfall')
+        if(empty($productID))
         {
-            $childrens = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->in(array_keys($executions))
-                ->andWhere('grade')->eq(2)
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('project')->eq($projectID)
+                ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
-
-            $executions += $childrens;
+        }
+        else
+        {
+            $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.project')->eq($projectID)
+                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
+                ->andWhere('t2.deleted')->eq('0')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
         }
 
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $hours     = array();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
@@ -1074,6 +1105,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
+        $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
         if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution) $execution->children = isset($children[$id]) ? $children[$id] : array();
@@ -1453,7 +1485,7 @@ class projectModel extends model
      */
     public function getOrderedExecutions($projectID, $status, $num = 0)
     {
-        $executionList = $this->getExecutionList($projectID, $status);
+        $executionList = $this->getExecutionList($projectID, 'all', $status);
         if(empty($executionIdList)) return $executionList;
 
         $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();

@@ -27,6 +27,11 @@ $lang->my->score          = 'Điểm của bạn';
 $lang->my->scoreRule      = 'Quy định điểm';
 $lang->my->noTodo         = 'Chưa có việc nào.';
 
+$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
+$lang->my->name         = 'Name';
+$lang->my->code         = 'Code';
+$lang->my->projects     = 'Project';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'Giao cho bạn';
 $lang->my->taskMenu->openedByMe   = 'Tạo bởi bạn';

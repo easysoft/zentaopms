@@ -158,6 +158,12 @@ else
         <?php endif;?>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
+          <th><?php echo $lang->program->PRJStoryConcept;?></th>
+          <td>
+            <?php echo html::select('storyConcept', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>

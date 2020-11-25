@@ -199,7 +199,7 @@ class product extends control
         /* Change for requirement story title. */
         if($storyType == 'requirement' and $this->config->URAndSR)
         {
-            $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->title = str_replace($this->lang->productSRCommon, $this->lang->productURCommon, $this->lang->story->title);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
         }
 
@@ -640,7 +640,7 @@ class product extends control
         }
         else
         {
-            $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'nodeleted');
+            $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch);
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 

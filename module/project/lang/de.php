@@ -62,7 +62,7 @@ $lang->project->createStory   = "Story erstellen";
 $lang->project->all           = 'Alle';
 $lang->project->undone        = 'Unabgeschlossen ';
 $lang->project->unclosed      = 'Geschlossen';
-$lang->project->typeDesc      = "Keine {$lang->storyCommon}, Bug, Build, Testaufgabe oder ist bei OPS erlaubt";
+$lang->project->typeDesc      = "Keine {$lang->productSRCommon}, Bug, Build, Testaufgabe oder ist bei OPS erlaubt";
 $lang->project->mine          = 'Meine Zuständigkeit: ';
 $lang->project->other         = 'Andere:';
 $lang->project->deleted       = 'Gelöscht';
@@ -341,6 +341,11 @@ $lang->printKanban->taskStatus = 'Status';
 
 $lang->printKanban->typeList['all']       = 'Alle';
 $lang->printKanban->typeList['increment'] = 'Erhöhen';
+
+$lang->project->typeList['']       = '';
+$lang->project->typeList['stage']  = 'Stage';
+$lang->project->typeList['sprint'] = $lang->projectCommon;
+$lang->project->typeList['kanban'] = 'Kanban';
 
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;

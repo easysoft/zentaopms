@@ -1,0 +1,11 @@
+
+.checkbox.btn{margin-top:0px}
+#releaseInfo > div {padding-top: 15px;}
+
+.linkBox #queryBox .search-form .form-actions {padding-bottom: 5px;}
+.linkBox .table-header {padding: 8px 15px; border-bottom: 1px solid #cbd0db;}
+#unlinkStoryList, #unlinkBugList, #unlinkLeftBugList {border-top: 1px solid #cbd0db;}
+
+#tabsNav .nav-tabs > li.pull-right {margin-right: 120px; margin-top: -5px}
+#tabsNav .nav-tabs > li.active + li.pull-right {margin-right: 0;}
+ol, ul { padding-left: 20px; }

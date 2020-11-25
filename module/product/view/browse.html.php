@@ -441,14 +441,7 @@ $('#branch' + branchID).closest('li').addClass('active');
 $(function()
 {
     // Update table summary text
-    <?php
-    $storyCommon = $lang->storyCommon;
-    if($config->URAndSR)
-    {
-        if($storyType == 'requirement') $storyCommon = $lang->URCommon;
-        if($storyType == 'story') $storyCommon = $lang->SRCommon;
-    }
-    ?>
+    <?php $storyCommon = $lang->productSRCommon;?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#productStoryForm').table(
     {

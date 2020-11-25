@@ -342,6 +342,11 @@ $lang->printKanban->taskStatus = 'Tình trạng';
 $lang->printKanban->typeList['all']       = 'Tất cả';
 $lang->printKanban->typeList['increment'] = 'Tăng dần';
 
+$lang->project->typeList['']       = '';
+$lang->project->typeList['stage']  = 'Stage';
+$lang->project->typeList['sprint'] = $lang->projectCommon;
+$lang->project->typeList['kanban'] = 'Kanban';
+
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;

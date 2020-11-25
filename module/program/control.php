@@ -68,6 +68,7 @@ class program extends control
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
         $this->app->session->set('programList', $this->app->getURI(true));
+        $this->app->session->set('taskList', $this->app->getURI(true). "?PRJ=6");
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -691,6 +692,7 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '', $projectID = 0)
     {
+        $this->app->loadLang('custom');
         if($from == 'PRJ')
         {
             $this->lang->navGroup->program = 'project';

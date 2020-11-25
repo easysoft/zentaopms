@@ -62,7 +62,7 @@ $lang->project->createStory   = "Create Story";
 $lang->project->all           = "All {$lang->projectCommon}s";
 $lang->project->undone        = 'Unfinished ';
 $lang->project->unclosed      = 'Unclosed';
-$lang->project->typeDesc      = "OPS {$lang->projectCommon} has no {$lang->storyCommon}, Bug, Build, or Test features.";
+$lang->project->typeDesc      = "OPS {$lang->projectCommon} has no {$lang->productSRCommon}, Bug, Build, or Test features.";
 $lang->project->mine          = 'Mine: ';
 $lang->project->other         = 'Others:';
 $lang->project->deleted       = 'Deleted';
@@ -341,6 +341,11 @@ $lang->printKanban->taskStatus = 'Status';
 
 $lang->printKanban->typeList['all']       = 'All';
 $lang->printKanban->typeList['increment'] = 'Increment';
+
+$lang->project->typeList['']       = '';
+$lang->project->typeList['stage']  = 'Stage';
+$lang->project->typeList['sprint'] = $lang->projectCommon;
+$lang->project->typeList['kanban'] = 'Kanban';
 
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;

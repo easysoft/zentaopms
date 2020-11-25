@@ -72,7 +72,7 @@ $lang->custom->closedProduct = '已关闭' . $lang->productCommon;
 
 $lang->custom->object['product']  = $lang->productCommon;
 $lang->custom->object['project']  = $lang->projectCommon;
-$lang->custom->object['story']    = $lang->storyCommon;
+$lang->custom->object['story']    = $lang->productSRCommon;
 $lang->custom->object['task']     = '任务';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = '用例';
@@ -125,11 +125,12 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
+$lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('required', 'score', 'estimate');
+$lang->custom->system = array('required', 'score');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -151,7 +152,7 @@ $lang->custom->notice->noClosedBlock               = '没有永久关闭的区�
 $lang->custom->notice->required                    = '页面提交时，选中的字段必填';
 $lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
-$lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->storyCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
+$lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->productSRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
 $lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->projectCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
 $lang->custom->notice->URSREmpty                   = '自定义需求名称不能为空！';
 

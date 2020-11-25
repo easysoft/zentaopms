@@ -97,7 +97,7 @@ $lang->user->testTask    = '测试单';
 $lang->user->testCase    = '测试用例';
 $lang->user->schedule    = '日程';
 $lang->user->todo        = '待办';
-$lang->user->story       = $lang->storyCommon;
+$lang->user->story       = $lang->productSRCommon;
 $lang->user->dynamic     = '动态';
 
 $lang->user->openedBy    = '由%s创建';
@@ -145,7 +145,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
 $lang->user->personalData['createdTodos']   = '创建的待办数';
-$lang->user->personalData['createdStories'] = "创建的{$lang->storyCommon}数";
+$lang->user->personalData['createdStories'] = "创建的{$lang->productSRCommon}数";
 $lang->user->personalData['finishedTasks']  = '完成的任务数';
 $lang->user->personalData['resolvedBugs']   = '解决的Bug数';
 $lang->user->personalData['createdCases']   = '创建的用例数';

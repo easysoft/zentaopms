@@ -111,7 +111,7 @@ $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';
 $lang->testtask->linkByBuild   = '複製測試單';
-$lang->testtask->linkByStory   = "按{$lang->storyCommon}關聯";
+$lang->testtask->linkByStory   = "按{$lang->productSRCommon}關聯";
 $lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->linkBySuite   = '按套件關聯';
 $lang->testtask->passAll       = '全部通過';

@@ -213,7 +213,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
-        $this->view->projects         = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
+        $this->view->projects         = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;

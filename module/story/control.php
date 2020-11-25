@@ -473,8 +473,8 @@ class story extends control
         if($type == 'requirement' and $this->config->URAndSR)
         {   
             $storyLang = $this->lang->story;
-            $SRCommon  = $this->lang->SRCommon;
-            $URCommon  = $this->lang->URCommon;
+            $SRCommon  = $this->lang->productSRCommon;
+            $URCommon  = $this->lang->productURCommon;
 
             $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
             $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);

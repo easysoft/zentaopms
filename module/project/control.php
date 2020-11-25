@@ -1084,6 +1084,8 @@ class project extends control
     public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
     {
         $this->app->loadLang('program');
+        $this->app->loadLang('stage');
+        $this->app->loadLang('programplan');
         if($projectID)
         {
             if(!empty($planID))
@@ -1204,6 +1206,7 @@ class project extends control
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->isStage       = $project->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -1220,6 +1223,8 @@ class project extends control
     public function edit($projectID, $action = 'edit', $extra = '')
     {
         $this->app->loadLang('program');
+        $this->app->loadLang('stage');
+        $this->app->loadLang('programplan');
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
@@ -1323,6 +1328,7 @@ class project extends control
         $this->view->linkedProducts = $linkedProducts;
         $this->view->productPlans   = $productPlans;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->isStage        = $PRJData->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -1335,6 +1341,8 @@ class project extends control
      */
     public function batchEdit($projectID = 0)
     {
+        $this->app->loadLang('stage');
+
         if($this->post->names)
         {
             $allChanges = $this->project->batchUpdate();
@@ -1383,6 +1391,8 @@ class project extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $PRJData = $this->project->getById($this->session->PRJ);
+
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
@@ -1391,6 +1401,7 @@ class project extends control
         $this->view->poUsers       = $poUsers;
         $this->view->qdUsers       = $qdUsers;
         $this->view->rdUsers       = $rdUsers;
+        $this->view->isStage       = $PRJData->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -2458,7 +2469,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'path_asc,id_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('programplan');
@@ -2473,17 +2484,17 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title         = $this->lang->project->allProject;
-        $this->view->position[]    = $this->lang->project->allProject;
+        $this->view->title      = $this->lang->project->allProject;
+        $this->view->position[] = $this->lang->project->allProject;
 
-        $this->view->projectStats  = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        $this->view->productID     = $productID;
-        $this->view->projectID     = $projectID;
-        $this->view->pager         = $pager;
-        $this->view->orderBy       = $orderBy;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status        = $status;
+        $this->view->executionStats = $this->project->getExecutionStats($this->session->PRJ, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->productID      = $productID;
+        $this->view->projectID      = $projectID;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status         = $status;
 
         $this->display();
     }

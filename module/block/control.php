@@ -847,7 +847,7 @@ class block extends control
             if($project->model == 'scrum')
             {
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 1, 'id_desc', null);
+                $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 30, 'path_asc,id_asc');
             }
             elseif($project->model == 'waterfall')
             {
@@ -1298,7 +1298,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
-        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, 0, 0, 30, 'path_asc,id_asc', $pager);
     }
 
     /**
@@ -1644,10 +1644,12 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
-        if(common::hasPriv('task',  'view')) $hasViewPriv['task'] = true;
-        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']  = true;
-        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk'] = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
+        if(common::hasPriv('issue', 'view')) $hasViewPriv['issue'] = true;
+        if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
 
         $params = $this->get->param;
         $params = json_decode(base64_decode($params));
@@ -1719,6 +1721,34 @@ class block extends control
 
             $count['risk'] = count($risks);
             $this->view->risks = $risks;
+        }
+        if(isset($hasViewPriv['issue']))
+        {
+            $this->app->loadLang('issue');
+            $stmt = $this->dao->select('*')->from(TABLE_ISSUE)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->issueNum)) $stmt->limit($params->issueNum);
+            $issues = $stmt->fetchAll();
+
+            $count['issue'] = count($issues);
+            $this->view->issues = $issues;
+        }
+        if(isset($hasViewPriv['story']))
+        {
+            $this->app->loadLang('story');
+            $stmt = $this->dao->select('*')->from(TABLE_STORY)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->storyNum)) $stmt->limit($params->storyNum);
+            $stories = $stmt->fetchAll();
+
+            $count['story'] = count($stories);
+            $this->view->stories = $stories;
         }
 
         $this->view->selfCall    = $this->selfCall;

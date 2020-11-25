@@ -5,10 +5,12 @@ $(function()
         if($(this).val() == 0)
         {
             $('#URSRName').addClass('hidden');
+            $('#customURSR').addClass('hidden');
         }
         else
         {
             $('#URSRName').removeClass('hidden');
+            $('#customURSR').removeClass('hidden');
         }
     });
 

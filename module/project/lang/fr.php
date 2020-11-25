@@ -62,7 +62,7 @@ $lang->project->createStory   = "Créer une Story";
 $lang->project->all           = "Tous les {$lang->projectCommon}s";
 $lang->project->undone        = 'Non Terminé';
 $lang->project->unclosed      = 'Non Fermées';
-$lang->project->typeDesc      = "Aucune {$lang->storyCommon}, bug, build, test, ou graphe d'atterrissage n'est disponible";
+$lang->project->typeDesc      = "Aucune {$lang->productSRCommon}, bug, build, test, ou graphe d'atterrissage n'est disponible";
 $lang->project->mine          = 'A Moi: ';
 $lang->project->other         = 'Autres:';
 $lang->project->deleted       = 'Supprimé';
@@ -341,6 +341,11 @@ $lang->printKanban->taskStatus = 'Statut';
 
 $lang->printKanban->typeList['all']       = 'Tout';
 $lang->printKanban->typeList['increment'] = 'Incrément';
+
+$lang->project->typeList['']       = '';
+$lang->project->typeList['stage']  = 'Stage';
+$lang->project->typeList['sprint'] = $lang->projectCommon;
+$lang->project->typeList['kanban'] = 'Kanban';
 
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;

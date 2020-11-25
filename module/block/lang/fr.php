@@ -80,7 +80,7 @@ $lang->block->hidden             = 'Masquer';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->storyCommon;
+$lang->block->totalStory   = 'The Total ' . $lang->productSRCommon;
 $lang->block->totalBug     = 'The Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
@@ -313,6 +313,7 @@ $lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
 $lang->block->availableBlocks->testtask = 'Recettes';
 $lang->block->availableBlocks->risk     = 'My Risks';
+$lang->block->availableBlocks->issue    = 'My Issues';
 
 $lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -424,10 +425,12 @@ $lang->block->orderByList->story['status_desc'] = 'Tri par Statut Story DESC';
 $lang->block->orderByList->story['stage_asc']   = 'Tri par Phase Story ASC';
 $lang->block->orderByList->story['stage_desc']  = 'Tri par Phase Story DESC';
 
-$lang->block->todoNum = 'Todo';
-$lang->block->taskNum = 'Task';
-$lang->block->bugNum  = 'Bug';
-$lang->block->riskNum = 'Risk';
+$lang->block->todoNum  = 'Todo';
+$lang->block->taskNum  = 'Task';
+$lang->block->bugNum   = 'Bug';
+$lang->block->riskNum  = 'Risk';
+$lang->block->issueNum = 'Issues';
+$lang->block->storyNum = 'Stories';
 
 $lang->block->typeList = new stdclass();
 

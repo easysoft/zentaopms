@@ -130,7 +130,7 @@ $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Show deleted user';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('required', 'score');
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 

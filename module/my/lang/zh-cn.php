@@ -9,8 +9,8 @@ $lang->my->task           = '我的任务';
 $lang->my->bug            = '我的Bug';
 $lang->my->testTask       = '我的版本';
 $lang->my->testCase       = '我的用例';
-$lang->my->story          = "我的{$lang->storyCommon}";
-$lang->my->requirement    = "我的用户{$lang->storyCommon}";
+$lang->my->story          = "我的{$lang->productSRCommon}";
+$lang->my->requirement    = "我的用户{$lang->productSRCommon}";
 $lang->my->createProgram  = '添加项目';
 $lang->my->project        = "我的项目";
 $lang->my->execution      = '我的执行';
@@ -26,6 +26,11 @@ $lang->my->limited        = '受限操作(只能编辑与自己相关的内容)'
 $lang->my->score          = '我的积分';
 $lang->my->scoreRule      = '积分规则';
 $lang->my->noTodo         = '暂时没有待办。';
+
+$lang->my->myExecutions = "我参与的阶段/{$lang->projectCommon}/看板";
+$lang->my->name         = '名称';
+$lang->my->code         = '代号';
+$lang->my->projects     = '项目';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派给我';

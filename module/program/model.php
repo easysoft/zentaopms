@@ -534,8 +534,6 @@ class programModel extends model
         if(empty($program)) return true;
         if(!isset($program->type)) return true;
 
-        if($program->type == 'program' && ($action == 'prjstart' || $action == 'prjsuspend')) return false;
-
         if($action == 'pgmclose')    return $program->status != 'closed';
         if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
 
@@ -838,15 +836,16 @@ class programModel extends model
             ->groupBy('PRJ')
             ->fetchAll('PRJ');
 
+        $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $project->executions = $this->project->getExecutionStats($projectID, $status, 0, 0, $itemCounts, $orderBy);
+            $orderBy = $project->model == 'waterfall' ? 'path_asc,id_asc' : 'id_desc';
+            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
+            $project->executions = $this->project->getExecutionStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
             $project->parentName = $this->getPRJParentName($project->parent);
         }
-
         return $projects;
     }
 
@@ -1075,6 +1074,23 @@ class programModel extends model
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchPairs();
+    }
+
+    /**
+     * Get project by id list.
+     *
+     * @param  array    $projectIdList
+     * @access public
+     * @return object
+     */
+    public function getPRJByIdList($projectIdList = array())
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('id')->in($projectIdList)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -1362,7 +1378,7 @@ class programModel extends model
         }
         if(empty($linkedProductsCount))
         {
-            dao::$errors[] = $this->lang->program->productNotEmpty;
+            dao::$errors[] = $this->lang->program->errorNoProducts;
             return false;
         }
 

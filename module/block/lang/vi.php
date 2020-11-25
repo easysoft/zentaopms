@@ -80,7 +80,7 @@ $lang->block->hidden             = 'Ẩn';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->storyCommon;
+$lang->block->totalStory   = 'The Total ' . $lang->productSRCommon;
 $lang->block->totalBug     = 'The Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
@@ -313,6 +313,7 @@ $lang->block->availableBlocks->release  = 'Phát hành';
 $lang->block->availableBlocks->build    = 'Bản dựng';
 $lang->block->availableBlocks->testtask = 'Yêu cầu';
 $lang->block->availableBlocks->risk     = 'My Risks';
+$lang->block->availableBlocks->issue    = 'My Issues';
 
 $lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -424,10 +425,12 @@ $lang->block->orderByList->story['status_desc'] = 'Tình trạng câu chuyện g
 $lang->block->orderByList->story['stage_asc']   = 'Giai đoạn câu chuyện tăng dần';
 $lang->block->orderByList->story['stage_desc']  = 'Giai đoạn câu chuyện giảm dần';
 
-$lang->block->todoNum = 'Việc làm';
-$lang->block->taskNum = 'Nhiệm vụ';
-$lang->block->bugNum  = 'Bug';
-$lang->block->riskNum = 'Risk';
+$lang->block->todoNum  = 'Việc làm';
+$lang->block->taskNum  = 'Nhiệm vụ';
+$lang->block->bugNum   = 'Bug';
+$lang->block->riskNum  = 'Risk';
+$lang->block->issueNum = 'Issues';
+$lang->block->storyNum = 'Stories';
 
 $lang->block->typeList = new stdclass();
 

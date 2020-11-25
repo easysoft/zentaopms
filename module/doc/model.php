@@ -152,15 +152,16 @@ class docModel extends model
         {
             $idList = array();
             if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
+            if($type == 'project')
+            {
+                $status = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
+                $idList = $this->loadModel('project')->getExecutionIdList($projectID, $status);
+            }
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
-                ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
-                ->andWhere('t2.id')->in($idList)
-                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy("t2.order desc, t1.order, t1.id")
+            $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where($type)->in($idList)
+                ->andWhere('deleted')->eq('0')
                 ->query();
         }
         elseif($type == 'all')
