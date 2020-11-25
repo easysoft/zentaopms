@@ -775,7 +775,10 @@ class blockModel extends model
             }
             else
             {
-                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
+                $blockName = $blockKey;
+                if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
+                if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
+                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$blockName}";
             }
         }
 
