@@ -130,7 +130,7 @@ $lang->custom->user->fields['statusList']   = 'Tình trạng';
 $lang->custom->user->fields['contactField'] = 'Liên hệ có sẵn';
 $lang->custom->user->fields['deleted']      = 'Người dùng đã xóa';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('required', 'score');
 
 $lang->custom->block->fields['closed'] = 'Đã đóng Block';
 
