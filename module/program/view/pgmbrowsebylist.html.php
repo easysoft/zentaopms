@@ -13,7 +13,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
-        <th class='text-center w-250px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-200px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody id='programTableList'>
