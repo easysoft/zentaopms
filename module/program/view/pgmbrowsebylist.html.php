@@ -61,7 +61,7 @@
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if(common::hasPriv('program', 'PGMEdit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
-          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown'></button>
+          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title="<?php echo $this->lang->more;?>"></button>
           <div class='dropdown-menu pull-right w-120px'>
             <?php common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe btn-action', true);?>
             <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe btn-action', true);?>
@@ -74,7 +74,7 @@
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if(common::hasPriv('program','PRJEdit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
           <?php common::printIcon('program', 'PRJCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
-          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown'></button>
+          <button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title="<?php echo $this->lang->more;?>"></button>
           <div class='dropdown-menu pull-right w-120px'>
             <?php common::printIcon('program', 'PRJActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe btn-action', true);?>
             <?php common::printIcon('program', 'PRJSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe btn-action', true);?>

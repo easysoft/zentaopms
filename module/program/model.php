@@ -1501,14 +1501,20 @@ class programModel extends model
                     common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
                     common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'icon icon-menu-project');
-                    common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);
-                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
-                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);
-                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);
                     if(common::hasPriv('program', 'PRJEdit')) echo html::a(helper::createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->edit}'");
-                    common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);
+
+                    echo "<button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title={$this->lang->more}></button>";
+
+                    echo "<div class='dropdown-menu pull-right w-150px'>";
+                    common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', 'btn-action', true);
+                    echo "</div>";
                     break;
             }
+            echo '</td>'; 
         }
     }
 }
