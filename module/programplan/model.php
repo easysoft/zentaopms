@@ -804,7 +804,8 @@ class programplanModel extends model
                 break;
             case 'actions':
                 common::printIcon('project', 'start', "projectID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'create', "projectID={$plan->id}", $plan, 'list');
+                $class = !empty($plan->children) ? 'disabled' : '';
+                common::printIcon('task', 'create', "projectID={$plan->id}", $plan, 'list', '', '', $class);
 
                 if($plan->grade == 1 && $this->isCreateTask($plan->id))
                 {
