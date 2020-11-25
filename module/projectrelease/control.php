@@ -26,6 +26,7 @@ class projectrelease extends control
         parent::__construct($moduleName, $methodName);
         $products = array();
         $this->loadModel('product');
+        $this->loadModel('release');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
     }
 
