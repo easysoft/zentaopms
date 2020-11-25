@@ -1473,7 +1473,7 @@ class programModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end == '2059-12-31' ? '' : $project->end;
+                    echo $project->end;
                     break;
                 case 'PRJStatus':
                     echo zget($this->lang->program->statusList, $project->status);
