@@ -1,17 +1,19 @@
 <style>
-#cards {margin: 0 10px;}
+.cards-menu > li > a {padding-left: 5px; text-align: left;}
+.cards-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
+.cards-menu > li > a:hover > i {opacity: 1;}
+
+#cards {margin: 0; padding: 0 10px 10px 10px;}
 #cards > .col {width: 33.33%;}
+.col-side #cards > .col {width: 100%;}
 #cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
-#cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
-#cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
-#cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
 #cards .project-type-label {padding: 1px 2px;}
 #cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .project-infos {font-size: 12px;}
+#cards .project-infos {font-size: 12px; padding: 0 15px;}
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 10px;}
@@ -29,14 +31,14 @@
 #cards .project-stage-item + .project-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
 #cards .project-stage-item.is-going {color: #333;}
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
-.block-recentproject .panel-body{padding: 0;}
+#dashboard .block-recentproject .panel-body {padding: 0;}
 </style>
 <div class="panel-body">
   <div class='row' id='cards'>
     <?php foreach ($projects as $projectID => $project):?>
     <div class='col' data-id='<?php echo $projectID?>'>
       <div class='panel' data-url='<?php echo $this->createLink('project', 'index', "projectID=$project->id");?>'>
-        <div class='panel-heading'>
+        <div class='panel-heading not-move-handler'>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?> </strong>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
@@ -45,8 +47,8 @@
           <?php endif; ?>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
-              <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
-              <ul class='dropdown-menu pull-right'>
+              <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
+              <ul class='dropdown-menu pull-right cards-menu'>
                 <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group');?></li>
                 <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
                 <li><?php common::printicon('program', 'PRJActivate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
@@ -63,7 +65,6 @@
           <div class='project-infos'>
             <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $project->teamCount); ?></span>
             <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->estimate); ?></span>
-            <span><i class='icon icon-cost'></i> <?php echo $project->budget . '' . zget($lang->program->unitList, $project->budgetUnit);?></span>
           </div>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>

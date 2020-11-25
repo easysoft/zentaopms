@@ -476,6 +476,12 @@ class customModel extends model
                 if($moduleName == 'user' and $method == 'edit' and strpos($this->config->user->contactField, $fieldName) === false) continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
+
+                if($moduleName == 'program')
+                {
+                    $fieldKey = substr($method, 0, 3) . ucfirst($fieldName);
+                    if(isset($moduleLang->$fieldKey) and is_string($moduleLang->$fieldKey)) $fields[$fieldName] = $moduleLang->$fieldKey;
+                }
             }
         }
         return $fields;
@@ -502,7 +508,6 @@ class customModel extends model
         {
             foreach($data->requiredFields as $method => $fields)
             {
-                $method      = strtolower($method);
                 $systemField = $this->config->$moduleName->$method->requiredFields;
 
                 $fields = join(',', $fields);
@@ -587,16 +592,38 @@ class customModel extends model
     public function setURAndSR()
     {
         $data = fixer::input('post')->get();
+        $lang = $this->app->getClientLang();
 
         $this->loadModel('setting')->setItem("system.custom.URAndSR", $data->URAndSR);
         if($data->URAndSR)
         {
-            $clientLang = $this->app->getClientLang();
-            $URSRName   = isset($this->config->custom->URSRName) ? json_decode($this->config->custom->URSRName, true) : array();
-            $URSRName['URCommon'][$clientLang] = $data->URCommon[$clientLang];
-            $URSRName['SRCommon'][$clientLang] = $data->SRCommon[$clientLang];
-            $this->setting->setItem("system.custom.common.URSRName", json_encode($URSRName));
+            /* If has custom UR and SR name. */
+            $newKey = '';
+            if(isset($data->URSRCustom))
+            {
+                if(!$data->URName || !$data->SRName) return false;
+
+                $newKey   = max(array_keys($this->lang->custom->URSRList)) + 1;
+                $URSRName = $data->URName . '/' . $data->SRName; 
+
+                /* Delete old lang data, and add new. */
+                $this->lang->custom->URSRList[$newKey] = $URSRName;
+                $this->lang->custom->URList[$newKey]   = $data->URName;
+                $this->lang->custom->SRList[$newKey]   = $data->SRName;
+                $this->deleteItems("lang=$lang&module=custom&section=URSRList");
+                $this->deleteItems("lang=$lang&module=custom&section=URList");
+                $this->deleteItems("lang=$lang&module=custom&section=SRList");
+
+                foreach($this->lang->custom->URSRList as $key => $value) $this->setItem("$lang.custom.URSRList.{$key}.1", $value);
+                foreach($this->lang->custom->URList as $key => $value)   $this->setItem("$lang.custom.URList.{$key}.1", $value);
+                foreach($this->lang->custom->SRList as $key => $value)   $this->setItem("$lang.custom.SRList.{$key}.1", $value);
+            }
+
+            $URSRName = $newKey ? $newKey : $data->URSRCommon;
+            $this->setting->setItem("system.custom.URSRName", $URSRName);
         }
+
+        return true;
     }
 
     /**

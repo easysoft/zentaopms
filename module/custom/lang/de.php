@@ -154,6 +154,7 @@ $lang->custom->notice->conceptResult     = 'According to your preference, <b> %s
 $lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
 $lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
 $lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
+$lang->custom->notice->URSREmpty         = 'Custom requirement name can not be empty!';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
@@ -221,11 +222,30 @@ $lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
 
 $lang->custom->waterfall = new stdclass();
 $lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enabled?';
-$lang->custom->waterfall->URSRName = 'A conceptual definition of requirements and stories?';
+$lang->custom->waterfall->URSRName = 'Combination of default requirements concepts';
 
 $lang->custom->scrum = new stdclass();
-$lang->custom->scrum->URAndSR  = 'Is it going to be epic?';
-$lang->custom->scrum->URSRName = 'A conceptual definition of requirements?';
+$lang->custom->scrum->setConcept = 'Set concept';
+$lang->custom->scrum->URAndSR    = 'Are epic concept enabled?';
+$lang->custom->scrum->URSRName   = 'A conceptual definition of epic?';
+
+$lang->custom->URList[1] = 'User Requirement';
+$lang->custom->URList[2] = 'UR';
+$lang->custom->URList[3] = 'Requirement';
+$lang->custom->URList[4] = 'Epic';
+
+$lang->custom->SRList[1] = 'Software Requirement';
+$lang->custom->SRList[2] = 'SR';
+$lang->custom->SRList[3] = 'Story';
+$lang->custom->SRList[4] = 'Story';
+
+$lang->custom->URSRList[1] = 'User Requirement/Software Requirement';
+$lang->custom->URSRList[2] = 'UR/SR';
+$lang->custom->URSRList[3] = 'Requirement/Story';
+$lang->custom->URSRList[4] = 'Epic/Story';
+
+$lang->custom->URTips = 'Type like：Requirement';
+$lang->custom->SRTips = 'Type like：Story';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();

@@ -125,12 +125,11 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score', 'estimate');
+$lang->custom->system = array('required', 'score', 'estimate');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -154,6 +153,7 @@ $lang->custom->notice->conceptResult               = '我们已经根据您的�
 $lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->storyCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
 $lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->projectCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
+$lang->custom->notice->URSREmpty                   = '自定义需求名称不能为空！';
 
 $lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -220,12 +220,31 @@ $lang->custom->conceptOptions->hourPoint['1'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['2'] = '代码行';
 
 $lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->URAndSR  = '是否启用用户需求概念？';
-$lang->custom->waterfall->URSRName = '用户需求和软件需求的概念定义？';
+$lang->custom->waterfall->URAndSR  = '是否启用用户需求概念';
+$lang->custom->waterfall->URSRName = '默认需求概念组合';
 
 $lang->custom->scrum = new stdclass();
-$lang->custom->scrum->URAndSR  = '是否启用epic概念？';
-$lang->custom->scrum->URSRName = '需求的概念定义？';
+$lang->custom->scrum->setConcept = '设置项目概念';
+$lang->custom->scrum->URAndSR    = '是否启用epic概念？';
+$lang->custom->scrum->URSRName   = '需求的概念定义？';
+
+$lang->custom->URList[1] = '用户需求';
+$lang->custom->URList[2] = '用需';
+$lang->custom->URList[3] = '需求';
+$lang->custom->URList[4] = '史诗';
+
+$lang->custom->SRList[1] = '软件需求';
+$lang->custom->SRList[2] = '软需';
+$lang->custom->SRList[3] = '故事';
+$lang->custom->SRList[4] = '故事';
+
+$lang->custom->URSRList[1] = '用户需求/软件需求';
+$lang->custom->URSRList[2] = '用需/软需';
+$lang->custom->URSRList[3] = '需求/故事';
+$lang->custom->URSRList[4] = '史诗/故事';
+
+$lang->custom->URTips = '请输入如：用户需求';
+$lang->custom->SRTips = '请输入如：软件需求';
 
 $lang->custom->waterfallOptions = new stdclass();
 $lang->custom->waterfallOptions->URAndSR = array();

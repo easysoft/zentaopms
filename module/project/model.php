@@ -948,10 +948,11 @@ class projectModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
+     * @param  string  $pairs
      * @access public
      * @return array
      */
-    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0)
+    public function getExecutionsByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
         if(!$projectID) return array();
 
@@ -961,7 +962,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('begin_asc')
+            ->orderBy('path_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -972,7 +973,15 @@ class projectModel extends model
             {
                 if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
             }
+
             foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+        }
+
+        if($pairs)
+        {
+            $executionPairs = array();
+            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            $executions = $executionPairs;
         }
 
         return $executions;
@@ -992,31 +1001,27 @@ class projectModel extends model
      */
     public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
-        /* Init vars. */
-        $executions = $this->getExecutionList($projectID, $status, 0, $productID, $branch);
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('id')->in(array_keys($executions))
-            ->andWhere('grade')->eq(1)
-            ->andWhere('deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-
-        if(empty($executions)) return array();
-
-        /* In case of a waterfall model, obtain sub-stage data. */
-        $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
-        if($project and $project->model == 'waterfall')
+        if(empty($productID))
         {
-            $childrens = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->in(array_keys($executions))
-                ->andWhere('grade')->eq(2)
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('project')->eq($projectID)
+                ->andWhere('type')->eq('stage')
                 ->andWhere('deleted')->eq('0')
-                ->orderBy($orderBy)
+                ->orderBy('path_desc,id_asc')
                 ->page($pager)
                 ->fetchAll('id');
-
-            $executions += $childrens;
+        }
+        else
+        {
+            $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.project')->eq($projectID)
+                ->andWhere('t2.type')->eq('stage')
+                ->andWhere('t2.deleted')->eq('0')
+                ->orderBy('t2.parent_desc,t2.id_asc')
+                ->page($pager)
+                ->fetchAll('id');
         }
 
         $hours       = array();
@@ -1111,6 +1116,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
+        $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
         if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution) $execution->children = isset($children[$id]) ? $children[$id] : array();

@@ -492,6 +492,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
@@ -868,6 +869,7 @@ $lang->menu->waterfall->programplan  = array('link' => '计划|programplan|brows
 $lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly       = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc          = array('link' => '文档|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->projectstory = array('link' => '需求|projectstory|requirement|product={PRODUCT}', 'subModule' => 'requirement,story,');
 //$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
 $lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci           = '代码|repo|browse|';

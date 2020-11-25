@@ -120,7 +120,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $lib->project);
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -226,7 +226,7 @@ class doc extends control
 
         $projectID = $this->session->PRJ;
         $products  = $this->product->getProductPairsByProject($projectID, 'noclosed');
-        $projects  = $this->project->getExecutionPairs($projectID, 'all', 'noclosed');
+        $projects  = $this->project->getExecutionsByProject($projectID, 'all', 0, true);
 
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products)) unset($libTypeList['product']);
@@ -355,7 +355,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $lib->project);
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -721,7 +721,7 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $libs    = $this->doc->getAllLibsByType($type, $pager, $product);
+        $libs    = $this->doc->getAllLibsByType($type, $pager);
         $subLibs = array();
         if($type == 'product' or $type == 'project')
         {
@@ -776,7 +776,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'program';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $objectID);
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -872,7 +872,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode'), $objectID);
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else

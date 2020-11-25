@@ -39,28 +39,31 @@ EOT;
   <form id='ajaxForm' class='form-ajax' method='post'>
     <div class='modal-body'>
       <?php if($type == 'concept'):?>
-      <div class="form-group">
-        <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
-        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?> </div>
-      </div>
-      <div class='form-group'>
-        <label><?php echo '2. ' . $lang->custom->scrum->URAndSR;?></label>
-        <div class='checkbox'><?php echo html::radio('URAndSR', $lang->custom->waterfallOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?></div>
-      </div>
-      <?php $hidden = zget($this->config->custom, 'URAndSR', 0) == 0 ? 'hidden' : '';?>
-      <div class="form-group <?php echo $hidden;?>" id='URSRName'><label><?php echo '3. ' . $lang->custom->scrum->URSRName;?></label>
-        <div class='input-group'>
-          <?php 
-            echo html::input("URCommon[{$clientLang}]", isset($URSRName->URCommon->$clientLang) ? $URSRName->URCommon->$clientLang : $lang->custom->URStory, "class='form-control'");
-          ?>
-          <span class='input-group-addon'></span>
-          <?php echo html::input("SRCommon[{$clientLang}]", isset($URSRName->SRCommon->$clientLang) ? $URSRName->SRCommon->$clientLang : $lang->custom->SRStory, "class='form-control'");?>
-        </div>
-      </div>
-      <div class="form-group">
-        <label></label>
-        <div><?php echo html::submitButton();?></div>
-      </div>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-160px'><?php echo $lang->custom->scrum->setConcept;?> </th>
+          <td><?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?></td>
+          <td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <th> <?php echo $lang->custom->waterfall->URAndSR;?> </th>
+          <td> <?php echo html::radio('URAndSR', $lang->custom->waterfallOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?> </td>
+        </tr>
+        <?php $hidden = zget($this->config->custom, 'URAndSR', 0) == 0 ? 'hidden' : '';?>
+        <tr class="<?php echo $hidden;?>" id='URSRName'>
+          <th><?php echo $lang->custom->waterfall->URSRName;?></th>
+          <td><?php echo html::select('URSRCommon', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
+          <td><?php echo html::checkbox('URSRCustom', $lang->custom->common, "class='form-control'");?></td>
+        </tr>
+        <tr class='hidden' id='customURSR'>
+          <th></th>
+          <td><?php echo html::input('URName', '', "class='form-control' placeholder={$lang->custom->URTips}");?></td>
+          <td><?php echo html::input('SRName', '', "class='form-control' placeholder={$lang->custom->SRTips}");?></td>
+        </tr>
+        <tr>
+          <td class='text-right'><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php endif;?>
       <?php if($type == 'user'):?>
 	  <table class='table table-form active-disabled table-condensed mw-600px'>

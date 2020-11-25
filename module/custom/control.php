@@ -19,9 +19,9 @@ class custom extends control
      */
     public function index()
     {
+        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=program&field=" . key($this->lang->custom->program->fields))));
         if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
-        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set')));
 
         foreach($this->lang->custom->system as $sysObject)
         {
@@ -41,7 +41,7 @@ class custom extends control
     public function set($module = 'story', $field = 'priList', $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if($module == 'user' and $field == 'priList') $field = 'roleList';
+        if($module == 'user' and $field == 'priList') $field = 'statusList';
         if($module == 'block' and $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
 
@@ -400,6 +400,7 @@ class custom extends control
      */
     public function configureWaterfall($type = 'concept')
     {   
+        $this->app->loadLang('custom');
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
@@ -407,7 +408,8 @@ class custom extends control
         {   
             if($type == 'concept')
             {
-                $this->custom->setURAndSR();
+                $result = $this->custom->setURAndSR();
+                if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
             }
 
             if($type == 'user' and isset($_POST['keys']))
@@ -486,6 +488,7 @@ class custom extends control
      */
     public function configureScrum($type = 'concept')
     {
+        $this->app->loadLang('custom');
         $this->lang->custom->menu = new stdclass();
         $this->lang->navGroup->custom = 'system';
 
@@ -494,7 +497,8 @@ class custom extends control
             if($type == 'concept')
             {
                 $this->custom->setConcept();
-                $this->custom->setURAndSR();
+                $result = $this->custom->setURAndSR();
+                if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
             }
 
             if($type == 'user' && isset($_POST['keys']))

@@ -115,7 +115,7 @@ class build extends control
             $execution->name = '';
         }
 
-        $executions = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'nodeleted');
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch);
         if(!isset($executions[$build->project])) $executions[$build->project] = $execution->name;
 
         $productGroups = $this->project->getProducts($build->project);

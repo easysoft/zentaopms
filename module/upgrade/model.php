@@ -632,6 +632,16 @@ class upgradeModel extends model
             $this->setWork2Full();
             $this->initUserView();
             $this->appendExec('20_0_alpha');
+        case '20_0_alpha1':
+            $this->saveLogs('Execute 20_0_alpha1');
+
+            if(strpos($fromVersion, '20') !== 0)
+            {
+                $this->execSQL($this->getUpgradeFile('12.4.4'));
+                $this->adjustPriv12_5();
+            }
+
+            $this->appendExec('20_0_alpha1');
         }
 
         $this->deletePatch();

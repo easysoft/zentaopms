@@ -1274,7 +1274,7 @@ class project extends control
         $projectProsucts = $this->project->getProducts($project->project);
         foreach($projectProsucts as $product) $allProducts[$product->id] = $product->name;
 
-        $linkedProducts = $this->project->getProducts($project->id);
+        $linkedProducts = $this->project->getProducts($project->project);
         $linkedBranches = array();
         foreach($linkedProducts as $product)
         {
@@ -1964,7 +1964,7 @@ class project extends control
         $position[] = $this->lang->project->manageProducts;
 
         $allProducts     = $this->product->getProductPairsByProject($project->project);
-        $linkedProducts  = $this->project->getProducts($project->id);
+        $linkedProducts  = $this->project->getProducts($project->project);
         $linkedBranches  = array();
         // Merge allProducts and linkedProducts for closed product.
         foreach($linkedProducts as $product)
