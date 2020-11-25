@@ -454,6 +454,10 @@ $lang->doc->menu = new stdclass();
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
 
+/* 項目發布視圖菜單設置。*/
+$lang->projectrelease = new stdclass();
+$lang->projectrelease->menu = new stdclass();
+
 /* 統計視圖菜單設置。*/
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
@@ -625,6 +629,7 @@ $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
+$lang->navGroup->projectrelease = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
@@ -862,19 +867,19 @@ $lang->menu->scrum->qa      = '測試|qa|index';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex = array('link' => '儀表盤|program|index|program={PROGRAM}');
-$lang->menu->waterfall->programplan  = array('link' => '計劃|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly       = array('link' => '報告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->doc          = array('link' => '文檔|doc|index|program={PROGRAM}');
-//$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
-$lang->menu->waterfall->design       = '設計|design|browse|product={PRODUCT}';
-$lang->menu->waterfall->ci           = '代碼|repo|browse|';
-$lang->menu->waterfall->qa           = array('link' => '測試|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-//$lang->menu->waterfall->release      = array('link' => '發佈|release|browse|product={PRODUCT}', 'subModule' => 'release');
-$lang->menu->waterfall->issue        = '問題|issue|browse|';
-$lang->menu->waterfall->risk         = '風險|risk|browse|';
-$lang->menu->waterfall->list         = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->programindex   = array('link' => '儀表盤|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan    = array('link' => '計劃|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly         = array('link' => '報告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc            = array('link' => '文檔|doc|index|program={PROGRAM}');
+//$lang->menu->waterfall->product        = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->design         = '設計|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci             = '代碼|repo|browse|';
+$lang->menu->waterfall->qa             = array('link' => '測試|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->projectrelease = array('link' => '發布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->issue          = '問題|issue|browse|';
+$lang->menu->waterfall->risk           = '風險|risk|browse|';
+$lang->menu->waterfall->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();

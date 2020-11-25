@@ -80,6 +80,7 @@
         </tbody>
       </table>
     </div>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     <?php endif;?>
   </div>
 </div>
