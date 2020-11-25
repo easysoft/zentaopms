@@ -1078,6 +1078,23 @@ class programModel extends model
     }
 
     /**
+     * Get project by id list.
+     *
+     * @param  array    $projectIdList
+     * @access public
+     * @return object
+     */
+    public function getPRJByIdList($projectIdList = array())
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('id')->in($projectIdList)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Build the query.
      *
      * @param  int    $projectID

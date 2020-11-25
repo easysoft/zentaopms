@@ -27,6 +27,11 @@ $lang->my->score          = '我的積分';
 $lang->my->scoreRule      = '積分規則';
 $lang->my->noTodo         = '暫時沒有待辦。';
 
+$lang->my->myExecutions = '我參與的階段/衝刺/看板';
+$lang->my->name         = '名稱';
+$lang->my->code         = '代號';
+$lang->my->projects     = '項目';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派給我';
 $lang->my->taskMenu->openedByMe   = '由我創建';

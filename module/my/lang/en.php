@@ -27,6 +27,11 @@ $lang->my->score          = 'My Points';
 $lang->my->scoreRule      = 'Point Rules';
 $lang->my->noTodo         = 'No todos yet. ';
 
+$lang->my->myExecutions = 'My Stage/Sprint/Kanban';
+$lang->my->name         = 'Name';
+$lang->my->code         = 'Code';
+$lang->my->projects     = 'Project';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'AssignedToMe';
 $lang->my->taskMenu->openedByMe   = 'CreatedByMe';
