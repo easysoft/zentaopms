@@ -381,7 +381,7 @@ class task extends control
             }
         }
 
-        $noclosedProjects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'noclosed,nocode,noParentStage');
+        $noclosedProjects = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
         $tasks = $this->task->getParentTaskPairs($this->view->project->id, $this->view->task->parent);
