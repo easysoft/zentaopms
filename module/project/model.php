@@ -999,7 +999,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'path_asc,id_asc', $pager = null)
     {
         if(empty($productID))
         {
@@ -1007,7 +1007,7 @@ class projectModel extends model
                 ->where('project')->eq($projectID)
                 ->andWhere('type')->eq('stage')
                 ->andWhere('deleted')->eq('0')
-                ->orderBy('path_desc,id_asc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -1019,7 +1019,7 @@ class projectModel extends model
                 ->andWhere('t2.project')->eq($projectID)
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.deleted')->eq('0')
-                ->orderBy('t2.parent_desc,t2.id_asc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }

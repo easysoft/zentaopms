@@ -2469,7 +2469,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'undone', $projectID = 0, $orderBy = 'path_asc,id_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('programplan');
@@ -2484,17 +2484,17 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title         = $this->lang->project->allProject;
-        $this->view->position[]    = $this->lang->project->allProject;
+        $this->view->title      = $this->lang->project->allProject;
+        $this->view->position[] = $this->lang->project->allProject;
 
-        $this->view->projectStats  = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        $this->view->productID     = $productID;
-        $this->view->projectID     = $projectID;
-        $this->view->pager         = $pager;
-        $this->view->orderBy       = $orderBy;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status        = $status;
+        $this->view->executionStats = $this->project->getExecutionStats($this->session->PRJ, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->productID      = $productID;
+        $this->view->projectID      = $projectID;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status         = $status;
 
         $this->display();
     }

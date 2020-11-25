@@ -840,13 +840,12 @@ class programModel extends model
 
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
+            $orderBy = $project->model == 'waterfall' ? 'path_asc,id_asc' : 'id_desc';
             $project->executions = $this->project->getExecutionStats($projectID, $status, 0, 0, $itemCounts, $orderBy);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
             $project->parentName = $this->getPRJParentName($project->parent);
         }
-
         return $projects;
     }
 

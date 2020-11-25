@@ -847,7 +847,7 @@ class block extends control
             if($project->model == 'scrum')
             {
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 1, 'id_desc', null);
+                $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 30, 'path_asc,id_asc');
             }
             elseif($project->model == 'waterfall')
             {
@@ -1298,7 +1298,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
-        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, 0, 0, 30, 'path_asc,id_asc', $pager);
     }
 
     /**
