@@ -20,7 +20,7 @@
       <span class='prefix label-id'><strong><?php echo $program->id;?></strong></span>
       <?php echo isonlybody() ? ("<span title='$program->name'>" . $program->name . '</span>') : html::a($this->createLink('program', 'view', 'program=' . $program->id), $program->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->program->activate;?></small>
+      <small><?php echo $lang->arrow . $lang->project->activate;?></small>
       <?php endif;?>
     </h2>
   </div>
