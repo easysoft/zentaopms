@@ -45,8 +45,19 @@ class commonModel extends model
     public function sendHeader()
     {
         header("Content-Type: text/html; Language={$this->config->charset}");
-        if(!$this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon')) header("X-Frame-Options: SAMEORIGIN");
         header("Cache-control: private");
+        if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
+        {
+            if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') 
+            {
+                $session = $this->config->sessionVar . '=' . session_id();
+                header("Set-Cookie: $session; SameSite=None; Secure=true", false);
+            }
+        }
+        else
+        {
+            header("X-Frame-Options: SAMEORIGIN");
+        }
     }
 
     /**
