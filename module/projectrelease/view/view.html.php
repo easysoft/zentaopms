@@ -31,19 +31,19 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    $canBeChanged = common::canBeChanged('release', $release);
+    $canBeChanged = common::canBeChanged('projectrelease', $release);
 
     if(!$release->deleted and $canBeChanged)
     {
         echo $this->buildOperateMenu($release, 'view');
 
-        if(common::hasPriv('release', 'changeStatus', $release))
+        if(common::hasPriv('projectrelease', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
             echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$lang->release->changeStatusList[$changedStatus]}'");
         }
-        if(common::hasPriv('release', 'edit'))   echo html::a(inlink('edit',   "releaseID=$release->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('release', 'delete')) echo html::a(inlink('delete', "releaseID=$release->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        if(common::hasPriv('projectrelease', 'edit'))   echo html::a(inlink('edit',   "releaseID=$release->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('projectrelease', 'delete')) echo html::a(inlink('delete', "releaseID=$release->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>
@@ -59,19 +59,19 @@
           <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->release->generatedBugs;?></a></li>
           <li <?php if($type == 'releaseInfo') echo "class='active'"?>><a href='#releaseInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->release->view;?></a></li>
           <?php if($countStories or $countBugs or $countLeftBugs):?>
-          <li class='pull-right'><div><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
+          <li class='pull-right'><div><?php common::printIcon('projectrelease', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged):?>
+            <?php if(common::hasPriv('projectrelease', 'linkStory') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-story' method='post' id='linkedStoriesForm' data-ride="table">
               <table class='table has-sort-head' id='storyList'>
                 <?php
-                $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');
+                $canBatchUnlink = common::hasPriv('projectrelease', 'batchUnlinkStory');
                 $canBatchClose  = common::hasPriv('story', 'batchClose');
                 ?>
                 <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
@@ -122,9 +122,9 @@
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkStory') and $canBeChanged)
+                      if(common::hasPriv('projectrelease', 'unlinkStory') and $canBeChanged)
                       {
-                          $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
+                          $unlinkURL = $this->createLink('projectrelease', 'unlinkStory', "releaseID=$release->id&story=$story->id");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
                       }
                       ?>
@@ -138,7 +138,7 @@
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php
-                  if(common::hasPriv('release', 'batchUnlinkStory'))
+                  if(common::hasPriv('projectrelease', 'batchUnlinkStory'))
                   {
                       $unlinkURL = inlink('batchUnlinkStory', "release=$release->id");
                       echo html::a('###', $lang->release->batchUnlink, '', "onclick='setFormAction(\"$unlinkURL\", \"hiddenwin\", this)' class='btn'");
@@ -162,13 +162,13 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('projectrelease', 'linkBug') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='bugList'>
-                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+                <?php $canBatchUnlink = common::hasPriv('projectrelease', 'batchUnlinkBug');?>
                 <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr class='text-center'>
@@ -212,9 +212,9 @@
                     <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)
+                      if(common::hasPriv('projectrelease', 'unlinkBug') and $canBeChanged)
                       {
-                          $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
+                          $unlinkURL = $this->createLink('projectrelease', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
                       }
                       ?>
@@ -240,13 +240,13 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('projectrelease', 'linkBug') and $canBeChanged):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='leftBugList'>
-                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+                <?php $canBatchUnlink = common::hasPriv('projectrelease', 'batchUnlinkBug');?>
                 <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr class='text-center'>
@@ -303,9 +303,9 @@
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
                       <?php
-                      if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)
+                      if(common::hasPriv('projectrelease', 'unlinkBug') and $canBeChanged)
                       {
-                          $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
+                          $unlinkURL = $this->createLink('projectrelease', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"leftBugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
                       }
                       ?>
