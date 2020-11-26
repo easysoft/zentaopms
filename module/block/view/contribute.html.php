@@ -7,6 +7,10 @@
         <div class="tile-amount"><?php echo empty($data['createdTodos']) ? 0 : html::a($this->createLink('my', 'todo', 'type=all'), (int)$data['createdTodos']);?></div>
       </div>
       <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->createdRequirements;?></div>
+        <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : html::a($this->createLink('my', 'story', 'type=openedBy'), (int)$data['createdRequirements']);?></div>
+      </div>
+      <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdStories;?></div>
         <div class="tile-amount"><?php echo empty($data['createdStories']) ? 0 : html::a($this->createLink('my', 'story', 'type=openedBy'), (int)$data['createdStories']);?></div>
       </div>
@@ -15,12 +19,36 @@
         <div class="tile-amount"><?php echo empty($data['finishedTasks']) ? 0 : html::a($this->createLink('my', 'task', 'type=finishedBy'), (int)$data['finishedTasks']);?></div>
       </div>
       <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->createdBugs;?></div>
+        <div class="tile-amount"><?php echo empty($data['createdBugs']) ? 0 : html::a($this->createLink('my', 'bug', 'type=openedBy'), (int)$data['createdBugs']);?></div>
+      </div>
+      <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->resolvedBugs;?></div>
         <div class="tile-amount"><?php echo empty($data['resolvedBugs']) ? 0 : html::a($this->createLink('my', 'bug', 'type=resolvedBy'), (int)$data['resolvedBugs']);?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdCases;?></div>
         <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : html::a($this->createLink('my', 'testcase', 'type=openedbyme'), (int)$data['createdCases']);?></div>
+      </div>
+      <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->createdRisks;?></div>
+        <div class="tile-amount"><?php echo $data['createdRisks'];?></div>
+      </div>
+      <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->resolvedRisks;?></div>
+        <div class="tile-amount"><?php echo $data['resolvedRisks'];?></div>
+      </div>
+      <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->createdIssues;?></div>
+        <div class="tile-amount"><?php echo $data['createdIssues'];?></div>
+      </div>
+      <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->resolvedIssues;?></div>
+        <div class="tile-amount"><?php echo $data['resolvedIssues'];?></div>
+      </div>
+      <div class="col-xs-4 tile">
+        <div class="tile-title"><?php echo $lang->block->createdDocs;?></div>
+        <div class="tile-amount"><?php echo $data['createdDocs'];?></div>
       </div>
     </div>
   </div>
