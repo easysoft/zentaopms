@@ -115,7 +115,8 @@ $config->framework->detectDevice['fr']    = true; // 在en语言情况下，是�
 $config->framework->detectDevice['vi']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 
 /* IP white list settings.*/
-$config->ipWhiteList = '*';
+$config->ipWhiteList   = '*';
+$config->xFrameOptions = 'SAMEORIGIN';
 
 /* Switch for zentao features. */
 $config->features = new stdclass();
