@@ -66,9 +66,11 @@ $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = $lang->productSRCommon;
-$lang->action->objectTypes['productplan'] = '計劃';
+$lang->action->objectTypes['productplan'] = $lang->planCommon;
 $lang->action->objectTypes['release']     = '發佈';
-$lang->action->objectTypes['project']     = $lang->projectCommon;
+$lang->action->objectTypes['program']     = '項目集';
+$lang->action->objectTypes['project']     = '項目';
+$lang->action->objectTypes['execution']   = '執行';
 $lang->action->objectTypes['task']        = '任務';
 $lang->action->objectTypes['build']       = '版本';
 $lang->action->objectTypes['bug']         = 'Bug';
@@ -387,7 +389,9 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = '計劃|productplan|view|productID=%s';
 $lang->action->label->release     = '發佈|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->productSRCommon}|story|view|storyID=%s";
-$lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
+$lang->action->label->program     = "項目集|program|pgmproduct|programID=%s";
+$lang->action->label->project     = "項目|project|view|projectID=%s";
+$lang->action->label->execution   = "執行|project|task|projectID=%s";
 $lang->action->label->task        = '任務|task|view|taskID=%s';
 $lang->action->label->build       = '版本|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';

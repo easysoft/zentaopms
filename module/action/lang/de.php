@@ -65,11 +65,12 @@ $lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
 $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
-$lang->action->objectTypes['story']       = 'Story';
-$lang->action->objectTypes['productplan'] = 'Plan';
+$lang->action->objectTypes['story']       = $lang->productSRCommon;
+$lang->action->objectTypes['productplan'] = $lang->planCommon;
 $lang->action->objectTypes['release']     = 'Release';
 $lang->action->objectTypes['program']     = 'Program';
-$lang->action->objectTypes['project']     = $lang->projectCommon;
+$lang->action->objectTypes['project']     = 'Project';
+$lang->action->objectTypes['execution']   = 'Execution';
 $lang->action->objectTypes['task']        = 'Aufgabe';
 $lang->action->objectTypes['build']       = 'Build';
 $lang->action->objectTypes['bug']         = 'Bug';
@@ -400,8 +401,9 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
-$lang->action->label->program     = "Program|program|browse|";
-$lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
+$lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
+$lang->action->label->project     = "Project|project|view|projectID=%s";
+$lang->action->label->execution   = "Execution|project|task|projectID=%s";
 $lang->action->label->task        = 'Aufgaben|task|view|taskID=%s';
 $lang->action->label->build       = 'Builds|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bugs|bug|view|bugID=%s';
