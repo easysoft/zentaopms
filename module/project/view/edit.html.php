@@ -170,7 +170,8 @@
         <?php $this->printExtendFields($project, 'table');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+          <?php $class = $project->grade == 2 ? "disabled='disabled'" : '';?>
+          <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);' $class", 'block'));?></td>
         </tr>
         <tr class="<?php if($project->acl == 'open') echo 'hidden';?>" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>

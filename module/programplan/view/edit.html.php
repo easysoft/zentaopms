@@ -57,7 +57,8 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->project->acl;?> </th>
-            <td><?php echo html::select('acl', $lang->project->aclList, $plan->acl, 'class="form-control"');?></td>
+            <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
+            <td><?php echo html::select('acl', $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->programplan->begin;?> </th>
