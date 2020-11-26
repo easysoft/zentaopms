@@ -77,9 +77,7 @@ class projectModel extends model
 
         if(!$projectID and $this->session->project) $projectID = $this->session->project;
 
-        /* Get project and program */
         $project   = $this->getById($projectID);
-
         $isProgram = false;
         if(!empty($project))
         {

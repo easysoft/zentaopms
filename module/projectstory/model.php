@@ -22,6 +22,9 @@ class projectstoryModel extends model
      */
     public function setMenu($products = array(), $productID = 0, $branch = 0)
     {
+        /* Determine if the product is accessible. */
+        if($products and (!isset($products[$productID]) or !$this->loadModel('product')->checkPriv($productID))) $this->loadModel('product')->accessDenied();
+
         if(empty($productID)) $productID = key($products);
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
