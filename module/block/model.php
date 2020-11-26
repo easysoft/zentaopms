@@ -768,6 +768,7 @@ class blockModel extends model
             list($moduleName, $blockKey) = explode('|', $block);
             if(empty($moduleName))
             {
+                if(isset($this->lang->block->$blockKey)) $blockPairs[$block] = $this->lang->block->$blockKey;
                 if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
                 if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
                 if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
@@ -775,7 +776,14 @@ class blockModel extends model
             }
             else
             {
-                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
+                $blockName = $blockKey;
+                if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
+                if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
+                if(isset($this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey;
+                if(isset($this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey;
+
+                $blockPairs[$block]  = isset($this->lang->block->moduleList[$moduleName]) ? "{$this->lang->block->moduleList[$moduleName]}|" : '';
+                $blockPairs[$block] .= $blockName;
             }
         }
 

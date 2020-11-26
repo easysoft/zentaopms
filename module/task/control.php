@@ -381,9 +381,6 @@ class task extends control
             }
         }
 
-        $noclosedProjects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'noclosed,nocode');
-        unset($noclosedProjects[$this->view->project->id]);
-        $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
         $tasks = $this->task->getParentTaskPairs($this->view->project->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
@@ -398,6 +395,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->project, 0, 0, $this->view->showAllModule ? 'allModule' : '');
+        $this->view->projects      = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 

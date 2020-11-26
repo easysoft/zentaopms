@@ -859,11 +859,12 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program = '儀表盤|program|index|';
-//$lang->menu->scrum->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->scrum->project = "$lang->projectCommon|project|index|locate=no";
-$lang->menu->scrum->doc     = '文檔|doc|index|';
-$lang->menu->scrum->qa      = '測試|qa|index';
+$lang->menu->scrum->program     = '儀表盤|program|index|';
+//$lang->menu->scrum->product   = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->scrum->project     = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->doc         = '文檔|doc|index|';
+$lang->menu->scrum->qa          = '測試|qa|index';
+$lang->menu->scrum->stakeholder = '干係人|stakeholder|browse';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
