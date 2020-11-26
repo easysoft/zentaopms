@@ -10,6 +10,24 @@
  */
 class projectStory extends control
 {
+    public $products = array();
 
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectStory")));
+    }
+
+    public function requirement($projectID = 0, $productID = 0, $branch = 0)
+    {
+        $this->projectstory->setMenu($this->products, $productID, $branch);
+        $this->display();
+    }
+
+    public function story()
+    {
+        $this->display();
+    }
 }
 

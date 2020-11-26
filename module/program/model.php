@@ -73,7 +73,10 @@ class programModel extends model
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('id')->in($this->app->user->view->programs)
+            ->orWhere('id')->in($this->app->user->view->projects)
+            ->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
@@ -1215,7 +1218,7 @@ class programModel extends model
             ->join('whitelist', ',')
             ->cleanInt('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta')
+            ->remove('products,branch,plans,delta,newProduct,productName')
             ->get();
 
         if($project->parent)
@@ -1238,7 +1241,7 @@ class programModel extends model
             {
                 if(!empty($product)) $linkedProductsCount++;
             }
-            if(empty($linkedProductsCount))
+            if(empty($linkedProductsCount) and !$this->post->productName)
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
@@ -1276,13 +1279,14 @@ class programModel extends model
             {
                 $this->loadModel('project')->updateProducts($projectID);
             }
-            else
+
+            if(isset($this->post->newProduct) || !$project->parent)
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name        = $project->name;
-                $product->code        = $project->code;
-                $product->bind        = 1;
+                $product->name        = $this->post->productName ? $this->post->productName : $project->name;
+                $product->code        = $this->post->productName ? $this->post->productName : $project->code;
+                $product->bind        = $this->post->productName ? 0 : 1;
                 $product->acl         = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO          = $project->PM;
                 $product->createdBy   = $this->app->user->account;
@@ -1472,7 +1476,7 @@ class programModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end == '2059-12-31' ? '' : $project->end;
+                    echo $project->end;
                     break;
                 case 'PRJStatus':
                     echo zget($this->lang->program->statusList, $project->status);
@@ -1500,14 +1504,20 @@ class programModel extends model
                     common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID", $project, 'list', 'group');
                     common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'icon icon-menu-project');
-                    common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe', true);
-                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
-                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe', true);
-                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe', true);
                     if(common::hasPriv('program', 'PRJEdit')) echo html::a(helper::createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->edit}'");
-                    common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', '', true);
+
+                    echo "<button type='button' class='btn icon-ellipsis-v' data-toggle='context-dropdown' title={$this->lang->more}></button>";
+
+                    echo "<div class='dropdown-menu pull-right w-150px'>";
+                    common::printIcon('program', 'PRJStart', "programID=$project->id", $project, 'list', 'start', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+                    common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', 'btn-action', true);
+                    echo "</div>";
                     break;
             }
+            echo '</td>'; 
         }
     }
 }

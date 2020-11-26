@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('storyType', 'track');?>
 <style>
-.table td{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.table td{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;position:unset !important;border-bottom-color:#ddd !important;}
 .requirement{background: #fff}
 .main-table tbody>tr:hover { background-color: #fff; }
 .main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
@@ -79,6 +79,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
+      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </div>
     <?php endif;?>
   </div>

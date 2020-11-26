@@ -1212,7 +1212,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build', $module) !== false)
+        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -1234,6 +1234,10 @@ class productModel extends model
             {
                 $extra = $extra ? $extra : 'gantt';
                 $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
+            }
+            elseif($module == 'projectstory')
+            {
+                $link  = helper::createLink($module, $method, "projectID=%s&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
             else
             {
@@ -1263,6 +1267,22 @@ class productModel extends model
         }
 
         return $link;
+    }
+
+    /**
+     * Setting parameters for link.
+     *
+     * @param  string $module
+     * @param  string $link
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function setParamsForLink($module, $link, $projectID, $productID)
+    {
+        $linkHtml = strpos('programplan,projectstory', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
+        return $linkHtml;
     }
 
     /**

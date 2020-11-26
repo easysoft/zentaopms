@@ -6,10 +6,27 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     projectStory
- * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
+ * @version     $Id
  * @link        http://www.zentao.net
  */
-class projectStory extends model()
+class projectstoryModel extends model
 {
-    
+    /**
+     * Set the menu.
+     *
+     * @param  array $products
+     * @param  int   $productID
+     * @param  int   $branch
+     * @access public
+     * @return void
+     */
+    public function setMenu($products = array(), $productID = 0, $branch = 0)
+    {
+        if(empty($productID)) $productID = key($products);
+        $this->loadModel('product')->setMenu($products, $productID, $branch);
+        $selectHtml = $this->product->select($products, $productID, 'projectstory', 'requirement', '', $branch);
+        $indexHtml  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('projectstory', 'requirement'), $this->lang->projectstory->index, '', "class='btn'") . '</div></div>';
+        $pageNav    = $indexHtml . $selectHtml;
+        $this->lang->modulePageNav = $pageNav;
+    }
 }

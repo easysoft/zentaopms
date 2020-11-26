@@ -96,6 +96,7 @@ $lang->product->iterationInfo  = '%s lặp lại';
 $lang->product->iterationView  = 'Chi tiết';
 $lang->product->createdBy      = 'Người tạo';
 $lang->product->createdDate    = 'Ngày tạo';
+$lang->product->storyConcept   = 'Story Concept';
 
 $lang->product->searchStory  = 'Tìm kiếm';
 $lang->product->assignedToMe = 'Giao cho bạn';

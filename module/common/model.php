@@ -45,7 +45,7 @@ class commonModel extends model
     public function sendHeader()
     {
         header("Content-Type: text/html; Language={$this->config->charset}");
-        header("X-Frame-Options: SAMEORIGIN");
+        if(!$this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon')) header("X-Frame-Options: SAMEORIGIN");
         header("Cache-control: private");
     }
 

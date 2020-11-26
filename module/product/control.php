@@ -253,6 +253,7 @@ class product extends control
      */
     public function create()
     {
+        $this->app->loadLang('custom');
         $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         if(!empty($_POST))

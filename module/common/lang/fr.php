@@ -454,6 +454,10 @@ $lang->doc->menu = new stdclass();
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
 
+/* Project release menu settings. */
+$lang->projectrelease = new stdclass();
+$lang->projectrelease->menu = new stdclass();
+
 /* Report menu settings. */
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
@@ -625,6 +629,7 @@ $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
+$lang->navGroup->projectrelease = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
@@ -854,27 +859,28 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program = 'Index|program|index|';
-$lang->menu->scrum->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->scrum->project = "$lang->projectCommon|project|index|locate=no";
-$lang->menu->scrum->doc     = 'Doc|doc|index|';
-$lang->menu->scrum->qa      = 'QA|qa|index';
+$lang->menu->scrum->program     = 'Index|program|index|';
+$lang->menu->scrum->product     = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->scrum->project     = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->doc         = 'Doc|doc|index|';
+$lang->menu->scrum->qa          = 'QA|qa|index';
+$lang->menu->scrum->stakeholder = 'Stakeholder|stakeholder|browse';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex = array('link' => 'Index|program|index|program={PROGRAM}');
-$lang->menu->waterfall->programplan  = array('link' => 'Plan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly       = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->doc          = array('link' => 'Doc|doc|index|program={PROGRAM}');
-$lang->menu->waterfall->product      = array('link' => 'Story|product|browse|product={PRODUCT}', 'subModule' => ',story,');
-$lang->menu->waterfall->design       = 'Design|design|browse|product={PRODUCT}';
-$lang->menu->waterfall->ci           = 'Code|repo|browse|';
-$lang->menu->waterfall->qa           = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->release      = array('link' => 'Release|release|browse|product={PRODUCT}', 'subModule' => 'release');
-$lang->menu->waterfall->issue        = 'Issue|issue|browse|';
-$lang->menu->waterfall->risk         = 'Risk|risk|browse|';
-$lang->menu->waterfall->list         = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->product        = array('link' => 'Story|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci             = 'Code|repo|browse|';
+$lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->issue          = 'Issue|issue|browse|';
+$lang->menu->waterfall->risk           = 'Risk|risk|browse|';
+$lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();

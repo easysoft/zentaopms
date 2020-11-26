@@ -55,7 +55,7 @@
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php $disabledEnd = $program->end == '2059-12-31' ? 'disabled' : '';?>
-              <?php echo html::input('end', $program->end == '2059-12-31' ? '' : $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
+              <?php echo html::input('end', $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
           <?php $endValue = $program->end == '2059-12-31' ? 999 : '';?>

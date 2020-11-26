@@ -22,6 +22,7 @@ $lang->program->PRJManageView        = 'Manage View';
 $lang->program->PRJManagePriv        = 'Manage Privilege';
 $lang->program->PRJManageMembers     = 'Manage Team';
 $lang->program->export               = 'Export';
+$lang->program->addProduct           = 'Add product';
 $lang->program->PRJManageGroupMember = 'Manage Group';
 $lang->program->PRJModuleSetting     = 'List Settings';
 $lang->program->PRJModuleOpen        = 'Program Name';

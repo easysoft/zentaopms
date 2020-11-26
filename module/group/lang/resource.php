@@ -510,6 +510,36 @@ $lang->release->methodOrder[60] = 'unlinkBug';
 $lang->release->methodOrder[65] = 'batchUnlinkBug';
 $lang->release->methodOrder[70] = 'changeStatus';
 
+/* Release. */
+$lang->resource->projectrelease = new stdclass();
+$lang->resource->projectrelease->browse           = 'browse';
+$lang->resource->projectrelease->create           = 'create';
+$lang->resource->projectrelease->edit             = 'edit';
+$lang->resource->projectrelease->delete           = 'delete';
+$lang->resource->projectrelease->view             = 'view';
+$lang->resource->projectrelease->export           = 'export';
+$lang->resource->projectrelease->linkStory        = 'linkStory';
+$lang->resource->projectrelease->unlinkStory      = 'unlinkStory';
+$lang->resource->projectrelease->batchUnlinkStory = 'batchUnlinkStory';
+$lang->resource->projectrelease->linkBug          = 'linkBug';
+$lang->resource->projectrelease->unlinkBug        = 'unlinkBug';
+$lang->resource->projectrelease->batchUnlinkBug   = 'batchUnlinkBug';
+$lang->resource->projectrelease->changeStatus     = 'changeStatus';
+
+$lang->projectrelease->methodOrder[5]  = 'browse';
+$lang->projectrelease->methodOrder[10] = 'create';
+$lang->projectrelease->methodOrder[15] = 'edit';
+$lang->projectrelease->methodOrder[20] = 'delete';
+$lang->projectrelease->methodOrder[25] = 'view';
+$lang->projectrelease->methodOrder[35] = 'export';
+$lang->projectrelease->methodOrder[40] = 'linkStory';
+$lang->projectrelease->methodOrder[45] = 'unlinkStory';
+$lang->projectrelease->methodOrder[50] = 'batchUnlinkStory';
+$lang->projectrelease->methodOrder[55] = 'linkBug';
+$lang->projectrelease->methodOrder[60] = 'unlinkBug';
+$lang->projectrelease->methodOrder[65] = 'batchUnlinkBug';
+$lang->projectrelease->methodOrder[70] = 'changeStatus';
+
 /* Project. */
 $lang->resource->project = new stdclass();
 $lang->resource->project->index             = 'index';

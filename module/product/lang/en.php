@@ -96,6 +96,7 @@ $lang->product->iterationInfo  = '%s Iteration';
 $lang->product->iterationView  = 'More';
 $lang->product->createdBy      = 'CreatedBy';
 $lang->product->createdDate    = 'createdDate';
+$lang->product->storyConcept   = 'Story Concept';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'AssignedToMe';

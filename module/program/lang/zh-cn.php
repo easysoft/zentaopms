@@ -22,6 +22,7 @@ $lang->program->PRJManageView        = '项目维护视野';
 $lang->program->PRJManagePriv        = '项目维护权限';
 $lang->program->PRJManageMembers     = '项目团队';
 $lang->program->export               = '导出';
+$lang->program->addProduct           = '新建产品';
 $lang->program->PRJManageGroupMember = '维护分组用户';
 $lang->program->PRJModuleSetting     = '列表设置';
 $lang->program->PRJModuleOpen        = '显示项目集名';
@@ -91,7 +92,7 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期';
 
-$lang->program->productNotEmpty = '请关联产品或创建产品。';
+$lang->program->productNotEmpty  = '请关联产品或创建产品。';
 
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';

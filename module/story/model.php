@@ -3586,13 +3586,20 @@ class storyModel extends model
     /**
      * Get tracks.
      *
-     * @param  int  $productID
+     * @param  int    $productID
+     * @param  object $pager
      * @access public
      * @return bool|array
      */
-    public function getTracks($productID)
+    public function getTracks($productID, $pager = null)
     {
-        $requirements = $this->getProductStories($productID, 0, 0, 'all', 'requirement', 'id_desc');
+        $sourcePageID = $pager->pageID;
+        $requirements = $this->getProductStories($productID, 0, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+        if($pager->pageID != $sourcePageID)
+        {
+            $requirements  = array();
+            $pager->pageID = $sourcePageID;
+        }
 
         foreach($requirements as $requirement)
         {
@@ -3612,24 +3619,23 @@ class storyModel extends model
         }
 
         /* Get no requirements story. */
-        $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc');
-        foreach($stories as $id => $story)
+        $subdividedStories = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('product')->eq($productID)->fetchPairs('BID', 'BID');
+        $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $subdividedStories);
+        if($stories) $pager->recTotal += 1;
+
+        if(count($requirements) < $pager->recPerPage)
         {
-            $counts = $this->getStoryRelationCounts($story->id, 'story');
-            if($counts != 0) 
+            foreach($stories as $id => $story)
             {
-                unset($stories[$id]);
-                continue;
+                $stories[$id]           = new stdclass();
+                $stories[$id]->title    = $story->title;
+                $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
             }
-            $title = $stories[$id]->title;
-            $stories[$id]           = new stdclass();
-            $stories[$id]->title    = $title;
-            $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
-            $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
-            $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-            $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
+            $requirements['noRequirement'] = $stories;
         }
-        $requirements['noRequirement'] = $stories;
 
         return $requirements;
     }

@@ -790,6 +790,7 @@ class projectModel extends model
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
             $pairs[$execution->id] = $execution->name;
         }
+
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
@@ -994,6 +995,7 @@ class projectModel extends model
                 ->where('project')->eq($projectID)
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1007,6 +1009,7 @@ class projectModel extends model
                 ->andWhere('t2.project')->eq($projectID)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1553,7 +1556,12 @@ class projectModel extends model
         }
 
         /* Build search form. */
-        if($type == 'projectStory') $this->config->product->search['module'] = 'projectStory';
+        if($type == 'projectStory') 
+        {
+            $this->config->product->search['module'] = 'projectStory';
+        }
+
+        $this->config->product->search['fields']['title'] = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->title);
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);

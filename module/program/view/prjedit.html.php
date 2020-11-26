@@ -28,12 +28,7 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->PRJTemplate;?></th>
-          <td><?php echo zget($lang->program->modelList, $project->model, '');?></td><td></td><td>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PGMParent;?></th>
+          <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
           <td><?php echo html::select('parent', $programList, $programID ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td></td>
           <td></td>
@@ -113,7 +108,7 @@
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php
                 $disabledEnd = $project->end == '2059-12-31' ? 'disabled' : '';
-                echo html::input('end', $project->end == '2059-12-31' ? '' : $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
+                echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
               ?>
             </div>
           </td>
@@ -133,6 +128,12 @@
           <td></td>
         </tr>
         <?php endif;?>
+        <tr>
+          <th><?php echo $lang->program->PRJStoryConcept;?></th>
+          <td>
+            <?php echo html::select('storyConcept', $lang->custom->URSRList, $project->storyConcept, "class='form-control chosen'");?>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
