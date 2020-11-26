@@ -87,7 +87,7 @@ $lang->block->hidden             = 'Verstecken';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->productSRCommon;
+$lang->block->totalStory   = 'The Total ' . $lang->SRCommon;
 $lang->block->totalBug     = 'The Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
