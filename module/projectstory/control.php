@@ -12,6 +12,14 @@ class projectStory extends control
 {
     public $products = array();
 
+    /**
+     * Get the products associated with the project.
+     *
+     * @param  string  $moduleName
+     * @param  string  $methodName
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
@@ -19,6 +27,20 @@ class projectStory extends control
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectStory")));
     }
 
+    /**
+     * Obtain user requirements through product.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function requirement($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'requirement', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(empty($productID)) $productID = key($this->products);
@@ -27,6 +49,20 @@ class projectStory extends control
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
+    /**
+     * Get software requirements from product.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function story($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(empty($productID)) $productID = key($this->products);
@@ -35,6 +71,17 @@ class projectStory extends control
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
+    /**
+     * Obtain the tracking matrix through the product.
+     *
+     * @param  int   $productID
+     * @param  int   $browseType
+     * @param  int   $recTotal
+     * @param  int   $recPerPage
+     * @param  int   $pageID
+     * @access public
+     * @return void
+     */
     public function track($productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(empty($productID)) $productID = key($this->products);
