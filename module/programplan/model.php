@@ -681,6 +681,8 @@ class programplanModel extends model
         }
         else
         {
+            $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
+            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
             $totalPercent    = $this->getTotalPercent($oldPlan);
