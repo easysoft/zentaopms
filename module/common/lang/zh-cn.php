@@ -872,16 +872,16 @@ $lang->menu->scrum->stakeholder    = '干系人|stakeholder|browse';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex   = array('link' => '仪表盘|program|index|program={PROGRAM}');
-$lang->menu->waterfall->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement|projectID={PROGRAM}', 'subModule' => 'requirement,story,track');
-//$lang->menu->waterfall->product        = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
-$lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
-$lang->menu->waterfall->ci             = '代码|repo|browse|';
-$lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->programindex = array('link' => '仪表盘|program|index|program={PROGRAM}');
+$lang->menu->waterfall->programplan  = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->project      = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->weekly       = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc          = array('link' => '文档|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->projectstory = array('link' => '需求|projectstory|requirement', 'subModule' => 'requirement,story,track');
+//$lang->menu->waterfall->product      = array('link' => '需求|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci           = '代码|repo|browse|';
+$lang->menu->waterfall->qa           = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
 //$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
@@ -943,9 +943,9 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->requirement = array('link' => '用户需求|projectstory|requirement|programID={PROGRAM}&productID={PRODUCT}');
-$lang->projectstory->menu->story       = array('link' => '软件需求|projectstory|story|programID={PROGRAM}&productID={PRODUCT}');
-$lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track|programID={PROGRAM}&productID={PRODUCT}');
+$lang->projectstory->menu->requirement = array('link' => '用户需求|projectstory|requirement', 'subModule' => '');
+$lang->projectstory->menu->story       = array('link' => '软件需求|projectstory|story', 'subModule' => '');
+$lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';

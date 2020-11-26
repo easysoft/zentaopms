@@ -609,7 +609,7 @@ class commonModel extends model
         self::setMainMenuByGroup($group, $moduleName, $methodName);
 
         /* Print all main menus. */
-        $menu       = customModel::getMainmenu();
+        $menu       = customModel::getMainMenu();
         $activeName = 'active';
         $lastMenu   = end($menu);
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;

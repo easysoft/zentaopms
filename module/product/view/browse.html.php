@@ -15,6 +15,7 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php js::set('rawModule', $this->app->rawModule);?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());

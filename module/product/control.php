@@ -104,9 +104,6 @@ class product extends control
      */
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
-
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
@@ -142,7 +139,12 @@ class product extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. */
-        $this->product->setMenu($this->products, $productID, $branch);
+        if($this->app->rawModule == 'product')
+        {
+            $this->lang->product->menu = $this->lang->product->viewMenu;
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
+            $this->product->setMenu($this->products, $productID, $branch);
+        }
 
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
@@ -173,11 +175,6 @@ class product extends control
 
         /* Get stories. */
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
-        if(empty($stories) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
-        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');

@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('storyType', 'track');?>
+<?php js::set('rawModule', $this->app->rawModule);?>
 <style>
 .table td{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;position:unset !important;border-bottom-color:#ddd !important;}
 .requirement{background: #fff}

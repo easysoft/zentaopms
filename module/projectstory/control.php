@@ -19,15 +19,28 @@ class projectStory extends control
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectStory")));
     }
 
-    public function requirement($projectID = 0, $productID = 0, $branch = 0)
+    public function requirement($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'requirement', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if(empty($productID)) $productID = key($this->products);
+        $this->lang->projectstory->menu->requirement['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
-        $this->display();
+        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
-    public function story()
+    public function story($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->display();
+        if(empty($productID)) $productID = key($this->products);
+        $this->lang->projectstory->menu->story['subModule'] = 'product';
+        $this->projectstory->setMenu($this->products, $productID, $branch);
+        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    public function track($productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        if(empty($productID)) $productID = key($this->products);
+        $this->lang->projectstory->menu->track['subModule'] = 'story';
+        $this->projectstory->setMenu($this->products, $productID, $branch);
+        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 }
 

@@ -66,6 +66,7 @@ class branch extends control
     {
         $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
         $this->view->productID = $productID;
+        $this->view->projectID = $this->session->PRJ;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;

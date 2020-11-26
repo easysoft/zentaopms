@@ -1,7 +1,11 @@
 $(function()
 {
-    $('#navbar .nav li').removeClass('active');
-    $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+    if(typeof(rawModule) == 'undefined') rawModule = 'product';
+    if(rawModule != 'projectstory')
+    {
+        $('#navbar .nav li').removeClass('active');
+        $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+    }
 
     if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
     $('#storyList td.has-child .story-toggle').each(function()
