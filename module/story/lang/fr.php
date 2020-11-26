@@ -81,7 +81,7 @@ $lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->productSRCommon} and link {$lang->productSRCommon} to the task. The closed {$lang->productSRCommon} will not be converted into tasks.";
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->projectSRCommon} and link {$lang->projectSRCommon} to the task. The closed {$lang->projectSRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Story';
@@ -128,7 +128,7 @@ $lang->story->version        = 'Version';
 $lang->story->plan           = 'Intégrée Plans';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Commentaire';
-$lang->story->children       = "Enfant {$lang->productSRCommon}";
+$lang->story->children       = "Enfant {$lang->projectSRCommon}";
 $lang->story->childrenAB     = "C";
 $lang->story->linkStories    = 'Stories Liées';
 $lang->story->childStories   = 'Stories Décomposées';
@@ -262,8 +262,8 @@ $lang->story->mustChooseResult     = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory              = "Aucune story pour l'instant. ";
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->productSRCommon} parent";
-$lang->story->moveChildrenTips     = "Its Child {$lang->productSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->productSRCommon}.";
+$lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->projectSRCommon} parent";
+$lang->story->moveChildrenTips     = "Its Child {$lang->projectSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->projectSRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();

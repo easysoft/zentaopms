@@ -788,6 +788,7 @@ class program extends control
      */
     public function PRJEdit($projectID = 0, $programID = 0)
     {
+        $this->app->loadLang('custom');
         $this->lang->navGroup->program = 'project';
         $this->app->loadLang('project');
         $this->loadModel('productplan');

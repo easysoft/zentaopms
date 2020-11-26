@@ -118,44 +118,44 @@
                     </ul>
                     <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
                   </div>
-                  <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
-                  <span class="input-group-addon fix-border br-0"><?php echo $lang->testcase->pri;?></span>
-                  <?php
-                  $hasCustomPri = false;
-                  foreach($lang->testcase->priList as $priKey => $priValue)
-                  {
-                      if(!empty($priKey) and (string)$priKey != (string)$priValue)
-                      {
-                          $hasCustomPri = true;
-                          break;
-                      }
-                  }
-                  $priList = $lang->testcase->priList;
-                  if(end($priList)) unset($priList[0]);
-                  if(!isset($priList[$pri]))
-                  {
-                      reset($priList);
-                      $pri = key($priList);
-                  }
-                  ?>
-                  <?php if($hasCustomPri):?>
-                  <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
-                  <?php else: ?>
-                  <?php ksort($priList);?>
-                  <div class="input-group-btn pri-selector" data-type="pri">
-                    <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
-                      <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
-                    </button>
-                    <div class='dropdown-menu pull-right'>
-                      <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-                    </div>
-                  </div>
-                  <?php endif; ?>
-                  <?php endif; // end print pri selector ?>
-                  <?php if(!$this->testcase->forceNotReview()):?>
-                  <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
-                  <?php endif;?>
                 </div>
+                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+                <span class="input-group-addon fix-border br-0"><?php echo $lang->testcase->pri;?></span>
+                <?php
+                $hasCustomPri = false;
+                foreach($lang->testcase->priList as $priKey => $priValue)
+                {
+                    if(!empty($priKey) and (string)$priKey != (string)$priValue)
+                    {
+                        $hasCustomPri = true;
+                        break;
+                    }
+                }
+                $priList = $lang->testcase->priList;
+                if(end($priList)) unset($priList[0]);
+                if(!isset($priList[$pri]))
+                {
+                    reset($priList);
+                    $pri = key($priList);
+                }
+                ?>
+                <?php if($hasCustomPri):?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
+                <?php else: ?>
+                <?php ksort($priList);?>
+                <div class="input-group-btn pri-selector" data-type="pri">
+                  <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                    <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
+                  </button>
+                  <div class='dropdown-menu pull-right'>
+                    <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+                  </div>
+                </div>
+                <?php endif; ?>
+                <?php endif; // end print pri selector ?>
+                <?php if(!$this->testcase->forceNotReview()):?>
+                <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
+                <?php endif;?>
               </div>
             </td>
           </tr>
