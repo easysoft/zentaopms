@@ -22,9 +22,10 @@ $lang->waterfall->menuOrder[90] = 'list';
 $lang->scrum->menuOrder[5]  = 'program';
 $lang->scrum->menuOrder[10] = 'product';
 $lang->scrum->menuOrder[15] = 'project';
-$lang->scrum->menuOrder[20] = 'qa';
-$lang->scrum->menuOrder[25] = 'projectrelease';
-$lang->scrum->menuOrder[30] = 'doc';
+$lang->scrum->menuOrder[20] = 'projectstory';
+$lang->scrum->menuOrder[25] = 'qa';
+$lang->scrum->menuOrder[30] = 'projectrelease';
+$lang->scrum->menuOrder[35] = 'doc';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
