@@ -8,4 +8,3 @@
 #copyProjectModal a.active:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
 #copyProjectModal a.cancel {color: #ff5d5d}
 #budget {border-right:0px;}
-#tipsModal {margin-top: 10%;}
