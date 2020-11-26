@@ -1139,7 +1139,8 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('program', $projectID, 'Started', $this->post->comment);
+                $objectType = $project->type == 'program' ? 'program' : 'project';
+                $actionID = $this->action->create($objectType, $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1174,7 +1175,8 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('program', $projectID, 'Suspended', $this->post->comment);
+                $objectType = $project->type == 'program' ? 'program' : 'project';
+                $actionID = $this->action->create($objectType, $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1210,7 +1212,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('program', $projectID, 'Closed', $this->post->comment);
+                $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1246,7 +1248,7 @@ class program extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('program', $projectID, 'Activated', $this->post->comment);
+                $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
