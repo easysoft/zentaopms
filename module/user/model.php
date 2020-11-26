@@ -1136,6 +1136,18 @@ class userModel extends model
     }
 
     /**
+     * Get users who have access to the parent stage.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return object
+     */
+    public function getParentStageAuthedUsers($stageID = 0)
+    {
+        return $this->dao->select('account')->from(TABLE_USERVIEW)->where("CONCAT(',', sprints, ',')")->like("%,{$stageID},%")->fetchPairs();
+    }
+
+    /**
      * Get a contact list by id.
      *
      * @param  int    $listID
@@ -1652,8 +1664,7 @@ class userModel extends model
             ->where('acl')->eq('open')
             ->andWhere('type')
             ->in('sprint,stage')
-            ->andWhere('project')
-            ->in($userView->projects)
+            ->andWhere('project')->in($userView->projects)
             ->fetchAll('id');
 
         $openedSprints     = join(',', array_keys($openedSprints));
@@ -1978,6 +1989,13 @@ class userModel extends model
                 $whiteList    = zget($whiteListGroup, $sprint->project, array());
 
                 $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
+
+                /* If you have parent stage view permissions, you have child stage permissions. */
+                if($sprint->type == 'stage' && $sprint->grade == 2)
+                {
+                    $parentStageAuthedUsers = $this->getParentStageAuthedUsers($sprint->parent);
+                    $authedUsers = array_merge($authedUsers, $parentStageAuthedUsers);
+                }
             }
         }
 
