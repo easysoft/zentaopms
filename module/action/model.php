@@ -806,7 +806,7 @@ class actionModel extends model
             $field     = $this->config->action->objectNameFields[$objectType];
             if($table != TABLE_TODO)
             {
-                $needGetPRJType = 'task,bug,build,issue';
+                $needGetPRJType = 'story,build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design';
                 if(strpos($needGetPRJType, $objectType) !== false)
                 {
                     $objectInfo = $this->dao->select("id, PRJ, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
