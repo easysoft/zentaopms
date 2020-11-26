@@ -876,7 +876,7 @@ $lang->menu->waterfall->product        = array('link' => 'Story|product|browse|p
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse|product={PRODUCT}');
 $lang->menu->waterfall->issue          = 'Issue|issue|browse|';
 $lang->menu->waterfall->risk           = 'Risk|risk|browse|';
 $lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
