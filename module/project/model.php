@@ -314,6 +314,11 @@ class projectModel extends model
         /* Determine whether to add a sprint or a stage according to the model of the project. */
         $project    = $this->getByID($this->session->PRJ);
         $sprintType = zget($this->config->project->modelList, $project->model, '');
+        if($sprintType == 'stage' and empty($this->post->products[0]))
+        {
+            dao::$errors['message'][] = $this->lang->project->onProduct;
+            return false;
+        }
 
         $sprint = fixer::input('post')
             ->setDefault('project', $this->session->PRJ)
@@ -330,11 +335,29 @@ class projectModel extends model
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
 
-        /* Check the workload format. */
-        if(!empty($sprint->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
+        /* Check the workload format and total. */
+        if(!empty($sprint->percent))
         {
-            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-            return false;
+            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
+            {
+                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+                return false;
+            }
+
+            $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($this->post->products[0])
+                ->andWhere('t2.type')->eq('stage')
+                ->andWhere('t2.grade')->eq(1)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetch('total');
+
+            $percentTotal = $sprint->percent + $oldPercentTotal;
+            if($percentTotal > 100)
+            {
+                dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
+                return false;
+            }
         }
 
         /* Set planDuration and realDuration. */
@@ -428,6 +451,12 @@ class projectModel extends model
     {
         $projectID  = (int)$projectID;
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        if($oldProject->type == 'stage' and empty($this->post->products[0]))
+        {
+            dao::$errors['message'][] = $this->lang->project->onProduct;
+            return false;
+        }
+
         $team = $this->getTeamMemberPairs($projectID);
 
         $this->lang->project->team = $this->lang->project->teamname;
@@ -444,11 +473,46 @@ class projectModel extends model
         if($project->acl == 'open') $project->whitelist = '';
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
-        /* Check the workload format. */
-        if(!empty($project->percent) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
+        /* Check the workload format and total. */
+        if(!empty($project->percent))
         {
-            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-            return false;
+            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
+            {
+                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+                return false;
+            }
+
+            if($oldProject->grade == 1)
+            {
+                $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($this->post->products[0])
+                    ->andWhere('t2.type')->eq('stage')
+                    ->andWhere('t2.grade')->eq(1)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch('total');
+
+                $percentTotal = $project->percent + $oldPercentTotal;
+                if($percentTotal > 100)
+                {
+                    dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
+                    return false;
+                }
+            }
+
+            /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
+            if($oldProject->grade == 2)
+            {
+                $parentPlan           = $this->loadModel('programPlan')->getByID($oldProject->parent);
+                $childrenTotalPercent = $this->loadModel('programPlan')->getTotalPercent($parentPlan, true);
+                $childrenTotalPercent = $childrenTotalPercent - $oldProject->percent + $project->percent;
+
+                if($childrenTotalPercent > $parentPlan->percent)
+                {
+                    dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
+                    return false;
+                }
+            }
         }
 
         /* Set planDuration and realDuration. */

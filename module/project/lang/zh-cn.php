@@ -57,7 +57,6 @@ $lang->project->totalLeft     = '剩余';
 $lang->project->progress      = '进度';
 $lang->project->hours         = '预计 %s 消耗 %s 剩余 %s';
 $lang->project->viewBug       = '查看bug';
-$lang->project->noProduct     = "无{$lang->projectCommon}{$lang->projectCommon}";
 $lang->project->createStory   = "添加{$lang->projectSRCommon}";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
@@ -76,6 +75,8 @@ $lang->project->watermark     = '由禅道导出';
 $lang->project->burnXUnit     = '(日期)';
 $lang->project->burnYUnit     = '(工时)';
 $lang->project->viewByUser    = '按用户查看';
+$lang->project->oneProduct    = "阶段只能关联一个{$lang->productCommon}";
+$lang->project->onProduct     = "阶段没有关联{$lang->productCommon}";
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";
@@ -281,6 +282,7 @@ $lang->project->fixFirstWithLeft      = '修改剩余工时';
 $lang->project->unfinishedProject     = "该{$lang->projectCommon}下还有";
 $lang->project->unfinishedTask        = "[%s]个未完成的任务，";
 $lang->project->unresolvedBug         = "[%s]个未解决的bug，";
+$lang->project->workloadTotal         = "工作量比例累计不应当超过100, 当前产品下的工作量之和为:%s";
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";

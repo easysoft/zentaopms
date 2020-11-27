@@ -77,17 +77,6 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($isStage):?>
-        <tr>
-          <th><?php echo $lang->programplan->percent;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('percent', $project->percent, "class='form-control'");?>
-              <span class='input-group-addon'>%</span>
-            </div>
-          </td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $project->team, "class='form-control'");?></td>
@@ -125,28 +114,42 @@
             </div>
           </td>
         </tr>
+        <?php if($isStage):?>
+        <tr>
+          <th><?php echo $lang->programplan->percent;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('percent', $project->percent, "class='form-control'");?>
+              <span class='input-group-addon'>%</span>
+            </div>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id='productsBox' colspan="2">
+          <td class='text-left' id="<?php echo $isStage ? '' : 'productsBox';?>" colspan="2">
+          <?php $class = $project->grade == 2 ? "disabled='disabled'" : '';?>
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
               <div class='col-sm-4'>
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?> 
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
               <?php endforeach;?>
+              <?php if(!$isStage):?>
               <div class='col-sm-4'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
+              <?php endif;?>
             </div>
           </td>
         </tr>

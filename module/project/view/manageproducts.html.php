@@ -22,16 +22,17 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->linkedProducts;?></div>
         <div class='detail-content row'>
+          <?php $class = $project->grade == 2 ? "disabled='disabled'" : '';?>
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php $checked = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
-                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'>";?>
+                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked $class id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen'");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen' $class");?>
             </div>
           </div>
           <?php unset($allProducts[$productID]);?>
@@ -39,6 +40,7 @@
           <?php endforeach;?>
         </div>
       </div>
+      <?php if($project->grade == 1):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
@@ -59,6 +61,7 @@
         <?php echo html::hidden("post", 'post');?>
         <?php if(common::canModify('project', $project)) echo html::submitButton();?>
       </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
