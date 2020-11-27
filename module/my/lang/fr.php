@@ -27,10 +27,12 @@ $lang->my->score          = 'Mes Points';
 $lang->my->scoreRule      = 'Règles Point';
 $lang->my->noTodo         = "Je n'ai rien à faire pour l'instant.";
 
-$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
-$lang->my->name         = 'Name';
-$lang->my->code         = 'Code';
-$lang->my->projects     = 'Project';
+$lang->my->myExecutions  = "My Stage/{$lang->projectCommon}/Kanban";
+$lang->my->name          = 'Name';
+$lang->my->code          = 'Code';
+$lang->my->projects      = 'Project';
+$lang->my->myRequirement = 'User Requirement/Epic';
+$lang->my->myStory       = 'Software Requirement/Story';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = "Tâches qui me sont affectées";

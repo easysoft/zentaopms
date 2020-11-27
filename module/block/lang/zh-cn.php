@@ -283,9 +283,10 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = '指派给我';
+$lang->block->default['full']['my']['7']['title']  = '指派给我的任务';
 $lang->block->default['full']['my']['7']['block']  = 'task';
-$lang->block->default['full']['my']['7']['grid']   = 4;
+$lang->block->default['full']['my']['7']['source'] = 'execution';
+$lang->block->default['full']['my']['7']['grid']   = 8;
 
 $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['7']['params']['count']   = '15';

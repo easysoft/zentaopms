@@ -8,7 +8,7 @@
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRequirements;?></div>
-        <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : html::a($this->createLink('my', 'story', 'type=openedBy'), (int)$data['createdRequirements']);?></div>
+        <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : html::a($this->createLink('my', 'story', 'type=openedBy&storyType=requirement'), (int)$data['createdRequirements']);?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdStories;?></div>

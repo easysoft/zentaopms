@@ -15,63 +15,64 @@ $lang->moduleOrder[0]   = 'index';
 $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
 
-$lang->moduleOrder[11]  = 'program';
-$lang->moduleOrder[12]  = 'personnel';
-$lang->moduleOrder[15]  = 'product';
-$lang->moduleOrder[20]  = 'story';
-$lang->moduleOrder[25]  = 'productplan';
-$lang->moduleOrder[30]  = 'release';
+$lang->moduleOrder[15]  = 'program';
+$lang->moduleOrder[20]  = 'personnel';
+$lang->moduleOrder[25]  = 'product';
+$lang->moduleOrder[30]  = 'story';
+$lang->moduleOrder[35]  = 'productplan';
+$lang->moduleOrder[40]  = 'release';
+$lang->moduleOrder[45]  = 'projectstory';
 
-$lang->moduleOrder[35]  = 'project';
-$lang->moduleOrder[40]  = 'task';
-$lang->moduleOrder[45]  = 'build';
+$lang->moduleOrder[50]  = 'project';
+$lang->moduleOrder[55]  = 'task';
+$lang->moduleOrder[60]  = 'build';
 
-$lang->moduleOrder[50]  = 'qa';
-$lang->moduleOrder[55]  = 'bug';
-$lang->moduleOrder[60]  = 'testcase';
-$lang->moduleOrder[65]  = 'testtask';
-$lang->moduleOrder[70]  = 'testsuite';
-$lang->moduleOrder[75]  = 'testreport';
-$lang->moduleOrder[80]  = 'caselib';
+$lang->moduleOrder[65]  = 'qa';
+$lang->moduleOrder[70]  = 'bug';
+$lang->moduleOrder[75]  = 'testcase';
+$lang->moduleOrder[80]  = 'testtask';
+$lang->moduleOrder[85]  = 'testsuite';
+$lang->moduleOrder[90]  = 'testreport';
+$lang->moduleOrder[95]  = 'caselib';
 
-$lang->moduleOrder[85]  = 'doc';
-$lang->moduleOrder[90]  = 'report';
+$lang->moduleOrder[100]  = 'doc';
+$lang->moduleOrder[105]  = 'report';
 
-$lang->moduleOrder[95]  = 'company';
-$lang->moduleOrder[100] = 'dept';
-$lang->moduleOrder[105] = 'group';
-$lang->moduleOrder[110] = 'user';
+$lang->moduleOrder[110] = 'company';
+$lang->moduleOrder[115] = 'dept';
+$lang->moduleOrder[120] = 'group';
+$lang->moduleOrder[125] = 'user';
 
-$lang->moduleOrder[115] = 'admin';
-$lang->moduleOrder[120] = 'extension';
-$lang->moduleOrder[125] = 'custom';
-$lang->moduleOrder[140] = 'action';
+$lang->moduleOrder[130] = 'admin';
+$lang->moduleOrder[135] = 'extension';
+$lang->moduleOrder[140] = 'custom';
+$lang->moduleOrder[145] = 'action';
 
-$lang->moduleOrder[145] = 'mail';
-$lang->moduleOrder[150] = 'svn';
-$lang->moduleOrder[155] = 'git';
-$lang->moduleOrder[160] = 'search';
-$lang->moduleOrder[165] = 'tree';
-$lang->moduleOrder[170] = 'api';
-$lang->moduleOrder[175] = 'file';
-$lang->moduleOrder[180] = 'misc';
-$lang->moduleOrder[185] = 'backup';
-$lang->moduleOrder[190] = 'cron';
-$lang->moduleOrder[195] = 'dev';
-$lang->moduleOrder[200] = 'message';
+$lang->moduleOrder[150] = 'mail';
+$lang->moduleOrder[155] = 'svn';
+$lang->moduleOrder[160] = 'git';
+$lang->moduleOrder[165] = 'search';
+$lang->moduleOrder[170] = 'tree';
+$lang->moduleOrder[175] = 'api';
+$lang->moduleOrder[180] = 'file';
+$lang->moduleOrder[185] = 'misc';
+$lang->moduleOrder[190] = 'backup';
+$lang->moduleOrder[195] = 'cron';
+$lang->moduleOrder[200] = 'dev';
+$lang->moduleOrder[205] = 'message';
 
-$lang->moduleOrder[205] = 'design';
-$lang->moduleOrder[210] = 'programplan';
-$lang->moduleOrder[215] = 'issue';
-$lang->moduleOrder[220] = 'risk';
-$lang->moduleOrder[225] = 'stage';
+$lang->moduleOrder[210] = 'design';
+$lang->moduleOrder[215] = 'programplan';
+$lang->moduleOrder[220] = 'issue';
+$lang->moduleOrder[225] = 'risk';
+$lang->moduleOrder[230] = 'stage';
 
-$lang->moduleOrder[230] = 'budget';
-$lang->moduleOrder[235] = 'workestimation';
-$lang->moduleOrder[240] = 'durationestimation';
+$lang->moduleOrder[235] = 'budget';
+$lang->moduleOrder[240] = 'workestimation';
+$lang->moduleOrder[245] = 'durationestimation';
 
-$lang->moduleOrder[245] = 'subject';
-$lang->moduleOrder[250] = 'holiday';
+$lang->moduleOrder[250] = 'subject';
+$lang->moduleOrder[255] = 'holiday';
 
 $lang->resource = new stdclass();
 
@@ -479,6 +480,16 @@ $lang->productplan->methodOrder[45] = 'linkBug';
 $lang->productplan->methodOrder[50] = 'unlinkBug';
 $lang->productplan->methodOrder[55] = 'batchUnlinkBug';
 $lang->productplan->methodOrder[60] = 'batchEdit';
+
+/* Project Story. */
+$lang->resource->projectstory = new stdclass();
+$lang->resource->projectstory->requirement = 'requirement';
+$lang->resource->projectstory->story       = 'story';
+$lang->resource->projectstory->track       = 'track';
+
+$lang->productplan->methodOrder[5]  = 'requirement';
+$lang->productplan->methodOrder[10] = 'story';
+$lang->productplan->methodOrder[15] = 'track';
 
 /* Release. */
 $lang->resource->release = new stdclass();
