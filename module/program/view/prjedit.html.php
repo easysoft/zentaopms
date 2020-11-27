@@ -128,12 +128,14 @@
           <td></td>
         </tr>
         <?php endif;?>
+        <?php if($config->URAndSR):?>
         <tr>
           <th><?php echo $lang->program->PRJStoryConcept;?></th>
           <td>
             <?php echo html::select('storyConcept', $lang->custom->URSRList, $project->storyConcept, "class='form-control chosen'");?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>

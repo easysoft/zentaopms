@@ -447,32 +447,35 @@ class commonModel extends model
         $moduleName = $app->getModuleName();
         $methodName = $app->getMethodName();
 
-        foreach($lang->menu->waterfall as $key => $menu)
+        foreach(array('waterfall', 'scrum') as $model)
         {
-            /* Replace for dropdown submenu. */
-            if(isset($lang->waterfall->subMenu->$key))
-            {    
-                $programSubMenu = $lang->waterfall->subMenu->$key;
-                $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
-
-                if(!empty($subMenu))
+            foreach($lang->menu->$model as $key => $menu)
+            {
+                /* Replace for dropdown submenu. */
+                if(isset($lang->$model->subMenu->$key))
                 {    
-                    foreach($subMenu as $menuKey => $menu)
-                    {    
-                        $itemMenu = zget($programSubMenu, $menuKey, ''); 
-                        $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
-                        $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
-                        $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+                    $programSubMenu = $lang->$model->subMenu->$key;
+                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
 
-                        if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
+                    if(!empty($subMenu))
+                    {    
+                        foreach($subMenu as $menuKey => $menu)
                         {    
-                            $lang->menu->waterfall->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
-                            break;
+                            $itemMenu = zget($programSubMenu, $menuKey, ''); 
+                            $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
+                            $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                            $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+
+                            if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
+                            {    
+                                $lang->menu->$model->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                                break;
+                            }    
                         }    
+                        $lang->menu->$model->{$key}['subMenu'] = $subMenu;
                     }    
-                    $lang->menu->waterfall->{$key}['subMenu'] = $subMenu;
-                }    
-            } 
+                } 
+            }
         }
     }
 
@@ -2312,9 +2315,9 @@ EOD;
         {    
             $link = is_array($setting) ? $setting['link'] : $setting;
 
-            if(strpos($link, "{PRODUCT}") !== false) $link = str_replace('{PRODUCT}', $app->session->product, $link);
-            if(strpos($link, "{PROJECT}") !== false) $link = str_replace('{PROJECT}', $app->session->project, $link);
-            if(strpos($link, "{PROGRAM}") !== false) $link = str_replace('{PROGRAM}', $app->session->PRJ, $link);
+            if(strpos($link, "{PRODUCT}") !== false)   $link = str_replace('{PRODUCT}', $app->session->product, $link);
+            if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->project, $link);
+            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->PRJ, $link);
 
             if(is_array($setting)) 
             {    
@@ -2345,9 +2348,13 @@ EOD;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
 
+        self::initProgramSubmenu();
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
+
+            /* The scrum project temporarily hides the trace matrix. */
+            unset($lang->projectstory->menu->track);
             return self::processMenuVars($lang->menu->scrum);
         }
 
@@ -2357,7 +2364,6 @@ EOD;
             $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;
             $lang->program->dividerMenu = ',product,issue,';
-            self::initProgramSubmenu();
             return self::processMenuVars($lang->menu->waterfall);
         }
     }
@@ -2379,6 +2385,12 @@ EOD;
         {
             $lang->navGroup->product = 'project';
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        }
+        if($program->model == 'scrum') 
+        {
+            unset($lang->stakeholder->menu->issue);
+            unset($lang->stakeholder->menu->plan);
+            unset($lang->stakeholder->menu->expectation);
         }
     }
 

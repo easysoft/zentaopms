@@ -31,7 +31,7 @@
         <th class="c-id"><?php echo $lang->idAB?></th>
         <?php endif;?>
         <th class="c-pri"><?php echo $lang->priAB?></th>
-        <th class="c-name"><?php echo $lang->story->title;?></th>
+        <th class="c-name"><?php echo $lang->SRCommon;?></th>
         <?php if($longBlock):?>
         <th class='c-estimate'><?php echo $lang->story->estimateAB;?></th>
         <?php endif;?>

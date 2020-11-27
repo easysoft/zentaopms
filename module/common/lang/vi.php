@@ -277,12 +277,6 @@ $lang->my->menu->story       = array('link' => 'Câu chuyện|my|story|',   'sub
 $lang->my->menu->myExecution = "Execution|my|execution|";
 $lang->my->menu->dynamic     = 'Lịch sử|my|dynamic|';
 
-if($config->URAndSR)
-{
-    $lang->my->menu->requirement = array('link' => "{$URCommon}|my|requirement|", 'subModule' => 'story');
-    $lang->my->menu->story       = array('link' => "{$SRCommon}|my|story|", 'subModule' => 'story');
-}
-
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo    = new stdclass();
@@ -342,7 +336,7 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Bản dựng|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => 'Yêu cầu|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',story,team,product,';
+$lang->project->dividerMenu = ',projectstory,issue,story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -869,11 +863,11 @@ $lang->menu->scrum->stakeholder    = 'Stakeholder|stakeholder|browse';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROGRAM}');
-$lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROJECT}');
+$lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROJECT}', 'subModule' => 'programplan');
 $lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROGRAM}');
+$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
+$lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->product        = array('link' => 'Story|product|browse|product={PRODUCT}', 'subModule' => ',story,');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
@@ -881,7 +875,7 @@ $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product=
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse|product={PRODUCT}');
 $lang->menu->waterfall->issue          = 'Issue|issue|browse|';
 $lang->menu->waterfall->risk           = 'Risk|risk|browse|';
-$lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
@@ -926,15 +920,15 @@ $lang->durationestimation->menu = new stdclass();
 $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 
-$lang->workestimation->menu->index    = 'Workload|workestimation|index|program={PROGRAM}';
-$lang->workestimation->menu->duration = array('link' => 'Duration|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->index    = 'Workload|workestimation|index|program={PROJECT}';
+$lang->workestimation->menu->duration = array('link' => 'Duration|durationestimation|index|program={PROJECT}', 'subModule' => 'durationestimation');
 $lang->workestimation->menu->budget   = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
 
 $lang->durationestimation->menu = $lang->workestimation->menu;
 $lang->budget->menu = $lang->workestimation->menu;
 
-$lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
-$lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists', 'alias' => 'create');
+$lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
+$lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
 $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = 'Story|product|browse|product={PRODUCT}';

@@ -1321,7 +1321,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function track($pyoductID, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($productID, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set menu. The projectstory module does not execute. */
         if($this->app->rawModule == 'story')

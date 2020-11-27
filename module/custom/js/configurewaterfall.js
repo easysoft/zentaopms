@@ -10,7 +10,6 @@ $(function()
         else
         {
             $('#URSRName').removeClass('hidden');
-            $('#customURSR').removeClass('hidden');
         }
     });
 

@@ -801,12 +801,13 @@ class actionModel extends model
         {
             if(!isset($this->config->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
 
-            $objectIds   = array_unique($objectIds);
-            $table       = $this->config->objectTables[$objectType];
-            $field       = $this->config->action->objectNameFields[$objectType];
+            $objectIds = array_unique($objectIds);
+            $table     = $this->config->objectTables[$objectType];
+            $field     = $this->config->action->objectNameFields[$objectType];
             if($table != TABLE_TODO)
             {
-                if(strpos($table, 'task') !== false or strpos($table, 'bug') !== false or strpos($table, 'build') !== false or strpos($table, 'issue') !== false)
+                $needGetPRJType = 'story,build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design';
+                if(strpos($needGetPRJType, $objectType) !== false)
                 {
                     $objectInfo = $this->dao->select("id, PRJ, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
                     foreach($objectInfo as $object)
@@ -815,13 +816,13 @@ class actionModel extends model
                         $objectPRJ[$object->id]  = $object->PRJ;
                     }
                 }
-                elseif(strpos($table, 'project') !== false)
+                elseif($objectType == 'program' or $objectType == 'project' or $objectType == 'execution')
                 {
-                    $objectInfo = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id] = $object->name;
-                        $objectPRJ[$object->id]  = $object->id;
+                        $objectPRJ[$object->id]  = $object->project > 0 ? $object->project : $object->id;
                     }
                 }
                 else

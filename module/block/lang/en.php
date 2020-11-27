@@ -87,7 +87,7 @@ $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->productSRCommon;
+$lang->block->totalStory   = 'The Total ' . $lang->SRCommon;
 $lang->block->totalBug     = 'The Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
@@ -282,9 +282,10 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = 'Assigned To Me';
+$lang->block->default['full']['my']['7']['title']  = 'My Tasks';
 $lang->block->default['full']['my']['7']['block']  = 'task';
-$lang->block->default['full']['my']['7']['grid']   = 4;
+$lang->block->default['full']['my']['7']['source'] = 'execution';
+$lang->block->default['full']['my']['7']['grid']   = 8;
 
 $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['7']['params']['count']   = '15';

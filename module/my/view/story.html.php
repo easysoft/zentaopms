@@ -13,12 +13,24 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <div class="btn-group angle-btn active">
+      <div class="btn-group">
+        <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
+          <?php $label = $storyType == 'story' ? $lang->my->myStory : $lang->my->myRequirement;?>
+          <?php echo $label;?><span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu'>
+          <li><?php echo html::a($this->inLink('story'), $lang->my->myStory);?></li>
+          <li><?php echo html::a($this->inLink('story', "type=assignedTo&storyType=requirement"), $lang->my->myRequirement);?></li>
+        </ul>
+      </div>
+    </div>
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink('story', "type=assignedTo"),  "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=openedBy"),    "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=reviewedBy"),  "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=closedBy"),    "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=assignedTo&storyType=$storyType"),  "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=openedBy&storyType=$storyType"),    "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=reviewedBy&storyType=$storyType"),  "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=closedByi&storyType=$storyType"),    "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
@@ -30,7 +42,7 @@
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
     <table id='storyList' class="table has-sort-head table-fixed">
-      <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "type=$type&storyType=$storyType&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
       $canBatchEdit     = common::hasPriv('story', 'batchEdit');
       $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
@@ -51,8 +63,10 @@
           </th>
           <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
+          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
+          <?php if($storyType == 'story'):?>
           <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
+          <?php endif;?>
           <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-hours'>    <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
@@ -82,7 +96,9 @@
             <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
+          <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
+          <?php endif;?>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours'><?php echo $story->estimate;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
@@ -122,7 +138,9 @@
           <td class='c-name nobr'>
               <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
+          <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
+          <?php endif;?>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
@@ -169,7 +187,7 @@
             unset($lang->story->reviewResultList['revert']);
             foreach($lang->story->reviewResultList as $key => $result)
             {
-                $actionLink = $this->createLink('story', 'batchReview', "result=$key", '', '', $story->program);
+                $actionLink = $this->createLink('story', 'batchReview', "result=$key");
                 if($key == 'reject')
                 {
                     echo "<li class='dropdown-submenu'>";
@@ -181,7 +199,7 @@
 
                     foreach($lang->story->reasonList as $key => $reason)
                     {
-                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key", '', '', $story->program);
+                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
                         echo "<li>";
                         echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                         echo "</li>";
@@ -202,7 +220,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($users) > 10;
-          $actionLink = $this->createLink('story', 'batchAssignTo', '', '', '', $story->program);
+          $actionLink = $this->createLink('story', 'batchAssignTo');
           echo html::select('assignedTo', $users, '', 'class="hidden"');
           if($withSearch)
           {

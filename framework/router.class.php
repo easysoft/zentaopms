@@ -207,7 +207,6 @@ class router extends baseRouter
                 $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
                 $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
             }
-
         }
 
         parent::loadLang($moduleName, $appName);

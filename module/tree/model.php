@@ -410,7 +410,11 @@ class treeModel extends model
             {
                 $linkHtml = ($type == 'case' and !empty($extra)) ? '<a>' . $branch . '</a>' : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
-                if($type == 'story' or $type == 'bug') $linkHtml = html::a(inlink('browse', "productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams), $branch, "", "id=branch" . $branchID);
+                if($type == 'story' or $type == 'bug')
+                {
+                    $branchLink = helper::createLink($this->app->rawModule, $this->app->rawMethod, "productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams);
+                    $linkHtml   = html::a($branchLink, $branch, "", "id=branch" . $branchID);
+                }
                 if($firstBranch and $product->type != 'normal')
                 {
                     $linkHtml = '<a>' . $this->lang->product->branchName[$product->type] . '</a><ul><li>' . $linkHtml;
@@ -840,7 +844,7 @@ class treeModel extends model
      */
     public function createStoryLink($type, $module)
     {
-        return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink($this->app->rawModule, $this->app->rawMethod, "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -900,8 +904,8 @@ class treeModel extends model
      * @return string
      */
     public function createRequirementLink($type, $module)
-    {    
-        return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}&storyType=requirement"), $module->name, '_self', "id='module{$module->id}'");
+    {
+        return html::a(helper::createLink($this->app->rawModule, $this->app->rawMethod, "root={$module->root}&branch=&type=byModule&param={$module->id}&storyType=requirement"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**

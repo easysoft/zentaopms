@@ -77,9 +77,7 @@ class projectModel extends model
 
         if(!$projectID and $this->session->project) $projectID = $this->session->project;
 
-        /* Get project and program */
         $project   = $this->getById($projectID);
-
         $isProgram = false;
         if(!empty($project))
         {
@@ -436,13 +434,14 @@ class projectModel extends model
         $project = fixer::input('post')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans')
             ->get();
 
+        if(!isset($project->acl)) $project->acl = $oldProject->acl;
+        if($project->acl == 'open') $project->whitelist = '';
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format. */

@@ -20,6 +20,7 @@
   </div>
 </div>
 <?php $hideAttribute = $planID == 0 ? '' : ' hidden'?>
+<?php $class = $planID == 0 ? '' : "disabled='disabled'"?>
 <div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post' id='planForm' enctype='multipart/form-data'>
     <table class='table table-form'>
@@ -53,7 +54,7 @@
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $stage->type, "class='form-control'");?></td>
-            <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', 'class="form-control"');?></td>
+            <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
             <td><input type='text' name='begin[]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
@@ -84,7 +85,7 @@
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
-            <td><?php echo html::select("acl[]", $lang->project->aclList, $plan->acl, 'class="form-control"');?></td>
+            <td><?php echo html::select("acl[]", $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
             <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
             <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
@@ -112,7 +113,7 @@
             </div>
           </td>
           <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
-          <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', 'class="form-control"');?></td>
+          <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
           <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
           <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
@@ -151,7 +152,7 @@
         </div>
       </td>
       <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
-      <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', 'class="form-control"');?></td>
+      <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
       <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
       <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='end[]' id='end<?php echo $i;?>' class='form-control form-date' /></td>

@@ -13,7 +13,7 @@
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
-        <th class='text-center w-200px'><?php echo $lang->actions;?></th>
+        <th class='text-center w-240px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody id='programTableList'>
@@ -71,6 +71,8 @@
           <?php else:?>
           <?php common::printIcon('program', 'PRJGroup', "programID=$program->id", $program, 'list', 'icon icon-lock');?>
           <?php common::printIcon('program', 'PRJManageMembers', "programID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'PRJWhitelist', "projectID=$program->id", $program, 'list', 'group');?>
+          <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id", $program, 'list', 'icon icon-menu-project');?>
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if(common::hasPriv('program','PRJEdit')) echo html::a($this->createLink("program", "prjedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->program->PRJEdit}'");?>
           <?php common::printIcon('program', 'PRJCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', 'disabled', '', '', $this->lang->program->PGMChildren);?>
