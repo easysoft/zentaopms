@@ -1241,7 +1241,8 @@ class programModel extends model
             {
                 if(!empty($product)) $linkedProductsCount++;
             }
-            if(empty($linkedProductsCount) and !$this->post->productName)
+
+            if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
@@ -1280,13 +1281,14 @@ class programModel extends model
                 $this->loadModel('project')->updateProducts($projectID);
             }
 
-            if(isset($this->post->newProduct) || !$project->parent)
+            if(isset($_POST['newProduct']) || !$project->parent)
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name        = $this->post->productName ? $this->post->productName : $project->name;
                 $product->code        = $this->post->productName ? $this->post->productName : $project->code;
                 $product->bind        = $this->post->productName ? 0 : 1;
+                $product->program     = $project->parent;
                 $product->acl         = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO          = $project->PM;
                 $product->createdBy   = $this->app->user->account;
