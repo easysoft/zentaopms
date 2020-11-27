@@ -865,7 +865,7 @@ $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = '干系人|stakeholder|browse';
-$lang->menu->scrum->list        = array('link' => '更多|program|prjedit|project={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->scrum->list           = array('link' => '更多|program|prjedit|project={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
