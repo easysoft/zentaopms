@@ -544,13 +544,13 @@ class programplanModel extends model
             {
                 unset($data->id);
                 $data->status        = 'wait';
-                $data->acl           = $data->parent == 0 ? 'open' : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('acl');
                 $data->version       = 1;
                 $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
                 $data->team          = substr($data->name,0, 30);
                 $data->openedBy      = $account;
                 $data->openedDate    = $now;
                 $data->openedVersion = $this->config->version;
+                if(!isset($data->acl)) $data->acl = $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('acl');
                 $this->dao->insert(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
