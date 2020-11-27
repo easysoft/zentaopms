@@ -88,6 +88,7 @@ $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['caselib']     = '用例庫';
 $lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['entry']       = '應用';
+$lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用來描述操作歷史記錄。*/
@@ -408,6 +409,8 @@ $lang->action->label->entry       = '應用|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '風險|risk|view|riskID=%s';
+$lang->action->label->design      = '設計|design|view|designID=%s';
+$lang->action->label->stakeholder = '干係人|stakeholder|browse|';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';

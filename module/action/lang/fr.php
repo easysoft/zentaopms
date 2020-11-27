@@ -88,6 +88,7 @@ $lang->action->objectTypes['testsuite']   = 'Cahier recette';
 $lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Edition';
 $lang->action->objectTypes['entry']       = 'Entrée';
+$lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
@@ -422,6 +423,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
+$lang->action->label->stakeholder = 'Stakeholder|stakeholder|browse|';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    
