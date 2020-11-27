@@ -110,6 +110,9 @@ $lang->future      = '未来';
 $lang->year        = '年';
 $lang->workingHour = '工时';
 
+$lang->generalUR = '用需/史诗';
+$lang->generalSR = '软需/故事';
+
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = '状态';
@@ -947,8 +950,8 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->requirement = array('link' => '用户需求|projectstory|requirement', 'subModule' => '');
-$lang->projectstory->menu->story       = array('link' => '软件需求|projectstory|story', 'subModule' => '');
+$lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
+$lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
