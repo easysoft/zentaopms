@@ -127,6 +127,9 @@ class install extends control
                 {
                     if(!session_save_path())
                     {
+                        /* Restart the session because the session save path is null when start the session last time. */
+                        session_write_close();
+
                         $tmpRootInfo     = $this->install->getTmpRoot();
                         $sessionSavePath = $tmpRootInfo['path'] . 'session';
                         if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
@@ -137,8 +140,6 @@ class install extends control
                         $sessionResult = $this->install->checkSessionSavePath();
                         if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
 
-                        /* Restart the session because the session save path is null when start the session last time. */
-                        session_write_close();
                         session_start();
                         $this->session->set('installing', true);
                     }
