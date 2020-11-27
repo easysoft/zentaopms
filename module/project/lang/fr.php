@@ -57,6 +57,7 @@ $lang->project->totalLeft     = 'Reste';
 $lang->project->progress      = ' Progrès';
 $lang->project->hours         = 'Estimé: %s, Coût: %s, Reste: %s.';
 $lang->project->viewBug       = 'Bugs';
+$lang->project->noProduct     = "Aucun {$lang->productCommon} pour l'instant.";
 $lang->project->createStory   = "Créer une Story";
 $lang->project->all           = "Tous les {$lang->projectCommon}s";
 $lang->project->undone        = 'Non Terminé';
@@ -76,7 +77,7 @@ $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'Par Utilisateur';
 $lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
-$lang->project->onProduct     = "Stage not linked {$lang->productCommon}";
+$lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";
 
 $lang->project->start    = 'Démarrer';
 $lang->project->activate = 'Activer';

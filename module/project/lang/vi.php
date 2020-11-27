@@ -57,6 +57,7 @@ $lang->project->totalLeft     = 'Còn';
 $lang->project->progress      = ' Tiến độ';
 $lang->project->hours         = 'Dự tính: %s, Đã làm: %s, Còn: %s.';
 $lang->project->viewBug       = 'Bugs';
+$lang->project->noProduct     = "Không có {$lang->productCommon} nào.";
 $lang->project->createStory   = "Tạo câu chuyện";
 $lang->project->all           = "Tất cả {$lang->projectCommon}";
 $lang->project->undone        = 'Chưa kết thúc ';
@@ -76,7 +77,7 @@ $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'Theo người dùng';
 $lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
-$lang->project->onProduct     = "Stage not linked {$lang->productCommon}";
+$lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";
 
 $lang->project->start    = 'Bắt đầu';
 $lang->project->activate = 'Kích hoạt';
