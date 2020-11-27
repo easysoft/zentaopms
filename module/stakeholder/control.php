@@ -260,7 +260,8 @@ class stakeholder extends control
         }
         else
         {
-            $this->stakeholder->delete($userID);
+            $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
+            $this->loadModel('user')->updateUserView($this->session->PRJ, 'project');
             die(js::reload('parent'));
         }
     }
@@ -332,7 +333,6 @@ class stakeholder extends control
         $this->commonAction($userID, 'stakeholder');
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $result = $this->stakeholder->communicate($userID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
