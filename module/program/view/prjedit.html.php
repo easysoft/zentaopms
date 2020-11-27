@@ -63,7 +63,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-                <div class='col-sm-4  <?php if($programID) echo 'required';?>'>
+              <div class='col-sm-4  <?php if($programID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
@@ -78,10 +78,11 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
-              <?php $i++;?>
+                <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
+                <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+                <?php $i++;?>
               <?php endforeach;?>
+              <div class="col-sm-4" id="planDefault"><?php echo html::select("plans[0]", array(), 0, "class='form-control chosen'");?></div>
             </div>
           </td>
         </tr>
