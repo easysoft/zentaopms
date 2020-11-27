@@ -65,7 +65,7 @@ class projectrelease extends control
      */
     public function browse($productID = 0, $branch = 0, $type = 'all')
     {
-        if(!$productID) $productID = key($this->view->products);
+        if(!$productID) $productID = key($this->products);
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true));
 

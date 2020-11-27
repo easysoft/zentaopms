@@ -50,6 +50,68 @@ class buildModel extends model
     }
 
     /**
+     * Get builds of a project.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0)
+    {
+        return $this->dao->select('t1.*, t2.name as projectName, t2.id as executionID, t3.name as productName, t4.name as branchName')
+            ->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
+            ->where('t1.PRJ')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
+            ->beginIF($type == 'bysearch')->andWhere($param)->fi()
+            ->orderBy('t1.date DESC, t1.id desc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get builds of a project by search.
+     *
+     * @param  int    $projectID
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getProjectBuildsBySearch($projectID, $queryID)
+    {
+        /* If there are saved query conditions, reset the session. */
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('projectBuildQuery', $query->sql);
+                $this->session->set('projectBuildForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('projectBuildQuery', ' 1 = 1');
+            }
+        }
+
+        /* Distinguish between repeated fields. */
+        $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
+        foreach($fields as $field)
+        {
+            if(strpos($this->session->projectBuildQuery, $field) !== false)
+            {
+                $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
+            }
+        }
+
+        return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
+    }
+
+    /**
      * Get builds of a execution.
      *
      * @param  int        $executionID

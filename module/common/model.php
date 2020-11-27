@@ -693,6 +693,9 @@ class commonModel extends model
                     $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
+                /* Disable links to more buttons. */
+                if($menuItem->name == 'morelink') $link='javascript:void(0);';
+
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
                 echo $menuItemHtml;
@@ -2349,6 +2352,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
+            $lang->project->dividerMenu = ',doc,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);

@@ -956,12 +956,25 @@ class projectModel extends model
         $project = $this->loadModel('program')->getPRJByID($projectID);
         if($project->model == 'waterfall')
         {
+            $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->where('project')->in(array_keys($executions))
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs();
+
+            $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+
             foreach($executions as $executionID => $execution)
             {
                 if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
             }
 
-            foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+            foreach($executions as $executionID => $execution)
+            {
+                if($execution->grade == 2) unset($executions[$execution->parent]);
+                $linkProductID   = $executionProducts[$executionID];
+                $execution->name = $products[$linkProductID] . '/' . $execution->name;
+            }
         }
 
         if($pairs)
