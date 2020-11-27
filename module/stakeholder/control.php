@@ -55,7 +55,7 @@ class stakeholder extends control
                 $this->send($response);
             }
 
-            $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Opened');
+            $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             $response['locate'] = $this->createLink('stakeholder', 'browse', '');
             $this->send($response);
         }
