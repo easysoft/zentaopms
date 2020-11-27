@@ -25,12 +25,14 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
+          <?php if($product->program):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo zget($programs, $product->program, '/');?></td>
           </tr>
+          <?php endif;?>
           <tr>
-            <th><?php echo $lang->product->name;?></th>
+            <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
           <tr>
