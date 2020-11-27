@@ -59,6 +59,7 @@ $lang->project->hours         = 'Estimates: %s, Cost: %s, Left: %s.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
+$lang->project->storyTitle    = "Story Name";
 $lang->project->all           = "All {$lang->projectCommon}s";
 $lang->project->undone        = 'Unfinished ';
 $lang->project->unclosed      = 'Unclosed';
