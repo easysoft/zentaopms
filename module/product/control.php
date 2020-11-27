@@ -306,6 +306,7 @@ class product extends control
      */
     public function edit($productID, $action = 'edit', $extra = '')
     {
+        $this->app->loadLang('custom');
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
