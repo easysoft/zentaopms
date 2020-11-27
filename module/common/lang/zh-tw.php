@@ -858,7 +858,7 @@ $lang->menu->scrum->program        = '儀表盤|program|index|';
 $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->scrum->doc            = '文檔|doc|index|';
 $lang->menu->scrum->qa             = '測試|qa|index';
-$lang->menu->scrum->projectrelease = array('link' => '發布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->scrum->projectrelease = array('link' => '發布|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = '干係人|stakeholder|browse';
 
 /* Waterfall menu. */
@@ -872,7 +872,7 @@ $lang->menu->waterfall->doc            = array('link' => '文檔|doc|index|progr
 $lang->menu->waterfall->design         = '設計|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代碼|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '測試|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => '發布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => '發布|projectrelease|browse');
 $lang->menu->waterfall->issue          = '問題|issue|browse|';
 $lang->menu->waterfall->risk           = '風險|risk|browse|';
 $lang->menu->waterfall->list           = array('link' => '更多|workestimation|index|program={PROGRAM}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
