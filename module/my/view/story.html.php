@@ -20,8 +20,10 @@
           <?php echo $label;?><span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>
-          <li><?php echo html::a($this->inLink('story'), $lang->my->myStory);?></li>
-          <li><?php echo html::a($this->inLink('story', "type=assignedTo&storyType=requirement"), $lang->my->myRequirement);?></li>
+          <li><?php echo html::a($this->inLink('story', "type=$type"), $lang->my->myStory);?></li>
+          <?php if($config->URAndSR):?>
+          <li><?php echo html::a($this->inLink('story', "type=$type&storyType=requirement"), $lang->my->myRequirement);?></li>
+          <?php endif;?>
         </ul>
       </div>
     </div>
