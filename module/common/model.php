@@ -2349,6 +2349,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
+            $lang->project->dividerMenu = ',doc,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
