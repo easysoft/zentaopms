@@ -408,7 +408,7 @@ class bug extends control
         /* If projectID is setted, get builds and stories of this project. */
         if($projectID)
         {
-            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,noterminate,nodone');
+            $builds  = $this->loadModel('build')->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getProjectStoryPairs($projectID);
         }
         else
@@ -509,7 +509,7 @@ class bug extends control
         /* If projectID is setted, get builds and stories of this project. */
         if($projectID)
         {
-            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds  = $this->loadModel('build')->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty');
             $stories = $this->story->getProjectStoryPairs($projectID);
         }
         else
@@ -701,7 +701,7 @@ class bug extends control
         $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
         if($projectID)
         {
-            $openedBuilds = $this->build->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
+            $openedBuilds = $this->build->getExecutionBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
         }
         else
         {
@@ -1715,7 +1715,7 @@ class bug extends control
     public function ajaxGetBugFieldOptions($productID, $projectID = 0)
     {
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
-        $builds   = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID);
+        $builds   = $this->loadModel('build')->getExecutionBuildPairs($projectID, $productID);
         $type     = $this->lang->bug->typeList;
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;

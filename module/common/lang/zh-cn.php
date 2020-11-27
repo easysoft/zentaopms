@@ -882,7 +882,7 @@ $lang->menu->waterfall->projectstory = array('link' => '需求|projectstory|requ
 $lang->menu->waterfall->design       = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci           = '代码|repo|browse|';
 $lang->menu->waterfall->qa           = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 //$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
 $lang->menu->waterfall->risk           = '风险|risk|browse|';

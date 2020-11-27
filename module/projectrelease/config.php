@@ -1,10 +1,10 @@
 <?php
-$config->release = new stdclass();
-$config->release->create = new stdclass();
-$config->release->edit   = new stdclass();
-$config->release->create->requiredFields = 'name,date';
-$config->release->edit->requiredFields   = 'name,date,build';
+$config->projectrelease = new stdclass();
+$config->projectrelease->create = new stdclass();
+$config->projectrelease->edit   = new stdclass();
+$config->projectrelease->create->requiredFields = 'name,date';
+$config->projectrelease->edit->requiredFields   = 'name,date,build';
 
-$config->release->editor = new stdclass();
-$config->release->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->release->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->projectrelease->editor = new stdclass();
+$config->projectrelease->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->projectrelease->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

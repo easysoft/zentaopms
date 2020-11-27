@@ -3,7 +3,7 @@ function showLink(releaseID, type, param)
     var method = type == 'story' ? 'linkStory' : 'linkBug';
     if(typeof(param) == 'undefined') param = '&browseType=' + type + '&param=0';
     if(type == 'leftBug') param += '&type=leftBug';
-    loadURL(createLink('release', method, 'releaseID=' + releaseID + param), type);
+    loadURL(createLink('projectrelease', method, 'releaseID=' + releaseID + param), type);
 
     $('.actions').find("a[href*='" + type + "']").addClass('hidden');
 }

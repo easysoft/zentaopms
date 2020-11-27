@@ -16,14 +16,14 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('browse', "productID={$productID}&branch=$branch&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('browse', "productID={$productID}&branch=$branch&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('browse', "productID={$productID}&branch=$branch&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "'");
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('product', $product)):?>
-    <?php common::printLink('projectrelease', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('project', $project)):?>
+    <?php common::printLink('projectrelease', 'create', "productID=$productID&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -32,8 +32,8 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if(common::canModify('product', $product) and common::hasPriv('projectrelease', 'create')):?>
-      <?php echo html::a($this->createLink('projectrelease', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('projectrelease', 'create')):?>
+      <?php echo html::a($this->createLink('projectrelease', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -44,7 +44,7 @@
         <th class='w-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
         <th><?php echo $lang->release->build;?></th>
-        <?php if($product->type != 'normal'):?>
+        <?php if(isset($product->type) and $product->type != 'normal'):?>
         <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
@@ -68,7 +68,7 @@
           ?>
         </td>
         <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
-        <?php if($product->type != 'normal'):?>
+        <?php if(isset($product->type) and $product->type != 'normal'):?>
         <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date;?></td>

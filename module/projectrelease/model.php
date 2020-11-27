@@ -42,23 +42,25 @@ class projectreleaseModel extends model
 
     /**
      * Get list of releases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  string $type 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0, $type = 'all')
+    public function getList($productID, $branch = 0, $type = 'all', $projectID = 0)
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->where('t1.product')->eq((int)$productID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($projectID)->andWhere('t1.PRJ')->eq((int)$projectID)->fi()
+            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
-            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
             ->fetchAll();
     }
@@ -102,15 +104,11 @@ class projectreleaseModel extends model
     /**
      * Create a release.
      * 
-     * @param  int    $productID 
-     * @param  int    $branch 
      * @access public
      * @return int
      */
-    public function create($productID, $branch = 0)
+    public function create()
     {
-        $productID = (int)$productID;
-        $branch    = (int)$branch;
         $buildID   = 0;
 
         /* Check build if build is required. */
@@ -121,8 +119,6 @@ class projectreleaseModel extends model
 
         $release = fixer::input('post')
             ->add('PRJ', $this->session->PRJ)
-            ->add('product', (int)$productID)
-            ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
@@ -134,10 +130,11 @@ class projectreleaseModel extends model
         /* Auto create build when release is not link build. */
         if(empty($release->build) and $release->name)
         {
-            $build = $this->dao->select('*')->from(TABLE_BUILD)
+            $branch = isset($release->branch) ? $release->branch : 0;
+            $build  = $this->dao->select('*')->from(TABLE_BUILD)
                 ->where('deleted')->eq('0')
                 ->andWhere('name')->eq($release->name)
-                ->andWhere('product')->eq($productID)
+                ->andWhere('product')->eq($release->product)
                 ->andWhere('branch')->eq($branch)
                 ->fetch();
             if($build)
@@ -148,8 +145,8 @@ class projectreleaseModel extends model
             {
                 $build = new stdclass();
                 $build->PRJ = $this->session->PRJ;
-                $build->product = (int)$productID;
-                $build->branch  = (int)$branch;
+                $build->product = $release->product;
+                $build->branch  = $branch;
                 $build->name    = $release->name;
                 $build->date    = $release->date;
                 $build->builder = $this->app->user->account;
@@ -159,7 +156,7 @@ class projectreleaseModel extends model
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->dao->insert(TABLE_BUILD)->data($build)
                     ->autoCheck()
-                    ->check('name', 'unique', "product = {$productID} AND branch = {$branch} AND deleted = '0'")
+                    ->check('name', 'unique', "product = {$release->product} AND branch = {$branch} AND deleted = '0'")
                     ->batchCheck($this->config->release->create->requiredFields, 'notempty')
                     ->exec();
                 if(dao::isError()) return false;
