@@ -277,12 +277,6 @@ $lang->my->menu->story       = array('link' => 'Story|my|story|',   'subModule' 
 $lang->my->menu->myExecution = "Execution|my|execution|";
 $lang->my->menu->dynamic     = 'Dynamics|my|dynamic|';
 
-if($config->URAndSR)
-{
-    $lang->my->menu->requirement = array('link' => "{$URCommon}|my|requirement|", 'subModule' => 'story');
-    $lang->my->menu->story       = array('link' => "{$SRCommon}|my|story|", 'subModule' => 'story');
-}
-
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();

@@ -163,13 +163,15 @@ class my extends control
      * My stories
 
      * @param  string $type
+     * @param  string $storyType
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $storyType = 'story', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
@@ -185,10 +187,11 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, $storyType);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->programs   = $this->loadModel('program')->getPRJPairs();
         $this->view->type       = $type;
+        $this->view->storyType  = $storyType;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
