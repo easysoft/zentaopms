@@ -116,7 +116,7 @@
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id='productsBox' colspan="3">
+          <td class='text-left' id="<?php echo $isStage ? '' : 'productsBox';?>" colspan="3">
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>

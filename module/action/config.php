@@ -26,6 +26,7 @@ $config->action->objectNameFields['webhook']     = 'name';
 $config->action->objectNameFields['risk']        = 'name';
 $config->action->objectNameFields['issue']       = 'title';
 $config->action->objectNameFields['design']      = 'name';
+$config->action->objectNameFields['stakeholder'] = 'user';
 
 $config->action->commonImgSize = 870;
 

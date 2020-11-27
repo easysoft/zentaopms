@@ -1291,7 +1291,7 @@ class project extends control
 
         $this->view->isSprint = false;
         $PRJData = $this->project->getById($this->session->PRJ);
-        if($PRJData->model == 'scrum' && strpos($this->config->custom->productProject, '_1'))
+        if($PRJData->model == 'scrum' && isset($this->config->custom->productProject) && strpos($this->config->custom->productProject, '_1'))
         {
             $this->view->isSprint = true;
 
@@ -1936,6 +1936,14 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
+            $projectType = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('type');
+            if($projectType == 'stage')
+            {
+                if(count($this->post->products) > 1) die(js::alert($this->lang->project->oneProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
+
+                if(!isset($this->post->products)) die(js::alert($this->lang->project->onProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
+            }
+
             $oldProducts = $this->project->getProducts($projectID);
 
             if($from == 'buildCreate' && $this->session->buildCreate) $browseProjectLink = $this->session->buildCreate;
