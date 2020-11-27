@@ -47,7 +47,18 @@ class commonModel extends model
         header("Content-Type: text/html; Language={$this->config->charset}");
         header("Cache-control: private");
 
-        if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
+        if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
+        {    
+            if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') 
+            {    
+                $session = $this->config->sessionVar . '=' . session_id();
+                header("Set-Cookie: $session; SameSite=None; Secure=true", false);
+            }    
+        }    
+        else 
+        {    
+			if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
+        } 
     }
 
     /**
