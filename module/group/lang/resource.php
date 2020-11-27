@@ -522,6 +522,10 @@ $lang->release->methodOrder[65] = 'batchUnlinkBug';
 $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Release. */
+$lang->resource->projectbuild = new stdclass();
+$lang->resource->projectbuild->browse = 'browse';
+
+/* Release. */
 $lang->resource->projectrelease = new stdclass();
 $lang->resource->projectrelease->browse           = 'browse';
 $lang->resource->projectrelease->create           = 'create';
