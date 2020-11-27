@@ -28,6 +28,7 @@ class projectrelease extends control
         $this->loadModel('product');
         $this->loadModel('release');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
     }
 
     /**
@@ -44,17 +45,13 @@ class projectrelease extends control
         $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         $this->loadModel('product');
-        $this->loadModel('project');
-        $products = $this->product->getProductPairsByProject($this->session->PRJ);
-        if(empty($products)) $this->locate($this->createLink('product', 'create'));
-
         $product = $this->product->getById($productID);
+
         $this->view->product  = $product;
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
         $this->view->project  = $this->loadModel('project')->getById($this->session->PRJ);
-        $this->view->products = $products;
-        $this->product->setMenu($this->product->getPairs(), $productID ? $productID : key($products), $branch);
+        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
@@ -68,13 +65,13 @@ class projectrelease extends control
      */
     public function browse($productID = 0, $branch = 0, $type = 'all')
     {
+        if(!$productID) $productID = key($this->view->products);
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true));
 
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->projectrelease->getList($productID, $branch, $type, $this->session->PRJ);
-        $this->view->productID  = $productID;
+        $this->view->releases   = $this->projectrelease->getList($productID, $branch, $type);
         $this->view->type       = $type;
         $this->display();
     }
@@ -91,7 +88,7 @@ class projectrelease extends control
     {
         if(!empty($_POST))
         {
-            $releaseID = $this->projectrelease->create();
+            $releaseID = $this->projectrelease->create($productID, $branch);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
@@ -101,20 +98,16 @@ class projectrelease extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
-        $builds        = $this->loadModel('build')->getProjectBuildPairs($this->session->PRJ, $productID, $branch, 'notrunk|withbranch');
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
         $releaseBuilds = $this->projectrelease->getReleaseBuilds($productID, $branch);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
         $this->commonAction($productID, $branch);
-        $productID = !empty($productID) ? $productID : key($this->view->products);
-
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
         $this->view->productID   = $productID;
-        $this->view->product     = $this->product->getById($productID);
-        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
         $this->view->lastRelease = $this->projectrelease->getLast($productID, $branch);
         $this->display();
     }

@@ -21,21 +21,6 @@
       <table class='table table-form'> 
         <tbody>
           <tr>
-            <th><?php echo $lang->release->product;?></th>
-            <td>
-              <?php if($product->type != 'normal'):?>
-              <div class='input-group'>
-              <?php endif;?>
-              <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
-              <?php if($product->type != 'normal'):?>
-              <span class='input-group-addon fix-border fix-padding'></span>
-              <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
-              </div>
-              <?php endif;?>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td class='muted'>
