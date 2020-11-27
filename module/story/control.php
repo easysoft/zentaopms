@@ -346,7 +346,8 @@ class story extends control
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
-                die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type"), 'parent'));
+                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
+                die(js::locate($locateLink, 'parent'));
             }
         }
 
