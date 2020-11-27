@@ -88,6 +88,7 @@ $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['caselib']     = '用例庫';
 $lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['entry']       = '應用';
+$lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用來描述操作歷史記錄。*/
@@ -96,6 +97,7 @@ $lang->action->desc->common         = '$date, <strong>$action</strong> by <stron
 $lang->action->desc->extra          = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>。' . "\n";
 $lang->action->desc->opened         = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
 $lang->action->desc->created        = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
+$lang->action->desc->added          = '$date, 由 <strong>$actor</strong> 添加。' . "\n";
 $lang->action->desc->changed        = '$date, 由 <strong>$actor</strong> 變更。' . "\n";
 $lang->action->desc->edited         = '$date, 由 <strong>$actor</strong> 編輯。' . "\n";
 $lang->action->desc->assigned       = '$date, 由 <strong>$actor</strong> 指派給 <strong>$extra</strong>。' . "\n";
@@ -157,6 +159,7 @@ $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '創建';
 $lang->action->label->opened              = '創建';
+$lang->action->label->added               = '添加';
 $lang->action->label->changed             = '變更了';
 $lang->action->label->edited              = '編輯了';
 $lang->action->label->assigned            = '指派了';
@@ -168,6 +171,7 @@ $lang->action->label->erased              = '刪除了';
 $lang->action->label->undeleted           = '還原了';
 $lang->action->label->hidden              = '隱藏了';
 $lang->action->label->commented           = '評論了';
+$lang->action->label->communicated        = '溝通了';
 $lang->action->label->activated           = '激活了';
 $lang->action->label->blocked             = '阻塞了';
 $lang->action->label->resolved            = '解決了';
@@ -408,6 +412,8 @@ $lang->action->label->entry       = '應用|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '風險|risk|view|riskID=%s';
+$lang->action->label->design      = '設計|design|view|designID=%s';
+$lang->action->label->stakeholder = '干係人|stakeholder|browse|';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';

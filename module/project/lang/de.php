@@ -59,6 +59,7 @@ $lang->project->hours         = '%s geplant, %s verbraucht, %s Rest.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "Kein {$lang->productCommon}";
 $lang->project->createStory   = "Story erstellen";
+$lang->project->storyTitle    = "Story Name";
 $lang->project->all           = 'Alle';
 $lang->project->undone        = 'Unabgeschlossen ';
 $lang->project->unclosed      = 'Geschlossen';

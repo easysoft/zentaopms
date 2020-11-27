@@ -88,6 +88,7 @@ $lang->action->objectTypes['testsuite']   = 'Suite';
 $lang->action->objectTypes['caselib']     = 'Bibliothek';
 $lang->action->objectTypes['testreport']  = 'Berichte';
 $lang->action->objectTypes['entry']       = 'Eintrag';
+$lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
@@ -96,6 +97,7 @@ $lang->action->desc->common         = '$date, <strong>$action</strong> von <stro
 $lang->action->desc->extra          = '$date, <strong>$action</strong> als <strong>$extra</strong> von <strong>$actor</strong>.' . "\n";
 $lang->action->desc->opened         = '$date, erstellt von <strong>$actor</strong> .' . "\n";
 $lang->action->desc->created        = '$date, erstellt von  <strong>$actor</strong> .' . "\n";
+$lang->action->desc->added          = '$date, hinzugefügt durch <strong>$actor</strong> .' . "\n";
 $lang->action->desc->changed        = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
 $lang->action->desc->edited         = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> zugewisen an <strong>$extra</strong>.' . "\n";
@@ -157,6 +159,7 @@ $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> hate ei
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'created ';
 $lang->action->label->opened              = 'opened ';
+$lang->action->label->added               = 'added';
 $lang->action->label->changed             = 'changed ';
 $lang->action->label->edited              = 'edited ';
 $lang->action->label->assigned            = 'assigned ';
@@ -168,6 +171,7 @@ $lang->action->label->erased              = 'erased ';
 $lang->action->label->undeleted           = 'restored ';
 $lang->action->label->hidden              = 'hid ';
 $lang->action->label->commented           = 'commented ';
+$lang->action->label->communicated        = 'communicated';
 $lang->action->label->activated           = 'activated ';
 $lang->action->label->blocked             = 'blocked ';
 $lang->action->label->resolved            = 'resolved ';
@@ -422,6 +426,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
+$lang->action->label->stakeholder = 'Stakeholder|stakeholder|browse|';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    

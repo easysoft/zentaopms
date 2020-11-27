@@ -130,7 +130,7 @@ class stakeholderModel extends model
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
 
             $stakeholderID = $this->dao->lastInsertId();
-            $this->action->create('stakeholder', $stakeholderID, 'Opened');
+            $this->action->create('stakeholder', $stakeholderID, 'added');
         }    
 
         /* Only changed account update userview. */

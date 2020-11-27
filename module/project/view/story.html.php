@@ -136,7 +136,7 @@
             <th class='w-60px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->orderAB);?></th>
             <?php endif;?>
             <th class='c-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-            <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+            <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->project->storyTitle);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='c-estimate w-80px {sorter:false}'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>

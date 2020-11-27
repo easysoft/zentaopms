@@ -59,6 +59,7 @@ $lang->project->hours         = 'Dự tính: %s, Đã làm: %s, Còn: %s.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "Không có {$lang->productCommon} nào.";
 $lang->project->createStory   = "Tạo câu chuyện";
+$lang->project->storyTitle    = "Story Name";
 $lang->project->all           = "Tất cả {$lang->projectCommon}";
 $lang->project->undone        = 'Chưa kết thúc ';
 $lang->project->unclosed      = 'Chưa đóng';
