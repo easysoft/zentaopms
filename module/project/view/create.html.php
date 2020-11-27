@@ -131,7 +131,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
-                <div class='input-group'>
+                <div class="input-group <?php echo $isStage ? 'required' : '';?>">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
