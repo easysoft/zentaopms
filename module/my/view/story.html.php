@@ -16,13 +16,13 @@
     <div class="btn-group angle-btn active">
       <div class="btn-group">
         <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-          <?php $label = $storyType == 'story' ? $lang->my->myStory : $lang->my->myRequirement;?>
+          <?php $label = $storyType == 'story' ? $lang->generalSR : $lang->generalUR;?>
           <?php echo $label;?><span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>
-          <li><?php echo html::a($this->inLink('story', "type=$type"), $lang->my->myStory);?></li>
+          <li><?php echo html::a($this->inLink('story', "type=$type"), $lang->generalSR);?></li>
           <?php if($config->URAndSR):?>
-          <li><?php echo html::a($this->inLink('story', "type=$type&storyType=requirement"), $lang->my->myRequirement);?></li>
+          <li><?php echo html::a($this->inLink('story', "type=$type&storyType=requirement"), $lang->generalUR);?></li>
           <?php endif;?>
         </ul>
       </div>
