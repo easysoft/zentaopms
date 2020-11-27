@@ -212,7 +212,7 @@ class build extends control
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->build        = $build;
-        $this->view->buildPairs   = $this->build->getProjectBuildPairs($build->project, 0, 0, 'noempty,notrunk');
+        $this->view->buildPairs   = $this->build->getExecutionBuildPairs($build->project, 0, 0, 'noempty,notrunk');
         $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link         = $link;
         $this->view->param        = $param;
@@ -323,26 +323,26 @@ class build extends control
         if($varName == 'openedBuild')
         {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds')
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty');
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
         { 
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName, $builds, $build, "class='form-control'"));
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
             else
             {
@@ -357,7 +357,7 @@ class build extends control
         }
         if($varName == 'dropdownList')
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             $list  = "<div class='list-group'>";

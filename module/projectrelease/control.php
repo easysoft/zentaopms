@@ -28,6 +28,7 @@ class projectrelease extends control
         $this->loadModel('product');
         $this->loadModel('release');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
     }
 
     /**
@@ -45,11 +46,11 @@ class projectrelease extends control
 
         $this->loadModel('product');
         $product = $this->product->getById($productID);
-        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+
         $this->view->product  = $product;
+        $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
-        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
+        $this->view->project  = $this->loadModel('project')->getById($this->session->PRJ);
         $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
@@ -62,12 +63,13 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 0, $type = 'all')
+    public function browse($productID = 0, $branch = 0, $type = 'all')
     {
+        if(!$productID) $productID = key($this->products);
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true));
 
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
         $this->view->releases   = $this->projectrelease->getList($productID, $branch, $type);
         $this->view->type       = $type;
@@ -102,7 +104,7 @@ class projectrelease extends control
         unset($builds['trunk']);
 
         $this->commonAction($productID, $branch);
-        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
         $this->view->productID   = $productID;
@@ -147,7 +149,7 @@ class projectrelease extends control
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
+        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($this->session->PRJ, $release->product, $release->branch, 'notrunk|withbranch');
         $this->display();
     }
                                                           
@@ -418,7 +420,7 @@ class projectrelease extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
-        $this->config->product->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
@@ -535,7 +537,7 @@ class projectrelease extends control
         $this->loadModel('bug');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         unset($this->config->bug->search['fields']['product']);
-        $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));

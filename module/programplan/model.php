@@ -311,20 +311,21 @@ class programplanModel extends model
     /**
      * Get total percent.
      *
-     * @param  object  $plan
+     * @param  object  $stage
+     * @param  object  $parent
      * @access public
      * @return int
      */
-    public function getTotalPercent($plan, $parent = false)
+    public function getTotalPercent($stage, $parent = false)
     {
         /* When parent is equal to true, query the total workload of the subphase. */
-        $projectID = $parent ? $plan->id : $plan->project;
-        $plans = $this->getStage($projectID, $plan->product, 'parent');
+        $projectID = $parent ? $stage->id : $stage->project;
+        $plans = $this->getStage($projectID, $stage->product, 'parent');
 
         $totalPercent = 0;
         foreach($plans as $id => $stage)
         {
-            if($id == $plan->id) continue;
+            if($id == $stage->id) continue;
             $totalPercent += $stage->percent;
         }
 
@@ -661,12 +662,12 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $parentPlan = $this->getByID($plan->parent);
-            $plan->attribute = $parentPlan->attribute;
-            $plan->acl       = $parentPlan->acl;
-            $parentPercent   = $parentPlan->percent;
+            $parentStage = $this->getByID($plan->parent);
+            $plan->attribute = $parentStage->attribute;
+            $plan->acl       = $parentStage->acl;
+            $parentPercent   = $parentStage->percent;
 
-            $childrenTotalPercent = $this->getTotalPercent($parentPlan, true);
+            $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
             $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
 
             /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
@@ -677,12 +678,13 @@ class programplanModel extends model
             }
 
             /* If child plan has milestone, update parent plan set milestone eq 0 . */
-            if($plan->milestone and $parentPlan->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
+            if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
         }
         else
         {
             $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
             if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
+
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
             $totalPercent    = $this->getTotalPercent($oldPlan);

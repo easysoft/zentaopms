@@ -693,6 +693,9 @@ class commonModel extends model
                     $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
+                /* Disable links to more buttons. */
+                if($menuItem->name == 'morelink') $link='javascript:void(0);';
+
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
                 echo $menuItemHtml;
@@ -1713,11 +1716,8 @@ EOD;
         $module = strtolower($module);
         $method = strtolower($method);
 
-        $module  = strtolower($module);
-        $method  = strtolower($method);
-
         /* Check the parent object is closed. */
-        if(strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+        if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -2352,6 +2352,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
+            $lang->project->dividerMenu = ',doc,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);

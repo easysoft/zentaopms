@@ -110,6 +110,9 @@ $lang->future      = '未来';
 $lang->year        = '年';
 $lang->workingHour = '工时';
 
+$lang->generalUR = '用需/史诗';
+$lang->generalSR = '软需/故事';
+
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = '状态';
@@ -546,6 +549,7 @@ $lang->menugroup->branch      = 'product';
 $lang->menugroup->productplan = 'product';
 $lang->menugroup->task        = 'project';
 $lang->menugroup->build       = 'project';
+$lang->menugroup->product     = 'projectstory';
 $lang->menugroup->convert     = 'admin';
 $lang->menugroup->upgrade     = 'admin';
 $lang->menugroup->user        = 'company';
@@ -627,6 +631,7 @@ $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
+$lang->navGroup->projectbuild   = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
@@ -862,14 +867,15 @@ $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=
 $lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'subModule' => 'requirement,story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
-$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
+$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = '干系人|stakeholder|browse';
-$lang->menu->scrum->list        = array('link' => '更多|program|prjedit|project={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->scrum->morelink       = array('link' => '更多|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
-$lang->scrum->subMenu->list = new stdclass();
-$lang->scrum->subMenu->list->program = '项目|program|edit|';
+$lang->scrum->subMenu->morelink = new stdclass();
+$lang->scrum->subMenu->morelink->program = '项目|program|edit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -883,18 +889,18 @@ $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|re
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 //$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
 $lang->menu->waterfall->risk           = '风险|risk|browse|';
-$lang->menu->waterfall->list           = array('link' => '更多|workestimation|index|project={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->morelink       = array('link' => '更多|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
-$lang->waterfall->subMenu->list = new stdclass();
-$lang->waterfall->subMenu->list->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->list->stakeholder    = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->waterfall->subMenu->list->program        = '项目|program|edit|';
+$lang->waterfall->subMenu->morelink = new stdclass();
+$lang->waterfall->subMenu->morelink->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->morelink->stakeholder    = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+$lang->waterfall->subMenu->morelink->program        = '项目|program|edit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
@@ -944,8 +950,8 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->requirement = array('link' => '用户需求|projectstory|requirement', 'subModule' => '');
-$lang->projectstory->menu->story       = array('link' => '软件需求|projectstory|story', 'subModule' => '');
+$lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
+$lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
@@ -959,6 +965,6 @@ if($config->URAndSR)
 }
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

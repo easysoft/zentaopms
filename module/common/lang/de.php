@@ -858,7 +858,7 @@ $lang->menu->scrum->product        = $lang->productCommon . '|product|index|loca
 $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
-$lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse|product={PRODUCT}');
+$lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = 'Stakeholder|stakeholder|browse';
 
 /* Waterfall menu. */
@@ -872,7 +872,7 @@ $lang->menu->waterfall->product        = array('link' => 'Story|product|browse|p
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->issue          = 'Issue|issue|browse|';
 $lang->menu->waterfall->risk           = 'Risk|risk|browse|';
 $lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');

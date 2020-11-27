@@ -25,12 +25,14 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
+          <?php if($product->program):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo zget($programs, $product->program, '/');?></td>
           </tr>
+          <?php endif;?>
           <tr>
-            <th><?php echo $lang->product->name;?></th>
+            <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
           <tr>
@@ -53,6 +55,13 @@
             <th><?php echo $lang->product->type;?></th>
             <td><?php echo html::select('type', $lang->product->typeList, $product->type, "class='form-control'");?></td><td></td>
           </tr>
+          <?php if($config->URAndSR):?>
+          <tr>
+            <th><?php echo $lang->product->storyConcept;?></th>
+            <td><?php echo html::select('storyConcept', $lang->custom->URSRList, $product->storyConcept, "class='form-control chosen'");?></td>
+            <td></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='form-control'");?></td><td></td>

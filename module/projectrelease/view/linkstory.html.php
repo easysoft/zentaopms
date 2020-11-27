@@ -12,7 +12,7 @@
 ?>
 <div id='queryBox' data-module='story' class='show'></div>
 <div id='unlinkStoryList'>
-  <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('release', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>' data-ride='table'>
+  <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('projectrelease', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>' data-ride='table'>
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>

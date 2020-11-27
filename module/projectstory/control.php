@@ -43,7 +43,9 @@ class projectStory extends control
      */
     public function requirement($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'requirement', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->session->set('storyList',   $this->app->getURI(true));
         if(empty($productID)) $productID = key($this->products);
+
         $this->lang->projectstory->menu->requirement['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -65,7 +67,9 @@ class projectStory extends control
      */
     public function story($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->session->set('storyList',   $this->app->getURI(true));
         if(empty($productID)) $productID = key($this->products);
+
         $this->lang->projectstory->menu->story['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");

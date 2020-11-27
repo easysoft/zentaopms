@@ -89,8 +89,13 @@ class stakeholderModel extends model
             ->check('user', 'unique', "objectID = {$this->session->PRJ} and deleted = '0'")
             ->autoCheck()
             ->exec();
+        $stakeholderID = $this->dao->lastInsertID();
 
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $this->loadModel('user')->updateUserView($this->session->PRJ, 'project', $stakeholder->user);
+            return $stakeholderID;
+        }
         return false;
     }
 
@@ -238,7 +243,7 @@ class stakeholderModel extends model
      */
     public function getStakeholderGroup($objectIdList)
     {
-        $stakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->fetchAll();
+        $stakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
 
         $stakeholderGroup = array();
         foreach($stakeholders as $stakeholder)
@@ -274,7 +279,7 @@ class stakeholderModel extends model
         }
 
         /* Get all parent stakeholders.*/
-        $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->fetchAll();
+        $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
 
         $parentStakeholderGroup = array();
         foreach($parentStakeholders as $parentStakeholder)
@@ -398,18 +403,6 @@ class stakeholderModel extends model
         return $this->dao->select('id, name')->from(TABLE_ACTIVITY)
             ->where('deleted')->eq(0)
             ->fetchPairs(); 
-    }
-
-    /**
-     * Delete user.
-     *
-     * @param  int    $userID
-     * @access public
-     * @return void
-     */
-    public function delete($userID, $null = null)
-    {
-        $this->dao->update(TABLE_STAKEHOLDER)->set('deleted')->eq('1')->where('id')->eq($userID)->exec();
     }
 
     /**

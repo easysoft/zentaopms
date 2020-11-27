@@ -890,11 +890,11 @@ class project extends control
         /* Get builds. */
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, $param);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch((int)$projectID, $queryID);
         }
         else
         {
-            $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID, $type, $param);
+            $builds = $this->loadModel('build')->getExecutionBuilds((int)$projectID, $type, $param);
         }
 
         /* Set project builds. */

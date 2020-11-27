@@ -20,8 +20,10 @@
           <?php echo $label;?><span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>
-          <li><?php echo html::a($this->inLink('story'), $lang->my->myStory);?></li>
-          <li><?php echo html::a($this->inLink('story', "type=assignedTo&storyType=requirement"), $lang->my->myRequirement);?></li>
+          <li><?php echo html::a($this->inLink('story', "type=$type"), $lang->my->myStory);?></li>
+          <?php if($config->URAndSR):?>
+          <li><?php echo html::a($this->inLink('story', "type=$type&storyType=requirement"), $lang->my->myRequirement);?></li>
+          <?php endif;?>
         </ul>
       </div>
     </div>
@@ -42,7 +44,7 @@
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
     <table id='storyList' class="table has-sort-head table-fixed">
-      <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "type=$type&storyType=$storyType&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
       $canBatchEdit     = common::hasPriv('story', 'batchEdit');
       $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
@@ -63,7 +65,7 @@
           </th>
           <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
+          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
           <?php if($storyType == 'story'):?>
           <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
           <?php endif;?>
@@ -138,7 +140,9 @@
           <td class='c-name nobr'>
               <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
+          <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
+          <?php endif;?>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>

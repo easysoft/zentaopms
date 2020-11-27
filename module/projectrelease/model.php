@@ -42,10 +42,10 @@ class projectreleaseModel extends model
 
     /**
      * Get list of releases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  string $type 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
      * @access public
      * @return array
      */
@@ -102,8 +102,9 @@ class projectreleaseModel extends model
     /**
      * Create a release.
      * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     * @param  int    $productID
+     * @param  int    $branch
+     *
      * @access public
      * @return int
      */

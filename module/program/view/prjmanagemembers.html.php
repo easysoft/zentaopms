@@ -83,7 +83,13 @@
         <?php $i ++; $memberCount ++;?>
         <?php endfor;?>
       </tbody>
-      <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::a($this->createLink('program', 'PRJBrowse', '', '', '', $project->id), $lang->goback, '', 'class="btn btn-back btn-wide"');?></td></tr></tfoot>
+      <tfoot>
+        <tr>
+          <td colspan='6' class='text-center form-actions'>
+            <?php echo html::submitButton() . html::backButton();?>
+          </td>
+        </tr>
+      </tfoot>
     </table>
     <?php js::set('i', $i);?>
   </form>
