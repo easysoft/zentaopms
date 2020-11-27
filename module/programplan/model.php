@@ -424,6 +424,7 @@ class programplanModel extends model
             $parentStage     = $this->getByID($parentID);
             $parentAttribute = $parentStage->attribute;
             $parentPercent   = $parentStage->percent;
+            $parentACL       = $parentStage->acl;
         }
 
         $attributes = array_values($attributes);
@@ -447,7 +448,7 @@ class programplanModel extends model
             $plan->realBegan = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
             $plan->realEnd   = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
             $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
-            $plan->acl       = $acl[$key];
+            $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
 
             $datas[] = $plan;
         }
@@ -543,7 +544,7 @@ class programplanModel extends model
             {
                 unset($data->id);
                 $data->status        = 'wait';
-                $data->acl           = 'open';
+                $data->acl           = $data->parent == 0 ? 'open' : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('acl');
                 $data->version       = 1;
                 $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
                 $data->team          = substr($data->name,0, 30);
@@ -559,6 +560,8 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+
+                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
                     $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($stageID * 5)->where('id')->eq($stageID)->exec();
 
                     /* Create doc lib. */
@@ -660,6 +663,7 @@ class programplanModel extends model
         {
             $parentPlan = $this->getByID($plan->parent);
             $plan->attribute = $parentPlan->attribute;
+            $plan->acl       = $parentPlan->acl;
             $parentPercent   = $parentPlan->percent;
 
             $childrenTotalPercent = $this->getTotalPercent($parentPlan, true);
@@ -677,6 +681,8 @@ class programplanModel extends model
         }
         else
         {
+            $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
+            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
             $totalPercent    = $this->getTotalPercent($oldPlan);

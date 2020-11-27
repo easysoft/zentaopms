@@ -1235,10 +1235,6 @@ class productModel extends model
                 $extra = $extra ? $extra : 'gantt';
                 $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
             }
-            elseif($module == 'projectstory')
-            {
-                $link  = helper::createLink($module, $method, "projectID=%s&productID=%s" . ($branch ? "&branch=%s" : ''));
-            }
             else
             {
                 $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
@@ -1281,7 +1277,7 @@ class productModel extends model
      */
     public function setParamsForLink($module, $link, $projectID, $productID)
     {
-        $linkHtml = strpos('programplan,projectstory', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
+        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
         return $linkHtml;
     }
 

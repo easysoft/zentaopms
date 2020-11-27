@@ -22,9 +22,12 @@ class projectstoryModel extends model
      */
     public function setMenu($products = array(), $productID = 0, $branch = 0)
     {
+        /* Determine if the product is accessible. */
+        if($products and (!isset($products[$productID]) or !$this->loadModel('product')->checkPriv($productID))) $this->loadModel('product')->accessDenied();
+
         if(empty($productID)) $productID = key($products);
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'projectstory', 'requirement', '', $branch);
+        $selectHtml = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
         $indexHtml  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('projectstory', 'requirement'), $this->lang->projectstory->index, '', "class='btn'") . '</div></div>';
         $pageNav    = $indexHtml . $selectHtml;
         $this->lang->modulePageNav = $pageNav;

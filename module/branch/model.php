@@ -205,4 +205,20 @@ class branchModel extends model
             ->fetch();
         return empty($module) && empty($story) && empty($bug) && empty($case) && empty($release) && empty($build) && empty($plan) && empty($project);
     }
+
+    /**
+     * Setting parameters for link.
+     *
+     * @param  string $module
+     * @param  string $link
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function setParamsForLink($module, $link, $projectID, $productID, $branch)
+    {
+        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, $branch) : sprintf($link, $productID, $branch);
+        return $linkHtml;
+    }
 }

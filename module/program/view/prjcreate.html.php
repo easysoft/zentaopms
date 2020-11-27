@@ -10,32 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(isset($tips)):?>
-<?php
-if($from == 'PRJ')
-{
-    $defaultURL = $this->createLink('program', 'PRJBrowse', "programID=$programID&browseType=all");
-}
-else
-{
-    $defaultURL = $this->createLink('program', 'PGMBrowse');
-}
-?>
-<?php include '../../common/view/header.lite.html.php';?>
-<body>
-  <div class='modal-dialog mw-500px' id='tipsModal'>
-    <div class='modal-header'>
-      <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->program->tips;?></h4>
-    </div>
-    <div class='modal-body'>
-    <?php echo $tips;?>
-    </div>
-  </div>
-</body>
-</html>
-<?php exit;?>
-<?php endif;?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
@@ -156,12 +130,14 @@ else
         </tr>
         <?php endif;?>
         <?php $this->printExtendFields('', 'table');?>
+        <?php if($config->URAndSR):?>
         <tr>
           <th><?php echo $lang->program->PRJStoryConcept;?></th>
           <td>
             <?php echo html::select('storyConcept', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>

@@ -155,8 +155,8 @@ class storyModel extends model
 
         return $story;
     }
-	
-	/**  
+
+    /**
      *  Get requirements for story.
      *
      *  @param  int     $productID
@@ -164,7 +164,7 @@ class storyModel extends model
      *  @return void
      */
     public function getRequierements($productID)
-    {    
+    {
         return $this->dao->select('id,title')->from(TABLE_STORY)
            ->where('deleted')->eq(0) 
            ->andWhere('status')->ne('draft') 
@@ -3587,14 +3587,15 @@ class storyModel extends model
      * Get tracks.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  object $pager
      * @access public
      * @return bool|array
      */
-    public function getTracks($productID, $pager = null)
+    public function getTracks($productID = 0, $branch = 0, $pager = null)
     {
         $sourcePageID = $pager->pageID;
-        $requirements = $this->getProductStories($productID, 0, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+        $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
         if($pager->pageID != $sourcePageID)
         {
             $requirements  = array();

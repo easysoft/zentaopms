@@ -2,8 +2,12 @@ $(function()
 {
     if(typeof(resetActive) != 'undefined') return false;
     if(typeof(storyType) == 'undefined') storyType = '';
-    $('#navbar .nav li').removeClass('active');
-    $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+    if(typeof(rawModule) == 'undefined') rawModule = 'product';
+    if(rawModule != 'projectstory')
+    {
+        $('#navbar .nav li').removeClass('active');
+        $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+    }
 })
 
 function getStatus(method, params)

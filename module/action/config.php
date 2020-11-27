@@ -5,6 +5,7 @@ $config->action->objectNameFields['productplan'] = 'title';
 $config->action->objectNameFields['release']     = 'name';
 $config->action->objectNameFields['program']     = 'name';
 $config->action->objectNameFields['project']     = 'name';
+$config->action->objectNameFields['execution']   = 'name';
 $config->action->objectNameFields['task']        = 'name';
 $config->action->objectNameFields['build']       = 'name';
 $config->action->objectNameFields['bug']         = 'title';

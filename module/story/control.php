@@ -1315,24 +1315,28 @@ class story extends control
      * Story track.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track($productID, $recPerPage = 10, $pageID = 1)
-    {   
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
-        $products  = $this->product->getPairs();
-        $productID = $this->product->saveState($productID, $products);
-        $this->product->setMenu($products, $productID, 0, 0, '');
+    public function track($productID, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Set menu. The projectstory module does not execute. */
+        if($this->app->rawModule == 'story')
+        {
+            $this->lang->product->menu = $this->lang->product->viewMenu;
+            $products  = $this->product->getPairs();
+            $productID = $this->product->saveState($productID, $products);
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+            $this->product->setMenu($products, $productID, $branch);
+        }
 
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $pager);
+        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $tracks = $this->story->getTracks($productID, $branch, $pager);
 
         $this->view->title      = $this->lang->story->track;
         $this->view->posision[] = $this->lang->story->track;
