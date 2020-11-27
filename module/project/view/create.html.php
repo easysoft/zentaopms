@@ -35,6 +35,7 @@
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
+<?php js::set('isStage', $isStage);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -116,7 +117,7 @@
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id="<?php echo $isStage ? '' : 'productsBox';?>" colspan="3">
+          <td class='text-left' id="<?php echo $isStage ? 'productBox' : 'productsBox';?>" colspan="3">
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
