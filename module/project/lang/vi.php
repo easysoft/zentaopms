@@ -57,7 +57,6 @@ $lang->project->totalLeft     = 'Còn';
 $lang->project->progress      = ' Tiến độ';
 $lang->project->hours         = 'Dự tính: %s, Đã làm: %s, Còn: %s.';
 $lang->project->viewBug       = 'Bugs';
-$lang->project->noProduct     = "Không có {$lang->productCommon} nào.";
 $lang->project->createStory   = "Tạo câu chuyện";
 $lang->project->all           = "Tất cả {$lang->projectCommon}";
 $lang->project->undone        = 'Chưa kết thúc ';
@@ -76,6 +75,8 @@ $lang->project->watermark     = 'Đã xuất bởi ZenTao';
 $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'Theo người dùng';
+$lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
+$lang->project->onProduct     = "Stage not linked {$lang->productCommon}";
 
 $lang->project->start    = 'Bắt đầu';
 $lang->project->activate = 'Kích hoạt';
@@ -260,6 +261,7 @@ $lang->project->byPeriod            = 'Theo thời gian';
 $lang->project->byUser              = 'Theo người dùng';
 $lang->project->noProject           = "Không có {$lang->projectCommon} nào";
 $lang->project->noMembers           = 'Không có thành viên đội nhóm nào';
+$lang->project->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 
 /* Interactive prompts. */
 $lang->project->confirmDelete         = "Bạn có muốn xóa {$lang->projectCommon}[%s] này?";
