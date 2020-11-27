@@ -110,10 +110,6 @@ class product extends control
         /* Load datatable. */
         $this->loadModel('datatable');
 
-        /* Save session. */
-        $this->session->set('storyList',   $this->app->getURI(true));
-        $this->session->set('productList', $this->app->getURI(true));
-
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
@@ -141,6 +137,10 @@ class product extends control
         /* Set menu. The projectstory module does not execute. */
         if($this->app->rawModule == 'product')
         {
+            /* Save session. */
+            $this->session->set('storyList',   $this->app->getURI(true));
+            $this->session->set('productList', $this->app->getURI(true));
+
             $this->lang->product->menu = $this->lang->product->viewMenu;
             $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
             $this->product->setMenu($this->products, $productID, $branch);
