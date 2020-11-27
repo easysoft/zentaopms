@@ -402,7 +402,7 @@ $lang->action->label->productplan = "{$lang->planCommon}|productplan|view|produc
 $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->productSRCommon}|story|view|storyID=%s";
 $lang->action->label->program     = "项目集|program|pgmproduct|programID=%s";
-$lang->action->label->project     = "项目|project|view|projectID=%s";
+$lang->action->label->project     = "项目|program|index|projectID=%s";
 $lang->action->label->execution   = "执行|project|task|projectID=%s";
 $lang->action->label->task        = '任务|task|view|taskID=%s';
 $lang->action->label->build       = '版本|build|view|buildID=%s';

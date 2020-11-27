@@ -402,7 +402,7 @@ $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
-$lang->action->label->project     = "Project|project|view|projectID=%s";
+$lang->action->label->project     = "Project|program|index|projectID=%s";
 $lang->action->label->execution   = "Execution|project|task|projectID=%s";
 $lang->action->label->task        = 'Tâche|task|view|taskID=%s';
 $lang->action->label->build       = 'Build|build|view|buildID=%s';

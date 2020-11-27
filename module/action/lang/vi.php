@@ -402,7 +402,7 @@ $lang->action->label->productplan = 'Kế hoạch|productplan|view|productID=%s'
 $lang->action->label->release     = 'Phát hành|release|view|productID=%s';
 $lang->action->label->story       = 'Câu chuyện|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
-$lang->action->label->project     = "Project|project|view|projectID=%s";
+$lang->action->label->project     = "Project|program|index|projectID=%s";
 $lang->action->label->execution   = "Execution|project|task|projectID=%s";
 $lang->action->label->task        = 'Nhiệm vụ|task|view|taskID=%s';
 $lang->action->label->build       = 'Bản dựng|build|view|buildID=%s';

@@ -390,7 +390,7 @@ $lang->action->label->productplan = '計劃|productplan|view|productID=%s';
 $lang->action->label->release     = '發佈|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->productSRCommon}|story|view|storyID=%s";
 $lang->action->label->program     = "項目集|program|pgmproduct|programID=%s";
-$lang->action->label->project     = "項目|project|view|projectID=%s";
+$lang->action->label->project     = "項目|program|index|projectID=%s";
 $lang->action->label->execution   = "執行|project|task|projectID=%s";
 $lang->action->label->task        = '任務|task|view|taskID=%s';
 $lang->action->label->build       = '版本|build|view|buildID=%s';
