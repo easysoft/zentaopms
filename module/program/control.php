@@ -1375,7 +1375,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJManageProducts($projectID, $programID)
+    public function PRJManageProducts($projectID, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
         $browseProjectLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");

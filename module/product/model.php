@@ -43,6 +43,8 @@ class productModel extends model
             $replace['branch']    = $branch;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
+
+        if($this->cookie->lastProduct and ($this->cookie->lastProduct != $this->session->product)) $this->replaceStoryConcept($productID);
     }
 
     /**
@@ -1318,5 +1320,43 @@ class productModel extends model
             ->orderBy('t2.begin desc')
             ->limit(1)
             ->fetch();
+    }
+
+    /**
+     * Replace story concept when change product.
+     *
+     * @param  int   $productID
+     * @access public
+     * @return object
+     */
+    public function replaceStoryConcept($productID = 0)
+    {
+        $this->app->loadLang('custom');
+        $product     = $this->getByID($productID);
+        $lastProduct = $this->getByID($this->cookie->lastProduct);
+
+        /* Replace menu lang. */
+        foreach($this->lang->product->menu as $key => $menu)    
+        {
+            if($key == 'requirement') 
+            {
+                $link    = explode('|', $menu['link']);
+                $link[0] = zget($this->lang->custom->URList, $product->storyConcept, $this->lang->URCommon); 
+                $this->lang->product->menu->$key = implode('|', $link);
+            }
+            if($key == 'story') 
+            {
+                $link    = explode('|', $menu['link']);
+                $link[0] = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon); 
+                $this->lang->product->menu->$key = implode('|', $link);
+            }
+        }
+
+        $lastSRCommon = zget($this->lang->custom->SRList, $lastProduct->storyConcept, $this->lang->SRCommon);
+        $SRCommon     = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon);
+
+        $this->lang->story->createStory       = str_replace($lastSRCommon, $SRCommon, $this->lang->story->create);
+        $this->lang->story->createRequirement = str_replace($lastSRCommon, $SRCommon, $this->lang->story->createRequirement);
+        $this->lang->story->noStory           = str_replace($lastSRCommon, $SRCommon, $this->lang->story->noStory);
     }
 }

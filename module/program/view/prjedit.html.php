@@ -49,7 +49,7 @@
         <?php endif;?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id='productsBox' colspan="2">
+          <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
@@ -74,7 +74,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->linkPlan;?></th>
-          <td id="plansBox" colspan="2">
+          <td id="plansBox" colspan="3">
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>

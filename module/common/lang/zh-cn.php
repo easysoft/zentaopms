@@ -863,7 +863,7 @@ $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=
 $lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'subModule' => 'requirement,story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
-$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = '干系人|stakeholder|browse';
 $lang->menu->scrum->list        = array('link' => '更多|program|prjedit|project={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
@@ -884,7 +884,7 @@ $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|re
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse|product={PRODUCT}');
+$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 //$lang->menu->waterfall->release      = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
 $lang->menu->waterfall->risk           = '风险|risk|browse|';

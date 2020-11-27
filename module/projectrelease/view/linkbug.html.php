@@ -16,7 +16,7 @@ $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
 $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
 ?>
 <div id='<?php echo $type == 'bug' ? 'unlinkBugList' : 'unlinkLeftBugList';?>'>
-  <form class='main-table' method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('release', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>' data-ride='table'>
+  <form class='main-table' method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('projectrelease', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>' data-ride='table'>
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedBugs;?>
     </div>

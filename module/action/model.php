@@ -885,6 +885,7 @@ class actionModel extends model
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
                 $action->objectLink = '';
+                if($action->objectType == 'story') $objectLabel = $this->getStoryConcept($action);
 
                 /* Fix bug #2961. */
                 $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
@@ -908,6 +909,25 @@ class actionModel extends model
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
         return $actions;
+    }
+
+    /**
+     * Get story concept by product.
+     * 
+     * @param  object $action 
+     * @access public
+     * @return void
+     */
+    public function getStoryConcept($action)
+    {
+        $this->app->loadLang('custom');
+        $story   = $this->loadModel('story')->getByID($action->objectID);
+        $product = $this->loadModel('product')->getByID($story->product);
+
+        $URCommon = zget($this->lang->custom->URList, $product->storyConcept, $this->lang->URCommon);
+        $SRCommon = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon);
+
+        return $story->type == 'story' ? $SRCommon : $URCommon;
     }
 
     /**
