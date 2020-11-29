@@ -216,3 +216,4 @@ $lang->user->noticeResetFile = "<h5>Kontaktieren Sie den Administrator um Ihr Pa
     <li>Die Datei muss leer sein.</li>
     <li>Wenn die Datei bereits existiert löschen Sie diese und erstellen Sie eine neue.</li>
     </ol>";
+$lang->user->notice4Safe = "It is detected that you may be using the one click installation package environment, and other sites in the environment are still using a simple password. For security, please change the password in time. Login address of other sites: <br />%s";

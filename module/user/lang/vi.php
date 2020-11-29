@@ -216,3 +216,4 @@ $lang->user->noticeResetFile = "<h5>Liên hệ quản trị viên để thiết 
  <li>Giữ tập tin này rỗng.</li>
  <li>Nếu tập tin đã tồn tại, xóa và tạo lại.</li>
  </ol>";
+$lang->user->notice4Safe = "It is detected that you may be using the one click installation package environment, and other sites in the environment are still using a simple password. For security, please change the password in time. Login address of other sites: <br />%s";
