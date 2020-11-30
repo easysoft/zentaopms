@@ -1144,7 +1144,7 @@ class docModel extends model
             {
                 if($type == 'product' or $type == 'project')
                 {
-                    $docLib->name = $objectList[$docLib->$type];
+                    $docLib->name = isset($objectList[$docLib->$type]) ? $objectList[$docLib->$type] : '';
                     $docLib->id   = $docLib->$type;
                 }
                 $libs[$docLib->id] = $docLib->name;
