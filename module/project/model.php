@@ -457,7 +457,13 @@ class projectModel extends model
         $projectID  = (int)$projectID;
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
-        /* If the project model is a stage, determine whether the product is linked. */
+        /* Judgment of required items. */
+        if($project->code == '')
+        {
+            dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->project->code);
+            return false;
+        }
+
         if($oldProject->type == 'stage' and empty($this->post->products[0]))
         {
             dao::$errors['message'][] = $this->lang->project->noLinkProduct;
