@@ -90,7 +90,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
   </div>
 </main>
 <?php
-if(strpos('/zentao/|/pro/|/biz/', $this->config->webRoot) !== false)
+if(strpos('|/zentao/|/pro/|/biz/|', "|{$this->config->webRoot}|") !== false)
 {
     $databases = array('zentao' => 'zentao', 'zentaopro' => 'zentaopro', 'zentaobiz' => 'zentaobiz', 'zentaoep' => 'zentaoep');
     if($this->config->webRoot == '/zentao/') unset($databases['zentao']);
