@@ -1001,7 +1001,7 @@ class userModel extends model
                     if($delay > 0) $project->delay = $delay;
                 }
 
-                if($project->project) $project->parentName = $projectList[$project->project]->name;
+                if($project->project) $project->projectName = $projectList[$project->project]->name;
                 $myProjects[$project->id] = $project;
             }
         }

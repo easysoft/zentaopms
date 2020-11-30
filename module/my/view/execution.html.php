@@ -48,7 +48,7 @@
         <td class='c-name text-left'><?php echo html::a($link, $execution->name);?></td>
         <td class='text-left'><?php echo $execution->code;?></td>
         <td class='text-left'><?php echo zget($lang->project->typeList, $execution->type);?></td>
-        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->parentName, '', "title='$execution->parentName'");?></td>
+        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
         <td><?php echo $execution->begin;?></td>
         <td><?php echo $execution->end;?></td>
         <td class="c-status">

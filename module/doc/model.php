@@ -1118,17 +1118,15 @@ class docModel extends model
 
             $idList    = array();
             $projectID = $this->session->PRJ;
-            if($type == 'product') $idList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            if($type == 'project') $idList = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
+            $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosed' : 'all';
+            if($type == 'product') $objectList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all');
+            if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, $executionStatus, 0, true);
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
-                ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
-                ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
-                ->andWhere('t2.id')->in(array_keys($idList))
-                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') === false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
-                ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
+            $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere("$type")->in(array_keys($objectList))
+                ->orderBy("`order` asc, id desc")
                 ->query();
         }
         else
@@ -1141,15 +1139,20 @@ class docModel extends model
         while($docLib = $stmt->fetch())
         {
             if($limit && $i > $limit) break;
-            $key = ($type == 'product' or $type == 'project') ? $type : 'id';
-            if($this->checkPrivLib($docLib) and !isset($libs[$docLib->$key]))
+
+            if($this->checkPrivLib($docLib))
             {
-                $libs[$docLib->$key] = $docLib->name;
+                if($type == 'product' or $type == 'project')
+                {
+                    $docLib->name = $objectList[$docLib->$type];
+                    $docLib->id   = $docLib->$type;
+                }
+                $libs[$docLib->id] = $docLib->name;
+
                 $i++;
             }
         }
 
-        if($type == 'product' or $type == 'project') $libs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc')->fetchAll('id');
         return $libs;
     }
 
@@ -1166,15 +1169,7 @@ class docModel extends model
     {
         if($type != 'product' and $type != 'project') return false;
         $libGroups = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
-        if($type == 'product')
-        {
-            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($idList)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('product', 'product');
-        }
+
         $buildGroups = array();
         foreach($libGroups as $objectID => $libs)
         {
@@ -1183,7 +1178,6 @@ class docModel extends model
                 if($this->checkPrivLib($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
             }
 
-            //if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doclib->project;
             if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
         }
 
@@ -1314,7 +1308,7 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->sprints)->get();
             $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
