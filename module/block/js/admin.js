@@ -34,10 +34,11 @@ $(function()
         if($blockParams.find('#actionLink').size() > 0) $form.attr('action', $blockParams.find('#actionLink').val());
 
         $titleInput = $blockParams.find('#title');
-        if($titleInput.length && $('#blockParams #paramstype').length)
+        if($titleInput.length && $('#paramstype').length)
         {
             blockTitle   = $titleInput.val();
-            preValue     = $('#blockParams #paramstype').find('option:selected').text();
+            preValue     = $('#paramstype').find('option:selected').text();
+
             var preIndex = blockTitle.indexOf(' - ' + preValue);
             if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
 
