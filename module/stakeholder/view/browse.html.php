@@ -38,7 +38,7 @@
           <th class="w-120px"><?php echo $lang->stakeholder->qq;?></th>
           <th class="w-120px"><?php echo $lang->stakeholder->weixin;?></th>
           <th class="w-200px"><?php echo $lang->stakeholder->email;?></th>
-          <th class='c-actions w-160px'><?php echo $lang->actions;?></th>
+          <th class='c-actions text-center w-150px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -60,7 +60,7 @@
             <?php
             common::printIcon('stakeholder', 'communicate', "id=$stakeholder->id", $stakeholder, 'list', 'chat-line', '', 'iframe', 'yes');
             common::printIcon('stakeholder', 'expect', "id=$stakeholder->id", $stakeholder, 'list', 'flag', '', 'iframe', 'yes');
-            common::printIcon('stakeholder', 'userIssue', "account=$stakeholder->id", $stakeholder, 'list', 'list-alt', '', 'iframe', 'yes');
+            if($stakeholder->projectModel == 'waterfall') common::printIcon('stakeholder', 'userIssue', "account=$stakeholder->id", $stakeholder, 'list', 'list-alt', '', 'iframe', 'yes');
             common::printIcon('stakeholder', 'edit', "id=$stakeholder->id", $stakeholder, 'list', '', '', '', '');
             $deleteClass = common::hasPriv('stakeholder', 'delete') ? 'btn' : 'btn disabled';
             echo html::a($this->createLink('stakeholder', 'delete', "id=$stakeholder->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->stakeholder->delete}' class='{$deleteClass}'");
