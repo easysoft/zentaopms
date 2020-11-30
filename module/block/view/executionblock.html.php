@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(empty($projectStats)): ?>
+<?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
@@ -34,36 +34,36 @@
     </thead>
     <tbody class="text-center">
      <?php $id = 0; ?>
-     <?php foreach($projectStats as $project):?>
+     <?php foreach($executionStats as $execution):?>
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
-      $viewLink = $this->createLink('project', 'task', 'project=' . $project->id);
+      $viewLink = $this->createLink('project', 'task', 'project=' . $execution->id);
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-name text-left' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
-        <td class="c-date"><?php echo $project->end;?></td>
+        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $execution->id), $execution->name, '', "title='$execution->name'");?></nobr></td>
+        <td class="c-date"><?php echo $execution->end;?></td>
         <?php if($longBlock):?>
         <td class="w-70px">
-          <?php if(isset($project->delay)):?>
+          <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <?php $statusName = $this->processStatus('project', $project);?>
-          <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
+          <?php $statusName = $this->processStatus('project', $execution);?>
+          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours"><?php echo $project->hours->totalEstimate;?></td>
-        <td class="c-hours"><?php echo $project->hours->totalConsumed;?></td>
-        <td class="c-hours"><?php echo $project->hours->totalLeft;?></td>
+        <td class="c-hours"><?php echo $execution->hours->totalEstimate;?></td>
+        <td class="c-hours"><?php echo $execution->hours->totalConsumed;?></td>
+        <td class="c-hours"><?php echo $execution->hours->totalLeft;?></td>
         <?php endif;?>
         <td class="c-progress">
           <div class="progress progress-text-left">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-            <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
+            <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
             </div>
           </div>
         </td>
         <?php if($longBlock):?>
-        <td id='spark-<?php echo $id++?>' class='no-padding text-left sparkline' values='<?php echo join(',', $project->burns);?>'></td>
+        <td id='spark-<?php echo $id++?>' class='no-padding text-left sparkline' values='<?php echo join(',', $execution->burns);?>'></td>
         <?php endif;?>
      </tr>
      <?php endforeach;?>

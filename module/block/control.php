@@ -218,6 +218,15 @@ class block extends control
             $project     = $this->loadModel('program')->getPRJByID($this->session->PRJ);
             $commonField = $project->model . 'common';
         }
+
+        /* Replace the block Title saved in the database. */
+        if($module == 'project')
+        {
+            $projectBlock = array();
+            foreach($this->lang->block->default['project'] as $block) $projectBlock[$block['block']] = $block['title'];
+            foreach($blocks as $block) $block->title = $projectBlock[$block->block];
+        }
+
         $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
 
         /* Init block when vist index first. */
@@ -1628,12 +1637,12 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $count = isset($this->params->count) ? (int)$this->params->count : 0;
-        $type  = isset($this->params->type)  ? $this->params->type : 'all';
-        $pager = pager::init(0, $count, 1);
+        $count  = isset($this->params->count) ? (int)$this->params->count : 0;
+        $status = isset($this->params->type)  ? $this->params->type : 'all';
+        $pager  = pager::init(0, $count, 1);
 
-        $programID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '', $programID);
+        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
+        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($projectID, $status, 0, 0, 30, 'path_asc,id_asc', $pager);
     }
 
     /**
