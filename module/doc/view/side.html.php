@@ -37,13 +37,13 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             ?>
             </li>
             <?php else:?>
-            <?php foreach($sideLibs[$tabValue] as $tabMenu):?>
+            <?php foreach($sideLibs[$tabValue] as $tabMenuID => $tabMenuName):?>
             <?php
             $customLibCount = 0;
             $mainLibID      = 0;
-            if(isset($sideSubLibs[$tabValue][$tabMenu->id]))
+            if(isset($sideSubLibs[$tabValue][$tabMenuID]))
             {
-                foreach($sideSubLibs[$tabValue][$tabMenu->id] as $subLibID => $subLibName)
+                foreach($sideSubLibs[$tabValue][$tabMenuID] as $subLibID => $subLibName)
                 {
                     if(is_numeric($subLibID) and !empty($mainLibID)) $customLibCount += 1;
                     if(is_numeric($subLibID) and empty($mainLibID)) $mainLibID = $subLibID;
@@ -51,29 +51,29 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             }
 
             $icon        = $tabValue == 'product' ? "<i class='icon icon-cube'></i> " : "<i class='icon icon-stack'></i> ";
-            $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenu->id) ? 'active' : '';
+            $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenuID) ? 'active' : '';
             $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $mainLibID) ? 'active' : $activeClass;
             ?>
             <li <?php echo "class='$activeClass'";?>>
               <?php if($customLibCount > 0):?>
-              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenu->id"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenuID"), $icon . $tabMenuName, '', "class='text-ellipsis' title='{$tabMenuName}'");?>
               <?php else:?>
-              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), $icon . $tabMenuName, '', "class='text-ellipsis' title='{$tabMenuName}'");?>
               <?php endif;?>
-              <?php if(isset($sideSubLibs[$tabValue][$tabMenu->id])):?>
+              <?php if(isset($sideSubLibs[$tabValue][$tabMenuID])):?>
               <ul>
-                <?php foreach($sideSubLibs[$tabValue][$tabMenu->id] as $subLibID => $subLibName):?>
+                <?php foreach($sideSubLibs[$tabValue][$tabMenuID] as $subLibID => $subLibName):?>
                 <?php
                 if($subLibID == 'project')
                 {
-                    $subLibLink  = inlink('allLibs', "type=project&product=$tabMenu->id");
-                    $activeClass = ($this->methodName == 'alllibs' && $type == 'project' && $$tabValue == $tabMenu->id) ? "class='active'" : '';
+                    $subLibLink  = inlink('allLibs', "type=project&product=$tabMenuID");
+                    $activeClass = ($this->methodName == 'alllibs' && $type == 'project' && $$tabValue == $tabMenuID) ? "class='active'" : '';
                     $icon        = 'icon-stack';
                 }
                 elseif($subLibID == 'files')
                 {
-                    $subLibLink  = inlink('showFiles', "type=$tabValue&objectID=$tabMenu->id");
-                    $activeClass = ($this->methodName == 'showfiles' && $type == $tabValue && $object->id == $tabMenu->id) ? "class='active'" : '';
+                    $subLibLink  = inlink('showFiles', "type=$tabValue&objectID=$tabMenuID");
+                    $activeClass = ($this->methodName == 'showfiles' && $type == $tabValue && $object->id == $tabMenuID) ? "class='active'" : '';
                     $icon        = 'icon-paper-clip';
                 }
                 else
