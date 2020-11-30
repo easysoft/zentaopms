@@ -359,7 +359,6 @@ class stakeholder extends control
             $expectID = $this->stakeholder->expect();
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('expect', $expectID, 'Opened');
             die(js::closeModal('parent.parent', 'this'));
         }
 
