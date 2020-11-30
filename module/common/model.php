@@ -733,6 +733,7 @@ class commonModel extends model
         elseif($moduleName == 'my' or $moduleName == 'user')
         {
             $searchObject = $methodName;
+            if($methodName == 'execution') $searchObject = 'project';
         }
         if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
 

@@ -18,9 +18,9 @@
         <div class="col-sm-6">
           <div class="panel block-burn" style="height: 280px">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $project->name . $lang->project->burn;?></div>
+              <div class="panel-title"><?php echo $execution->name . $lang->project->burn;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'burn', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'burn', "projectID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -44,7 +44,7 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'dynamic', "projectID=$execution->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body scrollbar-hover">
@@ -66,31 +66,31 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'team', "projectID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
                 <?php $i = 9; $j = 0;?>
-                <?php if($project->PM):?>
+                <?php if($execution->PM):?>
                 <?php $i--;?>
-                <?php unset($teamMembers[$project->PM]);?>
-                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->project->PM;?>）</span></div>
+                <?php unset($teamMembers[$execution->PM]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->PM);?> <span class="text-muted">（<?php echo $lang->project->PM;?>）</span></div>
                 <?php endif;?>
-                <?php if($project->PO):?>
+                <?php if($execution->PO):?>
                 <?php $i--;?>
-                <?php unset($teamMembers[$project->PO]);?>
-                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PO);?> <span class="text-muted">（<?php echo $lang->project->PO;?>）</span></div>
+                <?php unset($teamMembers[$execution->PO]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->PO);?> <span class="text-muted">（<?php echo $lang->project->PO;?>）</span></div>
                 <?php endif;?>
-                <?php if($project->QD):?>
+                <?php if($execution->QD):?>
                 <?php $i--;?>
-                <?php unset($teamMembers[$project->QD]);?>
-                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->QD);?> <span class="text-muted">（<?php echo $lang->project->QD;?>）</span></div>
+                <?php unset($teamMembers[$execution->QD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->QD);?> <span class="text-muted">（<?php echo $lang->project->QD;?>）</span></div>
                 <?php endif;?>
-                <?php if($project->RD):?>
+                <?php if($execution->RD):?>
                 <?php $i--;?>
-                <?php unset($teamMembers[$project->RD]);?>
-                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->RD);?> <span class="text-muted">（<?php echo $lang->project->RD;?>）</span></div>
+                <?php unset($teamMembers[$execution->RD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->RD);?> <span class="text-muted">（<?php echo $lang->project->RD;?>）</span></div>
                 <?php endif;?>
 
                 <?php if(common::hasPriv('project', 'team')):?>
@@ -100,7 +100,7 @@
                 <?php $j++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php if($canBeChanged) common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
+                  <?php if($canBeChanged) common::printLink('project', 'manageMembers', "projectID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
                 </div>
                 <?php endif;?>
               </div>
@@ -112,7 +112,7 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->project->doclib;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$execution->id&from=project", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -123,7 +123,7 @@
                 <?php if($i > 8) break;?>
                 <div class="col-xs-6">
                   <?php if($libID == 'files'):?>
-                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=project&objectID=$project->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=project&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
                   <?php else:?>
                   <?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
                   <?php endif;?>
@@ -131,40 +131,40 @@
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php if($canBeChanged) common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe' data-width='1000px'");?>
+                  <?php if($canBeChanged) common::printLink('doc', 'createLib', "type=project&objectID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe' data-width='1000px'");?>
                 </div>
                 <?php endif;?>
               </div>
             </div>
           </div>
         </div>
-        <?php $this->printExtendFields($project, 'div', "position=left&inForm=0");?>
+        <?php $this->printExtendFields($execution, 'div', "position=left&inForm=0");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
-          <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
+          <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$execution->id");?>
           <?php include '../../common/view/action.html.php';?>
         </div>
       </div>
       <div class='main-actions'>
         <div class="btn-toolbar">
           <?php
-          $params = "project=$project->id";
-          $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse', "projectID=$project->id");
+          $params = "project=$execution->id";
+          $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse', "projectID=$execution->id");
           common::printBack($browseLink);
-          if(!$project->deleted)
+          if(!$execution->deleted)
           {
               echo "<div class='divider'></div>";
-              common::printIcon('project', 'start',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-              common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-              common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-              common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-              common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'start',    "projectID=$execution->id", $execution, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'activate', "projectID=$execution->id", $execution, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'putoff',   "projectID=$execution->id", $execution, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'suspend',  "projectID=$execution->id", $execution, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'close',    "projectID=$execution->id", $execution, 'button', '', '', 'iframe', true);
 
-              echo $this->buildOperateMenu($project, 'view');
+              echo $this->buildOperateMenu($execution, 'view');
 
               echo "<div class='divider'></div>";
-              common::printIcon('project', 'edit', $params, $project);
-              common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin');
+              common::printIcon('project', 'edit', $params, $execution);
+              common::printIcon('project', 'delete', $params, $execution, 'button', 'trash', 'hiddenwin');
           }
           ?>
         </div>
@@ -175,18 +175,18 @@
         <div class="col-sm-12">
           <div class="cell">
             <div class="detail">
-              <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
+              <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
               <div class="detail-content article-content">
-                <p><span class="text-limit" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
+                <p><span class="text-limit" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
                 <p>
-                  <?php if($project->deleted):?>
+                  <?php if($execution->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                   <?php endif; ?>
-                  <span class="label label-primary label-outline"><?php echo zget($lang->program->PRJLifeTimeList, $project->lifetime);?></span>
-                  <?php if(isset($project->delay)):?>
+                  <span class="label label-primary label-outline"><?php echo zget($lang->program->PRJLifeTimeList, $execution->lifetime);?></span>
+                  <?php if(isset($execution->delay)):?>
                   <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                   <?php else:?>
-                  <span class="label label-success label-outline"><?php echo $this->processStatus('project', $project);?></span>
+                  <span class="label label-success label-outline"><?php echo $this->processStatus('project', $execution);?></span>
                   <?php endif;?>
                 </p>
               </div>
@@ -194,7 +194,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>
-                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php common::printLink('project', 'manageproducts', "projectID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -227,7 +227,7 @@
                     <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
-                        <?php $progress = ($project->totalConsumed + $project->totalLeft) ? floor($project->totalConsumed / ($project->totalConsumed + $project->totalLeft) * 1000) / 1000 * 100 : 0;?>
+                        <?php $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;?>
                         <?php echo $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
                         <div class="progress inline-block">
                           <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
@@ -236,25 +236,25 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->project->begin;?></th>
-                      <td><?php echo $project->begin;?></td>
+                      <td><?php echo $execution->begin;?></td>
                       <th><?php echo $lang->project->totalEstimate;?></th>
-                      <td><em><?php echo (float)$project->totalEstimate . $lang->project->workHour;?></em></td>
+                      <td><em><?php echo (float)$execution->totalEstimate . $lang->project->workHour;?></em></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->project->end;?></th>
-                      <td><?php echo $project->end;?></td>
+                      <td><?php echo $execution->end;?></td>
                       <th><?php echo $lang->project->totalConsumed;?></th>
-                      <td><em><?php echo (float)$project->totalConsumed . $lang->project->workHour;?></em></td>
+                      <td><em><?php echo (float)$execution->totalConsumed . $lang->project->workHour;?></em></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->project->totalDays;?></th>
-                      <td><?php echo $project->days;?></td>
+                      <td><?php echo $execution->days;?></td>
                       <th><?php echo $lang->project->totalLeft;?></th>
-                      <td><em><?php echo (float)$project->totalLeft . $lang->project->workHour;?></em></td>
+                      <td><em><?php echo (float)$execution->totalLeft . $lang->project->workHour;?></em></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->project->totalHours;?></th>
-                      <td><em><?php echo (float)$project->totalHours . $lang->project->workHour;?></em></td>
+                      <td><em><?php echo (float)$execution->totalHours . $lang->project->workHour;?></em></td>
                     </tr>
                   </tbody>
                 </table>
@@ -280,10 +280,10 @@
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
               <div class="detail-content">
-                <p><?php echo $lang->project->aclList[$project->acl];?></p>
+                <p><?php echo $lang->project->aclList[$execution->acl];?></p>
               </div>
             </div>
-            <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
+            <?php $this->printExtendFields($execution, 'div', "position=right&inForm=0&inCell=1");?>
           </div>
         </div>
       </div>
