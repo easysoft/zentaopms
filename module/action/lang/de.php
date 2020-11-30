@@ -89,7 +89,6 @@ $lang->action->objectTypes['caselib']     = 'Bibliothek';
 $lang->action->objectTypes['testreport']  = 'Berichte';
 $lang->action->objectTypes['entry']       = 'Eintrag';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
-$lang->action->objectTypes['expect']      = 'Expect';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
