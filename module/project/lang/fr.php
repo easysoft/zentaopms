@@ -349,7 +349,6 @@ $lang->printKanban->typeList['increment'] = 'Incrément';
 $lang->project->typeList['']       = '';
 $lang->project->typeList['stage']  = 'Stage';
 $lang->project->typeList['sprint'] = $lang->projectCommon;
-$lang->project->typeList['kanban'] = 'Kanban';
 
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;

@@ -27,7 +27,7 @@ $lang->my->score          = 'Meine Wertung';
 $lang->my->scoreRule      = 'Wertungs regeln';
 $lang->my->noTodo         = 'Keine toDos. ';
 
-$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
+$lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
