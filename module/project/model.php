@@ -458,7 +458,7 @@ class projectModel extends model
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
         /* Judgment of required items. */
-        if($project->code == '')
+        if($this->post->code == '')
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->project->code);
             return false;
