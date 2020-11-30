@@ -323,9 +323,10 @@ class programplanModel extends model
         $plans = $this->getStage($projectID, $stage->product, 'parent');
 
         $totalPercent = 0;
+        $stageID      = $stage->id;
         foreach($plans as $id => $stage)
         {
-            if($id == $stage->id) continue;
+            if($id == $stageID) continue;
             $totalPercent += $stage->percent;
         }
 
@@ -695,7 +696,6 @@ class programplanModel extends model
             if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
         }
 
-
         /* Set planDuration and realDuration. */
         $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
         $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
@@ -907,19 +907,6 @@ class programplanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc')
             ->fetchPairs();
-    }
-
-    /**
-     * Is parent.
-     *
-     * @param  int    $planID
-     * @access public
-     * @return bool
-     */
-    public function isParent($planID)
-    {
-        $childrenStage = $this->dao->select('grade')->from(TABLE_PROJECT)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetch();
-        return empty($childrenStage) ? false : true;
     }
 
     /**

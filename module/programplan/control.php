@@ -167,7 +167,6 @@ class programplan extends control
         $this->view->title        = $this->lang->programplan->edit;
         $this->view->position[]   = $this->lang->programplan->edit;
         $this->view->parentStage  = $this->programplan->getParentStageList($this->session->PRJ, $planID, $plan->product);
-        $this->view->isParent     = $this->programplan->isParent($planID);
         $this->view->isCreateTask = $this->programplan->isCreateTask($planID);
         $this->view->plan         = $plan;
 
