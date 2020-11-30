@@ -646,6 +646,7 @@ class programplanModel extends model
      */
     public function update($planID = 0, $projectID = 0)
     {
+        /* Get oldPlan and the data from the post. */
         $oldPlan = $this->getByID($planID);
         $plan    = fixer::input('post')
             ->setDefault('begin', '0000-00-00')
@@ -655,6 +656,7 @@ class programplanModel extends model
             ->join('output', ',')
             ->get();
 
+        /* Judgment of required items. */
         if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
 
@@ -682,6 +684,7 @@ class programplanModel extends model
         }
         else
         {
+            /* Synchronously update sub-phase permissions. */
             $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
             if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
 

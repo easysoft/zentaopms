@@ -329,6 +329,7 @@ class task extends control
      * Edit a task.
      *
      * @param  int    $taskID
+     * @param  bool   $comment
      * @access public
      * @return void
      */

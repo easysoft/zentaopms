@@ -305,7 +305,7 @@ class projectModel extends model
      * @param int $copyProjectID
      *
      * @access public
-     * @return void
+     * @return bool|int
      */
     public function create($copyProjectID = '')
     {
@@ -449,7 +449,7 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @access public
-     * @return array
+     * @return array|bool
      */
     public function update($projectID)
     {
