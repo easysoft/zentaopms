@@ -56,7 +56,7 @@
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>
           <td title="<?php echo $stakeholder->weixin;?>"><?php echo $stakeholder->weixin;?></td>
           <td title="<?php echo $stakeholder->email;?>"><?php echo $stakeholder->email;?></td>
-          <td class='c-actions'>
+          <td class='text-right c-actions'>
             <?php
             common::printIcon('stakeholder', 'communicate', "id=$stakeholder->id", $stakeholder, 'list', 'chat-line', '', 'iframe', 'yes');
             if($stakeholder->projectModel == 'waterfall') common::printIcon('stakeholder', 'userIssue', "account=$stakeholder->id", $stakeholder, 'list', 'list-alt', '', 'iframe', 'yes');
