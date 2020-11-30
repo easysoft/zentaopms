@@ -2597,7 +2597,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projectStats = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, null, $this->session->PRJ);
+            $projectStats = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'path_asc,id_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($projectStats as $i => $project)
             {
