@@ -37,3 +37,5 @@ $config->action->majorList['release'] = array('opened');
 $config->action->majorList['build']   = array('opened');
 $config->action->majorList['product'] = array('opened', 'edited');
 $config->action->majorList['project'] = array('opened', 'edited');
+
+$config->action->needGetPRJType = 'story,build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design';
