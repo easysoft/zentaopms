@@ -426,7 +426,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
-$lang->action->label->stakeholder = '干系人|stakeholder|browse|';
+$lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
