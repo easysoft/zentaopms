@@ -88,6 +88,7 @@ $lang->action->objectTypes['testsuite']   = 'Cahier recette';
 $lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Edition';
 $lang->action->objectTypes['entry']       = 'Entrée';
+$lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
@@ -96,6 +97,7 @@ $lang->action->desc->common         = '$date, <strong>$action</strong> par <stro
 $lang->action->desc->extra          = '$date, <strong>$action</strong> en tant que <strong>$extra</strong> par <strong>$actor</strong>.' . "\n";
 $lang->action->desc->opened         = '$date, initié par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->created        = '$date, créé par <strong>$actor</strong> .' . "\n";
+$lang->action->desc->added          = '$date, ajouter par  <strong>$actor</strong> .' . "\n";
 $lang->action->desc->changed        = '$date, modifié par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->edited         = '$date, édité par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> affecté à <strong>$extra</strong>.' . "\n";
@@ -157,6 +159,7 @@ $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> a déli
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'a créé ';
 $lang->action->label->opened              = 'a ouvert ';
+$lang->action->label->added               = 'ajouter';
 $lang->action->label->changed             = 'a changé ';
 $lang->action->label->edited              = 'a édité ';
 $lang->action->label->assigned            = 'a affecté ';
@@ -168,6 +171,7 @@ $lang->action->label->erased              = 'a détruit ';
 $lang->action->label->undeleted           = 'a restauré ';
 $lang->action->label->hidden              = 'a masqué ';
 $lang->action->label->commented           = 'a commenté ';
+$lang->action->label->communicated        = 'communicated';
 $lang->action->label->activated           = 'a activé ';
 $lang->action->label->blocked             = 'a bloqué ';
 $lang->action->label->resolved            = 'a résolu ';
@@ -422,6 +426,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
+$lang->action->label->stakeholder = 'Stakeholder|stakeholder|browse|';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    

@@ -1,9 +1,10 @@
-function setProgramType(type)
-{
-    $.cookie('programType', type, {expires:config.cookieLife, path:config.webRoot});
-    location.href = location.href;
-}
-
+/**
+ * Access rights are equal to private, and the white list settings are displayed.
+ *
+ * @param  string acl
+ * @access public
+ * @return void
+ */
 function setWhite(acl)
 {
     acl != 'open' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
@@ -12,7 +13,7 @@ function setWhite(acl)
 /**
  * Convert a date string like 2011-11-11 to date object in js.
  *
- * @param  string $date
+ * @param  string dateString
  * @access public
  * @return date
  */
@@ -25,8 +26,8 @@ function convertStringToDate(dateString)
 /**
  * Compute delta of two days.
  *
- * @param  string $date1
- * @param  string $date1
+ * @param  string date1
+ * @param  string date2
  * @access public
  * @return int
  */
@@ -50,6 +51,7 @@ function computeDaysDelta(date1, date2)
 /**
  * Compute work days.
  *
+ * @param  string currentID
  * @access public
  * @return void
  */
@@ -124,12 +126,15 @@ function computeEndDate(delta)
 /**
  * Load branches.
  *
- * @param  int $product
+ * @param  object   product
  * @access public
  * @return void
  */
 function loadBranches(product)
 {
+    /* When selecting a product, delete a plan that is empty by default. */
+    $("#planDefault").remove();
+
     $('#productsBox select').each(function()
     {
         var $product = $(product);
@@ -196,7 +201,12 @@ function loadPlans(product, branchID)
     }
 }
 
-
+/**
+ * Adjust the layout of product selection.
+ *
+ * @access public
+ * @return void
+ */
 function adjustProductBoxMargin()
 {
     var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
@@ -209,6 +219,12 @@ function adjustProductBoxMargin()
     }
 }
 
+/**
+ * Adjust the layout of the plan selection.
+ *
+ * @access public
+ * @return void
+ */
 function adjustPlanBoxMargin()
 {
     var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);
@@ -221,6 +237,12 @@ function adjustPlanBoxMargin()
     }
 }
 
+/**
+ * Initialization operation.
+ *
+ * @access public
+ * @return void
+ */
 $(function()
 {
     $('#privList > tbody > tr > th input[type=checkbox]').change(function()

@@ -17,7 +17,7 @@ class stakeholder extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $stakeholders = $this->stakeholder->getStakeHolders($browseType, $orderBy, $pager);
+        $stakeholders = $this->stakeholder->getStakeholders($browseType, $orderBy, $pager);
 
         $this->view->title       = $this->lang->stakeholder->browse;
         $this->view->position[]  = $this->lang->stakeholder->browse;
@@ -55,7 +55,7 @@ class stakeholder extends control
                 $this->send($response);
             }
 
-            $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Opened');
+            $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             $response['locate'] = $this->createLink('stakeholder', 'browse', '');
             $this->send($response);
         }

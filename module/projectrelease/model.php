@@ -43,19 +43,21 @@ class projectreleaseModel extends model
     /**
      * Get list of releases.
      *
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0, $type = 'all')
+    public function getList($projectID, $productID, $branch = 0, $type = 'all')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->where('t1.product')->eq((int)$productID)
+            ->where('t1.PRJ')->eq((int)$projectID)
+            ->andWhere('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)

@@ -59,6 +59,7 @@ $lang->project->hours         = 'Estimates: %s, Cost: %s, Left: %s.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
+$lang->project->storyTitle    = "Story Name";
 $lang->project->all           = "All {$lang->projectCommon}s";
 $lang->project->undone        = 'Unfinished ';
 $lang->project->unclosed      = 'Unclosed';
@@ -76,6 +77,8 @@ $lang->project->watermark     = 'Exported by ZenTao';
 $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'By User';
+$lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
+$lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -260,6 +263,7 @@ $lang->project->byPeriod            = 'By Time';
 $lang->project->byUser              = 'By User';
 $lang->project->noProject           = "No {$lang->projectCommon}. ";
 $lang->project->noMembers           = 'No team members yet. ';
+$lang->project->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 
 /* Interactive prompts. */
 $lang->project->confirmDelete         = "Do you want to delete the {$lang->projectCommon}[%s]?";

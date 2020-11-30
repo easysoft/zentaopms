@@ -130,7 +130,7 @@ class stakeholderModel extends model
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
 
             $stakeholderID = $this->dao->lastInsertId();
-            $this->action->create('stakeholder', $stakeholderID, 'Opened');
+            $this->action->create('stakeholder', $stakeholderID, 'added');
         }    
 
         /* Only changed account update userview. */
@@ -198,9 +198,10 @@ class stakeholderModel extends model
      */
     public function getStakeholders($browseType = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stakeholders = $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName')->from(TABLE_STAKEHOLDER)->alias('t1')
+        $stakeholders = $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.objectID=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.objectID')->eq($this->session->PRJ)
             ->beginIF($browseType == 'inside')->andWhere('t1.type')->eq('inside')->fi()

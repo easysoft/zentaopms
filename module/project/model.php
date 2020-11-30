@@ -316,7 +316,7 @@ class projectModel extends model
         $sprintType = zget($this->config->project->modelList, $project->model, '');
         if($sprintType == 'stage' and empty($this->post->products[0]))
         {
-            dao::$errors['message'][] = $this->lang->project->onProduct;
+            dao::$errors['message'][] = $this->lang->project->noLinkProduct;
             return false;
         }
 
@@ -453,7 +453,7 @@ class projectModel extends model
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         if($oldProject->type == 'stage' and empty($this->post->products[0]))
         {
-            dao::$errors['message'][] = $this->lang->project->onProduct;
+            dao::$errors['message'][] = $this->lang->project->noLinkProduct;
             return false;
         }
 
@@ -504,7 +504,7 @@ class projectModel extends model
             if($oldProject->grade == 2)
             {
                 $parentPlan           = $this->loadModel('programPlan')->getByID($oldProject->parent);
-                $childrenTotalPercent = $this->loadModel('programPlan')->getTotalPercent($parentPlan, true);
+                $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_PROJECT)->where('parent')->eq($oldProject->parent)->andWhere('deleted')->eq(0)->fetch('total');
                 $childrenTotalPercent = $childrenTotalPercent - $oldProject->percent + $project->percent;
 
                 if($childrenTotalPercent > $parentPlan->percent)

@@ -59,6 +59,7 @@ $lang->project->hours         = '%s geplant, %s verbraucht, %s Rest.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "Kein {$lang->productCommon}";
 $lang->project->createStory   = "Story erstellen";
+$lang->project->storyTitle    = "Story Name";
 $lang->project->all           = 'Alle';
 $lang->project->undone        = 'Unabgeschlossen ';
 $lang->project->unclosed      = 'Geschlossen';
@@ -76,6 +77,8 @@ $lang->project->watermark     = 'Exported by ZenTao';
 $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
 $lang->project->viewByUser    = 'By User';
+$lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
+$lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Aktivieren';
@@ -260,6 +263,7 @@ $lang->project->byPeriod            = 'Nach Zeit';
 $lang->project->byUser              = 'Nach Benutzer';
 $lang->project->noProject           = 'Keine Projekte. ';
 $lang->project->noMembers           = 'Keine Mitglieder. ';
+$lang->project->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Möchten Sie {$lang->projectCommon}[%s] löschen?";

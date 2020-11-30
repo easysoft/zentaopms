@@ -722,7 +722,8 @@ class story extends control
             $changes = $this->story->change($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files = $this->loadModel('file')->saveUpload('story', $storyID, $version);
+            $files   = $this->loadModel('file')->saveUpload('story', $storyID, $version);
+
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';

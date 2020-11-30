@@ -58,6 +58,8 @@ $lang->project->progress      = '进度';
 $lang->project->hours         = '预计 %s 消耗 %s 剩余 %s';
 $lang->project->viewBug       = '查看bug';
 $lang->project->createStory   = "添加{$lang->projectSRCommon}";
+$lang->project->noProduct     = "无{$lang->projectCommon}";
+$lang->project->storyTitle    = "{$lang->projectSRCommon}名称";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
 $lang->project->unclosed      = '未关闭';
@@ -76,7 +78,7 @@ $lang->project->burnXUnit     = '(日期)';
 $lang->project->burnYUnit     = '(工时)';
 $lang->project->viewByUser    = '按用户查看';
 $lang->project->oneProduct    = "阶段只能关联一个{$lang->productCommon}";
-$lang->project->onProduct     = "阶段没有关联{$lang->productCommon}";
+$lang->project->noLinkProduct = "阶段没有关联{$lang->productCommon}";
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";
