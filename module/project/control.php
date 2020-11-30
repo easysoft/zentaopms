@@ -1222,10 +1222,12 @@ class project extends control
      */
     public function edit($projectID, $action = 'edit', $extra = '')
     {
+        /* Load language files and get browseProjectLink. */
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
+
         if(!empty($_POST))
         {
             $oldProducts = $this->project->getProducts($projectID);
@@ -1241,6 +1243,7 @@ class project extends control
                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
                 $this->action->create('execution', $projectID, 'undeleted');
             }
+
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->project->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
@@ -1925,6 +1928,7 @@ class project extends control
      * Manage products.
      *
      * @param  int    $projectID
+     * @param  from   $from
      * @access public
      * @return void
      */
@@ -1934,14 +1938,16 @@ class project extends control
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
+
         if(!empty($_POST))
         {
+            /* Get projectType and determine whether a product is linked with the stage. */
             $projectType = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('type');
             if($projectType == 'stage')
             {
                 if(count($this->post->products) > 1) die(js::alert($this->lang->project->oneProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
 
-                if(!isset($this->post->products)) die(js::alert($this->lang->project->onProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
+                if(!isset($this->post->products)) die(js::alert($this->lang->project->noLinkProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
             }
 
             $oldProducts = $this->project->getProducts($projectID);

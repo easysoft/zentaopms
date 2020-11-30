@@ -302,7 +302,7 @@ class projectModel extends model
     /**
      * Create a project.
      *
-     * @param string $copyProjectID
+     * @param int $copyProjectID
      *
      * @access public
      * @return void
@@ -314,12 +314,15 @@ class projectModel extends model
         /* Determine whether to add a sprint or a stage according to the model of the project. */
         $project    = $this->getByID($this->session->PRJ);
         $sprintType = zget($this->config->project->modelList, $project->model, '');
+
+        /* If the project model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
         {
             dao::$errors['message'][] = $this->lang->project->noLinkProduct;
             return false;
         }
 
+        /* Get the data from the post. */
         $sprint = fixer::input('post')
             ->setDefault('project', $this->session->PRJ)
             ->setDefault('status', 'wait')
@@ -352,6 +355,7 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetch('total');
 
+            /* The total workload of the stage should not exceed 100%. */
             $percentTotal = $sprint->percent + $oldPercentTotal;
             if($percentTotal > 100)
             {
@@ -449,17 +453,22 @@ class projectModel extends model
      */
     public function update($projectID)
     {
+        /* Convert projectID format and get oldProject. */
         $projectID  = (int)$projectID;
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+
+        /* If the project model is a stage, determine whether the product is linked. */
         if($oldProject->type == 'stage' and empty($this->post->products[0]))
         {
             dao::$errors['message'][] = $this->lang->project->noLinkProduct;
             return false;
         }
 
+        /* Get team and language item. */
         $team = $this->getTeamMemberPairs($projectID);
-
         $this->lang->project->team = $this->lang->project->teamname;
+
+        /* Get the data from the post. */
         $project = fixer::input('post')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
@@ -469,8 +478,10 @@ class projectModel extends model
             ->remove('products, branch, uid, plans')
             ->get();
 
+        /* Child stage inherits parent stage permissions. */
         if(!isset($project->acl)) $project->acl = $oldProject->acl;
         if($project->acl == 'open') $project->whitelist = '';
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format and total. */
@@ -482,6 +493,7 @@ class projectModel extends model
                 return false;
             }
 
+            /* If it is the first stage, the total workload does not exceed 100%. */
             if($oldProject->grade == 1)
             {
                 $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -500,7 +512,7 @@ class projectModel extends model
                 }
             }
 
-            /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
+            /* The sum of the workload of the child stage cannot be greater than that of the parent stage. */
             if($oldProject->grade == 2)
             {
                 $parentPlan           = $this->loadModel('programPlan')->getByID($oldProject->parent);
@@ -519,6 +531,7 @@ class projectModel extends model
         $project->planDuration = $this->loadModel('programplan')->getDuration($project->begin, $project->end);
         if(!empty($project->realBegan) and !empty($project->realEnd)) $project->realDuration = $this->loadModel('programplan')->getDuration($project->realBegan, $project->realEnd);
 
+        /* Update data. */
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
