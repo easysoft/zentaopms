@@ -89,6 +89,7 @@ $lang->action->objectTypes['caselib']     = 'Thư viện';
 $lang->action->objectTypes['testreport']  = 'Báo cáo';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
+$lang->action->objectTypes['expect']      = 'Expect';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* Used to describe operation history. */
