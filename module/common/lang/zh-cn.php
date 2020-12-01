@@ -862,7 +862,6 @@ $lang->icons['score']              = 'tint';
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->program        = '仪表盘|program|index|';
-//$lang->menu->scrum->product      = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
