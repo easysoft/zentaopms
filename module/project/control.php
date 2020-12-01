@@ -2487,7 +2487,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $orderBy = 'path_asc,id_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'id_asc,path_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('programplan');
@@ -2598,7 +2598,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projectStats = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'path_asc,id_asc');
+            $projectStats = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc,path_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($projectStats as $i => $project)
             {
