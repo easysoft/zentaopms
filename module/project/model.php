@@ -806,7 +806,7 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetch('total');
 
-            if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
+            if($type == 'create')       $percentTotal = $percent + $oldPercentTotal;
             if($oldProject->grade == 1) $percentTotal = $oldPercentTotal - $oldProject->percent + $this->post->percent;
 
             if($percentTotal >100)
