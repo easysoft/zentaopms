@@ -621,6 +621,7 @@ class docModel extends model
             ->add('editedDate', $now)
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
+            ->setDefault('PRJ', $this->session->PRJ)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,project,module,lib')
             ->join('groups', ',')
