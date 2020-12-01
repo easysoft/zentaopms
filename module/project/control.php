@@ -1918,7 +1918,8 @@ class project extends control
         else
         {
             /* Delete project. */
-            $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->eq($projectID)->exec();
+            $this->loadModel('action')->create('execution', $projectID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
             $this->session->set('project', '');
