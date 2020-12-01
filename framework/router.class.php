@@ -176,7 +176,7 @@ class router extends baseRouter
             $config->URAndSR  = $URAndSR;
             $config->URSRName = $URSRName;
 
-            if($this->dbh and !empty($this->config->db->name))
+            if($this->dbh and !empty($this->config->db->name) and !IN_UPGRADE)
             {
                 /* Get story concept in project and product. */
                 $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
