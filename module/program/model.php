@@ -846,7 +846,7 @@ class programModel extends model
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
             $project->executions = $this->project->getExecutionStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
-            $project->estimate   = isset($estimates[$projectID]) ? $estimates[$projectID]->estimate : 0;
+            $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getPRJParentName($project->parent);
         }
         return $projects;
