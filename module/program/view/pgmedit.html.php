@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('longTime', LONG_TIME);?>
 <?php $aclList = $program->parent ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
 <?php $requiredFields = $config->program->PGMEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -54,11 +55,11 @@
             <div class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php $disabledEnd = $program->end == '2059-12-31' ? 'disabled' : '';?>
+              <?php $disabledEnd = $program->end == LONG_TIME ? 'disabled' : '';?>
               <?php echo html::input('end', $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
-          <?php $endValue = $program->end == '2059-12-31' ? 999 : '';?>
+          <?php $endValue = $program->end == LONG_TIME ? 999 : '';?>
           <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>

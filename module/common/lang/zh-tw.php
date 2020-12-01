@@ -756,6 +756,7 @@ if(!defined('DT_DATE4'))      define('DT_DATE4',     'n月j日');
 if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
 if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
+if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
 
 /* datepicker 時間*/
 $lang->datepicker = new stdclass();

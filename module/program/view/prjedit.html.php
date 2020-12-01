@@ -18,6 +18,7 @@
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
+<?php js::set('longTime', LONG_TIME);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -108,12 +109,12 @@
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php
-                $disabledEnd = $project->end == '2059-12-31' ? 'disabled' : '';
+                $disabledEnd = $project->end == LONG_TIME ? 'disabled' : '';
                 echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
               ?>
             </div>
           </td>
-          <?php $deltaValue = $project->end == '2059-12-31' ? 999 : '';?>
+          <?php $deltaValue = $project->end == LONG_TIME ? 999 : '';?>
           <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($project->model == 'scrum'):?>

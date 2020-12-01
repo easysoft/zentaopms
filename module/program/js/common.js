@@ -103,7 +103,7 @@ function computeEndDate(delta)
     delta     = parseInt(delta);
     if(delta == 999)
     {
-        $('#end').val('2059-12-31');
+        $('#end').val(longTime);
         $('#end').attr('disabled', 'disabled');
         return false;
     }
