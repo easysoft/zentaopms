@@ -1021,7 +1021,7 @@ class projectModel extends model
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('path_asc,id_asc')
+            ->orderBy('id_asc,path_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
@@ -1071,7 +1071,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'path_asc,id_asc', $pager = null)
+    public function getExecutionStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc,path_asc', $pager = null)
     {
         if(empty($productID))
         {
