@@ -57,7 +57,7 @@ class commonModel extends model
         }    
         else 
         {    
-			if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
+            if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
         } 
     }
 
