@@ -37,7 +37,8 @@
             <td><?php echo html::input('SRName', '', "class='form-control' placeholder={$lang->custom->SRTips}");?></td>
           </tr>
           <tr>
-            <td class='text-right'><?php echo html::submitButton();?></td>
+            <th></th>
+            <td class='text-left'><?php echo html::submitButton();?></td>
           </tr>
         </table>
       </div>
