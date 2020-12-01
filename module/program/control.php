@@ -1290,7 +1290,9 @@ class program extends control
         }
         else
         {
+            $projectIdList = $this->project->getExecutionsByProject($projectID);
             $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->in(array_keys($projectIdList))->exec();
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
             $this->session->set('PRJ', '');
