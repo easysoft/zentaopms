@@ -465,22 +465,22 @@ $lang->block->typeList->story['closedBy']   = '由我关闭';
 $lang->block->typeList->product['noclosed'] = '未关闭';
 $lang->block->typeList->product['closed']   = '已关闭';
 $lang->block->typeList->product['all']      = '全部';
-$lang->block->typeList->product['involved'] = '我参与的';
+$lang->block->typeList->product['involved'] = '我参与';
 
 $lang->block->typeList->project['undone']   = '未完成';
 $lang->block->typeList->project['doing']    = '进行中';
 $lang->block->typeList->project['all']      = '全部';
-$lang->block->typeList->project['involved'] = '我参与的';
+$lang->block->typeList->project['involved'] = '我参与';
 
 $lang->block->typeList->execution['undone']   = '未完成';
 $lang->block->typeList->execution['doing']    = '进行中';
 $lang->block->typeList->execution['all']      = '全部';
-$lang->block->typeList->execution['involved'] = '我参与的';
+$lang->block->typeList->execution['involved'] = '我参与';
 
 $lang->block->typeList->scrum['undone']   = '未完成';
 $lang->block->typeList->scrum['doing']    = '进行中';
 $lang->block->typeList->scrum['all']      = '全部';
-$lang->block->typeList->scrum['involved'] = '我参与的';
+$lang->block->typeList->scrum['involved'] = '我参与';
 
 $lang->block->typeList->testtask['wait']    = '待测版本';
 $lang->block->typeList->testtask['doing']   = '测试中版本';

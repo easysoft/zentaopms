@@ -67,6 +67,7 @@ $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
+$lang->block->connector           = ' - ';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';

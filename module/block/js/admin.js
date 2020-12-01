@@ -9,9 +9,18 @@ $(function()
         var title = $titleInput.val();
         var value = $(this).find('option:selected').text();
 
-        var preIndex = blockTitle.indexOf(' - ' + preValue);
-        if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
-        $titleInput.val(blockTitle + ' - ' + value);
+        var lang = config.clientLang;
+        if(lang.indexOf('zh') >= 0)
+        {
+            blockTitle = blockTitle.replace(preValue, value);
+            $titleInput.val(blockTitle);
+        }
+        else
+        {
+            var preIndex = blockTitle.indexOf(of + preValue);
+            if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
+            $titleInput.val(blockTitle + of + value);
+        }
 
         preValue = value;
     });
@@ -42,7 +51,7 @@ $(function()
             if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
 
             var lang = config.clientLang;
-            lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + ' - ' + preValue);
+            if(blockTitle.indexOf(of) < 0) lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + of + preValue);
         }
     };
 
