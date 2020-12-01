@@ -37,6 +37,8 @@ class GitRepo
      */
     public function ls($path, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return array();
+
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $sub  = ''; 
         chdir($this->root);
@@ -99,6 +101,8 @@ class GitRepo
      */
     public function tags($path, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return array();
+
         chdir($this->root);
         $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
@@ -166,6 +170,9 @@ class GitRepo
      */
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
@@ -206,6 +213,8 @@ class GitRepo
      */
     public function blame($path, $revision)
     {
+        if(!scm::checkRevision($revision)) return array();
+
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
         $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
@@ -257,6 +266,9 @@ class GitRepo
      */
     public function diff($path, $fromRevision, $toRevision)
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
         if($toRevision == 'HEAD' and $this->branch) $toRevision = $this->branch;
@@ -280,6 +292,8 @@ class GitRepo
      */
     public function cat($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
+
         chdir($this->root);
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $cmd     = escapeCmd("$this->client show $revision:$entry");
@@ -298,6 +312,8 @@ class GitRepo
      */
     public function info($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
+
         chdir($this->root);
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $path   = ltrim($entry, DIRECTORY_SEPARATOR);
@@ -446,6 +462,8 @@ class GitRepo
      */
     public function getCommitCount($commits = 0, $lastVersion = '')
     {
+        if(!scm::checkRevision($lastVersion)) return false;
+
         chdir($this->root);
         $revision = $this->branch ? $this->branch : 'HEAD';
         return execCmd(escapeCmd("$this->client rev-list --count $revision -- ./"), 'string');
@@ -489,6 +507,8 @@ class GitRepo
      */
     public function getCommits($version = '', $count = 0, $branch = '')
     {
+        if(!scm::checkRevision($version)) return array();
+
         if($version == 'HEAD' and $branch) $version = $branch;
         $revision = empty($version) ? $revision : $version;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
