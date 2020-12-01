@@ -88,6 +88,9 @@ $lang->action->objectTypes['testsuite']   = 'Cahier recette';
 $lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Edition';
 $lang->action->objectTypes['entry']       = 'Entrée';
+$lang->action->objectTypes['risk']        = 'Risk';
+$lang->action->objectTypes['issue']       = 'Issue';
+$lang->action->objectTypes['design']      = 'Design';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 

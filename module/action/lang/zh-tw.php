@@ -88,6 +88,9 @@ $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['caselib']     = '用例庫';
 $lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['entry']       = '應用';
+$lang->action->objectTypes['risk']        = '風險';
+$lang->action->objectTypes['issue']       = '問題';
+$lang->action->objectTypes['design']      = '設計';
 $lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
