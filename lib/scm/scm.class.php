@@ -28,6 +28,7 @@ class scm
      */
     public function ls($path, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return array();
         return $this->engine->ls($path, $revision);
     }
 
@@ -42,6 +43,7 @@ class scm
      */
     public function tags($path, $revision = 'HEAD', $onlyDir = true)
     {
+        if(!scm::checkRevision($revision)) return array();
         return $this->engine->tags($path, $revision, $onlyDir);
     }
 
@@ -68,6 +70,9 @@ class scm
      */
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         return $this->engine->log($path, $fromRevision, $toRevision);
     }
 
@@ -81,6 +86,7 @@ class scm
      */
     public function blame($path, $revision)
     {
+        if(!scm::checkRevision($revision)) return array();
         return $this->engine->blame($path, $revision);
     }
 
@@ -109,6 +115,9 @@ class scm
      */
     public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes')
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         $diffs = $this->engine->diff($path, $fromRevision, $toRevision);
 
         if($parse  != 'yes') return implode("\n", $diffs);
@@ -125,6 +134,7 @@ class scm
      */
     public function cat($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
         return $this->engine->cat($entry, $revision); 
     }
 
@@ -138,6 +148,7 @@ class scm
      */
     public function info($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
         return $this->engine->info($entry, $revision);
     }
 
@@ -163,6 +174,7 @@ class scm
      */
     public function getCommitCount($commits = 0, $lastVersion = 0)
     {
+        if(!scm::checkRevision($lastVersion)) return false;
         return $this->engine->getCommitCount($commits, $lastVersion); 
     }
 
@@ -199,7 +211,22 @@ class scm
      */
     public function getCommits($version = '', $count = 0, $branch = '')
     {
+        if(!scm::checkRevision($version)) return array();
         return $this->engine->getCommits($version, $count, $branch);
+    }
+
+    /**
+     * Check revision 
+     * 
+     * @param  int|string $revision 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkRevision($revision)
+    {
+        if(preg_match('/[^a-z0-9\^]/i', $revision)) return false;
+        return true;
     }
 }
 

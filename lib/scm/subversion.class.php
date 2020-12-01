@@ -46,6 +46,8 @@ class Subversion
      */
     public function ls($path, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return array();
+
         $resourcePath = $path;
         $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
@@ -98,6 +100,8 @@ class Subversion
      */
     public function tags($path, $revision = 'HEAD', $onlyDir = true)
     {
+        if(!scm::checkRevision($revision)) return array();
+
         $infos = $this->ls($path, $revision);
         $dirs  = array();
         foreach($infos as $info)
@@ -195,6 +199,9 @@ class Subversion
      */
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0, $quiet = false)
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         $resourcePath = $path;
         $count = $count == 0 ? '' : "--limit $count";
         $param = $quiet ? '-q' : '-v';
@@ -258,6 +265,8 @@ class Subversion
      */
     public function blame($path, $revision)
     {
+        if(!scm::checkRevision($revision)) return array();
+
         $resourcePath = $path;
         $path   = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $file   = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'cat', "-r $revision")));
@@ -327,6 +336,9 @@ class Subversion
      */
     public function diff($path, $fromRevision, $toRevision)
     {
+        if(!scm::checkRevision($fromRevision)) return array();
+        if(!scm::checkRevision($toRevision))   return array();
+
         $resourcePath = $path;
         if($fromRevision == '^') $fromRevision = $toRevision - 1;
         $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
@@ -351,6 +363,8 @@ class Subversion
      */
     public function cat($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
+
         $resourcePath = $entry;
         $entry = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($entry)) . '"';
         $cmd   = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'cat', "-r $revision")));
@@ -374,6 +388,8 @@ class Subversion
      */
     public function info($entry, $revision = 'HEAD')
     {
+        if(!scm::checkRevision($revision)) return false;
+
         $resourcePath = $entry;
         $entry   = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($entry)) . '"';
         $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
@@ -506,6 +522,8 @@ class Subversion
      */
     public function getCommitCount($commits = 0, $lastVersion = 0)
     {
+        if(!scm::checkRevision($lastVersion)) return false;
+
         if(empty($commits))     $commits     = 0;
         if(empty($lastVersion)) $lastVersion = 0;
         $lastRevision = $this->getLatestRevision();
@@ -563,6 +581,8 @@ class Subversion
      */
     public function getCommits($version = '', $count = 0)
     {
+        if(!scm::checkRevision($version)) return array();
+
         $count = $count == 0 ? '' : "--limit $count";
         $path  = '"' . $this->root . '"';
         if(stripos($this->root, 'https') === 0 or stripos($this->root, 'svn') === 0)
