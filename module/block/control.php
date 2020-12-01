@@ -39,7 +39,6 @@ class block extends control
 
         $title = $id == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
 
-        $module = zget($this->config->block->moduleIndex, $module, $module);
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
@@ -66,7 +65,7 @@ class block extends control
         elseif(isset($this->lang->block->moduleList[$module]))
         {
             $this->get->set('mode', 'getblocklist');
-            if($module == 'project') $this->get->set('dashboard', 'project');
+            if($module == 'program') $this->get->set('dashboard', 'program');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -215,8 +214,8 @@ class block extends control
         $commonField = 'common';
         if($module == 'program')
         {
-            $project     = $this->loadModel('program')->getPRJByID($this->session->PRJ);
-            $commonField = $project->model . 'common';
+            $program     = $this->loadModel('project')->getByID($this->session->PRJ);
+            $commonField = $program->model . 'common';
         }
 
         /* Replace the block Title saved in the database. */
@@ -430,17 +429,17 @@ class block extends control
             $dashboard = $this->get->dashboard;
 
             /* Create a project block. */
-            if($dashboard == 'project')
+            if($dashboard == 'program')
             {
                 $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
                 $model   = $project->model;
             }
 
             /* Edit a project block. */
-            if($id and $block->module == 'project')
+            if($id and $block->module == 'program')
             {
                 $model     = $block->type;
-                $dashboard = 'project';
+                $dashboard = 'program';
             }
 
             $blocks = $this->block->getAvailableBlocks($module, $dashboard, $model);
@@ -758,7 +757,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printProjectBlock()
+    public function printProgramBlock()
     {
         $this->app->loadLang('project');
         $this->app->loadLang('task');
@@ -817,7 +816,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printProjectStatisticBlock()
+    public function printProgramStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -1017,7 +1016,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printExecutionStatisticBlock()
+    public function printProjectStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -1373,7 +1372,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printProjectDynamicBlock()
+    public function printProgramDynamicBlock()
     {
         $projectID = $this->session->PRJ;
 
@@ -1529,7 +1528,6 @@ class block extends control
      */
     public function printOverviewBlock($module = 'product')
     {
-        if($module == 'project') $module = 'execution';
         $func = 'print' . ucfirst($module) . 'OverviewBlock';
         $this->view->module = $module;
         $this->$func();
@@ -1569,7 +1567,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printExecutionOverviewBlock()
+    public function printProjectOverviewBlock()
     {
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
         $executions = $this->loadModel('project')->getExecutionList($projectID);
@@ -1633,7 +1631,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printExecutionBlock()
+    public function printProjectBlock()
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
@@ -1773,7 +1771,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printRecentProjectBlock()
+    public function printRecentProgramBlock()
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
