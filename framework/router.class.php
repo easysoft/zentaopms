@@ -163,8 +163,7 @@ class router extends baseRouter
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
             if(isset($model->model) && $model->model == 'waterfall')
-            {
-                $projectIndex = 2;
+            { $projectIndex = 2;
             }
 
             /* Set productCommon, projectCommon, hourCommon and planCommon. Default english lang. */
@@ -176,7 +175,7 @@ class router extends baseRouter
             $config->URAndSR  = $URAndSR;
             $config->URSRName = $URSRName;
 
-            if($this->dbh and !empty($this->config->db->name) and !IN_UPGRADE)
+            if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
             {
                 /* Get story concept in project and product. */
                 $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
