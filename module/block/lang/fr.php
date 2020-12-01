@@ -5,9 +5,10 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     block 
+ * @package     block
  * @version     $Id$
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
+ */
  */
 $lang->block = new stdclass();
 $lang->block->common = 'Bloc';
@@ -42,8 +43,8 @@ $lang->block->leftToday           = 'Reste à faire';
 $lang->block->myTask              = 'Mes Tâches';
 $lang->block->myStory             = 'Stories';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = $lang->projectCommon . 's';
-$lang->block->myProduct           = '' . $lang->productCommon . 's';
+$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Ajourné';
 $lang->block->noData              = 'Pas de données pour ce type de rapport.';
 $lang->block->emptyTip            = 'No data.';
@@ -67,6 +68,7 @@ $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
+$lang->block->of                  = ' di ';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Nom';
@@ -365,9 +367,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = 'Rapport de ' . $lang->projectCommon;
-$lang->block->modules['execution']->availableBlocks->overview  = "Vue d'ensemble du " . $lang->projectCommon;
-$lang->block->modules['execution']->availableBlocks->list      = 'Liste ' . $lang->projectCommon;
+$lang->block->modules['execution']->availableBlocks->statistic = 'Rapport de exécuter';
+$lang->block->modules['execution']->availableBlocks->overview  = "Vue d'ensemble du exécuter";
+$lang->block->modules['execution']->availableBlocks->list      = 'Liste exécuter';
 $lang->block->modules['execution']->availableBlocks->task      = 'Tâches';
 $lang->block->modules['execution']->availableBlocks->build     = 'Build';
 

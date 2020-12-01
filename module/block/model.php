@@ -223,7 +223,7 @@ class blockModel extends model
         $account = $this->app->user->account;
         if($module == 'program') 
         {
-            $blocks    = $this->lang->block->default[$type]['project'];
+            $blocks    = $this->lang->block->default[$type]['program'];
             $projectID = $this->session->PRJ;
             $project   = $this->loadModel('program')->getPRJByID($projectID);
 
@@ -267,7 +267,7 @@ class blockModel extends model
     public function getAvailableBlocks($module = '', $dashboard = '', $model = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($dashboard == 'project')
+        if($dashboard == 'program')
         {
             $blocks = $this->lang->block->modules[$model]['index']->availableBlocks;
         }
@@ -445,7 +445,7 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProjectParams()
+    public function getProgramParams()
     {
         $this->app->loadLang('program');
         $params->type['name']    = $this->lang->block->type;
@@ -465,7 +465,7 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProjectTeamParams()
+    public function getProgramTeamParams()
     {
         $this->app->loadLang('program');
         $params->type['name']    = $this->lang->block->type;
@@ -516,7 +516,6 @@ class blockModel extends model
         if($module == 'product')   return $this->getProductStatisticParams($module);
         if($module == 'project')   return $this->getProjectStatisticParams($module);
         if($module == 'qa')        return $this->getQaStatisticParams($module);
-        if($module == 'execution') return $this->getExecutionStatisticParams($module);
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -593,7 +592,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getRecentProjectParams()
+    public function getRecentProgramParams()
     {
         return false;
     }
@@ -704,7 +703,7 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getExecutionParams()
+    public function getProjectParams()
     {
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
@@ -922,7 +921,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getProjectDynamicParams($module = '')
+    public function getProgramDynamicParams($module = '')
     {
         $params = $this->appendCountParams();
 

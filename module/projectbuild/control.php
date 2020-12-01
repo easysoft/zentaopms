@@ -1,6 +1,24 @@
 <?php
+/**
+ * The control file of projectBuild module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     projectBuild
+ * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
+ * @link        http://www.zentao.net
+ */
 class projectBuild extends control
 {
+    /**
+     * Browse builds of a project.
+     *
+     * @param  int    $projectID
+     * @param  string $type      all|product|bysearch
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
     public function browse($projectID = 0, $type = 'all', $param = 0)
     {
         $this->loadModel('project');
@@ -28,9 +46,9 @@ class projectBuild extends control
         /* Set project builds. */
         $projectBuilds = array();
         if(!empty($builds))
-        {    
+        {
             foreach($builds as $build) $projectBuilds[$build->product][] = $build;
-        } 
+        }
 
         /* Header and position. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;

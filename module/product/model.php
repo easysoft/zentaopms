@@ -425,11 +425,32 @@ class productModel extends model
             {
                 $closedProducts[$product->id] = $product;
             }
+            $concept = $this->getStoryConceptByProduct($product->id);
+            $product->conceptName = $concept->SR;
         }
         $products = $mineProducts + $otherProducts + $closedProducts;
 
         if(empty($num)) return $products;
         return array_slice($products, 0, $num, true);
+    }
+
+    /*
+     * Get the concept of requirements for product use.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getStoryConceptByProduct($productID = 0)
+    {
+        $product = $this->getById($productID);
+        $URList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        $SRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('SRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+
+        $concept = new stdClass();
+        $concept->UR = zget($URList, $product->storyConcept, $this->config->URCommonList[$this->app->clientLang]);
+        $concept->SR = zget($SRList, $product->storyConcept, $this->config->SRCommonList[$this->app->clientLang]);
+        return $concept;
     }
 
     /*

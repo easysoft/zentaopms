@@ -163,12 +163,8 @@ class router extends baseRouter
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
             if(isset($model->model) && $model->model == 'waterfall')
-            {
-                $projectIndex = 2;
+            { $projectIndex = 2;
             }
-
-            $config->URAndSR  = $URAndSR;
-            $config->URSRName = $URSRName;
 
             /* Set productCommon, projectCommon, hourCommon and planCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productIndex]) ? $this->config->productCommonList[$this->clientLang][(int)$productIndex] : $this->config->productCommonList['en'][(int)$productIndex];
@@ -176,36 +172,42 @@ class router extends baseRouter
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex]  : $this->config->hourPointCommonList['en'][(int)$hourIndex];
             $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planIndex])       ? $this->config->planCommonList[$this->clientLang][(int)$planIndex]       : $this->config->planCommonList['en'][(int)$planIndex];
 
-            /* Get story concept in project and product. */
-            $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
-            $SRLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'SRList' and lang = \"{$this->clientLang}\"")->fetchAll();
+            $config->URAndSR  = $URAndSR;
+            $config->URSRName = $URSRName;
 
-            $URList  = array();
-            $SRList  = array();
-            foreach($URLists as $pair) $URList[$pair->key] = $pair->value;
-            foreach($SRLists as $pair) $SRList[$pair->key] = $pair->value;
+            if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
+            {
+                /* Get story concept in project and product. */
+                $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
+                $SRLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'SRList' and lang = \"{$this->clientLang}\"")->fetchAll();
 
-            $lang->URCommon = zget($URList, $config->URSRName, $config->URCommonList[$this->clientLang]);
-            $lang->SRCommon = zget($SRList, $config->URSRName, $config->SRCommonList[$this->clientLang]);
-            $lang->projectURCommon = $config->URCommonList[$this->clientLang];
-            $lang->productURCommon = $config->URCommonList[$this->clientLang];
-            $lang->projectSRCommon = $config->SRCommonList[$this->clientLang];
-            $lang->productSRCommon = $config->SRCommonList[$this->clientLang];
+                $URList  = array();
+                $SRList  = array();
+                foreach($URLists as $pair) $URList[$pair->key] = $pair->value;
+                foreach($SRLists as $pair) $SRList[$pair->key] = $pair->value;
 
-            $projectID = $this->session->PRJ;
-            if($projectID)
-            {    
-                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
-                $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
-                $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
-            }    
+                $lang->URCommon = zget($URList, $config->URSRName, $config->URCommonList[$this->clientLang]);
+                $lang->SRCommon = zget($SRList, $config->URSRName, $config->SRCommonList[$this->clientLang]);
+                $lang->projectURCommon = $config->URCommonList[$this->clientLang];
+                $lang->productURCommon = $config->URCommonList[$this->clientLang];
+                $lang->projectSRCommon = $config->SRCommonList[$this->clientLang];
+                $lang->productSRCommon = $config->SRCommonList[$this->clientLang];
 
-            $productID = $this->session->product;
-            if($productID)
-            {    
-                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
-                $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
-                $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
+                $projectID = $this->session->PRJ;
+                if($projectID)
+                {    
+                    $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
+                    $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
+                    $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
+                }    
+
+                $productID = $this->session->product;
+                if($productID)
+                {    
+                    $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
+                    $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
+                    $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
+                }
             }
         }
 

@@ -1,48 +1,72 @@
-<?php if(empty($programs)): ?>
-<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php
+/**
+ * The project block view file of block module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     block
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<?php if(empty($executionStats)): ?>
+<div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
-<style>
-.block-programs .c-pri {width: 45px;text-align: center;}
-.block-programs .c-status {width: 80px;}
-</style>
-<div class='panel-body has-table scrollbar-hover'>
-  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-programs <?php if(!$longBlock) echo 'block-sm';?>'>
+<div class="panel-body has-table scrollbar-hover">
+  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
-      <tr>
-        <th class='c-name'><?php echo $lang->program->PGMName;?></th>
-        <th class='w-100px'> <?php echo $lang->program->PGMPM;?></th>
-        <th class='w-80px'><?php echo $lang->program->PGMStatus;?></th>
+      <tr class='text-center'>
+        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
+        <th class="c-date"><?php echo $lang->project->end;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'><?php echo $lang->program->teamCount;?></th>
-        <th class='w-80px'><?php echo $lang->task->consumed;?></th>
-        <th class='w-100px'><?php echo $lang->program->PGMBudget;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftStories;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftTasks;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftBugs;?></th>
+        <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
+        <th class="c-status"><?php echo $lang->statusAB;?></th>
+        <th class='<?php echo $thClass?>'><?php echo $lang->project->totalEstimate;?></th>
+        <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>
+        <th class="c-hours"><?php echo $lang->project->totalLeft;?></th>
+        <?php endif;?>
+        <th class="c-progress"><?php echo $lang->project->progress;?></th>
+        <?php if($longBlock):?>
+        <th><?php echo $lang->project->burn;?></th>
         <?php endif;?>
       </tr>
     </thead>
-    <tbody>
-      <?php foreach($programs as $program):?>
+    <tbody class="text-center">
+     <?php $id = 0; ?>
+     <?php foreach($executionStats as $execution):?>
       <?php
-      $viewLink = $this->createLink('program', 'index', "programID={$program->id}");
+      $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
+      $viewLink = $this->createLink('project', 'task', 'project=' . $execution->id);
       ?>
-      <tr>
-        <td title='<?php echo $program->name?>'><?php echo html::a($viewLink, $program->name);?></td>
-        <td><?php echo zget($users, $program->PM, $program->PM)?></td>
-        <td class='c-status'>
-          <span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status);?></span>
+      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $execution->id), $execution->name, '', "title='$execution->name'");?></nobr></td>
+        <td class="c-date"><?php echo $execution->end;?></td>
+        <?php if($longBlock):?>
+        <td class="w-70px">
+          <?php if(isset($execution->delay)):?>
+          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
+          <?php else:?>
+          <?php $statusName = $this->processStatus('project', $execution);?>
+          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
+          <?php endif;?>
+        </td>
+        <td class="c-hours"><?php echo $execution->hours->totalEstimate;?></td>
+        <td class="c-hours"><?php echo $execution->hours->totalConsumed;?></td>
+        <td class="c-hours"><?php echo $execution->hours->totalLeft;?></td>
+        <?php endif;?>
+        <td class="c-progress">
+          <div class="progress progress-text-left">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
+            <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
+            </div>
+          </div>
         </td>
         <?php if($longBlock):?>
-        <td><?php echo $program->teamCount;?></td>
-        <td><?php echo $program->consumed;?></td>
-        <td><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
-        <td><?php echo $program->leftStories;?></td>
-        <td><?php echo $program->leftTasks;?></td>
-        <td><?php echo $program->leftBugs;?></td>
+        <td id='spark-<?php echo $id++?>' class='no-padding text-left sparkline' values='<?php echo join(',', $execution->burns);?>'></td>
         <?php endif;?>
-      </tr>
-      <?php endforeach;?>
+     </tr>
+     <?php endforeach;?>
     </tbody>
   </table>
 </div>
