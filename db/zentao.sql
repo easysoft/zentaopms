@@ -1668,6 +1668,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'productplan', 'unlinkBug'),
 (1, 'productplan', 'unlinkStory'),
 (1, 'productplan', 'view'),
+(1, 'program', 'view'),
 (1, 'project', 'activate'),
 (1, 'project', 'batchedit'),
 (1, 'project', 'batchUnlinkStory'),
