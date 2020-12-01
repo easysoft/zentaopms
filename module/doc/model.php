@@ -1118,7 +1118,7 @@ class docModel extends model
 
             $idList    = array();
             $projectID = $this->session->PRJ;
-            $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosed' : 'all';
+            $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
             if($type == 'product') $objectList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all');
             if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, $executionStatus, 0, true);
 
