@@ -951,7 +951,7 @@ class baseFixer
     public function cleanFloat($fieldName)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION|FILTER_FLAG_ALLOW_THOUSAND);
+        foreach($fields as $fieldName) $this->data->$fieldName = (float)filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION|FILTER_FLAG_ALLOW_THOUSAND);
         return $this;
     }
 
@@ -971,7 +971,7 @@ class baseFixer
             $filterVar = filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_INT);
             if(empty($filterVar)) $filterVar = 0;
 
-            $this->data->$fieldName = $filterVar;
+            $this->data->$fieldName = (int)$filterVar;
         }
         return $this;
     }

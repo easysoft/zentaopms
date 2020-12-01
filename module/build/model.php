@@ -134,10 +134,10 @@ class buildModel extends model
     public function getProjectBuildsBySearch($projectID, $queryID)
     {
         /* If there are saved query conditions, reset the session. */
-        if($queryID)
+        if((int)$queryID)
         {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
+            $buildQuery = $this->loadModel('search')->getQuery($queryID);
+            if($buildQuery)
             {
                 $this->session->set('projectBuildQuery', $query->sql);
                 $this->session->set('projectBuildForm', $query->form);
@@ -147,6 +147,12 @@ class buildModel extends model
                 $this->session->set('projectBuildQuery', ' 1 = 1');
             }
         }
+        else
+        {
+             if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        }
+
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
@@ -196,15 +202,25 @@ class buildModel extends model
     public function getExecutionBuildsBySearch($executionID, $queryID)
     {
         /* If there are saved query conditions, reset the session. */
-        if($queryID)
+        if((int)$queryID)
         {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
+            $buildQuery = $this->loadModel('search')->getQuery($queryID);
+            if($buildQuery)
             {
                 $this->session->set('projectBuildQuery', $query->sql);
                 $this->session->set('projectBuildForm', $query->form);
             }
+            else
+            {
+                $this->session->set('projectBuildQuery', ' 1 = 1');
+            }
         }
+        else
+        {
+             if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        }
+
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');

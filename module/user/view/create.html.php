@@ -60,11 +60,13 @@
           <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
           <td><?php echo $lang->user->placeholder->role?></td>
         </tr>
+        <?php if(common::hasPriv('group', 'managemember')):?>
         <tr>
           <th><?php echo $lang->user->group;?></th>
           <td><?php echo html::select('group', $groupList, '', "class='form-control chosen'");?></td>
           <td><?php echo $lang->user->placeholder->group?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->user->email;?></th>
           <td><?php echo html::input('email', '', "class='form-control'");?></td>
