@@ -74,6 +74,56 @@ class buildModel extends model
     }
 
     /**
+     * Get builds of a project in pairs.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $params       noempty|notrunk, can be a set of them
+     * @param  int    $buildID
+     * @access public
+     * @return array
+     */
+    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '', $buildID = 0)
+    {
+        $sysBuilds      = array();
+        $selectedBuilds = array();
+        if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
+        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
+        if($buildID != 0) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchPairs();
+
+        $projectBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
+            ->where('t1.PRJ')->eq((int)$projectID)
+            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
+
+        /* Set builds and filter terminate releases. */
+        $builds = array();
+        foreach($projectBuilds as $buildID => $build)
+        {
+            if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->projectStatus === 'done')) continue;
+            if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
+            $builds[$buildID] = $build->name;
+        }
+        if(!$builds) return $sysBuilds + $selectedBuilds;
+
+        /* if the build has been released, replace build name with release name. */
+        $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
+            ->where('build')->in(array_keys($builds))
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+        foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
+
+        return $sysBuilds + $builds + $selectedBuilds;
+    }
+
+    /**
      * Get builds of a project by search.
      *
      * @param  int    $projectID
@@ -84,10 +134,10 @@ class buildModel extends model
     public function getProjectBuildsBySearch($projectID, $queryID)
     {
         /* If there are saved query conditions, reset the session. */
-        if($queryID)
+        if((int)$queryID)
         {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
+            $buildQuery = $this->loadModel('search')->getQuery($queryID);
+            if($buildQuery)
             {
                 $this->session->set('projectBuildQuery', $query->sql);
                 $this->session->set('projectBuildForm', $query->form);
@@ -97,6 +147,12 @@ class buildModel extends model
                 $this->session->set('projectBuildQuery', ' 1 = 1');
             }
         }
+        else
+        {
+             if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        }
+
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
@@ -146,15 +202,25 @@ class buildModel extends model
     public function getExecutionBuildsBySearch($executionID, $queryID)
     {
         /* If there are saved query conditions, reset the session. */
-        if($queryID)
+        if((int)$queryID)
         {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
+            $buildQuery = $this->loadModel('search')->getQuery($queryID);
+            if($buildQuery)
             {
                 $this->session->set('projectBuildQuery', $query->sql);
                 $this->session->set('projectBuildForm', $query->form);
             }
+            else
+            {
+                $this->session->set('projectBuildQuery', ' 1 = 1');
+            }
         }
+        else
+        {
+             if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        }
+
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
@@ -167,56 +233,6 @@ class buildModel extends model
         }
 
         return $this->getExecutionBuilds($executionID, 'bysearch', $buildQuery);
-    }
-
-    /**
-     * Get builds of a project in pairs.
-     *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  int    $buildID
-     * @access public
-     * @return array
-     */
-    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '', $buildID = 0)
-    {
-        $sysBuilds      = array();
-        $selectedBuilds = array();
-        if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
-        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
-        if($buildID != 0) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchPairs();
-
-        $projectBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
-            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.PRJ')->eq((int)$projectID)
-            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
-
-        /* Set builds and filter terminate releases. */
-        $builds = array();
-        foreach($projectBuilds as $buildID => $build)
-        {
-            if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->projectStatus === 'done')) continue;
-            if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            $builds[$buildID] = $build->name;
-        }
-        if(!$builds) return $sysBuilds + $selectedBuilds;
-
-        /* if the build has been released, replace build name with release name. */
-        $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-            ->where('build')->in(array_keys($builds))
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
-        foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
-
-        return $sysBuilds + $builds + $selectedBuilds;
     }
 
     /**

@@ -33,6 +33,7 @@ $lang->program->PRJAddWhitelist      = '项目添加白名单';
 $lang->program->PRJStoryConcept      = '需求概念组合';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '关联产品';
+$lang->program->view                 = '项目集详情';
 $lang->program->copyTitle            = '请选择一个项目来复制';
 $lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 $lang->program->errorNoProducts      = '最少关联一个产品';

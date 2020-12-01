@@ -339,30 +339,7 @@ class projectModel extends model
             ->get();
 
         /* Check the workload format and total. */
-        if(!empty($sprint->percent))
-        {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $sprint->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($this->post->products[0])
-                ->andWhere('t2.type')->eq('stage')
-                ->andWhere('t2.grade')->eq(1)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetch('total');
-
-            /* The total workload of the stage should not exceed 100%. */
-            $percentTotal = $sprint->percent + $oldPercentTotal;
-            if($percentTotal > 100)
-            {
-                dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
-                return false;
-            }
-        }
+        if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
 
         /* Set planDuration and realDuration. */
         $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
@@ -457,7 +434,13 @@ class projectModel extends model
         $projectID  = (int)$projectID;
         $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
-        /* If the project model is a stage, determine whether the product is linked. */
+        /* Judgment of required items. */
+        if($this->post->code == '')
+        {
+            dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->project->code);
+            return false;
+        }
+
         if($oldProject->type == 'stage' and empty($this->post->products[0]))
         {
             dao::$errors['message'][] = $this->lang->project->noLinkProduct;
@@ -485,47 +468,7 @@ class projectModel extends model
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format and total. */
-        if(!empty($project->percent))
-        {
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $project->percent))
-            {
-                dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
-                return false;
-            }
-
-            /* If it is the first stage, the total workload does not exceed 100%. */
-            if($oldProject->grade == 1)
-            {
-                $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t1.product')->eq($this->post->products[0])
-                    ->andWhere('t2.type')->eq('stage')
-                    ->andWhere('t2.grade')->eq(1)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->fetch('total');
-
-                $percentTotal = $project->percent + $oldPercentTotal;
-                if($percentTotal > 100)
-                {
-                    dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
-                    return false;
-                }
-            }
-
-            /* The sum of the workload of the child stage cannot be greater than that of the parent stage. */
-            if($oldProject->grade == 2)
-            {
-                $parentPlan           = $this->loadModel('programPlan')->getByID($oldProject->parent);
-                $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_PROJECT)->where('parent')->eq($oldProject->parent)->andWhere('deleted')->eq(0)->fetch('total');
-                $childrenTotalPercent = $childrenTotalPercent - $oldProject->percent + $project->percent;
-
-                if($childrenTotalPercent > $parentPlan->percent)
-                {
-                    dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
-                    return false;
-                }
-            }
-        }
+        if(!empty($project->percent)) $this->checkWorkload('update', $project->percent, $oldProject);
 
         /* Set planDuration and realDuration. */
         $project->planDuration = $this->loadModel('programplan')->getDuration($project->begin, $project->end);
@@ -836,6 +779,58 @@ class projectModel extends model
     }
 
     /**
+     * Check the workload format and total.
+     *
+     * @param  string $type create|update
+     * @param  int    $percent
+     * @param  object $oldProject
+     * @access public
+     * @return bool
+     */
+    public function checkWorkload($type = '', $percent = 0, $oldProject = '')
+    {
+        if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $percent))
+        {
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
+        }
+
+        /* The total workload of the first stage should not exceed 100%. */
+        if($type == 'create' or $oldProject->grade == 1)
+        {
+            $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($this->post->products[0])
+                ->andWhere('t2.type')->eq('stage')
+                ->andWhere('t2.grade')->eq(1)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetch('total');
+
+            if($type == 'create')       $percentTotal = $percent + $oldPercentTotal;
+            if($oldProject->grade == 1) $percentTotal = $oldPercentTotal - $oldProject->percent + $this->post->percent;
+
+            if($percentTotal >100)
+            {
+                dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
+                return false;
+            }
+        }
+
+        if($type == 'update' and $oldProject->grade == 2)
+        {
+            $parentPlan           = $this->loadModel('programPlan')->getByID($oldProject->parent);
+            $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_PROJECT)->where('parent')->eq($oldProject->parent)->andWhere('deleted')->eq(0)->fetch('total');
+            $childrenTotalPercent = $childrenTotalPercent - $oldProject->percent + $this->post->percent;
+
+            if($childrenTotalPercent > $parentPlan->percent)
+            {
+                dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
+                return false;
+            }
+        }
+    }
+
+    /**
      * Get execution pairs.
      *
      * @param  int    $projectID
@@ -1095,7 +1090,7 @@ class projectModel extends model
             $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
-                ->andWhere('t2.project')->eq($projectID)
+                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()

@@ -463,10 +463,16 @@ class extension extends control
 
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
-            move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
+            $dest      = $this->app->getTmpRoot() . "/extension/$fileName";
+            move_uploaded_file($tmpName, $dest);
+
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);
-            if($return->result != 'ok') die(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
+            if($return->result != 'ok')
+            {
+                unlink($dest);
+                die(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
+            }
 
             $info = $this->extension->parseExtensionCFG($extension);
             if(isset($info->code) and $info->code != $extension)

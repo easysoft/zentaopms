@@ -18,7 +18,7 @@ class projectBuild extends control
 
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, $param);
+            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, (int)$param);
         }
         else
         {

@@ -27,7 +27,7 @@ $lang->my->score          = 'Điểm của bạn';
 $lang->my->scoreRule      = 'Quy định điểm';
 $lang->my->noTodo         = 'Chưa có việc nào.';
 
-$lang->my->myExecutions = "My Stage/{$lang->projectCommon}/Kanban";
+$lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';

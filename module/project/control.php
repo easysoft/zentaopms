@@ -1591,19 +1591,22 @@ class project extends control
     }
 
     /**
-     * View a project.
+     * View a execution.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function view($projectID)
+    public function view($executionID)
     {
         $this->app->loadLang('program');
-        $project = $this->project->getById($projectID, true);
-        if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
+        $execution = $this->project->getById($executionID, true);
+        if(!$execution) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $products = $this->project->getProducts($project->id);
+        /* Project not found to prevent searching for .*/
+        if(!isset($this->projects[$execution->id])) $this->projects = $this->project->getExecutionPairs($execution->project, 'all', 'nocode');
+
+        $products = $this->project->getProducts($execution->id);
         $linkedBranches = array();
         foreach($products as $product)
         {
@@ -1611,34 +1614,34 @@ class project extends control
         }
 
         /* Set menu. */
-        $this->project->setMenu($this->projects, $project->id);
+        $this->project->setMenu($this->projects, $execution->id);
         $this->app->loadLang('bug');
 
-        list($dateList, $interval) = $this->project->getDateList($project->begin, $project->end, 'noweekend', 0, 'Y-m-d');
-        $chartData = $this->project->buildBurnData($projectID, $dateList, 'noweekend');
+        list($dateList, $interval) = $this->project->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d');
+        $chartData = $this->project->buildBurnData($executionID, $dateList, 'noweekend');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
-        $this->executeHooks($projectID);
+        $this->executeHooks($executionID);
 
         $this->view->title      = $this->lang->project->view;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$executionID"), $execution->name);
         $this->view->position[] = $this->view->title;
 
-        $this->view->project      = $project;
+        $this->view->execution    = $execution;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->project->getPlans($products);
-        $this->view->actions      = $this->loadModel('action')->getList('execution', $projectID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $executionID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
-        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
-        $this->view->statData     = $this->project->statRelatedData($projectID);
+        $this->view->teamMembers  = $this->project->getTeamMembers($executionID);
+        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $executionID);
+        $this->view->statData     = $this->project->statRelatedData($executionID);
         $this->view->chartData    = $chartData;
-        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
+        $this->view->canBeChanged = common::canModify('project', $execution); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -2594,7 +2597,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projectStats = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, null, $this->session->PRJ);
+            $projectStats = $this->project->getExecutionStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'path_asc,id_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($projectStats as $i => $project)
             {

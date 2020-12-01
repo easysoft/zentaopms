@@ -89,7 +89,6 @@ $lang->action->objectTypes['caselib']     = 'Thư viện';
 $lang->action->objectTypes['testreport']  = 'Báo cáo';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
-$lang->action->objectTypes['expect']      = 'Expect';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* Used to describe operation history. */
@@ -427,7 +426,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = 'Risk|risk|view|riskID%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
-$lang->action->label->stakeholder = 'Stakeholder|stakeholder|browse|';
+$lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = ''; 

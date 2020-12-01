@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('parentID', $plan->parent);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -21,14 +20,10 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <?php if($isParent === false):?>
           <tr>
             <th class="w-100px"><?php echo $lang->programplan->parent;?></th>
             <td class="w-p35-f"><?php echo html::select('parent', $parentStage, $plan->parent, "class='form-control chosen '");?></td>
           </tr>
-          <?php else:?>
-            <?php echo html::hidden('parent', 0);?>
-          <?php endif;?>
           <tr>
             <th class='w-100px'><?php echo $lang->programplan->name;?> </th>
             <td class='w-p35-f'><?php echo html::input('name', $plan->name, "class='form-control'");?></td>
@@ -43,7 +38,7 @@
               </div>
             </td>
           </tr>
-          <tr class="<?php if($plan->parent) echo "hidden";?>" id="attributeType">
+          <tr class="<?php if($plan->grade == 2) echo "hidden";?>" id="attributeType">
             <th><?php echo $lang->programplan->attribute;?> </th>
             <td><?php echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
           </tr>
@@ -94,29 +89,15 @@
 $("#parent").change(function()
 {
     var parent = $(this).children("option:selected").val();
-    if(parentID > 0)
+    if(parent == 0)
     {
-        if(parent == 0)
-        {
-            $("#attributeType").removeClass('hidden');
-        }
-        else
-        {
-            $("#attributeType").addClass('hidden');
-
-        }
+        $("#attributeType").removeClass('hidden');
+        $("#acl").attr('disabled', false);
     }
     else
     {
-        if(parent == 0)
-        {
-            $("#attributeType").removeClass('hidden');
-        }
-        else
-        {
-            $("#attributeType").addClass('hidden');
-
-        }
+        $("#attributeType").addClass('hidden');
+        $("#acl").attr('disabled', true);
     }
 });
 </script>

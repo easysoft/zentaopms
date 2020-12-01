@@ -89,7 +89,6 @@ $lang->action->objectTypes['caselib']     = '用例库';
 $lang->action->objectTypes['testreport']  = '报告';
 $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['stakeholder'] = '干系人';
-$lang->action->objectTypes['expect']      = '期望';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
@@ -427,7 +426,7 @@ $lang->action->label->space       = ' ';
 $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
-$lang->action->label->stakeholder = '干系人|stakeholder|browse|';
+$lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';

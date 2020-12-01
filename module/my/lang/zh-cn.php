@@ -27,7 +27,7 @@ $lang->my->score          = '我的积分';
 $lang->my->scoreRule      = '积分规则';
 $lang->my->noTodo         = '暂时没有待办。';
 
-$lang->my->myExecutions = "我参与的阶段/{$lang->projectCommon}/看板";
+$lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';
 $lang->my->projects     = '项目';
