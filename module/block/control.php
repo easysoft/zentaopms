@@ -911,6 +911,7 @@ class block extends control
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
+
         /* Padding the stories to sure all status have records. */
         foreach($stories as $product => $story)
         {
