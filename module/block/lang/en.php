@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     block 
+ * @package     block
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -42,8 +42,8 @@ $lang->block->leftToday           = 'Remained Work';
 $lang->block->myTask              = 'My Tasks';
 $lang->block->myStory             = 'Stories';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = '' . $lang->projectCommon . 's';
-$lang->block->myProduct           = '' . $lang->productCommon . 's';
+$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Delayed';
 $lang->block->noData              = 'No data on this type of reports.';
 $lang->block->emptyTip            = 'No data.';

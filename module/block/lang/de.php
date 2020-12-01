@@ -5,9 +5,9 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     block 
+ * @package     block
  * @version     $Id$
- * @link        http://www.ranzhi.org
+ * @link        http://www.zentao.net
  */
 $lang->block = new stdclass();
 $lang->block->common = 'InfoBlock';
@@ -42,8 +42,8 @@ $lang->block->leftToday           = 'Arbeit für Heute';
 $lang->block->myTask              = 'Aufgaben';
 $lang->block->myStory             = 'Story';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = '' . $lang->projectCommon;
-$lang->block->myProduct           = '' . $lang->productCommon;
+$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Verspätet';
 $lang->block->noData              = 'Keine Daten für diesen Bericht.';
 $lang->block->emptyTip            = 'Keine Information';
@@ -98,78 +98,78 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Residuals';
 
-$lang->block->default['waterfall']['project']['1']['title']  = $lang->projectCommon . 'Weekly';
-$lang->block->default['waterfall']['project']['1']['block']  = 'waterfallreport';
-$lang->block->default['waterfall']['project']['1']['source'] = 'project';
-$lang->block->default['waterfall']['project']['1']['grid']   = 8;
+$lang->block->default['waterfall']['program']['1']['title']  = $lang->projectCommon . 'Weekly';
+$lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
+$lang->block->default['waterfall']['program']['1']['source'] = 'program';
+$lang->block->default['waterfall']['program']['1']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['2']['title']  = 'Estimate';
-$lang->block->default['waterfall']['project']['2']['block']  = 'waterfallestimate';
-$lang->block->default['waterfall']['project']['2']['source'] = 'project';
-$lang->block->default['waterfall']['project']['2']['grid']   = 4;
+$lang->block->default['waterfall']['program']['2']['title']  = 'Estimate';
+$lang->block->default['waterfall']['program']['2']['block']  = 'waterfallestimate';
+$lang->block->default['waterfall']['program']['2']['source'] = 'program';
+$lang->block->default['waterfall']['program']['2']['grid']   = 4;
 
-$lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
-$lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
-$lang->block->default['waterfall']['project']['3']['source'] = 'project';
-$lang->block->default['waterfall']['project']['3']['grid']   = 8;
+$lang->block->default['waterfall']['program']['3']['title']  = 'Plan Gantt Chart';
+$lang->block->default['waterfall']['program']['3']['block']  = 'waterfallgantt';
+$lang->block->default['waterfall']['program']['3']['source'] = 'program';
+$lang->block->default['waterfall']['program']['3']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['4']['title']  = 'Progress Chart';
-$lang->block->default['waterfall']['project']['4']['block']  = 'waterfallprogress';
-$lang->block->default['waterfall']['project']['4']['grid']   = 4;
+$lang->block->default['waterfall']['program']['4']['title']  = 'Progress Chart';
+$lang->block->default['waterfall']['program']['4']['block']  = 'waterfallprogress';
+$lang->block->default['waterfall']['program']['4']['grid']   = 4;
 
-$lang->block->default['waterfall']['project']['5']['title']  = 'project Issue';
-$lang->block->default['waterfall']['project']['5']['block']  = 'waterfallissue';
-$lang->block->default['waterfall']['project']['5']['source'] = 'project';
-$lang->block->default['waterfall']['project']['5']['grid']   = 8;
+$lang->block->default['waterfall']['program']['5']['title']  = 'project Issue';
+$lang->block->default['waterfall']['program']['5']['block']  = 'waterfallissue';
+$lang->block->default['waterfall']['program']['5']['source'] = 'program';
+$lang->block->default['waterfall']['program']['5']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['5']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['5']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['5']['params']['orderBy'] = 'id_desc';
+$lang->block->default['waterfall']['program']['5']['params']['type']    = 'all';
+$lang->block->default['waterfall']['program']['5']['params']['count']   = '15';
+$lang->block->default['waterfall']['program']['5']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['waterfall']['project']['6']['title']  = 'Dynamic';
-$lang->block->default['waterfall']['project']['6']['block']  = 'dynamic';
-$lang->block->default['waterfall']['project']['6']['grid']   = 4;
-$lang->block->default['waterfall']['project']['6']['source'] = '';
+$lang->block->default['waterfall']['program']['6']['title']  = 'Dynamic';
+$lang->block->default['waterfall']['program']['6']['block']  = 'programdynamic';
+$lang->block->default['waterfall']['program']['6']['grid']   = 4;
+$lang->block->default['waterfall']['program']['6']['source'] = 'program';
 
-$lang->block->default['waterfall']['project']['7']['title']  = $lang->projectCommon . 'Risk';
-$lang->block->default['waterfall']['project']['7']['block']  = 'waterfallrisk';
-$lang->block->default['waterfall']['project']['7']['source'] = 'project';
-$lang->block->default['waterfall']['project']['7']['grid']   = 8;
+$lang->block->default['waterfall']['program']['7']['title']  = 'Project Risk';
+$lang->block->default['waterfall']['program']['7']['block']  = 'waterfallrisk';
+$lang->block->default['waterfall']['program']['7']['source'] = 'program';
+$lang->block->default['waterfall']['program']['7']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['7']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['7']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['7']['params']['orderBy'] = 'id_desc';
+$lang->block->default['waterfall']['program']['7']['params']['type']    = 'all';
+$lang->block->default['waterfall']['program']['7']['params']['count']   = '15';
+$lang->block->default['waterfall']['program']['7']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['project']['1']['title'] =  $lang->projectCommon . ' Overall';
-$lang->block->default['scrum']['project']['1']['block'] = 'scrumoverall';
-$lang->block->default['scrum']['project']['1']['grid']  = 8;
+$lang->block->default['scrum']['program']['1']['title'] =  'Project Overall';
+$lang->block->default['scrum']['program']['1']['block'] = 'scrumoverview';
+$lang->block->default['scrum']['program']['1']['grid']  = 8;
 
-$lang->block->default['scrum']['project']['2']['title'] = $lang->projectCommon . ' List';
-$lang->block->default['scrum']['project']['2']['block'] = 'scrumlist';
-$lang->block->default['scrum']['project']['2']['grid']  = 8;
+$lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . ' List';
+$lang->block->default['scrum']['program']['2']['block'] = 'scrumlist';
+$lang->block->default['scrum']['program']['2']['grid']  = 8;
 
-$lang->block->default['scrum']['project']['3']['title'] = 'Test Version';
-$lang->block->default['scrum']['project']['3']['block'] = 'scrumtest';
-$lang->block->default['scrum']['project']['3']['grid']  = 8;
+$lang->block->default['scrum']['program']['3']['title'] = 'Test Version';
+$lang->block->default['scrum']['program']['3']['block'] = 'scrumtest';
+$lang->block->default['scrum']['program']['3']['grid']  = 8;
 
-$lang->block->default['scrum']['project']['3']['params']['type']    = 'wait';
-$lang->block->default['scrum']['project']['3']['params']['count']   = '15';
-$lang->block->default['scrum']['project']['3']['params']['orderBy'] = 'id_desc';
+$lang->block->default['scrum']['program']['3']['params']['type']    = 'wait';
+$lang->block->default['scrum']['program']['3']['params']['count']   = '15';
+$lang->block->default['scrum']['program']['3']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['project']['4']['title'] = $lang->projectCommon . ' Overview';
-$lang->block->default['scrum']['project']['4']['block'] = 'sprint';
-$lang->block->default['scrum']['project']['4']['grid']  = 4;
+$lang->block->default['scrum']['program']['4']['title'] = $lang->projectCommon . ' Overview';
+$lang->block->default['scrum']['program']['4']['block'] = 'sprint';
+$lang->block->default['scrum']['program']['4']['grid']  = 4;
 
-$lang->block->default['scrum']['project']['5']['title'] = 'Dynamic';
-$lang->block->default['scrum']['project']['5']['block'] = 'scrumdynamic';
-$lang->block->default['scrum']['project']['5']['grid']  = 4;
+$lang->block->default['scrum']['program']['5']['title'] = 'Dynamic';
+$lang->block->default['scrum']['program']['5']['block'] = 'programdynamic';
+$lang->block->default['scrum']['program']['5']['grid']  = 4;
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Berichte';
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['type']  = 'all';
-$lang->block->default['product']['1']['params']['count'] = 5;
+$lang->block->default['product']['1']['params']['count'] = '20';
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . ' Übersicht';
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -246,7 +246,7 @@ $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
 $lang->block->default['qa']['4']['title'] = 'Ausstehende Builds';
 $lang->block->default['qa']['4']['block'] = 'testtask';
-$lang->block->default['qa']['4']['grid']  = 4;
+$lang->block->default['qa']['4']['grid']  = 8;
 
 $lang->block->default['qa']['4']['params']['count']   = 15;
 $lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
@@ -268,9 +268,9 @@ $lang->block->default['full']['my']['3']['grid']   = 4;
 $lang->block->default['full']['my']['3']['source'] = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['4']['title']  = $lang->projectCommon . ' Statistic';
+$lang->block->default['full']['my']['4']['title']  = 'Project Statistic';
 $lang->block->default['full']['my']['4']['block']  = 'statistic';
-$lang->block->default['full']['my']['4']['source'] = 'project';
+$lang->block->default['full']['my']['4']['source'] = 'program';
 $lang->block->default['full']['my']['4']['grid']   = 8;
 
 $lang->block->default['full']['my']['5']['title']  = 'Personal Contribution';
@@ -278,14 +278,14 @@ $lang->block->default['full']['my']['5']['block']  = 'contribute';
 $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
-$lang->block->default['full']['my']['6']['title']  = 'Recent ' . $lang->projectCommon;
-$lang->block->default['full']['my']['6']['block']  = 'recentproject';
-$lang->block->default['full']['my']['6']['source'] = 'project';
+$lang->block->default['full']['my']['6']['title']  = 'Recent Project';
+$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
 $lang->block->default['full']['my']['7']['title']  = 'Meine Aufgaben';
 $lang->block->default['full']['my']['7']['block']  = 'task';
-$lang->block->default['full']['my']['7']['source'] = 'execution';
+$lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
 $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
@@ -296,9 +296,9 @@ $lang->block->default['full']['my']['8']['title'] = 'Human Input';
 $lang->block->default['full']['my']['8']['block'] = 'projectteam';
 $lang->block->default['full']['my']['8']['grid']  = 8;
 
-$lang->block->default['full']['my']['9']['title']  = $lang->projectCommon . ' List';
-$lang->block->default['full']['my']['9']['block']  = 'project';
-$lang->block->default['full']['my']['9']['source'] = 'project';
+$lang->block->default['full']['my']['9']['title']  = 'Project List';
+$lang->block->default['full']['my']['9']['block']  = 'program';
+$lang->block->default['full']['my']['9']['source'] = 'program';
 $lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
@@ -324,22 +324,22 @@ $lang->block->availableBlocks->testtask = 'Testaufgaben';
 $lang->block->availableBlocks->risk     = 'My Risks';
 $lang->block->availableBlocks->issue    = 'My Issues';
 
-$lang->block->moduleList['project']   = 'Project';
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = 'Execution';
-$lang->block->moduleList['qa']        = 'QA';
-$lang->block->moduleList['todo']      = 'Todos';
+$lang->block->moduleList['program'] = 'Project';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = 'Execution';
+$lang->block->moduleList['qa']      = 'QA';
+$lang->block->moduleList['todo']    = 'Todos';
 
-$lang->block->modules['project'] = new stdclass();
-$lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = 'Project List';
-$lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
-$lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-$lang->block->modules['project']->availableBlocks->projectteam   = 'Project Human Input';
+$lang->block->modules['program'] = new stdclass();
+$lang->block->modules['program']->availableBlocks = new stdclass();
+$lang->block->modules['program']->availableBlocks->program       = 'Project List';
+$lang->block->modules['program']->availableBlocks->recentprogram = 'Recent Project';
+$lang->block->modules['program']->availableBlocks->statistic     = 'Project Statistic';
+$lang->block->modules['program']->availableBlocks->programteam   = 'Project Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = $lang->projectCommon . ' Overview';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Project Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . ' List';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
@@ -347,12 +347,12 @@ $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dyna
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = $lang->projectCommon . ' Weekly';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = 'Project Weekly';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = 'Estimate';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = 'Plan Gantt Chart';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = 'Progress Chart';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = $lang->projectCommon . ' Issue';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = $lang->projectCommon . ' Risk';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = 'Project Issue';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = 'Project Risk';
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = 'Dynamics';
 
 $lang->block->modules['product'] = new stdclass();
@@ -364,13 +364,13 @@ $lang->block->modules['product']->availableBlocks->story     = 'Story';
 $lang->block->modules['product']->availableBlocks->plan      = 'Plan';
 $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
-$lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->projectCommon . ' Berichte';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->projectCommon . ' Übersicht';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->projectCommon . ' Liste';
-$lang->block->modules['execution']->availableBlocks->task      = 'Aufgaben';
-$lang->block->modules['execution']->availableBlocks->build     = 'Build';
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks = new stdclass();
+$lang->block->modules['project']->availableBlocks->statistic = 'Ausführen Berichte';
+$lang->block->modules['project']->availableBlocks->overview  = 'Ausführen Übersicht';
+$lang->block->modules['project']->availableBlocks->list      = 'Ausführen Liste';
+$lang->block->modules['project']->availableBlocks->task      = 'Aufgaben';
+$lang->block->modules['project']->availableBlocks->build     = 'Build';
 
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
@@ -461,21 +461,21 @@ $lang->block->typeList->story['assignedTo'] = 'Mir zugewiesen';
 $lang->block->typeList->story['openedBy']   = 'Von mir erstellt';
 $lang->block->typeList->story['reviewedBy'] = 'Von mir überprüft';
 $lang->block->typeList->story['closedBy']   = 'Von mir geschlossen' ;
- 
+
 $lang->block->typeList->product['noclosed'] = 'Offen';
 $lang->block->typeList->product['closed']   = 'Geschlossen';
 $lang->block->typeList->product['all']      = 'Alle';
 $lang->block->typeList->product['involved'] = 'Beteiligt';
 
-$lang->block->typeList->project['undone']   = 'Nicht abgeschlossen';
-$lang->block->typeList->project['doing']    = 'In Arbeit';
-$lang->block->typeList->project['all']      = 'Alle';
-$lang->block->typeList->project['involved'] = 'Betieligt';
+$lang->block->typeList->program['undone']   = 'Nicht abgeschlossen';
+$lang->block->typeList->program['doing']    = 'In Arbeit';
+$lang->block->typeList->program['all']      = 'Alle';
+$lang->block->typeList->program['involved'] = 'Betieligt';
 
-$lang->block->typeList->execution['undone']   = 'Unfinished';
-$lang->block->typeList->execution['doing']    = 'Ongoing';
-$lang->block->typeList->execution['all']      = 'All';
-$lang->block->typeList->execution['involved'] = 'Involved';
+$lang->block->typeList->project['undone']   = 'Unfinished';
+$lang->block->typeList->project['doing']    = 'Ongoing';
+$lang->block->typeList->project['all']      = 'All';
+$lang->block->typeList->project['involved'] = 'Involved';
 
 $lang->block->typeList->scrum['undone']   = 'Unfinished';
 $lang->block->typeList->scrum['doing']    = 'Ongoing中';
@@ -488,19 +488,19 @@ $lang->block->typeList->testtask['blocked'] = 'Blockiert';
 $lang->block->typeList->testtask['done']    = 'Erledigt';
 $lang->block->typeList->testtask['all']     = 'Alle';
 
-$lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|prjbrowse|';
-$lang->block->modules['project']->moreLinkList->statistic      = 'project|prjbrowse|';
-$lang->block->modules['project']->moreLinkList->project        = 'project|prjbrowse|';
-$lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
-$lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
-$lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
-$lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|all|';
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
-$lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|all|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'company|dynamic|';
+$lang->block->modules['program']->moreLinkList = new stdclass();
+$lang->block->modules['program']->moreLinkList->recentproject  = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->statistic      = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->project        = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->cmmireport     = 'weekly|index|';
+$lang->block->modules['program']->moreLinkList->cmmiestimate   = 'workestimation|index|';
+$lang->block->modules['program']->moreLinkList->cmmiissue      = 'issue|browse|';
+$lang->block->modules['program']->moreLinkList->cmmirisk       = 'risk|browse|';
+$lang->block->modules['program']->moreLinkList->scrumlist      = 'project|all|';
+$lang->block->modules['program']->moreLinkList->scrumtest      = 'testtask|browse|';
+$lang->block->modules['program']->moreLinkList->scrumproduct   = 'product|all|';
+$lang->block->modules['program']->moreLinkList->sprint         = 'project|all|';
+$lang->block->modules['program']->moreLinkList->projectdynamic = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';

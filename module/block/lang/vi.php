@@ -3,11 +3,11 @@
  * The en file of crm block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license  ZPL (http://zpl.pub/page/zplv12.html)
- * @author   Yidong Wang <yidong@cnezsoft.com>
- * @package  block 
- * @version  $Id$
- * @link  http://www.zentao.net
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     block
+ * @version     $Id$
+ * @link        http://www.zentao.net
  */
 $lang->block = new stdclass();
 $lang->block->common = 'Block';
@@ -42,8 +42,8 @@ $lang->block->leftToday           = 'Việc hôm nay';
 $lang->block->myTask              = 'Nhiệm vụ';
 $lang->block->myStory             = 'Câu chuyện';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = '' . $lang->projectCommon;
-$lang->block->myProduct           = '' . $lang->productCommon;
+$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Tạm ngưng';
 $lang->block->noData              = 'Không có dữ liệu trên loại báo cáo này.';
 $lang->block->emptyTip            = 'Không có dữ liệu.';

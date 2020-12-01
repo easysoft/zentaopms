@@ -5,9 +5,10 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     block 
+ * @package     block
  * @version     $Id$
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
+ */
  */
 $lang->block = new stdclass();
 $lang->block->common = 'Bloc';
@@ -42,8 +43,8 @@ $lang->block->leftToday           = 'Reste à faire';
 $lang->block->myTask              = 'Mes Tâches';
 $lang->block->myStory             = 'Stories';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = $lang->projectCommon . 's';
-$lang->block->myProduct           = '' . $lang->productCommon . 's';
+$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Ajourné';
 $lang->block->noData              = 'Pas de données pour ce type de rapport.';
 $lang->block->emptyTip            = 'No data.';
