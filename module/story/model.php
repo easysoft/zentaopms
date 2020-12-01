@@ -1176,6 +1176,7 @@ class storyModel extends model
             $story->reviewedDate   = $date;
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
+            $story->reviewedBy     = $this->app->user->account;
             if($result == 'pass') $story->status = 'active';
             if($reason == 'done') $story->stage = 'released';
             if($result == 'reject')
