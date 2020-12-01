@@ -12,7 +12,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
 include '../../common/view/kindeditor.html.php';
-css::import($jsRoot . 'misc/highlight/styles/github.css');
+css::import($jsRoot . 'misc/highlight/styles/code.css');
 js::import($jsRoot  . 'misc/highlight/highlight.pack.js');
 $encodePath = $this->repo->encodePath($entry);
 $version = " <span class=\"label label-info\">$revisionName</span>";

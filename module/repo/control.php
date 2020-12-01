@@ -291,7 +291,7 @@ class repo extends control
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath(urldecode($path)) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=&oldrevision=$oldRevision&newRevision=$newRevision", "path=" . $this->repo->encodePath($path)));
         }
 
         /* Cache infos. */
@@ -398,7 +398,7 @@ class repo extends control
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath(urldecode($path)) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=&oldrevision=$oldRevision&newRevision=$newRevision", "entry=" . $this->repo->encodePath($path)));
         }
 
         $this->scm->setEngine($repo);
@@ -598,7 +598,7 @@ class repo extends control
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
 
-            $this->locate( $this->repo->createLink('diff', "repoID=$repoID&entry=$entry&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding", 'entry=' . $this->repo->encodePath($entry)));
         }
 
         $this->scm->setEngine($repo);
