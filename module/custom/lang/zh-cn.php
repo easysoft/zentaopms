@@ -226,8 +226,6 @@ $lang->custom->waterfall->URSRName = '默认需求概念组合';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';
-$lang->custom->scrum->URAndSR    = '是否启用epic概念？';
-$lang->custom->scrum->URSRName   = '需求的概念定义？';
 
 $lang->custom->URList[1] = '用户需求';
 $lang->custom->URList[2] = '用需';
