@@ -112,7 +112,8 @@ if(strpos('|/zentao/|/pro/|/biz/|', "|{$this->config->webRoot}|") !== false)
 			if($database == 'zentaobiz') $webRoot = '/biz/';
 			if($database == 'zentaoep')  $webRoot = '/biz/';
 
-            $users[$webRoot] = $this->dbh->query("select * from {$database}.`zt_user` where account = 'admin' and password='" . md5('123456') . "'")->fetch();
+            $user = $this->dbh->query("select * from {$database}.`zt_user` where account = 'admin' and password='" . md5('123456') . "'")->fetch();
+            if($user) $users[$webRoot] = true;
         }
         catch(Exception $e){}
     }
