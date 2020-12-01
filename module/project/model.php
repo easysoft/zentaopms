@@ -791,7 +791,8 @@ class projectModel extends model
     {
         if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $percent))
         {
-            return dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
+            return false;
         }
 
         /* The total workload of the first stage should not exceed 100%. */
@@ -810,7 +811,8 @@ class projectModel extends model
 
             if($percentTotal >100)
             {
-                return dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
+                dao::$errors['percent'] = sprintf($this->lang->project->workloadTotal, $oldPercentTotal . '%');
+                return false;
             }
         }
 
@@ -822,7 +824,8 @@ class projectModel extends model
 
             if($childrenTotalPercent > $parentPlan->percent)
             {
-                return dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
+                dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
+                return false;
             }
         }
     }
