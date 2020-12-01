@@ -15,8 +15,8 @@ $config->block->editor  = new stdclass();
 $config->block->editor->set = array('id' => 'html', 'tools' => 'simple');
 
 $config->block->moduleIndex = array();
-$config->block->moduleIndex['program']  = 'project';
-$config->block->moduleIndex['project']  = 'execution';
+$config->block->moduleIndex['program'] = 'project';
+$config->block->moduleIndex['project'] = 'execution';
 
 $config->block->longBlock = array();
 $config->block->longBlock['']['flowchart']              = 'flowchart';
