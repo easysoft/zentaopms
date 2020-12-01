@@ -1127,7 +1127,7 @@ class docModel extends model
             $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere("$type")->in(array_keys($objectList))
-                ->orderBy("`order` asc, id desc")
+                ->orderBy("`order` asc, id asc")
                 ->query();
         }
         else
