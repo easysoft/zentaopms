@@ -190,18 +190,18 @@ $lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['project']['1']['title'] = $lang->projectCommon . ' Report';
+$lang->block->default['project']['1']['title'] = 'Execution Report';
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['type']  = 'all';
 $lang->block->default['project']['1']['params']['count'] = '20';
 
-$lang->block->default['project']['2']['title'] = $lang->projectCommon . ' Overview';
+$lang->block->default['project']['2']['title'] = 'Execution Overview';
 $lang->block->default['project']['2']['block'] = 'overview';
 $lang->block->default['project']['2']['grid']  = 4;
 
-$lang->block->default['project']['3']['title'] = 'Active ' . $lang->projectCommon . 's';
+$lang->block->default['project']['3']['title'] = 'Active ' . 'Executions';
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
@@ -332,18 +332,18 @@ $lang->block->moduleList['todo']    = 'Todo';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
-$lang->block->modules['program']->availableBlocks->project       = 'Project List';
-$lang->block->modules['program']->availableBlocks->recentproject = 'Recent Project';
+$lang->block->modules['program']->availableBlocks->program       = 'Project List';
+$lang->block->modules['program']->availableBlocks->recentprogram = 'Recent Project';
 $lang->block->modules['program']->availableBlocks->statistic     = 'Project Statistic';
-$lang->block->modules['program']->availableBlocks->projectteam   = 'Project Human Input';
+$lang->block->modules['program']->availableBlocks->programteam   = 'Project Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = $lang->projectCommon . ' Overview';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . ' List';
-$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . ' Overview';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Project Overview';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = 'Project List';
+$lang->block->modules['scrum']['index']->availableBlocks->sprint         = 'Project Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
-$lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
+$lang->block->modules['scrum']['index']->availableBlocks->programdynamic = 'Dynamics';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
