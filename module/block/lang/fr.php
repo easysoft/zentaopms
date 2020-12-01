@@ -67,6 +67,7 @@ $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
+$lang->block->of                  = ' di ';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Nom';
@@ -365,9 +366,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = 'Rapport de ' . $lang->projectCommon;
-$lang->block->modules['execution']->availableBlocks->overview  = "Vue d'ensemble du " . $lang->projectCommon;
-$lang->block->modules['execution']->availableBlocks->list      = 'Liste ' . $lang->projectCommon;
+$lang->block->modules['execution']->availableBlocks->statistic = 'Rapport de exécuter';
+$lang->block->modules['execution']->availableBlocks->overview  = "Vue d'ensemble du exécuter";
+$lang->block->modules['execution']->availableBlocks->list      = 'Liste exécuter';
 $lang->block->modules['execution']->availableBlocks->task      = 'Tâches';
 $lang->block->modules['execution']->availableBlocks->build     = 'Build';
 

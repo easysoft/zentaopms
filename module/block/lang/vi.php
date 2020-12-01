@@ -67,6 +67,7 @@ $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
+$lang->block->of                  = ' thực ';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Tên';
@@ -365,9 +366,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Phát hành';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = 'Báo cáo '.$lang->projectCommon;
-$lang->block->modules['execution']->availableBlocks->overview  = 'Tổng quan '.$lang->projectCommon ;
-$lang->block->modules['execution']->availableBlocks->list      = $lang->projectCommon . ' danh sách';
+$lang->block->modules['execution']->availableBlocks->statistic = 'Báo cáo thực';
+$lang->block->modules['execution']->availableBlocks->overview  = 'Tổng quan thực';
+$lang->block->modules['execution']->availableBlocks->list      = 'Thực danh sách';
 $lang->block->modules['execution']->availableBlocks->task      = 'Nhiệm vụ';
 $lang->block->modules['execution']->availableBlocks->build     = 'Bản dựng';
 

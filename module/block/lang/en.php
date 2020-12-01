@@ -67,7 +67,7 @@ $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
-$lang->block->connector           = ' - ';
+$lang->block->of                  = ' of ';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
@@ -366,11 +366,11 @@ $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->statistic = $lang->projectCommon . ' Report';
-$lang->block->modules['project']->availableBlocks->overview  = $lang->projectCommon . ' Overview';
-$lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . ' List';
-$lang->block->modules['project']->availableBlocks->task  = 'Task';
-$lang->block->modules['project']->availableBlocks->build = 'Build';
+$lang->block->modules['project']->availableBlocks->statistic = 'Execution Report';
+$lang->block->modules['project']->availableBlocks->overview  = 'Execution Overview';
+$lang->block->modules['project']->availableBlocks->list      = 'Execution List';
+$lang->block->modules['project']->availableBlocks->task      = 'Task';
+$lang->block->modules['project']->availableBlocks->build     = 'Build';
 
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
