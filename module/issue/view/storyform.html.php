@@ -59,11 +59,11 @@
   <th><?php echo $lang->story->title;?></th>
   <td colspan="2">
     <div class="input-group title-group">
-      <div class="input-control has-icon-right">
+      <div class="input-control has-icon-right required">
         <?php echo html::input('title', $issue->title, "class='form-control'");?>
       </div>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->story->pri;?></span>
-      <div class="input-group-btn pri-selector" data-type="pri">
+      <div class="input-group-btn pri-selector w-80px" data-type="pri">
         <?php echo html::select('pri', $lang->story->priList, $issue->pri, "class='form-control'");?>
       </div>
       <div class='table-col w-120px'>
@@ -105,6 +105,7 @@
 <tr>
   <td></td>
   <td>
+    <?php echo html::hidden('type', 'requirement');?>
     <div class='form-action'><?php echo html::submitButton();?></div>
   </td>
 </tr>

@@ -267,16 +267,18 @@ class issue extends control
     {
         if($_POST)
         {
-            $this->issue->resolve($issueID);
-            $resolution = $this->post->resolution;
+            $data = fixer::input('post')->stripTags('steps', $this->config->allowedTags)->get();
+            $resolution = $data->resolution;
+            unset($_POST['resolution'], $_POST['resolvedBy'], $_POST['resolvedDate']);
 
             $objectID = '';
             if($resolution == 'totask')
             {
-                $objectID   = $this->issue->createTask($issueID);
+                $objectID = $this->issue->createTask($issueID);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
-                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
+
+                $objectLink = html::a($this->createLink('task', 'view', "id=$objectID"), $this->post->name);
+                $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink, "data-toggle='modal'");
 
                 $this->loadModel('action')->create('task', $objectID, 'Opened', '');
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
@@ -297,7 +299,6 @@ class issue extends control
             {
                 $objectID   = $this->issue->createBug($issueID);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $objectLink = html::a($this->createLink('bug', 'view', "id=$objectID"), $this->post->title, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
 
@@ -309,7 +310,6 @@ class issue extends control
             {
                 $objectID   = $this->issue->createRisk($issueID);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                $objectLink = html::a($this->createLink('story', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
 
@@ -317,6 +317,7 @@ class issue extends control
                 $this->loadModel('action')->create('issue', $issueID, 'Resolved', $comment);
             }
 
+            $this->issue->resolve($issueID, $data);
             if($resolution == 'resolved') $this->loadModel('action')->create('issue', $issueID, 'Resolved');
             $this->dao->update(TABLE_ISSUE)->set('objectID')->eq($objectID)->where('id')->eq($issueID)->exec();
 
@@ -375,16 +376,14 @@ class issue extends control
             $this->view->showAllModule    = 'allModule';;
             $this->view->projects         = $projects;
             $this->view->projectID        = $projectID;
-            $this->view->showFields       = $this->config->task->custom->createFields;
             $this->view->moduleID         = 0;
             $this->view->branch           = 0;
         }
 
         if(in_array($data->mode, array('tostory', 'tobug')))
         {
-            $products  = $this->loadModel('product')->getPairs();
-            $productID = $this->session->product;
-            $productID = isset($products[$productID]) ? $productID : key($products);
+            $products  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+            $productID = key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');
 
             $module = $data->mode == 'tostory' ? 'story' : 'bug';
@@ -405,23 +404,24 @@ class issue extends control
                 $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
                 $stories = $this->story->getProjectStoryPairs($projectID, 0, 0);
 
-                $this->view->project = $project;
-                $this->view->members = $members;
-                $this->view->stories = $stories;
+                $this->view->project    = $project;
+                $this->view->members    = $members;
+                $this->view->stories    = $stories;
+                $this->view->showFields = $this->config->task->custom->createFields;
 
                 $this->display('issue', 'taskform');
                 break;
             case 'tobug':
                 $this->loadModel('bug');
-                $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID, '', 'noempty,noterminate,nodone');
-                $this->view->buildID = 0;
+                $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID, '', 'noempty,noterminate,nodone');
+                $this->view->buildID    = 0;
+                $this->view->showFields = $this->config->bug->custom->createFields;
 
                 $this->display('issue', 'bugform');
                 break;
             case 'tostory':
                 $this->loadModel('story');
-                $this->view->showFields = $this->config->task->custom->createFields;
-
+                $this->fetch('story', 'replaceURLang', 'type=requirement');
                 $this->display('issue', 'storyform');
                 break;
             case 'torisk':

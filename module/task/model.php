@@ -28,6 +28,9 @@ class taskModel extends model
             return false;
         }
 
+        $program = $this->loadModel('project')->getByID($this->session->PRJ);
+        if($program->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+
         $projectID      = (int)$projectID;
         $taskIdList     = array();
         $taskFiles      = array();

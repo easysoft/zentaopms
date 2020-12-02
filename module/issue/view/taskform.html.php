@@ -18,11 +18,11 @@
 </tr>
 <tr>
   <th><?php echo $lang->task->project;?></th>
-  <td><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
+  <td class="required"><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadAll(this.value)'");?></td><td></td><td></td>
 </tr>
 <tr>
   <th><?php echo $lang->task->type;?></th>
-  <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen'");?></td>
+  <td class="required"><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen'");?></td>
   <td>
   </td>
 </tr>
@@ -40,7 +40,7 @@
   <th><?php echo $lang->task->assignedTo;?></th>
   <td>
     <div class="input-group" id="dataPlanGroup">
-      <?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?>
+      <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
       <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
     </div>
   </td>
@@ -49,7 +49,7 @@
   <th><?php echo $lang->task->name;?></th>
   <td colspan='3'>
     <div class="input-group title-group">
-      <div class="input-control has-icon-right">
+      <div class="input-control has-icon-right required">
         <?php echo html::input('name', $task->name, "class='form-control'");?>
       </div>
       <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
@@ -79,13 +79,15 @@ $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
 <tr>
   <th><?php echo $lang->task->datePlan;?></th>
   <td colspan='2'>
-    <div class='input-group'>
+    <div class='input-group required'>
       <?php if(!$hiddenEstStarted):?>
       <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
       <?php endif;?>
+
       <?php if(!$hiddenEstStarted and !$hiddenDeadline):?>
       <span class='input-group-addon fix-border'>~</span>
       <?php endif;?>
+
       <?php if(!$hiddenDeadline):?>
       <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
       <?php endif;?>

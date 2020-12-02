@@ -43,11 +43,8 @@
     </div>
   </td>
 </tr>
-<?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
 <tr>
-  <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
-
-  <?php if(!$showProject):?>
+  <th><?php echo $lang->bug->type;?></th>
   <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
   <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
   <td>
@@ -55,20 +52,20 @@
       <?php echo html::select('type', $lang->bug->typeList, '', "class='form-control'");?>
       <?php if($showOS):?>
       <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-      <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+      <?php echo html::select('os', $lang->bug->osList, '', "class='form-control w-120px'");?>
       <?php endif;?>
       <?php if($showBrowser):?>
       <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-      <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+      <?php echo html::select('browser', $lang->bug->browserList, '', "class='form-control w-100px'");?>
       <?php endif;?>
     </div>
   </td>
-  <?php endif;?>
-  <?php if($showProject):?>
+</tr>
+<tr>
+  <th><?php echo $lang->bug->project;?></th>
   <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
-  <?php endif;?>
   <td>
-    <div class='input-group' id='buildBox'>
+    <div class='input-group required' id='buildBox'>
       <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
       <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
       <span class='input-group-addon fix-border' id='buildBoxActions'></span>
@@ -94,40 +91,10 @@
   </td>
 </tr>
 <?php endif;?>
-<?php if($showProject):?>
-<?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
-<?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-<tr>
-  <th><?php echo $lang->bug->type;?></th>
-  <td>
-    <div class='table-row'>
-      <div class='table-col' id='typeBox'>
-        <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");?>
-      </div>
-      <?php if($showOS):?>
-      <div class='table-col' id='osBox'>
-        <div class='input-group'>
-          <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-          <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
-        </div>
-      </div>
-      <?php endif;?>
-      <?php if($showBrowser):?>
-      <div class='table-col'>
-        <div class='input-group'>
-          <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-          <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
-        </div>
-      </div>
-      <?php endif;?>
-    </div>
-  </td>
-</tr>
-<?php endif;?>
 <tr>
   <th><?php echo $lang->bug->title;?></th>
   <td colspan='2'>
-    <div class="input-group title-group">
+    <div class="input-group title-group required">
       <div class="input-control has-icon-right">
         <?php echo html::input('title', $issue->title, "class='form-control'");?>
       </div>
@@ -165,10 +132,6 @@
     <div class='form-action'><?php echo html::submitButton();?></div>
   </td>
 </tr>
-<?php
-$showMailto   = strpos(",$showFields,", ',mailto,')   !== false;
-$showKeywords = strpos(",$showFields,", ',keywords,') !== false;
-?>
 <?php
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');

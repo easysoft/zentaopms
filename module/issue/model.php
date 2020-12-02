@@ -308,13 +308,12 @@ class issueModel extends model
      * Resolve an issue.
      *
      * @param  int    $issueID
+     * @param  object $data
      * @access public
      * @return object
      */
-    public function resolve($issueID)
+    public function resolve($issueID, $data)
     {
-        $data = fixer::input('post')->stripTags('steps', $this->config->allowedTags)->get();
-
         $issue = new stdClass();
         $issue->resolution        = $data->resolution;
         $issue->resolutionComment = isset($data->resolutionComment) ? $data->resolutionComment : '';
@@ -333,15 +332,12 @@ class issueModel extends model
      */
     public function createTask()
     {
-        $task = fixer::input('post')
-            ->remove('resolution,resolvedBy,resolvedDate')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', helper::today())
-            ->stripTags('desc', $this->config->allowedTags)
-            ->get();
+        $projectID = $this->post->project;
+        $tasks     = $this->loadModel('task')->create($projectID);
+        if(dao::isError()) return false;
 
-        $this->dao->insert(TABLE_TASK)->data($task)->exec();
-        return $this->dao->lastInsertID();
+        $task = current($tasks);
+        return $task['id'];
     }
 
     /**
@@ -352,25 +348,9 @@ class issueModel extends model
      */
     public function createStory()
     {
-        $story = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', helper::now())
-            ->setIF($this->post->needNotReview or $this->post->product > 0, 'status', 'active')
-            ->stripTags('spec', $this->config->allowedTags)
-            ->remove('resolution,resolvedBy,resolvedDate,needNotReview')
-            ->get();
-
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec')->exec();
-
-        $stotyID = $this->dao->lastInsertID();
-        $this->dao->insert(TABLE_STORYSPEC)
-            ->set('story')->eq($stotyID)
-            ->set('title')->eq($story->title)
-            ->set('spec')->eq($this->post->spec)
-            ->set('version')->eq(1)
-            ->exec();
-
-        return $stotyID;
+        $storyResult = $this->loadModel('story')->create();
+        if(dao::isError()) return false;
+        return $storyResult['id'];
     }
 
     /**
@@ -381,16 +361,9 @@ class issueModel extends model
      */
     public function createBug()
     {
-        $bug = fixer::input('post')
-            ->remove('resolution,resolvedBy,resolvedDate')
-            ->join('openedBuild', ',')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', helper::now())
-            ->stripTags('steps', $this->config->allowedTags)
-            ->get();
-
-        $this->dao->insert(TABLE_BUG)->data($bug)->exec();
-        return $this->dao->lastInsertID();
+        $bugResult = $this->loadModel('bug')->create();
+        if(dao::isError()) return false;
+        return $bugResult['id'];
     }
 
     /**
@@ -401,14 +374,9 @@ class issueModel extends model
      */
     public function createRisk()
     {
-        $risk = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->remove('resolution,resolvedBy,resolvedDate')
-            ->get();
-
-        $this->dao->insert(TABLE_RISK)->data($risk)->exec();
-        return $this->dao->lastInsertID();
+        $riskID = $this->loadModel('risk')->create();
+        if(dao::isError()) return false;
+        return $riskID;
     }
 
    /**
