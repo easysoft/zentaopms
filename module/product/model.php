@@ -348,7 +348,7 @@ class productModel extends model
      * Get product id by project.
      *
      * @param  int    $projectID
-     * @param  int    $isFirst
+     * @param  bool   $isFirst
      * @access public
      * @return array
      */
