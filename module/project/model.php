@@ -1026,6 +1026,7 @@ class projectModel extends model
             ->fetchAll('id');
 
         $project = $this->loadModel('program')->getPRJByID($projectID);
+        $executionList = array();
         if($project->model == 'waterfall')
         {
             $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1036,27 +1037,44 @@ class projectModel extends model
 
             $products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
-            foreach($executions as $executionID => $execution)
+            foreach($executions as $id => $execution)
             {
-                if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
+                if($execution->grade == 2 and isset($executions[$execution->parent]))
+                {
+                    $execution->name = $executions[$execution->parent]->name . '/' . $execution->name;
+                    $executions[$execution->parent]->children[$id] = $execution;
+                    unset($executions[$id]);
+                }
             }
 
-            foreach($executions as $executionID => $execution)
+            foreach($executions as $id => $execution)
             {
-                if($execution->grade == 2) unset($executions[$execution->parent]);
-                $linkProductID   = $executionProducts[$executionID];
-                $execution->name = $products[$linkProductID] . '/' . $execution->name;
+                if(isset($execution->children))
+                {
+                    foreach($execution->children as $id => $execution)
+                    {
+                        $linkProductID   = $executionProducts[$id];
+                        $execution->name = $products[$linkProductID] . '/' . $execution->name;
+                        $executionList[$id] = $execution;
+                    }
+                }
+                else
+                {
+                    $linkProductID   = $executionProducts[$id];
+                    $execution->name = $products[$linkProductID] . '/' . $execution->name;
+                    $executionList[$id] = $execution;
+                }
             }
         }
 
         if($pairs)
         {
             $executionPairs = array();
-            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
-            $executions = $executionPairs;
+            foreach($executionList as $execution) $executionPairs[$execution->id] = $execution->name;
+            $executionList = $executionPairs;
         }
 
-        return $executions;
+        return $executionList;
     }
 
     /**
