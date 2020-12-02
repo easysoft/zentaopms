@@ -1195,10 +1195,17 @@ class projectModel extends model
         $project = $this->loadModel('program')->getPRJById($this->session->PRJ);
         if($project and $project->model == 'waterfall')
         {
-            foreach($parents as $id => $execution) $execution->children = isset($children[$id]) ? $children[$id] : array();
+            foreach($parents as $id => $execution)
+            {
+                $execution->children = isset($children[$id]) ? $children[$id] : array();
+                unset($children[$id]);
+            }
         }
 
-        return $parents;
+        $aloneChildren = array();
+        foreach($children as $child) $aloneChildren = array_merge($child, $aloneChildren);
+
+        return array_merge($parents, $aloneChildren);
     }
 
     /**
