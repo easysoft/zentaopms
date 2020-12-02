@@ -208,7 +208,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
+                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-datetime'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedBy;?></th>
@@ -216,7 +216,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedDate;?></th>
-                <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control form-date"');?></td>
+                <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control form-datetime"');?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->canceledBy;?></th>
@@ -224,7 +224,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->canceledDate;?></th>
-                <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control form-date"');?></td>
+                <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control form-datetime"');?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->closedBy;?></th>
@@ -236,7 +236,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->closedDate;?></th>
-                <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control form-date"');?></td>
+                <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control form-datetime"');?></td>
               </tr>
             </table>
           </div>
