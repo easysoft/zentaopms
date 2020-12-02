@@ -1026,9 +1026,9 @@ class projectModel extends model
             ->fetchAll('id');
 
         $project = $this->loadModel('program')->getPRJByID($projectID);
-        $executionList = array();
         if($project->model == 'waterfall')
         {
+            $executionList = array();
             $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
                 ->where('project')->in(array_keys($executions))
@@ -1070,11 +1070,12 @@ class projectModel extends model
         if($pairs)
         {
             $executionPairs = array();
-            foreach($executionList as $execution) $executionPairs[$execution->id] = $execution->name;
-            $executionList = $executionPairs;
+            $executions = $project->model == 'waterfall' ? $executionList : $executions;
+            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            $executions = $executionPairs;
         }
 
-        return $executionList;
+        return $executions;
     }
 
     /**
