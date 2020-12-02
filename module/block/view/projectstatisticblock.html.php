@@ -118,17 +118,17 @@ $(function()
             <div class="table-row text-center small text-muted with-padding">
               <div class="col-4 text-bottom">
                 <div><?php echo $lang->project->totalEstimate;?></div>
-                <div><?php echo $project->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo (float)$project->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-primary"></span>
                 <div><?php echo $lang->project->totalConsumed;?></div>
-                <div><?php echo $project->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo (float)$project->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-pale"></span>
                 <div><?php echo $lang->project->totalLeft;?></div>
-                <div><?php echo $project->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo (float)$project->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
             </div>
           </div>

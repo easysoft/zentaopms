@@ -920,16 +920,16 @@ class block extends control
                 if($task->parent == '-1') continue;
 
                 $totalConsumed += $task->consumed;
-                if($task->status != 'cancel') $totalEstimate += $task->estimate;
+                $totalEstimate += $task->estimate;
                 if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
             }
 
             $projects[$projectID]->totalTasks        = count($taskGroup);
             $projects[$projectID]->undoneTasks       = $undoneTasks;
             $projects[$projectID]->yesterdayFinished = $yesterdayFinished;
-            $projects[$projectID]->totalEstimate     = $totalEstimate;
-            $projects[$projectID]->totalConsumed     = $totalConsumed;
-            $projects[$projectID]->totalLeft         = $totalLeft;
+            $projects[$projectID]->totalEstimate     = round($totalEstimate, 1);
+            $projects[$projectID]->totalConsumed     = round($totalConsumed, 1);
+            $projects[$projectID]->totalLeft         = round($totalLeft, 1);
         }
 
         /* Get stories. */
