@@ -151,7 +151,7 @@ function loadProjectMembers(projectID)
         $('#assignedTo_chosen').remove();
         $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
-        $('#assignedTo').attr('name', 'assignedTo').chosen();
+        $('#assignedTo').attr('name', 'assignedTo[]').chosen();
     });
 }
 </script>

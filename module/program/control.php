@@ -553,7 +553,7 @@ class program extends control
      */
     public function ajaxGetPRJDropMenu($projectID = 0, $module, $method)
     {
-        $closedProjects = $this->program->getPRJList(0, 'closed', 0, 'id_desc', null, 0, 0);
+        $closedProjects = $this->program->getPRJList(0, 'closed', 0, 'id_desc');
 
         $closedProjectNames = array();
         foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
