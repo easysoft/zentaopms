@@ -95,7 +95,7 @@
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', $project->budget, "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <?php echo html::input('budget', $project->budget ? $project->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, $project->budgetUnit, "class='form-control'");?>
             </div>

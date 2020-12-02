@@ -46,7 +46,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
-          <td><?php echo html::input('budget', $program->budget, "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?></td>
+          <td><?php echo html::input('budget', $program->budget ? $program->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?></td>
           <td style='float:left'><?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?></td><td></td>
         </tr>
         <tr>
