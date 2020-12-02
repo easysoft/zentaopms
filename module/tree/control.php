@@ -258,7 +258,7 @@ class tree extends control
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
-        $this->view->canBeChanged    = common::canModify('product', $product); // Determines whether an object is editable.
+        $this->view->canBeChanged    = common::canModify('project', $project); // Determines whether an object is editable.
         $this->display();
     } 
 
