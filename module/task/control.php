@@ -980,6 +980,8 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $task = $this->task->getById($taskID);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1001,7 +1003,10 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->restart;
         $this->view->position[] = $this->lang->task->restart;
+
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members    = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
+        $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
         $this->display();
     }
 
