@@ -1020,9 +1020,10 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->close($taskID);
+
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
+            if(!empty($changes))
             {
                 $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);

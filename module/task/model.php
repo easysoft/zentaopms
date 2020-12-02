@@ -1679,6 +1679,7 @@ class taskModel extends model
     public function close($taskID)
     {
         $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if($oldTask->status == 'closed') return;
 
         $now  = helper::now();
         $task = fixer::input('post')
