@@ -292,9 +292,10 @@ $lang->block->default['full']['my']['7']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['7']['params']['count']   = '15';
 $lang->block->default['full']['my']['7']['params']['type']    = 'assignedTo';
 
-$lang->block->default['full']['my']['8']['title'] = 'Human Input';
-$lang->block->default['full']['my']['8']['block'] = 'projectteam';
-$lang->block->default['full']['my']['8']['grid']  = 8;
+$lang->block->default['full']['my']['8']['title']  = 'Human Input';
+$lang->block->default['full']['my']['8']['block']  = 'programteam';
+$lang->block->default['full']['my']['8']['source'] = 'program';
+$lang->block->default['full']['my']['8']['grid']   = 8;
 
 $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'program';

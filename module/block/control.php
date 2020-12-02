@@ -1780,10 +1780,14 @@ class block extends control
         $this->view->projects = $this->loadModel('program')->getPRJInfo('all', 30, 'id_desc', $pager);
     }
 
-    public function printProjectTeamBlock()
+    /**
+     * Print project team block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProgramTeamBlock()
     {
-        $this->loadModel('project');
-
         $count   = isset($this->params->count) ? $this->params->count : 15;
         $status  = isset($this->params->type) ? $this->params->type : 'all';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
