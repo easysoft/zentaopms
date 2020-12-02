@@ -785,7 +785,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc,path_asc')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc')
     {
         if(!$this->session->PRJ || !$productID) return array();
 
@@ -799,25 +799,42 @@ class productModel extends model
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $executionList = array('0' => '');
+
+        /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         if($project->model == 'waterfall')
         {
-            foreach($executions as $execution)
+            foreach($executions as $id => $execution)
             {
-                if($execution->parent and isset($executions[$execution->parent])) $executions[$execution->id]->name = $executions[$execution->parent]->name . '/' . $execution->name;
+                if($execution->grade == 2 and isset($executions[$execution->parent]))
+                {
+                    $execution->name = $executions[$execution->parent]->name . '/' . $execution->name;
+                    $executions[$execution->parent]->children[$id] = $execution->name;
+                    unset($executions[$id]);
+                }
             }
 
-            foreach($executions as $execution) if($execution->grade == 2) unset($executions[$execution->parent]);
+            foreach($executions as $execution)
+            {
+                if(isset($execution->children))
+                {
+                    $executionList = array_merge($executionList, $execution->children);
+                    continue;
+                }
+                $executionList[$execution->id] = $execution->name;
+            }
+        }
+        else
+        {
+            foreach($executions as $execution) $executionList[$execution->id] = $execution->name;
         }
 
-        $executionList = array('0' => '');
-        foreach($executions as $execution) $executionList[$execution->id] = $execution->name;
         return $executionList;
     }
 
     /**
-     * Get roadmap of a proejct
+     * Get roadmap of a proejct.
      *
      * @param  int    $productID
      * @param  int    $branch
