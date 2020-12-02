@@ -266,10 +266,6 @@ class product extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $rootID = key($this->products);
-        if($this->session->product) $rootID = $this->session->product;
-        $this->product->setMenu($this->products, $rootID);
-
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
@@ -289,7 +285,6 @@ class product extends control
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
-        $this->view->rootID     = $rootID;
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -390,8 +385,6 @@ class product extends control
 
             die(js::locate($this->session->productList, 'parent'));
         }
-
-        $this->product->setMenu($this->products, $productID);
 
         $productIDList = $this->post->productIDList ? $this->post->productIDList : die(js::locate($this->session->productList, 'parent'));
 
