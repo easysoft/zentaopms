@@ -209,8 +209,8 @@ class buildModel extends model
             $buildQuery = $this->loadModel('search')->getQuery($queryID);
             if($buildQuery)
             {
-                $this->session->set('projectBuildQuery', $query->sql);
-                $this->session->set('projectBuildForm', $query->form);
+                $this->session->set('projectBuildQuery', $buildQuery->sql);
+                $this->session->set('projectBuildForm', $buildQuery->form);
             }
             else
             {
