@@ -1218,7 +1218,12 @@ class bugModel extends model
         $openedBuilds = $this->post->openedBuild;
         if($openedBuilds)
         {
-            foreach($openedBuilds as $openedBuild) $this->loadModel('build')->unlinkBug($openedBuild, $bugID);
+            foreach($openedBuilds as $openedBuild)
+            {
+                $build = $this->getByID($openedBuild);
+                $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
+                $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$openedBuild)->exec();
+            }
         }
 
         $bug->activatedCount += 1;
