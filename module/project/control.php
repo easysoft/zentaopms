@@ -1949,9 +1949,9 @@ class project extends control
             $projectType = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('type');
             if($projectType == 'stage')
             {
-                if(count($this->post->products) > 1) die(js::alert($this->lang->project->oneProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
+                if(!isset($_POST['products'])) die(js::alert($this->lang->project->noLinkProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
 
-                if(!isset($this->post->products)) die(js::alert($this->lang->project->noLinkProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
+                if(count($_POST['products']) > 1) die(js::alert($this->lang->project->oneProduct) . js::locate($this->createLink('project', 'manageProducts', "projectID=$projectID&from=$from")));
             }
 
             $oldProducts = $this->project->getProducts($projectID);
