@@ -1220,10 +1220,10 @@ class projectModel extends model
             }
         }
 
-        $aloneChildren = array();
-        foreach($children as $child) $aloneChildren = array_merge($child, $aloneChildren);
+        $orphan = array();
+        foreach($children as $child) $orphan = array_merge($child, $orphan);
 
-        return array_merge($parents, $aloneChildren);
+        return array_merge($parents, $orphan);
     }
 
     /**
