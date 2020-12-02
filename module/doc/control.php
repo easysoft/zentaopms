@@ -857,7 +857,7 @@ class doc extends control
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-        if(empty($object)) $this->locate($this->createLink($type, 'create'));
+        if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->PRJ));
 
         if($from == 'product')
         {
