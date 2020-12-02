@@ -373,8 +373,10 @@ class testreportModel extends model
     {
         $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTREPORT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.tasks=t2.task')
+            ->leftJoin(TABLE_CASE)->alias('t3')->on('t2.case=t3.id')
             ->where('t1.id')->eq($reportID)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->fetchPairs('case');
 
         return $caseIdList;
