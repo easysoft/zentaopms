@@ -834,7 +834,7 @@ class projectModel extends model
      * Get execution pairs.
      *
      * @param  int    $projectID
-     * @param  string $type all|sprint|stage|kanban
+     * @param  string $type all|execution|sprint|stage|kanban
      * @param  string $mode all|noclosed or empty
      * @access public
      * @return array
@@ -850,7 +850,8 @@ class projectModel extends model
         $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF(!$projectID and $type == 'execution')->andWhere('project')->gt(0)->fi()
+            ->beginIF($type != 'all' and $type != 'execution')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
