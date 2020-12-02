@@ -9,7 +9,7 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-programs <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-name'><?php echo $lang->program->PGMName;?></th>
+        <th class='c-name'><?php echo $lang->program->PRJName;?></th>
         <th class='w-100px'> <?php echo $lang->program->PGMPM;?></th>
         <th class='w-80px'><?php echo $lang->program->PGMStatus;?></th>
         <?php if($longBlock):?>
