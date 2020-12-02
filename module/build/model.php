@@ -104,6 +104,8 @@ class buildModel extends model
 
         $buildQuery = $this->session->projectBuildQuery;
 
+        $buildQuery = $this->session->projectBuildQuery;
+
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
         foreach($fields as $field)
