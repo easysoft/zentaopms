@@ -1601,11 +1601,6 @@ class bug extends control
                 if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
                 if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
 
-                $bug->openedDate     = substr($bug->openedDate,     0, 10);
-                $bug->assignedDate   = substr($bug->assignedDate,   0, 10);
-                $bug->closedDate     = substr($bug->closedDate,     0, 10);
-                $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
-                $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
                 $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
      
                 if($bug->linkBug)
