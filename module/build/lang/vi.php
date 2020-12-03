@@ -49,7 +49,8 @@ $lang->build->noProduct     = " <span style='color:red'>{$lang->projectCommon} n
 $lang->build->noBuild       = 'Không có bản dựng nào';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "{$lang->storyCommon} này  hoặc Bug đã được kết hợp, và sản phẩm của nó không thể bị sửa đổi";
+$lang->build->notice->changeProduct = "The {$lang->storyCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
+$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->projectCommon}";
 
 $lang->build->finishStories = "  {$lang->storyCommon} đã kết thúc %s";
 $lang->build->resolvedBugs  = '  Bug đã giải quyết %s';

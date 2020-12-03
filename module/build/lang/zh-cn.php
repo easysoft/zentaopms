@@ -49,7 +49,8 @@ $lang->build->noProduct     = " <span style='color:red'>该{$lang->projectCommon
 $lang->build->noBuild       = '暂时没有版本。';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "已经关联{$lang->storyCommon}或Bug的版本，不能修改其所属产品";
+$lang->build->notice->changeProduct = "已经关联{$lang->storyCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
+$lang->build->notice->changeProject = "提交测试单的版本，不能修改其所属{$lang->projectCommon}";
 
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->storyCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';

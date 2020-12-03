@@ -49,7 +49,8 @@ $lang->build->noProduct     = " <span style='color:red'>This {$lang->projectComm
 $lang->build->noBuild       = 'No builds yet.';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "The {$lang->storyCommon} or Bug has been associated, and its product cannot be modified";
+$lang->build->notice->changeProduct = "The {$lang->storyCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
+$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->projectCommon}";
 
 $lang->build->finishStories = "  Finished {$lang->storyCommon} %s";
 $lang->build->resolvedBugs  = '  Resolved Bug %s';

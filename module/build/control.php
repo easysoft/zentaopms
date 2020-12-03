@@ -179,6 +179,7 @@ class build extends control
         $this->view->products      = $products;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter', $build->builder);
         $this->view->build         = $build;
+        $this->view->testtask      = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
         $this->display();
     }
 
