@@ -110,6 +110,9 @@ $lang->future       = 'En Attente';
 $lang->year         = 'Année';
 $lang->workingHour  = 'Heures';
 
+$lang->generalUR = 'UR/Epic';
+$lang->generalSR = 'SR/Story';
+
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Statut';
@@ -165,8 +168,9 @@ $lang->product->menu->home = 'Home|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->viewMenu->track = array('link' => "Track|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
@@ -489,6 +493,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index   = array('link' => 'Accueil|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company = array('link' => 'Personnel|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->custom  = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => 'Données|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => 'Sécurité|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system  = array('link' => 'Système|cron|index', 'subModule' => 'cron');
@@ -588,9 +593,9 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
+$lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->tree        = 'project';
 $lang->navGroup->task        = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';
@@ -604,6 +609,7 @@ $lang->navGroup->feedback    = 'project';
 $lang->navGroup->deploy      = 'project';
 $lang->navGroup->stakeholder = 'project';
 
+$lang->navGroup->projectstory   = 'project';
 $lang->navGroup->programplan    = 'project';
 $lang->navGroup->workestimation = 'project';
 $lang->navGroup->budget         = 'project';
@@ -624,6 +630,7 @@ $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
+$lang->navGroup->projectbuild   = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
@@ -855,12 +862,19 @@ $lang->icons['score']              = 'tint';
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->program        = 'Index|program|index|';
-$lang->menu->scrum->product        = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
+$lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->stakeholder    = 'Stakeholder|stakeholder|browse';
+$lang->menu->scrum->morelink       = array('link' => 'More|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list');
+
+$lang->scrum = new stdclass();
+$lang->scrum->subMenu = new stdclass();
+$lang->scrum->subMenu->morelink = new stdclass();
+$lang->scrum->subMenu->morelink->program = 'Program|program|edit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -869,21 +883,21 @@ $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|brows
 $lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
-$lang->menu->waterfall->product        = array('link' => 'Story|product|browse|product={PRODUCT}', 'subModule' => ',story,');
+$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->issue          = 'Issue|issue|browse|';
 $lang->menu->waterfall->risk           = 'Risk|risk|browse|';
-$lang->menu->waterfall->list           = array('link' => 'More|workestimation|index|program={PROJECT}', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->morelink       = array('link' => 'More|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
-$lang->waterfall->subMenu->list = new stdclass();
-$lang->waterfall->subMenu->list->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->list->stakeholder    = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->waterfall->subMenu->list->program        = 'Project|program|PRJEdit|';
+$lang->waterfall->subMenu->morelink = new stdclass();
+$lang->waterfall->subMenu->morelink->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->morelink->stakeholder    = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
+$lang->waterfall->subMenu->morelink->program        = 'Project|program|edit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
@@ -901,6 +915,7 @@ $lang->issue              = new stdclass();
 $lang->risk               = new stdclass();
 $lang->stakeholder        = new stdclass();
 $lang->durationestimation = new stdclass();
+$lang->projectstory       = new stdclass();
 
 $lang->workestimation->menu     = new stdclass();
 $lang->budget->menu             = new stdclass();
@@ -917,6 +932,7 @@ $lang->risk->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
 $lang->durationestimation->menu = new stdclass();
+$lang->projectstory->menu       = new stdclass();
 
 $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
@@ -930,6 +946,10 @@ $lang->budget->menu = $lang->workestimation->menu;
 
 $lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
+
+$lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
+$lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
+$lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
 $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = 'Story|product|browse|product={PRODUCT}';

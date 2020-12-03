@@ -279,7 +279,7 @@ $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Project';
-$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
@@ -327,14 +327,14 @@ $lang->block->availableBlocks->issue    = 'My Issues';
 
 $lang->block->moduleList['program'] = 'Project';
 $lang->block->moduleList['product'] = $lang->productCommon;
-$lang->block->moduleList['project'] = 'Execution';
+$lang->block->moduleList['project'] = $lang->execution;
 $lang->block->moduleList['qa']      = 'QA';
 $lang->block->moduleList['todo']    = 'Todos';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = 'Project List';
-$lang->block->modules['program']->availableBlocks->recentprogram = 'Recent Project';
+$lang->block->modules['program']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['program']->availableBlocks->statistic     = 'Project Statistic';
 $lang->block->modules['program']->availableBlocks->programteam   = 'Project Human Input';
 
@@ -367,9 +367,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->statistic = 'Ausführen Berichte';
-$lang->block->modules['project']->availableBlocks->overview  = 'Ausführen Übersicht';
-$lang->block->modules['project']->availableBlocks->list      = 'Ausführen Liste';
+$lang->block->modules['project']->availableBlocks->statistic = $lang->execution . ' Statistik';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->execution . ' Übersicht';
+$lang->block->modules['project']->availableBlocks->list      = $lang->execution . ' Liste';
 $lang->block->modules['project']->availableBlocks->task      = 'Aufgaben';
 $lang->block->modules['project']->availableBlocks->build     = 'Build';
 

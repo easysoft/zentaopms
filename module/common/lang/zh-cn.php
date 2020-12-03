@@ -32,6 +32,7 @@ $lang->changePassword = '更改密码';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
+$lang->execution      = '执行';
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -221,7 +222,7 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = "{$lang->productSRCommon}";
 $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
-$lang->searchObjects['project']     = '执行';
+$lang->searchObjects['project']     = $lang->execution;
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['user']        = '用户';
 $lang->searchObjects['build']       = '版本';
@@ -278,7 +279,7 @@ $lang->my->menu->task        = array('link' => '任务|my|task|', 'subModule' =>
 $lang->my->menu->bug         = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask    = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
-$lang->my->menu->myExecution = "执行|my|execution|";
+$lang->my->menu->myExecution = "{$lang->execution}|my|execution|";
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';

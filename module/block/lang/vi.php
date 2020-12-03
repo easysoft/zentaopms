@@ -279,7 +279,7 @@ $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Projects';
-$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
@@ -325,11 +325,11 @@ $lang->block->availableBlocks->testtask = 'Yêu cầu';
 $lang->block->availableBlocks->risk     = 'My Risks';
 $lang->block->availableBlocks->issue    = 'My Issues';
 
-$lang->block->moduleList['program']   = 'Project';
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['project']   = 'Execution';
-$lang->block->moduleList['qa']        = 'QA';
-$lang->block->moduleList['todo']      = 'Việc làm';
+$lang->block->moduleList['program'] = 'Project';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = $lang->execution;
+$lang->block->moduleList['qa']      = 'QA';
+$lang->block->moduleList['todo']    = 'Việc làm';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
@@ -367,9 +367,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Phát hành';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->statistic = 'Báo cáo thực';
-$lang->block->modules['project']->availableBlocks->overview  = 'Tổng quan thực';
-$lang->block->modules['project']->availableBlocks->list      = 'Thực danh sách';
+$lang->block->modules['project']->availableBlocks->statistic = $lang->execution . ' thống';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->execution . ' xem';
+$lang->block->modules['project']->availableBlocks->list      = $lang->execution . ' danh sách';
 $lang->block->modules['project']->availableBlocks->task      = 'Nhiệm vụ';
 $lang->block->modules['project']->availableBlocks->build     = 'Bản dựng';
 
@@ -490,17 +490,17 @@ $lang->block->typeList->testtask['done']    = 'Hoàn thành';
 $lang->block->typeList->testtask['all']     = 'Tất cả';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentprogram  = 'program|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->statistic      = 'program|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->program        = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->recentproject  = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->statistic      = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->project        = 'project|prjbrowse|';
 $lang->block->modules['program']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['program']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['program']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['program']->moreLinkList->scrumlist      = 'program|all|';
+$lang->block->modules['program']->moreLinkList->scrumlist      = 'project|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest      = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['program']->moreLinkList->sprint         = 'program|all|';
+$lang->block->modules['program']->moreLinkList->sprint         = 'project|all|';
 $lang->block->modules['program']->moreLinkList->projectdynamic = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();

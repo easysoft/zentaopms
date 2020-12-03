@@ -1182,9 +1182,9 @@ class block extends control
      */
     public function printWaterfallGanttBlock()
     {
-        $products  = $this->loadModel('product')->getPairs('', $this->session->PRJ);
-        $productID = isset($this->session->product) ? 0 : $this->session->product;
-        if(!$productID) $productID = key($products);
+        $products  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $productID = $this->session->product ? $this->session->product : 0;
+        $productID = isset($products[$productID]) ? $productID : key($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->PRJ, $productID, 0, 'task', false);
         $this->view->products  = $products;
@@ -1772,7 +1772,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printRecentProgramBlock()
+    public function printRecentProjectBlock()
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
