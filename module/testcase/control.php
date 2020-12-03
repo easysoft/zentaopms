@@ -451,7 +451,9 @@ class testcase extends control
      */
     public function createBug($productID, $branch = 0, $extras = '')
     {
-        parse_str(str_replace(array(',', ' '), array('&', ''), $extras));
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $params);
+        extract($params);
 
         $this->loadModel('testtask');
         $case = '';
