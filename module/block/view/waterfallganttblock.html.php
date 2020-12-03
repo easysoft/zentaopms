@@ -70,7 +70,7 @@
       $.each(ganttData, function(index, item)
       {
           plansMap[item.id] = item;
-          if(item.type === 'plan' && item.parent === '0')
+          if(item.type == 'plan' && item.parent == '0')
           {
               item.startDatetime = createDatetime(item.start_date);
               item.endDatetime   = createDatetime(item.deadline);
@@ -92,7 +92,7 @@
       $.each(tasks, function(index, task)
       {
           var plan = plansMap[task.parent];
-          while(plan.parent !== '0') plan = plansMap[plan.parent];
+          while(plan.parent > 0) plan = plansMap[plan.parent];
           plan.progress += task.progress;
           if(task.progress === 100) plan.completeTasks.push(task);
           plan.tasks.push(task);

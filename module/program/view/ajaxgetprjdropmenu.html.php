@@ -4,9 +4,7 @@
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-    <?php
-    echo $normalProjectsHtml;
-    ?>
+    <?php echo $normalProjectsHtml;?>
     </div>
     <div class="col-footer">
       <?php echo html::a(helper::createLink('program', 'PRJBrowse', 'programID=0&status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
