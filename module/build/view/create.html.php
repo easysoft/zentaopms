@@ -24,9 +24,9 @@
           <?php if(!empty($products)):?>
           <td>
             <div class='input-group'>
-              <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
+              <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
-              if($product->type != 'normal' and isset($branches[$product->branch]))
+              if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))
               {
                   if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
                   echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $product->branch, "class='form-control chosen'");
