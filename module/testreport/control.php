@@ -72,6 +72,7 @@ class testreport extends control
                 $tasks = explode(',', $report->tasks);
                 if(count($tasks) != count($taskIdList) or array_diff($tasks, $taskIdList)) unset($reports[$reportID]);
             }
+            $pager->setRecTotal(count($reports));
         }
 
         if(empty($reports) and common::hasPriv('testreport', 'create'))
