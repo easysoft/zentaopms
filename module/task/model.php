@@ -1057,7 +1057,7 @@ class taskModel extends model
                 $task->left = 0;
                 if(!$task->finishedBy)  $task->finishedBy = $this->app->user->account;
                 if($task->closedReason) $task->closedDate = $now;
-                $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
+                $task->finishedDate = $oldTask->status == 'done' ? $oldTask->finishedDate : $now;
 
                 $task->canceledBy   = '';
                 $task->canceledDate = '';
@@ -1066,15 +1066,21 @@ class taskModel extends model
                 $task->assignedTo   = $oldTask->openedBy;
                 $task->assignedDate = $now;
 
-                if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
-                if(!$task->canceledDate) $task->canceledDate = $now;
+                if(!$task->canceledBy)
+                {
+                    $task->canceledBy   = $this->app->user->account;
+                    $task->canceledDate = $now;
+                }
 
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 break;
             case 'closed':
-                if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
-                if(!$task->closedDate) $task->closedDate = $now;
+                if(!$task->closedBy)
+                {
+                    $task->closedBy   = $this->app->user->account;
+                    $task->closedDate = $now;
+                }
                 break;
             case 'wait':
                 if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';

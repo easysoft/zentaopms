@@ -2398,7 +2398,7 @@ class storyModel extends model
      */
     public function getProjectMembers($storyID)
     {
-        $projects = $this->dao->select('project')
+        $projects = $this->dao->select('t1.project')
             ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq((int)$storyID)
             ->andWhere('t2.status')->eq('doing')
