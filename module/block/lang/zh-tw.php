@@ -325,11 +325,11 @@ $lang->block->availableBlocks->testtask = '測試版本列表';
 $lang->block->availableBlocks->risk     = '我的風險';
 $lang->block->availableBlocks->issue    = '我的問題';
 
-$lang->block->moduleList['project']   = '項目';
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = '執行';
-$lang->block->moduleList['qa']        = '測試';
-$lang->block->moduleList['todo']      = '待辦';
+$lang->block->moduleList['project'] = '項目';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = $lang->execution;
+$lang->block->moduleList['qa']      = '測試';
+$lang->block->moduleList['todo']    = '待辦';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
@@ -365,13 +365,13 @@ $lang->block->modules['product']->availableBlocks->story     = "{$lang->productS
 $lang->block->modules['product']->availableBlocks->plan      = "{$lang->planCommon}列表";
 $lang->block->modules['product']->availableBlocks->release   = '發佈列表';
 
-$lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->projectCommon . '統計';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->projectCommon . '總覽';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->projectCommon . '列表';
-$lang->block->modules['execution']->availableBlocks->task      = '任務列表';
-$lang->block->modules['execution']->availableBlocks->build     = '版本列表';
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks = new stdclass();
+$lang->block->modules['project']->availableBlocks->statistic = $lang->execution . '統計';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->execution . '總覽';
+$lang->block->modules['project']->availableBlocks->list      = $lang->execution . '列表';
+$lang->block->modules['project']->availableBlocks->task      = '任務列表';
+$lang->block->modules['project']->availableBlocks->build     = '版本列表';
 
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();

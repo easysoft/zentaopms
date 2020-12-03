@@ -326,11 +326,11 @@ $lang->block->availableBlocks->testtask = 'Recettes';
 $lang->block->availableBlocks->risk     = 'My Risks';
 $lang->block->availableBlocks->issue    = 'My Issues';
 
-$lang->block->moduleList['project']   = $lang->projectCommon;
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->projectCommon;
-$lang->block->moduleList['qa']        = 'QA';
-$lang->block->moduleList['todo']      = 'Todo';
+$lang->block->moduleList['program'] = 'Project';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = $lang->execution;
+$lang->block->moduleList['qa']      = 'Test';
+$lang->block->moduleList['todo']    = 'Todo';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
@@ -366,13 +366,13 @@ $lang->block->modules['product']->availableBlocks->story     = 'Story';
 $lang->block->modules['product']->availableBlocks->plan      = 'Plan';
 $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
-$lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = 'Rapport de exécuter';
-$lang->block->modules['execution']->availableBlocks->overview  = "Vue d'ensemble du exécuter";
-$lang->block->modules['execution']->availableBlocks->list      = 'Liste exécuter';
-$lang->block->modules['execution']->availableBlocks->task      = 'Tâches';
-$lang->block->modules['execution']->availableBlocks->build     = 'Build';
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks = new stdclass();
+$lang->block->modules['project']->availableBlocks->statistic = $lang->execution . ' Statistiques';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->execution . " Vue d'ensemble";
+$lang->block->modules['project']->availableBlocks->list      = $lang->execution . ' Liste';
+$lang->block->modules['project']->availableBlocks->task      = 'Tâches';
+$lang->block->modules['project']->availableBlocks->build     = 'Build';
 
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
