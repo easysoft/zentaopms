@@ -1,6 +1,6 @@
 <?php
 /**
- * The zh-tw file of crm block module of ZenTaoPMS.
+ * The zh-tw file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -127,7 +127,7 @@ $lang->block->default['waterfall']['program']['5']['params']['count']   = '15';
 $lang->block->default['waterfall']['program']['5']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['waterfall']['program']['6']['title']  = '最新動態';
-$lang->block->default['waterfall']['program']['6']['block']  = 'programdynamic';
+$lang->block->default['waterfall']['program']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['program']['6']['grid']   = 4;
 $lang->block->default['waterfall']['program']['6']['source'] = 'program';
 
@@ -161,7 +161,7 @@ $lang->block->default['scrum']['program']['4']['block'] = 'sprint';
 $lang->block->default['scrum']['program']['4']['grid']  = 4;
 
 $lang->block->default['scrum']['program']['5']['title'] = '最新動態';
-$lang->block->default['scrum']['program']['5']['block'] = 'programdynamic';
+$lang->block->default['scrum']['program']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['program']['5']['grid']  = 4;
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '統計';
@@ -344,7 +344,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '項�
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . '總覽';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待測版本';
-$lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最新動態';
+$lang->block->modules['scrum']['index']->availableBlocks->projectynamic = '最新動態';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
@@ -354,7 +354,7 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前為止項目進展趨勢圖';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '項目問題';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '項目風險';
-$lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新動態';
+$lang->block->modules['waterfall']['index']->availableBlocks->projectynamic    = '最新動態';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

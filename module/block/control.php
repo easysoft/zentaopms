@@ -1368,12 +1368,12 @@ class block extends control
     }
 
     /**
-     * Print program dynamic block.
+     * Print project dynamic block.
      *
      * @access public
      * @return void
      */
-    public function printProgramDynamicBlock()
+    public function printProjectDynamicBlock()
     {
         $projectID = $this->session->PRJ;
 

@@ -921,7 +921,7 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getProgramDynamicParams($module = '')
+    public function getProjectDynamicParams($module = '')
     {
         $params = $this->appendCountParams();
 

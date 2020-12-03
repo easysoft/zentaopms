@@ -1,6 +1,6 @@
 <?php
 /**
- * The en file of crm block module of ZenTaoPMS.
+ * The en file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -127,7 +127,7 @@ $lang->block->default['waterfall']['program']['5']['params']['count']   = '15';
 $lang->block->default['waterfall']['program']['5']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['waterfall']['program']['6']['title']  = 'Dynamic';
-$lang->block->default['waterfall']['program']['6']['block']  = 'programdynamic';
+$lang->block->default['waterfall']['program']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['program']['6']['grid']   = 4;
 $lang->block->default['waterfall']['program']['6']['source'] = 'program';
 
@@ -161,7 +161,7 @@ $lang->block->default['scrum']['program']['4']['block'] = 'sprint';
 $lang->block->default['scrum']['program']['4']['grid']  = 4;
 
 $lang->block->default['scrum']['program']['5']['title'] = 'Dynamic';
-$lang->block->default['scrum']['program']['5']['block'] = 'programdynamic';
+$lang->block->default['scrum']['program']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['program']['5']['grid']  = 4;
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
@@ -344,7 +344,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Proj
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = 'Project List';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = 'Project Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
-$lang->block->modules['scrum']['index']->availableBlocks->programdynamic = 'Dynamics';
+$lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
