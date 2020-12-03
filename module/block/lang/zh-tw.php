@@ -344,7 +344,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '項�
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . '總覽';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待測版本';
-$lang->block->modules['scrum']['index']->availableBlocks->projectynamic = '最新動態';
+$lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最新動態';
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
@@ -354,7 +354,7 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前為止項目進展趨勢圖';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '項目問題';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '項目風險';
-$lang->block->modules['waterfall']['index']->availableBlocks->projectynamic    = '最新動態';
+$lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新動態';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
