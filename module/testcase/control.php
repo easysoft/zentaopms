@@ -1243,9 +1243,10 @@ class testcase extends control
                         $childId ++;
                     }
                 }
-                $case->stepDesc   = trim($case->stepDesc);
-                $case->stepExpect = trim($case->stepExpect);
-                $case->real       = trim($case->real);
+                $case->stepDesc     = trim($case->stepDesc);
+                $case->stepExpect   = trim($case->stepExpect);
+                $case->real         = trim($case->real);
+                $case->precondition = html_entity_decode($case->precondition, ENT_QUOTES);
 
                 if($this->post->fileType == 'csv')
                 {
