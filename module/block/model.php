@@ -590,9 +590,9 @@ class blockModel extends model
      * Get recent project pararms.
      *
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getRecentProgramParams()
+    public function getRecentProjectParams()
     {
         return false;
     }
@@ -601,7 +601,7 @@ class blockModel extends model
      * Get product overview pararms.
      *
      * @access public
-     * @return string
+     * @return bool
      */
     public function getOverviewParams()
     {

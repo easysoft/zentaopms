@@ -279,7 +279,7 @@ $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Projects';
-$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
@@ -334,7 +334,7 @@ $lang->block->moduleList['todo']    = 'Todo';
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = 'Project List';
-$lang->block->modules['program']->availableBlocks->recentprogram = 'Recent Project';
+$lang->block->modules['program']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['program']->availableBlocks->statistic     = 'Project Statistic';
 $lang->block->modules['program']->availableBlocks->programteam   = 'Project Human Input';
 
@@ -490,17 +490,17 @@ $lang->block->typeList->testtask['done']    = 'Done';
 $lang->block->typeList->testtask['all']     = 'All';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentprogram  = 'program|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->statistic      = 'program|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->program        = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->recentproject  = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->statistic      = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->project        = 'project|prjbrowse|';
 $lang->block->modules['program']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['program']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['program']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['program']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['program']->moreLinkList->scrumlist      = 'program|all|';
+$lang->block->modules['program']->moreLinkList->scrumlist      = 'project|all|';
 $lang->block->modules['program']->moreLinkList->scrumtest      = 'testtask|browse|';
 $lang->block->modules['program']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['program']->moreLinkList->sprint         = 'program|all|';
+$lang->block->modules['program']->moreLinkList->sprint         = 'project|all|';
 $lang->block->modules['program']->moreLinkList->projectdynamic = 'company|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();

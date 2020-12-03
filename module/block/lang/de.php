@@ -279,7 +279,7 @@ $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Project';
-$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
@@ -334,7 +334,7 @@ $lang->block->moduleList['todo']    = 'Todos';
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = 'Project List';
-$lang->block->modules['program']->availableBlocks->recentprogram = 'Recent Project';
+$lang->block->modules['program']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['program']->availableBlocks->statistic     = 'Project Statistic';
 $lang->block->modules['program']->availableBlocks->programteam   = 'Project Human Input';
 

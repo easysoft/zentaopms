@@ -1772,7 +1772,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printRecentProgramBlock()
+    public function printRecentProjectBlock()
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);

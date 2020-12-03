@@ -83,7 +83,7 @@ $lang->block->closeForever       = '永久关闭';
 $lang->block->confirmClose       = '确定永久关闭该区块吗？关闭后所有人都将无法使用该区块，可以在后台自定义中打开。';
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
-$lang->block->nbsp               = '';  
+$lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
@@ -279,7 +279,7 @@ $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
 
 $lang->block->default['full']['my']['6']['title']  = '我近期参与的项目';
-$lang->block->default['full']['my']['6']['block']  = 'recentprogram';
+$lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'program';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
@@ -334,7 +334,7 @@ $lang->block->moduleList['todo']    = '待办';
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
 $lang->block->modules['program']->availableBlocks->program       = '项目列表';
-$lang->block->modules['program']->availableBlocks->recentprogram = '近期项目';
+$lang->block->modules['program']->availableBlocks->recentproject = '近期项目';
 $lang->block->modules['program']->availableBlocks->statistic     = '项目统计';
 $lang->block->modules['program']->availableBlocks->programteam   = '项目人力投入';
 
