@@ -32,6 +32,7 @@ $lang->changePassword = 'Mot de Passe';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "J'ai lu et j'accepte les termes et conditions de la <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Sans autorisation, je ne dois pas supprimer, masquer ou couvrir les logos / liens de ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.pm/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>AIUX</strong></a>";
+$lang->execution      = 'Execution';
 
 $lang->reset        = 'Réinitialiser';
 $lang->cancel       = 'Annuler';
@@ -886,7 +887,7 @@ $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program=
 $lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
-$lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
+$lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->issue          = 'Issue|issue|browse|';
 $lang->menu->waterfall->risk           = 'Risk|risk|browse|';

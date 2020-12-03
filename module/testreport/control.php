@@ -534,7 +534,6 @@ class testreport extends control
             $projectID      = $this->project->saveState($objectID, $this->projects);
             $this->project->setMenu($this->projects, $projectID);
             $this->lang->testreport->menu = $this->lang->project->menu;
-            $this->lang->testreport->menu->testtask['subModule'] = 'testreport';
             $this->lang->menugroup->testreport = 'project';
             return $projectID;
         }

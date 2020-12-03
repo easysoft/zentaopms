@@ -808,6 +808,7 @@ class commonModel extends model
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 
         if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
+
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
