@@ -28,7 +28,7 @@
           <td>
             <?php
             $disabled = '';
-            if($build->stories or $build->bugs) $disabled = 'disabled';
+            if($build->stories or $build->bugs or $testtask) $disabled = 'disabled';
             ?>
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
@@ -44,8 +44,10 @@
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
         <tr>
+          <?php $disabled = $testtask ? 'disabled' : '';?>
           <th><?php echo $lang->build->project;?></th>
-          <td id='projectsBox'><?php echo html::select('project', $executions, $build->project, "class='form-control chosen' required");?></td>
+          <td id='projectsBox'><?php echo html::select('project', $executions, $build->project, "class='form-control chosen' required $disabled");?></td>
+          <td><?php if($disabled) echo $lang->build->notice->changeProject;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>
