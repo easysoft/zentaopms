@@ -125,7 +125,7 @@ $(function()
     $('#submit').on('click', function()
     {
         var steps = editor['steps'].html();
-        if(stepsRequired !== false && (steps == stepsTemplate || steps == editor.steps.templateHtml))
+        if(stepsRequired !== false && (steps == stepsTemplate || steps == editor.steps.templateHtml) && isStepsTemplate)
         {
             bootbox.alert(stepsNotEmpty);
             return false;

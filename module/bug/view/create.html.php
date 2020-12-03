@@ -22,6 +22,7 @@ js::set('refresh', $lang->refresh);
 js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
+js::set('isStepsTemplate', $isStepsTemplate);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">

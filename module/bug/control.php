@@ -478,6 +478,7 @@ class bug extends control
         $this->view->branches         = $branches;
         $this->view->color            = $color;
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
+        $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
 
         $this->display();
     }
