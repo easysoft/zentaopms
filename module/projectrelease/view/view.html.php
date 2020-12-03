@@ -172,7 +172,7 @@
                 <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr class='text-center'>
-                    <th class='c-id text-left'>
+                    <th class='c-id text-left w-110px'>
                       <?php if($canBatchUnlink and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
