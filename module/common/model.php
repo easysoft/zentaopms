@@ -601,6 +601,7 @@ class commonModel extends model
 
         /* If program, return.*/
         if($moduleName == 'program' and strpos($methodName, 'prj') !== false) return;
+        if($moduleName == 'product' and $methodName == 'create') return;
 
         /* Set the main main menu. */
         $mainMenu      = $moduleName;
