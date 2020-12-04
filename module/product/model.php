@@ -818,6 +818,7 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
+        $executionList = array('0' => '');
 
         $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
 

@@ -22,27 +22,31 @@ class projectBuild extends control
     public function browse($projectID = 0, $type = 'all', $param = 0)
     {
         $this->loadModel('project');
+        $this->loadModel('build');
         $project = $this->loadModel('program')->getPRJByID($projectID);
 
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
         $products = array('' => '') + $products;
 
-        $projects = $this->project->getExecutionsByProject((int)$projectID, 'all', '', true);
-
         /* Build the search form. */
         $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0; 
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('projectbuild', 'browse', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+
+        $projects = $this->project->getExecutionsByProject($projectID, 'all', '', true);
+        $this->config->build->search['fields']['project'] = $this->project->lang->projectCommon;
+        $this->config->build->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $projects);
+
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, $projects, 'projectBuild');
 
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getProjectBuildsBySearch((int)$projectID, (int)$param);
+            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param);
         }
         else
         {
-            $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID, $type, $param);
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param);
         }
 
         /* Set project builds. */
