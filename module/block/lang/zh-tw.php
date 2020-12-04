@@ -217,6 +217,13 @@ $lang->block->default['project']['4']['params']['count']   = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
+$lang->block->default['project']['5']['title'] = '版本列表';
+$lang->block->default['project']['5']['block'] = 'build';
+$lang->block->default['project']['5']['grid']  = 8;
+
+$lang->block->default['project']['5']['params']['count']   = 15;
+$lang->block->default['project']['5']['params']['orderBy'] = 'id_desc';
+
 $lang->block->default['qa']['1']['title'] = '測試統計';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
