@@ -171,6 +171,7 @@ $lang->doc->noSearchedDoc      = 'Nichts gesucht.';
 $lang->doc->noEditedDoc        = 'Sie haben kein Dokument bearbeitet.';
 $lang->doc->noOpenedDoc        = 'Sie haben kein Dokument erstellt.';
 $lang->doc->noCollectedDoc     = 'Sie haben kein Dokument gesammelt.';
+$lang->doc->errorEmptyLib      = 'No data in document library.';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product can access it.';
 $lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist can access it.';

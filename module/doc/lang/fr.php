@@ -171,6 +171,7 @@ $lang->doc->noSearchedDoc      = 'Aucun documents trouvé.';
 $lang->doc->noEditedDoc        = "Vous n'avez pas mis à jour de documents.";
 $lang->doc->noOpenedDoc        = "Vous n'avez pas ajouté de documents.";
 $lang->doc->noCollectedDoc     = "Vous avez aucun document dans vos favoris.";
+$lang->doc->errorEmptyLib      = 'No data in document library.';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
 $lang->doc->noticeAcl['lib']['product']['custom']  = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';

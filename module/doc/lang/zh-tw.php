@@ -148,7 +148,7 @@ $lang->doc->orderLib                       = '文檔庫排序';
 $lang->doc->customShowLibs                 = '顯示設置';
 $lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
 $lang->doc->customShowLibsList['children'] = '顯示子分類的文檔';
-$lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的項目';
+$lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的' . $lang->projectCommon;
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
@@ -171,6 +171,7 @@ $lang->doc->noSearchedDoc      = '沒有搜索到任何文檔。';
 $lang->doc->noEditedDoc        = '您還沒有編輯任何文檔。';
 $lang->doc->noOpenedDoc        = '您還沒有創建任何文檔。';
 $lang->doc->noCollectedDoc     = '您還沒有收藏任何文檔。';
+$lang->doc->errorEmptyLib      = '文檔庫暫無數據。';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = '有所選產品訪問權限的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['product']['custom']  = '有所選產品訪問權限或白名單裡的用戶可以訪問。';

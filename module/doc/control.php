@@ -594,12 +594,11 @@ class doc extends control
      */
     public function sort($type = '')
     {
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            foreach($_POST as $id => $order)
-            {
-                $this->dao->update(TABLE_DOCLIB)->set('order')->eq($order)->where('id')->eq($id)->exec();
-            }
+            if(empty($_POST)) $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEmptyLib));
+            foreach($_POST as $id => $order) $this->dao->update(TABLE_DOCLIB)->set('order')->eq($order)->where('id')->eq($id)->exec();
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success'));
         }

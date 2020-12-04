@@ -171,6 +171,7 @@ $lang->doc->noSearchedDoc      = '没有搜索到任何文档。';
 $lang->doc->noEditedDoc        = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc        = '您还没有创建任何文档。';
 $lang->doc->noCollectedDoc     = '您还没有收藏任何文档。';
+$lang->doc->errorEmptyLib      = '文档库暂无数据。';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = '有所选产品访问权限的用户可以访问。';
 $lang->doc->noticeAcl['lib']['product']['custom']  = '有所选产品访问权限或白名单里的用户可以访问。';

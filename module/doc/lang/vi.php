@@ -136,11 +136,6 @@ $lang->doc->fastMenuList['byediteddate']  = 'Recent Edited';
 $lang->doc->fastMenuList['openedbyme']    = 'My tài liệu';
 $lang->doc->fastMenuList['collectedbyme'] = 'My Favorites';
 
-$lang->doc->fastMenuList['byediteddate']  = 'Recent Edited';
-//$lang->doc->fastMenuList['visiteddate'] = 'Recently Visited';
-$lang->doc->fastMenuList['openedbyme']    = 'My tài liệu';
-$lang->doc->fastMenuList['collectedbyme'] = 'My Favorites';
-
 $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 //$lang->doc->fastMenuIconList['visiteddate'] = 'icon-folder-move';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
@@ -149,8 +144,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Hiện Attachment thư viện';
 $lang->doc->customObjectLibs['customFiles'] = 'Hiện Custom thư viện';
 
-$lang->doc->orderLib = 'Đánh giá Thiết lập';
-$lang->doc->customShowLibs = 'Display Thiết lập';
+$lang->doc->orderLib                       = 'Đánh giá Thiết lập';
+$lang->doc->customShowLibs                 = 'Display Thiết lập';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty thư viện';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category tài liệu';
 $lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon} Only";
@@ -176,6 +171,7 @@ $lang->doc->noSearchedDoc      = 'Không có documents found.';
 $lang->doc->noEditedDoc        = 'Bạn có not edited any documents.';
 $lang->doc->noOpenedDoc        = 'Bạn chưa tạo any documents.';
 $lang->doc->noCollectedDoc     = 'Bạn có not favorited any documents.';
+$lang->doc->errorEmptyLib      = 'No data in document library.';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
