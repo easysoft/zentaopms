@@ -28,11 +28,13 @@ class projectBuild extends control
         $products = $this->project->getProducts($projectID, false);
         $products = array('' => '') + $products;
 
+        $projects = $this->project->getExecutionsByProject((int)$projectID, 'all', '', true);
+
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0; 
         $actionURL = $this->createLink('projectbuild', 'browse', "projectID=$projectID&type=bysearch&queryID=myQueryID");
-        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL);
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, $projects, 'projectBuild');
 
         if($type == 'bysearch')
         {
@@ -62,6 +64,7 @@ class projectBuild extends control
         $this->view->product       = $type == 'product' ? $param : 'all';
         $this->view->project       = $project;
         $this->view->products      = $products;
+        $this->view->projects      = $projects;
         $this->view->type          = $type;
 
         $this->display();
