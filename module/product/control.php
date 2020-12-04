@@ -689,7 +689,8 @@ class product extends control
      */
     public function ajaxGetDropMenu($productID, $module, $method, $extra)
     {
-        $products = ($module == 'product') ? $this->product->getList() : $this->product->getProductsByProject($this->session->PRJ);
+        $inProduct = zget($this->lang->navGroup, $module) == 'product';
+        $products = $inProduct ? $this->product->getList() : $this->product->getProductsByProject($this->session->PRJ);
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
