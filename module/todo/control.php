@@ -369,15 +369,21 @@ class todo extends control
             $this->lang->set('menugroup.todo', $from);
         }
 
-        $this->view->title      = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
-        $this->view->position[] = $this->lang->todo->view;
-        $this->view->todo       = $todo;
-        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('todo', $todoID);
-        $this->view->from       = $from;
-        $this->view->projects   = $this->loadModel('project')->getExecutionPairs(0, 'execution');
-        $this->view->products   = $this->loadModel('product')->getPairs();
+        $projects  = $this->loadModel('program')->getPRJPairs();
+        //$projectID = isset($this->session->PRJ) ? $this->session->PRJ : key($projects);
+        if(!isset($this->session->PRJ)) $this->session->set('PRJ', key($projects));
+
+        $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
+        $this->view->position[]      = $this->lang->todo->view;
+        $this->view->todo            = $todo;
+        $this->view->times           = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->from            = $from;
+        $this->view->projects        = $projects;
+        $this->view->executions      = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
+        $this->view->products        = $this->loadModel('product')->getPairs();
+        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
 
         $this->display();
     }
@@ -592,6 +598,36 @@ class todo extends control
         $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
         $field = $objectType == 'project' ? 'parent' : 'program';
         die($this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field));
+    }
+
+    /**
+     * AJAX: get execution pairs.
+     *
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionPairs($projectID)
+    {
+        $this->session->set('PRJ', $projectID);
+
+        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
+        die(html::select('execution', $executions, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * AJAX: get product pairs.
+     *
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductPairs($projectID)
+    {
+        $this->session->set('PRJ', $projectID);
+
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        die(html::select('product', $products, '', "class='form-control chosen'"));
     }
 
     /**

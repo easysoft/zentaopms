@@ -15,10 +15,10 @@ $(function()
     $('#toTaskButton').click(function()
     {
         var onlybody    = config.onlybody;
-        var programID   = $('#projectProgram').val();
+        var projectID   = $('#project').val();
 
-        var projectID = $(this).closest('.input-group').find('#project').val();
-        var link      = createLink('task', 'create', 'projectID=' + projectID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', programID);
+        var executionID = $(this).closest('.input-group').find('#execution').val();
+        var link        = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
 
         parent.location.href = link;
     })
@@ -37,7 +37,7 @@ $(function()
     $('#toBugButton').click(function()
     {
         var onlybody    = config.onlybody;
-        var programID   = $('#productProgram').val();
+        var programID   = $('#project').val();
 
         var productID = $(this).closest('.input-group').find('#product').val();
         var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', programID);
@@ -70,12 +70,19 @@ function createProject()
     parent.location.href = link;
 }
 
-function getProgramByProject(projectID)
+function getExecutionByProject(projectID)
 {
-    link = createLink('todo', 'ajaxGetProgramID', "projectID=" + projectID + '&type=project');
-    $.post(link, function(data)
-    {
-        $('#projectProgram').val(data);        
+    link = createLink('todo', 'ajaxGetExecutionPairs', "projectID=" + projectID);
+    $('#executionIdBox').load(link, function(){
+        $(this).find('select').chosen();
+    })
+}
+
+function getProductByProject(projectID)
+{
+    link = createLink('todo', 'ajaxGetProductPairs', "projectID=" + projectID);
+    $('#productIdBox').load(link, function(){
+        $(this).find('select').chosen();
     })
 }
 
