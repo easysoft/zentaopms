@@ -370,7 +370,6 @@ class todo extends control
         }
 
         $projects  = $this->loadModel('program')->getPRJPairs();
-        //$projectID = isset($this->session->PRJ) ? $this->session->PRJ : key($projects);
         if(!isset($this->session->PRJ)) $this->session->set('PRJ', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
