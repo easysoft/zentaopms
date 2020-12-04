@@ -78,7 +78,7 @@
                     echo "<ul class='dropdown-menu pull-right' role='menu'>";
                     if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
                     if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
-                    if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
+                    if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#projectProductModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
                     echo "</ul>";
                     if($isonlybody) $_GET['onlybody'] = 'yes';
                 }
@@ -199,9 +199,13 @@
         </div>
         <?php else:?>
         <div class='input-group'>
-          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProgramByProject(this.value);");?>
+          <span>
+          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?>
+          </span>
+          <span id='executionIdBox'>
+          <?php echo html::select('execution', $executions, '', "class='form-control chosen'");?>
+          </span>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
-          <?php echo html::hidden('projectProgram', 0);?>
         </div>
         <?php endif;?>
       </div>
@@ -227,8 +231,37 @@
         <div class='input-group'>
           <?php echo html::select('product', $products, '', "class='form-control chosen' onchange=getProgramByProduct(this.value);");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'", 'btn btn-primary');?></span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
           <?php echo html::hidden('productProgram', 0);?>
+        </div>
+        <?php endif;?>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="projectProductModal">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
+      </div>
+      <div class="modal-body">
+        <?php if(empty($projects)):?>
+        <div class="table-empty-tip">
+          <p>
+            <span class="text-muted"><?php echo $lang->project->noProject;?></span>
+            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+          </p>
+        </div>
+        <?php else:?>
+        <div class='input-group'>
+          <span>
+          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?>
+          </span>
+          <span id='productIdBox'>
+          <?php echo html::select('product', $projectProducts, '', "class='form-control chosen'");?>
+          </span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
         </div>
         <?php endif;?>
       </div>
