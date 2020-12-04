@@ -18,6 +18,9 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $design->id?></span>
       <span class="text" title="<?php echo $design->name;?>"><?php echo $design->name;?></span>
+      <?php if($design->deleted):?>
+      <span class='label label-danger'><?php echo $lang->design->deleted;?></span>
+      <?php endif; ?>
     </div>
   </div>
 </div>
