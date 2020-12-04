@@ -800,7 +800,6 @@ class productModel extends model
             ->fetchAll('id');
 
         $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
-        $executionList = array('0' => '');
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         if($project->model == 'waterfall')

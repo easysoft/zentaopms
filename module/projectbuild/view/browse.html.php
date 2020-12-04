@@ -36,7 +36,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
       <?php if(common::canModify('project', $project) and common::hasPriv('build', 'create')):?>
-      <?php echo html::a($this->createLink('build', 'create', "project=$project->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
+      <?php echo html::a('#projects', "<i class='icon icon-plus'></i> " . $lang->build->create, '', "data-toggle='modal' class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -93,5 +93,21 @@
     </table>
   </div>
   <?php endif;?>
+</div>
+<div class="modal fade" id="projects">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->projectbuild->project;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('projects', $projects, '', "class='form-control chosen' id=project");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->build->create, "id='createBuildButton'", 'btn btn-primary');?></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
