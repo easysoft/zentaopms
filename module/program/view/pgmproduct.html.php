@@ -66,14 +66,14 @@
           </td>
           <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
           <td><?php echo $program->name;?></td>
-          <td class='text-center'><?php echo $product->stories['active'];?></td>
-          <td class='text-center'><?php echo $product->stories['changed'];?></td>
-          <td class='text-center'><?php echo $product->stories['draft'];?></td>
-          <td class='text-center'><?php echo $product->stories['closed'];?></td>
-          <td class='text-center'><?php echo $product->plans;?></td>
-          <td class='text-center'><?php echo $product->releases;?></td>
-          <td class='text-center'><?php echo $product->unResolved;?></td>
-          <td class='text-center'><?php echo $product->assignToNull;?></td>
+          <td class='text-left'><?php echo $product->stories['active'];?></td>
+          <td class='text-left'><?php echo $product->stories['changed'];?></td>
+          <td class='text-left'><?php echo $product->stories['draft'];?></td>
+          <td class='text-left'><?php echo $product->stories['closed'];?></td>
+          <td class='text-left'><?php echo $product->plans;?></td>
+          <td class='text-left'><?php echo $product->releases;?></td>
+          <td class='text-left'><?php echo $product->unResolved;?></td>
+          <td class='text-left'><?php echo $product->assignToNull;?></td>
           <?php if($canOrder):?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>
