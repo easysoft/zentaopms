@@ -187,7 +187,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->project->selectProject;?></h4>
+        <h4 class="modal-title"><?php echo $lang->project->selectExecution;?></h4>
       </div>
       <div class="modal-body">
         <?php if(empty($projects)):?>
@@ -269,6 +269,7 @@
   </div>
 </div>
 <?php js::set('todoID', $todo->id);?>
+<?php js::set('selectExecution', $lang->project->selectExecution);?>
 <?php else:?>
 <?php echo $lang->todo->thisIsPrivate;?>
 <?php endif;?>

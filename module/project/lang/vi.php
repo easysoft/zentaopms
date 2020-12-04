@@ -229,6 +229,7 @@ $lang->project->aboveAllProject = "Tất cả {$lang->projectCommon} trên";
 /* Page prompt. */
 $lang->project->linkStoryByPlanTips = "Hành động này sẽ liên kết tất cả câu chuyện trong kế hoạch này tới {$lang->projectCommon} này.";
 $lang->project->selectProject       = "Chọn {$lang->projectCommon}";
+$lang->project->selectExecution     = "Select Execution";
 $lang->project->beginAndEnd         = 'Thời gian';
 $lang->project->begin               = 'Bắt đầu';
 $lang->project->end                 = 'Kết thúc';

@@ -229,6 +229,7 @@ $lang->project->aboveAllProject = "Alle oberen {$lang->projectCommon}";
 /* 页面提示。*/
 $lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->projectCommon}.";
 $lang->project->selectProject       = "Auswahl {$lang->projectCommon}";
+$lang->project->selectExecution     = "Select Execution";
 $lang->project->beginAndEnd         = 'Dauer';
 $lang->project->begin               = 'Start';
 $lang->project->end                 = 'Ende';

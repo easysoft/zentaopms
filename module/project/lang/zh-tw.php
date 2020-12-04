@@ -226,6 +226,7 @@ $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 /* 頁面提示。*/
 $lang->project->linkStoryByPlanTips = "此操作會將所選計划下面的{$lang->productSRCommon}全部關聯到此{$lang->projectCommon}中";
 $lang->project->selectProject       = "請選擇{$lang->projectCommon}";
+$lang->project->selectExecution     = "請選擇執行";
 $lang->project->beginAndEnd         = '起止時間';
 $lang->project->begin               = '開始日期';
 $lang->project->end                 = '截止日期';

@@ -14,10 +14,14 @@ $(function()
 
     $('#toTaskButton').click(function()
     {
+        var executionID = $(this).closest('.input-group').find('#execution').val();
+        if(!executionID)
+        {
+            alert(selectExecution);
+            return false;
+        }
         var onlybody    = config.onlybody;
         var projectID   = $('#project').val();
-
-        var executionID = $(this).closest('.input-group').find('#execution').val();
         var link        = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
 
         parent.location.href = link;
