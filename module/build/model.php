@@ -28,6 +28,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.id')->eq((int)$buildID)
+            ->andWhere('t1.deleted')->eq(0)
             ->fetch();
         if(!$build) return false;
 

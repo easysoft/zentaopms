@@ -173,7 +173,7 @@ class build extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         /* Set menu. */
-        $build = $this->build->getById((int)$buildID, true);
+        $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $product = $this->loadModel('product')->getById($build->product);

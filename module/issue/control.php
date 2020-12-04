@@ -445,6 +445,7 @@ class issue extends control
     {
         $this->commonAction($issueID, 'issue');
         $issue = $this->issue->getByID($issueID);
+        if(!$issue) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $issue->title;
         $this->view->position[] = $this->lang->issue->common;

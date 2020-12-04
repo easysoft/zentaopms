@@ -71,6 +71,7 @@ class issueModel extends model
     public function getByID($issueID)
     {
         $issue        = $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+        if(!$issue) return false;
         $issue->files = $this->loadModel('file')->getByObject('issue', $issue->id);
         return $issue;
     }
