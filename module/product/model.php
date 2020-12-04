@@ -730,6 +730,26 @@ class productModel extends model
     }
 
     /**
+     * Get the total number of requirements associated with the product.
+     *
+     * @param  array  $productIdList
+     * @param  array  $type
+     * @param  array  $status  closed|active|draft
+     * @access public
+     * @return array
+     */
+    public function getTotalStoriesByProduct($productIdList, $type, $status)
+    {
+        return $this->dao->select("count(*) as stories")->from(TABLE_STORY)
+            ->where('type')->eq($type)
+            ->andWhere('product')->in($productIdList)
+            ->andWhere('status')->eq($status)
+            ->beginIF($status == 'closed')->andWhere('closedReason')->eq('done')->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetch('stories');
+    }
+
+    /**
      * Batch get story stage.
      *
      * @param  array  $stories.

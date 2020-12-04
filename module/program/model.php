@@ -895,6 +895,8 @@ class programModel extends model
         if(empty($projects)) return array();
         $projectIdList = array_keys($projects);
 
+        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)->where('root')->in($projectIdList)->groupBy('root')->fetchPairs();
+
         $hours = $this->dao->select('PRJ,
             cast(sum(consumed) as decimal(10,2)) as consumed,
             cast(sum(estimate) as decimal(10,2)) as estimate')
@@ -905,72 +907,37 @@ class programModel extends model
             ->groupBy('PRJ')
             ->fetchAll('PRJ');
 
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->groupBy('root')
-            ->fetchAll('root');
-
-        $leftTasks = $this->dao->select('PRJ, count(*) as leftTasks')->from(TABLE_TASK)
+        $leftTasks = $this->dao->select('PRJ, count(*) as tasks')->from(TABLE_TASK)
             ->where('PRJ')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
             ->groupBy('PRJ')
-            ->fetchAll('PRJ');
+            ->fetchPairs();
 
-        $allStories = $this->dao->select('PRJ, count(*) as allStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->ne('draft')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
+        foreach($projectIdList as $projectID)
+        {
+            $productIdList = $this->loadModel('product')->getProductIDByProject($projectID);
+            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'draft');
+            $doneStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'closed');
+            $leftStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'active');
+        }
 
-        $doneStories = $this->dao->select('PRJ, count(*) as doneStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('closed')
-            ->andWhere('closedReason')->eq('done')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $leftStories = $this->dao->select('PRJ, count(*) as leftStories')->from(TABLE_STORY)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $leftBugs = $this->dao->select('PRJ, count(*) as leftBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $allBugs = $this->dao->select('PRJ, count(*) as allBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $doneBugs = $this->dao->select('PRJ, count(*) as doneBugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('resolved')
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
+        $leftBugs = $this->getTotalBugByPRJ($projectIdList, 'active');
+        $allBugs  = $this->getTotalBugByPRJ($projectIdList, 'all');
+        $doneBugs = $this->getTotalBugByPRJ($projectIdList, 'resolved');
 
         foreach($projects as $projectID => $project)
         {
-            $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->consumed    = isset($hours[$projectID]) ? $hours[$projectID]->consumed : 0;
             $project->estimate    = isset($hours[$projectID]) ? $hours[$projectID]->estimate : 0;
-            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->leftTasks : 0;
-            $project->allStories  = isset($allStories[$projectID]) ? $allStories[$projectID]->allStories : 0;
-            $project->doneStories = isset($doneStories[$projectID]) ? $doneStories[$projectID]->doneStories : 0;
-            $project->leftStories = isset($leftStories[$projectID]) ? $leftStories[$projectID]->leftStories : 0;
-            $project->leftBugs    = isset($leftBugs[$projectID]) ? $leftBugs[$projectID]->leftBugs : 0;
-            $project->allBugs     = isset($allBugs[$projectID]) ? $allBugs[$projectID]->allBugs : 0;
-            $project->doneBugs    = isset($doneBugs[$projectID]) ? $doneBugs[$projectID]->doneBugs : 0;
+            $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID] : 0;
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
+            $project->leftBugs    = isset($leftBugs[$projectID])  ? $leftBugs[$projectID]  : 0;
+            $project->allBugs     = isset($allBugs[$projectID])   ? $allBugs[$projectID]   : 0;
+            $project->doneBugs    = isset($doneBugs[$projectID])  ? $doneBugs[$projectID]  : 0;
+            $project->allStories  = $allStories[$projectID];
+            $project->doneStories = $doneStories[$projectID];
+            $project->leftStories = $leftStories[$projectID];
         }
 
         return $projects;
@@ -1094,6 +1061,24 @@ class programModel extends model
             ->andWhere('id')->in($projectIdList)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');
+    }
+
+    /**
+     * Get associated bugs by project.
+     *
+     * @param  array  $projectIdList
+     * @param  string $status   active|resolved|all
+     * @access public
+     * @return object
+     */
+    public function getTotalBugByPRJ($projectIdList, $status)
+    {
+        return $this->dao->select('PRJ, count(*) as bugs')->from(TABLE_BUG)
+            ->where('PRJ')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->groupBy('PRJ')
+            ->fetchPairs('PRJ');
     }
 
     /**
