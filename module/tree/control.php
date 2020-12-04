@@ -307,7 +307,7 @@ class tree extends control
             $product = $this->loadModel('product')->getById($module->root);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
             $this->view->product  = $product;
-            $this->view->products = $this->product->getPairs('', $this->session->PRJ);
+            $this->view->products = $this->product->getPairs('', $product->program);
         }
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
