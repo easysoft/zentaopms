@@ -113,6 +113,15 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Get the top programID. */
+        if($programID)
+        {
+            $program   = $this->program->getPGMByID($programID);
+            $path      = explode(',', $program->path);
+            $path      = array_filter($path);
+            $programID = current($path);
+        }
+
         $this->view->title       = $this->lang->program->PGMProduct;
         $this->view->position[]  = $this->lang->program->PGMProduct;
 
