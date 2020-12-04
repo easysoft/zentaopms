@@ -1484,7 +1484,7 @@ class programModel extends model
                     echo zget($this->lang->program->statusList, $project->status);
                     break;
                 case 'PRJBudget':
-                    echo $project->budget . zget($this->lang->program->unitList, $project->budgetUnit);
+                    echo $project->budget ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : '';
                     break;
                 case 'teamCount':
                     echo $project->teamCount;
