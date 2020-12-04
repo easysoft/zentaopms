@@ -293,6 +293,7 @@ class projectModel extends model
         if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
         if(!isset($projects[$this->session->project]))
         {
+            ksort($projects);
             $this->session->set('project', key($projects));
             if($projectID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
         }
