@@ -39,6 +39,7 @@ $lang->risk->editedDate        = '編輯日期';
 $lang->risk->legendBasicInfo   = '基本信息';
 $lang->risk->legendLifeTime    = '風險的一生';
 $lang->risk->confirmDelete     = '您確認刪除該風險嗎？';
+$lang->risk->deleted           = '已刪除';
 
 /* Actions */
 $lang->risk->batchCreate = '批量添加';

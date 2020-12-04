@@ -39,6 +39,7 @@ $lang->risk->editedDate        = 'EditedDate';
 $lang->risk->legendBasicInfo   = 'Basic Info.';
 $lang->risk->legendLifeTime    = 'About Risk';
 $lang->risk->confirmDelete     = 'Do you want to delelte this risk?';
+$lang->risk->deleted           = 'Deleted';
 
 /* Actions */
 $lang->risk->batchCreate = 'Batch Create';
