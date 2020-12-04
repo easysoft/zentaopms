@@ -818,8 +818,8 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
-        $executionList = array('0' => '');
 
+        $executionList = array('0' => '');
         $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
@@ -839,7 +839,7 @@ class productModel extends model
             {
                 if(isset($execution->children))
                 {
-                    $executionList = array_merge($executionList, $execution->children);
+                    $executionList = $executionList + $execution->children;
                     continue;
                 }
                 $executionList[$execution->id] = $execution->name;

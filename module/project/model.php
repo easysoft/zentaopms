@@ -62,12 +62,12 @@ class projectModel extends model
      */
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
-        $program = $this->getByID($this->session->PRJ);
+        $project = $this->getByID($this->session->PRJ);
         if(empty($projects))
         {
-            if($program->model == 'waterfall')
+            if($project->model == 'waterfall')
             {
-                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'project') die(js::locate(helper::createLink('programplan', 'create', "progarmID=$program->id")));
+                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'project') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
             }
             else
             {
@@ -82,7 +82,7 @@ class projectModel extends model
         if(!empty($project))
         {
             $isProgram = $project->model;
-            $program   = $isProgram ? $project : $this->getByID($project->parent);
+            $project   = $isProgram ? $project : $this->getByID($project->parent);
         }
 
         if($isProgram)

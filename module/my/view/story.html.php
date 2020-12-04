@@ -1,19 +1,19 @@
 <?php
 /**
- * The story view file of dashboard module of ZenTaoPMS.
+ * The story view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     dashboard
- * @version     $Id: story.html.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
+ * @package     my
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <div class="btn-group angle-btn active">
+    <div class="btn-group active">
       <div class="btn-group">
         <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
           <?php $label = $storyType == 'story' ? $lang->generalSR : $lang->generalUR;?>

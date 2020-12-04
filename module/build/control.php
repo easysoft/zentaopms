@@ -33,35 +33,29 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
-        $this->session->set('buildCreate', $this->app->getURI(true));
-
         /* Load these models. */
         $this->loadModel('project');
         $this->loadModel('user');
-        
+
+        $this->session->set('buildCreate', $this->app->getURI(true));
+        $execution = $this->loadModel('project')->getExecutionById($executionID);
+
         /* Set menu. */
         $executions = $this->project->getExecutionPairs($this->session->PRJ);
         $this->project->setMenu($executions, $executionID);
-
-        /* Get stories and bugs. */
-        $orderBy  = 'status_asc, stage_asc, id_desc';
-
-        /* Assign. */
-        $project = $this->loadModel('project')->getExecutionById($executionID);
 
         $productGroups = $this->project->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $products      = array();
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->create;
-        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$executionID"), $project->name);
+        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->create;
+        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
         $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->executionID   = $executionID;
-        $this->view->orderBy       = $orderBy;
         $this->view->products      = $products;
         $this->view->lastBuild     = $this->build->getLast($executionID);
         $this->view->productGroups = $productGroups;
