@@ -21,6 +21,11 @@ class build extends control
      */
     public function create($executionID, $productID = 0)
     {
+        if($executionID == 0)
+        {
+            die(js::locate($this->createLink('project', 'create'), 'parent'));
+        }
+
         if(!empty($_POST))
         {
             $buildID = $this->build->create($executionID);
