@@ -635,6 +635,7 @@ class product extends control
         {
             $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch);
         }
+
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 
         if($number === '')

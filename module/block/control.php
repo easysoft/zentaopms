@@ -203,6 +203,7 @@ class block extends control
      * Display dashboard for app.
      *
      * @param  string    $module
+     * @param  string    $type
      * @access public
      * @return void
      */
@@ -1331,14 +1332,14 @@ class block extends control
     }
 
     /**
-     * Print srcum project block.
+     * Print sprint block.
      *
      * @access public
      * @return void
      */
     public function printSprintBlock()
     {
-        $status = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)
+        $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('sprint')
             ->andWhere('parent')->eq($this->session->PRJ)
@@ -1346,9 +1347,9 @@ class block extends control
             ->fetchPairs();
 
         $summary = new stdclass();
-        $summary->total  = array_sum($status);
-        $summary->doing  = zget($status, 'doing', 0);
-        $summary->closed = zget($status, 'closed', 0);
+        $summary->total  = array_sum($sprints);
+        $summary->doing  = zget($sprints, 'doing', 0);
+        $summary->closed = zget($sprints, 'closed', 0);
 
         $progress = new stdclass();
         $progress->doing  = $summary->total == 0 ? 0 : round($summary->doing  / $summary->total, 3);
