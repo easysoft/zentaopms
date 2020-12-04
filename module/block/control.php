@@ -203,6 +203,7 @@ class block extends control
      * Display dashboard for app.
      *
      * @param  string    $module
+     * @param  string    $type
      * @access public
      * @return void
      */
