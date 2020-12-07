@@ -38,7 +38,7 @@
           <th class="w-120px"><?php echo $lang->stakeholder->qq;?></th>
           <th class="w-120px"><?php echo $lang->stakeholder->weixin;?></th>
           <th class="w-200px"><?php echo $lang->stakeholder->email;?></th>
-          <th class='c-actions text-center w-130px'><?php echo $lang->actions;?></th>
+          <th class='c-actions text-center w-150px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
