@@ -50,10 +50,11 @@ class projectStory extends control
         $this->lang->projectstory->menu->requirement['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
-        $this->lang->story->title             = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->title);
+        $this->fetch('story', 'replaceURLang', 'type=requirement');
+        $this->lang->story->title             = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->title);
         $this->lang->story->createRequirement = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createRequirement);
-        $this->lang->story->createStory       = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->createStory);
-        $this->lang->story->noStory           = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->noStory);
+        $this->lang->story->createStory       = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createStory);
+        $this->lang->story->noStory           = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->noStory);
 
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -82,7 +83,7 @@ class projectStory extends control
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
         $this->lang->story->title             = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->title);
-        $this->lang->story->createRequirement = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createRequirement);
+        $this->lang->story->createRequirement = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->createRequirement);
         $this->lang->story->createStory       = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->createStory);
         $this->lang->story->noStory           = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->noStory);
 
