@@ -898,17 +898,19 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
         {
-            if(!isset($lang->menu->$mainMenu)) return print("</ul>");
-
-            $menuLink = $lang->menu->$mainMenu;
-            if(is_array($menuLink)) $menuLink = $menuLink['link'];
-            list($menuLabel, $module, $method) = explode('|', $menuLink);
-            echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
+            if(isset($lang->menu->$mainMenu))
+            {
+                $menuLink = $lang->menu->$mainMenu;
+                if(is_array($menuLink)) $menuLink = $menuLink['link'];
+                list($menuLabel, $module, $method) = explode('|', $menuLink);
+                echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
+            }
         }
         else
         {
             echo '<li>' . $lang->index->common . '</li>';
         }
+
         if(empty($position))
         {
             echo '</ul>';
@@ -1717,6 +1719,9 @@ EOD;
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+
+        /* More menus do not require permission control. */
+        if($module == 'project' && $method == 'morelink') return true;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;

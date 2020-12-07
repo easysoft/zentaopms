@@ -875,7 +875,7 @@ $lang->menu->scrum->morelink       = array('link' => 'More|project|morelink', 'c
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
 $lang->scrum->subMenu->morelink = new stdclass();
-$lang->scrum->subMenu->morelink->program = 'Program|program|edit|';
+$lang->scrum->subMenu->morelink->program = 'Program|program|PRJEdit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -898,7 +898,7 @@ $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->morelink = new stdclass();
 $lang->waterfall->subMenu->morelink->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
 $lang->waterfall->subMenu->morelink->stakeholder    = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->waterfall->subMenu->morelink->program        = 'Project|program|edit|';
+$lang->waterfall->subMenu->morelink->program        = 'Project|program|PRJEdit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
