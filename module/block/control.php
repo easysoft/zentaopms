@@ -1370,14 +1370,14 @@ class block extends control
         $projectID = $this->session->PRJ;
 
         $executions = $this->loadModel('project')->getExecutionPairs($projectID);
-        $products   = $this->loadModel('product')->getPairs($projectID);
-        $count    = isset($this->params->count) ? (int)$this->params->count : 10;
+        $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $count      = isset($this->params->count) ? (int)$this->params->count : 10;
 
         $actions = array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('project')->eq($projectID)
-            ->beginIF($executions)->markLeft()->orWhere('project')->in(array_keys($executions))->fi()->markRight()
-            ->beginIF($products)->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->beginIF(!empty($executions))->markLeft()->orWhere('project')->in(array_keys($executions))->fi()->markRight()
+            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
             ->orderBy('date_desc')
             ->limit($count)
             ->fetchAll();
