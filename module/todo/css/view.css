@@ -1,3 +1,2 @@
 #projectModal .modal-dialog, #productModal .modal-dialog {top: auto!important; bottom: 90px;}
 .body-modal #projectModal .modal-dialog, .body-modal #productModal .modal-dialog {top: auto!important; bottom: 55px;}
-.body-modal #mainMenu + #mainContent.main-row {padding-top: 0}
