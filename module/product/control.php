@@ -472,11 +472,11 @@ class product extends control
      */
     public function view($productID)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
-
         $product = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
@@ -732,10 +732,12 @@ class product extends control
      */
     public function showErrorNone($fromModule = 'bug')
     {
-        if($fromModule != 'product') 
+        if($fromModule != 'product')
         {
             $this->lang->navGroup->product = 'project';
-            unset($this->lang->noMenuModule[4]);
+            $moduleIndex = array_search('product', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
             $this->view->project = $this->loadModel('program')->getPRJById($this->session->PRJ);
         }
 

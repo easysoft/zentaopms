@@ -1414,11 +1414,11 @@ class story extends control
 
         $this->lang->set('menugroup.story', 'qa');
 
-        unset($this->lang->noMenuModule[6]);
+        $moduleIndex = array_search('story', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         $this->lang->navGroup->story  = 'project';
         $this->lang->story->menu      = $this->lang->testcase->menu;
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
-        $this->lang->story->menu->testcase['subModule'] = 'story';
         $this->loadModel('testcase')->setMenu($products, $productID);
 
         /* Append id for secend sort. */
