@@ -93,7 +93,6 @@ class repo extends control
         $this->view->programs = $this->loadModel('program')->getPRJPairs();
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->create;
 
         $this->display();

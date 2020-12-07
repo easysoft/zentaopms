@@ -1329,8 +1329,8 @@ class story extends control
         /* Set menu. The projectstory module does not execute. */
         if($this->app->rawModule == 'story')
         {
+            $products = $this->product->getPairs();
             $this->lang->product->menu = $this->lang->product->viewMenu;
-            $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
             $this->product->setMenu($products, $productID, $branch);
@@ -1342,7 +1342,7 @@ class story extends control
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
         $this->view->title      = $this->lang->story->track;
-        $this->view->posision[] = $this->lang->story->track;
+        $this->view->position[] = $this->lang->story->track;
 
         $this->view->tracks = $tracks;
         $this->view->pager  = $pager;
