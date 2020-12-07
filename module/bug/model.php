@@ -1406,7 +1406,6 @@ class bugModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)

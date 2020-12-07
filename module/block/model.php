@@ -172,7 +172,6 @@ class blockModel extends model
         $data['tasks']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         $data['bugs']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi() //Fix bug #2373.
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['stories']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
