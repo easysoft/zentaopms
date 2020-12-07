@@ -101,6 +101,11 @@
             }
             else
             {
+                if(!isset($taskMembers[$tasks[$taskID]->assignedTo]))
+                {
+                    $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+                    $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
+                }
                 $taskMembers = $members;
             }
             ?>
