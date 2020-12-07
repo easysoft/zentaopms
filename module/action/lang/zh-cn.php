@@ -70,7 +70,7 @@ $lang->action->objectTypes['productplan'] = $lang->planCommon;
 $lang->action->objectTypes['release']     = '发布';
 $lang->action->objectTypes['program']     = '项目集';
 $lang->action->objectTypes['project']     = '项目';
-$lang->action->objectTypes['execution']   = $lang->execution;
+$lang->action->objectTypes['execution']   = $lang->executionCommon;
 $lang->action->objectTypes['task']        = '任务';
 $lang->action->objectTypes['build']       = '版本';
 $lang->action->objectTypes['bug']         = 'Bug';
@@ -137,6 +137,7 @@ $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
 $lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解决。' . "\n";
+$lang->action->desc->managed        = '$date, 由 <strong>$actor</strong> 维护。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";

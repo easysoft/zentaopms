@@ -141,7 +141,7 @@
         <?php $this->printExtendFields($execution, 'div', "position=left&inForm=0");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
-          <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$execution->id");?>
+          <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=execution&objectID=$execution->id");?>
           <?php include '../../common/view/action.html.php';?>
         </div>
       </div>

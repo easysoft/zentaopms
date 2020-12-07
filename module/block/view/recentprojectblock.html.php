@@ -116,7 +116,7 @@
 </div>
 <script>
 /* Auto resize stages */
-$('.block-recentprogram #cards .project-stages-container').each(function()
+$('.block-recentproject #cards .project-stages-container').each(function()
 {
     var $container = $(this);
     var $row = $container.children();

@@ -334,7 +334,7 @@ $lang->block->availableBlocks->issue    = '我的問題';
 
 $lang->block->moduleList['program'] = '項目';
 $lang->block->moduleList['product'] = $lang->productCommon;
-$lang->block->moduleList['project'] = $lang->execution;
+$lang->block->moduleList['project'] = $lang->executionCommon;
 $lang->block->moduleList['qa']      = '測試';
 $lang->block->moduleList['todo']    = '待辦';
 
@@ -374,9 +374,9 @@ $lang->block->modules['product']->availableBlocks->release   = '發佈列表';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->statistic = $lang->execution . '統計';
-$lang->block->modules['project']->availableBlocks->overview  = $lang->execution . '總覽';
-$lang->block->modules['project']->availableBlocks->list      = $lang->execution . '列表';
+$lang->block->modules['project']->availableBlocks->statistic = $lang->executionCommon . '統計';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->executionCommon . '總覽';
+$lang->block->modules['project']->availableBlocks->list      = $lang->executionCommon . '列表';
 $lang->block->modules['project']->availableBlocks->task      = '任務列表';
 $lang->block->modules['project']->availableBlocks->build     = '版本列表';
 
