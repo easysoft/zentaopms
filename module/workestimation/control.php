@@ -1,12 +1,12 @@
 <?php
 /**
- * The control file of workestimation of ChanzhiEPS.
+ * The control file of workestimation module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv11.html)
- * @author      Xiying Guan <guanxiying@xirangit.com>
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     workestimation
- * @version     $Id$
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 class workestimation extends control
@@ -28,7 +28,7 @@ class workestimation extends control
             $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
-        $scale  = $this->workestimation->getProgramScale($projectID);
+        $scale  = $this->workestimation->getProjectScale($projectID);
         $budget = $this->workestimation->getBudget($projectID);
         if(!isset($this->config->project)) $this->config->project = new stdclass();
         if(empty($budget))
@@ -44,7 +44,7 @@ class workestimation extends control
         $this->view->title        = $this->lang->workestimation->common;
         $this->view->position[]   = $this->lang->workestimation->common;
         $this->view->hourPoint    = $this->config->custom->hourPoint;
-        $this->view->programScale = $scale;
+        $this->view->scale        = $scale;
         $this->view->budget       = $budget;
         $this->display();
     }

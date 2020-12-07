@@ -11,8 +11,8 @@ $lang->workestimation->dayHour        = 'Daily Man-hours';
 $lang->workestimation->hour           = 'Man-hour';
 $lang->workestimation->consumed       = 'Cost Man-hours';
 
-$lang->workestimation->programScaleTip = "Actual scale of current project: <strong>%s{$lang->hourCommon}</strong> <a href='###' id='useScale' class='btn btn-xs'> uses </span>";
-$lang->workestimation->tips            = 'Estimate the duration of the project only after the estimate of the workload has been completed';
+$lang->workestimation->scaleTip = "Actual scale of current project: <strong>%s{$lang->hourCommon}</strong> <a href='###' id='useScale' class='btn btn-xs'> uses </span>";
+$lang->workestimation->tips     = 'Estimate the duration of the project only after the estimate of the workload has been completed';
 
 $lang->workestimation->placeholder = new stdclass(); 
 $lang->workestimation->placeholder->scale          = '';

@@ -1,5 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('program', $program);?>
+<?php js::set('project', $project);?>
 <?php js::set('estimation', $workestimation);?>
 <div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post' id='stageForm' enctype='multipart/form-data'>

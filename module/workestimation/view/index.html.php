@@ -28,7 +28,7 @@
                 <span class='input-group-addon unify-padding'><?php echo $lang->hourCommon;?></span>
               </div>
             </td>
-            <td><?php if(isset($budget->duration) and $budget->duration) printf($lang->workestimation->programScaleTip, $programScale);?></td>
+            <td><?php if(isset($budget->duration) and $budget->duration) printf($lang->workestimation->scaleTip, $scale);?></td>
             <td></td>
             <td></td>
           </tr>
@@ -95,7 +95,7 @@ $(function()
 {
     $('#useScale').click(function()
     {
-        $('#scale').val('<?php echo $programScale;?>').keyup();
+        $('#scale').val('<?php echo $scale;?>').keyup();
     });
 
     $(':input').keyup(function()

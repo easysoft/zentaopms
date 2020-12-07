@@ -30,7 +30,7 @@ $().ready(function()
     $(':input').change(function()
     {
         var that = $(this);
-        programID    = program.id;
+        projectID    = project.id;
         stage        = $(this).parents('tr').find('[name*=stage]').val();
         workload     = $(this).parents('tr').find('[name*=workload]').val();
         worktimeRate = $(this).parents('tr').find('[name*=worktimeRate]').val();
@@ -39,7 +39,7 @@ $().ready(function()
         if(startDate) startDate = startDate.replace(/-/g, '_');
 
         if(isNaN(workload) || isNaN(worktimeRate) || isNaN(people) || startDate == '') return false;
-        url = createLink('durationestimation', 'ajaxGetDuration', 'program=' + programID + '&stage=' + stage + '&workload=' + workload + '&worktimeRate=' + worktimeRate  + '&people=' + people + '&startDate=' + startDate),
+        url = createLink('durationestimation', 'ajaxGetDuration', 'projectID=' + projectID + '&stage=' + stage + '&workload=' + workload + '&worktimeRate=' + worktimeRate  + '&people=' + people + '&startDate=' + startDate),
         $.getJSON(
             url,
             function(response)

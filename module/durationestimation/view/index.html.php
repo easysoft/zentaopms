@@ -1,6 +1,4 @@
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('program', $program);?>
-<?php js::set('estimation', $workestimation);?>
 <div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post' id='planForm' enctype='multipart/form-data'>
     <table class='table table-list table-bordered'>
@@ -23,8 +21,8 @@
             <?php echo $plan->name;?>
             <?php echo html::hidden('stage[]', $plan->id);?>
           </td>
-          <td> <?php echo zget($estimation, 'workload', ''); ?>% </td>
-          <td> <?php echo zget($estimation, 'worktimeRate', '');?>% </td>
+          <td><?php echo zget($estimation, 'workload', ''); ?>% </td>
+          <td><?php echo zget($estimation, 'worktimeRate', '');?>% </td>
           <td><?php echo zget($estimation, 'people', '');?></td>
           <td><?php echo zget($estimation, 'startDate', '');?></td>
           <td><?php echo zget($estimation, 'endDate', '');?></td>
@@ -35,14 +33,11 @@
       <tfoot>
         <tr>
           <td colspan='6' class='form-actions text-center'>
-            <?php echo html::a(inlink('create', "program={$program->id}"), $lang->durationestimation->setting, '', "class='btn btn-primary'");?>
+            <?php echo html::a(inlink('create', "projectID={$project->id}"), $lang->durationestimation->setting, '', "class='btn btn-primary'");?>
           </td>
         </tr>
       </tfoot>
     </table>
-
-    </table>
-    <?php js::set('i', $i);?>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

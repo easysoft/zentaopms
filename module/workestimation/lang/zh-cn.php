@@ -11,8 +11,8 @@ $lang->workestimation->dayHour        = '每日工时';
 $lang->workestimation->hour           = '工时';
 $lang->workestimation->consumed       = '已消耗工时';
 
-$lang->workestimation->programScaleTip = "当前项目实际规模：<strong>%s{$lang->hourCommon}</strong> <a href='###' id='useScale' class='btn btn-xs'>使用</span>";
-$lang->workestimation->tips            = '完成工作量估算后，才能进行工期估算';
+$lang->workestimation->scaleTip = "当前项目实际规模：<strong>%s{$lang->hourCommon}</strong> <a href='###' id='useScale' class='btn btn-xs'>使用</span>";
+$lang->workestimation->tips     = '完成工作量估算后，才能进行工期估算';
 
 $lang->workestimation->placeholder = new stdclass(); 
 $lang->workestimation->placeholder->scale          = '';

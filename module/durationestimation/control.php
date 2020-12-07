@@ -11,41 +11,55 @@
  */
 class durationestimation extends control
 {
-    public function index($programID)
+    /**
+     * Project duration estimation.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function index($projectID)
     {
-        $workestimation = $this->loadModel('workestimation')->getBudget($programID);
-        if(!$workestimation) 
+        $workestimation = $this->loadModel('workestimation')->getBudget($projectID);
+        if(empty($workestimation))
         {
             echo js::alert($this->lang->durationestimation->setWorkestimation);
-            die(js::locate($this->createLink('workestimation', 'index', "currentProgram=$programID")));
+            die(js::locate($this->createLink('workestimation', 'index', "projectID=$projectID")));
         }
 
-        $this->loadModel('programplan');
-        $program = $this->loadModel('project')->getById($programID);
+        $this->app->loadLang('programplan');
+        $project = $this->loadModel('program')->getPRJByID($projectID);
         $stages  = $this->loadModel('stage')->getStages();
-        $title   = $this->lang->durationestimation->common . $this->lang->colon . $program->name;
 
-        $this->view->estimationList = $this->durationestimation->getListByProgram($programID);
-        if(empty($this->view->estimationList)) $this->locate(inlink('create', "currentProgram=$programID"));
+        $estimationList = $this->durationestimation->getListByProject($projectID);
+        if(empty($estimationList)) $this->locate(inlink('create', "projectID=$projectID"));
+
+        $this->view->title          = $this->lang->durationestimation->common . $this->lang->colon . $project->name;
+        $this->view->position[]     = $this->lang->durationestimation->common;
         $this->view->workestimation = $workestimation;
-
-        $this->view->title    = $title;
-        $this->view->program  = $program;
-        $this->view->stages   = $stages;
-
+        $this->view->estimationList = $estimationList;
+        $this->view->project        = $project;
+        $this->view->stages         = $stages;
         $this->display();
     }
 
-    public function create($programID = 0)
+    /**
+     * Save the project duration estimate.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function create($projectID = 0)
     {
-        $workestimation = $this->loadModel('workestimation')->getBudget($programID);
-        if(!$workestimation) 
+        $workestimation = $this->loadModel('workestimation')->getBudget($projectID);
+        if(empty($workestimation))
         {
             echo js::alert($this->lang->durationestimation->setWorkestimation);
-            die(js::locate($this->createLink('workestimation', 'index', "currentProgram=$programID")));
+            die(js::locate($this->createLink('workestimation', 'index', "projectID=$projectID")));
         }
 
-        $this->loadModel('programplan');
+        $this->app->loadLang('programplan');
         if(!empty($_POST))
         {
             $total = 0;
@@ -54,49 +68,51 @@ class durationestimation extends control
             $workloadTotal = $this->config->durationestimation->workloadTotal;
             if($total != $workloadTotal) $this->send(array('result' => 'fail', 'message' => $this->lang->durationestimation->workloadError));
 
-            $this->durationestimation->save($programID);
+            $this->durationestimation->save($projectID);
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', "currentProgram={$programID}")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index', "projectID={$projectID}")));
         }
 
-        $this->view->estimationList = $this->durationestimation->getListByProgram($programID);
+        $project = $this->loadModel('program')->getPRJByID($projectID);
+
+        $this->view->title          = $this->lang->durationestimation->common . $this->lang->colon . $project->name;
+        $this->view->position[]     = $this->lang->durationestimation->common;
+        $this->view->project        = $project;
+        $this->view->stages         = $this->loadModel('stage')->getStages();
+        $this->view->estimationList = $this->durationestimation->getListByProject($projectID);
         $this->view->workestimation = $workestimation;
-
-        $program = $this->loadModel('project')->getById($programID);
-        $title   = $this->lang->durationestimation->common . $this->lang->colon . $program->name;
-
-        $this->view->title    = $title;
-        $this->view->program  = $program;
-        $this->view->stages	  = $this->loadModel('stage')->getStages();
 
         $this->display();
     }
 
     /**
-     * ajaxGetDuration
-     * 
-     * @param  int    $program 
-     * @param  int    $workload 
-     * @param  int    $worktimeRate 
-     * @param  int    $people 
+     * Calculate the end time of the duration.
+     *
+     * @param  int     $projectID
+     * @param  int     $stage
+     * @param  int     $workload
+     * @param  int     $worktimeRate
+     * @param  int     $people
+     * @param  string  $startDate
      * @access public
      * @return void
      */
-    public function ajaxGetDuration($program, $stage, $workload, $worktimeRate, $people, $startDate)
+    public function ajaxGetDuration($projectID, $stage, $workload, $worktimeRate, $people, $startDate)
     {
         $startDate = str_replace('_', '-', $startDate);
         if($startDate == '0000-00-00') $this->send(array('result' => 'success', 'endDate' => '0000-00-00'));
 
-        $estimation = $this->loadModel('workestimation')->getBudget($program);
+        $estimation = $this->loadModel('workestimation')->getBudget($projectID);
         $duration   = $estimation->duration * $workload / 100;
         $divisor    = ($people == 0 || $estimation->dayHour == 0) ? 0 : $worktimeRate / 100 * $people * $estimation->dayHour;
         $duration   = $divisor == 0 ? 0 : $duration / $divisor;
         if(!$divisor) $this->send(array('result' => 'fail'));
 
-        $holidays   = array();
-        $workDays   = array();
+        $holidays = array();
+        $workDays = array();
         $i = 0;
+
         $this->loadModel('project');
 
         $startedTime = strtotime($startDate);
