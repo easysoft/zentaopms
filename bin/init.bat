@@ -164,6 +164,13 @@ if %requestType% == 'PATH_INFO' (
 echo %deletelog% > %baseDir%deletelog.bat
 echo deletelog.bat ok
 
+:: encrypt.
+if exist "%baseDir%php\encrypt.php" (
+  SET encrypt= %phpcli% %baseDir%php\encrypt.php %%*
+  echo %encrypt% > %baseDir%encrypt.bat
+  echo encrypt.bat ok
+)
+
 :: create crond.bat
 SET cron= %phpcli% %baseDir%php\crond.php
 echo %cron% > %baseDir%crond.bat

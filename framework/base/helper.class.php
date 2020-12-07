@@ -268,6 +268,66 @@ class baseHelper
     }
 
     /**
+     * Encrypt password 
+     * 
+     * @param  string    $password 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function encryptPassword($password)
+    {
+        global $config;
+
+        $encrypted = '';
+        if(!empty($config->encryptSecret) and $password)
+        {
+            $secret = $config->encryptSecret;
+            if(function_exists('mcrypt_encrypt'))
+            {
+                $encrypted = base64_encode(@mcrypt_encrypt(MCRYPT_DES, $secret, $password, MCRYPT_MODE_CBC));
+            }
+            elseif(function_exists('openssl_encrypt'))
+            {
+                $encrypted = @openssl_encrypt($password, 'des-cbc', $secret);
+            }
+        }
+        if(empty($encrypted)) $encrypted = $password;
+
+        return $encrypted;
+    }
+
+    /**
+     * Decrypt password.
+     * 
+     * @param  string $password 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function decryptPassword($password)
+    {
+        global $config;
+
+        $decryptedPassword = '';
+        if(!empty($config->encryptSecret) and $password)
+        {
+            $secret = $config->encryptSecret;
+            if(function_exists('mcrypt_decrypt'))
+            {
+                $decryptedPassword = mcrypt_decrypt(MCRYPT_DES, $secret, base64_decode($password), MCRYPT_MODE_CBC);
+            }
+            elseif(function_exists('openssl_decrypt'))
+            {
+                $decryptedPassword = openssl_decrypt($password, 'des-cbc', $secret);
+            }
+        }
+        if(empty($decryptedPassword)) $decryptedPassword = $password;
+
+        return $decryptedPassword;
+    }
+
+    /**
      * 判断是否是utf8编码
      * Judge a string is utf-8 or not.
      * 
