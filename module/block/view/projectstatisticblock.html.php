@@ -127,8 +127,8 @@ $(function()
               </div>
               <div class="col-4">
                 <span class="label label-dot label-pale"></span>
-                <div><?php echo (float)$lang->project->totalLeft;?></div>
-                <div><?php echo $execution->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
+                <div><?php echo $lang->project->totalLeft;?></div>
+                <div><?php echo (float)$execution->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
               </div>
             </div>
           </div>
