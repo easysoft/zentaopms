@@ -18,3 +18,6 @@ INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VA
 ('zh-cn', 'custom', 'SRList', '2', '软需', '1'),
 ('zh-cn', 'custom', 'SRList', '3', '故事', '1'),
 ('zh-cn', 'custom', 'SRList', '4', '故事', '1');
+
+TRUNCATE TABLE `zt_block`;
+DELETE FROM `zt_config` WHERE `key` = 'blockInited';
