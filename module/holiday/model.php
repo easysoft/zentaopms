@@ -65,6 +65,8 @@ class holidayModel extends model
     {
         $holiday = fixer::input('post')->get();
         $holiday->year = substr($holiday->begin, 0, 4);
+        if(helper::isZeroDate($holiday->year)) return dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
+        if(helper::isZeroDate($holiday->end))  return dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
 
         $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
             ->autoCheck()
@@ -97,6 +99,8 @@ class holidayModel extends model
     {
         $holiday = fixer::input('post')->get();
         $holiday->year = substr($holiday->begin, 0, 4);
+        if(helper::isZeroDate($holiday->year)) return dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
+        if(helper::isZeroDate($holiday->end))  return dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
 
         $this->dao->update(TABLE_HOLIDAY)
             ->data($holiday)
