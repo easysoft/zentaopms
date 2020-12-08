@@ -1182,7 +1182,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
