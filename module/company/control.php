@@ -140,10 +140,10 @@ class company extends control
      * Company dynamic.
      * 
      * @param  string $browseType 
-     * @param  string $orderBy 
+     * @param  string $param 
      * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  string $date 
+     * @param  string $direction    next|pre 
      * @access public
      * @return void
      */
@@ -176,7 +176,13 @@ class company extends control
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Set the user and type. */
-        $account = $browseType == 'account' ? $param : 'all';
+        $account = 'all';
+        $user    = '';
+        if($browseType == 'account')
+        {
+            $user = $this->loadModel('user')->getById((int)$param, 'id');
+            if($user) $account = $user->account;
+        }
         $product = $browseType == 'product' ? $param : 'all';
         $project = $browseType == 'project' ? $param : 'all';
         $period  = ($browseType == 'account' or $browseType == 'product' or $browseType == 'project') ? 'all'  : $browseType;
@@ -194,9 +200,12 @@ class company extends control
         $this->view->projects = $projects; 
 
         /* Get users.*/
-        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
-        $users[''] = $this->lang->company->user;
-        $this->view->users    = $users; 
+        $userIdPairs = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter|useid');
+        $userIdPairs[''] = $this->lang->company->user;
+        $this->view->userIdPairs = $userIdPairs; 
+
+        $accountPairs = $this->user->getPairs('noclosed|nodeleted|noletter');
+        $accountPairs[''] = '';
 
         /* The header and position. */
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
@@ -215,7 +224,6 @@ class company extends control
         /* Build search form. */
         $projects[0] = '';
         $products[0] = '';
-        $users['']   = '';
         ksort($projects);
         ksort($products);
         $projects['all'] = $this->lang->project->allProject;
@@ -231,7 +239,7 @@ class company extends control
         $this->config->company->dynamic->search['params']['action']['values']  = $this->lang->action->search->label;
         $this->config->company->dynamic->search['params']['project']['values'] = $projects;
         $this->config->company->dynamic->search['params']['product']['values'] = $products; 
-        $this->config->company->dynamic->search['params']['actor']['values']   = $users; 
+        $this->config->company->dynamic->search['params']['actor']['values']   = $accountPairs; 
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
         /* Assign. */
@@ -242,6 +250,7 @@ class company extends control
         $this->view->queryID    = $queryID; 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->user       = $user;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType);
         $this->view->direction  = $direction;

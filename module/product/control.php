@@ -535,11 +535,12 @@ class product extends control
     /**
      * Product dynamic.
      *
+     * @param  int    $productID
      * @param  string $type
-     * @param  string $orderBy
+     * @param  string $param
      * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $date
+     * @param  string $direction    next|pre
      * @access public
      * @return void
      */
@@ -569,7 +570,12 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Set the user and type. */
-        $account = $type == 'account' ? $param : 'all';
+        $account = 'all';
+        if($type == 'account')
+        {
+            $user = $this->loadModel('user')->getById((int)$param, 'id');
+            if($user) $account = $user->account;
+        }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, 'all', $date, $direction);
@@ -579,12 +585,15 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
+        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
+        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
+
         /* Assign. */
         $this->view->productID  = $productID;
         $this->view->type       = $type;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
-        $this->view->account    = $account;
         $this->view->orderBy    = $orderBy;
+        $this->view->account    = $account;
+        $this->view->user       = isset($user) ? $user : '';
         $this->view->param      = $param;
         $this->view->pager      = $pager;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);

@@ -52,7 +52,7 @@
         }
         else
         {
-            $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
+            $browseLink = $this->createLink('user', 'todo', "userID=$user->id");
         }
 
         if($this->app->user->admin or ($this->app->user->account == $todo->account) or ($this->app->user->account == $todo->assignedTo))

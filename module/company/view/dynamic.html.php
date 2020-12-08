@@ -25,7 +25,7 @@
     echo html::a(inlink('dynamic', "browseType=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
-    <div class="input-control space w-150px"><?php echo html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space w-150px"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
     <?php if($config->global->flow != 'onlyTest'):?>
     <div class="input-control space w-150px"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"'); ?></div>
@@ -56,7 +56,7 @@
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
-              <?php echo zget($users, $action->actor);?>
+              <?php echo zget($accountPairs, $action->actor);?>
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
