@@ -47,7 +47,7 @@
       </thead>
       <tbody>
       <?php foreach($todos as $todo):?>
-      <tr class='text-center'>
+      <tr class='text-left'>
         <td><?php echo $todo->id;?></td>
         <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
         <td><?php echo $lang->todo->typeList[$todo->type];?></td>
