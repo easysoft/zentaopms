@@ -66,26 +66,23 @@ class holidayModel extends model
         $holiday = fixer::input('post')->get();
         $holiday->year = substr($holiday->begin, 0, 4);
 
-        $this->dao->insert(TABLE_HOLIDAY)
-            ->data($holiday)
+        $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
             ->autoCheck()
             ->batchCheck($this->config->holiday->require->create, 'notempty')
             ->check('end', 'ge', $holiday->begin)
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
-        {
-            $beginDate = $this->post->begin;
-            $endDate   = $this->post->end;
+        $beginDate = $this->post->begin;
+        $endDate   = $this->post->end;
 
-            /* Update project. */
-            $this->updateProjectPlanDuration($beginDate, $endDate);
-            $this->updateProjectRealDuration($beginDate, $endDate);
+        /* Update project. */
+        $this->updateProjectPlanDuration($beginDate, $endDate);
+        $this->updateProjectRealDuration($beginDate, $endDate);
 
-            /* Update task. */
-            $this->updateTaskPlanDuration($beginDate, $endDate);
-            $this->updateTaskRealDuration($beginDate, $endDate);
-        }
+        /* Update task. */
+        $this->updateTaskPlanDuration($beginDate, $endDate);
+        $this->updateTaskRealDuration($beginDate, $endDate);
 
         return $this->dao->lastInsertID();
     }
