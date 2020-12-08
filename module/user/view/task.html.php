@@ -53,7 +53,7 @@
       </thead>   
       <tbody>
         <?php foreach($tasks as $task):?>
-        <tr class='text-center'>
+        <tr class='text-left'>
           <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>

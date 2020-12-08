@@ -51,7 +51,7 @@
       <tbody>
         <?php foreach($stories as $key => $story):?>
           <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
-          <tr class='text-center'>
+          <tr class='text-left'>
           <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td><?php echo $story->productTitle;?></td>
