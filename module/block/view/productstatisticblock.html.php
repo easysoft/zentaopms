@@ -175,40 +175,10 @@ $(function()
                 </div>
               </div>
             </div>
-            <div class="product-info">
-              <?php $totalProject = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
-              <?php $undoneProject = $product->projects ? zget($product->projects, 'undone', 0) : 0;?>
-              <?php $delayProject = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
-              <?php $undoneRate    = $totalProject ? round($undoneProject / $totalProject * 100, 2) : 0;?>
-              <?php if($totalProject):?>
-              <div class="progress-info">
-                <?php if($delayProject):?>
-                <i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted"><?php echo $lang->project->delayed;?></span> <strong><?php echo $delayProject;?></strong>
-                <?php endif;?>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $undoneRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $undoneRate;?>%"></div>
-              </div>
-              <?php else:?>
-              <div class="actions">
-                <?php common::printLink('project', 'create', '', "<i class='icon icon-plus'></i>" . $lang->project->create, '', "class='btn btn-info'");?>
-              </div>
-              <?php endif;?>
-              <div class="type-info">
-                <div class="type-label">
-                  <table class='status-count'>
-                    <tr>
-                      <td class='text-right'><?php echo $lang->project->allProjects;?> :</td>
-                      <td class='text-left'><?php echo empty($totalProject) ? 0 : html::a($this->createLink('product', 'project', "type=all&product={$product->id}"), $totalProject);?></td>
-                    </tr>
-                    <tr>
-                      <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
-                      <td class='text-left'><?php echo empty($undoneProject) ? 0 : html::a($this->createLink('product', 'project', "type=undone&product={$product->id}"), $undoneProject);?></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-            </div>
+            <?php $totalProject  = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
+            <?php $undoneProject = $product->projects ? zget($product->projects, 'undone', 0) : 0;?>
+            <?php $delayProject  = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
+            <?php $undoneRate    = $totalProject ? round($undoneProject / $totalProject * 100, 2) : 0;?>
             <div class="product-info">
               <?php $totalRelease  = $product->releases ? array_sum($product->releases) : 0;?>
               <?php $normalRelease = $product->releases ? zget($product->releases, 'normal', 0) : 0;?>
