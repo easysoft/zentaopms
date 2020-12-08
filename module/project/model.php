@@ -1054,15 +1054,13 @@ class projectModel extends model
                 {
                     foreach($execution->children as $id => $execution)
                     {
-                        $linkProductID   = $executionProducts[$id];
-                        $execution->name = $products[$linkProductID] . '/' . $execution->name;
+                        $execution->name = (isset($executionProducts[$id]) ? $products[$executionProducts[$id]] . '/' : '') . $execution->name;
                         $executionList[$id] = $execution;
                     }
                 }
                 else
                 {
-                    $linkProductID   = $executionProducts[$id];
-                    $execution->name = $products[$linkProductID] . '/' . $execution->name;
+                    $execution->name = (isset($executionProducts[$id]) ? $products[$executionProducts[$id]] . '/' : '') . $execution->name;
                     $executionList[$id] = $execution;
                 }
             }
@@ -1761,6 +1759,10 @@ class projectModel extends model
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }
+
+        /* Delete the execution linked products that is not linked with the project. */
+        $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq((int)$projectID)->fetchPairs('id');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
