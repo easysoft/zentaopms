@@ -1072,6 +1072,9 @@ class baseFixer
                 /* Disable caching. */
                 $purifierConfig->set('Cache.DefinitionImpl', null);
 
+                /* The name attribute is allowed. */
+                $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
+
                 $purifier = new HTMLPurifier($purifierConfig);
                 $def = $purifierConfig->getHTMLDefinition(true);
                 $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');

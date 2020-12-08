@@ -627,9 +627,16 @@ class testtaskModel extends model
      */
     public function getLinkableCasesByTestTask($testTask, $linkedCases, $query, $pager)
     {
-        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
+        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
-        return $this->dao->select("*")->from(TABLE_CASE)->where($query)->andWhere('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
+        return $this->dao->select("t1.*,t2.lastRunner,t2.lastRunDate,t2.lastRunResult")->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+            ->where($query)
+            ->andWhere('t1.id')->notin($linkedCases)
+            ->andWhere('t2.task')->eq($testTask)
+            ->andWhere('t1.status')->ne('wait')
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**
