@@ -1199,6 +1199,7 @@ class docModel extends model
     {
         if($type != 'product' and $type != 'project') return false;
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+
         if($type == 'product')
         {
             $hasProject  = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1218,6 +1219,13 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
+
+        if(common::hasPriv('doc', 'showFiles'))
+        {
+            $libs['files'] = new stdclass();
+            $libs['files']->name = $this->lang->doclib->files;
+            $libs['files']->allCount = count($this->getLibFiles($type, $objectID, 'id_desc'));
+        }
 
         return $libs;
     }
