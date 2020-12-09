@@ -293,7 +293,6 @@ class projectModel extends model
         if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
         if(!isset($projects[$this->session->project]))
         {
-            ksort($projects);
             $this->session->set('project', key($projects));
             if($projectID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
         }
@@ -844,11 +843,23 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
-        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
+        $orderBy = $this->config->project->orderBy;
+        if($projectID)
+        {
+            $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
+            $orderBy = $projectModel == 'waterfall' ? 'sortStatus_asc,begin_asc,id_asc' : 'begin_desc';
+
+            /* Waterfall project, when all phases are closed, in reverse order of date. */
+            if($projectModel == 'waterfall')
+            {
+                $summary = $this->dao->select('count(id) as executions, sum(IF(INSTR("closed", status) < 1, 0, 1)) as closedExecutions')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
+                if($summary['executions'] == $summary['closedExecutions']) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
+            }
+        }
 
         /* Order by status's content whether or not done */
-        $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
+        $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
@@ -856,6 +867,7 @@ class projectModel extends model
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
+
         $pairs = array();
         foreach($executions as $execution)
         {
