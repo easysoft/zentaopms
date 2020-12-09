@@ -29,7 +29,7 @@ class durationestimation extends control
 
         $this->app->loadLang('programplan');
         $project = $this->loadModel('program')->getPRJByID($projectID);
-        $stages  = $this->loadModel('stage')->getStages();
+        $stages  = $this->loadModel('stage')->getStages('id_asc');
 
         $estimationList = $this->durationestimation->getListByProject($projectID);
         if(empty($estimationList)) $this->locate(inlink('create', "projectID=$projectID"));
@@ -79,7 +79,7 @@ class durationestimation extends control
         $this->view->title          = $this->lang->durationestimation->common . $this->lang->colon . $project->name;
         $this->view->position[]     = $this->lang->durationestimation->common;
         $this->view->project        = $project;
-        $this->view->stages         = $this->loadModel('stage')->getStages();
+        $this->view->stages         = $this->loadModel('stage')->getStages('id_asc');
         $this->view->estimationList = $this->durationestimation->getListByProject($projectID);
         $this->view->workestimation = $workestimation;
 
