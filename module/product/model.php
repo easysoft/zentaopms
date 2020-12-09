@@ -1293,7 +1293,7 @@ class productModel extends model
             }
             elseif($module == 'product' && ($method == 'browse' or $method == 'index' or $method == 'all'))
             {
-                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '') . "&browseType=&param=0&$extra");
+                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&browseType=&param=0&$extra");
             }
             elseif($module == 'programplan')
             {
