@@ -65,3 +65,8 @@ $(document).ready(function()
         return false;
     });
 });
+
+function showNotice()
+{
+    if(typeof(process4Safe) == 'string') bootbox.alert(process4Safe)
+}

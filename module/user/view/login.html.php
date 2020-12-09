@@ -81,6 +81,9 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id="info" class="table-row">
       <div class="table-col text-middle text-center">
         <div id="poweredby">
+          <?php if($weakSites):?>
+          <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
+          <?php endif;?>
           <?php if($config->checkVersion):?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' height='45' scrolling='no' allowtransparency='true' src="<?php echo $this->createLink('misc', 'checkUpdate', "sn=$s");?>"></iframe>
           <?php endif;?>
@@ -90,50 +93,23 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
   </div>
 </main>
 <?php
-if(strpos('|/zentao/|/pro/|/biz/|', "|{$this->config->webRoot}|") !== false)
+if($weakSites)
 {
-    $databases = array('zentao' => 'zentao', 'zentaopro' => 'zentaopro', 'zentaobiz' => 'zentaobiz', 'zentaoep' => 'zentaoep');
-    if($this->config->webRoot == '/zentao/') unset($databases['zentao']);
-    if($this->config->webRoot == '/pro/') unset($databases['zentaopro']);
-    if($this->config->webRoot == '/biz/')
+    $paths     = array();
+    $databases = array();
+    $isXampp   = false;
+    foreach($weakSites as $webRoot => $site)
     {
-        unset($databases['zentaobiz']);
-        unset($databases['zentaoep']);
+        $path = $site['path'];
+        if(strpos($path, 'xampp') !== false) $isXampp = true;
+
+        $paths[]     = $site['path'];
+        $databases[] = $site['database'];
     }
 
-    $users = array();
-    foreach($databases as $database)
-    {
-        try
-        {
-		    $webRoot = "/{$database}/";
-			if($database == 'zentao')    $webRoot = '/zentao/';
-			if($database == 'zentaopro') $webRoot = '/pro/';
-			if($database == 'zentaobiz') $webRoot = '/biz/';
-			if($database == 'zentaoep')  $webRoot = '/biz/';
-
-            $user = $this->dbh->query("select * from {$database}.`zt_user` where account = 'admin' and password='" . md5('123456') . "'")->fetch();
-            if($user) $users[$webRoot] = true;
-        }
-        catch(Exception $e){}
-    }
-
-	if($users)
-	{
-		$sysURL = common::getSysURL();
-		$links  = array();
-		foreach($users as $webRoot => $user) $links[] = $sysURL . $webRoot;
-
-		$notice = sprintf($lang->user->notice4Safe, join('<br />', $links));
-		echo <<<EOD
-<script>
-\$(function()
-{
-	bootbox.alert('$notice');
-})
-</script>
-EOD;
-	}
+    $process4Safe = $isXampp ? $lang->user->process4DB : $lang->user->process4DIR;
+    $process4Safe = sprintf($process4Safe, join(' ', $isXampp ? $databases : $paths));
+    js::set('process4Safe', $process4Safe);
 }
 ?>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -216,4 +216,6 @@ $lang->user->noticeResetFile = "<h5>Contactez l'administrateur pour réinitialis
     <li>Gardez ce fichier vide.</li>
     <li>Si le fichier existe déjà, supprimez le et créez le à nouveau.</li><li>Bonne chance.</li>
     </ol>";
-$lang->user->notice4Safe = "It is detected that you may be using the one click installation package environment, and other sites in the environment are still using a simple password. For security, please change the password in time. Login address of other sites: <br />%s";
+$lang->user->notice4Safe = "Warning: one click package security hazard detected";
+$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory.";
+$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please visit login database and modify password field of zt_user table of %s database.";
