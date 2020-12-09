@@ -1780,11 +1780,12 @@ class block extends control
      */
     public function printProgramTeamBlock()
     {
-        $count   = isset($this->params->count) ? $this->params->count : 15;
-        $status  = isset($this->params->type) ? $this->params->type : 'all';
+        $count   = isset($this->params->count)   ? $this->params->count   : 15;
+        $status  = isset($this->params->type)    ? $this->params->type    : 'all';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
         /* Get projects. */
+        $this->app->loadLang('task');
         $this->view->projects = $this->loadModel('program')->getPRJOverview('byStatus', $status, $orderBy, $count);
     }
 
