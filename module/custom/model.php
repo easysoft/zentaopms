@@ -362,25 +362,6 @@ class customModel extends model
     }
 
     /**
-     * Get system mode switcher.
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return array
-     */
-    public function getModeSwitcher()
-    {
-        $current = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? 'Scrum' : $this->lang->custom->waterfallCommon;
-        $link    = (isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum') ? html::a(helper::createLink('custom', 'setwaterfall'), $this->lang->custom->waterfallCommon) : html::a(helper::createLink('custom', 'setscrum'), 'Scrum');
-
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' title='{$current}'><span class='text'>{$current}</span> <span class='caret'></span></button>";
-        $output .= "<ul class='dropdown-menu'><li>" . $link . "</li></ul>";
-        $output .= "</div>";
-
-        return $output;
-    }
-
-    /**
      * Merge shortcut query in featureBar.
      *
      * @param  string $module
@@ -601,7 +582,7 @@ class customModel extends model
             if(!$data->URName || !$data->SRName) return false;
 
             $newKey   = max(array_keys($this->lang->custom->URSRList)) + 1;
-            $URSRName = $data->URName . '/' . $data->SRName;
+            $URSRName = $data->URName . '/' . $data->SRName; 
 
             /* Delete old lang data, and add new. */
             $this->lang->custom->URSRList[$newKey] = $URSRName;

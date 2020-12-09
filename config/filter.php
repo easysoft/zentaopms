@@ -26,7 +26,6 @@ $filter->default->cookie['lang']        = 'reg::lang';
 $filter->default->cookie['theme']       = 'reg::word';
 $filter->default->cookie['fingerprint'] = 'reg::word';
 $filter->default->cookie['hideMenu']    = 'equal::true';
-$filter->default->cookie['systemModel'] = 'code';
 
 $filter->bug        = new stdclass();
 $filter->caselib    = new stdclass();

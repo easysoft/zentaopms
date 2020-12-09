@@ -40,7 +40,7 @@ $lang->custom->SRStory            = "Software requirements";
 $lang->custom->epic               = "Epic";
 $lang->custom->scrumStory         = "Story";
 $lang->custom->waterfallCommon    = "Waterfall";
-$lang->custom->configureWaterfall = "Waterfall Configure";
+$lang->custom->setStoryConcept    = "Set Story Concept";
 $lang->custom->configureScrum     = "Scrum Configure";
 
 $lang->custom->object['program'] = 'Program';
@@ -226,8 +226,6 @@ $lang->custom->waterfall->URSRName = 'A conceptual definition of requirements an
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
-$lang->custom->scrum->URAndSR    = 'Is it going to be epic?';
-$lang->custom->scrum->URSRName   = 'A conceptual definition of requirements?';
 
 $lang->custom->URList[1] = 'User Requirement';
 $lang->custom->URList[2] = 'UR';
@@ -246,8 +244,3 @@ $lang->custom->URSRList[4] = 'Epic/Story';
 
 $lang->custom->URTips = 'Type like：Requirement';
 $lang->custom->SRTips = 'Type like：Story';
-
-$lang->custom->waterfallOptions = new stdclass();
-$lang->custom->waterfallOptions->URAndSR = array();
-$lang->custom->waterfallOptions->URAndSR[0] = 'No';
-$lang->custom->waterfallOptions->URAndSR[1] = 'Yes';
