@@ -22,7 +22,6 @@ $lang->budget->createdDate    = '創建時間';
 $lang->budget->lastEditedBy   = '由誰編輯';
 $lang->budget->lastEditedDate = '編輯時間';
 $lang->budget->basicInfo      = '基本信息';
-$lang->budget->noData         = '暫無記錄，';
 
 $lang->budget->summaryReport = '彙總表';
 $lang->budget->confirmDelete = '您確定要刪除嗎？';

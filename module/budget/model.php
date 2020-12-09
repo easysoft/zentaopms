@@ -51,52 +51,39 @@ class budgetModel extends model
     /**
      * Get budget list.
      *
-     * @param  int     $programID
-     * @param  varchar $orderBy
-     * @param  pager   $object
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return object
      */
-    public function getList($programID, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('PRJ')->eq($programID)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
+        return $this->dao->select('*')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /**
      * Get stages.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getStages($programID)
+    public function getStages($projectID)
     {
-        return $this->dao->select('stage')->from(TABLE_BUDGET)
-            ->where('PRJ')->eq($programID)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('stage_asc')
-            ->fetchPairs();
+        return $this->dao->select('stage')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->orderBy('stage_asc')->fetchPairs();
     }
 
     /**
      * Get subjects.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getSubjects($programID)
+    public function getSubjects($projectID)
     {
-        return $this->dao->select('subject')->from(TABLE_BUDGET)
-            ->where('PRJ')->eq($programID)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('subject_asc')
-            ->fetchPairs();
+        return $this->dao->select('subject')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->orderBy('subject_asc')->fetchPairs();
     }
 
     /**
@@ -107,59 +94,75 @@ class budgetModel extends model
      */
     public function getSubjectStructure()
     {
-        $subjects  = $this->getSubjects($this->session->PRJ);
+        $this->loadModel('tree');
 
         $structure = array();
+        $subjects  = $this->getSubjects($this->session->PRJ);
         foreach($subjects as $subjectID)
         {
-            $subject = $this->loadModel('tree')->getById($subjectID); 
-            if($subject->grade == 1) 
+            $subject = $this->tree->getById($subjectID);
+            if($subject->grade == 1)
             {
                 $structure[$subject->id][] = $subject->id;
                 continue;
             }
-            
-            $structure[$subject->parent][]           = $subject->id;
-            $structure[$subject->parent]['hasChild'] = true;
+
+            $structure[$subject->parent][] = $subject->id;
         }
 
         return $structure;
     }
 
     /**
+     * Existence of sub-subjects.
+     *
+     * @param  array  $subjects
+     * @access public
+     * @return bool
+     */
+    public function getSubSubject($subjects)
+    {
+        foreach($subjects as $id => $subject)
+        {
+            if($subject[0] != $id) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get summary.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
+     * @param  array  $subjects
      * @access public
      * @return array
      */
-    public function getSummary($programID)
+    public function getSummary($projectID, $subjects)
     {
-        $budgets = $this->dao->select('*')->from(TABLE_BUDGET)
-            ->where('PRJ')->eq($programID)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
+        $budgets = $this->dao->select('*')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->fetchAll();
+        $stages  = $this->getStages($this->session->PRJ);
 
-        $summary = array();
-        foreach($budgets as $budget)
+        $summary['stages']   = array();
+        $summary['subjects'] = array();
+        foreach($stages as $stage)
         {
-            $summary[$budget->subject] = isset($summary[$budget->subject]) ? $summary[$budget->subject] : array();
-            $summary[$budget->subject][$budget->stage]  = isset($summary[$budget->subject][$budget->stage]) ? $summary[$budget->subject][$budget->stage] : 0;
-            $summary[$budget->subject][$budget->stage] += $budget->amount;
-        }
-
-        $total = 0;
-        foreach($summary as $subject => $stageSummary)
-        {
-            $summary[$subject]['summary'] = 0;
-            foreach($stageSummary as $amount) 
+            foreach($subjects as $subject)
             {
-                $summary[$subject]['summary'] += $amount;
-                $total += $amount;
+                foreach($subject as $children)
+                {
+                    $summary['stages'][$stage][$children] = 0;
+                    $summary['subjects'][$children]       = 0;
+                }
             }
         }
 
-        $summary['total'] = $total;
+        foreach($budgets as $budget)
+        {
+            $summary['stages'][$budget->stage][$budget->subject] = $budget->amount;
+            $summary['subjects'][$budget->subject] += $budget->amount;
+        }
+
         return $summary;
     }
 

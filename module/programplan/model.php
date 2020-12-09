@@ -94,23 +94,7 @@ class programplanModel extends model
      */
     public function getPlanPairsForBudget($programID = 0)
     {
-        $pairs   = array();
-        $plans   = $this->getPlans($programID);
-        $program = $this->getByID($programID);
-        foreach($plans as $planID => $plan)
-        {
-            $name = $plan->name;
-            if($program->product == 'multiple') $name = $plan->productName . '/' . $name;
-            $pairs[$planID] = '/'.$name;
-
-            foreach($plan->children as $childID => $child)
-            {
-                $childName = $name . '/' . $child->name;
-                $pairs[$childID] = $childName;
-            }
-        }
-
-        return $pairs;
+        return $this->loadModel('project')->getExecutionsByProject($programID, 'all', 0, true);
     }
 
     /**

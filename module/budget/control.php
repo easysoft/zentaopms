@@ -22,13 +22,13 @@ class budget extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        $this->view->program = $this->loadModel('project')->getByID($this->session->PRJ);
+        $this->view->program = $this->loadModel('program')->getPRJByID($this->session->PRJ);
     }
 
     /**
      * The budget browse page.
      *
-     * @param  varchar $orderBy
+     * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
@@ -40,14 +40,16 @@ class budget extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->budget->common . $this->lang->budget->list;
-        $this->view->position[] = $this->lang->budget->common . $this->lang->budget->list;
-        $this->view->budgets    = $this->budget->getList($this->session->PRJ, $orderBy, $pager);
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->title      = $this->lang->budget->list . $this->lang->colon . $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->list;
+
+        $this->view->budgets = $this->budget->getList($this->session->PRJ, $orderBy, $pager);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'subject');
+        $this->view->stages  = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
@@ -59,29 +61,18 @@ class budget extends control
      */
     public function summary()
     {
-        $getSubjectStructure = $this->budget->getSubjectStructure();
-        $isChildren          = false;
-        if(is_array($getSubjectStructure))
-        {
-            foreach($getSubjectStructure as $subjects)
-            {
-                if(isset($subjects['hasChild']))
-                {
-                    $isChildren = true;
-                    break;
-                }
-            }
-        }
+        $subjects = $this->budget->getSubjectStructure();
 
-        $this->view->title            = $this->lang->budget->common . $this->lang->budget->summary;
-        $this->view->position[]       = $this->lang->budget->common . $this->lang->budget->summary;
-        $this->view->subjectStructure = $getSubjectStructure;
-        $this->view->isChildren       = $isChildren;
-        $this->view->subjects         = $this->budget->getSubjects($this->session->PRJ);
-        $this->view->stages           = $this->budget->getStages($this->session->PRJ);
-        $this->view->stagePairs       = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
-        $this->view->summary          = $this->budget->getSummary($this->session->PRJ);
-        $this->view->modules          = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
+        $this->view->title      = $this->lang->budget->summary . $this->lang->colon . $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->summary;
+
+        $this->view->subjects   = $subjects;
+        $this->view->subSubject = $this->budget->getSubSubject($subjects);
+        $this->view->plans      = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->summary    = $this->budget->getSummary($this->session->PRJ, $subjects);
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
+
         $this->display();
     }
 
@@ -96,32 +87,30 @@ class budget extends control
         if($_POST)
         {
             $budgetID = $this->budget->create();
-
             if(dao::isError())
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                $response = array('result' => 'fail', 'message' => dao::getError());
                 $this->send($response);
             }
 
             $this->loadModel('action')->create('budget', $budgetID, 'created');
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('browse');
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'));
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->budget->create . $this->lang->budget->common;
-        $this->view->position[] = $this->lang->budget->create . $this->lang->budget->common;
-        $this->view->subjects   = array(0 => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->title      = $this->lang->budget->create . $this->lang->colon . $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->create;
+
+        $this->view->subjects = array(0 => '') + $this->budget->getSubjectOption();
+        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->display();
     }
 
     /**
      * Edit a budget.
      *
+     * @param  int    $budgetID
      * @access public
      * @return void
      */
@@ -130,11 +119,9 @@ class budget extends control
         if($_POST)
         {
             $changes = $this->budget->update($budgetID);
-
             if(dao::isError())
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                $response = array('result' => 'fail', 'message' => dao::getError());
                 $this->send($response);
             }
 
@@ -144,22 +131,22 @@ class budget extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('browse');
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'));
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->budget->edit . $this->lang->budget->common;
-        $this->view->position[] = $this->lang->budget->edit . $this->lang->budget->common;
-        $this->view->subjects   = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
-        $this->view->budget     = $this->budget->getByID($budgetID);
+        $this->view->title      = $this->lang->budget->edit . $this->lang->colon . $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->edit;
+
+        $this->view->subjects = array('' => '') + $this->budget->getSubjectOption();
+        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->budget   = $this->budget->getByID($budgetID);
         $this->display();
     }
 
     /**
-     * View a budget.
+     * Budget details.
      *
      * @param  int  $budgetID
      * @access public
@@ -167,12 +154,16 @@ class budget extends control
      */
     public function view($budgetID)
     {
-        $this->view->stages     = $this->budget->getStages($this->session->PRJ);
-        $this->view->subjects   = $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
-        $this->view->budget     = $this->budget->getByID($budgetID);
-        $this->view->actions    = $this->loadModel('action')->getList('budget', $budgetID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->title      = $this->lang->budget->common . $this->lang->colon . $this->lang->budget->view;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->view;
+
+        $this->view->subjects = $this->budget->getSubjectOption();
+        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->budget   = $this->budget->getByID($budgetID);
+        $this->view->actions  = $this->loadModel('action')->getList('budget', $budgetID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
+
         $this->display();
     }
 
@@ -188,15 +179,14 @@ class budget extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->budget->confirmDelete, $this->createLink('budget', 'delete', "id=$budgetID&confirm=yes"));
-            exit;
+            echo js::confirm($this->lang->budget->confirmDelete, inLink('delete', "budgetID=$budgetID&confirm=yes"));
+            die();
         }
         else
         {
             $this->budget->delete(TABLE_BUDGET, $budgetID);
             die(js::locate(inlink('browse'), 'parent'));
         }
-
     }
 
     /**
@@ -210,24 +200,22 @@ class budget extends control
         if($_POST)
         {
             $this->budget->batchCreate();
-
             if(dao::isError())
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                $response = array('result' => 'fail', 'message' => dao::getError());
                 $this->send($response);
             }
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('browse');
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'));
             $this->send($response);
         }
 
-        $this->view->title      = $this->lang->budget->batchCreate . $this->lang->budget->common;
-        $this->view->position[] = $this->lang->budget->batchCreate . $this->lang->budget->common;
-        $this->view->subjects   = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->stages     = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->title      = $this->lang->budget->batchCreate . $this->lang->colon . $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->common;
+        $this->view->position[] = $this->lang->budget->batchCreate;
+
+        $this->view->subjects = array('' => '') + $this->budget->getSubjectOption();
+        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
         $this->display();
     }
 }

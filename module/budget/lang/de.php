@@ -22,7 +22,6 @@ $lang->budget->createdDate    = 'CreatedDate';
 $lang->budget->lastEditedBy   = 'LastEditBy';
 $lang->budget->lastEditedDate = 'LastEditedDate';
 $lang->budget->basicInfo      = 'Basic Info.';
-$lang->budget->noData         = 'No Data';
 
 $lang->budget->summaryReport = 'Summary';
 $lang->budget->confirmDelete = 'Do you want to delete it?';

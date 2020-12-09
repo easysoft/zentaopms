@@ -22,7 +22,7 @@
         <tbody>
           <tr>
             <th class='w-120px'><?php echo $lang->budget->stage;?> </th>
-            <td><?php echo html::select('stage', $stages, '', 'class="form-control chosen"');?></td>
+            <td><?php echo html::select('stage', $plans, '', 'class="form-control chosen"');?></td>
             <td></td>
             <td></td>
           </tr>

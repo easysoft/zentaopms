@@ -42,7 +42,7 @@
           <tbody>
             <tr>
               <th><?php echo $lang->budget->stage;?></th>
-              <td><?php echo zget($stages, $budget->stage);?></td>
+              <td><?php echo zget($plans, $budget->stage);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->budget->subject;?></th>

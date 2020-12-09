@@ -29,7 +29,7 @@
     <?php if(empty($budgets)):?>
     <div class="table-empty-tip">
       <p> 
-        <span class="text-muted"><?php echo $lang->budget->noData;?></span>
+        <span class="text-muted"><?php echo $lang->noData;?></span>
         <?php if(common::hasPriv('budget', 'create')):?>
         <?php echo html::a($this->createLink('budget', 'create', ''), "<i class='icon icon-plus'></i> " . $lang->budget->create, '', "class='btn btn-info'");?>
         <?php endif;?>

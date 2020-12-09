@@ -33,7 +33,7 @@
         <?php for($i = 1; $i <= 10; $i++):?>
           <tr>
             <td><?php echo $i;?></td>
-            <td><?php echo html::select("stage[$i]", $stages, '', 'class="form-control chosen"');?></td>
+            <td><?php echo html::select("stage[$i]", $plans, '', 'class="form-control chosen"');?></td>
             <td><?php echo html::select("subject[$i]", $subjects, '', 'class="form-control chosen"');?></td>
             <td><?php echo html::input("name[$i]", '', 'class="form-control"');?></td>
             <td>

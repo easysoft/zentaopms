@@ -29,70 +29,47 @@
 </div>
 <div id='mainContent' class='main-content'>
   <div class="center-block">
-    <?php if($summary['total'] != 0):?>
+    <?php if(!empty($subjects)):?>
     <table class='table table-bordered'>
       <tr class='text-center table-title'>
-        <th rowspan="<?php echo $isChildren ?  2 : 1;?>"><?php echo $lang->budget->subject . '/' . $lang->budget->stage?></th>
-        <?php $hasChild = false;?>
-        <?php foreach($subjectStructure as $subject => $structure):?>
-        <?php if(isset($structure['hasChild'])) $hasChild = true;?>
-        <th colspan="<?php echo (count($structure) - 1)?>"><?php echo zget($modules, $subject);?></th>
+        <th rowspan="<?php echo $subSubject ? 2 : 1;?>"><?php echo $lang->budget->subject . '/' . $lang->budget->stage;?></th>
+        <?php foreach($subjects as $id => $subject):?>
+          <th colspan="<?php echo count($subject);?>"><?php echo zget($modules, $id);?></th>
         <?php endforeach;?>
-        <th rowspan="<?php echo $isChildren ? 2 : 1;?>"><?php echo $lang->budget->summary; ?></th>
+        <th rowspan="<?php echo $subSubject ? 2 : 1;?>"><?php echo $lang->budget->summary;?></th>
       </tr>
-      <?php if($hasChild):?>
       <tr class='text-center table-title'>
-        <?php foreach($subjectStructure as $parentID => $structure):?>
-        <?php
-        foreach($structure as $subject)
-        {
-            if($subject == 'hasChild') continue;
-            if($subject == $parentID)
-            {
-                echo "<th></th>";
-            }
-            else
-            {
-                echo "<th>" . zget($modules, $subject) . "</th>";
-            }
-        }
-        ?>
+        <?php foreach($subjects as $subject):?>
+          <?php if($id == $subject[0] && !$subSubject) continue;?>
+          <?php foreach($subject as $subjectID):?>
+            <th><?php echo zget($modules, $subjectID);?></th>
+          <?php endforeach;?>
         <?php endforeach;?>
       </tr>
-      <?php endif;?>
-      <?php foreach($stages as $stage):?>
+
+      <?php foreach($summary['stages'] as $stageID => $subject):?>
       <tr>
-        <td><?php echo zget($stagePairs, $stage);?></td>
-        <?php foreach($subjects as $subject):?>
-        <td><?php echo isset($summary[$subject][$stage]) ? $summary[$subject][$stage] : 0;?></td>
+        <td><?php echo zget($plans, $stageID, $stageID);?></td>
+        <?php foreach($subject as $cost):?>
+          <td><?php echo $cost;?></td>
         <?php endforeach;?>
-        <td>
-        <?php $rowsum = 0;?>
-        <?php foreach($subjects as $subject):?>
-        <?php $rowsum += isset($summary[$subject][$stage]) ? $summary[$subject][$stage] : 0;?>
-        <?php endforeach;?>
-        <?php echo $rowsum;?>
-        </td>
+        <td><?php echo array_sum($subject);?></td>
       </tr>
       <?php endforeach;?>
+
       <tr class='summary'>
         <td><?php echo $lang->budget->summary;?></td>
-        <?php foreach($subjects as $subject):?>
-        <td><?php echo isset($summary[$subject]['summary']) ? $summary[$subject]['summary'] : 0;?></td>
+        <?php foreach($summary['subjects'] as $cost):?>
+          <td><?php echo $cost;?></td>
         <?php endforeach;?>
-        <td>
-        <?php $rowsum = 0;?>
-        <?php foreach($subjects as $subject):?>
-        <?php $rowsum += isset($summary[$subject]['summary']) ? $summary[$subject]['summary'] : 0;?>
-        <?php endforeach;?>
-        <?php echo $rowsum;?>
         </td>
+        <td><?php echo array_sum($summary['subjects']);?></td>
       </tr>
     </table>
-      <div class='alert alert-info mg-0'><?php echo $lang->budget->total . '：' . $summary['total'] . $lang->budget->{$program->budgetUnit};?></div>
+    <div class='alert alert-info mg-0'><?php echo $lang->budget->total . '：' . array_sum($summary['subjects']) . $lang->budget->{$program->budgetUnit};?></div>
     <?php else:?>
     <div class="table-empty-tip">
-      <p> 
+      <p>
         <span class="text-muted"><?php echo $lang->noData;?></span>
       </p>
     </div>
