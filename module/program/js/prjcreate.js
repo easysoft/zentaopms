@@ -35,10 +35,14 @@ function addNewProduct(obj)
     if($(obj).attr('checked'))
     {
         $('#productName').closest('tr').removeClass('hidden');
+        $('#plans').closest('tr').addClass('hidden');
+        $('#productsBox .chosen-container').attr('disabled',true);
     }
     else
     {
         $('#productName').closest('tr').addClass('hidden');
+        $('#plans').closest('tr').removeClass('hidden');
+        $('#productsBox .chosen-container').removeAttr('disabled',true);
     }
 }
 

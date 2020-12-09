@@ -47,10 +47,6 @@
           <th><?php echo $lang->program->PRJCode;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <tr class='hidden'>
-          <th><?php echo $lang->product->name;?></th>
-          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
-        </tr>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -92,6 +88,10 @@
               <?php endif;?>
             </div>
           </td>
+        </tr>
+        <tr class='hidden'>
+          <th><?php echo $lang->product->name;?></th>
+          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
