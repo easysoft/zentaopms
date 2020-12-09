@@ -24,9 +24,6 @@
           <td colspan='3'><?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?></td>
           <td></td><td></td>
         </tr>
-        <tr>
-          <th> <?php echo $lang->custom->waterfall->URAndSR;?> </th>
-          <td> <?php echo html::radio('URAndSR', $lang->custom->waterfallOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?> </td>
         </tr>
         <?php $hidden = zget($this->config->custom, 'URAndSR', 0) == 0 ? 'hidden' : '';?>
         <tr class="<?php echo $hidden;?>" id='URSRName'>
