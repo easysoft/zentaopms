@@ -805,7 +805,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'begin_asc')
     {
         if(!$this->session->PRJ || !$productID) return array();
 
