@@ -202,8 +202,8 @@ class designModel extends model
         $commit    = $oldCommit ? $oldCommit . ',' . $revisions : $revisions;
 
         $design = new stdclass();
-        $design->commit     = $commit;
-        $design->commitBy   = $this->app->user->account;
+        $design->commit   = $commit;
+        $design->commitBy = $this->app->user->account;
         $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
     }
 
