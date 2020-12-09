@@ -93,6 +93,7 @@ $lang->action->objectTypes['issue']       = 'Issue';
 $lang->action->objectTypes['design']      = 'Design';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['budget']      = 'Cost Estimate';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

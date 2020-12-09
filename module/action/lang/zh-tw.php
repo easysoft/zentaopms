@@ -93,6 +93,7 @@ $lang->action->objectTypes['issue']       = '問題';
 $lang->action->objectTypes['design']      = '設計';
 $lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['budget']      = '费用估算';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

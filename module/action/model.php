@@ -478,6 +478,7 @@ class actionModel extends model
             $object->objectType = str_replace('`', '', $object->objectType);
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
+
         foreach($typeTrashes as $objectType => $objectIds)
         {
             if(!isset($this->config->objectTables[$objectType]))continue;
