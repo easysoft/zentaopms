@@ -83,7 +83,7 @@ $lang->story->create = $storyType == 'story' ? $lang->story->createStory : $lang
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID&chartType=pie&storyType=$storyType", '', 'button', 'bar-chart muted'); ?>
+    <?php common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>

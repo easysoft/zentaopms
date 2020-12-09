@@ -1297,6 +1297,10 @@ class productModel extends model
                 $extra = $extra ? $extra : 'gantt';
                 $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
             }
+            elseif($module == 'story' && $method == 'report')
+            {
+                $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+            }
             else
             {
                 $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));

@@ -1678,7 +1678,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'pie', $storyType = 'story')
+    public function report($productID, $branchID, $storyType = 'story', $browseType, $moduleID, $chartType = 'pie')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1698,6 +1698,7 @@ class story extends control
             }
         }
         $this->products = $this->product->getPairs();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $storyType, $branchID); 
         $this->product->setMenu($this->products, $productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
