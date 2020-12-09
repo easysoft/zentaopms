@@ -472,7 +472,7 @@ class story extends control
      */
     public function replaceURLang($type)
     {
-        if($type == 'requirement' and $this->config->URAndSR)
+        if($type == 'requirement')
         {   
             $storyLang = $this->lang->story;
             $SRCommon  = $this->lang->productSRCommon;

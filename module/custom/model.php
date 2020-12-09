@@ -594,34 +594,30 @@ class customModel extends model
         $data = fixer::input('post')->get();
         $lang = $this->app->getClientLang();
 
-        $this->loadModel('setting')->setItem("system.custom.URAndSR", $data->URAndSR);
-        if($data->URAndSR)
+        /* If has custom UR and SR name. */
+        $newKey = '';
+        if(isset($data->URSRCustom))
         {
-            /* If has custom UR and SR name. */
-            $newKey = '';
-            if(isset($data->URSRCustom))
-            {
-                if(!$data->URName || !$data->SRName) return false;
+            if(!$data->URName || !$data->SRName) return false;
 
-                $newKey   = max(array_keys($this->lang->custom->URSRList)) + 1;
-                $URSRName = $data->URName . '/' . $data->SRName; 
+            $newKey   = max(array_keys($this->lang->custom->URSRList)) + 1;
+            $URSRName = $data->URName . '/' . $data->SRName;
 
-                /* Delete old lang data, and add new. */
-                $this->lang->custom->URSRList[$newKey] = $URSRName;
-                $this->lang->custom->URList[$newKey]   = $data->URName;
-                $this->lang->custom->SRList[$newKey]   = $data->SRName;
-                $this->deleteItems("lang=$lang&module=custom&section=URSRList");
-                $this->deleteItems("lang=$lang&module=custom&section=URList");
-                $this->deleteItems("lang=$lang&module=custom&section=SRList");
+            /* Delete old lang data, and add new. */
+            $this->lang->custom->URSRList[$newKey] = $URSRName;
+            $this->lang->custom->URList[$newKey]   = $data->URName;
+            $this->lang->custom->SRList[$newKey]   = $data->SRName;
+            $this->deleteItems("lang=$lang&module=custom&section=URSRList");
+            $this->deleteItems("lang=$lang&module=custom&section=URList");
+            $this->deleteItems("lang=$lang&module=custom&section=SRList");
 
-                foreach($this->lang->custom->URSRList as $key => $value) $this->setItem("$lang.custom.URSRList.{$key}.1", $value);
-                foreach($this->lang->custom->URList as $key => $value)   $this->setItem("$lang.custom.URList.{$key}.1", $value);
-                foreach($this->lang->custom->SRList as $key => $value)   $this->setItem("$lang.custom.SRList.{$key}.1", $value);
-            }
-
-            $URSRName = $newKey ? $newKey : $data->URSRCommon;
-            $this->setting->setItem("system.custom.URSRName", $URSRName);
+            foreach($this->lang->custom->URSRList as $key => $value) $this->setItem("$lang.custom.URSRList.{$key}.1", $value);
+            foreach($this->lang->custom->URList as $key => $value)   $this->setItem("$lang.custom.URList.{$key}.1", $value);
+            foreach($this->lang->custom->SRList as $key => $value)   $this->setItem("$lang.custom.SRList.{$key}.1", $value);
         }
+
+        $URSRName = $newKey ? $newKey : $data->URSRCommon;
+        $this->loadModel('setting')->setItem("system.custom.URSRName", $URSRName);
 
         return true;
     }

@@ -55,13 +55,11 @@
               <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
             </td><td></td>
           </tr>  
-          <?php if($config->URAndSR):?>
           <tr>
             <th><?php echo $lang->product->storyConcept;?></th>
             <td><?php echo html::select('storyConcept', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
             <td></td>
           </tr>
-          <?php endif;?>
           <tr class='hide'>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>
