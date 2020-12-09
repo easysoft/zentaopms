@@ -62,7 +62,7 @@ $config->story->datatable->fieldList['pri']['required'] = 'no';
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
 $config->story->datatable->fieldList['title']['fixed']    = 'left';
-$config->story->datatable->fieldList['title']['width']    = 'auto';
+$config->story->datatable->fieldList['title']['width']    = '170';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
 $config->story->datatable->fieldList['branch']['title']    = 'branch';
@@ -97,7 +97,7 @@ $config->story->datatable->fieldList['status']['required'] = 'no';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '65';
+$config->story->datatable->fieldList['estimate']['width']    = '60';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';

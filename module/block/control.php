@@ -784,7 +784,17 @@ class block extends control
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $count , 1);
 
-        $productStats = $this->loadModel('product')->getStats('order_desc', $pager, $type);
+        $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
+        $productIdList = array();
+        foreach($productStats as $product) $productIdList[] = $product->id;
+
+        $this->view->executions = $this->dao->select('t1.product,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.type')->in('stage,sprint')
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t1.project')
+            ->fetchPairs('product', 'name');
         $this->view->productStats = $productStats;
     }
 

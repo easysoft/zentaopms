@@ -145,8 +145,8 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
 $lang->user->personalData['createdTodos']        = '创建的待办数';
-$lang->user->personalData['createdRequirements'] = "创建的{$lang->URCommon}数";
-$lang->user->personalData['createdStories']      = "创建的{$lang->SRCommon}数";
+$lang->user->personalData['createdRequirements'] = "创建的用需/史诗数";
+$lang->user->personalData['createdStories']      = "创建的软需/故事数";
 $lang->user->personalData['finishedTasks']       = '完成的任务数';
 $lang->user->personalData['createdBugs']         = '提交的Bug数';
 $lang->user->personalData['resolvedBugs']        = '解决的Bug数';
