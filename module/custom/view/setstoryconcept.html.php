@@ -10,11 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <?php echo html::a(inlink('setstoryconcept'), "<span class='text'>" . $lang->custom->concept . '</span>', '', "class='btn btn-link btn-active-text concept'");?>
-  </div>
-</div>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
