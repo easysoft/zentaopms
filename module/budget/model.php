@@ -162,7 +162,7 @@ class budgetModel extends model
         /* Count the costs incurred by a stage corresponding to a subject. */
         foreach($budgets as $budget)
         {
-            $summary['stages'][$budget->stage][$budget->subject] = $budget->amount;
+            $summary['stages'][$budget->stage][$budget->subject] += $budget->amount;
             $summary['subjects'][$budget->subject] += $budget->amount;
         }
 
