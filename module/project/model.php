@@ -854,7 +854,7 @@ class projectModel extends model
             if($projectModel == 'waterfall')
             {
                 $summary = $this->dao->select('count(id) as executions, sum(IF(INSTR("closed", status) < 1, 0, 1)) as closedExecutions')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
-                if($summary['executions'] == $summary['closedExecutions']) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
+                if($summary->executions == $summary->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
             }
         }
 
