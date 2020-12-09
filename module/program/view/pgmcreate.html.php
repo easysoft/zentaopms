@@ -34,7 +34,7 @@
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
-<?php js::set('longTime', LONG_TIME);?>
+<?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php $requiredFields = $config->program->PGMCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>

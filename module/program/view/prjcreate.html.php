@@ -19,7 +19,7 @@
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
-<?php js::set('longTime', LONG_TIME);?>
+<?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php $requiredFields = $config->program->PRJCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>

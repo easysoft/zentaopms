@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
-<?php js::set('longTime', LONG_TIME);?>
+<?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php $aclList = $program->parent ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
 <?php $requiredFields = $config->program->PGMEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -55,8 +55,11 @@
             <div class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php $disabledEnd = $program->end == LONG_TIME ? 'disabled' : '';?>
-              <?php echo html::input('end', $program->end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");?>
+              <?php
+                $disabledEnd = $program->end == LONG_TIME ? 'disabled' : '';
+                $end         = $program->end == LONG_TIME ? $lang->program->PRJLongTime : $program->end;
+                echo html::input('end', $end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->program->end . "' required");
+              ?>
             </div>
           </td>
           <?php $endValue = $program->end == LONG_TIME ? 999 : '';?>

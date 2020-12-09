@@ -1463,7 +1463,7 @@ class programModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end;
+                    echo $project->end == LONG_TIME ? $this->lang->program->PRJLongTime : $project->end;
                     break;
                 case 'PRJStatus':
                     echo zget($this->lang->program->statusList, $project->status);

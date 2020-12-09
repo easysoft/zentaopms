@@ -18,7 +18,7 @@
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
-<?php js::set('longTime', LONG_TIME);?>
+<?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -110,7 +110,8 @@
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
               <?php
                 $disabledEnd = $project->end == LONG_TIME ? 'disabled' : '';
-                echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
+                $end         = $project->end == LONG_TIME ? $lang->program->PRJLongTime : $project->end;
+                echo html::input('end', $end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->program->end . "' required");
               ?>
             </div>
           </td>
