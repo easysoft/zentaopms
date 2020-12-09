@@ -34,8 +34,8 @@
             <th class='c-id w-50px'>
               <?php echo $lang->idAB;?>
             </th>
-            <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
             <th class='table-nest-title'><?php echo $lang->program->PRJName;?></th>
+            <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
             <th class='w-80px'><?php  echo $lang->program->PRJStatus;?></th>
             <th class='w-100px'><?php echo $lang->program->begin;?></th>
             <th class='w-100px'><?php echo $lang->program->end;?></th>
@@ -50,11 +50,11 @@
             <td class='c-id'>
               <?php printf('%03d', $project->id);?>
             </td>
-            <td class='text-left'><?php echo $project->code;?></td>
             <td class='c-name text-left' title='<?php echo $project->name?>'>
               <span class="table-nest-icon"></span>
               <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?>
             </td>
+            <td class='text-left'><?php echo $project->code;?></td>
             <td class='c-status'><span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
             <td class='text-center'><?php echo $project->begin;?></td>
             <td class='text-center'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
