@@ -21,9 +21,7 @@
         </button>
         <ul class='dropdown-menu'>
           <li><?php echo html::a($this->inLink('story', "type=$type"), $lang->generalSR);?></li>
-          <?php if($config->URAndSR):?>
           <li><?php echo html::a($this->inLink('story', "type=$type&storyType=requirement"), $lang->generalUR);?></li>
-          <?php endif;?>
         </ul>
       </div>
     </div>

@@ -125,11 +125,8 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模組';
 
 global $config;
-if($config->URAndSR)
-{
-    $URCommon = zget($lang, 'URCommon', "用戶需求");
-    $SRCommon = zget($lang, 'SRCommon', "軟件需求");
-}
+$URCommon = zget($lang, 'URCommon', "用戶需求");
+$SRCommon = zget($lang, 'SRCommon', "軟件需求");
 
 /* 主導航菜單。*/
 $lang->mainNav = new stdclass();
@@ -169,9 +166,9 @@ $lang->product->menu->home = '主頁|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-if($config->URAndSR) $lang->product->viewMenu->track = array('link' => "跟蹤矩陣|story|track|productID=%s");
+$lang->product->viewMenu->track       = array('link' => "跟蹤矩陣|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "計劃|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s';
@@ -302,11 +299,8 @@ $lang->scrumproduct->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->scrumproduct->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->scrumproduct->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 
-if($config->URAndSR)
-{
-    $lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-    $lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-}
+$lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
 $lang->product->dividerMenu = ',project,doc,';
 
@@ -956,11 +950,8 @@ $lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|prod
 $lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track = '跟蹤矩陣|story|track|product={PRODUCT}';
 
-if($config->URAndSR)
-{
-    $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
-    $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
-}
+$lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
+$lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');

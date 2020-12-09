@@ -194,7 +194,7 @@ class product extends control
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         /* Change for requirement story title. */
-        if($storyType == 'requirement' and $this->config->URAndSR)
+        if($storyType == 'requirement')
         {
             $this->lang->story->title = str_replace($this->lang->productSRCommon, $this->lang->productURCommon, $this->lang->story->title);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;

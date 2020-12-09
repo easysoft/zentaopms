@@ -14,14 +14,11 @@ $lang->story->create            = "提{$lang->productSRCommon}";
 $lang->story->createStory       = "提{$lang->productSRCommon}";
 $lang->story->createRequirement = "提{$lang->productSRCommon}";
 
-if($config->URAndSR)
-{
-    $lang->story->requirement       = zget($lang, 'productURCommon', "用户需求");
-    $lang->story->story             = zget($lang, 'productSRCommon', "软件需求");
-    $lang->story->createStory       = '添加' . $lang->story->story;
-    $lang->story->createRequirement = '添加' . $lang->story->requirement;
-    $lang->story->affectedStories   = "影响的{$lang->story->story}";
-}
+$lang->story->requirement       = zget($lang, 'productURCommon', "用户需求");
+$lang->story->story             = zget($lang, 'productSRCommon', "软件需求");
+$lang->story->createStory       = '添加' . $lang->story->story;
+$lang->story->createRequirement = '添加' . $lang->story->requirement;
+$lang->story->affectedStories   = "影响的{$lang->story->story}";
 
 $lang->story->batchCreate       = "批量创建";
 $lang->story->change            = "变更";

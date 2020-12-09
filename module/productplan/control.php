@@ -503,7 +503,7 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductPairsByProject($this->session->PRJ);
+        $products = $this->product->getPairs('nocode');
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
