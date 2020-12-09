@@ -141,15 +141,9 @@ $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
-$lang->system->menuOrder[1]  = 'setmodel';
-$lang->system->menuOrder[5]  = 'estimate';
-$lang->system->menuOrder[10] = 'stage';
-$lang->system->menuOrder[15] = 'measurement';
-$lang->system->menuOrder[20] = 'auditcl';
-$lang->system->menuOrder[25] = 'cmcl';
-$lang->system->menuOrder[30] = 'process';
-$lang->system->menuOrder[35] = 'reviewcl';
-$lang->system->menuOrder[40] = 'subject';
+$lang->system->menuOrder[5]  = 'company';
+$lang->system->menuOrder[10] = 'scrum';
+$lang->system->menuOrder[15] = 'waterfall';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

@@ -362,8 +362,11 @@ class custom extends control
      */
     public function estimate()
     {
-        $this->lang->custom->menu = new stdclass();
+        $this->lang->custom->menu = $this->lang->stage->menu;
         $this->lang->navGroup->custom = 'system';
+        $key = array_search('custom', $this->lang->noMenuModule);
+        unset($this->lang->noMenuModule[$key]);
+
         if(strtolower($this->server->request_method) == "post")
         {
             $this->loadModel('setting');
@@ -393,16 +396,20 @@ class custom extends control
     } 
 
     /**
-     * Configure waterfall.
+     * Set story concept.
      * 
      * @access public
      * @return void
      */
-    public function configureWaterfall()
+    public function setStoryConcept()
     {   
+        /* Process menu.*/
         $this->app->loadLang('custom');
-        $this->lang->custom->menu = new stdclass();
+        $this->lang->custom->menu = $this->lang->subject->menu;
         $this->lang->navGroup->custom = 'system';
+        $this->lang->system->menu->company['subModule'] .= ',custom';
+        $key = array_search('custom', $this->lang->noMenuModule);
+        unset($this->lang->noMenuModule[$key]);
 
         if($_POST)
         {   
@@ -410,18 +417,11 @@ class custom extends control
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'configurewaterfall')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'setstoryconcept')));
         }   
 
-        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('section')->eq('common')
-            ->andWhere('`key`')->eq('URSRName')
-            ->fetch('value');
-
-        $this->view->title      = $this->lang->custom->common;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->URSRName   = json_decode($URSRName);
+        $this->view->title      = $this->lang->custom->setStoryConcept;
+        $this->view->position[] = $this->lang->custom->setStoryConcept;
 
         $this->display();
     }
@@ -501,32 +501,6 @@ class custom extends control
         $this->view->position[] = $this->view->title;
 
         $this->display();
-    }
-
-    /**
-     * Set waterfall model.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setWaterfall()
-    {   
-        setCookie("systemModel", 'waterfall', $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        die(js::locate($this->createLink('custom', 'estimate')));
-    }
-
-    /**
-     * Set scrum model.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setscrum()
-    {   
-        setCookie("systemModel", 'scrum', $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        die(js::locate($this->createLink('custom', 'configurescrum')));
     }
 
     /**

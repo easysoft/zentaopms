@@ -134,7 +134,7 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> 产品|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> 项目|program|prjbrowse|';
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
@@ -188,28 +188,23 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
-$lang->system->menu->stage    = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-$lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
-$lang->system->menu->custom   = array('link' => '自定义|custom|configurewaterfall|');
-$lang->system->dividerMenu    = ',auditcl,subject,';
+$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
+$lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
+$lang->system->menu->waterfall = array('link' => '瀑布模型|custom|estimate|', 'subModule' => 'stage');
 
-if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
-{
-    $lang->system->menu = new stdclass();
-    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-    $lang->system->menu->holiday  = array('link' => '节假日|holiday|browse|');
-    $lang->system->menu->custom   = array('link' => '自定义|custom|configurescrum|');
+$lang->subject = new stdclass();
+$lang->subject->menu = new stdclass();
+$lang->subject->menu->subject = array('link' => '科目|subject|browse|');
+$lang->subject->menu->holiday = array('link' => '节假日|holiday|browse|');
+$lang->subject->menu->concept = array('link' => '需求概念|custom|setstoryconcept|');
 
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
-    unset($lang->system->dividerMenu);
-}
+$lang->holiday = new stdclass();
+$lang->holiday->menu = $lang->subject->menu;
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
-$lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
-$lang->stage->menu->settype = '阶段类型|stage|settype|';
+$lang->stage->menu->estimate = array('link' => '估算|custom|estimate');
+$lang->stage->menu->stage    = array('link' => '阶段|stage|settype');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -956,6 +951,6 @@ $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|produc
 $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'auditcl', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

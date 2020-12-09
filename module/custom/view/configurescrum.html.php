@@ -24,18 +24,6 @@
           <td colspan='3'><?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?></td>
           <td></td><td></td>
         </tr>
-        </tr>
-        <?php $hidden = zget($this->config->custom, 'URAndSR', 0) == 0 ? 'hidden' : '';?>
-        <tr class="<?php echo $hidden;?>" id='URSRName'>
-          <th><?php echo $lang->custom->waterfall->URSRName;?></th>
-          <td><?php echo html::select('URSRCommon', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
-          <td><?php echo html::checkbox('URSRCustom', $lang->custom->common, "class='form-control'");?></td>
-        </tr>
-        <tr class='hidden' id='customURSR'>
-          <th></th>
-          <td><?php echo html::input('URName', '', "class='form-control' placeholder={$lang->custom->URTips}");?></td>
-          <td><?php echo html::input('SRName', '', "class='form-control' placeholder={$lang->custom->SRTips}");?></td>
-        </tr>
         <tr>
           <th></th>
           <td class='text-left'><?php echo html::submitButton();?></td>

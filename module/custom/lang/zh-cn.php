@@ -34,14 +34,14 @@ $lang->custom->region             = '区间';
 $lang->custom->tips               = '提示语';
 $lang->custom->setTips            = '设置提示语';
 $lang->custom->isRange            = '是否目标控制范围';
-$lang->custom->concept            = "概念";
+$lang->custom->concept            = "项目概念";
 $lang->custom->URStory            = "用户需求";
 $lang->custom->SRStory            = "软件需求";
 $lang->custom->epic               = "史诗";
 $lang->custom->scrumStory         = "故事";
 $lang->custom->waterfallCommon    = "瀑布";
-$lang->custom->configureWaterfall = "瀑布自定义";
-$lang->custom->configureScrum     = "敏捷自定义";
+$lang->custom->setStoryConcept    = "设置需求概念";
+$lang->custom->configureScrum     = "敏捷模型自定义";
 
 $lang->custom->object['program'] = '项目';
 $lang->custom->program->fields['unitList'] = '预算单位';
@@ -221,7 +221,6 @@ $lang->custom->conceptOptions->hourPoint['1'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['2'] = '代码行';
 
 $lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->URAndSR  = '是否启用用户需求概念';
 $lang->custom->waterfall->URSRName = '默认需求概念组合';
 
 $lang->custom->scrum = new stdclass();
@@ -244,8 +243,3 @@ $lang->custom->URSRList[4] = '史诗/故事';
 
 $lang->custom->URTips = '请输入如：用户需求';
 $lang->custom->SRTips = '请输入如：软件需求';
-
-$lang->custom->waterfallOptions = new stdclass();
-$lang->custom->waterfallOptions->URAndSR = array();
-$lang->custom->waterfallOptions->URAndSR[0] = '否';
-$lang->custom->waterfallOptions->URAndSR[1] = '是';

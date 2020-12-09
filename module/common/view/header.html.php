@@ -10,7 +10,6 @@ include 'chosen.html.php';
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
 <?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
 <?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
-<?php $isSystem  = (zget($lang->navGroup, $app->rawModule) == 'system');?>
 <div id='menu'>
   <nav id='menuNav'>
     <?php commonModel::printMainNav($app->rawModule);?>
@@ -30,7 +29,6 @@ include 'chosen.html.php';
         <?php if($isProgram) echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
         <?php if($isProduct) echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
-        <?php if($isSystem)  echo $this->loadModel('custom')->getModeSwitcher();?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
