@@ -47,6 +47,7 @@ $lang->product->project     = ' Liste ' . $lang->projectCommon;
 $lang->product->build       = 'Liste Builds';
 $lang->product->projectInfo = "Les {$lang->projectCommon}s qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
 
+$lang->product->currentExecution      = 'Current iteration/phase';
 $lang->product->activeStories         = 'Actives [S]';
 $lang->product->activeStoriesTitle    = 'Stories Actives';
 $lang->product->changedStories        = 'Changées [S]';

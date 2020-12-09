@@ -21,6 +21,9 @@
     <thead>
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
+        <?php if($longBlock):?>
+        <th class='c-name c-project'><?php echo $lang->product->currentExecution;?></th>
+        <?php endif;?>
         <th title='<?php echo $lang->product->plans?>' class='c-num w-120px'><?php echo $lang->product->plans;?></th>
         <th title='<?php echo $lang->product->releases?>' class='c-num w-100px'><?php echo $lang->product->releases;?></th>
         <th title='<?php echo $lang->product->activeStoriesTitle?>' class='c-num w-120px'><?php echo $lang->product->activeStories;?></th>
@@ -35,6 +38,10 @@
       ?>
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
+        <?php if($longBlock):?>
+        <?php $projectName = zget($executions, $product->id, '');?>
+        <td class='c-name c-project text-left' title='<?php echo $projectName;?>'><?php echo $projectName;?></td>
+        <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
         <td class="c-num"><?php echo $product->releases?></td>
         <td class="c-num"><?php echo $product->stories['active']?></td>
