@@ -144,11 +144,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Mạnh</span>"
 $lang->user->statusList['active'] = 'Kích hoạt';
 $lang->user->statusList['delete'] = 'Đã xóa';
 
-$lang->user->personalData['createdTodos']   = 'Việc đã tạo';
-$lang->user->personalData['createdStories'] = 'Chuyện đã tạo';
-$lang->user->personalData['finishedTasks']  = 'Nhiệm vụ đã kết thúc';
-$lang->user->personalData['resolvedBugs']   = 'Bugs đã giải quyết';
-$lang->user->personalData['createdCases']   = 'Tình huống đã tạo';
+$lang->user->personalData['createdTodos']        = 'Todos Created';
+$lang->user->personalData['createdRequirements'] = "Requirements Created";
+$lang->user->personalData['createdStories']      = "Stories Created";
+$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
+$lang->user->personalData['createdBugs']         = 'Bugs Created';
+$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
+$lang->user->personalData['createdCases']        = 'Cases Created';
+$lang->user->personalData['createdRisks']        = 'Risks Created';
+$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
+$lang->user->personalData['createdIssues']       = 'Issues Created';
+$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
+$lang->user->personalData['createdDocs']         = 'Docs Created';
 
 $lang->user->keepLogin['on']   = 'Duy trì đăng nhập';
 $lang->user->loginWithDemoUser = 'Đăng nhập Demo:';

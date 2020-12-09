@@ -144,11 +144,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>强</span>";
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
-$lang->user->personalData['createdTodos']   = '创建的待办数';
-$lang->user->personalData['createdStories'] = "创建的{$lang->productSRCommon}数";
-$lang->user->personalData['finishedTasks']  = '完成的任务数';
-$lang->user->personalData['resolvedBugs']   = '解决的Bug数';
-$lang->user->personalData['createdCases']   = '创建的用例数';
+$lang->user->personalData['createdTodos']        = '创建的待办数';
+$lang->user->personalData['createdRequirements'] = "创建的{$lang->URCommon}数";
+$lang->user->personalData['createdStories']      = "创建的{$lang->SRCommon}数";
+$lang->user->personalData['finishedTasks']       = '完成的任务数';
+$lang->user->personalData['createdBugs']         = '提交的Bug数';
+$lang->user->personalData['resolvedBugs']        = '解决的Bug数';
+$lang->user->personalData['createdCases']        = '创建的用例数';
+$lang->user->personalData['createdRisks']        = '创建的风险数';
+$lang->user->personalData['resolvedRisks']       = '解决的风险数';
+$lang->user->personalData['createdIssues']       = '创建的问题数';
+$lang->user->personalData['resolvedIssues']      = '解决的问题数';
+$lang->user->personalData['createdDocs']         = '创建的文档数';
 
 $lang->user->keepLogin['on']      = '保持登录';
 $lang->user->loginWithDemoUser    = '使用demo帐号登录：';
