@@ -8,6 +8,7 @@ $maxConsumed  = 0;
 <div class='panel-body'>
   <div class='table-row'>
     <div class='table-col chart-titles'>
+      <div class='chart-col-title strong'><span><?php echo $lang->program->PRJName;?></span></div>
       <?php foreach($projects as $project):?>
       <?php
       $maxTeamCount = max($maxTeamCount, $project->teamCount);
@@ -47,7 +48,7 @@ $maxConsumed  = 0;
   </div>
   <style>
   .block-projectteam .panel-body {margin-top: -10px}
-  .chart-titles {width: 110px; padding-right: 10px; padding-top: 30px; position: relative; z-index: 1}
+  .chart-titles {width: 110px; padding-right: 10px; position: relative; z-index: 1}
   .chart-rows {position: relative; z-index: 0}
   .chart-title {width: 100px; line-height: 20px; padding: 5px 0; height: 30px}
   .chart-title > span {background: #fff}
