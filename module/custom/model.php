@@ -587,7 +587,7 @@ class customModel extends model
      * Set ur and SR concept.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function setURAndSR()
     {
