@@ -1141,10 +1141,10 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $program = $this->loadModel('project')->getByID($this->session->PRJ);
+        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
         $today   = helper::today();
         $date    = date('Ymd', strtotime('this week Monday'));
-        $begin   = $program->begin;
+        $begin   = $project->begin;
         $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
 
@@ -1242,10 +1242,10 @@ class block extends control
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
-        $programID = $this->session->PRJ;
-        $program   = $this->loadModel('project')->getByID($programID);
+        $projectID = $this->session->PRJ;
+        $project   = $this->loadModel('program')->getPRJByID($projectID);
 
-        $begin = $program->begin;
+        $begin = $project->begin;
         $today = helper::today();
         $end   = date('Y-m-d', strtotime($today));
 
@@ -1256,9 +1256,9 @@ class block extends control
         while($begin < $end)
         {
             $charts['labels'][] = $this->lang->block->time . $i . $this->lang->block->week;
-            $charts['PV']      .= $this->weekly->getPV($programID, $begin) . ',';
-            $charts['EV']      .= $this->weekly->getEV($programID, $begin) . ',';
-            $charts['AC']      .= $this->weekly->getAC($programID, $begin) . ',';
+            $charts['PV']      .= $this->weekly->getPV($projectID, $begin) . ',';
+            $charts['EV']      .= $this->weekly->getEV($projectID, $begin) . ',';
+            $charts['AC']      .= $this->weekly->getAC($projectID, $begin) . ',';
             $stageEnd           = $this->weekly->getThisSunday($begin);
             $begin              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
             $i ++;
