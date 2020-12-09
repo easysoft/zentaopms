@@ -545,6 +545,7 @@ class testtaskModel extends model
      *
      * @param  string $testTask
      * @param  array  $linkedCases
+     * @param  string $query
      * @param  object $pager
      * @access public
      * @return array
