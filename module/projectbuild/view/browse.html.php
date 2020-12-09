@@ -48,6 +48,7 @@
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
           <th class="c-name w-200px text-left"><?php echo $lang->build->product;?></th>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
+          <th class="c-name text-left"><?php echo $lang->projectCommon;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
@@ -65,6 +66,7 @@
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
           </td>
+          <td class="c-name text-left" title='<?php echo $build->projectName;?>'><?php echo $build->projectName;?></td>
           <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
