@@ -39,7 +39,7 @@
             <td>
               <div class='input-group'>
               <?php echo html::input("amount[$i]", '', 'class="form-control"');?>
-              <span class='input-group-addon'><?php echo $lang->budget->{$program->budgetUnit};?></span>
+              <span class='input-group-addon'><?php echo $lang->budget->{$project->budgetUnit};?></span>
               </div>
             </td>
             <td><?php echo html::textarea("desc[$i]", '', 'class="form-control" rows=1');?></td>

@@ -35,7 +35,7 @@
             <td>
               <div class='input-group'>
               <?php echo html::input('amount', $budget->amount, 'class="form-control"');?>
-              <span class='input-group-addon'><?php echo $lang->budget->{$program->budgetUnit};?></span>
+              <span class='input-group-addon'><?php echo $lang->budget->{$project->budgetUnit};?></span>
               </div>
             </td>
           </tr>

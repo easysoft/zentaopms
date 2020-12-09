@@ -98,6 +98,7 @@ class budgetModel extends model
 
         $structure = array();
         $subjects  = $this->getSubjects($this->session->PRJ);
+
         foreach($subjects as $subjectID)
         {
             $subject = $this->tree->getById($subjectID);
@@ -143,6 +144,7 @@ class budgetModel extends model
         $budgets = $this->dao->select('*')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->fetchAll();
         $stages  = $this->getStages($this->session->PRJ);
 
+        /* Assign each subject to a stage. */
         $summary['stages']   = array();
         $summary['subjects'] = array();
         foreach($stages as $stage)
@@ -157,6 +159,7 @@ class budgetModel extends model
             }
         }
 
+        /* Count the costs incurred by a stage corresponding to a subject. */
         foreach($budgets as $budget)
         {
             $summary['stages'][$budget->stage][$budget->subject] = $budget->amount;
@@ -216,19 +219,17 @@ class budgetModel extends model
             $data->createdDate = $today;
 
             foreach(explode(',', $this->config->budget->create->requiredFields) as $field)
-            {    
+            {
                 $field = trim($field);
                 if($field and empty($data->$field))
-                {    
+                {
                     dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->budget->$field);
                     return false;
-                }    
+                }
             }
 
 
-            $this->dao->insert(TABLE_BUDGET)->data($data)
-                ->autoCheck()
-                ->exec();
+            $this->dao->insert(TABLE_BUDGET)->data($data)->autoCheck()->exec();
 
             $budgetID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('budget', $budgetID, 'Opened');

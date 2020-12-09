@@ -22,7 +22,7 @@ class budget extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        $this->view->program = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $this->view->project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
     }
 
     /**

@@ -66,7 +66,7 @@
         <td><?php echo array_sum($summary['subjects']);?></td>
       </tr>
     </table>
-    <div class='alert alert-info mg-0'><?php echo $lang->budget->total . '：' . array_sum($summary['subjects']) . $lang->budget->{$program->budgetUnit};?></div>
+    <div class='alert alert-info mg-0'><?php echo $lang->budget->total . '：' . array_sum($summary['subjects']) . $lang->budget->{$project->budgetUnit};?></div>
     <?php else:?>
     <div class="table-empty-tip">
       <p>
