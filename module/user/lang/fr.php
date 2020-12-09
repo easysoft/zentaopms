@@ -144,11 +144,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Fort</span>";
 $lang->user->statusList['active'] = 'Actif';
 $lang->user->statusList['delete'] = 'Supprimé';
 
-$lang->user->personalData['createdTodos']   = 'Entrées Agenda Créées';
-$lang->user->personalData['createdStories'] = 'Stories Créées';
-$lang->user->personalData['finishedTasks']  = 'Tâches Terminées';
-$lang->user->personalData['resolvedBugs']   = 'Bugs Résolus';
-$lang->user->personalData['createdCases']   = 'CasTests Créés';
+$lang->user->personalData['createdTodos']        = 'Todos Created';
+$lang->user->personalData['createdRequirements'] = "Requirements Created";
+$lang->user->personalData['createdStories']      = "Stories Created";
+$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
+$lang->user->personalData['createdBugs']         = 'Bugs Created';
+$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
+$lang->user->personalData['createdCases']        = 'Cases Created';
+$lang->user->personalData['createdRisks']        = 'Risks Created';
+$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
+$lang->user->personalData['createdIssues']       = 'Issues Created';
+$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
+$lang->user->personalData['createdDocs']         = 'Docs Created';
 
 $lang->user->keepLogin['on']      = 'Rester connecté';
 $lang->user->loginWithDemoUser    = "Se connecté en tant qu'invité :";

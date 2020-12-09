@@ -141,6 +141,7 @@ class design extends control
 
             $this->send($response);
         }
+        $this->design->setProductMenu($productID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;

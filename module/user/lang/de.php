@@ -144,11 +144,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Stark</span>";
 $lang->user->statusList['active'] = 'Aktiviert';
 $lang->user->statusList['delete'] = 'Gelöscht';
 
-$lang->user->personalData['createdTodos']   = 'Todos Created';
-$lang->user->personalData['createdStories'] = 'Stories Created';
-$lang->user->personalData['finishedTasks']  = 'Tasks Finished';
-$lang->user->personalData['resolvedBugs']   = 'Bugs Resolved';
-$lang->user->personalData['createdCases']   = 'Cases Created';
+$lang->user->personalData['createdTodos']        = 'Todos Created';
+$lang->user->personalData['createdRequirements'] = "Requirements Created";
+$lang->user->personalData['createdStories']      = "Stories Created";
+$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
+$lang->user->personalData['createdBugs']         = 'Bugs Created';
+$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
+$lang->user->personalData['createdCases']        = 'Cases Created';
+$lang->user->personalData['createdRisks']        = 'Risks Created';
+$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
+$lang->user->personalData['createdIssues']       = 'Issues Created';
+$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
+$lang->user->personalData['createdDocs']         = 'Docs Created';
 
 $lang->user->keepLogin['on']      = 'Angemeldet bleiben';
 $lang->user->loginWithDemoUser    = 'Login als Demo User:';

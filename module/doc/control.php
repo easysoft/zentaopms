@@ -772,7 +772,7 @@ class doc extends control
         }
         elseif($this->from == 'project')
         {
-            $this->lang->navGroup->doc  = 'program';
+            $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
