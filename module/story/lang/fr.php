@@ -14,14 +14,11 @@ $lang->story->create            = "Créer Story";
 $lang->story->createStory       = "Créer Story";
 $lang->story->createRequirement = 'Create Requirement';
 
-if(!empty($config->URAndSR))
-{
-    $lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
-    $lang->story->story             = zget($lang, 'srCommon', "Story");
-    $lang->story->createStory       = 'Create ' . $lang->story->story;
-    $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
-    $lang->story->affectedStories   = "Affected {$lang->story->story}";
-}
+$lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
+$lang->story->story             = zget($lang, 'srCommon', "Story");
+$lang->story->createStory       = 'Create ' . $lang->story->story;
+$lang->story->createRequirement = 'Create ' . $lang->story->requirement;
+$lang->story->affectedStories   = "Affected {$lang->story->story}";
 
 $lang->story->batchCreate       = "Créer par Lot";
 $lang->story->change            = "Changer";

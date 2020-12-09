@@ -95,6 +95,7 @@ function getExecutions()
         })
     }
 }
+adjustMenuWidth();
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>

@@ -3168,7 +3168,7 @@ class storyModel extends model
             ->fetchPairs('id', 'title');
 
         /* For requirement children. */
-        if($type == 'requirement' && $this->config->URAndSR)
+        if($type == 'requirement')
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
               ->where('AID')->in(array_keys($stories))  
