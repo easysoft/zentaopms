@@ -19,7 +19,7 @@ class buildModel extends model
      * @param  int    $buildID
      * @param  bool   $setImgSize
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getByID($buildID, $setImgSize = false)
     {
@@ -495,9 +495,10 @@ class buildModel extends model
      */
     public function unlinkStory($buildID, $storyID)
     {
-        $build = $this->getByID($buildID);
+        $build          = $this->getByID($buildID);
         $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
         if($build->stories) $build->stories = ',' . $build->stories;
+
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfrombuild', '', $buildID, '', false);
     }
@@ -558,9 +559,10 @@ class buildModel extends model
      */
     public function unlinkBug($buildID, $bugID)
     {
-        $build = $this->getByID($buildID);
+        $build       = $this->getByID($buildID);
         $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
         if($build->bugs) $build->bugs = ',' . $build->bugs;
+
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfrombuild', '', $buildID, '', false);
     }

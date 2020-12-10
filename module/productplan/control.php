@@ -485,7 +485,6 @@ class productplan extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     *
      * @access public
      * @return void
      */
