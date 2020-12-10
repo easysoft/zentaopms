@@ -1237,6 +1237,13 @@ class programModel extends model
             }
         }
 
+        /* When select create new product, product name cannot be empty. */
+        if(isset($_POST['newProduct']) and empty($_POST['productName']))
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->app->loadLang('product')->product->name);
+            return false;
+        }
+
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
