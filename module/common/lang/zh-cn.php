@@ -216,7 +216,6 @@ $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['project']     = $lang->executionCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
-$lang->searchObjects['user']        = '用户';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
 $lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
