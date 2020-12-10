@@ -9,7 +9,6 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
- */
 $lang->block = new stdclass();
 $lang->block->common = 'Bloc';
 $lang->block->name   = 'Nom';
