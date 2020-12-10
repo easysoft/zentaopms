@@ -70,24 +70,6 @@
             </td>
             <?php endif;?>
           </tr>
-          <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTest'):?>
-          <tr>
-            <th><?php echo $lang->testcase->lblStory;?></th>
-            <td colspan='2'>
-              <div class='input-group' id='storyIdBox'>
-                <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
-                <span class='input-group-btn' style='width: 0.01%'>
-                <?php if($storyID == 0): ?>
-                  <a href='' id='preview' class='btn hidden'><?php echo $lang->preview;?></a>
-                <?php else:?>
-                  <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn' id='preview'");?>
-                <?php endif;?>
-                </span>
-              </div>
-            </td>
-          </tr>
-          <?php endif;?>
-          </tr>
           <?php if(strpos(",$showFields,", ',story,') !== false):?>
           <tr>
             <th><?php echo $lang->testcase->lblStory;?></th>
