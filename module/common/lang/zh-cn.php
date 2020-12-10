@@ -204,7 +204,7 @@ $lang->holiday->menu = $lang->subject->menu;
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->estimate = array('link' => '估算|custom|estimate');
-$lang->stage->menu->stage    = array('link' => '阶段|stage|settype', 'alias' => 'browse,create,edit,batchcreate');
+$lang->stage->menu->stage    = array('link' => '阶段|stage|settype', 'subModule' => 'stage');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -950,6 +950,6 @@ $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|produc
 $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'auditcl', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

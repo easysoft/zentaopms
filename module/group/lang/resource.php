@@ -1156,7 +1156,7 @@ $lang->resource->custom->working          = 'working';
 $lang->resource->custom->setPublic        = 'setPublic';
 $lang->resource->custom->timezone         = 'timezone';
 $lang->resource->custom->estimate         = 'estimate';
-$lang->resource->custom->setStoryContcept = 'setStoryContcept';
+$lang->resource->custom->setStoryConcept  = 'setStoryConcept';
 $lang->resource->custom->configureScrum   = 'configureScrum';
 
 $lang->custom->methodOrder[5]  = 'index';
