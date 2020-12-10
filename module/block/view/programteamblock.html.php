@@ -14,7 +14,7 @@ $maxConsumed  = 0;
       $maxTeamCount = max($maxTeamCount, $project->teamCount);
       $maxConsumed  = max($maxConsumed, $project->consumed);
       ?>
-      <div class='chart-title text-ellipsis'><span><?php echo $project->name;?></span></div>
+      <div class='chart-title text-ellipsis' title="<?php echo $project->name;?>"><span><?php echo $project->name;?></span></div>
       <?php endforeach;?>
     </div>
     <div class='table-col chart-rows'>
