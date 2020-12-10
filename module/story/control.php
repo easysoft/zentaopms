@@ -1672,13 +1672,15 @@ class story extends control
      * The report page.
      *
      * @param  int    $productID
-     * @param  string $browseType
      * @param  int    $branchID
+     * @param  int    $storyType
+     * @param  string $browseType
      * @param  int    $moduleID
+     * @param  string $chartType
      * @access public
      * @return void
      */
-    public function report($productID, $branchID, $storyType = 'story', $browseType, $moduleID, $chartType = 'pie')
+    public function report($productID, $branchID, $storyType = 'story', $browseType = 'unclosed', $moduleID = 0, $chartType = 'pie')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
