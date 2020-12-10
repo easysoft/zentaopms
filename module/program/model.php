@@ -1244,6 +1244,13 @@ class programModel extends model
             return false;
         }
 
+        $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+        if(!empty($existProductName))
+        {
+            dao::$errors[] = $this->lang->program->existProductName;
+            return false;
+        }
+
         $requiredFields = $this->config->program->PRJCreate->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 

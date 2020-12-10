@@ -89,7 +89,8 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = 'Team';
 $lang->program->PRJLongTime        = 'Long-Term Project';
 
-$lang->program->productNotEmpty = 'Please link products or create products.';
+$lang->program->productNotEmpty  = 'Please link products or create products.';
+$lang->program->existProductName = 'Product name already exists.';
 
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = 'Yuan';

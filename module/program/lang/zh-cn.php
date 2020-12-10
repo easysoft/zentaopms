@@ -91,6 +91,7 @@ $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期';
 
 $lang->program->productNotEmpty  = '请关联产品或创建产品。';
+$lang->program->existProductName = '产品名称已存在。';
 
 $lang->program->unitList['']       = '';
 $lang->program->unitList['yuan']   = '元';
