@@ -165,8 +165,8 @@ $lang->custom->moduleName['project']     = $lang->projectCommon;
 
 $lang->custom->conceptQuestions['overview']         = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
 $lang->custom->conceptQuestions['story']            = "2. Utilisez-vous le concept d'exigence ou de user story dans votre entreprise ?";
-$lang->custom->conceptQuestions['requirementpoint'] = "2. Utilisez-vous des heures ou des points de fonction pour faire des estimations dans votre entreprise ?";
-$lang->custom->conceptQuestions['storypoint']       = "2. Utilisez-vous des heures ou des points de Story pour faire des estimations dans votre entreprise ?";
+$lang->custom->conceptQuestions['requirementpoint'] = "3. Utilisez-vous des heures ou des points de fonction pour faire des estimations dans votre entreprise ?";
+$lang->custom->conceptQuestions['storypoint']       = "3. Utilisez-vous des heures ou des points de Story pour faire des estimations dans votre entreprise ?";
 
 $lang->custom->conceptOptions = new stdclass;
 
