@@ -36,13 +36,13 @@ function addNewProduct(obj)
     {
         $('#productName').closest('tr').removeClass('hidden');
         $('#plans').closest('tr').addClass('hidden');
-        $('#productsBox .chosen-container').attr('disabled',true);
+        $(obj).closest('.input-group').find('select').attr('disabled', true).trigger("chosen:updated");
     }
     else
     {
         $('#productName').closest('tr').addClass('hidden');
         $('#plans').closest('tr').removeClass('hidden');
-        $('#productsBox .chosen-container').removeAttr('disabled',true);
+        $(obj).closest('.input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
     }
 }
 

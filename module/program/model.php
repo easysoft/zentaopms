@@ -1222,9 +1222,12 @@ class programModel extends model
 
             /* Judge products not empty. */
             $linkedProductsCount = 0;
-            foreach($_POST['products'] as $product)
+            if(isset($_POST['products']))
             {
-                if(!empty($product)) $linkedProductsCount++;
+                foreach($_POST['products'] as $product)
+                {
+                    if(!empty($product)) $linkedProductsCount++;
+                }
             }
 
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
