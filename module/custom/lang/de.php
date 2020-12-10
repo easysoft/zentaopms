@@ -210,7 +210,7 @@ $lang->custom->conceptQuestions['storypoint']       = "2. Do you use hours or st
 $lang->custom->conceptOptions = new stdclass;
 
 $lang->custom->conceptOptions->story = array();
-$lang->custom->conceptOptions->story['0'] = 'Requiremenet';
+$lang->custom->conceptOptions->story['0'] = 'Requirement';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint = array();

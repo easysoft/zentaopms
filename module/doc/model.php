@@ -995,12 +995,14 @@ class docModel extends model
 
         if($type == 'product' or $type == 'project')
         {
-            $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $fields = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
-            $libs   = $this->dao->select("id, name, `order`, {$fields}")->from($table)
+            $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+            $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+            $table   = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $fields  = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
+            $libs    = $this->dao->select("id, name, `order`, {$fields}")->from($table)
                 ->where('id')->in($idList)
                 ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
-                ->orderBy('`order` desc, id desc')
+                ->orderBy($orderBy)
                 ->page($pager, 'id')
                 ->fetchAll('id');
         }
@@ -1138,7 +1140,7 @@ class docModel extends model
         }
         else
         {
-            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetch();
+            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetchAll();
             if(!empty($docLibList))
             {
                 foreach($docLibList as $docLib) $docLibs[] = $docLib;
