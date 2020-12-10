@@ -221,7 +221,6 @@ $lang->searchObjects['task']        = 'Nhiệm vụ';
 $lang->searchObjects['testcase']    = 'Tình huống';
 $lang->searchObjects['project']     = 'Execution';
 $lang->searchObjects['product']     = $lang->productCommon;
-$lang->searchObjects['user']        = 'Người dùng';
 $lang->searchObjects['build']       = 'Bản dựng';
 $lang->searchObjects['release']     = 'Phát hành';
 $lang->searchObjects['productplan'] = 'Kế hoạch '.$lang->productCommon;

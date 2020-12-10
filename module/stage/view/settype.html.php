@@ -29,6 +29,16 @@ EOT;
 ?>
 <?php js::set('itemRow', $itemRow)?>
 <div id='mainContent' class='main-row'>
+  <div class='side-col'>
+    <div class='panel'>
+      <div class='panel-body'>
+        <div class="list-group">
+          <?php echo html::a(inlink('setType'), $lang->stage->setType, '', "class='selected'");?>
+          <?php echo html::a(inlink('browse'), $lang->stage->browse);?>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <table class='table table-form active-disabled table-condensed mw-600px'>

@@ -441,8 +441,6 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept();
-            $result = $this->custom->setURAndSR();
-            if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             $locate = inlink('configureScrum');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));

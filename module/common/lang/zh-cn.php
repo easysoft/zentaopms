@@ -204,7 +204,7 @@ $lang->holiday->menu = $lang->subject->menu;
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->estimate = array('link' => '估算|custom|estimate');
-$lang->stage->menu->stage    = array('link' => '阶段|stage|settype');
+$lang->stage->menu->stage    = array('link' => '阶段|stage|settype', 'subModule' => 'stage');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -216,7 +216,6 @@ $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['project']     = $lang->executionCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
-$lang->searchObjects['user']        = '用户';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
 $lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
@@ -488,7 +487,7 @@ $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule
 $lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
+$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -951,6 +950,6 @@ $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|produc
 $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'auditcl', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

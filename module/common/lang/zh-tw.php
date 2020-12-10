@@ -221,7 +221,6 @@ $lang->searchObjects['task']        = '任務';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['project']     = $lang->executionCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
-$lang->searchObjects['user']        = '用戶';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;

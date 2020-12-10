@@ -16,7 +16,7 @@
       <div class='modal-body'>
         <table class='table table-form'>
           <tr id='URSRName'>
-            <th class='w-160px'><?php echo $lang->custom->waterfall->URSRName;?></th>
+            <th class='w-120px'><?php echo $lang->custom->waterfall->URSRName;?></th>
             <td><?php echo html::select('URSRCommon', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
             <td><?php echo html::checkbox('URSRCustom', $lang->custom->common, "class='form-control'");?></td>
             <td></td><td></td><td></td>

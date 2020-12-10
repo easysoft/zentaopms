@@ -20,7 +20,7 @@
     <div class='modal-body'>
       <table class='table table-form'>
         <tr>
-          <th class='w-160px'><?php echo $lang->custom->scrum->setConcept;?> </th>
+          <th class='w-100px'><?php echo $lang->custom->scrum->setConcept;?> </th>
           <td colspan='3'><?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?></td>
           <td></td><td></td>
         </tr>

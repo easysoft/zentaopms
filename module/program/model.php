@@ -1187,7 +1187,7 @@ class programModel extends model
      * Create a project.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function PRJCreate()
     {
@@ -1206,6 +1206,15 @@ class programModel extends model
             ->remove('products,branch,plans,delta,newProduct,productName')
             ->get();
 
+        $linkedProductsCount = 0;
+        if(isset($_POST['products']))
+        {
+            foreach($_POST['products'] as $product)
+            {
+                if(!empty($product)) $linkedProductsCount++;
+            }
+        }
+
         if($project->parent)
         {
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
@@ -1221,15 +1230,6 @@ class programModel extends model
             }
 
             /* Judge products not empty. */
-            $linkedProductsCount = 0;
-            if(isset($_POST['products']))
-            {
-                foreach($_POST['products'] as $product)
-                {
-                    if(!empty($product)) $linkedProductsCount++;
-                }
-            }
-
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
                 dao::$errors[] = $this->lang->program->productNotEmpty;
@@ -1241,6 +1241,13 @@ class programModel extends model
         if(isset($_POST['newProduct']) and empty($_POST['productName']))
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->app->loadLang('product')->product->name);
+            return false;
+        }
+
+        $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+        if(!empty($existProductName))
+        {
+            dao::$errors[] = $this->lang->program->existProductName;
             return false;
         }
 
@@ -1271,12 +1278,9 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if($project->parent)
-            {
-                $this->loadModel('project')->updateProducts($projectID);
-            }
+            $this->loadModel('project')->updateProducts($projectID);
 
-            if(isset($_POST['newProduct']) || !$project->parent)
+            if(isset($_POST['newProduct']) || (!$project->parent && empty($linkedProductsCount)))
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();

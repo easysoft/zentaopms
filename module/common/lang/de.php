@@ -221,7 +221,6 @@ $lang->searchObjects['task']        = 'Aufgaben';
 $lang->searchObjects['testcase']    = 'Fall';
 $lang->searchObjects['project']     = 'Execution';
 $lang->searchObjects['product']     = $lang->productCommon;
-$lang->searchObjects['user']        = 'Benutzer';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';

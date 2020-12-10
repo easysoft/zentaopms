@@ -1109,7 +1109,8 @@ class docModel extends model
      */
     public function getLimitLibs($type, $limit = 0)
     {
-        $libs = array();
+        $libs    = array();
+        $docLibs = array();
         if($type == 'product' or $type == 'project')
         {
             $nonzeroLibs = array();
@@ -1125,20 +1126,27 @@ class docModel extends model
             if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, 'all', 0, true);
             if(empty($objectList)) return $libs;
 
-            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where('deleted')->eq(0)
-                ->andWhere("$type")->in(array_keys($objectList))
-                ->orderBy("`order` asc, id asc")
-                ->query();
+            foreach(array_keys($objectList) as $objectID)
+            {
+                $docLib = $this->dao->select('*')->from(TABLE_DOCLIB)
+                    ->where('deleted')->eq(0)
+                    ->andWhere("$type")->in($objectID)
+                    ->orderBy("`order` asc, id asc")
+                    ->fetch();
+                if(!empty($docLib)) $docLibs[] = $docLib;
+            }
         }
         else
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->query();
+            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetch();
+            if(!empty($docLibList))
+            {
+                foreach($docLibList as $docLib) $docLibs[] = $docLib;
+            }
         }
 
-        $i    = 1;
-        while($docLib = $stmt->fetch())
+        $i = 1;
+        foreach($docLibs as $docLib)
         {
             if($limit && $i > $limit) break;
 

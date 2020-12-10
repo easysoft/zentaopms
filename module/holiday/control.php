@@ -31,6 +31,10 @@ class holiday extends control
      */
     public function browse($year = '')
     {
+        $this->lang->menugroup->holiday  = ''; 
+        $this->lang->holiday->menu = $this->lang->subject->menu;
+        $this->lang->holiday->menuOrder = $this->lang->subject->menuOrder;
+
         $holidays = $this->holiday->getList($year);
         $yearList = $this->holiday->getYearPairs();
 

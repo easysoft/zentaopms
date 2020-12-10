@@ -760,7 +760,7 @@ class program extends control
             }
         }
 
-        $allProducts = empty($programID) ? array() : $this->program->getPGMProductPairs($programID);
+        $allProducts = $this->program->getPGMProductPairs($programID);
 
         $this->view->title      = $this->lang->program->PRJCreate;
         $this->view->position[] = $this->lang->program->PRJCreate;
