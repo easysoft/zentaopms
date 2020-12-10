@@ -805,9 +805,12 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'begin_asc')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc')
     {
         if(!$this->session->PRJ || !$productID) return array();
+
+        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -820,7 +823,6 @@ class productModel extends model
             ->fetchAll('id');
 
         $executionList = array('0' => '');
-        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         if($project->model == 'waterfall')
