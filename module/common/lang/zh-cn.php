@@ -204,7 +204,7 @@ $lang->holiday->menu = $lang->subject->menu;
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->estimate = array('link' => '估算|custom|estimate');
-$lang->stage->menu->stage    = array('link' => '阶段|stage|settype');
+$lang->stage->menu->stage    = array('link' => '阶段|stage|settype', 'alias' => 'browse,create,edit,batchcreate');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
