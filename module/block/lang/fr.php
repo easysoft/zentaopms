@@ -341,12 +341,12 @@ $lang->block->moduleList['project'] = $lang->executionCommon;
 $lang->block->moduleList['qa']      = 'Test';
 $lang->block->moduleList['todo']    = 'Todo';
 
-$lang->block->modules['project'] = new stdclass();
-$lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = $lang->projectCommon . ' List';
-$lang->block->modules['project']->availableBlocks->recentproject = 'Recent ' . $lang->projectCommon;
-$lang->block->modules['project']->availableBlocks->statistic     = $lang->projectCommon . ' Statistic';
-$lang->block->modules['project']->availableBlocks->projectteam   = $lang->projectCommon . 'Human Input';
+$lang->block->modules['program'] = new stdclass();
+$lang->block->modules['program']->availableBlocks = new stdclass();
+$lang->block->modules['program']->availableBlocks->program       = $lang->projectCommon . ' List';
+$lang->block->modules['program']->availableBlocks->recentproject = 'Recent ' . $lang->projectCommon;
+$lang->block->modules['program']->availableBlocks->statistic     = $lang->projectCommon . ' Statistic';
+$lang->block->modules['program']->availableBlocks->programteam   = $lang->projectCommon . 'Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
