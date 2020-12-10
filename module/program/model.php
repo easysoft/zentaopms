@@ -1222,9 +1222,12 @@ class programModel extends model
 
             /* Judge products not empty. */
             $linkedProductsCount = 0;
-            foreach($_POST['products'] as $product)
+            if(isset($_POST['products']))
             {
-                if(!empty($product)) $linkedProductsCount++;
+                foreach($_POST['products'] as $product)
+                {
+                    if(!empty($product)) $linkedProductsCount++;
+                }
             }
 
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
@@ -1232,6 +1235,13 @@ class programModel extends model
                 dao::$errors[] = $this->lang->program->productNotEmpty;
                 return false;
             }
+        }
+
+        /* When select create new product, product name cannot be empty. */
+        if(isset($_POST['newProduct']) and empty($_POST['productName']))
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->app->loadLang('product')->product->name);
+            return false;
         }
 
         $requiredFields = $this->config->program->PRJCreate->requiredFields;

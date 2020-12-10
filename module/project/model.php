@@ -58,7 +58,7 @@ class projectModel extends model
      * @param  int    $buildID
      * @param  string $extra
      * @access public
-     * @return void
+     * @return bool
      */
     public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
@@ -125,7 +125,7 @@ class projectModel extends model
 
         /* Set project module page nav. */
         $label = $this->lang->project->index;
-        if($methodName == 'all')    $label = $this->lang->project->allProjects;
+        if($methodName == 'all') $label = $this->lang->project->allProjects;
         if($methodName == 'create' and $moduleName == 'project') $label = $this->lang->project->create;
 
         $projectIndex  = '<div class="btn-group angle-btn' . ((strpos('index|all|create', $methodName) !== false and $moduleName == 'project') ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';

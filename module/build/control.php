@@ -21,6 +21,7 @@ class build extends control
      */
     public function create($executionID, $productID = 0)
     {
+        /* Create execution if no execution. */
         if($executionID == 0)
         {
             die(js::locate($this->createLink('project', 'create'), 'parent'));
@@ -34,7 +35,7 @@ class build extends control
 
             $this->executeHooks($buildID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProjectBuilds($executionID)"));//Code for task #5126.
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProjectBuilds($executionID)")); // Code for task #5126.
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
@@ -42,6 +43,7 @@ class build extends control
         $this->loadModel('project');
         $this->loadModel('user');
 
+        /* Set session and get execution by id. */
         $this->session->set('buildCreate', $this->app->getURI(true));
         $execution = $this->loadModel('project')->getExecutionById($executionID);
 
@@ -162,6 +164,7 @@ class build extends control
      */
     public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
+        /* Set session and load modules. */
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
 
@@ -172,7 +175,7 @@ class build extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
-        /* Set menu. */
+        /* Get build, product and bugs. */
         $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -185,6 +188,7 @@ class build extends control
             ->page($bugPager)
             ->fetchAll();
 
+        /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy($orderBy)->fi()
@@ -193,6 +197,7 @@ class build extends control
         $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
+        /* Set menu. */
         $this->loadModel('project')->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project, $buildID);
         $projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'empty');
 

@@ -66,12 +66,13 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getByID($issueID)
     {
-        $issue        = $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
+        $issue = $this->dao->select('*')->from(TABLE_ISSUE)->where('id')->eq($issueID)->andWhere('deleted')->eq('0')->fetch();
         if(!$issue) return false;
+
         $issue->files = $this->loadModel('file')->getByObject('issue', $issue->id);
         return $issue;
     }

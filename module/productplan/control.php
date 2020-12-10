@@ -485,7 +485,6 @@ class productplan extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     *
      * @access public
      * @return void
      */
@@ -503,7 +502,7 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getPairs('nocode');
+        $products  = $this->product->getPairs('nocode');
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
