@@ -487,7 +487,7 @@ $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule
 $lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
+$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
