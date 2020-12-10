@@ -844,4 +844,6 @@ $(document).ready(function()
     revertModuleCookie();
 
     $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
+
+    $('.btn-group.header-angle-btn:last').addClass('active');
 });

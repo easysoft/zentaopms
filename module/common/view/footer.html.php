@@ -1,18 +1,6 @@
 </div><?php /* end '.outer' in 'header.html.php'. */ ?>
 <script>
 $.initSidebar();
-$(function()
-{
-    if($('#pgmCommonAction').length > 0)
-    {
-        $('#pgmCommonAction').addClass('active');
-        if($('#swapper').length > 0)
-        {
-            $('#pgmCommonAction').removeClass('active');
-            $('#swapper').addClass('active');
-        }
-    }
-})
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 
