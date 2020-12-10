@@ -1028,17 +1028,19 @@ class projectModel extends model
     {
         if(!$projectID) return array();
 
+        $project = $this->loadModel('program')->getPRJByID($projectID);
+        $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('project')->eq((int)$projectID)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq('0')
-            ->orderBy('begin_asc')
+            ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        $project = $this->loadModel('program')->getPRJByID($projectID);
         if($project->model == 'waterfall')
         {
             $executionList = array();
