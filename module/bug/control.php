@@ -31,7 +31,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
 
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
