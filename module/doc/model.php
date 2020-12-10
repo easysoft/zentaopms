@@ -1140,7 +1140,7 @@ class docModel extends model
         }
         else
         {
-            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetch();
+            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetchAll();
             if(!empty($docLibList))
             {
                 foreach($docLibList as $docLib) $docLibs[] = $docLib;
