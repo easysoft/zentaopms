@@ -28,7 +28,7 @@
           <td>
             <?php
             $disabled = '';
-            if($build->stories or $build->bugs or $testtask) $disabled = 'disabled';
+            if($build->stories or $build->bugs or $testtaskID) $disabled = 'disabled';
             ?>
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
@@ -45,7 +45,7 @@
         </tr>
         <?php if($this->config->global->flow != 'onlyTest'):?>
         <tr>
-          <?php $disabled = $testtask ? 'disabled' : '';?>
+          <?php $disabled = $testtaskID ? 'disabled' : '';?>
           <th><?php echo $lang->build->project;?></th>
           <td id='projectsBox'><?php echo html::select('project', $projects, $build->project, "class='form-control chosen' required $disabled");?></td>
           <td><?php if($disabled) echo $lang->build->notice->changeProject;?></td>
