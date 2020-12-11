@@ -2299,7 +2299,8 @@ EOD;
         }
         if($group == 'product')
         {
-            $lang->menu = $lang->product->menu;
+            $lang->menu      = $lang->product->menu;
+            $lang->menuOrder = $lang->product->menuOrder;
         }
         if($group == 'project')
         {

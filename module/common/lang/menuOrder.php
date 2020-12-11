@@ -53,19 +53,21 @@ $lang->my->menuOrder[80] = 'contacts';
 $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */
-$lang->product->menuOrder[0]  = 'plan';
 $lang->product->menuOrder[1]  = 'requirement';
 $lang->product->menuOrder[5]  = 'story';
-$lang->product->menuOrder[15] = 'release';
-$lang->product->menuOrder[20] = 'roadmap';
+$lang->product->menuOrder[10] = 'plan';
+$lang->product->menuOrder[15] = 'track';
+$lang->product->menuOrder[20] = 'release';
 $lang->product->menuOrder[25] = 'project';
-$lang->product->menuOrder[30] = 'dynamic';
-$lang->product->menuOrder[35] = 'doc';
-$lang->product->menuOrder[40] = 'branch';
-$lang->product->menuOrder[45] = 'module';
-$lang->product->menuOrder[50] = 'view';
-$lang->product->menuOrder[55] = 'create';
-$lang->product->menuOrder[60] = 'all';
+$lang->product->menuOrder[30] = 'roadmap';
+$lang->product->menuOrder[35] = 'module';
+$lang->product->menuOrder[40] = 'doc';
+$lang->product->menuOrder[45] = 'branch';
+$lang->product->menuOrder[50] = 'dynamic';
+$lang->product->menuOrder[55] = 'view';
+$lang->product->menuOrder[60] = 'create';
+$lang->product->menuOrder[65] = 'all';
+
 $lang->story->menuOrder       = $lang->product->menuOrder;
 $lang->productplan->menuOrder = $lang->product->menuOrder;
 $lang->release->menuOrder     = $lang->product->menuOrder;
