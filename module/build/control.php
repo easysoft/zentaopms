@@ -22,10 +22,7 @@ class build extends control
     public function create($executionID, $productID = 0)
     {
         /* Create execution if no execution. */
-        if($executionID == 0)
-        {
-            die(js::locate($this->createLink('project', 'create'), 'parent'));
-        }
+        if($executionID == 0) die(js::locate($this->createLink('project', 'create'), 'parent'));
 
         if(!empty($_POST))
         {
@@ -144,7 +141,7 @@ class build extends control
         $this->view->products      = $products;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter', $build->builder);
         $this->view->build         = $build;
-        $this->view->testtask      = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
+        $this->view->testtaskID    = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
         $this->display();
     }
 
