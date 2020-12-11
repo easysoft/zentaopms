@@ -1081,6 +1081,7 @@ class taskModel extends model
                     $task->closedBy   = $this->app->user->account;
                     $task->closedDate = $now;
                 }
+                if($task->closedReason == 'cancel' and $task->finishedDate == '0000-00-00 00:00:00') $task->finishedDate = '';
                 break;
             case 'wait':
                 if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
