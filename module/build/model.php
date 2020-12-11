@@ -213,7 +213,7 @@ class buildModel extends model
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
         foreach($fields as $field)
         {
-            if(strpos($this->session->projectBuildQuery, $field) !== false)
+            if(strpos($this->session->executionBuildQuery, $field) !== false)
             {
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
