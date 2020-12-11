@@ -815,6 +815,7 @@ class bug extends control
                 }
             }
 
+            $this->lang->navGroup->bug = 'my';
             $this->lang->bug->menu = $this->lang->my->menu;
             $this->lang->set('menugroup.bug', 'my');
             $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
