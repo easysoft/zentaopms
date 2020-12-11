@@ -636,6 +636,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0_alpha1');
             $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
             $this->appendExec('20_0_alpha1');
+        case '20_0_beta1':
+            $this->saveLogs('Execute 20_0_beta1');
+            $this->execSQL($this->getUpgradeFile('20.0.beta1'));
+            $this->unifiedFormat();
+            $this->appendExec('20_0_beta1');
         }
 
         $this->deletePatch();
@@ -4336,6 +4341,21 @@ class upgradeModel extends model
                     ->exec();
                 $order++;
             }
+        }
+
+        return true;
+    }
+
+    public function unifiedFormat()
+    {
+        $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll();
+        foreach($builds as $build)
+        {
+            $data = array();
+            if(!empty($build->stories) and $build->stories[0] != ',') $data['stories'] = ',' . $build->stories;
+            if(!empty($build->bugs) and $build->bugs[0] != ',')       $data['bugs']    = ',' . $build->bugs;
+
+            if($data) $this->dao->update(TABLE_BUILD)->data($data)->where('id')->eq($build->id)->exec();
         }
 
         return true;
