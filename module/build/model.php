@@ -147,6 +147,7 @@ class buildModel extends model
             }
         }
 
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
@@ -207,6 +208,7 @@ class buildModel extends model
             }
         }
 
+        if($this->session->executionBuildQuery == false) $this->session->set('executionBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->executionBuildQuery;
 
         /* Distinguish between repeated fields. */
