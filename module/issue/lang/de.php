@@ -51,6 +51,7 @@ $lang->issue->assignTo          = 'Assign';
 $lang->issue->create            = 'Create Issue';
 $lang->issue->edit              = 'Edit';
 $lang->issue->batchCreate       = 'Batch Create';
+$lang->issue->deleted           = 'Deleted';
 
 $lang->issue->labelList['all']       = 'All';
 $lang->issue->labelList['open']      = 'Open';

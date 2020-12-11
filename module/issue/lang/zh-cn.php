@@ -51,6 +51,7 @@ $lang->issue->assignTo          = '指派';
 $lang->issue->create            = '新建问题';
 $lang->issue->edit              = '编辑';
 $lang->issue->batchCreate       = '批量新建';
+$lang->issue->deleted           = '已删除';
 
 $lang->issue->labelList['all']       = '全部';
 $lang->issue->labelList['open']      = '开放';
