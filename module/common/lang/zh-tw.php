@@ -277,6 +277,8 @@ $lang->my->menu->testtask    = array('link' => '測試|my|testtask|', 'subModule
 $lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
 $lang->my->menu->myExecution = "{$lang->executionCommon}|my|execution|";
 $lang->my->menu->dynamic     = '動態|my|dynamic|';
+$lang->my->menu->profile     = array('link' => '檔案|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->contacts    = '聯繫人|my|managecontacts|';
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
 

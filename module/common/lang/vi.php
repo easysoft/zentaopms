@@ -277,7 +277,7 @@ $lang->my->menu->testtask    = array('link' => 'Yêu cầu|my|testtask|', 'subMo
 $lang->my->menu->story       = array('link' => 'Câu chuyện|my|story|',   'subModule' => 'story');
 $lang->my->menu->myExecution = "Execution|my|execution|";
 $lang->my->menu->dynamic     = 'Lịch sử|my|dynamic|';
-$lang->my->menu->profile     = 'Profile|my|profile|';
+$lang->my->menu->profile     = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';

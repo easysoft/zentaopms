@@ -272,7 +272,7 @@ $lang->my->menu->testtask    = array('link' => '测试|my|testtask|', 'subModule
 $lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
 $lang->my->menu->myExecution = "{$lang->executionCommon}|my|execution|";
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
-$lang->my->menu->profile     = '档案|my|profile|';
+$lang->my->menu->profile     = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->dividerMenu = ',program,requirement,dynamic,';
