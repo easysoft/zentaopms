@@ -902,8 +902,7 @@ class fileModel extends model
         setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false);
 
         /* Only download upload file that is in zentao. */
-        if($type == 'file' and stripos($content, $this->app->getBasePath()) !== 0) die();
-        if($type == 'file' and stripos($content, '/data/upload/') === false) die();
+        if($type == 'file' and stripos($content, $this->savePath) !== 0) die();
 
         /* Append the extension name auto. */
         $extension = '.' . $fileType;
