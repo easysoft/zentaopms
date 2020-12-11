@@ -1310,17 +1310,17 @@ EOD;
         /* Set the query condition session. */
         if($onlyCondition)
         {
-            $queryCondition = explode('WHERE', $sql);
+            $queryCondition = explode(' WHERE ', $sql);
             $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
             if($queryCondition)
             {
-                $queryCondition = explode('ORDER', $queryCondition);
+                $queryCondition = explode(' ORDER BY ', $queryCondition);
                 $queryCondition = str_replace('t1.', '', $queryCondition[0]);
             }
         }
         else
         {
-            $queryCondition = explode('ORDER', $sql);
+            $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
         $queryCondition = trim($queryCondition);
@@ -1330,11 +1330,11 @@ EOD;
         $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
 
         /* Set the query condition session. */
-        $orderBy = explode('ORDER BY', $sql);
+        $orderBy = explode(' ORDER BY ', $sql);
         $orderBy = isset($orderBy[1]) ? $orderBy[1] : '';
         if($orderBy)
         {
-            $orderBy = explode('LIMIT', $orderBy);
+            $orderBy = explode(' LIMIT ', $orderBy);
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
