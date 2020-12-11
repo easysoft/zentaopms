@@ -233,6 +233,7 @@ $lang->story->errorNotSubdivide     = "狀態不是激活，或者階段不是�
 $lang->story->mustChooseResult      = '必須選擇評審結果';
 $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->noStory               = "暫時沒有{$lang->productSRCommon}。";
+$lang->story->noRequirement         = "暫時沒有{$lang->productURCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->productSRCommon} %s 為草稿狀態或已關閉狀態，沒有修改其階段。";
 $lang->story->cannotDeleteParent    = "不能刪除父{$lang->productSRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->productSRCommon}的所屬產品會將其下的子{$lang->productSRCommon}也移動到所選產品下。";

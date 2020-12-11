@@ -258,6 +258,7 @@ $lang->story->errorNotSubdivide    = "If the status is not active, or the stage 
 $lang->story->mustChooseResult     = 'Select Result';
 $lang->story->mustChoosePreVersion = 'Select a version to revert to.';
 $lang->story->noStory              = 'No stories yet. ';
+$lang->story->noRequirement        = 'No requirements yet. ';
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent   = "Can not delete parent {$lang->projectSRCommon}";
 $lang->story->moveChildrenTips     = "Its Child {$lang->projectSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->projectSRCommon}.";
