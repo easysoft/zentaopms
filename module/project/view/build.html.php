@@ -33,7 +33,7 @@
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='projectBuild'></div>
+  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='executionBuild'></div>
   <?php if(empty($projectBuilds)):?>
   <div class="table-empty-tip">
     <p>

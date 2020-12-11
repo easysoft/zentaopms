@@ -2958,15 +2958,17 @@ class projectModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $type execution|project
      * @access public
      * @return void
      */
-    public function buildProjectBuildSearchForm($products, $queryID, $actionURL)
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'execution')
     {
         $this->loadModel('build');
 
         /* Set search param. */
-        $this->config->build->search['module']    = 'projectBuild';
+        if($type == 'execution') $this->config->build->search['module']    = 'executionBuild';
+        if($type == 'project')   $this->config->build->search['module']    = 'projectBuild';
         $this->config->build->search['actionURL'] = $actionURL;
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;

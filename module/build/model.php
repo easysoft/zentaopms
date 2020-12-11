@@ -199,23 +199,15 @@ class buildModel extends model
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
         {
-            $buildQuery = $this->loadModel('search')->getQuery($queryID);
-            if($buildQuery)
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
             {
-                $this->session->set('projectBuildQuery', $buildQuery->sql);
-                $this->session->set('projectBuildForm', $buildQuery->form);
+                $this->session->set('executionBuildQuery', $query->sql);
+                $this->session->set('executionBuildForm', $query->form);
             }
-            else
-            {
-                $this->session->set('projectBuildQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-             if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
         }
 
-        $buildQuery = $this->session->projectBuildQuery;
+        $buildQuery = $this->session->executionBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`');
