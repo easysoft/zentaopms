@@ -919,6 +919,8 @@ class fileModel extends model
         if($type == 'content') die($content);
         if($type == 'file' and file_exists($content))
         {
+            if(stripos($content, $this->app->getBasePath()) !== 0) die();
+
             set_time_limit(0);
             $chunkSize = 10 * 1024 * 1024;
             $handle    = fopen($content, "r");
