@@ -1282,9 +1282,13 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
-            elseif($module == 'product' && ($method == 'dynamic' or $method == 'doc' or $method == 'view'))
+            elseif($module == 'product' && ($method == 'doc' or $method == 'view'))
             {
                 $link = helper::createLink($module, $method, "productID=%s");
+            }
+            elseif($module == 'product' && $method == 'dynamic')
+            {
+                $link = helper::createLink($module, $method, "productID=%s&type=$extra");
             }
             elseif($module == 'qa' && $method == 'index')
             {

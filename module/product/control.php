@@ -603,6 +603,8 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $type);
+
         /* Assign. */
         $this->view->productID  = $productID;
         $this->view->type       = $type;
