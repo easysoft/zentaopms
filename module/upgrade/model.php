@@ -4346,6 +4346,12 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Unify the format of the stories and bugs fields in the zt_build table.
+     *
+     * @access public
+     * @return bool
+     */
     public function unifiedFormat()
     {
         $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll();
