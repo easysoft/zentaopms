@@ -1133,21 +1133,25 @@ class docModel extends model
             if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, 'all', 0, true);
             if(empty($objectList)) return $libs;
 
-            foreach(array_keys($objectList) as $objectID)
+            $docLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere("$type")->in(array_keys($objectList))
+                ->orderBy("`order` asc, id asc")
+                ->fetchAll('project');
+
+            if($type == 'project')
             {
-                $docLib = $this->dao->select('*')->from(TABLE_DOCLIB)
-                    ->where('deleted')->eq(0)
-                    ->andWhere("$type")->in($objectID)
-                    ->orderBy("`order` asc, id asc")
-                    ->fetch();
-                if(!empty($docLib)) $docLibs[] = $docLib;
+                foreach(array_keys($objectList) as $objectID)
+                {
+                    $docLibs[] = $docLibs[$objectID];
+                    unset($docLibs[$objectID]);
+                }
             }
         }
         else
         {
-            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetchAll();
-            if(empty($docLibList)) return $libs;
-            foreach($docLibList as $docLib) $docLibs[] = $docLib;
+            $docLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id desc')->fetchAll();
+            if(empty($docLibs)) return $libs;
         }
 
         $i = 1;
