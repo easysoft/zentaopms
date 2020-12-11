@@ -91,6 +91,7 @@ class gitModel extends model
                 $lastTag = '';
                 foreach($tags as $tag)
                 {
+                    if(empty($tag)) continue;
                     if(!$isNew and $tag == $job->lastTag)
                     {
                         $isNew = true;
@@ -99,7 +100,7 @@ class gitModel extends model
                     if(!$isNew) continue;
 
                     $lastTag = $tag;
-                    $this->loadModel('compile')->createByJob($job->id, $lastTag, 'tag');
+                    if($lastTag) $this->loadModel('compile')->createByJob($job->id, $lastTag, 'tag');
                 }
                 if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }

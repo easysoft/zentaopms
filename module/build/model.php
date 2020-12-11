@@ -145,6 +145,9 @@ class buildModel extends model
                 $this->session->set('projectBuildForm', $query->form);
             }
         }
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+
+        $buildQuery = $this->session->projectBuildQuery;
 
         if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->projectBuildQuery;

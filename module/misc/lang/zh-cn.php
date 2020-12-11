@@ -87,6 +87,7 @@ $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
 $lang->misc->releaseDate['20.0.beta1']  = '2020-11-30';
+$lang->misc->releaseDate['12.5.1']      = '2020-11-30';
 $lang->misc->releaseDate['12.5.stable'] = '2020-11-19';
 $lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
 $lang->misc->releaseDate['12.4.4']      = '2020-10-30';
@@ -141,6 +142,7 @@ $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 $lang->misc->feature->all['20.0.beta1'][]  = array('title'=>'禅道20beta版本，修复bug，完善细节', 'desc' => '');
 $lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'禅道20版本大更新，重构导航，增加瀑布模型', 'desc' => '<p>增加项目集和项目概念</p><p>将原项目概念变为迭代或阶段概念</p><p>增加瀑布开发模板</p>');
 
+$lang->misc->feature->all['12.5.1'][]      = array('title' => '修复漏洞。', 'desc' => '');
 $lang->misc->feature->all['12.5.stable'][] = array('title' => '解决bug，完成高优先级需求。', 'desc' => '');
 
 $lang->misc->feature->all['12.4.4'][] = array('title'=>'兼容专业版和企业版', 'desc' => '');

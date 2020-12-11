@@ -17,12 +17,12 @@
     <ul class='nav nav-default'>
       <?php
       $that = zget($lang->user->thirdPerson, $user->gender);
-      echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  sprintf($lang->user->testTask2Him, $that)) . "</li>";
+      echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "userID={$user->id}"),  sprintf($lang->user->testTask2Him, $that)) . "</li>";
     
       $active = $type == 'case2Him' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
+      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
       $active = $type == 'caseByHim' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  sprintf($lang->user->caseByHim, $that)) . "</li>";
+      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=caseByHim"),  sprintf($lang->user->caseByHim, $that)) . "</li>";
       ?>
     </ul>
   </nav>
@@ -30,7 +30,7 @@
   <div class='main-table'>
     <table class='table has-sort-head'>
       <?php 
-      $vars = "account=$account&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
+      $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       ?>
       <thead>

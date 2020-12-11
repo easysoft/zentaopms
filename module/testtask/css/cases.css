@@ -12,6 +12,7 @@ tbody > tr > td   .icon-share{font-size: 9px;}
 .table-footer .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}
 td.c-story{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
 td .warning{color: red;}
+#modules .active{font-weight: bolder;}
 
 .fail .result-fail, .blocked .result-blocked{color:#f00;}
 .pass .result-pass{color:green;}

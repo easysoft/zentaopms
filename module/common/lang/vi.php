@@ -688,7 +688,7 @@ $lang->error->URL             = "『%s』should be url.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』nên là chữ hoặc số.";
-$lang->error->account         = "『%s』should be >= 3 letters or numbers.";
+$lang->error->account         = "『%s』should be >= 3 letters, underline or numbers.";
 $lang->error->passwordsame    = "The two passwords should be the same.";
 $lang->error->passwordrule    = "Password should conform to rules. It should be >= 6 characters.";
 $lang->error->accessDenied    = 'Truy cập bị từ chối.';

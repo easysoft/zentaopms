@@ -626,6 +626,9 @@ class upgradeModel extends model
         case '12_5':
             $this->saveLogs('Execute 12_5');
             $this->appendExec('12_5');
+        case '12_5_1':
+            $this->saveLogs('Execute 12_5_1');
+            $this->appendExec('12_5_1');
         case '20_0_alpha':
             $this->saveLogs('Execute 20_0_alpha');
             $this->execSQL($this->getUpgradeFile('20.0.alpha'));
@@ -822,6 +825,7 @@ class upgradeModel extends model
             case '12_4_3':
             case '12_4_4': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.4'));
             case '12_5':
+            case '12_5_1':
             case '20_0_alpha' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
             case '20_0_alpha1': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha1'));
         }

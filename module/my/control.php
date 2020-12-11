@@ -71,7 +71,7 @@ class my extends control
      * My todos.
      *
      * @param  string $type
-     * @param  string $account
+     * @param  int    $userID
      * @param  string $status
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -79,7 +79,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo($type = 'all', $account = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($type = 'all', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -94,6 +94,10 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        if(empty($userID)) $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
 
         /* The title and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
@@ -110,6 +114,7 @@ class my extends control
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
+        $this->view->user         = $user;
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;
@@ -620,10 +625,9 @@ class my extends control
      * My dynamic.
      *
      * @param  string $type
-     * @param  string $orderBy
      * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $date
+     * @param  string $direction    next|pre
      * @access public
      * @return void
      */

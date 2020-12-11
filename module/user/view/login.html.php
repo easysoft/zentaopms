@@ -81,6 +81,9 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id="info" class="table-row">
       <div class="table-col text-middle text-center">
         <div id="poweredby">
+          <?php if($weakSites):?>
+          <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
+          <?php endif;?>
           <?php if($config->checkVersion):?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' height='45' scrolling='no' allowtransparency='true' src="<?php echo $this->createLink('misc', 'checkUpdate', "sn=$s");?>"></iframe>
           <?php endif;?>
@@ -89,4 +92,24 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     </div>
   </div>
 </main>
+<?php
+if($weakSites)
+{
+    $paths     = array();
+    $databases = array();
+    $isXampp   = false;
+    foreach($weakSites as $webRoot => $site)
+    {
+        $path = $site['path'];
+        if(strpos($path, 'xampp') !== false) $isXampp = true;
+
+        $paths[]     = $site['path'];
+        $databases[] = $site['database'];
+    }
+
+    $process4Safe = $isXampp ? $lang->user->process4DB : $lang->user->process4DIR;
+    $process4Safe = sprintf($process4Safe, join(' ', $isXampp ? $databases : $paths));
+    js::set('process4Safe', $process4Safe);
+}
+?>
 <?php include '../../common/view/footer.lite.html.php';?>

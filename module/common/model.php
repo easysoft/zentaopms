@@ -46,6 +46,7 @@ class commonModel extends model
     {
         header("Content-Type: text/html; Language={$this->config->charset}");
         header("Cache-control: private");
+
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
         {
             if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') 
@@ -56,7 +57,7 @@ class commonModel extends model
         }
         else
         {
-            header("X-Frame-Options: SAMEORIGIN");
+            if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
         }
     }
 
@@ -1519,17 +1520,17 @@ EOD;
         /* Set the query condition session. */
         if($onlyCondition)
         {
-            $queryCondition = explode('WHERE', $sql);
+            $queryCondition = explode(' WHERE ', $sql);
             $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
             if($queryCondition)
             {
-                $queryCondition = explode('ORDER', $queryCondition);
+                $queryCondition = explode(' ORDER BY ', $queryCondition);
                 $queryCondition = str_replace('t1.', '', $queryCondition[0]);
             }
         }
         else
         {
-            $queryCondition = explode('ORDER', $sql);
+            $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
         $queryCondition = trim($queryCondition);
@@ -1539,11 +1540,11 @@ EOD;
         $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
 
         /* Set the query condition session. */
-        $orderBy = explode('ORDER BY', $sql);
+        $orderBy = explode(' ORDER BY ', $sql);
         $orderBy = isset($orderBy[1]) ? $orderBy[1] : '';
         if($orderBy)
         {
-            $orderBy = explode('LIMIT', $orderBy);
+            $orderBy = explode(' LIMIT ', $orderBy);
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }

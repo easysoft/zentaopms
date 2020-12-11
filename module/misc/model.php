@@ -60,4 +60,62 @@ class miscModel extends model
         }
         return $remind;
     }
+
+    /**
+     * Check one click package.
+     * 
+     * @access public
+     * @return array
+     */
+    public function checkOneClickPackage()
+    {
+        $weakSites = array();
+        if(strpos('|/zentao/|/pro/|/biz/|', "|{$this->config->webRoot}|") !== false)
+        {
+            $databases = array('zentao' => 'zentao', 'zentaopro' => 'zentaopro', 'zentaobiz' => 'zentaobiz', 'zentaoep' => 'zentaoep');
+            if($this->config->webRoot == '/zentao/') unset($databases['zentao']);
+            if($this->config->webRoot == '/pro/') unset($databases['zentaopro']);
+            if($this->config->webRoot == '/biz/')
+            {
+                unset($databases['zentaobiz']);
+                unset($databases['zentaoep']);
+            }
+
+            $basePath = dirname($this->app->getBasePath());
+            foreach($databases as $database)
+            {
+                $zentaoDirName = $database;
+                if(!is_dir($basePath . '/' . $zentaoDirName))
+                {
+                    if($zentaoDirName == 'zentaobiz' and !is_dir($basePath . '/zentaoep')) continue;
+                    if($zentaoDirName == 'zentaoep' and !is_dir($basePath . '/zentaobiz')) continue;
+                    if($zentaoDirName == 'zentao' or $zentaoDirName == 'zentaopro') continue;
+
+                    if($zentaoDirName == 'zentaobiz') $zentaoDirName = 'zentaoep';
+                    if($zentaoDirName == 'zentaoep')  $zentaoDirName = 'zentaobiz';
+                }
+
+                try
+                {
+                    $webRoot = "/{$database}/";
+                    if($database == 'zentao')    $webRoot = '/zentao/';
+                    if($database == 'zentaopro') $webRoot = '/pro/';
+                    if($database == 'zentaobiz') $webRoot = '/biz/';
+                    if($database == 'zentaoep')  $webRoot = '/biz/';
+
+                    $user = $this->dbh->query("select * from {$database}.`zt_user` where account = 'admin' and password='" . md5('123456') . "'")->fetch();
+                    if($user)
+                    {
+                        $site = array();
+                        $site['path'] = basename($basePath) . '/' . $zentaoDirName;
+                        $site['database'] = $database;
+                        $weakSites[$database] = $site;
+                    }
+                }
+                catch(Exception $e){}
+            }
+        }
+
+        return $weakSites;
+    }
 }

@@ -167,6 +167,13 @@ fi
 echo $deletelog > $basePath/deletelog.sh
 echo "deletelog.sh ok"
 
+# encrypt.
+if [ -f "$basePath/php/encrypt.php" ]; then
+  encrypt="$phpcli $basePath/php/encrypt.php \$*"
+  echo $encrypt > $basePath/encrypt.sh
+  echo "encrypt.sh ok"
+fi
+
 # cron
 if [ ! -d "$basePath/cron" ]; then
   mkdir $basePath/cron

@@ -1273,7 +1273,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -1995,15 +1995,17 @@ class story extends control
     /**
      * AJAX: get storys of a user in html select.
      *
-     * @param  string $account
+     * @param  int    $userID
      * @param  string $id       the id of the select control.
      * @access public
      * @return string
      */
-    public function ajaxGetUserStorys($account = '', $id = '')
+    public function ajaxGetUserStorys($userID = '', $id = '')
     {
-        if($account == '') $account = $this->app->user->account;
-        $storys = $this->story->getUserStoryPairs($account);
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+        $storys  = $this->story->getUserStoryPairs($account);
 
         if($id) die(html::select("storys[$id]", $storys, '', 'class="form-control"'));
         die(html::select('story', $storys, '', 'class=form-control'));

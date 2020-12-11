@@ -901,6 +901,9 @@ class fileModel extends model
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
         setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false);
 
+        /* Only download upload file that is in zentao. */
+        if($type == 'file' and stripos($content, $this->savePath) !== 0) die();
+
         /* Append the extension name auto. */
         $extension = '.' . $fileType;
         if(strpos($fileName, $extension) === false) $fileName .= $extension;
@@ -919,6 +922,8 @@ class fileModel extends model
         if($type == 'content') die($content);
         if($type == 'file' and file_exists($content))
         {
+            if(stripos($content, $this->app->getBasePath()) !== 0) die();
+
             set_time_limit(0);
             $chunkSize = 10 * 1024 * 1024;
             $handle    = fopen($content, "r");

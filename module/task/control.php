@@ -1252,15 +1252,18 @@ class task extends control
     /**
      * AJAX: return tasks of a user in html select.
      *
-     * @param  string $account
+     * @param  int    $userID
      * @param  string $id
      * @param  string $status
      * @access public
      * @return string
      */
-    public function ajaxGetUserTasks($account = '', $id = '', $status = 'wait,doing')
+    public function ajaxGetUserTasks($userID = '', $id = '', $status = 'wait,doing')
     {
-        if($account == '') $account = $this->app->user->account;
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
         $tasks = $this->task->getUserTaskPairs($account, $status);
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
