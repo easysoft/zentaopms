@@ -81,7 +81,7 @@ class budgetModel extends model
      * @access public
      * @return array
      */
-    public function getSubjects($projectID)
+    public function getSubjectPairs($projectID)
     {
         return $this->dao->select('subject')->from(TABLE_BUDGET)->where('PRJ')->eq($projectID)->andWhere('deleted')->eq(0)->orderBy('subject_asc')->fetchPairs();
     }
@@ -96,12 +96,12 @@ class budgetModel extends model
     {
         $this->loadModel('tree');
 
-        $structure = array();
-        $subjects  = $this->getSubjects($this->session->PRJ);
+        $structure    = array();
+        $subjectPairs = $this->getSubjectPairs($this->session->PRJ);
+        $subjects     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($subjectPairs)->fetchAll('id');
 
-        foreach($subjects as $subjectID)
+        foreach($subjects as $subject)
         {
-            $subject = $this->tree->getById($subjectID);
             if($subject->grade == 1)
             {
                 $structure[$subject->id][] = $subject->id;
@@ -115,17 +115,17 @@ class budgetModel extends model
     }
 
     /**
-     * Existence of sub-subjects.
+     * Check if has sub-subjects.
      *
      * @param  array  $subjects
      * @access public
      * @return bool
      */
-    public function getSubSubject($subjects)
+    public function checkSubSubject($subjects)
     {
         foreach($subjects as $id => $subject)
         {
-            if($subject[0] != $id) return true;
+            if(count($subject) > 1 || $id != $subject[0]) return true;
         }
 
         return false;
@@ -147,14 +147,14 @@ class budgetModel extends model
         /* Assign each subject to a stage. */
         $summary['stages']   = array();
         $summary['subjects'] = array();
-        foreach($stages as $stage)
+        foreach($stages as $stageID)
         {
             foreach($subjects as $subject)
             {
                 foreach($subject as $children)
                 {
-                    $summary['stages'][$stage][$children] = 0;
-                    $summary['subjects'][$children]       = 0;
+                    $summary['stages'][$stageID][$children] = 0;
+                    $summary['subjects'][$children]         = 0;
                 }
             }
         }

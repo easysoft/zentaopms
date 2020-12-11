@@ -318,10 +318,7 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
-('system','custom','','hourPoint','1'),
-('system','custom','','URAndSR','1'),
-('system','custom','common','URSRName','{\"URCommon\":{\"zh-cn\":\"\\u7528\\u6237\\u9700\\u6c42\"},\"SRCommon\":{\"zh-cn\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\"}}');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','hourPoint','1');
 
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
 ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;

@@ -4101,8 +4101,6 @@ INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VA
 ('zh-cn', 'custom', 'SRList', '3', '故事', '1'),
 ('zh-cn', 'custom', 'SRList', '4', '故事', '1');
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES 
-('system','custom','','hourPoint','1'),
-('system','custom','','URAndSR','1');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProject', '1');
