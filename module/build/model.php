@@ -149,9 +149,6 @@ class buildModel extends model
 
         $buildQuery = $this->session->projectBuildQuery;
 
-        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
-        $buildQuery = $this->session->projectBuildQuery;
-
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'project' => '`project`');
         foreach($fields as $field)
@@ -491,7 +488,7 @@ class buildModel extends model
      */
     public function unlinkStory($buildID, $storyID)
     {
-        $build          = $this->getByID($buildID);
+        $build = $this->getByID($buildID);
         $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
         if($build->stories) $build->stories = ',' . $build->stories;
 
@@ -555,7 +552,7 @@ class buildModel extends model
      */
     public function unlinkBug($buildID, $bugID)
     {
-        $build       = $this->getByID($buildID);
+        $build = $this->getByID($buildID);
         $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
         if($build->bugs) $build->bugs = ',' . $build->bugs;
 
