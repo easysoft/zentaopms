@@ -238,6 +238,7 @@ $config->objectTables['issue']       = TABLE_ISSUE;
 $config->objectTables['design']      = TABLE_DESIGN;
 $config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
 $config->objectTables['budget']      = TABLE_BUDGET;
+$config->objectTables['job']         = TABLE_JOB;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

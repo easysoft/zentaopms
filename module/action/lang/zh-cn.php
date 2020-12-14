@@ -94,6 +94,7 @@ $lang->action->objectTypes['design']      = '设计';
 $lang->action->objectTypes['stakeholder'] = '干系人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['budget']      = '费用估算';
+$lang->action->objectTypes['job']         = '构建';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

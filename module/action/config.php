@@ -28,6 +28,7 @@ $config->action->objectNameFields['issue']       = 'title';
 $config->action->objectNameFields['design']      = 'name';
 $config->action->objectNameFields['stakeholder'] = 'user';
 $config->action->objectNameFields['budget']      = 'name';
+$config->action->objectNameFields['job']         = 'name';
 
 $config->action->commonImgSize = 870;
 
