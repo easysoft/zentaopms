@@ -125,8 +125,8 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
 global $config;
-$URCommon = zget($lang, 'URCommon', "用户需求");
-$SRCommon = zget($lang, 'SRCommon', "软件需求");
+$URCommon = isset($lang->URCommon) ? $lang->URCommon : '用户需求';
+$SRCommon = isset($lang->SRCommon) ? $lang->SRCommon : '软件需求';
 
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
