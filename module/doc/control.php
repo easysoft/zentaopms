@@ -589,6 +589,7 @@ class doc extends control
     /**
      * Sort doc lib.
      *
+     * @param  string $type
      * @access public
      * @return void
      */

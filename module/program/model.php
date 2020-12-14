@@ -1196,7 +1196,7 @@ class programModel extends model
      * Create a project.
      *
      * @access public
-     * @return int
+     * @return int|bool
      */
     public function PRJCreate()
     {
