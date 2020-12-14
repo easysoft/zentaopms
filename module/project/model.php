@@ -1710,21 +1710,23 @@ class projectModel extends model
      * Get executions to import
      *
      * @param  array  $executionIds
+     * @param  string $type sprint|stage
      * @access public
      * @return array
      */
-    public function getExecutionsToImport($executionIds)
+    public function getExecutionsToImport($executionIds, $type)
     {
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIds)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll('id');
 
         $pairs = array();
         $now   = date('Y-m-d');
-        foreach($executions as $id => $execution) $pairs[$id] = ucfirst(substr($execution->code, 0, 1)) . ':' . $execution->name;
+        foreach($executions as $id => $execution) $pairs[$id] = $execution->name;
         return $pairs;
     }
 

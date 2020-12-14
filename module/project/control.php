@@ -446,7 +446,7 @@ class project extends control
         $toProject = $project->id;
         $branches  = $this->project->getExecutionBranches($toProject);
         $tasks     = $this->project->getTasks2Imported($toProject, $branches);
-        $projects  = $this->project->getExecutionsToImport(array_keys($tasks));
+        $projects  = $this->project->getExecutionsToImport(array_keys($tasks), $project->type);
         unset($projects[$toProject]);
         unset($tasks[$toProject]);
 
