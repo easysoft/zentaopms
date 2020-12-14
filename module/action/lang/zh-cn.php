@@ -87,6 +87,7 @@ $lang->action->objectTypes['caselib']     = '用例库';
 $lang->action->objectTypes['testreport']  = '报告';
 $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['job']         = '构建';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

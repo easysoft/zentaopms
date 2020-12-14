@@ -210,3 +210,4 @@ $config->objectTables['module']      = TABLE_MODULE;
 $config->objectTables['caselib']     = TABLE_TESTSUITE;
 $config->objectTables['entry']       = TABLE_ENTRY;
 $config->objectTables['webhook']     = TABLE_WEBHOOK;
+$config->objectTables['job']         = TABLE_JOB;
