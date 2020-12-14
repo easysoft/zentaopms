@@ -7,7 +7,13 @@ $(function()
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
     }
 
-    if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
+    $(document).ready(function(){
+        var $title = $('#storyList thead th.c-title');
+        var headerWidth = $('#storyList thead th.c-title a').innerWidth();
+        var buttonWidth = $('#storyList thead th.c-title button').innerWidth();
+        if($title.width() < headerWidth + buttonWidth) $title.width(headerWidth + buttonWidth + 10);
+    });
+
     $('#storyList td.has-child .story-toggle').each(function()
     {
         var $td = $(this).closest('td');
