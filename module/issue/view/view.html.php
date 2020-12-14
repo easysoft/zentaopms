@@ -31,6 +31,9 @@ foreach($issue as $field => $value)
     <div class="page-title">
       <span class="label label-id"><?php echo $issue->id?></span>
       <span class="text" title="<?php echo $issue->title?>"><?php echo $issue->title?></span>
+      <?php if($issue->deleted):?>
+      <span class='label label-danger'><?php echo $lang->issue->deleted;?></span>
+      <?php endif; ?>
     </div>
   </div>
   <div class="btn-toolbar pull-right">

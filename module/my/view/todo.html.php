@@ -18,7 +18,7 @@
     <?php foreach($lang->todo->periods as $period => $label):?>
     <?php
     $vars = "date=$period";
-    if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
+    if($period == 'before') $vars .= "&userID={$app->user->id}&status=undone";
     $label  = "<span class='text'>$label</span>";
     $active = '';
     if($period == $type)
@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export'");?>
+    <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export'");?>
     <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
     <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%'", '', 'true');?>
   </div>
@@ -60,7 +60,7 @@
     $canbatchAction = ($type != 'cycle' and ($canBatchEdit or $canBatchFinish or $canBatchClose or (common::hasPriv('todo', 'import2Today') and $importFuture)));
     ?>
     <table class="table has-sort-head" id='todoList'>
-      <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "type=$type&userID={$user->id}&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
           <th class="w-100px">
@@ -142,7 +142,7 @@
       <?php
       if($canBatchEdit)
       {
-          $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
+          $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status");
           echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
       }
       if($canBatchFinish)

@@ -819,7 +819,7 @@ function adjustMenuWidth()
         delta = (headingWidth + navbarWidth + toolbarWidth) - mainHeaderWidth;
         delta = Math.ceil(delta / $navbar.children('li').length / 2);
 
-        aTagPadding  = $navbar.find('a:first').css('padding-left').replace('px', '');
+        aTagPadding   = $navbar.find('a:first').css('padding-left').replace('px', '');
         dividerMargin = $navbar.find('.divider').css('margin-left').replace('px', '');
 
         newPadding = aTagPadding - delta;

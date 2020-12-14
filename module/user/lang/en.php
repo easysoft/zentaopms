@@ -181,7 +181,7 @@ $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = "ID %s，account must be >= 3 letters, underline, or numbers";
+$lang->user->error->account        = "ID %s，account must be >= 3 letters, underline or numbers";
 $lang->user->error->accountDupl    = "ID %s，account is used.";
 $lang->user->error->realname       = "ID %s，must be real name";
 $lang->user->error->password       = "ID %s，password must be >= 6 characters.";
@@ -225,4 +225,6 @@ $lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your pass
     <li>Keep the file empty.</li>
     <li>If the file exists, remove it and create it again.</li>
     </ol>";
-$lang->user->notice4Safe = "It is detected that you may be using the one click installation package environment, and other sites in the environment are still using a simple password. For security, please change the password in time. Login address of other sites: <br />%s";
+$lang->user->notice4Safe = "Warning: Weak password of one click package detected";
+$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";

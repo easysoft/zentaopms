@@ -32,15 +32,15 @@
     <?php if(!empty($subjects)):?>
     <table class='table table-bordered'>
       <tr class='text-center table-title'>
-        <th rowspan="<?php echo $subSubject ? 2 : 1;?>"><?php echo $lang->budget->subject . '/' . $lang->budget->stage;?></th>
+        <th rowspan="<?php echo $hasSubSubject ? 2 : 1;?>"><?php echo $lang->budget->subject . '/' . $lang->budget->stage;?></th>
         <?php foreach($subjects as $id => $subject):?>
           <th colspan="<?php echo count($subject);?>"><?php echo zget($modules, $id);?></th>
         <?php endforeach;?>
-        <th rowspan="<?php echo $subSubject ? 2 : 1;?>"><?php echo $lang->budget->summary;?></th>
+        <th rowspan="<?php echo $hasSubSubject ? 2 : 1;?>"><?php echo $lang->budget->summary;?></th>
       </tr>
       <tr class='text-center table-title'>
-        <?php foreach($subjects as $subject):?>
-          <?php if($id == $subject[0] && !$subSubject) continue;?>
+        <?php foreach($subjects as $id => $subject):?>
+          <?php if($id == $subject[0] && !$hasSubSubject) continue;?>
           <?php foreach($subject as $subjectID):?>
             <th><?php echo zget($modules, $subjectID);?></th>
           <?php endforeach;?>

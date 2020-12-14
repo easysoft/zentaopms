@@ -28,7 +28,6 @@ class buildModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.id')->eq((int)$buildID)
-            ->andWhere('t1.deleted')->eq(0)
             ->fetch();
         if(!$build) return false;
 
@@ -146,7 +145,11 @@ class buildModel extends model
                 $this->session->set('projectBuildForm', $query->form);
             }
         }
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
 
+        $buildQuery = $this->session->projectBuildQuery;
+
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
@@ -207,6 +210,7 @@ class buildModel extends model
             }
         }
 
+        if($this->session->executionBuildQuery == false) $this->session->set('executionBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->executionBuildQuery;
 
         /* Distinguish between repeated fields. */

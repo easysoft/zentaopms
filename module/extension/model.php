@@ -154,20 +154,6 @@ class extensionModel extends model
     }
 
     /**
-     * Download an extension.
-     * 
-     * @param  string    $extension 
-     * @param  string    $downLink 
-     * @access public
-     * @return void
-     */
-    public function downloadPackage($extension, $downLink)
-    {
-        $packageFile = $this->getPackageFile($extension);
-        file_put_contents($packageFile, common::http($downLink));
-    }
-
-    /**
      * Get extensions by status.
      * 
      * @param  string    $status 

@@ -23,7 +23,7 @@ function loadList(type, id)
         divID      = '#nameBox';
     }
 
-    var param = 'account=' + account;
+    var param = 'userID=' + userID;
     if(id) param += '&id=' + id;
     if(type == 'bug')
     {

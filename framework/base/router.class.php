@@ -2161,7 +2161,9 @@ class baseRouter
         }    
         try 
         {
-            $dbh = new PDO($dsn, $params->user, $params->password, array(PDO::ATTR_PERSISTENT => $params->persistant));
+            $dbPassword = helper::decryptPassword($params->password);
+
+            $dbh = new PDO($dsn, $params->user, $dbPassword, array(PDO::ATTR_PERSISTENT => $params->persistant));
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*

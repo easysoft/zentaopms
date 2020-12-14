@@ -86,18 +86,6 @@ class programplanModel extends model
     }
 
     /**
-     * Get plan pairs for budget.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return array
-     */
-    public function getPlanPairsForBudget($programID = 0)
-    {
-        return $this->loadModel('project')->getExecutionsByProject($programID, 'all', 0, true);
-    }
-
-    /**
      * Get plans.
      *
      * @param  int    $projectID

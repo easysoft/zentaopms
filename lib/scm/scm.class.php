@@ -239,10 +239,10 @@ class scm
  */
 function escapeCmd($cmd)
 {
-   $codes = array('#', '&', ';', '`', '|', '*', '?', '~', '<', '>', '^', '[', ']', '{', '}', '$', ',', '\x0A', '\xFF');
-   if(DIRECTORY_SEPARATOR == '/') $codes[] = '\\';
-   foreach($codes as $code) $cmd = str_replace($code, '\\' . $code, $cmd);
-   return $cmd;
+    $codes = array('#', '&', ';', '`', '|', '*', '?', '~', '<', '>', '^', '[', ']', '{', '}', '$', ',', '\x0A', '\xFF');
+    if(DIRECTORY_SEPARATOR == '/') $cmd = str_replace('\\', '\\\\', $cmd);
+    foreach($codes as $code) $cmd = str_replace($code, "\\{$code}", $cmd);
+    return $cmd;
 }
 
 /**

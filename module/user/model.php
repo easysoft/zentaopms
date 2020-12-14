@@ -14,25 +14,6 @@
 class userModel extends model
 {
     /**
-     * Set the menu.
-     *
-     * @param  array  $users    user pairs
-     * @param  string $account  current account
-     * @access public
-     * @return void
-     */
-    public function setMenu($users, $account)
-    {
-        $methodName = $this->app->getMethodName();
-        $selectHtml = html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '$methodName')\"");
-        foreach($this->lang->user->menu as $key => $value)
-        {
-            $replace = ($key == 'account') ? $selectHtml : $account;
-            common::setMenuVars($this->lang->user->menu, $key, $replace);
-        }
-    }
-
-    /**
      * Set users list.
      *
      * @param  array    $users
@@ -82,7 +63,7 @@ class userModel extends model
          * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,
          * thus to make sure users of this role at first.
          */
-        $fields = 'account, realname, deleted';
+        $fields = 'id, account, realname, deleted';
         $type   = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
         if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,', role) AS roleOrder";
         if(strpos($params, 'pdfirst') !== false) $fields .= ", INSTR(',po,pd,', role) AS roleOrder";
@@ -91,6 +72,8 @@ class userModel extends model
         if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',td,pm,', role) AS roleOrder";
         if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
         $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
+
+        $keyField = (strpos($params, 'useid')!== false) ? 'id' : "account";
 
         /* Get raw records. */
         $this->app->loadConfig('user');
@@ -102,7 +85,7 @@ class userModel extends model
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
-            ->fetchAll('account');
+            ->fetchAll($keyField);
 
         if($maxCount and $maxCount == count($users))
         {
@@ -112,14 +95,14 @@ class userModel extends model
             $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore') . $connectString . "params=" . base64_encode($moreLinkParams);
         }
 
-        if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
+        if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
         /* Cycle the user records to append the first letter of his account. */
         foreach($users as $account => $user)
         {
-            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
             if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $account : ($user->realname ? $user->realname : $account));
+            $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $user->account : ($user->realname ? $user->realname : $user->account));
         }
 
         /* Append empty, closed, and guest users. */
@@ -195,6 +178,9 @@ class userModel extends model
      */
     public function getById($userID, $field = 'account')
     {
+        if($field == 'id') $userID = (int)$userID;
+        if($field == 'account') $userID = str_replace(' ', '', $userID);
+
         $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
         $user->last = date(DT_DATETIME1, $user->last);

@@ -173,6 +173,7 @@ $lang->product->viewMenu->plan        = array('link' => "计划|productplan|brow
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->whitelist   = array('link' => '白名单|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
@@ -683,7 +684,7 @@ $lang->error->URL             = "『%s』应当为合法的URL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->datetime        = "『%s』应当为合法的日期。";
 $lang->error->code            = "『%s』应当为字母或数字的组合。";
-$lang->error->account         = "『%s』只能是字母和数字的组合三位以上。";
+$lang->error->account         = "『%s』只能是字母、数字或下划线的组合三位以上。";
 $lang->error->passwordsame    = "两次密码应该相同。";
 $lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
 $lang->error->accessDenied    = '您没有访问权限';

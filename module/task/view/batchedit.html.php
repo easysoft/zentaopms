@@ -135,7 +135,30 @@
             <td class='text-left<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("finishedBys[$taskID]", $members, $tasks[$taskID]->finishedBy, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("canceledBys[$taskID]", $members, $tasks[$taskID]->canceledBy, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("closedBys[$taskID]",   $members, $tasks[$taskID]->closedBy, "class='form-control chosen'");?></td>
-            <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>
+            <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>>
+              <?php
+              $reasonList[''] = '';
+              $closedReason   = $tasks[$taskID]->closedReason;
+              if(!empty($closedReason))
+              {
+                  $reasonList[$closedReason] = $lang->task->reasonList[$closedReason];
+              }
+              else
+              {
+                  $status = $tasks[$taskID]->status;
+                  if($status == 'done' or $status == 'cancel')
+                  {
+                      $reasonList[$status] = $lang->task->reasonList[$status];
+                  }
+                  else
+                  {
+                      $reasonList = $lang->task->reasonList;
+                  }
+              }
+
+              echo html::select("closedReasons[$taskID]", $reasonList, $closedReason, 'class=form-control');
+              ?>
+            </td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $tasks[$taskID], $extendField->field . "[{$taskID}]") . "</td>";?>
           </tr>
           <?php endforeach;?>

@@ -87,12 +87,12 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <tr>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
-            <?php echo html::checkbox('users', array($user->account => '')) . html::a(helper::createLink('user', 'view', "account=$user->account"), sprintf('%03d', $user->id));?>
+            <?php echo html::checkbox('users', array($user->account => '')) . html::a(helper::createLink('user', 'view', "userID=$user->id"), sprintf('%03d', $user->id));?>
             <?php else:?>
             <?php printf('%03d', $user->id);?>
             <?php endif;?>
           </td>
-          <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
+          <td><?php if(!common::printLink('user', 'view', "userID=$user->id", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
@@ -103,8 +103,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <?php
-            if(!empty($config->sso->turnon)) common::printIcon('user', 'unbind', "userID=$user->account", $user, 'list', 'unlink', "hiddenwin");
-            common::printIcon('user', 'unlock', "userID=$user->account", $user, 'list', 'unlock', "hiddenwin");
+            if(!empty($config->sso->turnon)) common::printIcon('user', 'unbind', "userID=$user->id", $user, 'list', 'unlink', "hiddenwin");
+            common::printIcon('user', 'unlock', "userID=$user->id", $user, 'list', 'unlock', "hiddenwin");
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
 
             $deleteClass = (strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete')) ? 'btn iframe' : 'btn disabled';

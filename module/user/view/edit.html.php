@@ -18,7 +18,7 @@
     <div class="main-header">
       <h2>
         <span class="label label-id"><?php echo $user->id;?></span>
-        <strong><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?> <small>(<?php echo $user->account;?>)</small></strong>
+        <strong><?php if(!common::printLink('user', 'view', "userID=$user->id", $user->realname)) echo $user->realname;?> <small>(<?php echo $user->account;?>)</small></strong>
         <small><?php echo $lang->arrow . $lang->user->edit;?></small>
       </h2>
     </div>

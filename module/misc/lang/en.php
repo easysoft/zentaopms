@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['12.5.1']      = '2020-11-30';
 $lang->misc->releaseDate['12.5.stable'] = '2020-11-19';
 $lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
 $lang->misc->releaseDate['12.4.4']      = '2020-10-30';
@@ -139,6 +140,7 @@ $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 $lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'Add program, reset priv.', 'desc' => '');
 
+$lang->misc->feature->all['12.5.1'][]      = array('title' => 'Fix Bug', 'desc' => '');
 $lang->misc->feature->all['12.5.stable'][] = array('title' => 'Fix Bug. Complete high priority story.', 'desc' => '');
 
 $lang->misc->feature->all['12.4.4'][] = array('title'=>'Compatible with professional and enterprise editions', 'desc' => '');

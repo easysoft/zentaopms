@@ -2069,38 +2069,36 @@ class project extends control
      * Unlink a memeber.
      *
      * @param  int    $projectID
-     * @param  string $account
+     * @param  int    $userID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account, $confirm = 'no')
+    public function unlinkMember($projectID, $userID, $confirm = 'no')
     {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&account=$account&confirm=yes")));
-        }
-        else
-        {
-            $this->project->unlinkMember($projectID, $account);
+        if($confirm == 'no') die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $this->project->unlinkMember($projectID, $account);
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
             {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                $this->send($response);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
             }
-            die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
         }
+        die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
     }
 
     /**
@@ -2272,11 +2270,12 @@ class project extends control
     /**
      * Project dynamic.
      *
+     * @param  int    $projectID
      * @param  string $type
-     * @param  string $orderBy
+     * @param  string $param
      * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $date
+     * @param  string $direction  next|pre
      * @access public
      * @return void
      */
@@ -2317,7 +2316,12 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Set the user and type. */
-        $account = $type == 'account' ? $param : 'all';
+        $account = 'all';
+        if($type == 'account')
+        {
+            $user = $this->loadModel('user')->getById((int)$param, 'id');
+            if($user) $account = $user->account;
+        }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, $date, $direction);
@@ -2328,13 +2332,15 @@ class project extends control
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->project->dynamic;
 
+        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|useid');
+        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
+
         /* Assign. */
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->account    = $account;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->account    = $account;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;

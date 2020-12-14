@@ -216,3 +216,6 @@ $lang->user->noticeResetFile = "<h5>普通用戶請聯繫管理員重置密碼</
     <li>檔案內容為空。</li>
     <li>如果之前檔案存在，刪除之後重新創建。</li>
     </ol>"; 
+$lang->user->notice4Safe = "警告：檢測到一鍵安裝包密碼口令弱";
+$lang->user->process4DIR = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。將 %s 目錄刪除或改名。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->process4DB  = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。請登錄資料庫，修改 %s 資料庫的zt_user表的password欄位。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";

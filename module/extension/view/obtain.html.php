@@ -92,7 +92,6 @@
             <div class='pull-right'>
               <div class='btn-group'>
               <?php
-              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->type&overridePackage=no&ignoreCompitable=yes");
               echo html::a($extension->viewLink, $lang->extension->view, '', 'class="btn extension"');
               if($currentRelease->public)
               {
@@ -109,11 +108,6 @@
                           {
                               echo html::commonButton("<i class='icon-ok'></i> " . $lang->extension->installed, "disabled='disabled'", 'btn text-success');
                           }
-                      }
-                      else
-                      {
-                          $label = $currentRelease->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
-                          echo html::a($installLink, $label, '', 'class="iframe btn"');
                       }
                   }
               }

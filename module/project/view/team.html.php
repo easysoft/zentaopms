@@ -66,7 +66,7 @@
         <tr>
           <td>
           <?php
-          if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
+          if(!common::printLink('user', 'view', "userID={$member->userID}", $member->realname)) print $member->realname;
           $memberHours = $member->days * $member->hours;
           $totalHours  += $memberHours;
           ?>
@@ -82,7 +82,7 @@
             <?php
             if (common::hasPriv('project', 'unlinkMember', $member))
             {
-                $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
+                $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&userID=$member->userID&confirm=yes");
                 echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"mainContent\", confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkMember}'");
             }
             ?>

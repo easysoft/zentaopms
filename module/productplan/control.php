@@ -502,9 +502,9 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);
-        $products  = $this->product->getPairs('nocode');
-        $productID = $plan->product;
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $productID   = $plan->product;
+        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+        $queryID     = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -514,7 +514,7 @@ class productplan extends control
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['product']['values']       = array($productID => $productName, 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['plan']['values']          = $this->productplan->getForProducts(array($plan->product => $plan->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
@@ -547,7 +547,6 @@ class productplan extends control
 
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $planBugs;
-        $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;

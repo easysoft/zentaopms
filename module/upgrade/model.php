@@ -626,6 +626,9 @@ class upgradeModel extends model
         case '12_5':
             $this->saveLogs('Execute 12_5');
             $this->appendExec('12_5');
+        case '12_5_1':
+            $this->saveLogs('Execute 12_5_1');
+            $this->appendExec('12_5_1');
         case '20_0_alpha':
             $this->saveLogs('Execute 20_0_alpha');
             $this->execSQL($this->getUpgradeFile('20.0.alpha'));
@@ -636,6 +639,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0_alpha1');
             $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
             $this->appendExec('20_0_alpha1');
+        case '20_0_beta1':
+            $this->saveLogs('Execute 20_0_beta1');
+            $this->execSQL($this->getUpgradeFile('20.0.beta1'));
+            $this->unifiedFormat();
+            $this->appendExec('20_0_beta1');
         }
 
         $this->deletePatch();
@@ -817,6 +825,7 @@ class upgradeModel extends model
             case '12_4_3':
             case '12_4_4': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.4'));
             case '12_5':
+            case '12_5_1':
             case '20_0_alpha' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
             case '20_0_alpha1': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha1'));
         }
@@ -4336,6 +4345,27 @@ class upgradeModel extends model
                     ->exec();
                 $order++;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Unify the format of the stories and bugs fields in the zt_build table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function unifiedFormat()
+    {
+        $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll();
+        foreach($builds as $build)
+        {
+            $data = array();
+            if(!empty($build->stories) and $build->stories[0] != ',') $data['stories'] = ',' . $build->stories;
+            if(!empty($build->bugs) and $build->bugs[0] != ',')       $data['bugs']    = ',' . $build->bugs;
+
+            if($data) $this->dao->update(TABLE_BUILD)->data($data)->where('id')->eq($build->id)->exec();
         }
 
         return true;

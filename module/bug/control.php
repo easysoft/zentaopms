@@ -815,9 +815,9 @@ class bug extends control
                 }
             }
 
-            $this->lang->navGroup->bug = 'my';
-            $this->lang->bug->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.bug', 'my');
+            $this->lang->navGroup->bug  = 'my';
+            $this->lang->noMenuModule[] = 'bug';
+            $this->lang->bug->menu      = $this->lang->my->menu;
             $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
@@ -1383,15 +1383,17 @@ class bug extends control
     /**
      * AJAX: get bugs of a user in html select.
      *
-     * @param  string $account
+     * @param  int    $userID
      * @param  string $id       the id of the select control.
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs($account = '', $id = '')
+    public function ajaxGetUserBugs($userID = '', $id = '')
     {
-        if($account == '') $account = $this->app->user->account;
-        $bugs = $this->bug->getUserBugPairs($account);
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+        $bugs    = $this->bug->getUserBugPairs($account);
 
         if($id) die(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         die(html::select('bug', $bugs, '', 'class=form-control'));

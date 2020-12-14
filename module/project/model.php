@@ -2200,7 +2200,7 @@ class projectModel extends model
         $project = $this->getByID($projectID);
         if(empty($project)) return array();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($project->type)
@@ -2225,24 +2225,25 @@ class projectModel extends model
         $project = $this->getByID($projectID);
         if(empty($project)) return array();
 
-        $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
+        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
+        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($project->type)
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
-            ->fetchPairs();
+            ->fetchAll($keyField);
 
-        if($usersToAppended) $users += $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchPairs();
+        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchPairs($keyField);
 
         if(!$users) return array('' => '');
 
-        foreach($users as $account => $realName)
+        foreach($users as $account => $user)
         {
-            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
             if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . ($realName ? $realName : $account);
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
         return array('' => '') + $users;
     }

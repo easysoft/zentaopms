@@ -48,7 +48,7 @@ class budget extends control
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
         $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'subject');
-        $this->view->stages  = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->stages  = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
@@ -67,11 +67,11 @@ class budget extends control
         $this->view->position[] = $this->lang->budget->common;
         $this->view->position[] = $this->lang->budget->summary;
 
-        $this->view->subjects   = $subjects;
-        $this->view->subSubject = $this->budget->getSubSubject($subjects);
-        $this->view->plans      = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
-        $this->view->summary    = $this->budget->getSummary($this->session->PRJ, $subjects);
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
+        $this->view->subjects      = $subjects;
+        $this->view->hasSubSubject = $this->budget->checkSubSubject($subjects);
+        $this->view->plans         = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->summary       = $this->budget->getSummary($this->session->PRJ, $subjects);
+        $this->view->modules       = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'subject', $startModuleID = 0);
 
         $this->display();
     }
@@ -103,7 +103,7 @@ class budget extends control
         $this->view->position[] = $this->lang->budget->create;
 
         $this->view->subjects = array(0 => '') + $this->budget->getSubjectOption();
-        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->plans    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 
@@ -140,7 +140,7 @@ class budget extends control
         $this->view->position[] = $this->lang->budget->edit;
 
         $this->view->subjects = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->plans    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->budget   = $this->budget->getByID($budgetID);
         $this->display();
     }
@@ -159,7 +159,7 @@ class budget extends control
         $this->view->position[] = $this->lang->budget->view;
 
         $this->view->subjects = $this->budget->getSubjectOption();
-        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->plans    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->budget   = $this->budget->getByID($budgetID);
         $this->view->actions  = $this->loadModel('action')->getList('budget', $budgetID);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -215,7 +215,7 @@ class budget extends control
         $this->view->position[] = $this->lang->budget->batchCreate;
 
         $this->view->subjects = array('' => '') + $this->budget->getSubjectOption();
-        $this->view->plans    = $this->loadModel('programplan')->getPlanPairsForBudget($this->session->PRJ);
+        $this->view->plans    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 }

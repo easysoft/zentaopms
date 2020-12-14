@@ -16,3 +16,6 @@ html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 #langs > .dropdown-menu {min-width: 0; width: 85px;}
 
 #logo-box img{margin-left:40px; width: 100px;}
+
+.showNotice{color:yellow;}
+.showNotice:hover{color:yellow;}

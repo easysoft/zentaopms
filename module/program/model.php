@@ -1246,18 +1246,24 @@ class programModel extends model
             }
         }
 
-        /* When select create new product, product name cannot be empty. */
-        if(isset($_POST['newProduct']) and empty($_POST['productName']))
+        /* When select create new product, product name cannot be empty and duplicate. */
+        if(isset($_POST['newProduct']))
         {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->app->loadLang('product')->product->name);
-            return false;
-        }
-
-        $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
-        if(!empty($existProductName))
-        {
-            dao::$errors[] = $this->lang->program->existProductName;
-            return false;
+            if(empty($_POST['productName']))
+            {
+                $this->app->loadLang('product');
+                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->product->name);
+                return false;
+            }
+            else
+            {
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+                if(!empty($existProductName))
+                {
+                    dao::$errors[] = $this->lang->program->existProductName;
+                    return false;
+                }
+            }
         }
 
         $requiredFields = $this->config->program->PRJCreate->requiredFields;

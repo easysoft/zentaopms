@@ -204,8 +204,8 @@ $lang->custom->moduleName['project']     = $lang->projectCommon;
 
 $lang->custom->conceptQuestions['overview']         = "1. Sự kết hợp quản lý nào phù hợp với công ty của bạn?";
 $lang->custom->conceptQuestions['story']            = "2. Bạn có sử dụng mô hình điều kiện hay câu chuyện người dùng trong doanh nghiệp của bạn?";
-$lang->custom->conceptQuestions['requirementpoint'] = "2. Do you use hours or function points to make estimations in your company?";
-$lang->custom->conceptQuestions['storypoint']       = "2. Bạn có dùng giờ hoặc điểm để tạo dự kiến trong doanh nghiệp của bạn ?";
+$lang->custom->conceptQuestions['requirementpoint'] = "3. Do you use hours or function points to make estimations in your company?";
+$lang->custom->conceptQuestions['storypoint']       = "3. Bạn có dùng giờ hoặc điểm để tạo dự kiến trong doanh nghiệp của bạn ?";
 
 $lang->custom->conceptOptions = new stdclass;
 
