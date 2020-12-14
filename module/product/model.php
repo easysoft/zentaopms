@@ -735,9 +735,9 @@ class productModel extends model
     /**
      * Get the total number of requirements associated with the product.
      *
-     * @param  array  $productIdList
-     * @param  array  $type
-     * @param  array  $status  closed|active|draft
+     * @param  array   $productIdList
+     * @param  string  $type
+     * @param  string  $status  closed|active|draft
      * @access public
      * @return array
      */
