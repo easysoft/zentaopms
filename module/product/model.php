@@ -741,12 +741,12 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getTotalStoriesByProduct($productIdList, $type, $status)
+    public function getTotalStoriesByProduct($productIdList, $type, $status = '')
     {
         return $this->dao->select("count(*) as stories")->from(TABLE_STORY)
             ->where('type')->eq($type)
             ->andWhere('product')->in($productIdList)
-            ->andWhere('status')->eq($status)
+            ->beginIF($status != '')->andWhere('status')->eq($status)
             ->beginIF($status == 'closed')->andWhere('closedReason')->eq('done')->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('stories');

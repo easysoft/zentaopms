@@ -926,7 +926,7 @@ class programModel extends model
         foreach($projectIdList as $projectID)
         {
             $productIdList = $this->loadModel('product')->getProductIDByProject($projectID);
-            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'draft');
+            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story');
             $doneStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'closed');
             $leftStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'active');
         }
