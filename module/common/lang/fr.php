@@ -219,7 +219,6 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Tâche';
 $lang->searchObjects['testcase']    = 'CasTest';
-$lang->searchObjects['project']     = 'Execution';
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
@@ -229,6 +228,8 @@ $lang->searchObjects['doc']         = 'Document';
 $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'CR de Test';
 $lang->searchObjects['program']     = 'Program';
+$lang->searchObjects['project']     = 'Project';
+$lang->searchObjects['execution']   = 'Iteration/Phase';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */

@@ -219,7 +219,6 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Câu chuyện';
 $lang->searchObjects['task']        = 'Nhiệm vụ';
 $lang->searchObjects['testcase']    = 'Tình huống';
-$lang->searchObjects['project']     = 'Execution';
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = 'Bản dựng';
 $lang->searchObjects['release']     = 'Phát hành';
@@ -229,6 +228,8 @@ $lang->searchObjects['doc']         = 'Tài liệu';
 $lang->searchObjects['caselib']     = 'Thư viện tình huống';
 $lang->searchObjects['testreport']  = 'Test báo cáo';
 $lang->searchObjects['program']     = 'Program';
+$lang->searchObjects['project']     = 'Project';
+$lang->searchObjects['execution']   = 'Iteration/Phase';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */

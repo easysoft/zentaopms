@@ -215,7 +215,6 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = "{$lang->productSRCommon}";
 $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
-$lang->searchObjects['project']     = $lang->executionCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
@@ -225,6 +224,8 @@ $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['caselib']     = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchObjects['program']     = '项目集';
+$lang->searchObjects['project']     = '项目';
+$lang->searchObjects['execution']   = '迭代/执行';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
