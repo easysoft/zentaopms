@@ -41,7 +41,7 @@ class program extends control
     public function PGMIndex()
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         $this->view->title      = $this->lang->program->PGMIndex;
         $this->view->position[] = $this->lang->program->PGMIndex;
@@ -62,7 +62,7 @@ class program extends control
     public function PGMBrowse($status = 'all', $orderBy = 'order_asc')
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
@@ -106,7 +106,7 @@ class program extends control
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         $this->program->setPGMViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -145,7 +145,7 @@ class program extends control
     public function PGMCreate($parentProgramID = 0)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         if($_POST)
         {
@@ -178,7 +178,7 @@ class program extends control
     public function PGMEdit($programID = 0)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         $program = $this->program->getPGMByID($programID);
 
@@ -220,7 +220,7 @@ class program extends control
     public function PGMView($programID = 0)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         $this->program->setPGMViewMenu($programID);
 
         $program = $this->program->getPGMByID($programID);
@@ -345,7 +345,7 @@ class program extends control
     public function PGMProject($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         $this->program->setPGMViewMenu($programID);
 
         $this->loadModel('datatable');
@@ -389,7 +389,7 @@ class program extends control
     {
         $this->loadModel('user');
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         $this->program->setPGMViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -426,7 +426,7 @@ class program extends control
 
         $this->loadModel('user');
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         $this->program->setPGMViewMenu($programID);
 
         $this->loadModel('dept');
@@ -706,7 +706,7 @@ class program extends control
         else
         {
             $this->lang->navGroup->program     = 'program';
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction();
+            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
         }
 
         if($_POST)
