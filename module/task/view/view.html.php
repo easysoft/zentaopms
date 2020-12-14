@@ -132,7 +132,7 @@
                   common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'finish',   "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
+                  common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
                   ?>
                 </td>
               </tr>
