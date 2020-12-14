@@ -190,7 +190,6 @@ $lang->program->PGMFinish            = '完成项目集';
 $lang->program->PGMSuspend           = '挂起项目集';
 $lang->program->PGMDelete            = '删除项目集';
 $lang->program->PGMClose             = '关闭项目集';
-$lang->program->PGMView              = '项目集概况';
 $lang->program->PGMActivate          = '激活项目集';
 $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';

@@ -147,7 +147,6 @@ $lang->program->menu = new stdclass();
 $lang->program->menu->browse = array('link' => 'Program|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
 
 $lang->program->viewMenu = new stdclass();
-//$lang->program->viewMenu->view        = array('link' => 'View|program|pgmview|program=%s');
 $lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "Project|program|pgmproject|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "Member|personnel|accessible|program=%s");

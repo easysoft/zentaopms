@@ -192,7 +192,6 @@ $lang->program->PGMFinish            = '完成項目集';
 $lang->program->PGMSuspend           = '掛起項目集';
 $lang->program->PGMDelete            = '刪除項目集';
 $lang->program->PGMClose             = '關閉項目集';
-$lang->program->PGMView              = '項目集概況';
 $lang->program->PGMActivate          = '激活項目集';
 $lang->program->PGMExport            = '導出';
 $lang->program->PGMStakeholder       = '干係人列表';

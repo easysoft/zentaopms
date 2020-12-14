@@ -188,7 +188,6 @@ $lang->program->PGMFinish            = 'Finish';
 $lang->program->PGMSuspend           = 'Suspend';
 $lang->program->PGMDelete            = 'Delete';
 $lang->program->PGMClose             = 'Close';
-$lang->program->PGMView              = 'Overview';
 $lang->program->PGMActivate          = 'Activate';
 $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';

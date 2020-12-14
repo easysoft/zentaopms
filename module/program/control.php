@@ -211,29 +211,6 @@ class program extends control
     }
 
     /**
-     * View a program.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function PGMView($programID = 0)
-    {
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
-        $this->program->setPGMViewMenu($programID);
-
-        $program = $this->program->getPGMByID($programID);
-
-        $this->view->title       = $this->lang->program->PGMView;
-        $this->view->position[]  = $this->lang->program->PGMView;
-
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
-        $this->view->program     = $program;
-        $this->display();
-    }
-
-    /**
      * Close a program.
      *
      * @param  int    $programID
