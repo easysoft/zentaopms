@@ -299,7 +299,7 @@ class baseHelper
     }
 
     /**
-     * Encrypt password 
+     * Encrypt password.
      * 
      * @param  string    $password 
      * @static
