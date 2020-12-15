@@ -75,7 +75,7 @@
           <td class='text-center'><?php echo $product->unResolved;?></td>
           <td class='text-center'><?php echo $product->assignToNull;?></td>
           <?php if($canOrder):?>
-          <td class='c-actions sort-handleri text-center'><i class="icon icon-move"></i></td>
+          <td class='c-actions sort-handler text-center'><i class="icon icon-move"></i></td>
           <?php endif;?>
         </tr>
         <?php endforeach;?>
