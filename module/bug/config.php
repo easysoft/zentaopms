@@ -59,7 +59,7 @@ $config->bug->editor->activate   = array('id' => 'comment', 'tools' => 'bugTools
 global $lang;
 $config->bug->search['module']                   = 'bug';
 $config->bug->search['fields']['title']          = $lang->bug->title;
-$config->bug->search['fields']['id']             = $lang->bug->id;
+$config->bug->search['fields']['module']         = $lang->bug->module;
 $config->bug->search['fields']['keywords']       = $lang->bug->keywords;
 $config->bug->search['fields']['steps']          = $lang->bug->steps;
 $config->bug->search['fields']['assignedTo']     = $lang->bug->assignedTo;
@@ -70,8 +70,8 @@ $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
-$config->bug->search['fields']['plan']          = $lang->bug->productplan;
-$config->bug->search['fields']['module']         = $lang->bug->module;
+$config->bug->search['fields']['plan']           = $lang->bug->productplan;
+$config->bug->search['fields']['id']             = $lang->bug->id;
 $config->bug->search['fields']['project']        = $lang->bug->project;
 
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
