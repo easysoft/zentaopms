@@ -73,7 +73,7 @@
     <div class="col-3 total-block hide-in-sm">
       <div><strong><?php echo $lang->block->totalBug;?></strong></div>
       <div class="tile-amount">
-      <?php echo $totalData[$projectID]->allBugs ? html::a($this->createLink('bug', 'browse'), $totalData[$projectID]->allBugs) : 0;?>
+      <?php echo $totalData[$projectID]->allBugs;?>
       </div>
       <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$projectID]->doneBugs;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$projectID]->allBugs;?>" style="width: <?php echo floor(($totalData[$projectID]->doneBugs/$totalData[$projectID]->allBugs)*100).'%';?>"></div>
