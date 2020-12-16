@@ -766,7 +766,7 @@ class block extends control
         $type    = isset($this->params->type)    ? $this->params->type    : 'all';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
-        $this->view->programs = $this->loadModel('program')->getPRJOverview('byStatus', $type, $orderBy, $count);
+        $this->view->projects = $this->loadModel('program')->getPRJOverview('byStatus', $type, $orderBy, $count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 

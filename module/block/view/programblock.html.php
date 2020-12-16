@@ -1,4 +1,4 @@
-<?php if(empty($programs)): ?>
+<?php if(empty($projects)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
@@ -23,23 +23,23 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach($programs as $program):?>
+      <?php foreach($projects as $project):?>
       <?php
-      $viewLink = $this->createLink('program', 'index', "programID={$program->id}");
+      $viewLink = $this->createLink('program', 'index', "programID={$project->id}");
       ?>
       <tr>
-        <td title='<?php echo $program->name?>'><?php echo html::a($viewLink, $program->name);?></td>
-        <td><?php echo zget($users, $program->PM, $program->PM)?></td>
+        <td title='<?php echo $project->name?>'><?php echo html::a($viewLink, $project->name);?></td>
+        <td><?php echo zget($users, $project->PM, $project->PM)?></td>
         <td class='c-status'>
-          <span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status);?></span>
+          <span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status);?></span>
         </td>
         <?php if($longBlock):?>
-        <td><?php echo $program->teamCount;?></td>
-        <td><?php echo $program->consumed;?></td>
-        <td><?php echo $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit);?></td>
-        <td><?php echo $program->leftStories;?></td>
-        <td><?php echo $program->leftTasks;?></td>
-        <td><?php echo $program->leftBugs;?></td>
+        <td><?php echo $project->teamCount;?></td>
+        <td><?php echo $project->consumed;?></td>
+        <td><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
+        <td><?php echo $project->leftStories;?></td>
+        <td><?php echo $project->leftTasks;?></td>
+        <td><?php echo $project->leftBugs;?></td>
         <?php endif;?>
       </tr>
       <?php endforeach;?>
