@@ -162,9 +162,7 @@ class router extends baseRouter
             $model->model = 'scrum';
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
-            if(isset($model->model) && $model->model == 'waterfall')
-            { $projectIndex = 2;
-            }
+            if(isset($model->model) && $model->model == 'waterfall') $projectIndex = 2;
 
             /* Set productCommon, projectCommon, hourCommon and planCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productIndex]) ? $this->config->productCommonList[$this->clientLang][(int)$productIndex] : $this->config->productCommonList['en'][(int)$productIndex];

@@ -330,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `PRJ` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
   `commit` varchar(30) NOT NULL,
-  `commitBy` varchar(30) NOT NULL,
+  `commitedBy` varchar(30) NOT NULL,
   `project` mediumint(9) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `status` varchar(30) NOT NULL,
