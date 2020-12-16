@@ -26,7 +26,7 @@
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID", "entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
       }
       echo '/' . ' ' . $fileName;
       ?>
@@ -40,10 +40,10 @@
     <ul class="nav nav-default">
       <?php $encodeEntry = $this->repo->encodePath($entry);?>
       <li><a><?php echo $lang->repo->log;?></a></li>
-      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=&revision=$revision", "entry=$encodeEntry"), $lang->repo->view);?></li>
+      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->view);?></li>
       <?php if($info->kind == 'file'):?>
-      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=&revision=$revision", "entry=$encodeEntry"), $lang->repo->blame);?></li>
-      <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=&fromRevision=$revision", "path=$encodeEntry"), $lang->repo->download, 'hiddenwin');?></li>
+      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->blame);?></li>
+      <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodeEntry&fromRevision=$revision"), $lang->repo->download, 'hiddenwin');?></li>
       <?php endif;?>
     </ul>
   </nav>

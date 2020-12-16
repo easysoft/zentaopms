@@ -44,7 +44,7 @@ class svn extends control
                 {
                     $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
                     $oldRevision = $revision - 1;
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=&oldRevision=$oldRevision&revision=$revision", "entry=$entry", 'html', true));
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', true));
                 }
             }
         }
@@ -77,7 +77,7 @@ class svn extends control
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=&revision=$revision", "entry=$entry", 'html', true));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=$entry&revision=$revision", 'html', true));
                 }
             }
         }
