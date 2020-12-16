@@ -15,7 +15,7 @@
 <div class='container mw-700px' style='margin-top:100px;'>
   <div class='panel panel-default'>
     <div class='panel-heading'>
-    <strong><?php echo $lang->user->resetPassword?></strong>
+      <strong><?php echo $lang->user->resetPassword?></strong>
     </div>
     <div class='panel-body'>
       <div class='alert alert-info'>
