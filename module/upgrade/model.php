@@ -642,7 +642,7 @@ class upgradeModel extends model
         case '20_0_beta1':
             $this->saveLogs('Execute 20_0_beta1');
             $this->execSQL($this->getUpgradeFile('20.0.beta1'));
-            $this->unifiedFormat();
+            $this->processBuildTable();
             $this->appendExec('20_0_beta1');
         }
 
@@ -4356,7 +4356,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function unifiedFormat()
+    public function processBuildTable()
     {
         $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll();
         foreach($builds as $build)
