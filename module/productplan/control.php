@@ -490,21 +490,24 @@ class productplan extends control
      */
     public function linkBug($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $projects = $this->app->user->view->projects . ',0';
-
         if(!empty($_POST['bugs']))
         {
             $this->productplan->linkBug($planID);
             die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
-        $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        /* Load module and set session. */
         $this->loadModel('bug');
-        $plan = $this->productplan->getByID($planID);
-        $this->commonAction($plan->product, $plan->branch);
-        $productID   = $plan->product;
-        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
-        $queryID     = ($browseType == 'bysearch') ? (int)$param : 0;
+        $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+
+        /* Init vars. */
+        $projects  = $this->app->user->view->projects . ',0';
+        $plan      = $this->productplan->getByID($planID);
+        $productID = $plan->product;
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Set menu. */
+        $this->commonAction($productID, $plan->branch);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -514,12 +517,13 @@ class productplan extends control
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['product']['values']       = array($productID => $productName, 'all' => $this->lang->bug->allProduct);
-        $this->config->bug->search['params']['plan']['values']          = $this->productplan->getForProducts(array($plan->product => $plan->product));
+        $this->config->bug->search['params']['plan']['values']          = $this->productplan->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID, $branch = 0, $params = '');
+
+        unset($this->config->bug->search['fields']['product']);
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -528,7 +532,7 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
             if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
@@ -538,7 +542,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($plan->product, $plan->branch, $queryID, 'id_desc', array_keys($planBugs), $pager);
+            $allBugs = $this->bug->getBySearch($productID, $plan->branch, $queryID, 'id_desc', array_keys($planBugs), $pager);
         }
         else
         {
