@@ -33,6 +33,9 @@ $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
+$lang->todo->project      = "所属项目";
+$lang->todo->product      = "所属产品";
+$lang->todo->execution    = "所属阶段/" . $lang->projectCommon;
 
 $lang->todo->reasonList['story'] = "转{$lang->productSRCommon}";
 $lang->todo->reasonList['task']  = "转任务";

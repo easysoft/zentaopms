@@ -198,15 +198,19 @@
           </p>
         </div>
         <?php else:?>
-        <div class='input-group'>
-          <span>
-          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?>
-          </span>
-          <span id='executionIdBox'>
-          <?php echo html::select('execution', $executions, '', "class='form-control chosen'");?>
-          </span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
-        </div>
+        <table align='center' class='table table-form'>
+          <tr>
+            <th><?php echo $lang->todo->project;?></th>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->todo->execution;?></th>
+            <td id='executionIdBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></td>
+          </tr>
+        </table>
         <?php endif;?>
       </div>
     </div>
@@ -254,15 +258,19 @@
           </p>
         </div>
         <?php else:?>
-        <div class='input-group'>
-          <span>
-          <?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?>
-          </span>
-          <span id='productIdBox'>
-          <?php echo html::select('product', $projectProducts, '', "class='form-control chosen'");?>
-          </span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
-        </div>
+        <table align='center' class='table table-form'>
+          <tr>
+            <th><?php echo $lang->todo->project;?></th>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->todo->product;?></th>
+            <td id='productIdBox'><?php echo html::select('product', $projectProducts, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></td>
+          </tr>
+        </table>
         <?php endif;?>
       </div>
     </div>

@@ -14,25 +14,25 @@ $(function()
 
     $('#toTaskButton').click(function()
     {
-        var executionID = $(this).closest('.input-group').find('#execution').val();
+        var executionID = $('#execution').val();
         if(!executionID)
         {
             alert(selectExecution);
             return false;
         }
-        var onlybody    = config.onlybody;
-        var projectID   = $('#project').val();
-        var link        = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
+        var onlybody  = config.onlybody;
+        var projectID = $('#project').val();
+        var link      = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
 
         parent.location.href = link;
     })
 
     $('#toStoryButton').click(function()
     {
-        var onlybody    = config.onlybody;
-        var programID   = $('#productProgram').val();
+        var onlybody  = config.onlybody;
+        var programID = $('#productProgram').val();
 
-        var productID = $(this).closest('.input-group').find('#product').val();
+        var productID = $('#product').val();
         var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, 'no', programID);
 
         parent.location.href = link;
@@ -40,10 +40,10 @@ $(function()
 
     $('#toBugButton').click(function()
     {
-        var onlybody    = config.onlybody;
-        var programID   = $('#project').val();
+        var onlybody  = config.onlybody;
+        var programID = $('#project').val();
 
-        var productID = $(this).closest('.input-group').find('#product').val();
+        var productID = $('#product').val();
         var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', programID);
 
         parent.location.href = link;
