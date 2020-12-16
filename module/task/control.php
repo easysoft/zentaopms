@@ -1030,8 +1030,7 @@ class task extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action   = (!empty($changes)) ? 'Closed' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
