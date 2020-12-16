@@ -41,10 +41,10 @@ $(function()
     $('#toBugButton').click(function()
     {
         var onlybody  = config.onlybody;
-        var programID = $('#project').val();
+        var projectID = $('#project').val();
 
         var productID = $('#product').val();
-        var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', programID);
+        var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', projectID);
 
         parent.location.href = link;
     })
@@ -52,6 +52,12 @@ $(function()
     $('#project, #product').change();
 });
 
+/**
+ * Link to create product.
+ *
+ * @access public
+ * @return void
+ */
 function createProduct()
 {
     var onlybody    = config.onlybody;
@@ -63,6 +69,12 @@ function createProduct()
     parent.location.href = link;
 }
 
+/**
+ * Link to create project.
+ *
+ * @access public
+ * @return void
+ */
 function createProject()
 {
     var onlybody    = config.onlybody;
@@ -74,22 +86,45 @@ function createProject()
     parent.location.href = link;
 }
 
+/**
+ * Get executions by project id.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
 function getExecutionByProject(projectID)
 {
     link = createLink('todo', 'ajaxGetExecutionPairs', "projectID=" + projectID);
-    $('#executionIdBox').load(link, function(){
+    $('#executionIdBox').load(link, function()
+    {
         $(this).find('select').chosen();
     })
 }
 
+/**
+ * Get products by project id.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
 function getProductByProject(projectID)
 {
     link = createLink('todo', 'ajaxGetProductPairs', "projectID=" + projectID);
-    $('#productIdBox').load(link, function(){
+    $('#productIdBox').load(link, function()
+    {
         $(this).find('select').chosen();
     })
 }
 
+/**
+ * Get programs by product id.
+ *
+ * @param  int    $productID
+ * @access public
+ * @return void
+ */
 function getProgramByProduct(productID)
 {
     link = createLink('todo', 'ajaxGetProgramID', "productID=" + productID + '&type=product');
