@@ -51,15 +51,15 @@ if(isset($entry)) $pathInfo .= '&type=file';
   </table>
   <div class='table-footer'>
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
-    <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&entry=&revision=HEAD&type=$logType", "entry=" . $this->repo->encodePath($path)), $lang->repo->allLog, '', "class='allLogs'");?>
+    <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs'");?>
     <div class='pull-right'>
       <div class='btn-group'>
         <?php
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;
         $nextPage = $pager->pageID == $pager->pageTotal ? $pager->pageID : $pager->pageID + 1;
-        $params   = "repoID=$repoID&path=&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-        $preLink  = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$prePage", "path=" . $this->repo->encodePath($path));
-        $nextLink = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$nextPage", "path=" . $this->repo->encodePath($path));
+        $params   = "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+        $preLink  = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$prePage");
+        $nextLink = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$nextPage");
         echo html::a($preLink, "<i class='icon icon-angle-left'></i>", '', "class='ajaxPager btn" . ($prePage == $pager->pageID ? ' disabled' : '') . "'");
         echo html::a($nextLink, "<i class='icon icon-angle-right'></i>", '', "class='ajaxPager btn" . ($nextPage == $pager->pageID ? ' disabled' : '') . "'");
         ?>

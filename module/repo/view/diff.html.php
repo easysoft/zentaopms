@@ -35,7 +35,7 @@
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID", "path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
       }
       echo '/' . ' ' . $fileName;
       if($repo->SCM == 'Git')
@@ -63,7 +63,7 @@
       </div>
       <div class='btn-toolbar'>
         <div class='btn-group'>
-          <?php if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=&fromRevison=$oldRevision&toRevision=$newRevision&type=path", "path=" . $this->repo->encodePath($entry)), $lang->repo->downloadDiff, 'hiddenwin', "class='btn btn-sm btn-download'");?>
+          <?php if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevison=$oldRevision&toRevision=$newRevision&type=path"), $lang->repo->downloadDiff, 'hiddenwin', "class='btn btn-sm btn-download'");?>
           <div class='btn-group'>
             <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "data-toggle='dropdown'", 'btn dropdown-toggle btn-sm')?>
             <ul class='dropdown-menu' role='menu'>

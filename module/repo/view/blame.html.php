@@ -38,7 +38,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID", "path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
         }
         echo '/' . ' ' . $fileName;
         echo " <span class='label label-info'>" . $revisionName . '</span>';
@@ -58,7 +58,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
         <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn dropdown-toggle')?>
         <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
           <?php foreach($lang->repo->encodingList as $key => $val):?>
-          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=&revision=$revision&encoding=$key", "entry=$encodePath"), $val)?></li>
+          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodePath&revision=$revision&encoding=$key"), $val)?></li>
           <?php endforeach;?>
         </ul>
       </div>
