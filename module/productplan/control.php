@@ -506,7 +506,7 @@ class productplan extends control
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* Set menu. */
+        /* Set drop menu. */
         $this->commonAction($productID, $plan->branch);
 
         /* Load pager. */
