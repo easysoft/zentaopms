@@ -320,7 +320,11 @@ class baseHelper
             }
             elseif(function_exists('openssl_encrypt'))
             {
-                $encrypted = @openssl_encrypt($password, 'des-cbc', $secret);
+                /* Set password length to multiple of 8. For compatible mcrypt_encrypt function. */
+                $oversize = strlen($password) % 8;
+                if($oversize != 0) $password .= str_repeat("\0", 8 - $oversize);
+
+                $encrypted = @openssl_encrypt($password, 'DES-CBC', $secret, OPENSSL_ZERO_PADDING);
             }
         }
         if(empty($encrypted)) $encrypted = $password;
@@ -346,15 +350,16 @@ class baseHelper
             $secret = $config->encryptSecret;
             if(function_exists('mcrypt_decrypt'))
             {
-                $decryptedPassword = mcrypt_decrypt(MCRYPT_DES, $secret, base64_decode($password), MCRYPT_MODE_CBC);
+                $decryptedPassword = @mcrypt_decrypt(MCRYPT_DES, $secret, base64_decode($password), MCRYPT_MODE_CBC);
             }
             elseif(function_exists('openssl_decrypt'))
             {
-                $decryptedPassword = openssl_decrypt($password, 'des-cbc', $secret);
+                $decryptedPassword = openssl_decrypt($password, 'DES-CBC', $secret, OPENSSL_ZERO_PADDING);
             }
         }
         if(empty($decryptedPassword)) $decryptedPassword = $password;
 
+        $decryptedPassword = trim($decryptedPassword);
         return $decryptedPassword;
     }
 
