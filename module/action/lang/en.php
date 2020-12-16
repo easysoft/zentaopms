@@ -87,6 +87,7 @@ $lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Report';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['job']         = 'Job';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
