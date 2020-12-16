@@ -374,7 +374,7 @@ class todo extends control
             $this->lang->set('menugroup.todo', $from);
         }
 
-        $projects  = $this->loadModel('program')->getPRJPairs();
+        $projects = $this->loadModel('program')->getPRJPairs();
         if(!isset($this->session->PRJ)) $this->session->set('PRJ', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
