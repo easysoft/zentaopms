@@ -2,7 +2,7 @@
 $lang->repo->common         = 'Repo';
 $lang->repo->browse         = 'Xem';
 $lang->repo->viewRevision   = 'Xem Revision';
-$lang->repo->program         = 'Program';
+$lang->repo->project        = 'Project';
 $lang->repo->create         = 'Tạo';
 $lang->repo->createAction   = 'Tạo Repo';
 $lang->repo->maintain       = 'Repo danh sách';
@@ -30,7 +30,6 @@ $lang->repo->addComment = 'Thêm nhận xét';
 
 $lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = 'Module';
-$lang->repo->project  = $lang->projectCommon;
 $lang->repo->type     = 'Loại';
 $lang->repo->assign   = 'Giao cho';
 $lang->repo->title    = 'Tiêu đề';

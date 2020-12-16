@@ -2,7 +2,7 @@
 $lang->repo->common          = 'Référentiel';
 $lang->repo->browse          = 'Aff';
 $lang->repo->viewRevision    = 'Aff Modifs';
-$lang->repo->program         = 'Program';
+$lang->repo->project         = 'Project';
 $lang->repo->create          = 'Créer';
 $lang->repo->createAction    = 'Créer Ref';
 $lang->repo->maintain        = 'Liste Ref';
@@ -30,7 +30,6 @@ $lang->repo->addComment = 'Ajout Comment';
 
 $lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = 'Module';
-$lang->repo->project  = $lang->projectCommon;
 $lang->repo->type     = 'Type';
 $lang->repo->assign   = 'Assigner à';
 $lang->repo->title    = 'Titre';

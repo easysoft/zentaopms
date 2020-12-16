@@ -25,8 +25,8 @@
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->repo->program; ?></th>
-            <td class='required'><?php echo html::select('PRJ[]', $programs, $this->session->PRJ, "class='form-control chosen' multiple"); ?></td>
+            <th><?php echo $lang->repo->project; ?></th>
+            <td class='required'><?php echo html::select('PRJ[]', $projects, $this->session->PRJ, "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>

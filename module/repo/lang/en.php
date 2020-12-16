@@ -2,7 +2,7 @@
 $lang->repo->common          = 'Repo';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
-$lang->repo->program         = 'Program';
+$lang->repo->project         = 'Project';
 $lang->repo->create          = 'Create';
 $lang->repo->createAction    = 'Create Repo';
 $lang->repo->maintain        = 'Repo List';
@@ -30,7 +30,6 @@ $lang->repo->addComment = 'Add Comment';
 
 $lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = 'Module';
-$lang->repo->project  = $lang->projectCommon;
 $lang->repo->type     = 'Type';
 $lang->repo->assign   = 'AssignTo';
 $lang->repo->title    = 'Title';
