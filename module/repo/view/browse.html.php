@@ -22,7 +22,7 @@
             foreach($paths as $pathName)
             {
                 $postPath .= $pathName . '/';
-                echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID", "path=" . $this->repo->encodePath($postPath) . "&revision=$revision"), trim($pathName, '/'));
+                echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($postPath) . "&revision=$revision"), trim($pathName, '/'));
             }
         }
         ?>
@@ -31,7 +31,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
-    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision&refresh=1", "path=" . $this->repo->encodePath($path)), "<i class='icon icon-refresh'></i> ". $lang->refresh, '', "class='btn btn-primary'");?>
+    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> ". $lang->refresh, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -57,7 +57,7 @@
           <td>
           <?php
           $infoPath = trim($path . '/' . $info->name, '/');
-          $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID", "path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&entry=", 'entry=' . $this->repo->encodePath($infoPath));
+          $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&entry=" . $this->repo->encodePath($infoPath));
           echo html::a($link, $info->name, '', "title='{$info->name}'");
           ?>
           </td>

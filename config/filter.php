@@ -268,8 +268,9 @@ $filter->repo->default = new stdclass();
 $filter->repo->diff    = new stdclass();
 $filter->repo->view    = new stdclass();
 
-$filter->repo->default->get['path']  = 'reg::base64';
-$filter->repo->default->get['entry'] = 'reg::base64';
+$filter->repo->default->get['repoPath'] = 'reg::base64';
+$filter->repo->default->get['path']     = 'reg::base64';
+$filter->repo->default->get['entry']    = 'reg::base64';
 
 $filter->repo->default->cookie['repoBranch'] = 'reg::any';
 $filter->repo->diff->cookie['arrange']       = 'reg::word';

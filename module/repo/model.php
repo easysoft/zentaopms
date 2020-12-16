@@ -791,15 +791,31 @@ class repoModel extends model
      * 
      * @param  string $method 
      * @param  string $params 
-     * @param  string $pathParams 
      * @param  string $viewType 
      * @param  bool   $onlybody 
      * @access public
      * @return string
      */
-    public function createLink($method, $params = '', $pathParams = '', $viewType = '', $onlybody = false)
+    public function createLink($method, $params = '', $viewType = '', $onlybody = false)
     {
-        $link  = helper::createLink('repo', $method, $params, $viewType, $onlybody);
+        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody);
+
+        $parsedParams = array();
+        parse_str($params, $parsedParams);
+
+        $pathParams = '';
+        $pathKey    = 'path';
+        if(isset($parsedParams['entry'])) $pathKey = 'entry';
+        if(isset($parsedParams['file']))  $pathKey = 'file';
+        if(isset($parsedParams['root']))  $pathKey = 'root';
+        if(isset($parsedParams[$pathKey]))
+        {
+            $pathParams = 'repoPath=' . $parsedParams[$pathKey];
+            $parsedParams[$pathKey] = '';
+        }
+
+        $params = http_build_query($parsedParams);
+        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody);
         if(empty($pathParams)) return $link;
 
         $link .= strpos($link, '?') === false ? '?' : '&';
@@ -992,12 +1008,6 @@ class repoModel extends model
     public function checkConnection()
     {
         if(empty($_POST)) return false;
-
-        if(strpos($this->post->client, ' '))
-        {
-            dao::$errors['client'] = $this->lang->repo->error->clientPath;
-            return false;
-        }
 
         $scm      = $this->post->SCM;
         $client   = $this->post->client;

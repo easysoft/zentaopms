@@ -44,7 +44,7 @@ class git extends control
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
                     $oldRevision = "$revision^";
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=&oldRevision=$oldRevision&revision=$revision", "entry=$entry", 'html', 'true'));
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
                 }
             }
         }
@@ -77,7 +77,7 @@ class git extends control
                 if(strpos($path, $repo->path) === 0)
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=&revision=$revision", "entry=$entry", 'html', true));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=$entry&revision=$revision", 'html', true));
                 }
             }
         }
