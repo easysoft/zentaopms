@@ -383,7 +383,8 @@ class issue extends control
         if(in_array($data->mode, array('tostory', 'tobug')))
         {
             $products  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-            $productID = key($products);
+            $productID = $this->session->product;
+            $productID = isset($products[$productID]) ? $productID : key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, 'noempty');
 
             $module = $data->mode == 'tostory' ? 'story' : 'bug';
