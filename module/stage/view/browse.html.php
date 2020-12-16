@@ -58,10 +58,10 @@
           <td class='text-center'><?php echo $stage->percent;?></td>
           <td><?php echo zget($lang->stage->typeList, $stage->type);?></td>
           <td class="c-actions">
-          <?php
-          common::printIcon('stage', 'edit', "stageID=$stage->id", "", "list");
-          common::printIcon('stage', 'delete', "stageID=$stage->id", "", "list", '', 'hiddenwin');
-          ?>
+            <?php
+            common::printIcon('stage', 'edit', "stageID=$stage->id", "", "list");
+            common::printIcon('stage', 'delete', "stageID=$stage->id", "", "list", '', 'hiddenwin');
+            ?>
           </td>
         </tr>
         <?php endforeach;?>
