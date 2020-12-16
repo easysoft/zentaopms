@@ -619,7 +619,9 @@ class todo extends control
     {
         $this->session->set('PRJ', $projectID);
 
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
+        $executions = $this->loadModel('project')->getExecutionsByProject($projectID, 'undone');
+        foreach($executions as $id => $execution) $executions[$id] = $execution->name;
+
         die(html::select('execution', $executions, '', "class='form-control chosen'"));
     }
 

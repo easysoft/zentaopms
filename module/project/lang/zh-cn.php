@@ -229,7 +229,7 @@ $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 /* 页面提示。*/
 $lang->project->linkStoryByPlanTips = "此操作会将所选{$lang->planCommon}下面的{$lang->projectSRCommon}全部关联到此{$lang->projectCommon}中";
 $lang->project->selectProject       = "请选择{$lang->projectCommon}";
-$lang->project->selectExecution     = "请选择阶段/" . $lang->projectCommon;
+$lang->project->selectExecution     = "请选择阶段/迭代/冲刺";
 $lang->project->beginAndEnd         = '起止时间';
 $lang->project->begin               = '开始日期';
 $lang->project->end                 = '截止日期';
