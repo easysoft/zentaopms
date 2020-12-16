@@ -112,6 +112,7 @@ function getSolutions()
                 case 'tostory':
                     $("#product").chosen();
                     $("#spec").kindeditor();
+                    $("#verify").kindeditor();
                     break;
                 case 'torisk':
                     $("#source").chosen();

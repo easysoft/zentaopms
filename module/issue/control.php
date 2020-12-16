@@ -422,6 +422,8 @@ class issue extends control
                 break;
             case 'tostory':
                 $this->loadModel('story');
+                $this->view->plans      = $this->loadModel('productplan')->getPairsForStory($productID, key($branches), true);
+                $this->view->showFields = $this->config->story->custom->createFields;
                 $this->fetch('story', 'replaceURLang', 'type=requirement');
                 $this->display('issue', 'storyform');
                 break;
