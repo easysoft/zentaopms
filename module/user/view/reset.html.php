@@ -29,7 +29,7 @@
 <div class='container mw-500px' style='margin-top:50px;'>
   <div class='panel'>
     <div class='panel-heading'>
-    <strong><?php echo $lang->user->resetPassword?></strong>
+      <strong><?php echo $lang->user->resetPassword?></strong>
     </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
