@@ -9,30 +9,53 @@
  * @version     $Id: setstoryconcept.html.php 4129 2020-09-01 01:58:14Z sgm $
  */
 ?>
+<?php
+$itemRow = <<<EOT
+  <tr>
+    <td><input type='text' class="form-control" autocomplete="off" value="" name="URName[]"></td>
+    <td><input type='text' class="form-control" autocomplete="off" value="" name="SRName[]"></td>
+    <td class='c-actions'>
+      <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
+      <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-close'></i></a>
+    </td>
+  </tr>
+EOT;
+?>
+<?php js::set('itemRow', $itemRow);?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <div class='main-col main-content'>
-    <form class="load-indicator main-form form-ajax" method='post'>
-      <div class='modal-body'>
-        <table class='table table-form'>
-          <tr id='URSRName'>
-            <th class='w-120px'><?php echo $lang->custom->waterfall->URSRName;?></th>
-            <td><?php echo html::select('URSRCommon', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
-            <td><?php echo html::checkbox('URSRCustom', $lang->custom->common, "class='form-control'");?></td>
-            <td></td><td></td><td></td>
-          </tr>
-          <tr class='hidden' id='customURSR'>
-            <th></th>
-            <td><?php echo html::input('URName', '', "class='form-control' placeholder={$lang->custom->URTips}");?></td>
-            <td><?php echo html::input('SRName', '', "class='form-control' placeholder={$lang->custom->SRTips}");?></td>
-          </tr>
-          <tr>
-            <th></th>
-            <td class='text-left'><?php echo html::submitButton();?></td>
-          </tr>
-        </table>
-      </div>
-    </form>
-  </div>
+  <form class="load-indicator main-form form-ajax" method='post'>
+    <div class='modal-body'>
+      <table class='table table-form'>
+        <tr class='text-center'>
+          <td class='w-200px'><strong><?php echo $lang->custom->URConcept;?></strong></th>
+          <td class='w-200px'><strong><?php echo $lang->custom->SRConcept;?></strong></th>
+          <td></td><td></td>
+        </tr>
+        <tr>
+          <td><?php echo html::input('URName[]', '', "class='form-control'");?></td>
+          <td><?php echo html::input('SRName[]', '', "class='form-control'");?></td>
+          <td class='c-actions'>
+            <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td class='text-center' colspan='2'><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+    </div>
+  </form>
 </div>
+<script>
+function addItem(clickedButton)
+{
+    $(clickedButton).parent().parent().after(itemRow);
+}
+
+function delItem(clickedButton)
+{
+    $(clickedButton).parent().parent().remove();
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

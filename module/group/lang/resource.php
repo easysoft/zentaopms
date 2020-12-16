@@ -1144,18 +1144,20 @@ $lang->holiday->methodOrder[20] = 'delete';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index            = 'index';
-$lang->resource->custom->set              = 'set';
-$lang->resource->custom->project          = 'project';
-$lang->resource->custom->product          = 'product';
-$lang->resource->custom->restore          = 'restore';
-$lang->resource->custom->flow             = 'flow';
-$lang->resource->custom->working          = 'working';
-$lang->resource->custom->setPublic        = 'setPublic';
-$lang->resource->custom->timezone         = 'timezone';
-$lang->resource->custom->estimate         = 'estimate';
-$lang->resource->custom->setStoryConcept  = 'setStoryConcept';
-$lang->resource->custom->configureScrum   = 'configureScrum';
+$lang->resource->custom->index              = 'index';
+$lang->resource->custom->set                = 'set';
+$lang->resource->custom->project            = 'project';
+$lang->resource->custom->product            = 'product';
+$lang->resource->custom->restore            = 'restore';
+$lang->resource->custom->flow               = 'flow';
+$lang->resource->custom->working            = 'working';
+$lang->resource->custom->setPublic          = 'setPublic';
+$lang->resource->custom->timezone           = 'timezone';
+$lang->resource->custom->estimate           = 'estimate';
+$lang->resource->custom->setStoryConcept    = 'setStoryConcept';
+$lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
+$lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
+$lang->resource->custom->configureScrum     = 'configureScrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1168,7 +1170,9 @@ $lang->custom->methodOrder[40] = 'setPublic';
 $lang->custom->methodOrder[45] = 'timezone';
 $lang->custom->methodOrder[50] = 'estimate';
 $lang->custom->methodOrder[55] = 'setStoryContcept';
-$lang->custom->methodOrder[60] = 'configureScrum';
+$lang->custom->methodOrder[60] = 'browseStoryContcept';
+$lang->custom->methodOrder[65] = 'deleteStoryContcept';
+$lang->custom->methodOrder[70] = 'configureScrum';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';

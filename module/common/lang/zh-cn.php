@@ -196,7 +196,7 @@ $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
 $lang->subject->menu->subject = array('link' => '科目|subject|browse|');
 $lang->subject->menu->holiday = array('link' => '节假日|holiday|browse|');
-$lang->subject->menu->concept = array('link' => '需求概念|custom|setstoryconcept|');
+$lang->subject->menu->concept = array('link' => '需求概念|custom|browsestoryconcept|');
 
 $lang->holiday = new stdclass();
 $lang->holiday->menu = $lang->subject->menu;

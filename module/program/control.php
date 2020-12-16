@@ -675,7 +675,6 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
-        $this->app->loadLang('custom');
         if($from == 'PRJ')
         {
             $this->lang->navGroup->program = 'project';
@@ -761,6 +760,7 @@ class program extends control
         $this->view->from          = $from;
         $this->view->programList   = $this->program->getParentPairs();
         $this->view->parentProgram = $this->program->getPGMByID($programID);
+        $this->view->URSRPairs     = $this->loadModel('custom')->getURSRPairs();
 
         $this->display();
     }
@@ -825,6 +825,7 @@ class program extends control
         $this->view->productPlans   = $productPlans;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
 
         $this->display();
     }

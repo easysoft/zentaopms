@@ -469,6 +469,47 @@ class customModel extends model
     }
 
     /**
+     * Get UR and SR pairs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getURSRPairs()
+    {
+        $this->app->loadLang('custom');
+
+        $URSRPairs = array();
+        foreach($this->lang->custom->URSRList as $key => $content)
+        {
+            $content = json_decode($content);
+            $URSRPairs[$key] = $content->SRName . '/' . $content->URName;
+        }
+
+        return $URSRPairs;
+    }
+
+    /**
+     * Get UR and SR list.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getURSRList()
+    {
+        $this->app->loadLang('custom');
+
+        $URSRList = array();
+        foreach($this->lang->custom->URSRList as $key => $content)
+        {
+            $content = json_decode($content);
+            $URSRList[$key]['SRName'] = $content->SRName;
+            $URSRList[$key]['URName'] = $content->URName;
+        }
+
+        return $URSRList;
+    }
+
+    /**
      * Save required fields.
      *
      * @param  int    $moduleName
@@ -572,33 +613,31 @@ class customModel extends model
      */
     public function setURAndSR()
     {
-        $data = fixer::input('post')->get();
-        $lang = $this->app->getClientLang();
+        $data   = fixer::input('post')->get();
+        $lang   = $this->app->getClientLang();
+        $maxKey = $this->dao->select('max(`key`) as maxKey')->from(TABLE_LANG)
+            ->where('section')->eq('URSRList')
+            ->andWhere('module')->eq('custom')
+            ->andWhere('lang')->eq($lang)
+            ->fetch('maxKey');
+        $maxKey = $maxKey ? $maxKey : 1;
+
 
         /* If has custom UR and SR name. */
-        $newKey = '';
-        if(isset($data->URSRCustom))
+        foreach($data->URName as $key => $URName)
         {
-            if(!$data->URName || !$data->SRName) return false;
+            $SRName = zget($data->SRName, $key, '');
+            if(!$URName || !$SRName) continue;
 
-            $newKey   = max(array_keys($this->lang->custom->URSRList)) + 1;
-            $URSRName = $data->URName . '/' . $data->SRName; 
+            $URSRList = new stdclass(); 
+            $URSRList->SRName = $SRName;
+            $URSRList->URName = $URName;
 
-            /* Delete old lang data, and add new. */
-            $this->lang->custom->URSRList[$newKey] = $URSRName;
-            $this->lang->custom->URList[$newKey]   = $data->URName;
-            $this->lang->custom->SRList[$newKey]   = $data->SRName;
-            $this->deleteItems("lang=$lang&module=custom&section=URSRList");
-            $this->deleteItems("lang=$lang&module=custom&section=URList");
-            $this->deleteItems("lang=$lang&module=custom&section=SRList");
+            $value   = json_encode($URSRList);
+            $maxKey += 1;
 
-            foreach($this->lang->custom->URSRList as $key => $value) $this->setItem("$lang.custom.URSRList.{$key}.1", $value);
-            foreach($this->lang->custom->URList as $key => $value)   $this->setItem("$lang.custom.URList.{$key}.1", $value);
-            foreach($this->lang->custom->SRList as $key => $value)   $this->setItem("$lang.custom.SRList.{$key}.1", $value);
+            $this->setItem("$lang.custom.URSRList.{$maxKey}.1", $value);
         }
-
-        $URSRName = $newKey ? $newKey : $data->URSRCommon;
-        $this->loadModel('setting')->setItem("system.custom.URSRName", $URSRName);
 
         return true;
     }

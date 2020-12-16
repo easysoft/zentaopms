@@ -57,7 +57,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->storyConcept;?></th>
-            <td><?php echo html::select('storyConcept', $lang->custom->URSRList, $product->storyConcept, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('storyConcept', $URSRPairs, $product->storyConcept, "class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <tr>

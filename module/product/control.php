@@ -251,7 +251,6 @@ class product extends control
      */
     public function create()
     {
-        $this->app->loadLang('custom');
         $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         if(!empty($_POST))
@@ -285,6 +284,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -354,6 +354,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
         $this->display();

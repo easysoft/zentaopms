@@ -39,7 +39,11 @@ $lang->custom->epic               = "史诗";
 $lang->custom->scrumStory         = "故事";
 $lang->custom->waterfallCommon    = "瀑布";
 $lang->custom->setStoryConcept    = "设置需求概念";
+$lang->custom->browseStoryConcept = "需求概念列表";
+$lang->custom->deleteStoryConcept = "删除需求概念";
 $lang->custom->configureScrum     = "敏捷模型自定义";
+$lang->custom->URConcept          = "用需概念";
+$lang->custom->SRConcept          = "软需概念";
 
 $lang->custom->object['program'] = '项目';
 $lang->custom->program->fields['unitList'] = '预算单位';
@@ -217,9 +221,6 @@ $lang->custom->conceptOptions->hourPoint = array();
 $lang->custom->conceptOptions->hourPoint['0'] = '故事点';
 $lang->custom->conceptOptions->hourPoint['1'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['2'] = '代码行';
-
-$lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->URSRName = '默认需求概念组合';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';

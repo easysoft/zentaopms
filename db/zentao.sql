@@ -4092,14 +4092,10 @@ INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edite
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
-('zh-cn', 'custom', 'URList', '1', '用户需求', '1'),
-('zh-cn', 'custom', 'URList', '2', '用需', '1'),
-('zh-cn', 'custom', 'URList', '3', '需求', '1'),
-('zh-cn', 'custom', 'URList', '4', '史诗', '1'),
-('zh-cn', 'custom', 'SRList', '1', '软件需求', '1'),
-('zh-cn', 'custom', 'SRList', '2', '软需', '1'),
-('zh-cn', 'custom', 'SRList', '3', '故事', '1'),
-('zh-cn', 'custom', 'SRList', '4', '故事', '1');
+('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');

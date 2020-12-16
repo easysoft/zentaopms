@@ -396,12 +396,12 @@ class custom extends control
     } 
 
     /**
-     * Set story concept.
+     * Browse story concept.
      * 
      * @access public
      * @return void
      */
-    public function setStoryConcept()
+    public function browseStoryConcept()
     {   
         /* Process menu.*/
         $this->app->loadLang('custom');
@@ -411,19 +411,52 @@ class custom extends control
         $key = array_search('custom', $this->lang->noMenuModule);
         unset($this->lang->noMenuModule[$key]);
 
+        $this->view->title      = $this->lang->custom->browseStoryConcept;
+        $this->view->position[] = $this->lang->custom->browseStoryConcept;
+        $this->view->URSRList   = $this->custom->getURSRList();
+
+        $this->display();
+    }
+
+    /**
+     * Set story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setStoryConcept()
+    {   
         if($_POST)
         {   
             $result = $this->custom->setURAndSR();
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'setstoryconcept')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }   
 
         $this->view->title      = $this->lang->custom->setStoryConcept;
         $this->view->position[] = $this->lang->custom->setStoryConcept;
 
         $this->display();
+    }
+
+    /**
+     * Delete story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteStoryConcept($key = 0)
+    {
+        $lang = $this->app->getClientLang();
+        $this->dao->delete()->from(TABLE_LANG)
+            ->where('lang')->eq($lang) 
+            ->andWhere('section')->eq('URSRList') 
+            ->andWhere('`key`')->eq($key) 
+            ->exec();
+
+        die(js::reload('parent.parent'));
     }
 
     /**

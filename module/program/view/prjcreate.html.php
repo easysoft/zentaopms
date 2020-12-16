@@ -134,7 +134,7 @@
         <tr>
           <th><?php echo $lang->program->PRJStoryConcept;?></th>
           <td>
-            <?php echo html::select('storyConcept', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?>
+            <?php echo html::select('storyConcept', $URSRPairs, '', "class='form-control chosen'");?>
           </td>
         </tr>
         <tr>

@@ -57,7 +57,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->product->storyConcept;?></th>
-            <td><?php echo html::select('storyConcept', $lang->custom->URSRList, zget($config->custom, 'URSRName', 1), "class='form-control chosen'");?></td>
+            <td><?php echo html::select('storyConcept', $URSRPairs, '', "class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <tr class='hide'>
