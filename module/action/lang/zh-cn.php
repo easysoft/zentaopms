@@ -73,6 +73,7 @@ $lang->action->objectTypes['project']     = '项目';
 $lang->action->objectTypes['execution']   = $lang->executionCommon;
 $lang->action->objectTypes['task']        = '任务';
 $lang->action->objectTypes['build']       = '版本';
+$lang->action->objectTypes['job']         = '构建';
 $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = '用例';
 $lang->action->objectTypes['caseresult']  = '用例结果';
@@ -94,7 +95,6 @@ $lang->action->objectTypes['design']      = '设计';
 $lang->action->objectTypes['stakeholder'] = '干系人';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['budget']      = '费用估算';
-$lang->action->objectTypes['job']         = '构建';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
