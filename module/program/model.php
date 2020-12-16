@@ -1078,7 +1078,7 @@ class programModel extends model
      * @param  array  $projectIdList
      * @param  string $status   active|resolved|all
      * @access public
-     * @return object
+     * @return array
      */
     public function getTotalBugByPRJ($projectIdList, $status)
     {

@@ -224,7 +224,7 @@ $lang->searchObjects['caselib']     = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = '项目';
-$lang->searchObjects['execution']   = '迭代/执行';
+$lang->searchObjects['execution']   = '迭代/阶段';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
