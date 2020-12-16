@@ -20,19 +20,19 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 
-$lang->zentaoPMS       = '禪道';
-$lang->logoImg         = 'zt-logo.png';
-$lang->welcome         = "%s項目管理系統";
-$lang->logout          = '退出';
-$lang->login           = '登錄';
-$lang->help            = '幫助';
-$lang->aboutZenTao     = '關於禪道';
-$lang->profile         = '個人檔案';
-$lang->changePassword  = '更改密碼';
-$lang->runInfo         = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
-$lang->agreement       = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
-$lang->designedByAIUX  = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾體驗</strong></a>";
-$lang->executionCommon = '執行';
+$lang->zentaoPMS        = '禪道';
+$lang->logoImg          = 'zt-logo.png';
+$lang->welcome          = "%s項目管理系統";
+$lang->logout           = '退出';
+$lang->login            = '登錄';
+$lang->help             = '幫助';
+$lang->aboutZenTao      = '關於禪道';
+$lang->profile          = '個人檔案';
+$lang->changePassword   = '更改密碼';
+$lang->runInfo          = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
+$lang->agreement        = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
+$lang->designedByAIUX   = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾體驗</strong></a>";
+$lang->executionCommon  = '執行';
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -134,7 +134,7 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盤|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 項目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> 產品|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> 項目|program|prjbrowse|';
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 組織|custom|estimate|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 組織|subject|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 後台|admin|index|';
 
 $lang->reporting = new stdclass();
@@ -172,6 +172,7 @@ $lang->product->viewMenu->plan        = array('link' => "計劃|productplan|brow
 $lang->product->viewMenu->release     = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s';
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->dynamic     = '動態|product|dynamic|productID=%s';
 $lang->product->viewMenu->module      = '模組|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->whitelist   = array('link' => '白名單|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
@@ -187,28 +188,23 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
-$lang->system->menu->stage    = array('link' => '階段|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-$lang->system->menu->holiday  = array('link' => '節假日|holiday|browse|');
-$lang->system->menu->custom   = array('link' => '自定義|custom|configurewaterfall|');
-$lang->system->dividerMenu    = ',auditcl,subject,';
+$lang->system->menu->company   = array('link' => '全局設置|subject|browse|', 'subModule' => 'holiday');
+$lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
+$lang->system->menu->waterfall = array('link' => '瀑布模型|custom|estimate|', 'subModule' => 'stage');
 
-if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
-{
-    $lang->system->menu = new stdclass();
-    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-    $lang->system->menu->holiday  = array('link' => '節假日|holiday|browse|');
-    $lang->system->menu->custom   = array('link' => '自定義|custom|configurescrum|');
+$lang->subject = new stdclass();
+$lang->subject->menu = new stdclass();
+$lang->subject->menu->subject = array('link' => '科目|subject|browse|');
+$lang->subject->menu->holiday = array('link' => '節假日|holiday|browse|');
+$lang->subject->menu->concept = array('link' => '需求概念|custom|setstoryconcept|');
 
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 組織|subject|browse|';
-    unset($lang->system->dividerMenu);
-}
+$lang->holiday = new stdclass();
+$lang->holiday->menu = $lang->subject->menu;
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
-$lang->stage->menu->browse  = array('link' => '階段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
-$lang->stage->menu->settype = '階段類型|stage|settype|';
+$lang->stage->menu->estimate = array('link' => '估算|custom|estimate');
+$lang->stage->menu->stage    = array('link' => '階段|stage|settype', 'subModule' => 'stage');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -218,7 +214,6 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = "{$lang->productSRCommon}";
 $lang->searchObjects['task']        = '任務';
 $lang->searchObjects['testcase']    = '用例';
-$lang->searchObjects['project']     = $lang->executionCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '發佈';
@@ -228,6 +223,8 @@ $lang->searchObjects['doc']         = '文檔';
 $lang->searchObjects['caselib']     = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchObjects['program']     = '項目集';
+$lang->searchObjects['project']     = '項目';
+$lang->searchObjects['execution']   = '迭代/階段';
 $lang->searchTips                   = '編號(ctrl+g)';
 
 /* 導入支持的編碼格式。*/
@@ -491,7 +488,7 @@ $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule
 $lang->admin->menu->custom  = array('link' => '自定義|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->data    = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => '系統|cron|index', 'subModule' => 'cron,search');
+$lang->admin->menu->system  = array('link' => '系統|cron|index', 'subModule' => 'cron');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -687,7 +684,7 @@ $lang->error->URL             = "『%s』應當為合法的URL。";
 $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
-$lang->error->account         = "『%s』只能是字母和數字的組合三位以上。";
+$lang->error->account         = "『%s』只能是字母、數字或下劃線的組合三位以上。";
 $lang->error->passwordsame    = "兩次密碼應該相同。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
@@ -954,6 +951,6 @@ $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|produc
 $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

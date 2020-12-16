@@ -329,7 +329,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `PRJ` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
-  `commit` varchar(30) NOT NULL,
+  `commit` text NOT NULL,
   `commitedBy` varchar(30) NOT NULL,
   `project` mediumint(9) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,

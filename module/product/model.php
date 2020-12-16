@@ -739,7 +739,7 @@ class productModel extends model
      * @param  string  $type
      * @param  string  $status  closed|active|draft
      * @access public
-     * @return array
+     * @return int
      */
     public function getTotalStoriesByProduct($productIdList, $type, $status = '')
     {
