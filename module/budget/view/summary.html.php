@@ -34,35 +34,32 @@
       <tr class='text-center table-title'>
         <th rowspan="<?php echo $hasSubSubject ? 2 : 1;?>"><?php echo $lang->budget->subject . '/' . $lang->budget->stage;?></th>
         <?php foreach($subjects as $id => $subject):?>
-          <th colspan="<?php echo count($subject);?>"><?php echo zget($modules, $id);?></th>
+        <th colspan="<?php echo count($subject);?>"><?php echo zget($modules, $id);?></th>
         <?php endforeach;?>
         <th rowspan="<?php echo $hasSubSubject ? 2 : 1;?>"><?php echo $lang->budget->summary;?></th>
       </tr>
       <tr class='text-center table-title'>
         <?php foreach($subjects as $id => $subject):?>
-          <?php if($id == $subject[0] && !$hasSubSubject) continue;?>
-          <?php foreach($subject as $subjectID):?>
-            <th><?php echo zget($modules, $subjectID);?></th>
-          <?php endforeach;?>
+        <?php if($id == $subject[0] && !$hasSubSubject) continue;?>
+        <?php foreach($subject as $subjectID):?>
+        <th><?php echo zget($modules, $subjectID);?></th>
+        <?php endforeach;?>
         <?php endforeach;?>
       </tr>
-
       <?php foreach($summary['stages'] as $stageID => $subject):?>
       <tr>
         <td><?php echo zget($plans, $stageID, $stageID);?></td>
         <?php foreach($subject as $cost):?>
-          <td><?php echo $cost;?></td>
+        <td><?php echo $cost;?></td>
         <?php endforeach;?>
         <td><?php echo array_sum($subject);?></td>
       </tr>
       <?php endforeach;?>
-
       <tr class='summary'>
         <td><?php echo $lang->budget->summary;?></td>
         <?php foreach($summary['subjects'] as $cost):?>
-          <td><?php echo $cost;?></td>
+        <td><?php echo $cost;?></td>
         <?php endforeach;?>
-        </td>
         <td><?php echo array_sum($summary['subjects']);?></td>
       </tr>
     </table>
