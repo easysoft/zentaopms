@@ -73,6 +73,7 @@ $lang->action->objectTypes['project']     = 'Project';
 $lang->action->objectTypes['execution']   = $lang->executionCommon;
 $lang->action->objectTypes['task']        = 'Task';
 $lang->action->objectTypes['build']       = 'Build';
+$lang->action->objectTypes['job']         = 'Job';
 $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = 'Case';
 $lang->action->objectTypes['caseresult']  = 'Case Result';
@@ -94,7 +95,6 @@ $lang->action->objectTypes['design']      = 'Design';
 $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['budget']      = 'Cost Estimate';
-$lang->action->objectTypes['job']         = 'Job';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
