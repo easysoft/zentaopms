@@ -1673,7 +1673,7 @@ class story extends control
      *
      * @param  int    $productID
      * @param  int    $branchID
-     * @param  int    $storyType
+     * @param  string $storyType
      * @param  string $browseType
      * @param  int    $moduleID
      * @param  string $chartType
