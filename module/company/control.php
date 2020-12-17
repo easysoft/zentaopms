@@ -243,17 +243,18 @@ class company extends control
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
         /* Assign. */
-        $this->view->browseType = $browseType;
-        $this->view->account    = $account;
-        $this->view->product    = $product;
-        $this->view->project    = $project;
-        $this->view->queryID    = $queryID; 
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->user       = $user;
-        $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType);
-        $this->view->direction  = $direction;
+        $this->view->browseType   = $browseType;
+        $this->view->account      = $account;
+        $this->view->accountPairs = $accountPairs;
+        $this->view->product      = $product;
+        $this->view->project      = $project;
+        $this->view->queryID      = $queryID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->user         = $user;
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType);
+        $this->view->direction    = $direction;
         $this->display();
     }
 }
