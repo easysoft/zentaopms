@@ -19,34 +19,64 @@ $(function()
     $('[data-toggle="tooltip"]').tooltip({placement: 'right'});
 });
 
+/**
+ * Set parent program.
+ *
+ * @access public
+ * @return void
+ */
 function setParentProgram()
 {
     var parentProgram = $("#parent").val();
     location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + parentProgram + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
 
+/**
+ * Set copy project.
+ *
+ * @param  int $copyProjectID
+ * @access public
+ * @return void
+ */
 function setCopyProject(copyProjectID)
 {
     location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
 
+/**
+ * Add new product.
+ *
+ * @param  obj $obj
+ * @access public
+ * @return void
+ */
 function addNewProduct(obj)
 {
     if($(obj).attr('checked'))
     {
+        $('#productName').removeAttr('disabled', true);
         $('#productName').closest('tr').removeClass('hidden');
-        $('#plans').closest('tr').addClass('hidden');
-        $(obj).closest('.input-group').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('#plansBox').closest('tr').addClass('hidden');
+        $('#productsBox .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
     }
     else
     {
+        $('#productName').attr('disabled', true);
         $('#productName').closest('tr').addClass('hidden');
-        $('#plans').closest('tr').removeClass('hidden');
-        $(obj).closest('.input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
+        $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        $('#plansBox').closest('tr').removeClass('hidden');
+        $('#productsBox .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
     }
 }
 
-
+/**
+ * Set access control box.
+ *
+ * @param  int $programID
+ * @access public
+ * @return void
+ */
 function setAclList(programID)
 {
     if(programID != 0)
@@ -111,6 +141,14 @@ function loadBranches(product)
     loadPlans(product);
 }
 
+/**
+ * Load plans.
+ *
+ * @param  obj $product
+ * @param  int $branchID
+ * @access public
+ * @return void
+ */
 function loadPlans(product, branchID)
 {
     if($('#plansBox').size() == 0) return false;
@@ -136,6 +174,12 @@ function loadPlans(product, branchID)
     }
 }
 
+/**
+ * Adjust product box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustProductBoxMargin()
 {
     var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
@@ -148,6 +192,12 @@ function adjustProductBoxMargin()
     }
 }
 
+/**
+ * Adjust plan box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustPlanBoxMargin()
 {
     var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);
