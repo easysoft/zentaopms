@@ -71,7 +71,7 @@ $lang->report->taskTotal     = "总任务数";
 $lang->report->manhourTotal  = "总工时";
 $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
-$lang->report->unplanned     = "未{$lang->planCommon}";
+$lang->report->unplanned     = "未计划";
 $lang->report->workday       = '每天工时';
 $lang->report->diffDays      = '工作日天数';
 
@@ -82,7 +82,7 @@ $lang->report->typeList['line']    = '折线图';
 
 $lang->report->conditions    = '筛选条件：';
 $lang->report->closedProduct = '关闭' . $lang->productCommon;
-$lang->report->overduePlan   = "过期{$lang->planCommon}";
+$lang->report->overduePlan   = "过期计划";
 
 /* daily reminder. */
 $lang->report->idAB         = 'ID';
@@ -112,7 +112,7 @@ $lang->report->annualData->consumed         = "累计工时数";
 $lang->report->annualData->foundBugs        = "累计创建Bug数";
 $lang->report->annualData->createdCases     = "累计创建用例数";
 $lang->report->annualData->involvedProducts = "累计参与{$lang->productCommon}数";
-$lang->report->annualData->createdPlans     = "累计创建{$lang->planCommon}数";
+$lang->report->annualData->createdPlans     = "累计创建计划数";
 $lang->report->annualData->createdStories   = "累计创建{$lang->productSRCommon}数";
 
 $lang->report->annualData->productOverview = "{$lang->productCommon}创建{$lang->productSRCommon}数及占比";
@@ -128,7 +128,7 @@ $lang->report->annualData->finishedTask  = '完成任务数';
 $lang->report->annualData->foundBug      = '创建Bug数';
 $lang->report->annualData->resolvedBug   = '解决Bug数';
 $lang->report->annualData->productName   = "{$lang->productCommon}名称";
-$lang->report->annualData->planCount     = "{$lang->planCommon}数";
+$lang->report->annualData->planCount     = "计划数";
 $lang->report->annualData->storyCount    = "{$lang->productSRCommon}数";
 
 $lang->report->annualData->qaData           = "累计创建Bug数和创建用例数";

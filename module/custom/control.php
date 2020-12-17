@@ -442,6 +442,35 @@ class custom extends control
     }
 
     /**
+     * Edit story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function editStoryConcept($key = 0)
+    {
+        if($_POST)
+        {   
+            $result = $this->custom->updateURAndSR($key);
+            if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }   
+
+        $lang = $this->app->getClientLang();
+        $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->andWhere('`key`')->eq($key)
+            ->fetch('value');
+
+        $this->view->URSR = json_decode($URSR);
+        $this->display();
+    }
+
+    /**
      * Delete story concept.
      * 
      * @access public

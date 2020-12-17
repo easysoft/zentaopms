@@ -40,6 +40,7 @@ $lang->custom->scrumStory         = "故事";
 $lang->custom->waterfallCommon    = "瀑布";
 $lang->custom->buildin            = "系统内置";
 $lang->custom->isDefault          = '是否默认';
+$lang->custom->editStoryConcept   = "编辑需求概念";
 $lang->custom->setStoryConcept    = "设置需求概念";
 $lang->custom->setDefaultConcept  = "设置默认概念";
 $lang->custom->browseStoryConcept = "需求概念列表";

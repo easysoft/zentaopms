@@ -443,13 +443,21 @@ class productModel extends model
      */
     public function getStoryConceptByProduct($productID = 0)
     {
-        $product = $this->getById($productID);
-        $URList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
-        $SRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('SRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        $product  = $this->getById($productID);
+        $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+
+        $URList  = array();
+        $SRList  = array();
+        foreach($URSRList as $key => $value) 
+        {   
+            $URSR = json_decode($value);
+            $URList[$key] = $URSR->URName;
+            $SRList[$key] = $URSR->SRName;
+        }
 
         $concept = new stdClass();
-        $concept->UR = zget($URList, $product->storyConcept, $this->config->URCommonList[$this->app->clientLang]);
-        $concept->SR = zget($SRList, $product->storyConcept, $this->config->SRCommonList[$this->app->clientLang]);
+        $concept->UR = zget($URList, $product->storyConcept);
+        $concept->SR = zget($SRList, $product->storyConcept);
         return $concept;
     }
 

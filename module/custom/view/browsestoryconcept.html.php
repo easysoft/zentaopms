@@ -15,7 +15,7 @@
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-right'>
-    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe' data-toggle='modal'");?>
+    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
@@ -36,7 +36,8 @@
           <td class='text-center'><?php if($key == $config->custom->URSRCommon) echo "<i class='icon icon-check'></i>";?></td>
           <td class='c-actions'>
             <?php $disabled = $URSR['system'] ? "disabled=disabled" : '';?>
-            <?php if(common::hasPriv('custom', 'setDefaultConcept')) echo html::a($this->createLink('custom', 'setDefaultConcept', "id=$key"), "<i class='icon icon-hand-right'></i>", 'hiddenwin', "class='btn' title={$lang->custom->setDefaultConcept}");?>
+            <?php if(common::hasPriv('custom', 'setDefaultConcept'))  echo html::a($this->createLink('custom', 'setDefaultConcept', "id=$key"), "<i class='icon icon-hand-right'></i>", 'hiddenwin', "class='btn' title={$lang->custom->setDefaultConcept}");?>
+            <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' title={$lang->edit}");?>
             <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete}");?>
           </td>
         </tr>
