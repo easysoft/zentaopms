@@ -50,7 +50,7 @@ class projectStory extends control
         $this->lang->projectstory->menu->requirement['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
-        $this->fetch('story', 'replaceURLang', 'type=requirement');
+        $this->loadModel('story')->replaceURLang('requirement');
         $this->lang->story->title             = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->title);
         $this->lang->story->createRequirement = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createRequirement);
         $this->lang->story->createStory       = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createStory);
