@@ -128,21 +128,9 @@ class router extends baseRouter
                 {
                     $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
                 }
-                catch (PDOException $exception) 
+                catch (PDOException $exception)
                 {
-                    $repairCode = '|1034|1035|1194|1195|1459|';
-                    $errorInfo = $exception->errorInfo;
-                    $errorCode = $errorInfo[1];
-                    $errorMsg  = $errorInfo[2];
-                    $message   = $exception->getMessage();
-                    if(strpos($repairCode, "|$errorCode|") !== false or ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false) or strpos($message, 'repair') !== false)
-                    {
-                        if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
-                        {
-                            header("location: " . $config->webRoot . 'checktable.php');
-                            exit;
-                        }
-                    }
+                    helper::checkDB2Repair($exception);
                 }
             }
 
