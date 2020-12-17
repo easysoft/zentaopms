@@ -2486,7 +2486,6 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $storyType    requirement|story
-     * @param  int    $programID
      * @access public
      * @return array
      */
