@@ -1795,9 +1795,9 @@ class projectModel extends model
      */
     public function getTasks2Imported($toProject, $branches)
     {
-        $this->loadModel('task');
-
         $products   = $this->getProducts($toProject);
+        if(empty($products)) return array();
+
         $project    = $this->getById($toProject);
         $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
