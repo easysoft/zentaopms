@@ -128,7 +128,7 @@ class todoModel extends model
                 $todo->idvalue = 0;
                 if($todo->type == 'bug')   $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
                 if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
-                if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
+                if($todo->type == 'story') $todo->idvalue = isset($todos->stories[$i + 1]) ? $todos->stories[$i + 1] : 0;
 
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
