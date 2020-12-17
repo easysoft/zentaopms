@@ -139,7 +139,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> wurde geänder
 $lang->action->desc->diff3          = 'Dateiname %s wurde geändert zu %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Verknüpft mit <strong>$extra</strong> von <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
-$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed。' . "\n";
+$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

@@ -139,7 +139,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. Th
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
-$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed。' . "\n";
+$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

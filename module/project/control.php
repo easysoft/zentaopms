@@ -21,7 +21,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->methodName != 'computeburn')
+        if($this->methodName != 'computeburn' && $this->session->PRJ)
         {
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
@@ -438,7 +438,7 @@ class project extends control
     {
         if(!empty($_POST))
         {
-            $this->project->importTask($toProject,$fromProject);
+            $this->project->importTask($toProject);
             die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
@@ -2370,7 +2370,7 @@ class project extends control
      */
     public function ajaxGetMembers($projectID, $assignedTo = '')
     {
-        $users      = $this->project->getTeamMemberPairs($projectID);
+        $users = $this->project->getTeamMemberPairs($projectID);
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($users));
