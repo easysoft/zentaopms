@@ -81,7 +81,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id="info" class="table-row">
       <div class="table-col text-middle text-center">
         <div id="poweredby">
-          <?php if($weakSites):?>
+          <?php if($unsafeSites):?>
           <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
           <?php endif;?>
           <?php if($config->checkVersion):?>
@@ -93,12 +93,12 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
   </div>
 </main>
 <?php
-if($weakSites)
+if($unsafeSites)
 {
     $paths     = array();
     $databases = array();
     $isXampp   = false;
-    foreach($weakSites as $webRoot => $site)
+    foreach($unsafeSites as $webRoot => $site)
     {
         $path = $site['path'];
         if(strpos($path, 'xampp') !== false) $isXampp = true;
