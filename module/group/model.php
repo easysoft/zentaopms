@@ -103,23 +103,25 @@ class groupModel extends model
     /**
      * Get group lists.
      * 
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getList($programID = 0)
+    public function getList($projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->where('PRJ')->eq($programID)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->where('PRJ')->eq($projectID)->orderBy('id')->fetchAll();
     }
 
     /**
      * Get group pairs.
      * 
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getPairs($programID = 0)
+    public function getPairs($projectID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('PRJ')->eq($programID)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('PRJ')->eq($projectID)->orderBy('id')->fetchPairs();
     }
 
     /**
