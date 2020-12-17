@@ -292,7 +292,7 @@ class designModel extends model
      * Get design list.
      *
      * @param  int    $productID
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
      * @param  int    $param
      * @param  string $orderBy
@@ -300,17 +300,17 @@ class designModel extends model
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($type == 'bySearch')
         {
-            $designs = $this->getBySearch($programID, $productID, $param, $orderBy, $pager);
+            $designs = $this->getBySearch($projectID, $productID, $param, $orderBy, $pager);
         }
         else
         {
             $designs = $this->dao->select('*')->from(TABLE_DESIGN)
                 ->where('deleted')->eq(0)
-                ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
+                ->beginIF($projectID)->andWhere('PRJ')->eq($projectID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
                 ->andWhere('product')->eq($productID)
                 ->orderBy($orderBy)
@@ -341,7 +341,7 @@ class designModel extends model
     /**
      * Get designs by search.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $queryID
      * @param  string $orderBy
@@ -349,7 +349,7 @@ class designModel extends model
      * @access public
      * @return object
      */
-    public function getBySearch($programID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getBySearch($projectID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         if($queryID)
         {
@@ -374,7 +374,7 @@ class designModel extends model
         $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('PRJ')->eq($programID)
+            ->andWhere('PRJ')->eq($projectID)
             ->andWhere('product')->eq($productID)
             ->orderBy($orderBy)
             ->page($pager)
