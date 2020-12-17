@@ -1797,8 +1797,13 @@ class projectModel extends model
     {
         $this->loadModel('task');
 
-        $products = $this->getProducts($toProject);
-        $projects = $this->dao->select('product, project')->from(TABLE_PROJECTPRODUCT)->where('product')->in(array_keys($products))->fetchGroup('project');
+        $products   = $this->getProducts($toProject);
+        $project    = $this->getById($toProject);
+        $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in(array_keys($products))
+            ->andWhere('t2.project')->eq($project->project)
+            ->fetchGroup('project');
         $branches = str_replace(',', "','", $branches);
 
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
@@ -1807,7 +1812,7 @@ class projectModel extends model
             ->where('t1.status')->in('wait, doing, pause, cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->andWhere('t1.project')->in(array_keys($projects))
+            ->andWhere('t1.project')->in(array_keys($executions))
             ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('project', 'id');
         return $tasks;
