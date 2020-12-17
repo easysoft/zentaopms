@@ -26,25 +26,15 @@
   <?php $hasLog    = ($compile and !empty($compile->logs));?>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
+      <li class='<?php echo ($hasResult || $hasLog) ? '' : 'active';?>'><a href='#info' data-toggle='tab'><?php echo $lang->job->lblBasic;?></a></li>
       <?php if($hasResult):?>
       <li class='active'><a href='#testresult' data-toggle='tab'><?php echo $lang->compile->result;?></a></li>
       <?php endif;?>
       <?php if($hasLog):?>
       <li class='<?php echo $hasResult ? '' : 'active';?>'><a href='#logs' data-toggle='tab'><?php echo $lang->compile->logs;?></a></li>
       <?php endif;?>
-      <li class='<?php echo ($hasResult || $hasLog) ? '' : 'active';?>'><a href='#info' data-toggle='tab'><?php echo $lang->job->lblBasic;?></a></li>
     </ul>
     <div class='tab-content'>
-      <?php if($hasResult):?>
-      <div id='testresult' class='tab-pane active'>
-        <?php include $this->app->getModuleRoot() . 'testtask/view/unitgroup.html.php';?>
-      </div>
-      <?php endif;?>
-      <?php if($hasLog):?>
-      <div id='logs' class='tab-pane <?php echo $hasResult ? '' : 'active';?>'>
-        <div class='main-content'><?php echo nl2br($compile->logs);?></div>
-      </div>
-      <?php endif;?>
       <div id='info' class='tab-pane <?php echo ($hasResult || $hasLog) ? '' : 'active';?>'>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
@@ -113,6 +103,16 @@
           </tr>
         </table>
       </div>
+      <?php if($hasResult):?>
+      <div id='testresult' class='tab-pane active'>
+        <?php include $this->app->getModuleRoot() . 'testtask/view/unitgroup.html.php';?>
+      </div>
+      <?php endif;?>
+      <?php if($hasLog):?>
+      <div id='logs' class='tab-pane <?php echo $hasResult ? '' : 'active';?>'>
+        <div class='main-content'><?php echo nl2br($compile->logs);?></div>
+      </div>
+      <?php endif;?>
     </div>
   </div>
 </div>

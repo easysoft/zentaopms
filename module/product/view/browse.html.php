@@ -280,8 +280,8 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class         = $canBatchClose ? '' : "class='disabled'";
-              $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
+              $class      = $canBatchClose ? '' : "class='disabled'";
+              $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
