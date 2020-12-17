@@ -1299,15 +1299,16 @@ class programModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name        = $this->post->productName ? $this->post->productName : $project->name;
-                $product->code        = $this->post->productName ? $this->post->productName : $project->code;
-                $product->bind        = $this->post->productName ? 0 : 1;
-                $product->program     = $project->parent;
-                $product->acl         = $project->acl = 'open' ? 'open' : 'private';
-                $product->PO          = $project->PM;
-                $product->createdBy   = $this->app->user->account;
-                $product->createdDate = helper::now();
-                $product->status      = 'normal';
+                $product->name         = $this->post->productName ? $this->post->productName : $project->name;
+                $product->code         = $this->post->productName ? $this->post->productName : $project->code;
+                $product->bind         = $this->post->productName ? 0 : 1;
+                $product->program      = $project->parent;
+                $product->storyConcept = $project->storyConcept;
+                $product->acl          = $project->acl = 'open' ? 'open' : 'private';
+                $product->PO           = $project->PM;
+                $product->createdBy    = $this->app->user->account;
+                $product->createdDate  = helper::now();
+                $product->status       = 'normal';
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
