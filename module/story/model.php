@@ -466,6 +466,12 @@ class storyModel extends model
             return false;
         }
 
+        if(!isset($_POST['needNotReview']) and empty($_POST['assignedTo']))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
