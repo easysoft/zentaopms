@@ -631,12 +631,22 @@ class upgradeModel extends model
             $this->appendExec('12_5_1');
         case '20_0_alpha':
             $this->saveLogs('Execute 20_0_alpha');
+
+            /* Ugrade 12.x when from 20.x. */
+            if(strpos($fromVersion, '20_0') === 0)
+            {
+                $this->execSQL($this->getUpgradeFile('12.4.4'));
+                $this->adjustPriv12_5();
+                $this->appendExec('12_4_4');
+            }
+
             $this->execSQL($this->getUpgradeFile('20.0.alpha'));
             $this->setWork2Full();
             $this->initUserView();
             $this->appendExec('20_0_alpha');
         case '20_0_alpha1':
             $this->saveLogs('Execute 20_0_alpha1');
+
             $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
             $this->appendExec('20_0_alpha1');
         case '20_0_beta1':
