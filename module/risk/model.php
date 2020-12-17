@@ -120,7 +120,7 @@ class riskModel extends model
     /**
      * Get risks List.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  string $browseType
      * @param  string $param
      * @param  string $orderBy
@@ -128,15 +128,15 @@ class riskModel extends model
      * @access public
      * @return object
      */
-    public function getList($programID, $browseType = '', $param = '', $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID, $browseType = '', $param = '', $orderBy = 'id_desc', $pager = null)
     {
-        if($browseType == 'bysearch') return $this->getBySearch($programID, $param, $orderBy, $pager);
+        if($browseType == 'bysearch') return $this->getBySearch($projectID, $param, $orderBy, $pager);
 
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where('deleted')->eq(0)
             ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->andWhere('PRJ')->eq($programID)
+            ->andWhere('PRJ')->eq($projectID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -145,14 +145,14 @@ class riskModel extends model
     /**
      * Get risks by search
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  string $queryID
      * @param  string $orderBy
      * @param  int    $pager
      * @access public
      * @return object
      */
-    public function getBySearch($programID, $queryID = '', $orderBy = 'id_desc', $pager = null)
+    public function getBySearch($projectID, $queryID = '', $orderBy = 'id_desc', $pager = null)
     {
         if($queryID && $queryID != 'myQueryID')
         {
@@ -177,7 +177,7 @@ class riskModel extends model
         return $this->dao->select('*')->from(TABLE_RISK)
             ->where($riskQuery)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('PRJ')->eq($programID)
+            ->andWhere('PRJ')->eq($projectID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -186,15 +186,15 @@ class riskModel extends model
     /**
      * Get risks of pairs
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getPairs($programID)
+    public function getPairs($projectID)
     {
         return $this->dao->select('id, name')->from(TABLE_RISK)
             ->where('deleted')->eq(0)
-            ->andWhere('PRJ')->eq($programID)
+            ->andWhere('PRJ')->eq($projectID)
             ->fetchPairs();
     }
 
@@ -213,17 +213,17 @@ class riskModel extends model
     /**
      * Get block risks
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  string $browseType
      * @param  int    $limit
      * @param  string $orderBy
      * @access public
      * @return object
      */
-    public function getBlockRisks($programID, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    public function getBlockRisks($projectID, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_RISK)
-            ->where('PRJ')->eq($programID)
+            ->where('PRJ')->eq($projectID)
             ->beginIF($browseType != 'all' and $browseType != 'assignTo')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'assignTo')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->andWhere('deleted')->eq('0')
