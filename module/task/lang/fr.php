@@ -132,7 +132,7 @@ $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Testée';
 
 $lang->task->ditto             = 'Idem';
-$lang->task->dittoNotice       = "Cette Tâche n'est pas associée au projet comme la précédente peut l'être !";
+$lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
 $lang->task->selectTestStory   = 'Select Story Testé';
 $lang->task->selectAllUser     = 'Tous Utilis.';
 $lang->task->noStory           = 'Aucune Story associée';

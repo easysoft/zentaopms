@@ -132,7 +132,7 @@ $lang->task->lblHour          = '(giờ)';
 $lang->task->lblTestStory     = 'Câu chuyện đã Test';
 
 $lang->task->ditto             = 'Như trên';
-$lang->task->dittoNotice       = "Nhiệm vụ này không liên kết tới dự án vì không có dự án trước nó!";
+$lang->task->dittoNotice       = 'Nhiệm vụ này không thuộc về cùng một %s với nhiệm vụ trước!';
 $lang->task->selectTestStory   = 'Chọn câu chuyện đã Test';
 $lang->task->selectAllUser     = 'Tất cả người dùng';
 $lang->task->noStory           = 'Không có câu chuyện liên kết';

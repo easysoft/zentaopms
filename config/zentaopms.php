@@ -68,25 +68,6 @@ $config->hourPointCommonList['vi'][0] = 'điểm';
 $config->hourPointCommonList['vi'][1] = 'function point';
 $config->hourPointCommonList['vi'][2] = 'loc point';
 
-/* Plan common list. */
-$config->planCommonList['zh-cn'][0] = '计划';
-$config->planCommonList['zh-cn'][1] = '排期';
-
-$config->planCommonList['zh-tw'][0] = '计划';
-$config->planCommonList['zh-tw'][1] = '排期';
-
-$config->planCommonList['en'][0] = 'Plan';
-$config->planCommonList['en'][1] = 'Schedule';
-
-$config->planCommonList['de'][0] = 'Plan';
-$config->planCommonList['de'][1] = 'Schedule';
-
-$config->planCommonList['fr'][0] = 'Plan';
-$config->planCommonList['fr'][1] = 'Schedule';
-
-$config->planCommonList['vi'][0] = 'Plan';
-$config->planCommonList['vi'][1] = 'Schedule';
-
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 

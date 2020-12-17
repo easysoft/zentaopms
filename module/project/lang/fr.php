@@ -122,7 +122,7 @@ $lang->project->aclList['private'] = 'Private (for team members and project stak
 $lang->project->storyPoint = 'Story Point';
 
 $lang->project->burnByList['left']       = 'View by remaining hours';
-$lang->project->burnByList['estimate']   = "View by {$lang->planCommon} hours";
+$lang->project->burnByList['estimate']   = "View by plan hours";
 $lang->project->burnByList['storyPoint'] = 'View by story point';
 
 /* Méthode List */

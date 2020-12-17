@@ -225,7 +225,7 @@ $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
-$lang->searchObjects['execution']   = 'Iteration/Phase';
+$lang->searchObjects['execution']   = $lang->sprintCommon;
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
@@ -944,7 +944,7 @@ $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommo
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
-$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->plan  = array('link' => "Plan|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = 'Story|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track = 'Track|story|track|product={PRODUCT}';
 

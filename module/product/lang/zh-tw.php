@@ -34,7 +34,7 @@ $lang->product->exportAction = "導出{$lang->productCommon}";
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
 
-$lang->product->plans       = "{$lang->planCommon}數";
+$lang->product->plans       = "計劃數";
 $lang->product->releases    = '發佈數';
 $lang->product->docs        = '文檔數';
 $lang->product->bugs        = '相關Bug';
@@ -90,7 +90,7 @@ $lang->product->release        = '發佈';
 $lang->product->allRelease     = '所有發佈';
 $lang->product->maintain       = '維護中';
 $lang->product->latestDynamic  = '最新動態';
-$lang->product->plan           = $lang->planCommon;
+$lang->product->plan           = '計劃';
 $lang->product->iteration      = '版本迭代';
 $lang->product->iterationInfo  = '迭代 %s 次';
 $lang->product->iterationView  = '查看詳情';
@@ -109,7 +109,7 @@ $lang->product->changedStory = '已變更';
 $lang->product->willClose    = '待關閉';
 $lang->product->closedStory  = '已關閉';
 $lang->product->unclosed     = '未關閉';
-$lang->product->unplan       = "未{$lang->planCommon}";
+$lang->product->unplan       = "未計劃";
 $lang->product->viewByUser   = '按用戶查看';
 
 $lang->product->allStory             = '所有';

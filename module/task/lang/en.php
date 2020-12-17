@@ -132,7 +132,7 @@ $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
 
 $lang->task->ditto             = 'Ditto';
-$lang->task->dittoNotice       = "This Task is not linked to the project as the previous one is!";
+$lang->task->dittoNotice       = "This Task is not linked to the %s as the previous one is!";
 $lang->task->selectTestStory   = 'Select Story Testd';
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';

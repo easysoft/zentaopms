@@ -12,7 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('dittoNotice', $this->lang->task->dittoNotice);?>
+<?php
+$dittoNotice = sprintf($this->lang->task->dittoNotice, $lang->projectCommon);
+js::set('dittoNotice', $dittoNotice);
+?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2>

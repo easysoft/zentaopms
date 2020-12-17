@@ -132,7 +132,7 @@ $lang->task->lblHour          = '(h)';
 $lang->task->lblTestStory     = "测试{$lang->productSRCommon}";
 
 $lang->task->ditto             = '同上';
-$lang->task->dittoNotice       = "该任务与上一任务不属于同一项目！";
+$lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";
 $lang->task->selectTestStory   = "选择测试{$lang->productSRCommon}";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "无{$lang->productSRCommon}";

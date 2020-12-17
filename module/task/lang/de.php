@@ -132,7 +132,7 @@ $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
 
 $lang->task->ditto             = 'Dito';
-$lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum Projekt wie die Vorherige!";
+$lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
 $lang->task->selectTestStory   = 'Select Story Testd';
 $lang->task->selectAllUser     = 'Alle';
 $lang->task->noStory           = 'Keine Story';

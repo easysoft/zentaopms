@@ -1,12 +1,12 @@
 <?php
 /**
- * The common simplified chinese file of ZenTaoPMS.
+ * The common module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
@@ -125,10 +125,6 @@ $lang->typeAB       = '類型';
 $lang->common = new stdclass();
 $lang->common->common = '公有模組';
 
-global $config;
-$URCommon = isset($lang->URCommon) ? $lang->URCommon : '用戶需求';
-$SRCommon = isset($lang->SRCommon) ? $lang->SRCommon : '軟件需求';
-
 /* 主導航菜單。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盤|my|index|';
@@ -218,14 +214,14 @@ $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '發佈';
-$lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
+$lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
 $lang->searchObjects['testtask']    = '測試單';
 $lang->searchObjects['doc']         = '文檔';
 $lang->searchObjects['caselib']     = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchObjects['program']     = '項目集';
 $lang->searchObjects['project']     = '項目';
-$lang->searchObjects['execution']   = '迭代/階段';
+$lang->searchObjects['execution']   = $lang->sprintCommon;
 $lang->searchTips                   = '編號(ctrl+g)';
 
 /* 導入支持的編碼格式。*/
@@ -287,7 +283,7 @@ $lang->scrumproduct = new stdclass();
 $lang->scrumproduct->menu = new stdclass();
 
 $lang->scrumproduct->menu->story   = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->scrumproduct->menu->plan    = array('link' => "計劃|productplan|browse|productID=%s", 'subModule' => 'productplan');
 //$lang->scrumproduct->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap = '路線圖|product|roadmap|productID=%s';
 $lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -943,13 +939,6 @@ $lang->programplan->menu->lists = array('link' => '階段列表|programplan|brow
 $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟蹤矩陣|projectstory|track', 'subModule' => '');
-
-$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
-$lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
-$lang->waterfallproduct->menu->track = '跟蹤矩陣|story|track|product={PRODUCT}';
-
-$lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
-$lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');

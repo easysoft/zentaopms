@@ -68,7 +68,6 @@ $lang->URCommon        = '';
 $lang->SRCommon        = '';
 $lang->productURCommon = '';
 $lang->productSRCommon = '';
-$lang->planCommon      = '';
 $lang->projectSRCommon = '';
 $lang->projectURCommon = '';
 include "../module/common/lang/{$clientLang}.php";

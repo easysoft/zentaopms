@@ -119,7 +119,7 @@ $lang->project->aclList['private'] = "私有（團隊成員和項目負責人、
 $lang->project->storyPoint = '故事點';
 
 $lang->project->burnByList['left']       = '按剩餘工時查看';
-$lang->project->burnByList['estimate']   = "按{$lang->planCommon}工時查看";
+$lang->project->burnByList['estimate']   = "按计划工時查看";
 $lang->project->burnByList['storyPoint'] = '按故事點查看';
 
 /* 方法列表。*/
