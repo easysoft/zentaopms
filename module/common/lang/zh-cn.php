@@ -125,10 +125,6 @@ $lang->typeAB       = '类型';
 $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
-global $config;
-$URCommon = isset($lang->URCommon) ? $lang->URCommon : '用户需求';
-$SRCommon = isset($lang->SRCommon) ? $lang->SRCommon : '软件需求';
-
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
@@ -943,13 +939,6 @@ $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|brow
 $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
-
-$lang->waterfallproduct->menu->plan  = array('link' => "计划|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
-$lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
-$lang->waterfallproduct->menu->track = '跟踪矩阵|story|track|product={PRODUCT}';
-
-$lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
-$lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');

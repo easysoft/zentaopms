@@ -489,6 +489,46 @@ class customModel extends model
     }
 
     /**
+     * Get UR pairs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getURPairs()
+    {
+        $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+
+        $URPairs = array();
+        foreach($URSRList as $key => $value) 
+        {    
+            $URSR = json_decode($value);
+            $URPairs[$key] = $URSR->URName;
+        }
+
+        return $URPairs;
+    }
+
+    /**
+     * Get SR pairs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getSRPairs()
+    {
+        $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+
+        $SRPairs = array();
+        foreach($URSRList as $key => $value) 
+        {    
+            $URSR = json_decode($value);
+            $SRPairs[$key] = $URSR->SRName;
+        }
+
+        return $SRPairs;
+    }
+
+    /**
      * Get UR and SR list.
      * 
      * @access public

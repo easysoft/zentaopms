@@ -443,21 +443,14 @@ class productModel extends model
      */
     public function getStoryConceptByProduct($productID = 0)
     {
-        $product  = $this->getById($productID);
-        $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
-
-        $URList  = array();
-        $SRList  = array();
-        foreach($URSRList as $key => $value) 
-        {   
-            $URSR = json_decode($value);
-            $URList[$key] = $URSR->URName;
-            $SRList[$key] = $URSR->SRName;
-        }
+        $this->loadModel('custom');
+        $product = $this->getById($productID);
+        $URPairs = $this->custom->getURPairs();
+        $SRPairs = $this->custom->getSRPairs();
 
         $concept = new stdClass();
-        $concept->UR = zget($URList, $product->storyConcept);
-        $concept->SR = zget($SRList, $product->storyConcept);
+        $concept->UR = zget($URPairs, $product->storyConcept, $this->lang->URCommon);
+        $concept->SR = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon);
         return $concept;
     }
 
@@ -1412,9 +1405,12 @@ class productModel extends model
      */
     public function replaceStoryConcept($productID = 0)
     {
-        $this->app->loadLang('custom');
+        $this->loadModel('custom');
         $product     = $this->getByID($productID);
         $lastProduct = $this->getByID($this->cookie->lastProduct);
+
+        $URPairs = $this->custom->getURPairs();
+        $SRPairs = $this->custom->getSRPairs();
 
         /* Replace menu lang. */
         foreach($this->lang->product->menu as $key => $menu)    
@@ -1422,22 +1418,23 @@ class productModel extends model
             if($key == 'requirement') 
             {
                 $link    = explode('|', $menu['link']);
-                $link[0] = zget($this->lang->custom->URList, $product->storyConcept, $this->lang->URCommon); 
+                $link[0] = zget($URPairs, $product->storyConcept, $this->lang->URCommon);
                 $this->lang->product->menu->$key = implode('|', $link);
             }
             if($key == 'story') 
             {
                 $link    = explode('|', $menu['link']);
-                $link[0] = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon); 
+                $link[0] = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon); 
                 $this->lang->product->menu->$key = implode('|', $link);
             }
         }
 
-        $lastSRCommon = zget($this->lang->custom->SRList, $lastProduct->storyConcept, $this->lang->SRCommon);
-        $SRCommon     = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon);
+        $lastSRCommon = zget($SRPairs, $lastProduct->storyConcept, $this->lang->SRCommon);
+        $SRCommon     = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon);
 
         $this->lang->story->createStory       = str_replace($lastSRCommon, $SRCommon, $this->lang->story->create);
         $this->lang->story->createRequirement = str_replace($lastSRCommon, $SRCommon, $this->lang->story->createRequirement);
         $this->lang->story->noStory           = str_replace($lastSRCommon, $SRCommon, $this->lang->story->noStory);
+        $this->lang->story->title             = str_replace($lastSRCommon, $SRCommon, $this->lang->story->title);
     }
 }

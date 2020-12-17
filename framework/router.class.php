@@ -162,17 +162,17 @@ class router extends baseRouter
                 /* Get story concept in project and product. */
                 $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and lang = \"{$this->clientLang}\"")->fetchAll();
 
-                $URList  = array();
-                $SRList  = array();
+                $URPairs  = array();
+                $SRPairs  = array();
                 foreach($URSRList as $id => $value) 
                 {
                     $URSR = json_decode($value->value);
-                    $URList[$value->key] = $URSR->URName;
-                    $SRList[$value->key] = $URSR->SRName;
+                    $URPairs[$value->key] = $URSR->URName;
+                    $SRPairs[$value->key] = $URSR->SRName;
                 }
 
-                $lang->URCommon = zget($URList, $config->URSR);
-                $lang->SRCommon = zget($SRList, $config->URSR);
+                $lang->URCommon = zget($URPairs, $config->URSR);
+                $lang->SRCommon = zget($SRPairs, $config->URSR);
                 $lang->projectURCommon = $lang->URCommon;
                 $lang->productURCommon = $lang->URCommon;
                 $lang->projectSRCommon = $lang->SRCommon;
@@ -182,16 +182,16 @@ class router extends baseRouter
                 if($projectID)
                 {    
                     $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
-                    $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $lang->URCommon);
-                    $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $lang->SRCommon);
+                    $lang->projectURCommon = zget($URPairs, $storyConcept->storyConcept, $lang->URCommon);
+                    $lang->projectSRCommon = zget($SRPairs, $storyConcept->storyConcept, $lang->SRCommon);
                 }    
 
                 $productID = $this->session->product;
                 if($productID)
                 {    
                     $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
-                    $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $lang->URCommon);
-                    $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $lang->SRCommon);
+                    $lang->productURCommon = zget($URPairs, $storyConcept->storyConcept, $lang->URCommon);
+                    $lang->productSRCommon = zget($SRPairs, $storyConcept->storyConcept, $lang->SRCommon);
                 }
             }
         }

@@ -922,12 +922,15 @@ class actionModel extends model
      */
     public function getStoryConcept($action)
     {
-        $this->app->loadLang('custom');
+        $this->loadModel('custom');
         $story   = $this->loadModel('story')->getByID($action->objectID);
         $product = $this->loadModel('product')->getByID($story->product);
 
-        $URCommon = zget($this->lang->custom->URList, $product->storyConcept, $this->lang->URCommon);
-        $SRCommon = zget($this->lang->custom->SRList, $product->storyConcept, $this->lang->SRCommon);
+        $URPairs = $this->custom->getURPairs();
+        $SRPairs = $this->custom->getSRPairs();
+
+        $URCommon = zget($URPairs, $product->storyConcept);
+        $SRCommon = zget($SRPairs, $product->storyConcept);
 
         return $story->type == 'story' ? $SRCommon : $URCommon;
     }
