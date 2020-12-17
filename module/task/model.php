@@ -905,19 +905,6 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
         }
 
-        /* Record task version. */
-        if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
-        {
-            $task->version = $oldTask->version + 1;
-            $taskSpec = new stdClass();
-            $taskSpec->task       = $taskID;
-            $taskSpec->version    = $task->version;
-            $taskSpec->name       = $task->name;
-            $taskSpec->estStarted = $task->estStarted;
-            $taskSpec->deadline   = $task->deadline;
-            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-        }
-
         $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('type');
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
         if($projectType == 'ops')
@@ -956,6 +943,19 @@ class taskModel extends model
 
         if(!dao::isError())
         {
+            /* Record task version. */
+            if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
+            {
+                $task->version = $oldTask->version + 1;
+                $taskSpec = new stdClass();
+                $taskSpec->task       = $taskID;
+                $taskSpec->version    = $task->version;
+                $taskSpec->name       = $task->name;
+                $taskSpec->estStarted = $task->estStarted;
+                $taskSpec->deadline   = $task->deadline;
+                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            }
+
             if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
