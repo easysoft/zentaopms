@@ -401,13 +401,9 @@ class issue extends control
             case 'totask':
                 $this->loadModel('story');
 
-                $project = $this->project->getById($projectID);
-                $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-                $stories = $this->story->getProjectStoryPairs($projectID, 0, 0);
-
-                $this->view->project    = $project;
-                $this->view->members    = $members;
-                $this->view->stories    = $stories;
+                $this->view->project    = $this->project->getById($projectID);
+                $this->view->members    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+                $this->view->stories    = $this->story->getProjectStoryPairs($projectID, 0, 0);
                 $this->view->showFields = $this->config->task->custom->createFields;
 
                 $this->display('issue', 'taskform');

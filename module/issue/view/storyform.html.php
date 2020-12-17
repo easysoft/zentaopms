@@ -48,7 +48,7 @@
   <td colspan='2'>
     <div class='input-group' id='planIdBox'>
       <?php
-      echo html::select('plan', $plans, $planID, "class='form-control chosen'");
+      echo html::select('plan', $plans, 0, "class='form-control chosen'");
       if(count($plans) == 1)
       {
           echo "<div class='input-group-btn'>";
@@ -66,9 +66,9 @@
     <div class="input-group">
       <div class="input-group">
         <div class="input-group-addon"><?php echo $lang->story->source;?></div>
-        <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+        <?php echo html::select('source', $lang->story->sourceList, 0, "class='form-control chosen'");?>
         <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
-        <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+        <?php echo html::input('sourceNote', '', "class='form-control' style='width:140px;'");?>
       </div>
     </div>
   </td>
