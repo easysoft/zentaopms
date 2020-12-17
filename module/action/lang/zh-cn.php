@@ -437,13 +437,14 @@ $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
-$lang->action->search->objectTypeList['program']     = '项目';
-$lang->action->search->objectTypeList['project']     = $lang->projectCommon;
+$lang->action->search->objectTypeList['program']     = '项目集';
+$lang->action->search->objectTypeList['project']     = '项目';
+$lang->action->search->objectTypeList['execution']   = '迭代/阶段';
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = '用例';
 $lang->action->search->objectTypeList['caseresult']  = '用例结果';
 $lang->action->search->objectTypeList['stepresult']  = '用例步骤';
-$lang->action->search->objectTypeList['story']       = $lang->productSRCommon;
+$lang->action->search->objectTypeList['story']       = '用需/软需';
 $lang->action->search->objectTypeList['task']        = '任务';
 $lang->action->search->objectTypeList['testtask']    = '测试单';
 $lang->action->search->objectTypeList['user']        = '用户';
