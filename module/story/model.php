@@ -466,12 +466,6 @@ class storyModel extends model
             return false;
         }
 
-        if(!isset($_POST['needNotReview']) and empty($_POST['assignedTo']))
-        {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-            return false;
-        }
-
         if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
@@ -486,7 +480,8 @@ class storyModel extends model
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->assignedTo == '', 'assignedTo', $oldStory->assignedTo)
+            ->setIF($this->post->assignedTo != '' and $this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
             ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')

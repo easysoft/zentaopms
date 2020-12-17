@@ -236,7 +236,6 @@ $lang->story->noStory              = "暫時沒有{$lang->storyCommon}。";
 $lang->story->ignoreChangeStage    = "{$lang->storyCommon} %s 為草稿狀態或已關閉狀態，沒有修改其階段。";
 $lang->story->cannotDeleteParent   = "不能刪除父{$lang->storyCommon}";
 $lang->story->moveChildrenTips     = "修改父{$lang->storyCommon}的所屬產品會將其下的子{$lang->storyCommon}也移動到所選產品下。";
-$lang->story->errorEmptyReviewedBy = "請選擇評審人。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "該{$lang->storyCommon}所屬範圍";
