@@ -105,7 +105,7 @@ class todoModel extends model
         $validTodos = array();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
+            if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]) || isset($todos->stories[$i + 1]))
             {
                 $todo          = new stdclass();
                 $todo->account = $this->app->user->account;
