@@ -552,7 +552,11 @@ class testtaskModel extends model
      */
     public function getLinkableCasesByTestTask($testTask, $linkedCases, $query, $pager)
     {
+        /* Format the query condition. */
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+        $query = str_replace('t1.`lastRunner`', 't2.`lastRunner`', $query);
+        $query = str_replace('t1.`lastRunDate`', 't2.`lastRunDate`', $query);
+        $query = str_replace('t1.`lastRunResult`', 't2.`lastRunResult`', $query);
 
         return $this->dao->select("t1.*,t2.lastRunner,t2.lastRunDate,t2.lastRunResult")->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
