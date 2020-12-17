@@ -61,11 +61,16 @@ if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 1
 
 $lang = new stdclass();
 $lang->misc = new stdclass();
-$lang->storyCommon   = '';
-$lang->productCommon = '';
-$lang->projectCommon = '';
-$lang->URCommon      = '';
-$lang->SRCommon      = '';
+$lang->storyCommon     = '';
+$lang->productCommon   = '';
+$lang->projectCommon   = '';
+$lang->URCommon        = '';
+$lang->SRCommon        = '';
+$lang->productURCommon = '';
+$lang->productSRCommon = '';
+$lang->planCommon      = '';
+$lang->projectSRCommon = '';
+$lang->projectURCommon = '';
 include "../module/common/lang/{$clientLang}.php";
 include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
