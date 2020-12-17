@@ -497,13 +497,21 @@ class customModel extends model
     public function getURSRList()
     {
         $this->app->loadLang('custom');
+        $lang = $this->app->getClientLang();
+
+        $langData = $this->dao->select('`key`, `value`, system')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->fetchAll();
 
         $URSRList = array();
-        foreach($this->lang->custom->URSRList as $key => $content)
+        foreach($langData as $id => $content)
         {
-            $content = json_decode($content);
-            $URSRList[$key]['SRName'] = $content->SRName;
-            $URSRList[$key]['URName'] = $content->URName;
+            $value = json_decode($content->value);
+            $URSRList[$content->key]['SRName'] = $value->SRName;
+            $URSRList[$content->key]['URName'] = $value->URName;
+            $URSRList[$content->key]['system'] = $content->system;
         }
 
         return $URSRList;
@@ -636,7 +644,7 @@ class customModel extends model
             $value   = json_encode($URSRList);
             $maxKey += 1;
 
-            $this->setItem("$lang.custom.URSRList.{$maxKey}.1", $value);
+            $this->setItem("$lang.custom.URSRList.{$maxKey}.0", $value);
         }
 
         return true;

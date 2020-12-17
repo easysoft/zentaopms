@@ -447,16 +447,37 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function deleteStoryConcept($key = 0)
+    public function setDefaultConcept($key = 0)
     {
-        $lang = $this->app->getClientLang();
-        $this->dao->delete()->from(TABLE_LANG)
-            ->where('lang')->eq($lang) 
-            ->andWhere('section')->eq('URSRList') 
-            ->andWhere('`key`')->eq($key) 
-            ->exec();
+        $this->loadModel('setting')->setItem('system.custom.URSR', $key);
 
         die(js::reload('parent.parent'));
+    }
+
+    /**
+     * Delete story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteStoryConcept($key = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), '');
+            die;
+        }
+        else
+        {
+            $lang = $this->app->getClientLang();
+            $this->dao->delete()->from(TABLE_LANG)
+                ->where('lang')->eq($lang) 
+                ->andWhere('section')->eq('URSRList') 
+                ->andWhere('`key`')->eq($key) 
+                ->exec();
+
+            die(js::reload('parent.parent'));
+        }
     }
 
     /**

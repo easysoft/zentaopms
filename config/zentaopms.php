@@ -43,21 +43,6 @@ $config->projectCommonList['vi'][0] = 'Lặp lại';
 $config->projectCommonList['vi'][1] = 'Sprint';
 $config->projectCommonList['vi'][2] = 'Giai đoạn';
 
-$config->URCommonList['zh-cn'] = '用户需求';
-$config->SRCommonList['zh-cn'] = '软件需求';
-
-$config->URCommonList['en'] = 'Requirement';
-$config->SRCommonList['en'] = 'Story';
-
-$config->URCommonList['vi'] = 'Requirement';
-$config->SRCommonList['vi'] = 'Story';
-
-$config->URCommonList['fr'] = 'Requirement';
-$config->SRCommonList['fr'] = 'Story';
-
-$config->URCommonList['de'] = 'Requirement';
-$config->SRCommonList['de'] = 'Story';
-
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '故事点';
 $config->hourPointCommonList['zh-cn'][1] = '功能点';

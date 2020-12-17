@@ -217,7 +217,7 @@ $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
-$lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
+$lang->searchObjects['productplan'] = $lang->productCommon . '计划';
 $lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['caselib']     = '用例库';
@@ -286,7 +286,7 @@ $lang->scrumproduct = new stdclass();
 $lang->scrumproduct->menu = new stdclass();
 
 $lang->scrumproduct->menu->story   = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->scrumproduct->menu->plan    = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 //$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -943,7 +943,7 @@ $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommo
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
-$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->plan  = array('link' => "计划|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track = '跟踪矩阵|story|track|product={PRODUCT}';
 

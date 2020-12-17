@@ -122,7 +122,7 @@ $lang->project->aclList['private'] = "私有（团队成员和项目负责人、
 $lang->project->storyPoint = '故事点';
 
 $lang->project->burnByList['left']       = '按剩余工时查看';
-$lang->project->burnByList['estimate']   = "按{$lang->planCommon}工时查看";
+$lang->project->burnByList['estimate']   = "按计划工时查看";
 $lang->project->burnByList['storyPoint'] = '按故事点查看';
 
 /* 方法列表。*/
@@ -144,8 +144,8 @@ $lang->project->doc               = '文档列表';
 $lang->project->doclib            = '文档库列表';
 $lang->project->manageProducts    = '关联' . $lang->productCommon;
 $lang->project->linkStory         = "关联{$lang->projectSRCommon}";
-$lang->project->linkStoryByPlan   = "按照{$lang->planCommon}关联";
-$lang->project->linkPlan          = "关联{$lang->planCommon}";
+$lang->project->linkStoryByPlan   = "按照计划关联";
+$lang->project->linkPlan          = "关联计划";
 $lang->project->unlinkStoryTasks  = "未关联{$lang->projectSRCommon}任务";
 $lang->project->linkedProducts    = '已关联';
 $lang->project->unlinkedProducts  = '未关联';
@@ -174,7 +174,7 @@ $lang->project->unlinkStory       = "移除{$lang->projectSRCommon}";
 $lang->project->unlinkStoryAB     = "移除{$lang->projectSRCommon}";
 $lang->project->batchUnlinkStory  = "批量移除{$lang->projectSRCommon}";
 $lang->project->importTask        = '转入任务';
-$lang->project->importPlanStories = "按{$lang->planCommon}关联{$lang->projectSRCommon}";
+$lang->project->importPlanStories = "按计划关联{$lang->projectSRCommon}";
 $lang->project->importBug         = '导入Bug';
 $lang->project->updateOrder       = "{$lang->projectCommon}排序";
 $lang->project->tree              = '树状图';
@@ -184,7 +184,7 @@ $lang->project->treeOnlyTask      = '树状图只看任务';
 $lang->project->treeOnlyStory     = "树状图只看{$lang->projectSRCommon}";
 $lang->project->storyKanban       = "{$lang->projectSRCommon}看板";
 $lang->project->storySort         = "{$lang->projectSRCommon}排序";
-$lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入' . $lang->planCommon . '关联的相关' . $lang->projectSRCommon . '？';
+$lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关' . $lang->projectSRCommon . '？';
 $lang->project->iteration         = '版本迭代';
 $lang->project->iterationInfo     = '迭代%s次';
 $lang->project->viewAll           = '查看所有';
@@ -227,7 +227,7 @@ $lang->project->aboveAllProduct = "以上所有{$lang->productCommon}";
 $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 
 /* 页面提示。*/
-$lang->project->linkStoryByPlanTips = "此操作会将所选{$lang->planCommon}下面的{$lang->projectSRCommon}全部关联到此{$lang->projectCommon}中";
+$lang->project->linkStoryByPlanTips = "此操作会将所选计划下面的{$lang->projectSRCommon}全部关联到此{$lang->projectCommon}中";
 $lang->project->selectProject       = "请选择{$lang->projectCommon}";
 $lang->project->selectExecution     = "请选择阶段/迭代/冲刺";
 $lang->project->beginAndEnd         = '起止时间';

@@ -126,7 +126,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','hourPoint','URAndSR', 'URSRName')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject', 'hourPoint', 'URSR')")->fetchAll();
                 }
                 catch (PDOException $exception)
                 {
@@ -134,64 +134,64 @@ class router extends baseRouter
                 }
             }
 
-            $productIndex = $hourIndex = $planIndex = $URAndSR = $URSRName = 0;
-            $projectIndex = empty($this->config->isINT) ? 0 : 1;
+            $productKey = $hourKey = $planKey = $URSR = 0;
+            $projectKey = empty($this->config->isINT) ? 0 : 1;
 
             foreach($commonSettings as $setting)
             {
-                if($setting->key == 'productProject')   list($productIndex, $projectIndex) = explode('_',  $setting->value);
-                if($setting->key == 'hourPoint')        $hourIndex  = $setting->value;
-                if($setting->key == 'URAndSR')          $URAndSR    = $setting->value;
-                if($setting->key == 'URSRName')         $URSRName   = $setting->value;
+                if($setting->key == 'productProject') list($productKey, $projectKey) = explode('_',  $setting->value);
+                if($setting->key == 'hourPoint')      $hourKey  = $setting->value;
+                if($setting->key == 'URSR')           $URSR = $setting->value;
             }
 
             $model = new stdclass();
             $model->model = 'scrum';
             if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
-            if(isset($model->model) && $model->model == 'waterfall') $projectIndex = 2;
+            if(isset($model->model) && $model->model == 'waterfall') $projectKey = 2;
 
-            /* Set productCommon, projectCommon, hourCommon and planCommon. Default english lang. */
-            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productIndex]) ? $this->config->productCommonList[$this->clientLang][(int)$productIndex] : $this->config->productCommonList['en'][(int)$productIndex];
-            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectIndex]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectIndex] : $this->config->projectCommonList['en'][(int)$$projectIndex];
-            $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourIndex]  : $this->config->hourPointCommonList['en'][(int)$hourIndex];
-            $lang->planCommon    = isset($this->config->planCommonList[$this->clientLang][(int)$planIndex])       ? $this->config->planCommonList[$this->clientLang][(int)$planIndex]       : $this->config->planCommonList['en'][(int)$planIndex];
+            /* Set productCommon, projectCommon and hourCommon. Default english lang. */
+            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productKey]) ? $this->config->productCommonList[$this->clientLang][(int)$productKey] : $this->config->productCommonList['en'][(int)$productKey];
+            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectKey] : $this->config->projectCommonList['en'][(int)$$projectKey];
+            $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
-            $config->URAndSR  = $URAndSR;
-            $config->URSRName = $URSRName;
+            $config->URSR = $URSR;
 
             if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
             {
                 /* Get story concept in project and product. */
-                $URLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URList' and lang = \"{$this->clientLang}\"")->fetchAll();
-                $SRLists = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'SRList' and lang = \"{$this->clientLang}\"")->fetchAll();
+                $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and lang = \"{$this->clientLang}\"")->fetchAll();
 
                 $URList  = array();
                 $SRList  = array();
-                foreach($URLists as $pair) $URList[$pair->key] = $pair->value;
-                foreach($SRLists as $pair) $SRList[$pair->key] = $pair->value;
+                foreach($URSRList as $id => $value) 
+                {
+                    $URSR = json_decode($value->value);
+                    $URList[$value->key] = $URSR->URName;
+                    $SRList[$value->key] = $URSR->SRName;
+                }
 
-                $lang->URCommon = zget($URList, $config->URSRName, $config->URCommonList[$this->clientLang]);
-                $lang->SRCommon = zget($SRList, $config->URSRName, $config->SRCommonList[$this->clientLang]);
-                $lang->projectURCommon = $config->URCommonList[$this->clientLang];
-                $lang->productURCommon = $config->URCommonList[$this->clientLang];
-                $lang->projectSRCommon = $config->SRCommonList[$this->clientLang];
-                $lang->productSRCommon = $config->SRCommonList[$this->clientLang];
+                $lang->URCommon = zget($URList, $config->URSR);
+                $lang->SRCommon = zget($SRList, $config->URSR);
+                $lang->projectURCommon = $lang->URCommon;
+                $lang->productURCommon = $lang->URCommon;
+                $lang->projectSRCommon = $lang->SRCommon;
+                $lang->productSRCommon = $lang->SRCommon;
 
                 $projectID = $this->session->PRJ;
                 if($projectID)
                 {    
                     $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
-                    $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
-                    $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
+                    $lang->projectURCommon = zget($URList, $storyConcept->storyConcept, $lang->URCommon);
+                    $lang->projectSRCommon = zget($SRList, $storyConcept->storyConcept, $lang->SRCommon);
                 }    
 
                 $productID = $this->session->product;
                 if($productID)
                 {    
                     $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
-                    $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $config->URCommonList[$this->clientLang]);
-                    $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $config->SRCommonList[$this->clientLang]);
+                    $lang->productURCommon = zget($URList, $storyConcept->storyConcept, $lang->URCommon);
+                    $lang->productSRCommon = zget($SRList, $storyConcept->storyConcept, $lang->SRCommon);
                 }
             }
         }
