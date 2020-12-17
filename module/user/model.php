@@ -880,7 +880,7 @@ class userModel extends model
             $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
 
-        /* Get can manage programs by user. */
+        /* Get can manage projects by user. */
         $PRJAdminGroupID   = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
         $canManageProjects = $this->dao->select('PRJ')->from(TABLE_USERGROUP)->where('`group`')->eq($PRJAdminGroupID)->andWhere('account')->eq($account)->fetch('PRJ');
         return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects);
@@ -1819,7 +1819,7 @@ class userModel extends model
             }
         }
 
-        /* Get all programs user view. */
+        /* Get all projects user view. */
         $stmt  = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
         if(empty($users) and $authedUsers)
         {
@@ -1985,7 +1985,7 @@ class userModel extends model
             }
         }
 
-        /* Get all programs user view. */
+        /* Get all sprints user view. */
         $stmt  = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
         if(empty($users) and $authedUsers)
         {
