@@ -613,20 +613,12 @@ class customModel extends model
         $this->setting->setItem('system.custom.sprintConcept', $this->post->sprintConcept);
 
         /* Change block title. */
-        $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0_0';
+        $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
         $newConfig = $this->post->sprintConcept;
-
-        list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
-        list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
-
-        foreach($this->config->productCommonList as $clientLang => $productCommonList)
-        {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
-        }
 
         foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
         {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldConfig]}', '{$projectCommonList[$newConfig]}')")->where('source')->eq('project')->exec();
         }
     }
 
