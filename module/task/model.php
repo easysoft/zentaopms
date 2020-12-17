@@ -110,7 +110,7 @@ class taskModel extends model
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
-                ->checkIF($task->deadline != '0000-00-00', 'deadline', 'ge', $task->estStarted)
+                ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
                 ->exec();
 
             if(dao::isError()) return false;
@@ -313,7 +313,7 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
-            if($task->deadline != '0000-00-00' and $task->deadline < $task->estStarted)
+            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
             {
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
                 return false;
@@ -883,7 +883,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
-            ->checkIF($task->deadline != '0000-00-00', 'deadline', 'ge', $task->estStarted)
+            ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
@@ -1081,7 +1081,7 @@ class taskModel extends model
                     $task->closedBy   = $this->app->user->account;
                     $task->closedDate = $now;
                 }
-                if($task->closedReason == 'cancel' and $task->finishedDate == '0000-00-00 00:00:00') $task->finishedDate = '';
+                if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = '';
                 break;
             case 'wait':
                 if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
@@ -1485,7 +1485,7 @@ class taskModel extends model
 
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF($oldTask->realStarted == '0000-00-00 00:00:00', 'realStarted', $now)
+            ->setIF(helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -2326,7 +2326,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
-            if($task->deadline != '0000-00-00')
+            if(!helper::isZeroDate($task->deadline))
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;

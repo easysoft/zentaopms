@@ -20,7 +20,7 @@
       <td class='text-left' title='<?php echo $bug->title?>'><?php echo html::a($sysURL . $this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $bug->openedBy);?></td>
       <td><?php echo zget($users, $bug->resolvedBy);?></td>
-      <td><?php if($bug->resolvedDate != '0000-00-00 00:00:00') echo substr($bug->resolvedDate, 2);?></td>
+      <td><?php if(!helper::isZeroDate($bug->resolvedDate)) echo substr($bug->resolvedDate, 2);?></td>
       <?php $status = $this->processStatus('bug', $bug);?>
       <td title='<?php echo $status;?>'>
         <span class="status-bug status-<?php echo $bug->status?>"><?php echo $status;?></span>

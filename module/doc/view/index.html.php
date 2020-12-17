@@ -40,7 +40,7 @@
                   <td class="c-name" title="<?php echo $doc->title?>"><?php echo $doc->title;?></td>
                   <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-                  <td class="c-datetime"><?php echo $doc->editedDate == '0000-00-00 00:00:00' ? formatTime($doc->addedDate, 'Y-m-d') : formatTime($doc->editedDate, 'Y-m-d');?></td>
+                  <td class="c-datetime"><?php echo helper::isZeroDate($doc->editedDate) ? formatTime($doc->addedDate, 'Y-m-d') : formatTime($doc->editedDate, 'Y-m-d');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>

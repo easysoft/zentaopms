@@ -80,8 +80,8 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-          <td><?php if($task->estStarted  != '0000-00-00') echo $task->estStarted;?></td>
-          <td <?php if(!empty($task->delay)) echo "class='delayed'";?>><?php if($task->deadline != '0000-00-00') echo $task->deadline;?></td>
+          <td><?php if(!helper::isZeroDate($task->estStarted)) echo $task->estStarted;?></td>
+          <td <?php if(!empty($task->delay)) echo "class='delayed'";?>><?php if(!helper::isZeroDate($task->deadline)) echo $task->deadline;?></td>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>

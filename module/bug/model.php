@@ -406,9 +406,9 @@ class bugModel extends model
     public function checkDelayBug($bug)
     {
         // Delayed or not?.
-        if($bug->deadline != '0000-00-00')
+        if(!helper::isZeroDate($bug->deadline))
         {
-            if($bug->resolvedDate and substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+            if($bug->resolvedDate and !helper::isZeroDate($bug->resolvedDate))
             {
                 $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
             }
