@@ -33,7 +33,7 @@
           <td class='text-left'><?php echo $URSR['URName'];?></td>
           <td class='text-left'><?php echo $URSR['SRName'];?></td>
           <td class='text-center'><?php echo zget($lang->custom->tipRangeList, $URSR['system'], '');?></td>
-          <td class='text-center'><?php if($key == $config->custom->URSRCommon) echo "<i class='icon icon-check'></i>";?></td>
+          <td class='text-center'><?php if($key == $config->custom->URSR) echo "<i class='icon icon-check'></i>";?></td>
           <td class='c-actions'>
             <?php $disabled = $URSR['system'] ? "disabled=disabled" : '';?>
             <?php if(common::hasPriv('custom', 'setDefaultConcept'))  echo html::a($this->createLink('custom', 'setDefaultConcept', "id=$key"), "<i class='icon icon-hand-right'></i>", 'hiddenwin', "class='btn' title={$lang->custom->setDefaultConcept}");?>
