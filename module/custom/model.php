@@ -476,13 +476,18 @@ class customModel extends model
      */
     public function getURSRPairs()
     {
-        $this->app->loadLang('custom');
+        $lang = $this->app->getClientLang();
+        $langData = $this->dao->select('`key`, `value`, system')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->fetchAll();
 
         $URSRPairs = array();
-        foreach($this->lang->custom->URSRList as $key => $content)
+        foreach($langData as $id => $content)
         {
-            $content = json_decode($content);
-            $URSRPairs[$key] = $content->URName . '/' . $content->SRName;
+            $value = json_decode($content->value);
+            $URSRPairs[$content->key] = $value->URName . '/' . $value->SRName;
         }
 
         return $URSRPairs;
