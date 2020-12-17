@@ -883,9 +883,11 @@ class extensionModel extends model
         $today       = date('Y-m-d');
         $expiredDate = '';
 
-        $licenceOrderFiles = glob($licencePath . 'order*' . $extension->code . $extension->version . '.txt');
+        $licenceOrderFiles = glob($licencePath . 'order*.txt');
         foreach($licenceOrderFiles as $licenceOrderFile)
         {
+            if(stripos($licenceOrderFile, "{$extension->code}{$extension->version}.txt") === false) continue;
+
             $order = file_get_contents($licenceOrderFile);
             $order = unserialize($order);
             if($order->type != 'life')
