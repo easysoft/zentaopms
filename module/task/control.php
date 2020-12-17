@@ -23,6 +23,14 @@ class task extends control
         $this->loadModel('project');
         $this->loadModel('story');
         $this->loadModel('tree');
+
+        /* Add required fields to waterfall project. */
+        $project = $this->project->getByID($this->session->PRJ);
+        if(!empty($project) && $project->model == 'waterfall')
+        {
+            $this->config->task->create->requiredFields .= ',estStarted,deadline';
+            $this->config->task->edit->requiredFields   .= ',estStarted,deadline';
+        }
     }
 
     /**

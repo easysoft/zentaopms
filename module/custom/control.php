@@ -451,7 +451,7 @@ class custom extends control
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
 
-        die(js::reload('parent.parent'));
+        die(js::reload('parent'));
     }
 
     /**
@@ -476,7 +476,22 @@ class custom extends control
                 ->andWhere('`key`')->eq($key) 
                 ->exec();
 
-            die(js::reload('parent.parent'));
+            $defaultConcept = $this->dao->select('`value`')->from(TABLE_CONFIG)
+                ->where('module')->eq('custom')
+                ->andWhere('`key`')->eq('URSR')
+                ->fetch('value');
+
+            /* Stay default concept. */
+            if($defaultConcept == $key)
+            {
+                $this->dao->update(TABLE_CONFIG)
+                    ->set('`value`')->eq(1)
+                    ->where('module')->eq('custom')
+                    ->andWhere('`key`')->eq('URSR')
+                    ->exec();
+            }
+
+            die(js::reload('parent'));
         }
     }
 

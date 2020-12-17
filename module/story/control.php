@@ -45,7 +45,7 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
-        $this->replaceURLang($type);
+        $this->story->replaceURLang($type);
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
@@ -307,7 +307,7 @@ class story extends control
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $this->replaceURLang($type);
+        $this->story->replaceURLang($type);
 
         /* Check can subdivide or not. */
         if($storyID)
@@ -450,7 +450,7 @@ class story extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
         $this->product->setMenu($products, $product->id, $story->branch);
 
-        $this->replaceURLang($story->type);
+        $this->story->replaceURLang($story->type);
 
         /* Assign. */
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
@@ -461,58 +461,6 @@ class story extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
-    }
-
-    /**
-     * Replace requirement story lang.
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function replaceURLang($type)
-    {
-        if($type == 'requirement')
-        {   
-            $storyLang = $this->lang->story;
-            $SRCommon  = $this->lang->productSRCommon;
-            $URCommon  = $this->lang->productURCommon;
-
-            $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
-            $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);
-            $storyLang->changed            = str_replace($SRCommon, $URCommon, $storyLang->changed);
-            $storyLang->assignAction       = str_replace($SRCommon, $URCommon, $storyLang->assignAction);
-            $storyLang->reviewAction       = str_replace($SRCommon, $URCommon, $storyLang->reviewAction);
-            $storyLang->subdivideAction    = str_replace($SRCommon, $URCommon, $storyLang->subdivideAction);
-            $storyLang->closeAction        = str_replace($SRCommon, $URCommon, $storyLang->closeAction);
-            $storyLang->activateAction     = str_replace($SRCommon, $URCommon, $storyLang->activateAction);
-            $storyLang->deleteAction       = str_replace($SRCommon, $URCommon, $storyLang->deleteAction);
-            $storyLang->view               = str_replace($SRCommon, $URCommon, $storyLang->view);
-            $storyLang->linkStory          = str_replace($SRCommon, $URCommon, $storyLang->linkStory);
-            $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
-            $storyLang->exportAction       = str_replace($SRCommon, $URCommon, $storyLang->exportAction);
-            $storyLang->zeroCase           = str_replace($SRCommon, $URCommon, $storyLang->zeroCase);
-            $storyLang->zeroTask           = str_replace($SRCommon, $URCommon, $storyLang->zeroTask);
-            $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
-            $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
-            $storyLang->source             = str_replace($SRCommon, $URCommon, $storyLang->source);
-            $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
-            $storyLang->type               = str_replace($SRCommon, $URCommon, $storyLang->type);
-            $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
-            $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
-            $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);
-            $storyLang->childStories       = str_replace($SRCommon, $URCommon, $storyLang->childStories);
-            $storyLang->duplicateStory     = str_replace($SRCommon, $URCommon, $storyLang->duplicateStory);
-            $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
-            $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
-            $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
-            $storyLang->allStories         = str_replace($SRCommon, $URCommon, $storyLang->allStories);
-            $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
-            $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
-            $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
-            $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
-            $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
-        }
     }
 
     /**
@@ -555,7 +503,7 @@ class story extends control
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent); 
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
-        $this->replaceURLang($story->type);
+        $this->story->replaceURLang($story->type);
 
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
@@ -579,7 +527,7 @@ class story extends control
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-        $this->replaceURLang($storyType);
+        $this->story->replaceURLang($storyType);
 
         /* Load model. */
         $this->loadModel('productplan');
@@ -806,7 +754,7 @@ class story extends control
         $story   = $this->story->getById($storyID, $version, true);
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->replaceURLang($story->type);
+        $this->story->replaceURLang($story->type);
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
@@ -928,7 +876,7 @@ class story extends control
         $story   = $this->story->getById($storyID);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
-        $this->replaceURLang($story->type);
+        $this->story->replaceURLang($story->type);
 
         /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
@@ -1013,7 +961,7 @@ class story extends control
         $story   = $this->story->getById($storyID);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
-        $this->replaceURLang($story->type);
+        $this->story->replaceURLang($story->type);
 
         /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
@@ -1703,6 +1651,8 @@ class story extends control
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
+
+        $this->story->replaceURLang($storyType);
         $this->products = $this->product->getPairs();
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $storyType, $branchID); 
         $this->product->setMenu($this->products, $productID, $branchID);
