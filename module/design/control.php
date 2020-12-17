@@ -110,7 +110,7 @@ class design extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
         $this->view->productID  = $productID;
-        $this->view->program    = $this->loadModel('project')->getByID($this->session->PRJ);
+        $this->view->project    = $this->loadModel('program')->getPRJByID($this->session->PRJ);
 
         $this->display();
     }
@@ -214,9 +214,9 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
         $this->view->position[] = $this->lang->design->edit;
 
-        $this->view->design   = $design;
-        $this->view->program  = $this->loadModel('project')->getByID($this->session->PRJ);
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($design->product);
+        $this->view->design  = $design;
+        $this->view->project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
 
         $this->display();
     }
@@ -236,9 +236,9 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        /* Get program and date. */
-        $program = $this->loadModel('project')->getByID($this->session->PRJ);
-        $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $program->begin;
+        /* Get project and date. */
+        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $project->begin;
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
         /* Get the repository information through the repoID. */

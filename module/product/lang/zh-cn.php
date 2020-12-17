@@ -34,7 +34,7 @@ $lang->product->exportAction = "导出{$lang->productCommon}";
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
 
-$lang->product->plans       = "{$lang->planCommon}数";
+$lang->product->plans       = "计划数";
 $lang->product->releases    = '发布数';
 $lang->product->docs        = '文档数';
 $lang->product->bugs        = '相关Bug';
@@ -47,7 +47,7 @@ $lang->product->project     = $lang->projectCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有与此产品关联的{$lang->projectCommon}";
 
-$lang->product->currentExecution      = '当前迭代/阶段';
+$lang->product->currentExecution      = "当前{$lang->sprintCommon}";
 $lang->product->activeStories         = "激活{$lang->productSRCommon}";
 $lang->product->activeStoriesTitle    = "激活{$lang->productSRCommon}";
 $lang->product->changedStories        = "已变更{$lang->productSRCommon}";
@@ -90,7 +90,7 @@ $lang->product->release        = '发布';
 $lang->product->allRelease     = '所有发布';
 $lang->product->maintain       = '维护中';
 $lang->product->latestDynamic  = '最新动态';
-$lang->product->plan           = $lang->planCommon;
+$lang->product->plan           = '计划';
 $lang->product->iteration      = '版本迭代';
 $lang->product->iterationInfo  = '迭代 %s 次';
 $lang->product->iterationView  = '查看详情';
@@ -109,7 +109,7 @@ $lang->product->changedStory = '已变更';
 $lang->product->willClose    = '待关闭';
 $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
-$lang->product->unplan       = "未{$lang->planCommon}";
+$lang->product->unplan       = "未计划";
 $lang->product->viewByUser   = '按用户查看';
 
 $lang->product->allStory             = '所有';

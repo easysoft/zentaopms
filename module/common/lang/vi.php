@@ -32,7 +32,6 @@ $lang->changePassword  = 'Mật khẩu';
 $lang->runInfo         = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement       = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
 $lang->designedByAIUX  = "<a href='https://api.zentao.pm/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>AIUX</strong></a>";
-$lang->executionCommon = 'Execution';
 
 $lang->reset        = 'Thiết lập lại';
 $lang->cancel       = 'Hủy';
@@ -111,8 +110,10 @@ $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
 $lang->workingHour = 'giờ';
 
-$lang->generalUR = 'UR/Epic';
-$lang->generalSR = 'SR/Story';
+$lang->generalUR       = 'UR/Epic';
+$lang->generalSR       = 'SR/Story';
+$lang->executionCommon = 'Execution';
+$lang->sprintCommon    = 'Iteration/Phase';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -172,6 +173,7 @@ $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
+$lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->module      = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->viewMenu->view        = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->whitelist   = array('link' => 'Whitelist|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
@@ -187,28 +189,23 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->estimate = array('link' => 'Estimate|custom|estimate|');
-$lang->system->menu->stage    = array('link' => 'Stage|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->subject  = array('link' => 'Subject|subject|browse|');
-$lang->system->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
-$lang->system->menu->custom   = array('link' => 'Custom|custom|configurewaterfall|');
-$lang->system->dividerMenu = ',auditcl,subject,';
+$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
+$lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
+$lang->system->menu->waterfall = array('link' => 'Waterfall Model|custom|estimate|', 'subModule' => 'stage');
 
-if(isset($_COOKIE['systemModel']) and $_COOKIE['systemModel'] == 'scrum')
-{
-    $lang->system->menu = new stdclass();
-    $lang->system->menu->subject = array('link' => 'Subject|subject|browse|');
-    $lang->system->menu->holiday = array('link' => 'Holiday|holiday|browse|');
-    $lang->system->menu->custom  = array('link' => 'Custom|custom|configurescrum|');
+$lang->subject = new stdclass();
+$lang->subject->menu = new stdclass();
+$lang->subject->menu->subject = array('link' => 'Subject|subject|browse|');
+$lang->subject->menu->holiday = array('link' => 'Holiday|holiday|browse|');
+$lang->subject->menu->concept = array('link' => 'Story Concept|custom|browsestoryconcept|');
 
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> System|subject|browse|';
-    unset($lang->system->dividerMenu);
-}
+$lang->holiday = new stdclass();
+$lang->holiday->menu = $lang->subject->menu;
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
-$lang->stage->menu->browse  = array('link' => 'Stage List|stage|browse|', 'alias' => 'create,edit,batchcreate');
-$lang->stage->menu->settype = 'Stage Type|stage|settype|';
+$lang->stage->menu->estimate = array('link' => 'Estimate|custom|estimate');
+$lang->stage->menu->stage    = array('link' => 'Stage|stage|settype', 'subModule' => 'stage');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -955,6 +952,6 @@ $lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|produc
 $lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

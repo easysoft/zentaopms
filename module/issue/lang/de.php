@@ -12,7 +12,7 @@
 $lang->issue->common            = 'Issue';
 $lang->issue->browse            = 'List';
 $lang->issue->resolvedBy        = 'Resolved By';
-$lang->issue->program           = 'Linked Project';
+$lang->issue->project           = 'Linked Project';
 $lang->issue->title             = 'Title';
 $lang->issue->desc              = 'Description';
 $lang->issue->pri               = 'Priority';

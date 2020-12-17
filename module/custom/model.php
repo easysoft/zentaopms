@@ -482,7 +482,7 @@ class customModel extends model
         foreach($this->lang->custom->URSRList as $key => $content)
         {
             $content = json_decode($content);
-            $URSRPairs[$key] = $content->SRName . '/' . $content->URName;
+            $URSRPairs[$key] = $content->URName . '/' . $content->SRName;
         }
 
         return $URSRPairs;
@@ -497,13 +497,21 @@ class customModel extends model
     public function getURSRList()
     {
         $this->app->loadLang('custom');
+        $lang = $this->app->getClientLang();
+
+        $langData = $this->dao->select('`key`, `value`, system')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->fetchAll();
 
         $URSRList = array();
-        foreach($this->lang->custom->URSRList as $key => $content)
+        foreach($langData as $id => $content)
         {
-            $content = json_decode($content);
-            $URSRList[$key]['SRName'] = $content->SRName;
-            $URSRList[$key]['URName'] = $content->URName;
+            $value = json_decode($content->value);
+            $URSRList[$content->key]['SRName'] = $value->SRName;
+            $URSRList[$content->key]['URName'] = $value->URName;
+            $URSRList[$content->key]['system'] = $content->system;
         }
 
         return $URSRList;
@@ -606,7 +614,7 @@ class customModel extends model
     }
 
     /**
-     * Set ur and SR concept.
+     * Set UR and SR concept.
      *
      * @access public
      * @return bool
@@ -636,9 +644,38 @@ class customModel extends model
             $value   = json_encode($URSRList);
             $maxKey += 1;
 
-            $this->setItem("$lang.custom.URSRList.{$maxKey}.1", $value);
+            $this->setItem("$lang.custom.URSRList.{$maxKey}.0", $value);
         }
 
+        return true;
+    }
+
+    /**
+     * Edit UR and SR concept.
+     *
+     * @param  int $key 
+     * @access public
+     * @return bool
+     */
+    public function updateURAndSR($key = 0)
+    {
+        $lang = $this->app->getClientLang();
+        $data = fixer::input('post')->get();
+
+        if(!$data->SRName || !$data->URName) return false;
+
+        $URSRList = new stdclass(); 
+        $URSRList->SRName = $data->SRName;
+        $URSRList->URName = $data->URName;
+
+        $value = json_encode($URSRList);
+        $this->dao->update(TABLE_LANG)->set('value')->eq($value)
+            ->where('`key`')->eq($key)
+            ->andWhere('section')->eq('URSRList')
+            ->andWhere('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->exec();
+        
         return true;
     }
 

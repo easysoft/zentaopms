@@ -139,6 +139,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> wurde geänder
 $lang->action->desc->diff3          = 'Dateiname %s wurde geändert zu %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Verknüpft mit <strong>$extra</strong> von <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
+$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed。' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -434,19 +435,19 @@ $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 
 /* Object type. */
-$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = 'Project';
-$lang->action->search->objectTypeList['execution']   = 'Sprint/Stage';
+$lang->action->search->objectTypeList['execution']   = $lang->sprintCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = 'Fälle'; 
+$lang->action->search->objectTypeList['case']        = 'Fälle';
 $lang->action->search->objectTypeList['caseresult']  = 'Fallergebnisse';
 $lang->action->search->objectTypeList['stepresult']  = 'Fallschritte';
-$lang->action->search->objectTypeList['story']       = 'UR/SR';
-$lang->action->search->objectTypeList['task']        = 'Aufgaben'; 
-$lang->action->search->objectTypeList['testtask']    = 'Testaufgaben';     
-$lang->action->search->objectTypeList['user']        = 'Benutzer'; 
+$lang->action->search->objectTypeList['story']       = 'Story';
+$lang->action->search->objectTypeList['task']        = 'Aufgaben';
+$lang->action->search->objectTypeList['testtask']    = 'Testaufgaben';
+$lang->action->search->objectTypeList['user']        = 'Benutzer';
 $lang->action->search->objectTypeList['doc']         = 'Dok';
 $lang->action->search->objectTypeList['doclib']      = 'Dok Bibliothek';
 $lang->action->search->objectTypeList['todo']        = 'Todo';

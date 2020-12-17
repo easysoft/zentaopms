@@ -442,21 +442,71 @@ class custom extends control
     }
 
     /**
+     * Edit story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function editStoryConcept($key = 0)
+    {
+        if($_POST)
+        {   
+            $result = $this->custom->updateURAndSR($key);
+            if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }   
+
+        $lang = $this->app->getClientLang();
+        $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->andWhere('`key`')->eq($key)
+            ->fetch('value');
+
+        $this->view->URSR = json_decode($URSR);
+        $this->display();
+    }
+
+    /**
      * Delete story concept.
      * 
      * @access public
      * @return void
      */
-    public function deleteStoryConcept($key = 0)
+    public function setDefaultConcept($key = 0)
     {
-        $lang = $this->app->getClientLang();
-        $this->dao->delete()->from(TABLE_LANG)
-            ->where('lang')->eq($lang) 
-            ->andWhere('section')->eq('URSRList') 
-            ->andWhere('`key`')->eq($key) 
-            ->exec();
+        $this->loadModel('setting')->setItem('system.custom.URSR', $key);
 
         die(js::reload('parent.parent'));
+    }
+
+    /**
+     * Delete story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteStoryConcept($key = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), '');
+            die;
+        }
+        else
+        {
+            $lang = $this->app->getClientLang();
+            $this->dao->delete()->from(TABLE_LANG)
+                ->where('lang')->eq($lang) 
+                ->andWhere('section')->eq('URSRList') 
+                ->andWhere('`key`')->eq($key) 
+                ->exec();
+
+            die(js::reload('parent.parent'));
+        }
     }
 
     /**

@@ -47,7 +47,7 @@ $lang->product->project     = 'Danh sách '.$lang->projectCommon;
 $lang->product->build       = 'Danh sách bản dựng';
 $lang->product->projectInfo = "{$lang->projectCommon} đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
-$lang->product->currentExecution      = 'Chế độ lặp hiện thời';
+$lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Kích hoạt [S]';
 $lang->product->activeStoriesTitle    = 'Kích hoạt câu chuyện';
 $lang->product->changedStories        = 'Đã thay đổi [S]';

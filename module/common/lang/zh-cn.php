@@ -32,7 +32,6 @@ $lang->changePassword   = '更改密码';
 $lang->runInfo          = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement        = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX   = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
-$lang->executionCommon  = '执行';
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -113,6 +112,8 @@ $lang->workingHour = '工时';
 
 $lang->generalUR = '用需/史诗';
 $lang->generalSR = '软需/故事';
+$lang->executionCommon = '执行';
+$lang->sprintCommon    = '迭代/阶段';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -217,7 +218,7 @@ $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
-$lang->searchObjects['productplan'] = $lang->productCommon . $lang->planCommon;
+$lang->searchObjects['productplan'] = $lang->productCommon . '计划';
 $lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['caselib']     = '用例库';
@@ -286,7 +287,7 @@ $lang->scrumproduct = new stdclass();
 $lang->scrumproduct->menu = new stdclass();
 
 $lang->scrumproduct->menu->story   = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->plan    = array('link' => "{$lang->planCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->scrumproduct->menu->plan    = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 //$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->scrumproduct->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -943,7 +944,7 @@ $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommo
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
-$lang->waterfallproduct->menu->plan  = array('link' => "{$lang->planCommon}|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
+$lang->waterfallproduct->menu->plan  = array('link' => "计划|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
 $lang->waterfallproduct->menu->story = '需求|product|browse|product={PRODUCT}';
 $lang->waterfallproduct->menu->track = '跟踪矩阵|story|track|product={PRODUCT}';
 

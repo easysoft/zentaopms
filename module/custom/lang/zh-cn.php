@@ -19,7 +19,7 @@ $lang->custom->score              = '积分';
 $lang->custom->timezone           = '时区';
 $lang->custom->scoreReset         = '重置积分';
 $lang->custom->scoreTitle         = '积分功能';
-$lang->custom->project            = $lang->projectCommon;
+$lang->custom->project            = $lang->sprintCommon;
 $lang->custom->product            = $lang->productCommon;
 $lang->custom->estimate           = '估算配置';
 $lang->custom->estimateConfig     = '估算配置';
@@ -38,15 +38,16 @@ $lang->custom->SRStory            = "软件需求";
 $lang->custom->epic               = "史诗";
 $lang->custom->scrumStory         = "故事";
 $lang->custom->waterfallCommon    = "瀑布";
+$lang->custom->buildin            = "系统内置";
+$lang->custom->isDefault          = '是否默认';
+$lang->custom->editStoryConcept   = "编辑需求概念";
 $lang->custom->setStoryConcept    = "设置需求概念";
+$lang->custom->setDefaultConcept  = "设置默认概念";
 $lang->custom->browseStoryConcept = "需求概念列表";
 $lang->custom->deleteStoryConcept = "删除需求概念";
 $lang->custom->configureScrum     = "敏捷模型自定义";
 $lang->custom->URConcept          = "用需概念";
 $lang->custom->SRConcept          = "软需概念";
-
-$lang->custom->object['program'] = '项目';
-$lang->custom->program->fields['unitList'] = '预算单位';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -69,11 +70,12 @@ $lang->custom->tipNotEmpty      = '提示语不能为空';
 
 $lang->custom->numberError = '区间必须大于零';
 
-$lang->custom->closedProject = '已关闭' . $lang->projectCommon;
+$lang->custom->closedProject = '已关闭' . $lang->sprintCommon;
 $lang->custom->closedProduct = '已关闭' . $lang->productCommon;
 
+$lang->custom->object['program'] = '项目';
 $lang->custom->object['product']  = $lang->productCommon;
-$lang->custom->object['project']  = $lang->projectCommon;
+$lang->custom->object['project']  = $lang->sprintCommon;
 $lang->custom->object['story']    = $lang->productSRCommon;
 $lang->custom->object['task']     = '任务';
 $lang->custom->object['bug']      = 'Bug';
@@ -82,6 +84,9 @@ $lang->custom->object['testtask'] = '版本';
 $lang->custom->object['todo']     = '待办';
 $lang->custom->object['user']     = '用户';
 $lang->custom->object['block']    = '区块';
+
+$lang->custom->program = new stdClass();
+$lang->custom->program->fields['unitList'] = '预算单位';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '优先级';
@@ -155,8 +160,9 @@ $lang->custom->notice->required                    = '页面提交时，选中�
 $lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->productSRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
-$lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->projectCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
+$lang->custom->notice->readOnlyOfProject           = '禁止修改后，已关闭' . $lang->sprintCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
 $lang->custom->notice->URSREmpty                   = '自定义需求名称不能为空！';
+$lang->custom->notice->confirmDelete               = '您确定要删除吗？';
 
 $lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -204,41 +210,22 @@ $lang->custom->CRProject[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
-$lang->custom->moduleName['project']     = $lang->projectCommon;
+$lang->custom->moduleName['project']     = $lang->sprintCommon;
 
 $lang->custom->conceptQuestions['overview']         = "1. 下述哪种组合方式更适合您公司的管理现状？";
 $lang->custom->conceptQuestions['story']            = "2. 您公司是在使用需求概念还是用户故事概念？";
 $lang->custom->conceptQuestions['requirementpoint'] = "3. 您公司是在使用工时还是功能点来做规模估算？";
 $lang->custom->conceptQuestions['storypoint']       = "3. 您公司是在使用工时还是故事点来做规模估算？";
 
-$lang->custom->conceptOptions = new stdclass;
-
-$lang->custom->conceptOptions->story = array();
+$lang->custom->conceptOptions             = new stdclass;
+$lang->custom->conceptOptions->story      = array();
 $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
-$lang->custom->conceptOptions->hourPoint = array();
+$lang->custom->conceptOptions->hourPoint      = array();
 $lang->custom->conceptOptions->hourPoint['0'] = '故事点';
 $lang->custom->conceptOptions->hourPoint['1'] = '功能点';
 $lang->custom->conceptOptions->hourPoint['2'] = '代码行';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';
-
-$lang->custom->URList[1] = '用户需求';
-$lang->custom->URList[2] = '用需';
-$lang->custom->URList[3] = '需求';
-$lang->custom->URList[4] = '史诗';
-
-$lang->custom->SRList[1] = '软件需求';
-$lang->custom->SRList[2] = '软需';
-$lang->custom->SRList[3] = '故事';
-$lang->custom->SRList[4] = '故事';
-
-$lang->custom->URSRList[1] = '用户需求/软件需求';
-$lang->custom->URSRList[2] = '用需/软需';
-$lang->custom->URSRList[3] = '需求/故事';
-$lang->custom->URSRList[4] = '史诗/故事';
-
-$lang->custom->URTips = '请输入如：用户需求';
-$lang->custom->SRTips = '请输入如：软件需求';

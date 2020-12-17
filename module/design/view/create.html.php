@@ -20,14 +20,14 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <?php if($program->product == 'multiple'):?>
+          <?php if($project->product == 'multiple'):?>
           <tr>
             <th class='w-120px'><?php echo $lang->design->product;?></th>
             <td><?php echo html::select('product', $products, $productID, "class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <?php endif;?>
-          <?php if($program->product == 'single') echo html::hidden('product', $productID);?>
+          <?php if($project->product == 'single') echo html::hidden('product', $productID);?>
           <tr>
             <th class='w-120px'><?php echo $lang->design->story;?></th>
             <td><?php echo html::select('story', empty($stories) ? '' : $stories, '', "class='form-control chosen'");?></td>

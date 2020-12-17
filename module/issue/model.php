@@ -80,7 +80,7 @@ class issueModel extends model
     /**
      * Get issue list data.
      *
-     * @param  int       $programID
+     * @param  int       $projectID
      * @param  string    $browseType bySearch|open|assignTo|closed|suspended|canceled
      * @param  int       $queryID
      * @param  string    $orderBy
@@ -88,7 +88,7 @@ class issueModel extends model
      * @access public
      * @return object
      */
-    public function getList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $issueQuery = '';
         if($browseType == 'bysearch')
@@ -105,7 +105,7 @@ class issueModel extends model
 
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
-            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
+            ->beginIF($projectID)->andWhere('PRJ')->eq($projectID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
@@ -122,18 +122,18 @@ class issueModel extends model
     /**
      * Get the issue in the block.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @param  string $browseType open|assignto|closed|suspended|canceled
      * @param  int    $limit
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getBlockIssues($programID = 0, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
+    public function getBlockIssues($projectID = 0, $browseType = 'all', $limit = 15, $orderBy = 'id_desc')
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
-            ->beginIF($programID)->andWhere('PRJ')->eq($programID)->fi()
+            ->beginIF($projectID)->andWhere('PRJ')->eq($projectID)->fi()
             ->beginIF($browseType == 'open')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'assignto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
