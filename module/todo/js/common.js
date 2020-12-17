@@ -35,7 +35,7 @@ function loadList(type, id)
     }
     else if(type == 'story')
     {
-        link = createLink('story', 'ajaxGetUserStorys', param);
+        link = createLink('story', 'ajaxGetUserStories', param);
     }
 
     if(type == 'bug' || type == 'task' || type == 'story')

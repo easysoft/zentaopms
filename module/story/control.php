@@ -1997,22 +1997,21 @@ class story extends control
     }
 
     /**
-     * AJAX: get storys of a user in html select.
+     * AJAX: get stories of a user in html select.
      *
      * @param  int    $userID
      * @param  string $id       the id of the select control.
      * @access public
      * @return string
      */
-    public function ajaxGetUserStorys($userID = '', $id = '')
+    public function ajaxGetUserStories($userID = '', $id = '')
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
-        $account = $user->account;
-        $storys  = $this->story->getUserStoryPairs($account);
+        $stories = $this->story->getUserStoryPairs($user->account);
 
-        if($id) die(html::select("storys[$id]", $storys, '', 'class="form-control"'));
-        die(html::select('story', $storys, '', 'class=form-control'));
+        if($id) die(html::select("stories[$id]", $stories, '', 'class="form-control"'));
+        die(html::select('story', $stories, '', 'class=form-control'));
     }
 
     /**
