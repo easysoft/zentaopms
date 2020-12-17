@@ -139,6 +139,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. Th
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, liên kết tới <strong>$extra</strong> bởi <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
+$lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -438,7 +439,7 @@ $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = 'Project';
-$lang->action->search->objectTypeList['execution']   = 'Sprint/Stage';
+$lang->action->search->objectTypeList['execution']   = $lang->sprintCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = 'Tình huống'; 
 $lang->action->search->objectTypeList['caseresult']  = 'Kết quả tình huống';

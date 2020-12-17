@@ -32,7 +32,6 @@ $lang->changePassword   = '更改密碼';
 $lang->runInfo          = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 $lang->agreement        = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 $lang->designedByAIUX   = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾體驗</strong></a>";
-$lang->executionCommon  = '執行';
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -113,6 +112,8 @@ $lang->workingHour = '工時';
 
 $lang->generalUR = '用需/史詩';
 $lang->generalSR = '軟需/故事';
+$lang->executionCommon = '執行';
+$lang->sprintCommon    = '迭代/階段';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -125,8 +126,8 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模組';
 
 global $config;
-$URCommon = zget($lang, 'URCommon', "用戶需求");
-$SRCommon = zget($lang, 'SRCommon', "軟件需求");
+$URCommon = isset($lang->URCommon) ? $lang->URCommon : '用戶需求';
+$SRCommon = isset($lang->SRCommon) ? $lang->SRCommon : '軟件需求';
 
 /* 主導航菜單。*/
 $lang->mainNav = new stdclass();
@@ -196,7 +197,7 @@ $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
 $lang->subject->menu->subject = array('link' => '科目|subject|browse|');
 $lang->subject->menu->holiday = array('link' => '節假日|holiday|browse|');
-$lang->subject->menu->concept = array('link' => '需求概念|custom|setstoryconcept|');
+$lang->subject->menu->concept = array('link' => '需求概念|custom|browsestoryconcept|');
 
 $lang->holiday = new stdclass();
 $lang->holiday->menu = $lang->subject->menu;

@@ -1,12 +1,12 @@
 <?php
 /**
- * The action module zh-tw file of ZenTaoPMS.
+ * The action module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-cn.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common     = '系統日誌';
@@ -65,7 +65,9 @@ $lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
 $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
+$lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['story']       = $lang->productSRCommon;
+$lang->action->objectTypes['design']      = '設計';
 $lang->action->objectTypes['productplan'] = $lang->planCommon;
 $lang->action->objectTypes['release']     = '發佈';
 $lang->action->objectTypes['program']     = '項目集';
@@ -78,23 +80,21 @@ $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = '用例';
 $lang->action->objectTypes['caseresult']  = '用例結果';
 $lang->action->objectTypes['stepresult']  = '用例步驟';
+$lang->action->objectTypes['caselib']     = '用例庫';
+$lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['testtask']    = '測試單';
-$lang->action->objectTypes['user']        = '用戶';
+$lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = '待辦';
-$lang->action->objectTypes['branch']      = '分支';
-$lang->action->objectTypes['module']      = '模組';
-$lang->action->objectTypes['testsuite']   = '套件';
-$lang->action->objectTypes['caselib']     = '用例庫';
-$lang->action->objectTypes['testreport']  = '報告';
-$lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['risk']        = '風險';
 $lang->action->objectTypes['issue']       = '問題';
-$lang->action->objectTypes['design']      = '設計';
+$lang->action->objectTypes['module']      = '模組';
+$lang->action->objectTypes['user']        = '用戶';
 $lang->action->objectTypes['stakeholder'] = '干係人';
+$lang->action->objectTypes['budget']      = '費用估算';
+$lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['budget']      = '费用估算';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -139,6 +139,7 @@ $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>';
 $lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解決。' . "\n";
+$lang->action->desc->managed        = '$date, 由 <strong>$actor</strong> 維護。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
@@ -436,13 +437,14 @@ $lang->action->label->stakeholder = '干係人|stakeholder|view|userID=%s';
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
-$lang->action->search->objectTypeList['program']     = '項目';
-$lang->action->search->objectTypeList['project']     = $lang->projectCommon;
+$lang->action->search->objectTypeList['program']     = '項目集';
+$lang->action->search->objectTypeList['project']     = '項目';
+$lang->action->search->objectTypeList['execution']   = $lang->sprintCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = '用例';
 $lang->action->search->objectTypeList['caseresult']  = '用例結果';
 $lang->action->search->objectTypeList['stepresult']  = '用例步驟';
-$lang->action->search->objectTypeList['story']       = $lang->productSRCommon;
+$lang->action->search->objectTypeList['story']       = '用需/軟需';
 $lang->action->search->objectTypeList['task']        = '任務';
 $lang->action->search->objectTypeList['testtask']    = '測試單';
 $lang->action->search->objectTypeList['user']        = '用戶';

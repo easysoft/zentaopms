@@ -47,7 +47,7 @@ $lang->product->project     = $lang->projectCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有与此产品关联的{$lang->projectCommon}";
 
-$lang->product->currentExecution      = '当前迭代/阶段';
+$lang->product->currentExecution      = "当前{$lang->sprintCommon}";
 $lang->product->activeStories         = "激活{$lang->productSRCommon}";
 $lang->product->activeStoriesTitle    = "激活{$lang->productSRCommon}";
 $lang->product->changedStories        = "已变更{$lang->productSRCommon}";

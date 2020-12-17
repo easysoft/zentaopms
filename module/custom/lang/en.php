@@ -19,7 +19,7 @@ $lang->custom->score              = 'Point';
 $lang->custom->timezone           = 'Timezone';
 $lang->custom->scoreReset         = 'Reset Points';
 $lang->custom->scoreTitle         = 'Point Feature';
-$lang->custom->project            = $lang->projectCommon;
+$lang->custom->project            = $lang->sprintCommon;
 $lang->custom->product            = $lang->productCommon;
 $lang->custom->estimate           = 'Estimated configuration';
 $lang->custom->estimateConfig     = 'Estimated configuration';
@@ -38,11 +38,16 @@ $lang->custom->SRStory            = "Software requirements";
 $lang->custom->epic               = "Epic";
 $lang->custom->scrumStory         = "Story";
 $lang->custom->waterfallCommon    = "Waterfall";
+$lang->custom->buildin            = "Buildin";
+$lang->custom->isDefault          = 'Is Default';
+$lang->custom->editStoryConcept   = "Edit Story Concept";
 $lang->custom->setStoryConcept    = "Set Story Concept";
-$lang->custom->configureScrum     = "Scrum Configure";
-
-$lang->custom->object['program'] = 'Program';
-$lang->custom->program->fields['unitList'] = 'Unit List';
+$lang->custom->setDefaultConcept  = "Set Default Concept";
+$lang->custom->browseStoryConcept = "List of story concepts";
+$lang->custom->deleteStoryConcept = "Delete story Concept";
+$lang->custom->configureScrum     = "Scrum Model Custom";
+$lang->custom->URConcept          = "UR Concept";
+$lang->custom->SRConcept          = "SR Concept";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -65,11 +70,12 @@ $lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
-$lang->custom->closedProject = 'Closed ' . $lang->projectCommon;
+$lang->custom->closedProject = 'Closed ' . $lang->sprintCommon;
 $lang->custom->closedProduct = 'Closed ' . $lang->productCommon;
 
+$lang->custom->object['program']  = 'Project';
 $lang->custom->object['product']  = $lang->productCommon;
-$lang->custom->object['project']  = $lang->projectCommon;
+$lang->custom->object['project']  = $lang->sprintCommon;
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
 $lang->custom->object['bug']      = 'Bug';
@@ -78,6 +84,9 @@ $lang->custom->object['testtask'] = 'Build';
 $lang->custom->object['todo']     = 'Todo';
 $lang->custom->object['user']     = 'User';
 $lang->custom->object['block']    = 'Block';
+
+$lang->custom->program = new stdClass();
+$lang->custom->program->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
@@ -151,8 +160,9 @@ $lang->custom->notice->required          = 'The selected field is required.';
 $lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
 $lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
-$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
+$lang->custom->notice->readOnlyOfProject = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->sprintCommon} is also forbidden.";
 $lang->custom->notice->URSREmpty         = 'Custom requirement name can not be empty!';
+$lang->custom->notice->confirmDelete     = 'Are you sure you want to delete it?';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -200,45 +210,22 @@ $lang->custom->CRProject[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['project']     = $lang->projectCommon;
+$lang->custom->moduleName['project']     = $lang->sprintCommon;
 
 $lang->custom->conceptQuestions['overview']         = "1. Which combination of management fits your company?";
 $lang->custom->conceptQuestions['story']            = "2. Do you use the concept of requirement or user story in your company?";
 $lang->custom->conceptQuestions['requirementpoint'] = "3. Do you use hours or function points to make estimations in your company?";
 $lang->custom->conceptQuestions['storypoint']       = "3. Do you use hours or story points to make estimations in your company?";
 
-$lang->custom->conceptOptions = new stdclass;
-
-$lang->custom->conceptOptions->story = array();
+$lang->custom->conceptOptions             = new stdclass;
+$lang->custom->conceptOptions->story      = array();
 $lang->custom->conceptOptions->story['0'] = 'Requirement';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
-$lang->custom->conceptOptions->hourPoint = array();
+$lang->custom->conceptOptions->hourPoint      = array();
 $lang->custom->conceptOptions->hourPoint['0'] = 'Story Point';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Function Ponit';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Code Line';
 
-$lang->custom->waterfall = new stdclass();
-$lang->custom->waterfall->URAndSR  = 'Are requirements and stories concepts enabled';
-$lang->custom->waterfall->URSRName = 'Combination of default requirements concepts';
-
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
-
-$lang->custom->URList[1] = 'User Requirement';
-$lang->custom->URList[2] = 'UR';
-$lang->custom->URList[3] = 'Requirement';
-$lang->custom->URList[4] = 'Epic';
-
-$lang->custom->SRList[1] = 'Software Requirement';
-$lang->custom->SRList[2] = 'SR';
-$lang->custom->SRList[3] = 'Story';
-$lang->custom->SRList[4] = 'Story';
-
-$lang->custom->URSRList[1] = 'User Requirement/Software Requirement';
-$lang->custom->URSRList[2] = 'UR/SR';
-$lang->custom->URSRList[3] = 'Requirement/Story';
-$lang->custom->URSRList[4] = 'Epic/Story';
-
-$lang->custom->URTips = 'Type like：Requirement';
-$lang->custom->SRTips = 'Type like：Story';

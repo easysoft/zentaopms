@@ -34,7 +34,7 @@ $lang->product->exportAction = "導出{$lang->productCommon}";
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
 
-$lang->product->plans       = '計劃數';
+$lang->product->plans       = "{$lang->planCommon}數";
 $lang->product->releases    = '發佈數';
 $lang->product->docs        = '文檔數';
 $lang->product->bugs        = '相關Bug';
@@ -47,7 +47,7 @@ $lang->product->project     = $lang->projectCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有與此產品關聯的{$lang->projectCommon}";
 
-$lang->product->currentExecution      = '當前迭代/階段';
+$lang->product->currentExecution      = "當前{$lang->sprintCommon}";
 $lang->product->activeStories         = "激活{$lang->productSRCommon}";
 $lang->product->activeStoriesTitle    = "激活{$lang->productSRCommon}";
 $lang->product->changedStories        = "已變更{$lang->productSRCommon}";
@@ -66,7 +66,7 @@ $lang->product->errorNoProduct = "還沒有創建{$lang->productCommon}！";
 $lang->product->accessDenied   = "您無權訪問該{$lang->productCommon}";
 
 $lang->product->id             = '編號';
-$lang->product->program        = '所屬項目集';
+$lang->product->program        = "所屬項目集";
 $lang->product->name           = "{$lang->productCommon}名稱";
 $lang->product->code           = "{$lang->productCommon}代號";
 $lang->product->line           = "{$lang->productCommon}綫";
@@ -90,12 +90,13 @@ $lang->product->release        = '發佈';
 $lang->product->allRelease     = '所有發佈';
 $lang->product->maintain       = '維護中';
 $lang->product->latestDynamic  = '最新動態';
-$lang->product->plan           = '計劃';
+$lang->product->plan           = $lang->planCommon;
 $lang->product->iteration      = '版本迭代';
 $lang->product->iterationInfo  = '迭代 %s 次';
 $lang->product->iterationView  = '查看詳情';
 $lang->product->createdBy      = '由誰創建';
 $lang->product->createdDate    = '創建日期';
+$lang->product->storyConcept   = '需求概念組合';
 
 $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指給我';
@@ -108,7 +109,7 @@ $lang->product->changedStory = '已變更';
 $lang->product->willClose    = '待關閉';
 $lang->product->closedStory  = '已關閉';
 $lang->product->unclosed     = '未關閉';
-$lang->product->unplan       = '未計劃';
+$lang->product->unplan       = "未{$lang->planCommon}";
 $lang->product->viewByUser   = '按用戶查看';
 
 $lang->product->allStory             = '所有';
@@ -132,9 +133,9 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
-$lang->product->aclList['open']    = "預設設置(有{$lang->productCommon}視圖權限，即可訪問)";
-$lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->productCommon}相關負責人和{$lang->projectCommon}團隊成員才能訪問)";
-$lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
+$lang->product->aclList['open']    = "公開(有{$lang->productCommon}視圖權限，即可訪問)";
+$lang->product->aclList['private'] = "私有({$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問)";
+//$lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
 $lang->product->storySummary   = "本頁共 <strong>%s</strong> 個%s，預計 <strong>%s</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%s</strong>。";
 $lang->product->checkedSummary = "選中 <strong>%total%</strong> 個%storyCommon%，預計 <strong>%estimate%</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%rate%</strong>。";
