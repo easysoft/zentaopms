@@ -247,7 +247,7 @@ class company extends control
         /* Assign. */
         $this->view->browseType   = $browseType;
         $this->view->account      = $account;
-        $this->view->accountPairs = $this->user->getPairs('noclosed|nodeleted|noletter');
+        $this->view->accountPairs = $accountPairs;
         $this->view->product      = $product;
         $this->view->project      = $project;
         $this->view->queryID      = $queryID; 

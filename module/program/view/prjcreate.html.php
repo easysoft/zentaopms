@@ -63,7 +63,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-                <div class='col-sm-4 <?php if($programID) echo 'required';?>'>
+              <div class='col-sm-4 <?php if($programID) echo 'required';?>'>
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->program->addProduct, '', "onchange=addNewProduct(this);");?></span>
