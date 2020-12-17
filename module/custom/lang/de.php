@@ -187,11 +187,8 @@ $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
-$lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = 'Product - Project';
-$lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
-
-$lang->custom->productProject->notice = 'Please select a concept according to your team.';
+$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
 

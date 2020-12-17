@@ -187,11 +187,8 @@ $lang->custom->weekend        = 'Cuối tuần';
 $lang->custom->weekendList[2] = '2 ngày nghỉ';
 $lang->custom->weekendList[1] = '1 ngày nghỉ';
 
-$lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = 'Sản phẩm - Dự án';
-$lang->custom->productProject->relation['0_1'] = 'Sản phẩm - lặp lại';
-
-$lang->custom->productProject->notice = 'Chọn một mô hình phù hợp với doanh nghiệp của bạn.';
+$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
 
 $lang->custom->workingList['full']      = 'Quản lý vòng đời ứng dụng';
 

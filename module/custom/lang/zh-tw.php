@@ -178,11 +178,11 @@ $lang->custom->weekend        = '休息日';
 $lang->custom->weekendList[2] = '雙休';
 $lang->custom->weekendList[1] = '單休';
 
-$lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = '項目 - 產品 - 迭代';
-$lang->custom->productProject->relation['0_1'] = '項目 - 產品 - 衝刺';
+$lang->custom->sprintConcept = new stdclass();
+$lang->custom->sprintConcept->relation['0_0'] = '項目 - 產品 - 迭代';
+$lang->custom->sprintConcept->relation['0_1'] = '項目 - 產品 - 衝刺';
 
-$lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
+$lang->custom->sprintConcept->notice = '請根據實際情況選擇適合自己團隊的概念。';
 
 $lang->custom->workingList['full'] = '完整研發管理工具';
 

@@ -13,6 +13,11 @@
 <div id='mainContent' class='main-row'>
   <form class="load-indicator main-form form-ajax" method='post'>
     <div class='modal-body'>
+      <div class='main-header'>
+        <h2>
+          <span><?php echo $lang->custom->editStoryConcept;?></span>
+        </h2>
+      </div>
       <table class='table table-form'>
         <tr class='text-center'>
           <td class='w-200px'><strong><?php echo $lang->custom->URConcept;?></strong></th>

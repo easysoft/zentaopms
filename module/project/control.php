@@ -1174,7 +1174,7 @@ class project extends control
         $this->view->isSprint = false;
         $project = $this->project->getById($this->session->PRJ);
 
-        if($project->model == 'scrum' && isset($this->config->custom->productProject) and strpos($this->config->custom->productProject, '_1'))
+        if($project->model == 'scrum' && isset($this->config->custom->sprintConcept) and $this->config->custom->sprintConcept == 1)
         {
             $this->view->isSprint = true;
 
@@ -1294,7 +1294,7 @@ class project extends control
 
         $this->view->isSprint = false;
         $PRJData = $this->project->getById($this->session->PRJ);
-        if($PRJData->model == 'scrum' && isset($this->config->custom->productProject) && strpos($this->config->custom->productProject, '_1'))
+        if($PRJData->model == 'scrum' && isset($this->config->custom->sprintConcept) && $this->config->custom->sprintConcept == 1)
         {
             $this->view->isSprint = true;
 

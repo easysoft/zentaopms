@@ -653,6 +653,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0_beta1');
             $this->execSQL($this->getUpgradeFile('20.0.beta1'));
             $this->processBuildTable();
+            $this->processSprintConcept();
             $this->appendExec('20_0_beta1');
         }
 
@@ -4377,6 +4378,29 @@ class upgradeModel extends model
 
             if($data) $this->dao->update(TABLE_BUILD)->data($data)->where('id')->eq($build->id)->exec();
         }
+
+        return true;
+    }
+
+    /**
+     * Process sprint concept.
+     * 
+     * @access public
+     * @return bool 
+     */
+    public function processSprintConcept()
+    {
+        $productProject = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('module')->eq('custom')
+            ->andWhere('`key`')->eq('productProject')
+            ->fetch();
+
+        $newValue = substr($productProject->value, 2);
+        $this->dao->update(TABLE_CONFIG)
+            ->set('`value`')->eq($newValue)
+            ->set('`key`')->eq('sprintConcept')
+            ->where('id')->eq($productProject->id)
+            ->exec(); 
 
         return true;
     }

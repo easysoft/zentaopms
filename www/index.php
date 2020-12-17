@@ -12,7 +12,7 @@
  * @link        http://www.zentao.net
  */
 /* Set the error reporting. */
-error_reporting(0);
+error_reporting(E_ALL);
 define('IN_USE', true);
 
 /* Start output buffer. */

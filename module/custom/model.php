@@ -597,34 +597,6 @@ class customModel extends model
     }
 
     /**
-     * Set flow function.
-     *
-     * @access public
-     * @return void
-     */
-    public function setFlow()
-    {
-        $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
-
-        /* Change block title. */
-        $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
-        $newConfig = $this->post->productProject;
-
-        list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
-        list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
-
-        foreach($this->config->productCommonList as $clientLang => $productCommonList)
-        {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
-        }
-
-        foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
-        {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
-        }
-    }
-
-    /**
      * Set product and project concept.
      *
      * @access public
@@ -633,11 +605,11 @@ class customModel extends model
     public function setConcept()
     {
         $this->loadModel('setting');
-        $this->setting->setItem('system.custom.productProject', $this->post->productProject);
+        $this->setting->setItem('system.custom.sprintConcept', $this->post->sprintConcept);
 
         /* Change block title. */
-        $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
-        $newConfig = $this->post->productProject;
+        $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0_0';
+        $newConfig = $this->post->sprintConcept;
 
         list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
         list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);

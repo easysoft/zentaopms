@@ -97,7 +97,7 @@ class baseHelper
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
         }
 
         /**
@@ -113,7 +113,7 @@ class baseHelper
             $link .= '.' . $viewType;
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
         }
 
         /**
@@ -125,7 +125,7 @@ class baseHelper
         {
             $link .= $config->default->method . '.' . $viewType; 
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
         }
 
         /**
@@ -137,7 +137,7 @@ class baseHelper
         {
             $link .= $moduleName . '/';
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
         }
 
         /**
@@ -147,7 +147,7 @@ class baseHelper
          */
         $link .= $moduleName . '.' . $viewType;
         $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processPRJParam($link, $PRJID, $onlyBody);
+        return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
     }
 
     /**
@@ -164,12 +164,15 @@ class baseHelper
      *  @access public
      *  @return string
      */
-    public static function processPRJParam($link, $PRJID = '', $onlybody = false)
+    public static function processPRJParam($link, $PRJID = '', $onlybody = false, $moduleName = '')
     {
-        global $config;
-        if(!$PRJID) return $link;
-        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
+        global $config, $lang;
 
+        if(!$PRJID) return $link;
+        $isProject = (zget($lang->navGroup, $moduleName) == 'project');
+        if(!$isProject) return $link;
+
+        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
         return $link;
     }
 

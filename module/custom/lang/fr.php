@@ -187,11 +187,8 @@ $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Jour';
 $lang->custom->weekendList[1] = '1-Jour';
 
-$lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = 'Product - Project';
-$lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
-
-$lang->custom->productProject->notice = 'Sélectionnez le concept qui correspond à votre équipe.';
+$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 

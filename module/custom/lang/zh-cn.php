@@ -187,11 +187,8 @@ $lang->custom->weekend        = '休息日';
 $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
-$lang->custom->productProject = new stdclass();
-$lang->custom->productProject->relation['0_0'] = '项目 - 产品 - 迭代';
-$lang->custom->productProject->relation['0_1'] = '项目 - 产品 - 冲刺';
-
-$lang->custom->productProject->notice = '请根据实际情况选择适合自己团队的概念。';
+$lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
+$lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 

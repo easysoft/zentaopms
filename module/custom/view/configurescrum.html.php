@@ -21,7 +21,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-100px'><?php echo $lang->custom->scrum->setConcept;?> </th>
-          <td colspan='3'><?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?></td>
+          <td colspan='3'><?php echo html::radio('sprintConcept', $lang->custom->sprintConceptList, zget($this->config->custom, 'sprintConcept', '0'))?></td>
           <td></td><td></td>
         </tr>
         <tr>
