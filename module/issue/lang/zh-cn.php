@@ -12,7 +12,7 @@
 $lang->issue->common            = '问题';
 $lang->issue->browse            = '问题列表';
 $lang->issue->resolvedBy        = '解决者';
-$lang->issue->program           = '所属项目';
+$lang->issue->project           = '所属项目';
 $lang->issue->title             = '标题';
 $lang->issue->desc              = '描述';
 $lang->issue->pri               = '优先级';
