@@ -155,6 +155,7 @@ function loadProduct(productID)
 {
     loadProductBranches(productID)
     loadProductModules(productID);
+    loadProductPlans(productID);
 }
 
 /**
