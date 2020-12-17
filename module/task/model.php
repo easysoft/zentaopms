@@ -1081,7 +1081,7 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
 
-            if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $data->deadline)
+            if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
             {
                 $task->version = $oldTask->version + 1;
                 $taskSpec = new stdClass();

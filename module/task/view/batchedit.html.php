@@ -81,31 +81,25 @@
               $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
-
-              $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
-              $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
           }
           ?>
           <tr>
             <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
+            $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
+            $teamAccounts = array_keys($projectTeams[$tasks[$taskID]->project]);
+            foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
+            $members['closed'] = 'Closed';
+
             $taskMembers = array();
             if(isset($teams[$taskID]))
             {
                 $teamAccounts = array_keys($teams[$taskID]);
-                foreach($teamAccounts as $teamAccount)
-                {
-                    $taskMembers[$teamAccount] = $members[$teamAccount];
-                }
+                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount] = $users[$teamAccount];
             }
             else
             {
-                if(!isset($taskMembers[$tasks[$taskID]->assignedTo]))
-                {
-                    $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
-                    $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
-                }
                 $taskMembers = $members;
             }
             ?>

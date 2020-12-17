@@ -456,15 +456,10 @@ class task extends control
             $modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
             $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
 
-            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-            $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
-            $members['closed'] = 'Closed';
-
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
             $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
             $this->view->project    = $project;
             $this->view->modules    = $modules;
-            $this->view->members    = $members;
         }
         /* The tasks of my. */
         else
@@ -482,6 +477,11 @@ class task extends control
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
 
+        /* Get project teams. */
+        $projectIDList = array();
+        foreach($tasks as $task) if(!in_array($task->project, $projectIDList)) $projectIDList[] = $task->project;
+        $projectTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($projectIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
+
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
@@ -493,16 +493,18 @@ class task extends control
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
         /* Assign. */
-        $this->view->position[]  = $this->lang->task->common;
-        $this->view->position[]  = $this->lang->task->batchEdit;
-        $this->view->projectID   = $projectID;
-        $this->view->priList     = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
-        $this->view->statusList  = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
-        $this->view->typeList    = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
-        $this->view->taskIDList  = $taskIDList;
-        $this->view->tasks       = $tasks;
-        $this->view->teams       = $teams;
-        $this->view->projectName = isset($project) ? $project->name : '';
+        $this->view->position[]   = $this->lang->task->common;
+        $this->view->position[]   = $this->lang->task->batchEdit;
+        $this->view->projectID    = $projectID;
+        $this->view->priList      = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
+        $this->view->statusList   = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
+        $this->view->typeList     = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
+        $this->view->taskIDList   = $taskIDList;
+        $this->view->tasks        = $tasks;
+        $this->view->teams        = $teams;
+        $this->view->projectTeams = $projectTeams;
+        $this->view->projectName  = isset($project) ? $project->name : '';
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted');
 
         $this->display();
     }
