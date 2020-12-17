@@ -627,18 +627,21 @@ class story extends control
             $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
             $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
-        /* The stories of a project. */
         elseif($projectID)
         {
-            unset($this->lang->product->menu->branch);
+            /* The stories of a project. */
+            $this->lang->navGroup->story = 'project';
+            $moduleIndex = array_search('story', $this->lang->noMenuModule);
+            unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->project->menu;
+
             $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
 
             $project = $this->project->getByID($projectID);
 
-            $branchProduct = false;
+            $branchProduct  = false;
             $linkedProducts = $this->project->getProducts($projectID);
             foreach($linkedProducts as $linkedProduct)
             {
@@ -649,8 +652,9 @@ class story extends control
                 }
             }
 
-            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
-            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[]  = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
+            $this->view->title       = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->resetActive = true;
         }
         /* The stories of my. */
         else
