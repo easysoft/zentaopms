@@ -12,9 +12,9 @@
 class holidayModel extends model
 {
     /**
-     * Get holiday by id. 
+     * Get holiday by id.
      * 
-     * @param  int    $id 
+     * @param  int    $id
      * @access public
      * @return object
      */
@@ -24,11 +24,12 @@ class holidayModel extends model
     }
 
     /**
-     * Get holiday list. 
-     * 
-     * @param  string $year 
+     * Get holiday list.
+     *
+     * @param  string $year
+     * @param  string $type
      * @access public
-     * @return array
+     * @return object
      */
     public function getList($year = '', $type = 'all')
     {
@@ -45,8 +46,8 @@ class holidayModel extends model
     }
 
     /**
-     * Get year pairs. 
-     * 
+     * Get year pairs.
+     *
      * @access public
      * @return array
      */
@@ -56,10 +57,10 @@ class holidayModel extends model
     }
 
     /**
-     * create a holiday.
-     * 
+     * Create a holiday.
+     *
      * @access public
-     * @return bool
+     * @return int
      */
     public function create()
     {
@@ -90,8 +91,9 @@ class holidayModel extends model
     }
 
     /**
-     * Edit holiday. 
-     * 
+     * Edit holiday.
+     *
+     * @param  int    $id
      * @access public
      * @return bool
      */
@@ -127,10 +129,9 @@ class holidayModel extends model
     }
 
     /**
-     * Delete a holiday 
-     * 
-     * @param  int    $id 
-     * @param  null $null 
+     * Delete a holiday.
+     *
+     * @param  int    $id
      * @access public
      * @return bool
      */
@@ -138,6 +139,7 @@ class holidayModel extends model
     {
         $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
         $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
+
         /* Update project. */
         $this->updateProjectPlanDuration($holidayInformation->begin, $holidayInformation->end);
         $this->updateProjectRealDuration($holidayInformation->begin, $holidayInformation->end);
@@ -150,12 +152,12 @@ class holidayModel extends model
     }
 
     /**
-     * Get holidays by begin and end. 
-     * 
-     * @param  varchar $begin
-     * @param  varchar $end
+     * Get holidays by begin and end.
+     *
+     * @param  string $begin
+     * @param  string $end
      * @access public
-     * @return bool
+     * @return array
      */
     public function getHolidays($begin, $end)
     {
@@ -178,12 +180,12 @@ class holidayModel extends model
     }
 
     /**
-     * Get working days. 
-     * 
-     * @param  varchar $begin
-     * @param  varchar $end
+     * Get working days.
+     *
+     * @param  string $begin
+     * @param  string $end
      * @access public
-     * @return bool
+     * @return array
      */
     public function getWorkingDays($begin = '', $end = '')
     {
@@ -203,12 +205,12 @@ class holidayModel extends model
     }
 
     /**
-     * Get actual working days. 
-     * 
-     * @param  varchar $begin
-     * @param  varchar $end
+     * Get actual working days.
+     *
+     * @param  string $begin
+     * @param  string $end
      * @access public
-     * @return bool
+     * @return array
      */
     public function getActualWorkingDays($begin, $end)
     {
@@ -268,8 +270,8 @@ class holidayModel extends model
     }
 
     /**
-     * Get diff days. 
-     * 
+     * Get diff days.
+     *
      * @param  varchar $begin
      * @param  varchar $end
      * @access public
@@ -288,9 +290,9 @@ class holidayModel extends model
     }
 
     /**
-     * Judge if is holiday. 
-     * 
-     * @param  varchar $date
+     * Judge if is holiday.
+     *
+     * @param  string $date
      * @access public
      * @return bool
      */
@@ -305,9 +307,9 @@ class holidayModel extends model
     }
 
     /**
-     * Judge if is working days. 
-     * 
-     * @param  varchar $date
+     * Judge if is working days.
+     *
+     * @param  string $date
      * @access public
      * @return bool
      */
@@ -322,12 +324,12 @@ class holidayModel extends model
     }
 
     /**
-     * Update project plan duration. 
+     * Update project plan duration.
      * 
-     * @param  varchar $beginDate
-     * @param  varchar $endDate
+     * @param  string $beginDate
+     * @param  string $endDate
      * @access public
-     * @return bool
+     * @return void
      */
     public function updateProjectPlanDuration($beginDate, $endDate)
     {
@@ -344,20 +346,17 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($project->begin, $project->end);
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_PROJECT)
-                ->set('planDuration')->eq($realDuration)
-                ->where('id')->eq($project->id)
-                ->exec();
+            $this->dao->update(TABLE_PROJECT)->set('planDuration')->eq($realDuration)->where('id')->eq($project->id)->exec();
         }
     }
 
     /**
-     * Update project real duration. 
-     * 
-     * @param  varchar $beginDate
-     * @param  varchar $endDate
+     * Update project real duration.
+     *
+     * @param  string $beginDate
+     * @param  string $endDate
      * @access public
-     * @return bool
+     * @return void
      */
     public function updateProjectRealDuration($beginDate, $endDate)
     {
@@ -374,20 +373,17 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($project->realBegan, $project->realEnd);
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_PROJECT)
-                ->set('realDuration')->eq($realDuration)
-                ->where('id')->eq($project->id)
-                ->exec();
+            $this->dao->update(TABLE_PROJECT)->set('realDuration')->eq($realDuration)->where('id')->eq($project->id)->exec();
         }
     }
 
     /**
-     * Update task plan duration. 
-     * 
-     * @param  varchar $beginDate
-     * @param  varchar $endDate
+     * Update task plan duration.
+     *
+     * @param  string $beginDate
+     * @param  string $endDate
      * @access public
-     * @return bool
+     * @return void
      */
     public function updateTaskPlanDuration($beginDate, $endDate)
     {
@@ -404,21 +400,17 @@ class holidayModel extends model
             $planduration = $this->getActualWorkingDays($task->estStarted, $task->deadline);
             $planduration = count($planduration);
 
-            $this->dao->update(TABLE_TASK)
-                ->set('planduration')->eq($planduration)
-                ->where('id')->eq($task->id)
-                ->exec();
+            $this->dao->update(TABLE_TASK)->set('planduration')->eq($planduration)->where('id')->eq($task->id)->exec();
         }
-
     }
 
     /**
-     * Update task real duration. 
-     * 
-     * @param  varchar $beginDate
-     * @param  varchar $endDate
+     * Update task real duration.
+     *
+     * @param  string $beginDate
+     * @param  string $endDate
      * @access public
-     * @return bool
+     * @return void
      */
     public function updateTaskRealDuration($beginDate, $endDate)
     {
@@ -435,10 +427,7 @@ class holidayModel extends model
             $realDuration = $this->getActualWorkingDays($task->realStarted, date('Y-m-d',strtotime($task->finishedDate)));
             $realDuration = count($realDuration);
 
-            $this->dao->update(TABLE_TASK)
-                ->set('realDuration')->eq($realDuration)
-                ->where('id')->eq($task->id)
-                ->exec();
+            $this->dao->update(TABLE_TASK)->set('realDuration')->eq($realDuration)->where('id')->eq($task->id)->exec();
         }
     }
 }

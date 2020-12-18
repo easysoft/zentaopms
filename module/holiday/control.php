@@ -12,8 +12,8 @@
 class holiday extends control
 {
     /**
-     * index 
-     * 
+     * Holiday list.
+     *
      * @access public
      * @return void
      */
@@ -23,9 +23,9 @@ class holiday extends control
     }
 
     /**
-     * browse holidays.
-     * 
-     * @param  string $year 
+     * Holiday list.
+     *
+     * @param  string $year
      * @access public
      * @return void
      */
@@ -47,7 +47,7 @@ class holiday extends control
 
     /**
      * Create a holiday.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -67,8 +67,8 @@ class holiday extends control
 
     /**
      * Edit holiday.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -88,8 +88,8 @@ class holiday extends control
     }
 
     /**
-     * Delete holiday. 
-     * 
+     * Delete holiday.
+     *
      * @param  int    $id
      * @param  int    $confirm
      * @access public
