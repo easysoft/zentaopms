@@ -21,3 +21,5 @@ td.delayed{color:#fff; background: #e84e0f!important;}
 
 th.c-confirmed {text-align: center;}
 .c-id {text-overflow:ellipsis; white-space:nowrap;}
+
+.body-modal #mainMenu>.btn-toolbar{width: auto;}
