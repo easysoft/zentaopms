@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Modul';
 $lang->bug->moduleAB         = 'Modul';
-$lang->bug->project          = $lang->projectCommon;
+$lang->bug->project          = $lang->executionCommon;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Farbe des Titels';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'Neu';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Basis Info';
 $lang->bug->legendAttatch               = 'Anlagen';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Typ/Schwere';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Reproduktionsschritte';
@@ -173,11 +173,11 @@ $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
 $lang->bug->summary              = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
-$lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
+$lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->executionCommon},Story and Task change. Do you want to do this?";
 $lang->bug->confirmDelete        = 'Do you want to delete this bug?';
 $lang->bug->remindTask           = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
 $lang->bug->skipClose            = 'Bug %s is not resolved. You cannot close it.';
-$lang->bug->projectAccessDenied  = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->projectAccessDenied  = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
 $lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* 模板。*/
@@ -278,7 +278,7 @@ $lang->bug->report->common = 'Berichte';
 $lang->bug->report->select = 'Typ selektieren ';
 $lang->bug->report->create = 'Bericht erstellen';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
+$lang->bug->report->charts['bugsPerProject']        = $lang->executionCommon . ' Bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs pro Build';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs pro Modul';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Erstellte Bugs pro Tag';
@@ -341,7 +341,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->executionCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Modul';
 

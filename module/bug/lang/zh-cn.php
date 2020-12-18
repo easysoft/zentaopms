@@ -17,7 +17,7 @@ $lang->bug->branch           = '分支/平台';
 $lang->bug->productplan      = '所属' . '计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
-$lang->bug->project          = '所属' . $lang->projectCommon;
+$lang->bug->project          = '所属' . $lang->executionCommon;
 $lang->bug->story            = "相关{$lang->projectSRCommon}";
 $lang->bug->storyVersion     = "{$lang->projectSRCommon}版本";
 $lang->bug->color            = '标题颜色';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = '创建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . "/{$lang->projectSRCommon}/任务";
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . "/{$lang->projectSRCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
 $lang->bug->legendSteps                 = '重现步骤';
@@ -173,11 +173,11 @@ $lang->bug->buttonConfirm = '确认';
 
 /* 交互提示。*/
 $lang->bug->summary              = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
-$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、{$lang->projectSRCommon}和任务发生变化，确定吗？";
+$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->projectSRCommon}和任务发生变化，确定吗？";
 $lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 $lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
-$lang->bug->projectAccessDenied  = "您无权访问该Bug所属的{$lang->projectCommon}！";
+$lang->bug->projectAccessDenied  = "您无权访问该Bug所属的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty        = "重现步骤不能为空。";
 
 /* 模板。*/
@@ -278,7 +278,7 @@ $lang->bug->report->common = '报表';
 $lang->bug->report->select = '请选择报表类型';
 $lang->bug->report->create = '生成报表';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . 'Bug数量';
+$lang->bug->report->charts['bugsPerProject']        = $lang->executionCommon . 'Bug数量';
 $lang->bug->report->charts['bugsPerBuild']          = '版本Bug数量';
 $lang->bug->report->charts['bugsPerModule']         = '模块Bug数量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug数';
@@ -341,7 +341,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->executionCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
 

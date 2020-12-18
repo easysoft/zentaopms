@@ -33,6 +33,9 @@ $lang->todo->import       = "Nhập";
 $lang->todo->legendBasic  = "Thông tin cơ bản";
 $lang->todo->cycle        = "Lặp lại";
 $lang->todo->cycleConfig  = "Cấu hình lặp lại";
+$lang->todo->project      = "Project";
+$lang->todo->product      = "Product";
+$lang->todo->execution    = "Stage/" . $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Chuyển thành câu chuyện";
 $lang->todo->reasonList['task']  = "Chuyển thành nhiệm vụ";

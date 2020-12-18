@@ -26,11 +26,11 @@ $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數據。';
 $lang->group->viewList           = '可訪問視圖';
 $lang->group->productList        = '可訪問' . $lang->productCommon;
-$lang->group->projectList        = '可訪問' . $lang->projectCommon;
+$lang->group->projectList        = '可訪問' . $lang->executionCommon;
 $lang->group->dynamic            = '可查看動態';
 $lang->group->noticeVisit        = '空代表沒有訪問限制';
 $lang->group->noneProduct        = "暫時沒有{$lang->productCommon}";
-$lang->group->noneProject        = "暫時沒有{$lang->projectCommon}";
+$lang->group->noneProject        = "暫時沒有{$lang->executionCommon}";
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';

@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branche/Plateforme';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->project          = $lang->projectCommon;
+$lang->bug->project          = $lang->executionCommon;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Version Story';
 $lang->bug->color            = 'Couleur';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'Nouveau';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Infos de Base';
 $lang->bug->legendAttatch               = 'Fichiers';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Tâche';
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Story/Tâche';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severité';
 $lang->bug->lblSystemBrowserAndHardware = 'Système/Browser';
 $lang->bug->legendSteps                 = 'Etapes Repro';
@@ -173,11 +173,11 @@ $lang->bug->buttonConfirm = 'Confirmer';
 
 /* 交互提示。*/
 $lang->bug->summary              = "Total de <strong>%s</strong> bugs sur cette page, et <strong>%s</strong> sont Actifs.";
-$lang->bug->confirmChangeProduct = "Tout changement aux {$lang->productCommon} fera que les {$lang->projectCommon}s, stories et tâches associées vont changer. Voulez-vous faire cela ?";
+$lang->bug->confirmChangeProduct = "Tout changement aux {$lang->productCommon} fera que les {$lang->executionCommon}s, stories et tâches associées vont changer. Voulez-vous faire cela ?";
 $lang->bug->confirmDelete        = 'Voulez-vous supprimer ce bug ?';
 $lang->bug->remindTask           = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';
 $lang->bug->skipClose            = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
-$lang->bug->projectAccessDenied  = "Votre accès à {$lang->projectCommon} auquel ce bug appartient est refusé !";
+$lang->bug->projectAccessDenied  = "Votre accès à {$lang->executionCommon} auquel ce bug appartient est refusé !";
 $lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* 模板。*/
@@ -278,7 +278,7 @@ $lang->bug->report->common = 'Rapport';
 $lang->bug->report->select = 'Sélect Type de Rapport';
 $lang->bug->report->create = 'Créer Rapport';
 
-$lang->bug->report->charts['bugsPerProject']        = 'Bugs ' . $lang->projectCommon;
+$lang->bug->report->charts['bugsPerProject']        = 'Bugs ' . $lang->executionCommon;
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs Par Build';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs Par Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Bugs Détectés Par Jour';
@@ -341,7 +341,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->executionCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 

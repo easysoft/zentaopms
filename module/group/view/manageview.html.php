@@ -99,7 +99,7 @@
                 <div class='action-item'>
                   <div class='checkbox-primary'>
                     <input type="checkbox" id='allchecker' onclick="selectAll(this)"/>
-                    <label class='priv' for='allchecker'><?php echo $module == 'project' ? "<i class='icon icon-menu-doc'></i> " . $lang->projectCommon : substr($title, 0, strpos($title, '|'));?></label>
+                    <label class='priv' for='allchecker'><?php echo $module == 'project' ? "<i class='icon icon-menu-doc'></i> " . $lang->executionCommon : substr($title, 0, strpos($title, '|'));?></label>
                   </div>
                 </div>
               </th>

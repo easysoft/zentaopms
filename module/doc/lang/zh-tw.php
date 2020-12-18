@@ -13,7 +13,7 @@
 $lang->doc->common         = '文檔';
 $lang->doc->id             = '文檔編號';
 $lang->doc->product        = '所屬' . $lang->productCommon;
-$lang->doc->project        = '所屬' . $lang->projectCommon;
+$lang->doc->project        = '所屬' . $lang->executionCommon;
 $lang->doc->lib            = '所屬文檔庫';
 $lang->doc->module         = '所屬分類';
 $lang->doc->title          = '文檔標題';
@@ -87,7 +87,7 @@ $lang->doc->custom         = '自定義文檔庫';
 $lang->doc->customAB       = '自定義庫';
 $lang->doc->createLib      = '創建文檔庫';
 $lang->doc->allLibs        = '文檔庫列表';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon}庫列表";
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon}庫列表";
 $lang->doc->showFiles      = '附件庫';
 $lang->doc->editLib        = '編輯文檔庫';
 $lang->doc->deleteLib      = '刪除文檔庫';
@@ -97,10 +97,10 @@ $lang->doc->search         = '搜索';
 
 /* 查詢條件列表 */
 $lang->doc->allProduct     = '所有' . $lang->productCommon;
-$lang->doc->allProject     = '所有' . $lang->projectCommon;
+$lang->doc->allProject     = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product'] = $lang->productCommon . '文檔庫';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . '文檔庫';
+$lang->doc->libTypeList['project'] = $lang->executionCommon . '文檔庫';
 $lang->doc->libTypeList['custom']  = '自定義文檔庫';
 
 $lang->doc->libIconList['product'] = 'icon-cube';
@@ -108,7 +108,7 @@ $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
-$lang->doc->systemLibs['project'] = $lang->projectCommon;
+$lang->doc->systemLibs['project'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = '公開';
 $lang->doc->aclList['custom']  = '自定義';
@@ -148,7 +148,7 @@ $lang->doc->orderLib                       = '文檔庫排序';
 $lang->doc->customShowLibs                 = '顯示設置';
 $lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
 $lang->doc->customShowLibsList['children'] = '顯示子分類的文檔';
-$lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的' . $lang->projectCommon;
+$lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的' . $lang->executionCommon;
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
@@ -160,7 +160,7 @@ $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";
 $lang->doc->errorEditSystemDoc = "系統文檔庫無需修改。";
 $lang->doc->errorEmptyProduct  = "沒有{$lang->productCommon}，無法創建文檔";
-$lang->doc->errorEmptyProject  = "沒有{$lang->projectCommon}，無法創建文檔";
+$lang->doc->errorEmptyProject  = "沒有{$lang->executionCommon}，無法創建文檔";
 $lang->doc->errorMainSysLib    = "該系統文檔庫不能刪除！";
 $lang->doc->accessDenied       = "您沒有權限訪問！";
 $lang->doc->versionNotFount    = '該版本文檔不存在';
@@ -175,8 +175,8 @@ $lang->doc->errorEmptyLib      = '文檔庫暫無數據。';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = '有所選產品訪問權限的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['product']['custom']  = '有所選產品訪問權限或白名單裡的用戶可以訪問。';
-$lang->doc->noticeAcl['lib']['project']['default'] = "有所選{$lang->projectCommon}訪問權限的用戶可以訪問。";
-$lang->doc->noticeAcl['lib']['project']['custom']  = "有所選{$lang->projectCommon}訪問權限或白名單裡的用戶可以訪問。";
+$lang->doc->noticeAcl['lib']['project']['default'] = "有所選{$lang->executionCommon}訪問權限的用戶可以訪問。";
+$lang->doc->noticeAcl['lib']['project']['custom']  = "有所選{$lang->executionCommon}訪問權限或白名單裡的用戶可以訪問。";
 $lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以訪問。';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = '白名單的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['custom']['private']  = '只有創建者自己可以訪問。';
@@ -196,7 +196,7 @@ $lang->doclib->user    = '用戶';
 $lang->doclib->files   = '附件庫';
 $lang->doclib->all     = '所有文檔庫';
 $lang->doclib->select  = '選擇文檔庫';
-$lang->doclib->project = $lang->projectCommon . '庫';
+$lang->doclib->project = $lang->executionCommon . '庫';
 $lang->doclib->product = $lang->productCommon . '庫';
 
 $lang->doclib->aclListA['default'] = '預設';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = '自定義';
 $lang->doclib->aclListB['private'] = '私有';
 
 $lang->doclib->create['product'] = '創建' . $lang->productCommon . '文檔庫';
-$lang->doclib->create['project'] = '創建' . $lang->projectCommon . '文檔庫';
+$lang->doclib->create['project'] = '創建' . $lang->executionCommon . '文檔庫';
 $lang->doclib->create['custom']  = '創建自定義文檔庫';
 
 $lang->doclib->main['product'] = $lang->productCommon . '主庫';
-$lang->doclib->main['project'] = $lang->projectCommon . '主庫';
+$lang->doclib->main['project'] = $lang->executionCommon . '主庫';
 
 $lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['project'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']  = '自定義';
 
 $lang->doclib->nameList['custom'] = '自定義文檔庫名稱';

@@ -71,7 +71,7 @@ $lang->testreport->legacyBugTip   = "Bug kích hoạt, hoặc Bug không đượ
 $lang->testreport->fromCaseBugTip = "Lỗi được tìm thấy từ việc chạy các trường hợp trong giai đoạn thử nghiệm.";
 $lang->testreport->errorTrunk     = "Bạn không thể tạo một báo cáo thử nghiệm cho trunk. Vui lòng sửa đổi bản dựng liên kết!";
 $lang->testreport->noTestTask     = "Không có yêu cầu thử nghiệm {$lang->productCommon} này, so no reports can be generated. Vui lòng go to {$lang->productCommon} which has test requests and then generate the report.";
-$lang->testreport->noObjectID     = "Không có yêu cầu test hoặc {$lang->projectCommon} được chọn, bởi vậy không có báo cáo có thể được tạo.";
+$lang->testreport->noObjectID     = "Không có yêu cầu test hoặc {$lang->executionCommon} được chọn, bởi vậy không có báo cáo có thể được tạo.";
 $lang->testreport->moreProduct    = "Báo cáo Test chỉ có thể được tạo cho cùng {$lang->productCommon}.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
 

@@ -110,10 +110,12 @@ $lang->future       = 'Waiting';
 $lang->year         = 'Year';
 $lang->workingHour  = 'Hours';
 
-$lang->generalUR       = 'UR/Epic';
-$lang->generalSR       = 'SR/Story';
-$lang->executionCommon = 'Execution';
-$lang->sprintCommon    = 'Iteration/Phase';
+$lang->generalUR    = 'UR/Epic';
+$lang->generalSR    = 'SR/Story';
+$lang->sprintCommon = 'Iteration/Phase';
+
+$lang->execution = new stdclass();
+$lang->execution->common = 'Execution';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -124,10 +126,6 @@ $lang->typeAB       = 'Type';
 
 $lang->common = new stdclass();
 $lang->common->common = 'Common Module';
-
-global $config;
-$URCommon = zget($lang, 'URCommon', "UR");
-$SRCommon = zget($lang, 'SRCommon', "SR");
 
 /* Main menu. */
 $lang->mainNav = new stdclass();
@@ -259,7 +257,7 @@ $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
-$lang->index->menu->project = "{$lang->projectCommon}|project|browse";
+$lang->index->menu->project = "{$lang->executionCommon}|project|browse";
 
 /* My dashboard menu settings. */
 $lang->my = new stdclass();
@@ -290,15 +288,14 @@ $lang->scrumproduct->menu->story    = array('link' => 'Story|product|browse|prod
 $lang->scrumproduct->menu->plan     = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->scrumproduct->menu->release  = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
-$lang->scrumproduct->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->scrumproduct->menu->project  = "{$lang->executionCommon}|product|project|status=all&productID=%s";
 $lang->scrumproduct->menu->dynamic  = 'Dynamics|product|dynamic|productID=%s';
 $lang->scrumproduct->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->scrumproduct->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->scrumproduct->menu->module   = 'Module|tree|browse|productID=%s&view=story';
 $lang->scrumproduct->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
-
-$lang->product->menu->requirement = array('link' => "{$URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->story       = array('link' => "{$SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->scrumproduct->menu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->scrumproduct->menu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
 $lang->product->dividerMenu = ',project,doc,';
 
@@ -455,7 +452,7 @@ $lang->report->menu = new stdclass();
 
 $lang->report->menu->annual  = array('link' => 'Annual Summary|report|annualData', 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
-$lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
+$lang->report->menu->prj     = array('link' => $lang->executionCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
@@ -855,7 +852,7 @@ $lang->icons['score']              = 'tint';
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->program        = 'Index|program|index|';
-$lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
@@ -873,7 +870,7 @@ $lang->scrum->subMenu->morelink->program = 'Program|program|PRJEdit|';
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
@@ -943,13 +940,6 @@ $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|prog
 $lang->projectstory->menu->requirement = array('link' => "{$lang->projectURCommon}|projectstory|requirement", 'subModule' => '');
 $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommon}|projectstory|story", 'subModule' => '');
 $lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
-
-$lang->waterfallproduct->menu->plan  = array('link' => "Plan|productplan|browse|productID={PRODUCT}", 'subModule' => 'productplan');
-$lang->waterfallproduct->menu->story = 'Story|product|browse|product={PRODUCT}';
-$lang->waterfallproduct->menu->track = 'Track|story|track|product={PRODUCT}';
-
-$lang->waterfallproduct->menu->requirement = array('link' => "{$URCommon}|product|browse|productID={PRODUCT}&branch=&browseType=unclosed&param=0&storyType=requirement");
-$lang->waterfallproduct->menu->story       = array('link' => "{$SRCommon}|product|browse|productID={PRODUCT}");
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');

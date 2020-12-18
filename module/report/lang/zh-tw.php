@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = '已指派';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->projectCommon . '偏差報表';
+$lang->report->projectDeviation = $lang->executionCommon . '偏差報表';
 $lang->report->productSummary   = $lang->productCommon . '彙總表';
 $lang->report->bugCreate        = 'Bug創建表';
 $lang->report->bugAssign        = 'Bug指派表';
@@ -46,16 +46,16 @@ $lang->report->workloadAB       = '工作負載';
 $lang->report->bugOpenedDate    = 'Bug創建時間';
 $lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
-$lang->report->deviationChart   = $lang->projectCommon . '偏差曲綫';
+$lang->report->deviationChart   = $lang->executionCommon . '偏差曲綫';
 
-$lang->reportList->project->lists[10] = $lang->projectCommon . '偏差報表|report|projectdeviation';
+$lang->reportList->project->lists[10] = $lang->executionCommon . '偏差報表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug創建表|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '員工負載表|report|workload';
 
 $lang->report->id            = '編號';
-$lang->report->project       = $lang->projectCommon;
+$lang->report->project       = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
 $lang->report->bugTotal      = 'Bug';
@@ -117,12 +117,12 @@ $lang->report->annualData->createdStories   = "累計創建{$lang->productSRComm
 
 $lang->report->annualData->productOverview = "{$lang->productCommon}創建{$lang->productSRCommon}數及占比";
 $lang->report->annualData->qaOverview      = "{$lang->productCommon}創建Bug數及占比";
-$lang->report->annualData->projectOverview = "參與{$lang->projectCommon}概覽";
-$lang->report->annualData->doneProject     = "已完成的{$lang->projectCommon}";
-$lang->report->annualData->doingProject    = "正在進行的{$lang->projectCommon}";
-$lang->report->annualData->suspendProject  = "已掛起的{$lang->projectCommon}";
+$lang->report->annualData->projectOverview = "參與{$lang->executionCommon}概覽";
+$lang->report->annualData->doneProject     = "已完成的{$lang->executionCommon}";
+$lang->report->annualData->doingProject    = "正在進行的{$lang->executionCommon}";
+$lang->report->annualData->suspendProject  = "已掛起的{$lang->executionCommon}";
 
-$lang->report->annualData->projectName   = "{$lang->projectCommon}名稱";
+$lang->report->annualData->projectName   = "{$lang->executionCommon}名稱";
 $lang->report->annualData->finishedStory = "完成{$lang->productSRCommon}數";
 $lang->report->annualData->finishedTask  = '完成任務數';
 $lang->report->annualData->foundBug      = '創建Bug數';

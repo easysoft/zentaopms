@@ -42,7 +42,7 @@
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)));?>
           </td>
           <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-          <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true, $bug->PRJ), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
           <td><?php echo zget($users, $bug->assignedTo);?></td>
           <td>

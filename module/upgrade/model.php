@@ -3541,7 +3541,7 @@ class upgradeModel extends model
                 $lang = new stdclass();
                 $lang->webhook       = new stdclass();
                 $lang->productCommon = $this->config->productCommonList[$currentLang][0];
-                $lang->projectCommon = $this->config->projectCommonList[$currentLang][0];
+                $lang->executionCommon = $this->config->executionCommonList[$currentLang][0];
 
                 include $langFile;
                 if(!isset($lang->webhook->typeList)) continue;
@@ -3745,7 +3745,7 @@ class upgradeModel extends model
                 $lang = new stdclass;
                 $lang->bug = new stdclass;
                 $lang->productCommon = '';
-                $lang->projectCommon = '';
+                $lang->executionCommon = '';
                 $lang->more          = '';
                 $langFile  = $this->app->getModuleRoot() . DS . 'bug' . DS . 'lang' . DS . $langCode . '.php';
                 if(is_file($langFile)) include $langFile;

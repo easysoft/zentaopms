@@ -38,14 +38,14 @@ $lang->product->plans       = "計劃數";
 $lang->product->releases    = '發佈數';
 $lang->product->docs        = '文檔數';
 $lang->product->bugs        = '相關Bug';
-$lang->product->projects    = "關聯{$lang->projectCommon}數";
+$lang->product->projects    = "關聯{$lang->executionCommon}數";
 $lang->product->cases       = '用例數';
 $lang->product->builds      = 'BUILD數';
 $lang->product->roadmap     = "{$lang->productCommon}路線圖";
 $lang->product->doc         = '文檔列表';
-$lang->product->project     = $lang->projectCommon . '列表';
+$lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
-$lang->product->projectInfo = "所有與此產品關聯的{$lang->projectCommon}";
+$lang->product->projectInfo = "所有與此產品關聯的{$lang->executionCommon}";
 
 $lang->product->currentExecution      = "當前{$lang->sprintCommon}";
 $lang->product->activeStories         = "激活{$lang->productSRCommon}";

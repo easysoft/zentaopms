@@ -228,7 +228,7 @@ $lang->story->legendLifeTime       = 'Tổng quan';
 $lang->story->legendRelated        = 'Thông tin liên quan';
 $lang->story->legendMailto         = 'Mail tới';
 $lang->story->legendAttatch        = 'Files';
-$lang->story->legendProjectAndTask = $lang->projectCommon . ' và nhiệm vụ';
+$lang->story->legendProjectAndTask = $lang->executionCommon . ' và nhiệm vụ';
 $lang->story->legendBugs           = 'Bugs liên kết';
 $lang->story->legendFromBug        = 'Từ Bug';
 $lang->story->legendCases          = 'Tình huống liên kết';
@@ -245,7 +245,7 @@ $lang->story->lblClose    = 'Đóng';
 $lang->story->lblTBC      = 'Nhiệm vụ/Bug/Tình huống';
 
 $lang->story->checkAffection   = 'Ảnh hưởng';
-$lang->story->affectedProjects = ' ' . $lang->projectCommon;
+$lang->story->affectedProjects = ' ' . $lang->executionCommon;
 $lang->story->affectedBugs     = 'Bugs';
 $lang->story->affectedCases    = 'Tình huống';
 
@@ -275,8 +275,8 @@ $lang->story->action->reviewed            = array('main' => '$date, ghi nhận b
 $lang->story->action->closed              = array('main' => '$date, được đóng bởi <strong>$actor</strong>.Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->linked2plan         = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới kế hoạch <strong>$extra</strong>');
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
-$lang->story->action->linked2project      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới ' . $lang->projectCommon . ' <strong>$extra</strong>.');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ ' . $lang->projectCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2project      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromproject = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ ' . $lang->executionCommon . ' <strong>$extra</strong>.');
 $lang->story->action->linked2build        = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bản dựng <strong>$extra</strong>');
 $lang->story->action->unlinkedfrombuild   = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
 $lang->story->action->linked2release      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>');

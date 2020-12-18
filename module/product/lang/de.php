@@ -38,14 +38,14 @@ $lang->product->plans       = 'Plan';
 $lang->product->releases    = 'Release';
 $lang->product->docs        = 'Dok';
 $lang->product->bugs        = 'Verknüpfte Bugs';
-$lang->product->projects    = "Verknüpfte {$lang->projectCommon}";
+$lang->product->projects    = "Verknüpfte {$lang->executionCommon}";
 $lang->product->cases       = 'Fälle';
 $lang->product->builds      = 'Builds';
 $lang->product->roadmap     = 'Roadmap';
 $lang->product->doc         = 'Dok';
-$lang->product->project     = $lang->projectCommon . 'Liste';
+$lang->product->project     = $lang->executionCommon . 'Liste';
 $lang->product->build       = 'Build';
-$lang->product->projectInfo = "{$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->projectInfo = "{$lang->executionCommon}s that are linked to this {$lang->productCommon} are listed below.";
 
 $lang->product->currentExecution      = "Aktuelle {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Aktivierte [S]';
@@ -134,7 +134,7 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Geschlossen';
 
 $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
-$lang->product->aclList['private'] = "Privat {$lang->productCommon} ({$lang->projectCommon} Nur Teammitglieder)";
+$lang->product->aclList['private'] = "Privat {$lang->productCommon} ({$lang->executionCommon} Nur Teammitglieder)";
 $lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
 
 $lang->product->storySummary   = " <strong>%s</strong> %s, <strong>%s</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%s</strong> auf dieser Seite.";

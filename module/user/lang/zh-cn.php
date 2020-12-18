@@ -89,7 +89,7 @@ $lang->user->setPublicTemplate     = '设为公共模板';
 $lang->user->tplContentNotEmpty    = '模板内容不能为空!';
 
 $lang->user->profile     = '档案';
-$lang->user->project     = $lang->projectCommon;
+$lang->user->project     = $lang->executionCommon;
 $lang->user->task        = '任务';
 $lang->user->bug         = 'Bug';
 $lang->user->test        = '测试';

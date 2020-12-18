@@ -33,7 +33,7 @@
     <table class="table table-fixed">
       <thead>
         <tr>
-          <th><?php echo $lang->projectCommon;?></th>
+          <th><?php echo $lang->executionCommon;?></th>
           <th class='w-150px'><?php echo $lang->project->code;?></th>
           <th class='w-120px'><?php echo $lang->project->end;?></th>
           <th class='w-80px'><?php echo $lang->project->status;?></th>

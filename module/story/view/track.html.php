@@ -51,7 +51,7 @@
               </td>
               <td>
                 <?php foreach($story->case as $caseID => $case):?>
-                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?> 
+                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?> 
                 <?php endforeach;?>
               </td>
               <td>

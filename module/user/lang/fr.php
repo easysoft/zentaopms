@@ -89,7 +89,7 @@ $lang->user->setPublicTemplate     = 'Définir comme Modèle Public';
 $lang->user->tplContentNotEmpty    = 'Le contenu du modèle ne peut pas être vide !';
 
 $lang->user->profile     = 'Profil';
-$lang->user->project     = $lang->projectCommon . 's';
+$lang->user->project     = $lang->executionCommon . 's';
 $lang->user->task        = 'Tâches';
 $lang->user->bug         = 'Bugs';
 $lang->user->test        = 'Test';

@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->project          = $lang->projectCommon;
+$lang->bug->project          = $lang->executionCommon;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Color';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'New';
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Files';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
@@ -173,11 +173,11 @@ $lang->bug->buttonConfirm = 'Confirm';
 
 /* Interactive prompt. */
 $lang->bug->summary              = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
-$lang->bug->confirmChangeProduct = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
+$lang->bug->confirmChangeProduct = "Any change to {$lang->productCommon} will cause linked {$lang->executionCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete        = 'Do you want to delete this bug?';
 $lang->bug->remindTask           = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
 $lang->bug->skipClose            = 'Bug %s is active. You cannot close it.';
-$lang->bug->projectAccessDenied  = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
+$lang->bug->projectAccessDenied  = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
 $lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* Template. */
@@ -278,7 +278,7 @@ $lang->bug->report->common = 'Report';
 $lang->bug->report->select = 'Select Report Type';
 $lang->bug->report->create = 'Create Report';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
+$lang->bug->report->charts['bugsPerProject']        = $lang->executionCommon . ' Bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs Per Build';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs Per Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Reported Bugs Per Day';
@@ -341,7 +341,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->executionCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 

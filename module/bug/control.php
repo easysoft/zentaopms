@@ -31,8 +31,8 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
 
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 
@@ -598,13 +598,13 @@ class bug extends control
 
         /* Get product info. */
         $productID   = $bug->product;
-        $productName = $this->products[$productID];
+        $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
         $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $this->executeHooks($bugID);
 
         /* Header and positon. */
-        $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
+        $this->view->title      = "BUG #$bug->id $bug->title - " . $productName;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
         $this->view->position[] = $this->lang->bug->view;
 

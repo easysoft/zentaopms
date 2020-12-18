@@ -35,7 +35,7 @@ $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
 $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
-$lang->todo->execution    = "所属阶段/" . $lang->projectCommon;
+$lang->todo->execution    = "所属阶段/" . $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "转{$lang->productSRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -96,8 +96,8 @@ $lang->todo->priList[4] = '最低';
 $lang->todo->typeList['custom']   = '自定义';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = $lang->projectCommon . '任务';
-$lang->todo->typeList['story']    = $lang->projectCommon . $lang->productSRCommon;
+$lang->todo->typeList['task']     = $lang->executionCommon . '任务';
+$lang->todo->typeList['story']    = $lang->executionCommon . $lang->productSRCommon;
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';

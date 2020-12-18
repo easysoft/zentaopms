@@ -10,9 +10,9 @@
  * @link        http://www.zentao.net
  */
 /* Fields. */
-$lang->project->common        = $lang->projectCommon;
+$lang->project->common        = $lang->executionCommon;
 $lang->project->allProjects   = 'Alle';
-$lang->project->id            = $lang->projectCommon . ' ID';
+$lang->project->id            = $lang->executionCommon . ' ID';
 $lang->project->type          = 'Typ';
 $lang->project->name          = 'Name';
 $lang->project->code          = 'Alias';
@@ -45,7 +45,7 @@ $lang->project->qa            = 'Test';
 $lang->project->release       = 'Release';
 $lang->project->acl           = 'Zugriffskontrolle';
 $lang->project->teamname      = 'Team Name';
-$lang->project->order         = "Sortierung {$lang->projectCommon}";
+$lang->project->order         = "Sortierung {$lang->executionCommon}";
 $lang->project->orderAB       = "Rank";
 $lang->project->products      = "Verknüpfung {$lang->productCommon}";
 $lang->project->whitelist     = 'Whitelist';
@@ -150,20 +150,20 @@ $lang->project->unlinkStoryTasks  = 'Verknüpfung aufheben';
 $lang->project->linkedProducts    = 'Verküpfte Produkte';
 $lang->project->unlinkedProducts  = 'Produkt verknüpfung aufheben';
 $lang->project->view              = "Übersicht";
-$lang->project->startAction       = "Start {$lang->projectCommon}";
-$lang->project->activateAction    = "Activate {$lang->projectCommon}";
-$lang->project->delayAction       = "Delay {$lang->projectCommon}";
-$lang->project->suspendAction     = "Suspend {$lang->projectCommon}";
-$lang->project->closeAction       = "Close {$lang->projectCommon}";
-$lang->project->testtaskAction    = "{$lang->projectCommon} Request";
-$lang->project->teamAction        = "{$lang->projectCommon} Members";
-$lang->project->kanbanAction      = "{$lang->projectCommon} Kanban";
+$lang->project->startAction       = "Start {$lang->executionCommon}";
+$lang->project->activateAction    = "Activate {$lang->executionCommon}";
+$lang->project->delayAction       = "Delay {$lang->executionCommon}";
+$lang->project->suspendAction     = "Suspend {$lang->executionCommon}";
+$lang->project->closeAction       = "Close {$lang->executionCommon}";
+$lang->project->testtaskAction    = "{$lang->executionCommon} Request";
+$lang->project->teamAction        = "{$lang->executionCommon} Members";
+$lang->project->kanbanAction      = "{$lang->executionCommon} Kanban";
 $lang->project->printKanbanAction = "Print Kanban";
-$lang->project->treeAction        = "{$lang->projectCommon} Tree View";
-$lang->project->exportAction      = "Export {$lang->projectCommon}";
+$lang->project->treeAction        = "{$lang->executionCommon} Tree View";
+$lang->project->exportAction      = "Export {$lang->executionCommon}";
 $lang->project->computeBurnAction = "Compute Burn";
 $lang->project->create            = "Erstelle Projekt";
-$lang->project->copy              = "Kopiere {$lang->projectCommon}";
+$lang->project->copy              = "Kopiere {$lang->executionCommon}";
 $lang->project->delete            = "Lösche";
 $lang->project->browse            = "Durchsuchen";
 $lang->project->edit              = "Bearbeiten";
@@ -184,7 +184,7 @@ $lang->project->treeOnlyTask      = 'Show Task Only';
 $lang->project->treeOnlyStory     = 'Show Story Only';
 $lang->project->storyKanban       = 'Story Kanban';
 $lang->project->storySort         = 'Story sortieren';
-$lang->project->importPlanStory   = '' . $lang->projectCommon . ' wurde erstellt!\nMöchten Sie Storys aus dem Plan importieren?';
+$lang->project->importPlanStory   = '' . $lang->executionCommon . ' wurde erstellt!\nMöchten Sie Storys aus dem Plan importieren?';
 $lang->project->iteration         = 'Iteration';
 $lang->project->iterationInfo     = '%s Iterationen';
 $lang->project->viewAll           = 'Alle anzeigen';
@@ -222,13 +222,13 @@ $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 $lang->project->byQuery = 'Suche';
 
 /* 查询条件列表。*/
-$lang->project->allProject      = "Alle {$lang->projectCommon}";
+$lang->project->allProject      = "Alle {$lang->executionCommon}";
 $lang->project->aboveAllProduct = "Alle oberen {$lang->productCommon}";
-$lang->project->aboveAllProject = "Alle oberen {$lang->projectCommon}";
+$lang->project->aboveAllProject = "Alle oberen {$lang->executionCommon}";
 
 /* 页面提示。*/
-$lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->projectCommon}.";
-$lang->project->selectProject       = "Auswahl {$lang->projectCommon}";
+$lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
+$lang->project->selectProject       = "Auswahl {$lang->executionCommon}";
 $lang->project->selectExecution     = "Select Execution";
 $lang->project->beginAndEnd         = 'Dauer';
 $lang->project->begin               = 'Start';
@@ -246,19 +246,19 @@ $lang->project->groupSummaryAB      = "<div>Aufgaben <strong>%s</strong></div><d
 $lang->project->wbs                 = "Aufgaben aufteilen";
 $lang->project->batchWBS            = "Mehrere aufteilen";
 $lang->project->howToUpdateBurn     = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='Wie wird der Burndown Chart aktualisiert?' class='btn btn-link'>Hilfe <i class='icon icon-help'></i></a>";
-$lang->project->whyNoStories        = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->projectCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
-$lang->project->productStories      = "{$lang->projectCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
+$lang->project->whyNoStories        = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
+$lang->project->productStories      = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
 $lang->project->haveDraft           = "There are %s draft stories can't be linked.";
 $lang->project->doneProjects        = 'Erledigt';
 $lang->project->selectDept          = 'Abteilung wählen';
 $lang->project->selectDeptTitle     = 'Abteilung wählen';
 $lang->project->copyTeam            = 'Team kopieren';
-$lang->project->copyFromTeam        = "Kopieren von {$lang->projectCommon} Team: <strong>%s</strong>";
-$lang->project->noMatched           = "$lang->projectCommon mit '%s' konnte nicht gefunden werden.";
-$lang->project->copyTitle           = "Wählen Sie ein {$lang->projectCommon} zum Kopieren.";
-$lang->project->copyTeamTitle       = "Wählen Sie ein {$lang->projectCommon} Team zum Kopieren.";
-$lang->project->copyNoProject       = "{$lang->projectCommon} kann nicht kopiert werden.";
-$lang->project->copyFromProject     = "Kopie von {$lang->projectCommon} <strong>%s</strong>";
+$lang->project->copyFromTeam        = "Kopieren von {$lang->executionCommon} Team: <strong>%s</strong>";
+$lang->project->noMatched           = "$lang->executionCommon mit '%s' konnte nicht gefunden werden.";
+$lang->project->copyTitle           = "Wählen Sie ein {$lang->executionCommon} zum Kopieren.";
+$lang->project->copyTeamTitle       = "Wählen Sie ein {$lang->executionCommon} Team zum Kopieren.";
+$lang->project->copyNoProject       = "{$lang->executionCommon} kann nicht kopiert werden.";
+$lang->project->copyFromProject     = "Kopie von {$lang->executionCommon} <strong>%s</strong>";
 $lang->project->cancelCopy          = 'Kopieren abbrechen';
 $lang->project->byPeriod            = 'Nach Zeit';
 $lang->project->byUser              = 'Nach Benutzer';
@@ -267,14 +267,14 @@ $lang->project->noMembers           = 'Keine Mitglieder. ';
 $lang->project->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 
 /* 交互提示。*/
-$lang->project->confirmDelete         = "Möchten Sie {$lang->projectCommon}[%s] löschen?";
-$lang->project->confirmUnlinkMember   = "Möchten Sie den Benutzer vom {$lang->projectCommon} entfernen?";
-$lang->project->confirmUnlinkStory    = "Möchten Sie die Story vom {$lang->projectCommon} entfernen?";
-$lang->project->errorNoLinkedProducts = "Kein verknüpftes {$lang->productCommon} in {$lang->projectCommon} gefunden. Sie werden auf die {$lang->productCommon} Seite geleitet.";
-$lang->project->errorSameProducts     = "{$lang->projectCommon} Kann nicht mit mehreren identischen {$lang->productCommon} verknüpft werden";
-$lang->project->accessDenied          = "Zugriff zu {$lang->projectCommon} verweigert!";
+$lang->project->confirmDelete         = "Möchten Sie {$lang->executionCommon}[%s] löschen?";
+$lang->project->confirmUnlinkMember   = "Möchten Sie den Benutzer vom {$lang->executionCommon} entfernen?";
+$lang->project->confirmUnlinkStory    = "Möchten Sie die Story vom {$lang->executionCommon} entfernen?";
+$lang->project->errorNoLinkedProducts = "Kein verknüpftes {$lang->productCommon} in {$lang->executionCommon} gefunden. Sie werden auf die {$lang->productCommon} Seite geleitet.";
+$lang->project->errorSameProducts     = "{$lang->executionCommon} Kann nicht mit mehreren identischen {$lang->productCommon} verknüpft werden";
+$lang->project->accessDenied          = "Zugriff zu {$lang->executionCommon} verweigert!";
 $lang->project->tips                  = 'Hinweis';
-$lang->project->afterInfo             = "{$lang->projectCommon} wurde erstellt. Als nächstes können Sie ";
+$lang->project->afterInfo             = "{$lang->executionCommon} wurde erstellt. Als nächstes können Sie ";
 $lang->project->setTeam               = 'Team setzen';
 $lang->project->linkStory             = 'Storys verküpfen';
 $lang->project->createTask            = 'Aufgaben erstellen';
@@ -283,7 +283,7 @@ $lang->project->noweekend             = 'Ohne Wochenende';
 $lang->project->withweekend           = 'Mit Wochenende';
 $lang->project->interval              = 'Intervale ';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
-$lang->project->unfinishedProject     = "This {$lang->projectCommon} has ";
+$lang->project->unfinishedProject     = "This {$lang->executionCommon} has ";
 $lang->project->unfinishedTask        = "[%s] unfinished tasks. ";
 $lang->project->unresolvedBug         = "[%s] unresolved bugs. ";
 
@@ -349,7 +349,7 @@ $lang->printKanban->typeList['increment'] = 'Erhöhen';
 
 $lang->project->typeList['']       = '';
 $lang->project->typeList['stage']  = 'Stage';
-$lang->project->typeList['sprint'] = $lang->projectCommon;
+$lang->project->typeList['sprint'] = $lang->executionCommon;
 
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;

@@ -28,7 +28,7 @@ $lang->company->guest    = 'Guest Login';
 $lang->company->admins   = 'Administrator';
 
 $lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->projectCommon;
+$lang->company->project = $lang->executionCommon;
 $lang->company->user    = 'User';
 
 $lang->company->guestOptions[0] = 'Deny';

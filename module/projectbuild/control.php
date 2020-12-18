@@ -35,7 +35,7 @@ class projectBuild extends control
         $actionURL = $this->createLink('projectbuild', 'browse', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
         $projects = $this->project->getExecutionsByProject($projectID, 'all', '', true);
-        $this->config->build->search['fields']['project'] = $this->project->lang->projectCommon;
+        $this->config->build->search['fields']['project'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $projects);
 
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
