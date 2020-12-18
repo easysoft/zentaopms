@@ -261,7 +261,7 @@ $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
-$lang->index->menu->project = "{$lang->projectCommon}|project|browse";
+$lang->index->menu->project = "{$lang->executionCommon}|project|browse";
 
 /* My dashboard menu settings. */
 $lang->my = new stdclass();
@@ -292,7 +292,7 @@ $lang->scrumproduct->menu->story    = array('link' => 'Story|product|browse|prod
 $lang->scrumproduct->menu->plan     = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->scrumproduct->menu->release  = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->scrumproduct->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
-$lang->scrumproduct->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->scrumproduct->menu->project  = "{$lang->executionCommon}|product|project|status=all&productID=%s";
 $lang->scrumproduct->menu->dynamic  = 'Verlauf|product|dynamic|productID=%s';
 $lang->scrumproduct->menu->doc      = array('link' => 'Dok|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->scrumproduct->menu->branch   = '@branch@|branch|manage|productID=%s';
@@ -457,7 +457,7 @@ $lang->report->menu = new stdclass();
 
 $lang->report->menu->annual  = array('link' => 'Annual Summary|report|annualData', 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
-$lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
+$lang->report->menu->prj     = array('link' => $lang->executionCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Unternehmen|report|workload');
 
@@ -857,7 +857,7 @@ $lang->icons['score']              = 'tint';
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->program        = 'Index|program|index|';
-$lang->menu->scrum->project        = "$lang->projectCommon|project|index|locate=no";
+$lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
@@ -875,7 +875,7 @@ $lang->scrum->subMenu->morelink->program = 'Program|program|PRJEdit|';
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');

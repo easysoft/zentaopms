@@ -34,7 +34,7 @@ $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Leer bedeutet Zugriff verweigert.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
-$lang->group->noneProject        = "No {$lang->projectCommon}";
+$lang->group->noneProject        = "No {$lang->executionCommon}";
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';

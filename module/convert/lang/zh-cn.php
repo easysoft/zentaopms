@@ -29,7 +29,7 @@ $lang->convert->convertBugFree = '转换BugFree';
 $lang->convert->selectSource     = '选择来源系统及版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
-$lang->convert->direction             = "请选择{$lang->projectCommon}问题转换方向";
+$lang->convert->direction             = "请选择{$lang->executionCommon}问题转换方向";
 $lang->convert->questionTypeOfRedmine = 'Redmine中问题类型';
 $lang->convert->aimTypeOfZentao       = '转化为Zentao中的类型';
 
@@ -66,7 +66,7 @@ $lang->convert->info       = '转换信息';
 
 $lang->convert->bugfree = new stdclass();
 $lang->convert->bugfree->users    = '用户';
-$lang->convert->bugfree->projects = $lang->projectCommon;
+$lang->convert->bugfree->projects = $lang->executionCommon;
 $lang->convert->bugfree->modules  = '模块';
 $lang->convert->bugfree->bugs     = 'Bug';
 $lang->convert->bugfree->cases    = '测试用例';
@@ -78,7 +78,7 @@ $lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = '用户';
 $lang->convert->redmine->groups       = '用户分组';
 $lang->convert->redmine->products     = $lang->productCommon;
-$lang->convert->redmine->projects     = $lang->projectCommon;
+$lang->convert->redmine->projects     = $lang->executionCommon;
 $lang->convert->redmine->stories      = $lang->productSRCommon;
 $lang->convert->redmine->tasks        = '任务';
 $lang->convert->redmine->bugs         = 'Bug';

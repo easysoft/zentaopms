@@ -93,8 +93,8 @@ $lang->todo->priList[4] = '最低';
 $lang->todo->typeList['custom']   = '自定義';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = $lang->projectCommon . '任務';
-$lang->todo->typeList['story']    = $lang->projectCommon . $lang->productSRCommon;
+$lang->todo->typeList['task']     = $lang->executionCommon . '任務';
+$lang->todo->typeList['story']    = $lang->executionCommon . $lang->productSRCommon;
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';

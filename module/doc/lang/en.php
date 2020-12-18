@@ -13,7 +13,7 @@
 $lang->doc->common         = 'Document';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
-$lang->doc->project        = $lang->projectCommon;
+$lang->doc->project        = $lang->executionCommon;
 $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Category';
 $lang->doc->title          = 'Name';
@@ -87,7 +87,7 @@ $lang->doc->custom         = 'Custom Document Library';
 $lang->doc->customAB       = 'Custom Doc Lib';
 $lang->doc->createLib      = 'Create Document Library';
 $lang->doc->allLibs        = 'Library List';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Libraries";
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
 $lang->doc->showFiles      = 'Attachments';
 $lang->doc->editLib        = 'Edit Document Library';
 $lang->doc->deleteLib      = 'Delete Document Library';
@@ -97,10 +97,10 @@ $lang->doc->search         = 'Search';
 
 /* Query condition list. */
 $lang->doc->allProduct     = 'All' . $lang->productCommon . 's';
-$lang->doc->allProject     = 'All' . $lang->projectCommon . 's';
+$lang->doc->allProject     = 'All' . $lang->executionCommon . 's';
 
 $lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
+$lang->doc->libTypeList['project'] = $lang->executionCommon . ' Library';
 $lang->doc->libTypeList['custom']  = 'Custom Library';
 
 $lang->doc->libIconList['product'] = 'icon-cube';
@@ -108,7 +108,7 @@ $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
-$lang->doc->systemLibs['project'] = $lang->projectCommon;
+$lang->doc->systemLibs['project'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
@@ -148,7 +148,7 @@ $lang->doc->orderLib = 'Rank Settings';
 $lang->doc->customShowLibs = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
-$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon}s Only";
+$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->executionCommon}s Only";
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
@@ -160,7 +160,7 @@ $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this document library?";
 $lang->doc->errorEditSystemDoc = "You don't have to change system document library.";
 $lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. It cannot be created.";
-$lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. It cannot be created.";
+$lang->doc->errorEmptyProject  = "No {$lang->executionCommon}. It cannot be created.";
 $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access is denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
@@ -196,7 +196,7 @@ $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Attachments';
 $lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select';
-$lang->doclib->project = $lang->projectCommon . ' Library';
+$lang->doclib->project = $lang->executionCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
 
 $lang->doclib->aclListA['default'] = 'Default';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = 'Custom';
 $lang->doclib->aclListB['private'] = 'Private';
 
 $lang->doclib->create['product'] = 'Create ' . $lang->productCommon . ' Library';
-$lang->doclib->create['project'] = 'Create ' . $lang->projectCommon . ' Library';
+$lang->doclib->create['project'] = 'Create ' . $lang->executionCommon . ' Library';
 $lang->doclib->create['custom']  = 'Create Custom Library';
 
 $lang->doclib->main['product'] =  'Primary Library';
 $lang->doclib->main['project'] =  'Primary Library';
 
 $lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['project'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']  = 'Custom';
 
 $lang->doclib->nameList['custom'] = 'Custom Name';

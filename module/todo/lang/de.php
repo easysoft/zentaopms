@@ -93,8 +93,8 @@ $lang->todo->priList[4] = 'Niedrig';
 $lang->todo->typeList['custom'] = 'Eigene';
 $lang->todo->typeList['cycle']  = 'Wiederkehrend';
 $lang->todo->typeList['bug']    = 'Bug';
-$lang->todo->typeList['task']   = $lang->projectCommon . ' Aufgabe';
-$lang->todo->typeList['story']  = $lang->projectCommon . ' Story';
+$lang->todo->typeList['task']   = $lang->executionCommon . ' Aufgabe';
+$lang->todo->typeList['story']  = $lang->executionCommon . ' Story';
 
 $lang->todo->confirmDelete  = "Möchten Sie diesen ToDo löschen?";
 $lang->todo->thisIsPrivate  = 'Dies ist ein privater ToDo';

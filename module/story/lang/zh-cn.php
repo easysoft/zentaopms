@@ -228,7 +228,7 @@ $lang->story->legendLifeTime       = "{$lang->productSRCommon}的一生";
 $lang->story->legendRelated        = '相关信息';
 $lang->story->legendMailto         = '抄送给';
 $lang->story->legendAttatch        = '附件';
-$lang->story->legendProjectAndTask = $lang->projectCommon . '任务';
+$lang->story->legendProjectAndTask = $lang->executionCommon . '任务';
 $lang->story->legendBugs           = '相关Bug';
 $lang->story->legendFromBug        = '来源Bug';
 $lang->story->legendCases          = '相关用例';
@@ -245,7 +245,7 @@ $lang->story->lblClose             = "关闭{$lang->productSRCommon}";
 $lang->story->lblTBC               = '任务Bug用例';
 
 $lang->story->checkAffection       = '影响范围';
-$lang->story->affectedProjects     = '影响的' . $lang->projectCommon;
+$lang->story->affectedProjects     = '影响的' . $lang->executionCommon;
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
@@ -275,8 +275,8 @@ $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
-$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。');
+$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 $lang->story->action->linked2build        = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfrombuild   = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2release      = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');

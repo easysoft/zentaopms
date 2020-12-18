@@ -616,9 +616,9 @@ class customModel extends model
         $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
         $newConfig = $this->post->sprintConcept;
 
-        foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
+        foreach($this->config->executionCommonList as $clientLang => $executionCommonList)
         {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldConfig]}', '{$projectCommonList[$newConfig]}')")->where('source')->eq('project')->exec();
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('project')->exec();
         }
     }
 

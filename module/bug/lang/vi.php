@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Kế hoạch';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->project          = $lang->projectCommon;
+$lang->bug->project          = $lang->executionCommon;
 $lang->bug->story            = 'Câu chuyện';
 $lang->bug->storyVersion     = 'Phiên bản câu chuyện';
 $lang->bug->color            = 'Màu';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'Mới';
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
 $lang->bug->legendAttatch               = 'Files';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Câu chuyện/Nhiệm vụ';
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';
 $lang->bug->lblSystemBrowserAndHardware = 'Hệ thống/Trình duyệt';
 $lang->bug->legendSteps                 = 'Các bước Repro';
@@ -173,11 +173,11 @@ $lang->bug->buttonConfirm = 'Xác nhận';
 
 /* Interactive prompt. */
 $lang->bug->summary              = "Tổng <strong>%s</strong> bugs, và <strong>%s</strong> kích hoạt.";
-$lang->bug->confirmChangeProduct = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->projectCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
+$lang->bug->confirmChangeProduct = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->executionCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
 $lang->bug->confirmDelete        = 'Bạn có muốn xóa bug này?';
 $lang->bug->remindTask           = 'Bug này đã chuyển thành một nhiệm vụ. Bạn có muốn cập nhật tình trạng của nhiệm vụ(ID %s)?';
 $lang->bug->skipClose            = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
-$lang->bug->projectAccessDenied  = "Truy cập của bạn tới {$lang->projectCommon} mà Bug này sở hữu bị từ chối!";
+$lang->bug->projectAccessDenied  = "Truy cập của bạn tới {$lang->executionCommon} mà Bug này sở hữu bị từ chối!";
 $lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
 
 /* Template. */
@@ -278,7 +278,7 @@ $lang->bug->report->common = 'Báo cáo';
 $lang->bug->report->select = 'Chọn loại báo cáo';
 $lang->bug->report->create = 'Tạo báo cáo';
 
-$lang->bug->report->charts['bugsPerProject']        = 'Bugs '.$lang->projectCommon;
+$lang->bug->report->charts['bugsPerProject']        = 'Bugs '.$lang->executionCommon;
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs mỗi bản dựng';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs mỗi Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Bugs đã báo cáo mỗi ngày';
@@ -341,7 +341,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName  = $lang->projectCommon;
+$lang->bug->report->bugsPerProject->graph->xAxisName  = $lang->executionCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName    = 'Bản dựng';
 $lang->bug->report->bugsPerModule->graph->xAxisName   = 'Module';
 

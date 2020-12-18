@@ -13,7 +13,7 @@
 $lang->doc->common       = 'Tài liệu';
 $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
-$lang->doc->project      = $lang->projectCommon;
+$lang->doc->project      = $lang->executionCommon;
 $lang->doc->lib          = 'Thư viện';
 $lang->doc->module       = 'Danh mục';
 $lang->doc->title        = 'Tên';
@@ -87,7 +87,7 @@ $lang->doc->custom     = 'Tùy biến thư viện tài liệu';
 $lang->doc->customAB   = 'Tùy biến Doc Lib';
 $lang->doc->createLib  = 'Tạo thư viện tài liệu';
 $lang->doc->allLibs    = 'Library danh sách';
-$lang->doc->objectLibs = "{$lang->productCommon}/{$lang->projectCommon} Libraries";
+$lang->doc->objectLibs = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
 $lang->doc->showFiles  = 'Attachments';
 $lang->doc->editLib    = 'Sửa thư viện tài liệu';
 $lang->doc->deleteLib  = 'Xóa thư viện tài liệu';
@@ -97,10 +97,10 @@ $lang->doc->search     = 'Tìm kiếm';
 
 /* Query condition list. */
 $lang->doc->allProduct = 'All' . $lang->productCommon;
-$lang->doc->allProject = 'All' . $lang->projectCommon;
+$lang->doc->allProject = 'All' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product'] = $lang->productCommon . ' thư viện';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . ' thư viện';
+$lang->doc->libTypeList['project'] = $lang->executionCommon . ' thư viện';
 $lang->doc->libTypeList['custom']  = 'Tùy biến thư viện';
 
 $lang->doc->libIconList['product'] = 'icon-cube';
@@ -108,7 +108,7 @@ $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
-$lang->doc->systemLibs['project'] = $lang->projectCommon;
+$lang->doc->systemLibs['project'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = 'Công khai';
 $lang->doc->aclList['custom']  = 'Tùy biến';
@@ -148,7 +148,7 @@ $lang->doc->orderLib                       = 'Đánh giá Thiết lập';
 $lang->doc->customShowLibs                 = 'Display Thiết lập';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty thư viện';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category tài liệu';
-$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon} Only";
+$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->executionCommon} Only";
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
@@ -160,7 +160,7 @@ $lang->doc->confirmDelete      = "Bạn có muốn xóa this document?";
 $lang->doc->confirmDeleteLib   = "Bạn có muốn xóa this document library?";
 $lang->doc->errorEditSystemDoc = "You don't have to change system document library.";
 $lang->doc->errorEmptyProduct  = "Không có {$lang->productCommon}. It cannot be created.";
-$lang->doc->errorEmptyProject  = "Không có {$lang->projectCommon}. It cannot be created.";
+$lang->doc->errorEmptyProject  = "Không có {$lang->executionCommon}. It cannot be created.";
 $lang->doc->errorMainSysLib    = "This library không thể xóa.";
 $lang->doc->accessDenied       = "Access bị từ chối!";
 $lang->doc->versionNotFount    = 'Nó does not exist in bản dựng này.';
@@ -196,7 +196,7 @@ $lang->doclib->user    = 'Người dùng';
 $lang->doclib->files   = 'Attachments';
 $lang->doclib->all     = 'Tất cả Libraries';
 $lang->doclib->select  = 'Chọn';
-$lang->doclib->project = $lang->projectCommon . ' thư viện';
+$lang->doclib->project = $lang->executionCommon . ' thư viện';
 $lang->doclib->product = $lang->productCommon . ' thư viện';
 
 $lang->doclib->aclListA['default'] = 'Mặc định';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = 'Tùy biến';
 $lang->doclib->aclListB['private'] = 'Riêng tư';
 
 $lang->doclib->create['product']   = 'Tạo ' . $lang->productCommon . ' thư viện';
-$lang->doclib->create['project']   = 'Tạo ' . $lang->projectCommon . ' thư viện';
+$lang->doclib->create['project']   = 'Tạo ' . $lang->executionCommon . ' thư viện';
 $lang->doclib->create['custom']    = 'Tạo Custom thư viện';
 
 $lang->doclib->main['product'] =  'Primary thư viện';
 $lang->doclib->main['project'] =  'Primary thư viện';
 
 $lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['project'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']  = 'Tùy biến';
 
 $lang->doclib->nameList['custom'] = 'Tùy biến tên';

@@ -30,7 +30,7 @@ $lang->build->basicInfo = '基本信息';
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = '平台/分支';
-$lang->build->project       = '所屬' . $lang->projectCommon;
+$lang->build->project       = '所屬' . $lang->executionCommon;
 $lang->build->name          = '名稱編號';
 $lang->build->date          = '打包日期';
 $lang->build->builder       = '構建者';
@@ -45,12 +45,12 @@ $lang->build->unlinkBug     = '移除Bug';
 $lang->build->stories       = "完成的{$lang->productSRCommon}";
 $lang->build->bugs          = '解決的Bug';
 $lang->build->generatedBugs = '產生的Bug';
-$lang->build->noProduct     = " <span style='color:red'>該{$lang->projectCommon}沒有關聯{$lang->productCommon}，無法創建版本，請先<a href='%s'>關聯{$lang->productCommon}</a></span>";
+$lang->build->noProduct     = " <span style='color:red'>該{$lang->executionCommon}沒有關聯{$lang->productCommon}，無法創建版本，請先<a href='%s'>關聯{$lang->productCommon}</a></span>";
 $lang->build->noBuild       = '暫時沒有版本。';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct = "已經關聯{$lang->productSRCommon}或Bug的版本，不能修改其所屬產品";
-$lang->build->notice->changeProject = "提交測試單的版本，不能修改其所屬{$lang->projectCommon}";
+$lang->build->notice->changeProject = "提交測試單的版本，不能修改其所屬{$lang->executionCommon}";
 
 $lang->build->finishStories = " 本次共完成 %s 個{$lang->productSRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解決 %s 個Bug';

@@ -42,7 +42,7 @@ $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
 $lang->block->myStory             = "我的{$lang->SRCommon}";
 $lang->block->myBug               = '我的BUG';
-$lang->block->myProject           = '未关闭的' . $lang->projectCommon;
+$lang->block->myProject           = '未关闭的' . $lang->executionCommon;
 $lang->block->myProduct           = '未关闭的' . $lang->productCommon;
 $lang->block->delayed             = '已延期';
 $lang->block->noData              = '当前统计类型下暂无数据';
@@ -59,9 +59,9 @@ $lang->block->resolvedRisks       = '解决的风险数';
 $lang->block->createdIssues       = '创建的问题数';
 $lang->block->resolvedIssues      = '解决的问题数';
 $lang->block->createdDocs         = '创建的文档数';
-$lang->block->allProject          = '所有' . $lang->projectCommon;
-$lang->block->doingProject        = '进行中的' . $lang->projectCommon;
-$lang->block->finishProject       = '累积' . $lang->projectCommon;
+$lang->block->allProject          = '所有' . $lang->executionCommon;
+$lang->block->doingProject        = '进行中的' . $lang->executionCommon;
+$lang->block->finishProject       = '累积' . $lang->executionCommon;
 $lang->block->estimatedHours      = '预计工时';
 $lang->block->consumedHours       = '已消耗';
 $lang->block->time                = '第';
@@ -144,7 +144,7 @@ $lang->block->default['scrum']['program']['1']['title'] =  '项目整体情况';
 $lang->block->default['scrum']['program']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['program']['1']['grid']  = 8;
 
-$lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . '列表';
+$lang->block->default['scrum']['program']['2']['title'] = $lang->executionCommon . '列表';
 $lang->block->default['scrum']['program']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['program']['2']['grid']  = 8;
 
@@ -156,7 +156,7 @@ $lang->block->default['scrum']['program']['3']['params']['type']    = 'wait';
 $lang->block->default['scrum']['program']['3']['params']['count']   = '15';
 $lang->block->default['scrum']['program']['3']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['program']['4']['title'] = $lang->projectCommon . '总览';
+$lang->block->default['scrum']['program']['4']['title'] = $lang->executionCommon . '总览';
 $lang->block->default['scrum']['program']['4']['block'] = 'sprint';
 $lang->block->default['scrum']['program']['4']['grid']  = 4;
 
@@ -190,18 +190,18 @@ $lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['project']['1']['title'] = $lang->projectCommon . '统计';
+$lang->block->default['project']['1']['title'] = $lang->executionCommon . '统计';
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['type']  = 'all';
 $lang->block->default['project']['1']['params']['count'] = '20';
 
-$lang->block->default['project']['2']['title'] = $lang->projectCommon . '总览';
+$lang->block->default['project']['2']['title'] = $lang->executionCommon . '总览';
 $lang->block->default['project']['2']['block'] = 'overview';
 $lang->block->default['project']['2']['grid']  = 4;
 
-$lang->block->default['project']['3']['title'] = '未关闭的' . $lang->projectCommon;
+$lang->block->default['project']['3']['title'] = '未关闭的' . $lang->executionCommon;
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
@@ -327,7 +327,7 @@ $lang->block->availableBlocks->bug      = '我的Bug';
 $lang->block->availableBlocks->case     = '我的用例';
 $lang->block->availableBlocks->story    = "我的{$lang->SRCommon}";
 $lang->block->availableBlocks->product  = $lang->productCommon . '列表';
-$lang->block->availableBlocks->project  = $lang->projectCommon . '列表';
+$lang->block->availableBlocks->project  = $lang->executionCommon . '列表';
 $lang->block->availableBlocks->plan     = "计划列表";
 $lang->block->availableBlocks->release  = '发布列表';
 $lang->block->availableBlocks->build    = '版本列表';
@@ -351,8 +351,8 @@ $lang->block->modules['program']->availableBlocks->programteam   = '项目人力
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '项目整体情况';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . '列表';
-$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . '总览';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
+$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待测版本';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最新动态';
 
@@ -544,6 +544,6 @@ $lang->block->gridOptions[4] = '右侧';
 $lang->block->flowchart   = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护公司', '添加用户', '维护权限');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护{$lang->SRCommon}", '创建发布');
-$lang->block->flowchart['project'] = array($lang->projectCommon . '经理', '创建' . $lang->projectCommon, '维护团队', '关联' . $lang->productCommon, "关联{$lang->SRCommon}", '分解任务');
+$lang->block->flowchart['project'] = array($lang->executionCommon . '经理', '创建' . $lang->executionCommon, '维护团队', '关联' . $lang->productCommon, "关联{$lang->SRCommon}", '分解任务');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '更新状态', '完成任务和Bug');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');

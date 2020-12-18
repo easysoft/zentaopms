@@ -228,7 +228,7 @@ $lang->story->legendLifeTime       = 'Story Leben ';
 $lang->story->legendRelated        = 'Weitere Infos';
 $lang->story->legendMailto         = 'Mail an';
 $lang->story->legendAttatch        = 'Dateien';
-$lang->story->legendProjectAndTask = $lang->projectCommon . ' Aufgaben';
+$lang->story->legendProjectAndTask = $lang->executionCommon . ' Aufgaben';
 $lang->story->legendBugs           = 'Verküpfte Bugs';
 $lang->story->legendFromBug        = 'Verküpfte Formular Bugs';
 $lang->story->legendCases          = 'Verküpfte Fälle';
@@ -245,7 +245,7 @@ $lang->story->lblClose             = 'Close';
 $lang->story->lblTBC               = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Impact';
-$lang->story->affectedProjects     = '' . $lang->projectCommon;
+$lang->story->affectedProjects     = '' . $lang->executionCommon;
 $lang->story->affectedBugs         = 'Bug';
 $lang->story->affectedCases        = 'Fall';
 
@@ -275,8 +275,8 @@ $lang->story->action->reviewed            = array('main' => '$date, geprüft von
 $lang->story->action->closed              = array('main' => '$date, geschlossen von <strong>$actor</strong>. Der Grund ist <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->linked2plan         = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>');
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Plan <strong>$extra</strong>.');
-$lang->story->action->linked2project      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit ' . $lang->projectCommon . ' <strong>$extra</strong>.');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit ' . $lang->projectCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2project      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromproject = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
 $lang->story->action->linked2build        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Build <strong>$extra</strong>');
 $lang->story->action->unlinkedfrombuild   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Build <strong>$extra</strong>.');
 $lang->story->action->linked2release      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Release <strong>$extra</strong>');

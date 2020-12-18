@@ -37,7 +37,7 @@ $lang->report->assign['assign'] = 'Zugeordnet';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->projectCommon . ' Abweichung';
+$lang->report->projectDeviation = $lang->executionCommon . ' Abweichung';
 $lang->report->productSummary   = $lang->productCommon . ' Zusammenfassung';
 $lang->report->bugCreate        = 'Bug gemeldet';
 $lang->report->bugAssign        = 'Bug zugeordnet';
@@ -46,16 +46,16 @@ $lang->report->workloadAB       = 'Arbeitslast';
 $lang->report->bugOpenedDate    = 'Bug gemeldet am';
 $lang->report->beginAndEnd      = ' : von';
 $lang->report->dept             = 'Abteilung';
-$lang->report->deviationChart   = $lang->projectCommon . ' Abweichnungs Chart';
+$lang->report->deviationChart   = $lang->executionCommon . ' Abweichnungs Chart';
 
-$lang->reportList->project->lists[10] = $lang->projectCommon . ' Abweichnung|report|projectdeviation';
+$lang->reportList->project->lists[10] = $lang->executionCommon . ' Abweichnung|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Zusammenfassung|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bugs gemeldet|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bugs zugeordnet|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Arbeitslast|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->projectCommon;
+$lang->report->project       = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Name';
 $lang->report->bugTotal      = 'Bug';

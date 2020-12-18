@@ -13,7 +13,7 @@
 $lang->doc->common         = 'Dok';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
-$lang->doc->project        = $lang->projectCommon;
+$lang->doc->project        = $lang->executionCommon;
 $lang->doc->lib            = 'Bibliothek';
 $lang->doc->module         = 'Modul';
 $lang->doc->title          = 'Titel';
@@ -87,7 +87,7 @@ $lang->doc->custom         = 'Eigene Dok Bibliothek';
 $lang->doc->customAB       = 'Eigene Bibliothek';
 $lang->doc->createLib      = 'Bibliothek erstellen';
 $lang->doc->allLibs        = 'Bibliothek';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Bibliothek Liste";
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
 $lang->doc->showFiles      = 'Dok Bibliothek';
 $lang->doc->editLib        = 'Bibliothek bearbeiten';
 $lang->doc->deleteLib      = 'Bibliothek löschen';
@@ -97,10 +97,10 @@ $lang->doc->search         = 'Suche';
 
 /* 查询条件列表 */
 $lang->doc->allProduct     = 'Alle' . $lang->productCommon;
-$lang->doc->allProject     = 'Alle' . $lang->projectCommon;
+$lang->doc->allProject     = 'Alle' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product'] = $lang->productCommon . ' Bibliothek';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Bibliothek';
+$lang->doc->libTypeList['project'] = $lang->executionCommon . ' Bibliothek';
 $lang->doc->libTypeList['custom']  = 'Eigene Bibliothek';
 
 $lang->doc->libIconList['product'] = 'icon-cube';
@@ -108,7 +108,7 @@ $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon . 'Dok Bibliothek';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . 'Dok Bibliothek';
+$lang->doc->systemLibs['project'] = $lang->executionCommon . 'Dok Bibliothek';
 
 $lang->doc->aclList['open']    = 'Öffentlich';
 $lang->doc->aclList['custom']  = 'Eigene';
@@ -148,7 +148,7 @@ $lang->doc->orderLib = 'Rank Settings';
 $lang->doc->customShowLibs = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
-$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon}s Only";
+$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->executionCommon}s Only";
 
 $lang->doc->mail = new stdclass();
 $lang->doc->mail->create = new stdclass();
@@ -160,7 +160,7 @@ $lang->doc->confirmDelete      = "Möchten Sie dieses Dokument löschen?";
 $lang->doc->confirmDeleteLib   = "Möchten Sie diese Bibliothek löschen?";
 $lang->doc->errorEditSystemDoc = "System Dokumentenbibliothek darf nicht geändert werden.";
 $lang->doc->errorEmptyProduct  = "Kein {$lang->productCommon}. Kann nicht erstellt werden.";
-$lang->doc->errorEmptyProject  = "Kein {$lang->projectCommon}. Kann nicht erstellt werden.";
+$lang->doc->errorEmptyProject  = "Kein {$lang->executionCommon}. Kann nicht erstellt werden.";
 $lang->doc->errorMainSysLib    = "Diese Bibliothek kann nicht gelöscht werden.";
 $lang->doc->accessDenied       = "Zugriff verweigert!";
 $lang->doc->versionNotFount    = 'Existiert nicht in diesem Build.';
@@ -196,7 +196,7 @@ $lang->doclib->user    = 'Benutzer';
 $lang->doclib->files   = 'Dateien';
 $lang->doclib->all     = 'Alle Bibliotheken';
 $lang->doclib->select  = 'Auswahl';
-$lang->doclib->project = $lang->projectCommon . ' Bibliothek';
+$lang->doclib->project = $lang->executionCommon . ' Bibliothek';
 $lang->doclib->product = $lang->productCommon . ' Bibliothek';
 
 $lang->doclib->aclListA['default'] = 'Default';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = 'Custom';
 $lang->doclib->aclListB['private'] = 'Private';
 
 $lang->doclib->create['product'] = 'Create ' . $lang->productCommon . ' Library';
-$lang->doclib->create['project'] = 'Create ' . $lang->projectCommon . ' Library';
+$lang->doclib->create['project'] = 'Create ' . $lang->executionCommon . ' Library';
 $lang->doclib->create['custom']  = 'Create Custom Library';
 
 $lang->doclib->main['product'] =  'Primary Library';
 $lang->doclib->main['project'] =  'Primary Library';
 
 $lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['project'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']  = 'Custom';
 
 $lang->doclib->nameList['custom'] = 'Custom Name';

@@ -89,7 +89,7 @@ $lang->user->setPublicTemplate     = 'Set as Public Template';
 $lang->user->tplContentNotEmpty    = 'Vorlageninhalt darf nicht leer sein!';
 
 $lang->user->profile     = 'Profil';
-$lang->user->project     = $lang->projectCommon;
+$lang->user->project     = $lang->executionCommon;
 $lang->user->task        = 'Aufgaben';
 $lang->user->bug         = 'Bugs';
 $lang->user->test        = 'Tests';

@@ -30,7 +30,7 @@ $lang->build->basicInfo = 'Thông tin cơ bản';
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = 'Platform/Branch';
-$lang->build->project       = $lang->projectCommon;
+$lang->build->project       = $lang->executionCommon;
 $lang->build->name          = 'Tên';
 $lang->build->date          = 'Ngày';
 $lang->build->builder       = 'Builder';
@@ -45,12 +45,12 @@ $lang->build->unlinkBug     = 'Hủy liên kết Bug';
 $lang->build->stories       = "{$lang->productSRCommon} đã kết thúc";
 $lang->build->bugs          = 'Bugs đã giải quyết';
 $lang->build->generatedBugs = 'Bugs đã báo cáo';
-$lang->build->noProduct     = " <span style='color:red'>{$lang->projectCommon} này chưa liên kết tới {$lang->productCommon}, bởi vậy Bản dựng này không thể tạo. Vui lòng liên kết <a href='%s'> {$lang->productCommon} trước</a></span>";
+$lang->build->noProduct     = " <span style='color:red'>{$lang->executionCommon} này chưa liên kết tới {$lang->productCommon}, bởi vậy Bản dựng này không thể tạo. Vui lòng liên kết <a href='%s'> {$lang->productCommon} trước</a></span>";
 $lang->build->noBuild       = 'Không có bản dựng nào';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct = "The {$lang->productSRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
-$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->projectCommon}";
+$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 
 $lang->build->finishStories = "  {$lang->productSRCommon} đã kết thúc %s";
 $lang->build->resolvedBugs  = '  Bug đã giải quyết %s';

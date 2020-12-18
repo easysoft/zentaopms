@@ -38,14 +38,14 @@ $lang->product->plans       = 'Kế hoạch';
 $lang->product->releases    = 'Phát hành';
 $lang->product->docs        = 'Tài liệu';
 $lang->product->bugs        = 'Bug liên kết';
-$lang->product->projects    = "{$lang->projectCommon} liên kết";
+$lang->product->projects    = "{$lang->executionCommon} liên kết";
 $lang->product->cases       = 'Tình huống';
 $lang->product->builds      = 'Bản dựng';
 $lang->product->roadmap     = "Lộ trình {$lang->productCommon}";
 $lang->product->doc         = "Tài liệu {$lang->productCommon}";
-$lang->product->project     = 'Danh sách '.$lang->projectCommon;
+$lang->product->project     = 'Danh sách '.$lang->executionCommon;
 $lang->product->build       = 'Danh sách bản dựng';
-$lang->product->projectInfo = "{$lang->projectCommon} đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
+$lang->product->projectInfo = "{$lang->executionCommon} đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
 $lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Kích hoạt [S]';
@@ -134,7 +134,7 @@ $lang->product->statusList['normal'] = 'Bình thường';
 $lang->product->statusList['closed'] = 'Đã đóng';
 
 $lang->product->aclList['open']    = "Mặc định (Người dùng với quyền {$lang->productCommon} có thể truy cập nó.)";
-$lang->product->aclList['private'] = "Riêng tư {$lang->productCommon} ({$lang->projectCommon} chỉ có thành viên nhóm)";
+$lang->product->aclList['private'] = "Riêng tư {$lang->productCommon} ({$lang->executionCommon} chỉ có thành viên nhóm)";
 $lang->product->aclList['custom']  = 'Tùy biến (Thành viên đội nhóm và thành viên danh sách trắng có thể truy cập nó.)';
 
 $lang->product->storySummary   = "Tổng <strong>%s</strong> câu chuyện trên trang này. Dự tính: <strong>%s</strong> ({$lang->hourCommon}), và phạm vi tình huống: <strong>%s</strong>.";

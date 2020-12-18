@@ -71,7 +71,7 @@ $lang->testreport->legacyBugTip   = "Aktive Bugs, oder gelöst nach der Testperi
 $lang->testreport->fromCaseBugTip = "Bugs created after case-failure in the test period.";
 $lang->testreport->errorTrunk     = "Die Trunk Version kann kein Testbericht erstellen. Bitte passen Sie die zugeordnete Version an!";
 $lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
-$lang->testreport->noObjectID     = "No test request or {$lang->projectCommon} is selected, so no report can be generated.";
+$lang->testreport->noObjectID     = "No test request or {$lang->executionCommon} is selected, so no report can be generated.";
 $lang->testreport->moreProduct    = "Ein Testbericht kann nur innerhalb des selben Produkts erstellt werden.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
 

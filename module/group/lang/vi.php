@@ -34,7 +34,7 @@ $lang->group->dynamic            = 'Truy cập Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "Không có {$lang->productCommon}";
-$lang->group->noneProject        = "Không có {$lang->projectCommon}";
+$lang->group->noneProject        = "Không có {$lang->executionCommon}";
 
 $lang->group->id      = 'ID';
 $lang->group->name    = 'Nhóm';

@@ -42,7 +42,7 @@ $lang->block->leftToday           = 'Arbeit für Heute';
 $lang->block->myTask              = 'Aufgaben';
 $lang->block->myStory             = 'Story';
 $lang->block->myBug               = 'Bugs';
-$lang->block->myProject           = 'Unclosed ' . $lang->projectCommon . 's';
+$lang->block->myProject           = 'Unclosed ' . $lang->executionCommon . 's';
 $lang->block->myProduct           = 'Unclosed ' . $lang->productCommon . 's';
 $lang->block->delayed             = 'Verspätet';
 $lang->block->noData              = 'Keine Daten für diesen Bericht.';
@@ -59,9 +59,9 @@ $lang->block->resolvedRisks       = 'Risks Resolved';
 $lang->block->createdIssues       = 'Issues Created';
 $lang->block->resolvedIssues      = 'Issues Resolved';
 $lang->block->createdDocs         = 'Docs Created';
-$lang->block->allProject          = 'All ' . $lang->projectCommon;
-$lang->block->doingProject        = 'Doning ' . $lang->projectCommon;
-$lang->block->finishProject       = 'Finish ' . $lang->projectCommon;
+$lang->block->allProject          = 'All ' . $lang->executionCommon;
+$lang->block->doingProject        = 'Doning ' . $lang->executionCommon;
+$lang->block->finishProject       = 'Finish ' . $lang->executionCommon;
 $lang->block->estimatedHours      = 'Estimated Hours';
 $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
@@ -98,7 +98,7 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Residuals';
 
-$lang->block->default['waterfall']['program']['1']['title']  = $lang->projectCommon . 'Weekly';
+$lang->block->default['waterfall']['program']['1']['title']  = $lang->executionCommon . 'Weekly';
 $lang->block->default['waterfall']['program']['1']['block']  = 'waterfallreport';
 $lang->block->default['waterfall']['program']['1']['source'] = 'program';
 $lang->block->default['waterfall']['program']['1']['grid']   = 8;
@@ -144,7 +144,7 @@ $lang->block->default['scrum']['program']['1']['title'] =  'Project Overall';
 $lang->block->default['scrum']['program']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['program']['1']['grid']  = 8;
 
-$lang->block->default['scrum']['program']['2']['title'] = $lang->projectCommon . ' List';
+$lang->block->default['scrum']['program']['2']['title'] = $lang->executionCommon . ' List';
 $lang->block->default['scrum']['program']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['program']['2']['grid']  = 8;
 
@@ -156,7 +156,7 @@ $lang->block->default['scrum']['program']['3']['params']['type']    = 'wait';
 $lang->block->default['scrum']['program']['3']['params']['count']   = '15';
 $lang->block->default['scrum']['program']['3']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['program']['4']['title'] = $lang->projectCommon . ' Overview';
+$lang->block->default['scrum']['program']['4']['title'] = $lang->executionCommon . ' Overview';
 $lang->block->default['scrum']['program']['4']['block'] = 'sprint';
 $lang->block->default['scrum']['program']['4']['grid']  = 4;
 
@@ -190,18 +190,18 @@ $lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['project']['1']['title'] = $lang->projectCommon . ' Berichte';
+$lang->block->default['project']['1']['title'] = $lang->executionCommon . ' Berichte';
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['type']  = 'all';
 $lang->block->default['project']['1']['params']['count'] = '20';
 
-$lang->block->default['project']['2']['title'] = $lang->projectCommon . ' Übersicht';
+$lang->block->default['project']['2']['title'] = $lang->executionCommon . ' Übersicht';
 $lang->block->default['project']['2']['block'] = 'overview';
 $lang->block->default['project']['2']['grid']  = 4;
 
-$lang->block->default['project']['3']['title'] = 'Aktive ' . $lang->projectCommon . 's';
+$lang->block->default['project']['3']['title'] = 'Aktive ' . $lang->executionCommon . 's';
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
@@ -327,7 +327,7 @@ $lang->block->availableBlocks->bug      = 'Meine Bugs';
 $lang->block->availableBlocks->case     = 'Meine Fälle';
 $lang->block->availableBlocks->story    = 'Meine Story';
 $lang->block->availableBlocks->product  = $lang->productCommon . 'Liste';
-$lang->block->availableBlocks->project  = $lang->projectCommon . 'Liste';
+$lang->block->availableBlocks->project  = $lang->executionCommon . 'Liste';
 $lang->block->availableBlocks->plan     = 'Plan';
 $lang->block->availableBlocks->release  = 'Release';
 $lang->block->availableBlocks->build    = 'Build';
@@ -351,8 +351,8 @@ $lang->block->modules['program']->availableBlocks->programteam   = 'Project Huma
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Project Overview';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->projectCommon . ' List';
-$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->projectCommon . ' Overview';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . ' List';
+$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
@@ -544,6 +544,6 @@ $lang->block->gridOptions[4] = 'Rechts';
 $lang->block->flowchart   = array();
 $lang->block->flowchart['admin']   = array('Administrator', 'Abteilung erstellen', 'Benutzer erstellen', 'Rechte pflegen');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Besitzer', $lang->productCommon . ' erstellen', 'Module pflegen', 'Pläne pflegen', 'Storys pflegen', 'Release erstellen');
-$lang->block->flowchart['project'] = array('Scrum Master', $lang->projectCommon  . ' erstellen', 'Teams pflegen', $lang->productCommon . ' verknüpfen', 'Storys verknüpfen', 'Aufgaben aufteilen');
+$lang->block->flowchart['project'] = array('Scrum Master', $lang->executionCommon  . ' erstellen', 'Teams pflegen', $lang->productCommon . ' verknüpfen', 'Storys verknüpfen', 'Aufgaben aufteilen');
 $lang->block->flowchart['dev']     = array('Entwickler', 'Aufgabe/Bugs anfordern', 'Update Status', 'Aufgaben/Bugs abschließen');
 $lang->block->flowchart['tester']  = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');

@@ -89,7 +89,7 @@ $lang->user->setPublicTemplate     = 'Thiết lập thành mẫu công khai';
 $lang->user->tplContentNotEmpty    = 'Nội dung mẫu này không thể để trống!';
 
 $lang->user->profile  = 'Hồ sơ';
-$lang->user->project  = $lang->projectCommon;
+$lang->user->project  = $lang->executionCommon;
 $lang->user->task     = 'Nhiệm vụ';
 $lang->user->bug      = 'Bugs';
 $lang->user->test     = 'Test';

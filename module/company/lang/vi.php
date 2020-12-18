@@ -28,7 +28,7 @@ $lang->company->guest    = 'Khách truy cập';
 $lang->company->admins   = 'Quản trị viên';
 
 $lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->projectCommon;
+$lang->company->project = $lang->executionCommon;
 $lang->company->user    = 'Người dùng';
 
 $lang->company->guestOptions[0] = 'Từ chối';

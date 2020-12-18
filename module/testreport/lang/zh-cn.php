@@ -71,7 +71,7 @@ $lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间�
 $lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug。";
 $lang->testreport->errorTrunk     = "主干版本不能创建测试报告，请修改关联版本！";
 $lang->testreport->noTestTask     = "该{$lang->productCommon}下还没有关联非Trunk的测试单，不能创建报告。请先创建测试单，再创建。";
-$lang->testreport->noObjectID     = "没有选定测试单或{$lang->projectCommon}，无法创建测试报告！";
+$lang->testreport->noObjectID     = "没有选定测试单或{$lang->executionCommon}，无法创建测试报告！";
 $lang->testreport->moreProduct    = "只能对同一个{$lang->productCommon}生成测试报告。";
 $lang->testreport->hiddenCase     = "隐藏 %s 个用例";
 

@@ -19,29 +19,29 @@ $config->productCommonList['fr'][0]    = 'Product';
 $config->productCommonList['vi'][0]    = 'Sản phẩm';
 
 /* Project common list. */
-$config->projectCommonList['zh-cn'][0] = '迭代';
-$config->projectCommonList['zh-cn'][1] = '冲刺';
-$config->projectCommonList['zh-cn'][2] = '阶段';
+$config->executionCommonList['zh-cn'][0] = '迭代';
+$config->executionCommonList['zh-cn'][1] = '冲刺';
+$config->executionCommonList['zh-cn'][2] = '阶段';
 
-$config->projectCommonList['zh-tw'][0] = '迭代';
-$config->projectCommonList['zh-tw'][1] = '冲刺';
-$config->projectCommonList['zh-tw'][2] = '階段';
+$config->executionCommonList['zh-tw'][0] = '迭代';
+$config->executionCommonList['zh-tw'][1] = '冲刺';
+$config->executionCommonList['zh-tw'][2] = '階段';
 
-$config->projectCommonList['en'][0] = 'Iteration';
-$config->projectCommonList['en'][1] = 'Sprint';
-$config->projectCommonList['en'][2] = 'Stage';
+$config->executionCommonList['en'][0] = 'Iteration';
+$config->executionCommonList['en'][1] = 'Sprint';
+$config->executionCommonList['en'][2] = 'Stage';
 
-$config->projectCommonList['de'][0] = 'Iteration';
-$config->projectCommonList['de'][1] = 'Sprint';
-$config->projectCommonList['de'][2] = 'Bühne';
+$config->executionCommonList['de'][0] = 'Iteration';
+$config->executionCommonList['de'][1] = 'Sprint';
+$config->executionCommonList['de'][2] = 'Bühne';
 
-$config->projectCommonList['fr'][0] = 'Iteration';
-$config->projectCommonList['fr'][1] = 'Sprint';
-$config->projectCommonList['fr'][2] = 'Phase';
+$config->executionCommonList['fr'][0] = 'Iteration';
+$config->executionCommonList['fr'][1] = 'Sprint';
+$config->executionCommonList['fr'][2] = 'Phase';
 
-$config->projectCommonList['vi'][0] = 'Lặp lại';
-$config->projectCommonList['vi'][1] = 'Sprint';
-$config->projectCommonList['vi'][2] = 'Giai đoạn';
+$config->executionCommonList['vi'][0] = 'Lặp lại';
+$config->executionCommonList['vi'][1] = 'Sprint';
+$config->executionCommonList['vi'][2] = 'Giai đoạn';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '故事点';

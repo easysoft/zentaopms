@@ -71,7 +71,7 @@ $lang->testreport->legacyBugTip   = "Bigs Actifs, ou bugs qui n'ont pas été r�
 $lang->testreport->fromCaseBugTip = "Bugs trouvés en jouant des CasTests pendant la période de test.";
 $lang->testreport->errorTrunk     = "Vous ne pouvez pas créer un rapport de test pour le tronc. Modifiez le build lié !";
 $lang->testreport->noTestTask     = "Pas de campagne de test pour ce {$lang->productCommon}, aucun rapport ne peut être généré. Choisissez un {$lang->productCommon} avec des campagnes de recette et vous pourrez produire des rapports.";
-$lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->projectCommon} est sélectionné, aucun rapport ne peut être généré.";
+$lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->executionCommon} est sélectionné, aucun rapport ne peut être généré.";
 $lang->testreport->moreProduct    = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
 

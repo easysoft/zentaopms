@@ -29,7 +29,7 @@ $lang->repo->addComment = '添加評論';
 
 $lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = '模組';
-$lang->repo->project  = $lang->projectCommon;
+$lang->repo->project  = $lang->executionCommon;
 $lang->repo->type     = '類型';
 $lang->repo->assign   = '指派';
 $lang->repo->title    = '標題';

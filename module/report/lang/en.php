@@ -37,7 +37,7 @@ $lang->report->assign['assign'] = 'Assigned';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->projectCommon . ' Deviation';
+$lang->report->projectDeviation = $lang->executionCommon . ' Deviation';
 $lang->report->productSummary   = $lang->productCommon . ' Summary';
 $lang->report->bugCreate        = 'Bug Reported Summary';
 $lang->report->bugAssign        = 'Bug Assigned Summary';
@@ -46,16 +46,16 @@ $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug reported from';
 $lang->report->beginAndEnd      = ' From';
 $lang->report->dept             = 'Department';
-$lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
+$lang->report->deviationChart   = $lang->executionCommon . ' Deviation Chart';
 
-$lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
+$lang->reportList->project->lists[10] = $lang->executionCommon . ' Deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->projectCommon;
+$lang->report->project       = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'User';
 $lang->report->bugTotal      = 'Bug';
@@ -117,12 +117,12 @@ $lang->report->annualData->createdStories   = "{$lang->productSRCommon} Created"
 
 $lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->productSRCommon} Count and Percent";
 $lang->report->annualData->qaOverview      = "{$lang->productCommon} Bug Count and Percent";
-$lang->report->annualData->projectOverview = "{$lang->projectCommon} Overview";
-$lang->report->annualData->doneProject     = "Done {$lang->projectCommon}";
-$lang->report->annualData->doingProject    = "Ongoing {$lang->projectCommon}";
-$lang->report->annualData->suspendProject  = "Suspended {$lang->projectCommon}";
+$lang->report->annualData->projectOverview = "{$lang->executionCommon} Overview";
+$lang->report->annualData->doneProject     = "Done {$lang->executionCommon}";
+$lang->report->annualData->doingProject    = "Ongoing {$lang->executionCommon}";
+$lang->report->annualData->suspendProject  = "Suspended {$lang->executionCommon}";
 
-$lang->report->annualData->projectName   = "{$lang->projectCommon}";
+$lang->report->annualData->projectName   = "{$lang->executionCommon}";
 $lang->report->annualData->finishedStory = "{$lang->productSRCommon} Finished";
 $lang->report->annualData->finishedTask  = 'Task Finished';
 $lang->report->annualData->foundBug      = 'Bug Reported';

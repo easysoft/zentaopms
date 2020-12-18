@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = 'Đã giao';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = 'Độ lệch '.$lang->projectCommon;
+$lang->report->projectDeviation = 'Độ lệch '.$lang->executionCommon;
 $lang->report->productSummary   = 'Tóm tắt '.$lang->productCommon;
 $lang->report->bugCreate        = 'Báo cáo Bug';
 $lang->report->bugAssign        = 'Bàn giao Bug';
@@ -46,16 +46,16 @@ $lang->report->workloadAB       = 'Lượng công việc';
 $lang->report->bugOpenedDate    = 'Bug được báo cáo từ';
 $lang->report->beginAndEnd      = ' từ';
 $lang->report->dept             = 'Phòng/Ban';
-$lang->report->deviationChart   = 'Biểu đồ chênh lệch '.$lang->projectCommon;
+$lang->report->deviationChart   = 'Biểu đồ chênh lệch '.$lang->executionCommon;
 
-$lang->reportList->project->lists[10] = 'Chênh lệch '.$lang->projectCommon . '|report|projectdeviation';
+$lang->reportList->project->lists[10] = 'Chênh lệch '.$lang->executionCommon . '|report|projectdeviation';
 $lang->reportList->product->lists[10] = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Báo cáo Bug|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bàn giao Bug|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Lượng công việc đội nhóm|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->projectCommon;
+$lang->report->project       = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Người dùng';
 $lang->report->bugTotal      = 'Bug';
@@ -117,12 +117,12 @@ $lang->report->annualData->createdStories   = "{$lang->productSRCommon} được
 
 $lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->productSRCommon} số lượng và Phần trăm";
 $lang->report->annualData->qaOverview      = "Bug {$lang->productCommon} số lượng và Phần trăm";
-$lang->report->annualData->projectOverview = "Tổng quan {$lang->projectCommon}";
-$lang->report->annualData->doneProject     = "{$lang->projectCommon} hoàn thành";
-$lang->report->annualData->doingProject    = "{$lang->projectCommon} đang thực hiện";
-$lang->report->annualData->suspendProject  = "{$lang->projectCommon} bị đình chỉ";
+$lang->report->annualData->projectOverview = "Tổng quan {$lang->executionCommon}";
+$lang->report->annualData->doneProject     = "{$lang->executionCommon} hoàn thành";
+$lang->report->annualData->doingProject    = "{$lang->executionCommon} đang thực hiện";
+$lang->report->annualData->suspendProject  = "{$lang->executionCommon} bị đình chỉ";
 
-$lang->report->annualData->projectName   = "{$lang->projectCommon}";
+$lang->report->annualData->projectName   = "{$lang->executionCommon}";
 $lang->report->annualData->finishedStory = "{$lang->productSRCommon} kết thúc";
 $lang->report->annualData->finishedTask  = 'Nhiệm vụ hoàn thành';
 $lang->report->annualData->foundBug      = 'Bug được báo cáo';

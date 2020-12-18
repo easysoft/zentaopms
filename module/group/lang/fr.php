@@ -29,12 +29,12 @@ $lang->group->viewList           = 'Accès Consultation';
 $lang->group->PRJ                = 'Manage Project';
 $lang->group->programList        = 'Accè Programs';
 $lang->group->productList        = 'Accès ' . $lang->productCommon . 's';
-$lang->group->projectList        = 'Accès ' . $lang->projectCommon . 's';
+$lang->group->projectList        = 'Accès ' . $lang->executionCommon . 's';
 $lang->group->dynamic            = 'Accès Historique';
 $lang->group->noticeVisit        = "Blanc signifie « pas de limitation d'accès ».";
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
-$lang->group->noneProject        = "No {$lang->projectCommon}";
+$lang->group->noneProject        = "No {$lang->executionCommon}";
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Groupe';

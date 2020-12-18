@@ -30,7 +30,7 @@ $lang->build->basicInfo = 'Basic Info';
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = 'Platform/Branch';
-$lang->build->project       = $lang->projectCommon;
+$lang->build->project       = $lang->executionCommon;
 $lang->build->name          = 'Name';
 $lang->build->date          = 'Date';
 $lang->build->builder       = 'Builder';
@@ -45,12 +45,12 @@ $lang->build->unlinkBug     = 'Unlink Bug';
 $lang->build->stories       = "Finished {$lang->productSRCommon}";
 $lang->build->bugs          = 'Resolved Bugs';
 $lang->build->generatedBugs = 'Reported Bugs';
-$lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
+$lang->build->noProduct     = " <span style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds yet.';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct = "The {$lang->productSRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
-$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->projectCommon}";
+$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 
 $lang->build->finishStories = "  Finished {$lang->productSRCommon} %s";
 $lang->build->resolvedBugs  = '  Resolved Bug %s';

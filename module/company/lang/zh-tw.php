@@ -28,7 +28,7 @@ $lang->company->guest    = '匿名登錄';
 $lang->company->admins   = '管理員';
 
 $lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->projectCommon;
+$lang->company->project = $lang->executionCommon;
 $lang->company->user    = '用戶';
 
 $lang->company->guestOptions[0] = '不允許';

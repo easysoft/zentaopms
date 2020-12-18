@@ -196,7 +196,7 @@ class router extends baseRouter
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
-        $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectKey] : $this->config->projectCommonList['en'][(int)$$projectKey];
+        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$$projectKey];
         $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         $config->URSR = $URSR;

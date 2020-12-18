@@ -37,7 +37,7 @@ $lang->report->assign['assign'] = 'Affecté';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = 'Dérive ' . $lang->projectCommon;
+$lang->report->projectDeviation = 'Dérive ' . $lang->executionCommon;
 $lang->report->productSummary   = 'Résumé ' . $lang->productCommon;
 $lang->report->bugCreate        = 'Résumé remontée Bugs';
 $lang->report->bugAssign        = 'Résumé affectation Bugs';
@@ -46,16 +46,16 @@ $lang->report->workloadAB       = 'Charge Travail';
 $lang->report->bugOpenedDate    = 'Bugs signalés de';
 $lang->report->beginAndEnd      = ' de';
 $lang->report->dept             = 'Compartiment';
-$lang->report->deviationChart   = 'Graphique de Dérive du ' . $lang->projectCommon;
+$lang->report->deviationChart   = 'Graphique de Dérive du ' . $lang->executionCommon;
 
-$lang->reportList->project->lists[10] = 'Dérive ' . $lang->projectCommon . '|report|projectdeviation';
+$lang->reportList->project->lists[10] = 'Dérive ' . $lang->executionCommon . '|report|projectdeviation';
 $lang->reportList->product->lists[10] = 'Résumé ' . $lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Résumé remontée Bugs|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Résumé affectation Bugs|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Résumé charge travail|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->projectCommon;
+$lang->report->project       = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Utilisateur';
 $lang->report->bugTotal      = 'Bugs';

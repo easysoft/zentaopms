@@ -3858,7 +3858,7 @@ class storyModel extends model
     }
 
     /**
-     * Replace requirement story lang.
+     * Replace story lang to requirement.
      *
      * @param  string $type
      * @access public
@@ -3905,6 +3905,7 @@ class storyModel extends model
             $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
             $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
             $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
+
             $storyLang->report->charts['storysPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerProduct']);
             $storyLang->report->charts['storysPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerModule']);
             $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']); 
