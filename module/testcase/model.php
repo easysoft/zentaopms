@@ -559,7 +559,7 @@ class testcaseModel extends model
      */
     public function getStoryCases($storyID)
     {
-        return $this->dao->select('id, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
+        return $this->dao->select('id, PRJ, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
             ->from(TABLE_CASE)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
