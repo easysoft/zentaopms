@@ -22,7 +22,6 @@ class programplan extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->app->loadLang('review');
     }
 
     /**
