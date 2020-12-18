@@ -167,6 +167,7 @@ class upgrade extends control
     public function mergeTips()
     {
         $this->loadModel('setting')->setItem('system.common.global.upgradeStep', 'mergeProgram');
+        $this->view->title = $this->lang->upgrade->mergeTips;
         $this->display();
     }
 
