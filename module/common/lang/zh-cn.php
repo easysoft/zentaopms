@@ -110,10 +110,12 @@ $lang->future      = '未来';
 $lang->year        = '年';
 $lang->workingHour = '工时';
 
-$lang->generalUR = '用需/史诗';
-$lang->generalSR = '软需/故事';
-$lang->executionCommon = '执行';
-$lang->sprintCommon    = '迭代/阶段';
+$lang->generalUR    = '用需/史诗';
+$lang->generalSR    = '软需/故事';
+$lang->sprintCommon = '迭代/阶段';
+
+$lang->execution = new stdclass();
+$lang->execution->common = '执行';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -268,7 +270,7 @@ $lang->my->menu->task        = array('link' => '任务|my|task|', 'subModule' =>
 $lang->my->menu->bug         = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask    = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
-$lang->my->menu->myExecution = "{$lang->executionCommon}|my|execution|";
+$lang->my->menu->myExecution = "{$lang->execution->common}|my|execution|";
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->profile     = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';

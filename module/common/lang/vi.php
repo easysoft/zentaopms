@@ -110,10 +110,12 @@ $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
 $lang->workingHour = 'giờ';
 
-$lang->generalUR       = 'UR/Epic';
-$lang->generalSR       = 'SR/Story';
-$lang->executionCommon = 'Execution';
-$lang->sprintCommon    = 'Iteration/Phase';
+$lang->generalUR    = 'UR/Epic';
+$lang->generalSR    = 'SR/Story';
+$lang->sprintCommon = 'Iteration/Phase';
+
+$lang->execution = new stdclass();
+$lang->execution->common = 'Execution';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';

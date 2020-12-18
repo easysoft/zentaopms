@@ -372,7 +372,6 @@ $lang->project->treeLevel['root']  = '全部折叠';
 $lang->project->treeLevel['task']  = '全部显示';
 $lang->project->treeLevel['story'] = "只看{$lang->projectSRCommon}";
 
-$lang->execution = new stdclass();
 $lang->execution->action = new stdclass();
 $lang->execution->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
 $lang->execution->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
