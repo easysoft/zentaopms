@@ -11,4 +11,4 @@ INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VA
 DELETE FROM `zt_config` WHERE `key` = 'URSRName' or `key` = 'URAndSR';
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '1');
 
-update zt_block set title='指派给我',source='',block='assigntome',params='{"todoNum":"20","taskNum":"20","bugNum":"20","riskNum":"20","issueNum":"20","storyNum":"20"}' where module='my' and block='task';
+UPDATE `zt_block` SET title = '指派给我', source = '', block = 'assigntome', params='{"todoNum":"20","taskNum":"20","bugNum":"20","riskNum":"20","issueNum":"20","storyNum":"20"}' WHERE module = 'my' AND block = 'task';
