@@ -152,10 +152,11 @@ class programplan extends control
         if($_POST)
         {
             $changes = $this->programplan->update($planID, $projectID);
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('programplan', $planID, 'edited');
+                $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
@@ -170,34 +171,6 @@ class programplan extends control
         $this->view->plan         = $plan;
 
         $this->display();
-    }
-
-    /**
-     * Delete a project plan.
-     *
-     * @param  int    $planID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function delete($planID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->programplan->confirmDelete, $this->createLink('programplan', 'delete', "planID=$planID&confirm=yes")));
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $this->programplan->delete(TABLE_PROJECT, $planID);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            $this->send($response);
-        }
     }
 
     /**

@@ -1405,6 +1405,8 @@ class productModel extends model
      */
     public function replaceStoryConcept($productID = 0)
     {
+        if($this->cookie->lastProduct) return false;
+
         $this->loadModel('custom');
         $product     = $this->getByID($productID);
         $lastProduct = $this->getByID($this->cookie->lastProduct);

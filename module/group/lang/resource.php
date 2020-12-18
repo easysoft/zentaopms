@@ -689,12 +689,10 @@ $lang->resource->programplan = new stdclass();
 $lang->resource->programplan->browse = 'browse';
 $lang->resource->programplan->create = 'create';
 $lang->resource->programplan->edit   = 'edit';
-$lang->resource->programplan->delete = 'delete';
 
 $lang->programplan->methodOrder[5]  = 'browse';
 $lang->programplan->methodOrder[10] = 'create';
 $lang->programplan->methodOrder[15] = 'edit';
-$lang->programplan->methodOrder[20] = 'delete';
 
 /* Task. */
 $lang->resource->task = new stdclass();

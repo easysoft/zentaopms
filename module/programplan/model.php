@@ -470,6 +470,7 @@ class programplanModel extends model
 
         if($totalPercent > 100) return dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
 
+        $this->loadModel('action');
         $this->loadModel('user');
         $this->loadModel('project');
         $this->app->loadLang('doc');
@@ -485,27 +486,27 @@ class programplanModel extends model
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
             if($data->id)
             {
-                $planID = $data->id;
+                $stageID = $data->id;
                 unset($data->id);
 
-                $oldPlan     = $this->getByID($planID);
-                $planChanged = ($oldPlan->name != $data->name || $oldPlan->milestone != $data->milestone || $oldPlan->begin != $data->begin || $oldPlan->end != $data->end);
+                $oldStage    = $this->getByID($stageID);
+                $planChanged = ($oldStage->name != $data->name || $oldStage->milestone != $data->milestone || $oldStage->begin != $data->begin || $oldStage->end != $data->end);
 
-                if($planChanged) $data->version = $oldPlan->version + 1;
+                if($planChanged) $data->version = $oldStage->version + 1;
                 $this->dao->update(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
                     ->checkIF($plan->percent != '', 'percent', 'float')
-                    ->where('id')->eq($planID)
+                    ->where('id')->eq($stageID)
                     ->exec();
 
-                if($data->acl != 'open') $this->user->updateUserView($planID, 'sprint');
+                if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                 /* Record version change information. */
                 if($planChanged)
                 {
                     $spec = new stdclass();
-                    $spec->project   = $planID;
+                    $spec->project   = $stageID;
                     $spec->version   = $data->version;
                     $spec->name      = $data->name;
                     $spec->milestone = $data->milestone;
@@ -513,6 +514,10 @@ class programplanModel extends model
                     $spec->end       = $data->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
                 }
+
+                $changes  = common::createChanges($oldStage, $data);
+                $actionID = $this->action->create('execution', $stageID, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
             else
             {
@@ -574,6 +579,8 @@ class programplanModel extends model
                     $spec->begin     = $data->begin;
                     $spec->end       = $data->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
+
+                    $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
                 }
             }
 
@@ -801,11 +808,11 @@ class programplanModel extends model
                 }
 
                 common::printIcon('programplan', 'edit', "planID=$plan->id&projectID=$projectID", $plan, 'list', '', '', 'iframe', true);
+
                 $disabled = !empty($plan->children) ? ' disabled' : '';
-                if(common::hasPriv('programplan', 'delete', $plan))
+                if(common::hasPriv('project', 'delete', $plan))
                 {
-                    $deleteURL = helper::createLink('programplan', 'delete', "planID=$plan->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"programplanForm\", confirmDelete)", '<i class="icon icon-close"></i>', '', "title='{$this->lang->programplan->delete}' class='btn $disabled'");
+                    common::printIcon('project', 'delete', "planID=$plan->id&confirm=no", $plan, 'list', 'trash', 'hiddenwin' , $disabled);
                 }
                 break;
             }
