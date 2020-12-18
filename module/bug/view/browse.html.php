@@ -35,7 +35,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       ?>
     </div>
   </div>
-  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-left">
     <?php
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
@@ -157,7 +156,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php endif;?>
     <?php endif;?>
   </div>
-  <?php endif;?>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
