@@ -28,6 +28,7 @@ class taskModel extends model
             return false;
         }
 
+        $this->getExtraRequiredFields();
         $projectID      = (int)$projectID;
         $taskIdList     = array();
         $taskFiles      = array();
@@ -279,6 +280,7 @@ class taskModel extends model
         $assignedTo = '';
 
         /* Get task data. */
+        $this->getExtraRequiredFields();
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
         foreach($tasks->name as $i => $name)
@@ -776,6 +778,8 @@ class taskModel extends model
      */
     public function update($taskID)
     {
+        $this->getExtraRequiredFields();
+
         $oldTask = $this->getByID($taskID);
         if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
         {
@@ -833,6 +837,8 @@ class taskModel extends model
             ->setIF($oldTask->parent > 0 and !$this->post->parent, 'parent', 0)
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
+
+            ->setIF($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline, 'version', $oldTask->version + 1)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -898,13 +904,6 @@ class taskModel extends model
             }
         }
 
-        /* Mark design version.*/
-        if(isset($task->design) && !empty($task->design))
-        {
-            $design = $this->loadModel('design')->getByID($task->design);
-            $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
-        }
-
         $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('type');
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
         if($projectType == 'ops')
@@ -943,10 +942,16 @@ class taskModel extends model
 
         if(!dao::isError())
         {
-            /* Record task version. */
-            if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
+            /* Mark design version.*/
+            if(isset($task->design) && !empty($task->design))
             {
-                $task->version = $oldTask->version + 1;
+                $design = $this->loadModel('design')->getByID($task->design);
+                $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
+            }
+
+            /* Record task version. */
+            if($task->version > $oldTask->version)
+            {
                 $taskSpec = new stdClass();
                 $taskSpec->task       = $taskID;
                 $taskSpec->version    = $task->version;
@@ -1081,14 +1086,6 @@ class taskModel extends model
             if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
             {
                 $task->version = $oldTask->version + 1;
-                $taskSpec = new stdClass();
-                $taskSpec->task       = $taskID;
-                $taskSpec->version    = $task->version;
-                $taskSpec->name       = $task->name;
-                $taskSpec->estStarted = $task->estStarted;
-                $taskSpec->deadline   = $task->deadline;
-
-                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             }
 
             foreach($extendFields as $extendField)
@@ -1176,6 +1173,7 @@ class taskModel extends model
         {
             if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
+            if($task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1217,6 +1215,19 @@ class taskModel extends model
             if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
             if(!dao::isError())
             {
+                /* Record version change history. */
+                if($task->version > $oldTask->version)
+                {
+                    $taskSpec = new stdClass();
+                    $taskSpec->task       = $taskID;
+                    $taskSpec->version    = $task->version;
+                    $taskSpec->name       = $task->name;
+                    $taskSpec->estStarted = $task->estStarted;
+                    $taskSpec->deadline   = $task->deadline;
+
+                    $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+                }
+
                 if($oldTask->parent > 0)
                 {
                     $this->updateParentStatus($oldTask->id);
@@ -3230,5 +3241,22 @@ class taskModel extends model
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
+    }
+
+    /**
+     * Get additional required fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function getExtraRequiredFields()
+    {
+        /* Add required fields to waterfall project. */
+        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        if(!empty($project) && $project->model == 'waterfall')
+        {
+            $this->config->task->create->requiredFields .= ',estStarted,deadline';
+            $this->config->task->edit->requiredFields   .= ',estStarted,deadline';
+        }
     }
 }
