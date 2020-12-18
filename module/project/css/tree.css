@@ -37,7 +37,7 @@
 #itemContent {min-height: 200px;}
 #itemContent .label {background: #fff; border: 1px solid #ddd;}
 #mainContent > .side-col {width: 460px; display: table-cell; overflow: hidden;}
-#mainContent > .side-col > .cell {display: block; position: fixed; width: 440px; overflow: auto;}
+#mainContent > .side-col > .cell {display: block; width: 440px; overflow: auto;}
 #mainContent.hide-side > .side-col {display: none}
 
 h2.detail-title {font-size: 14px;}

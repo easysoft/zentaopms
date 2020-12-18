@@ -38,7 +38,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    if(!$plan->deleted && !isonlybody())
+    if(!$plan->deleted)
     {
         echo $this->buildOperateMenu($plan, 'view');
 

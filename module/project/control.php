@@ -1900,7 +1900,8 @@ class project extends control
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->in('wait,doing,pause')
                 ->fetch();
-            $unresolvedBugs  = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)
+
+            $unresolvedBugs = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)
                 ->where('project')->eq($projectID)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->eq('active')
