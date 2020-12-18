@@ -433,7 +433,7 @@ class project extends control
     {
         if(!empty($_POST))
         {
-            $this->project->importTask($toProject,$fromProject);
+            $this->project->importTask($toProject);
             die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
