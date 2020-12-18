@@ -30,6 +30,7 @@ $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
 $lang->program->PRJWhitelist         = 'Project Whitelist';
 $lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
+$lang->program->PRJStoryConcept      = 'Story Concept';
 $lang->program->unbindWhielist       = 'Project Remove Whitelist';
 $lang->program->PRJManageProducts    = 'Manage Products';
 $lang->program->view                 = 'Program Detail';
@@ -131,6 +132,7 @@ $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
 $lang->program->endList[186] = 'Half yearly';
 $lang->program->endList[365] = 'One year';
+$lang->program->endList[999] = 'Longtime';
 
 $lang->program->noPRJ             = 'No project.';
 $lang->program->accessDenied      = 'Access denied!';
@@ -223,12 +225,12 @@ $lang->program->PGMShowClosed = 'Closed programs.';
 $lang->program->PGMTips       = 'By modifying the parent item set, the associateable product also changes and becomes required. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
 $lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
-$lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";
+$lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 
+$lang->program->subPGMAclList['private'] = "Private (accessible to this program set leader and stakeholders)";
 $lang->program->subPGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->subPGMAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
-$lang->program->subPGMAclList['private'] = "Private (accessible to this program set leader and stakeholders)";
 
 $lang->program->PGMAuthList['extend'] = 'Inherit(program privileges and company privileges)';
 $lang->program->PGMAuthList['reset']  = 'Reset(program privileges only)';

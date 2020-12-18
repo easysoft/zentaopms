@@ -343,10 +343,10 @@ $lang->block->moduleList['todo']    = 'Việc làm';
 
 $lang->block->modules['program'] = new stdclass();
 $lang->block->modules['program']->availableBlocks = new stdclass();
-$lang->block->modules['program']->availableBlocks->project       = $lang->executionCommon . ' List';
+$lang->block->modules['program']->availableBlocks->program       = $lang->executionCommon . ' List';
 $lang->block->modules['program']->availableBlocks->recentproject = 'Recent ' . $lang->executionCommon;
 $lang->block->modules['program']->availableBlocks->statistic     = $lang->executionCommon . ' Statistic';
-$lang->block->modules['program']->availableBlocks->projectteam   = $lang->executionCommon . 'Human Input';
+$lang->block->modules['program']->availableBlocks->programteam   = $lang->executionCommon . 'Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -478,15 +478,15 @@ $lang->block->typeList->product['closed']   = 'Đã đóng';
 $lang->block->typeList->product['all']      = 'Tất cả';
 $lang->block->typeList->product['involved'] = 'Liên đới';
 
-$lang->block->typeList->project['undone']   = 'Chưa kết thúc';
-$lang->block->typeList->project['doing']    = 'Đang làm';
-$lang->block->typeList->project['all']      = 'Tất cả';
-$lang->block->typeList->project['involved'] = 'Liên đới';
-
 $lang->block->typeList->program['undone']   = 'Unfinished';
 $lang->block->typeList->program['doing']    = 'Ongoing';
 $lang->block->typeList->program['all']      = 'All';
 $lang->block->typeList->program['involved'] = 'Involved';
+
+$lang->block->typeList->project['undone']   = 'Chưa kết thúc';
+$lang->block->typeList->project['doing']    = 'Đang làm';
+$lang->block->typeList->project['all']      = 'Tất cả';
+$lang->block->typeList->project['involved'] = 'Liên đới';
 
 $lang->block->typeList->scrum['undone']   = 'Unfinished';
 $lang->block->typeList->scrum['doing']    = 'Ongoing中';

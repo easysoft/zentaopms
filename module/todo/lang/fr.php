@@ -33,6 +33,9 @@ $lang->todo->import       = "Importer";
 $lang->todo->legendBasic  = "Infos de Base";
 $lang->todo->cycle        = "Rendre Récurrent";
 $lang->todo->cycleConfig  = "Récurrence";
+$lang->todo->project      = "Project";
+$lang->todo->product      = "Product";
+$lang->todo->execution    = "Stage/" . $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Convertir en Story";
 $lang->todo->reasonList['task']  = "Convertir en Tâche";

@@ -478,15 +478,15 @@ $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
 $lang->block->typeList->product['involved'] = 'Involved';
 
-$lang->block->typeList->project['undone']   = 'Unfinished';
-$lang->block->typeList->project['doing']    = 'Ongoing';
-$lang->block->typeList->project['all']      = 'All';
-$lang->block->typeList->project['involved'] = 'Involved';
-
 $lang->block->typeList->program['undone']   = 'Unfinished';
 $lang->block->typeList->program['doing']    = 'Ongoing';
 $lang->block->typeList->program['all']      = 'All';
 $lang->block->typeList->program['involved'] = 'Involved';
+
+$lang->block->typeList->project['undone']   = 'Unfinished';
+$lang->block->typeList->project['doing']    = 'Ongoing';
+$lang->block->typeList->project['all']      = 'All';
+$lang->block->typeList->project['involved'] = 'Involved';
 
 $lang->block->typeList->scrum['undone']   = 'Unfinished';
 $lang->block->typeList->scrum['doing']    = 'Ongoing中';

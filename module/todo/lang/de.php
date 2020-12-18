@@ -33,6 +33,9 @@ $lang->todo->import       = "Importieren";
 $lang->todo->legendBasic  = "Basis Info";
 $lang->todo->cycle        = "Wiederkehrend";
 $lang->todo->cycleConfig  = "Wiederkehrend setzen";
+$lang->todo->project      = "Project";
+$lang->todo->product      = "Product";
+$lang->todo->execution    = "Stage/" . $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Story übertragen";
 $lang->todo->reasonList['task']  = "Aufgabe übertragen";

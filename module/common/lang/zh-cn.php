@@ -294,7 +294,6 @@ $lang->scrumproduct->menu->doc     = array('link' => '文档|doc|objectLibs|type
 $lang->scrumproduct->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->scrumproduct->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->scrumproduct->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
-
 $lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 

@@ -50,6 +50,8 @@ $lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you d
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->to20Demo      = 'View version 20 of the demo';
+$lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
+$lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
 $lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
 $lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
 $lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information(If the video can not play properly, please visit directly <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>Zentao20</u></a>)：</p><br />";
