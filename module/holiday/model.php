@@ -129,29 +129,6 @@ class holidayModel extends model
     }
 
     /**
-     * Delete a holiday.
-     *
-     * @param  int    $id
-     * @access public
-     * @return bool
-     */
-    public function delete($id, $null = null)
-    {
-        $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
-        $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
-
-        /* Update project. */
-        $this->updateProjectPlanDuration($holidayInformation->begin, $holidayInformation->end);
-        $this->updateProjectRealDuration($holidayInformation->begin, $holidayInformation->end);
-
-        /* Update task. */
-        $this->updateTaskPlanDuration($holidayInformation->begin, $holidayInformation->end);
-        $this->updateTaskRealDuration($holidayInformation->begin, $holidayInformation->end);
-
-        return !dao::isError();
-    }
-
-    /**
      * Get holidays by begin and end.
      *
      * @param  string $begin

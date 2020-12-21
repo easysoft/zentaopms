@@ -103,8 +103,18 @@ class holiday extends control
         }
         else
         {
-            $result = $this->holiday->delete($id);
-            if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
+            $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
+
+            /* Update project. */
+            $this->holiday->updateProjectPlanDuration($holidayInformation->begin, $holidayInformation->end);
+            $this->holiday->updateProjectRealDuration($holidayInformation->begin, $holidayInformation->end);
+
+            /* Update task. */
+            $this->holiday->updateTaskPlanDuration($holidayInformation->begin, $holidayInformation->end);
+            $this->holiday->updateTaskRealDuration($holidayInformation->begin, $holidayInformation->end);
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             die(js::reload('parent'));
         }
     }
