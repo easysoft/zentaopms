@@ -2979,7 +2979,7 @@ class taskModel extends model
                 echo round($task->left, 1)     . ' ' . $this->lang->project->workHourUnit;
                 break;
             case 'progress':
-                echo "{$task->progress}%";
+                echo round($task->progress, 2) . '%';
                 break;
             case 'deadline':
                 if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
