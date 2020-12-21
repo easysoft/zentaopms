@@ -122,7 +122,7 @@ class searchModel extends model
             if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
 
             /* Set operator. */
-            $value    = trim($this->post->$valueName);
+            $value    = addcslashes(trim($this->post->$valueName), '%');
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
 
