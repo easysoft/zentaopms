@@ -116,6 +116,7 @@ class personnel extends control
         $this->view->pager      = $pager;
         $this->view->objectID   = $objectID;
         $this->view->whitelist  = $whitelist;
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->module     = $module;
 
         $this->display();
