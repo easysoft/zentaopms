@@ -88,11 +88,10 @@ $lang->todo->statusList['closed'] = '已关闭';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = '一般';
-$lang->todo->priList[1] = '最高';
-$lang->todo->priList[2] = '较高';
-$lang->todo->priList[4] = '最低';
+$lang->todo->priList[3] = 3;
+$lang->todo->priList[1] = 1;
+$lang->todo->priList[2] = 2;
+$lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']   = '自定义';
 $lang->todo->typeList['cycle']    = '周期';
