@@ -1,6 +1,11 @@
 $(function()
 {
-    $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
+    $('#copyProjects a').click(function()
+    {
+        setCopyProject($(this).data('id'));
+        $('#copyProjectModal').modal('hide')
+    });
+
     setAclList($("#parent").val());
 
     if(typeof(currentPlanID) == 'undefined')
@@ -28,7 +33,7 @@ $(function()
 function setParentProgram()
 {
     var parentProgram = $("#parent").val();
-    location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + parentProgram + '&from=' + from + '&copyProjectID=' + copyProjectID);
+    location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + parentProgram + '&from=' + from);
 }
 
 /**
@@ -209,3 +214,24 @@ function adjustPlanBoxMargin()
         }
     }
 }
+
+/**
+ * Fuzzy search projects by project name.
+ *
+ * @access public
+ * @return void
+ */
+$('#projectName').on('keyup', function()
+{
+    var name = $(this).val();
+    name = name.replace(/\s+/g, '');
+    link = createLink('program', 'ajaxGetCopyProjects', 'name=' + name + '&cpoyProjectID=' + copyProjectID);
+    $.post(link, function(data)
+    {
+        $('#copyProjects').html(data);
+        $('#copyProjects a').click(function()
+        {
+            setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')
+        });
+    })
+})

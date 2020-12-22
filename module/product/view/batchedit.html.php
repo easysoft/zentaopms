@@ -49,7 +49,7 @@
             <th class='w-200px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->product->type;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
             <th class='w-200px<?php echo zget($visibleFields, 'desc',   ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'acl',    ' hidden') . zget($requiredFields, 'acl',    '', ' required');?>'><?php echo $lang->product->acl;?></th>
+            <th class='w-200px<?php echo zget($visibleFields, 'acl',    ' hidden');?>'><?php echo $lang->product->acl;?></th>
             <th class='w-80px'><?php echo $lang->product->order;?></th>
           </tr>
         </thead>
@@ -69,7 +69,7 @@
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'><?php echo html::select("types[$productID]",    $lang->product->typeList,   $products[$productID]->type,   "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
-            <td class='<?php echo zget($visibleFields, 'acl', 'hidden')?>'> <?php echo nl2br(html::radio("acls[$productID]", $lang->product->acls, $products[$productID]->acl, "onclick='setWhite(this.value);'"));?> </td>
+            <td class='<?php echo zget($visibleFields, 'acl', 'hidden')?>'> <?php echo nl2br(html::radio("acls[$productID]", $lang->product->acls, $products[$productID]->acl));?></td>
             <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
           </tr>
           <?php

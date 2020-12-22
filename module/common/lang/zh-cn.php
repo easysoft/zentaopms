@@ -265,17 +265,31 @@ $lang->my->menu = new stdclass();
 
 $lang->my->menu->index       = '首页|my|index';
 $lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
 $lang->my->menu->myProject   = array('link' => '项目|my|project|');
-$lang->my->menu->task        = array('link' => '任务|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug         = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
-$lang->my->menu->testtask    = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story       = array('link' => "需求|my|story|", 'subModule' => 'story');
-$lang->my->menu->myExecution = "{$lang->execution->common}|my|execution|";
+$lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
-$lang->my->menu->profile     = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->score       = '积分|my|score|';
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
-$lang->my->dividerMenu = ',program,requirement,dynamic,';
+$lang->my->workMenu = new stdclass();
+$lang->my->workMenu->task     = '任务|my|work|mode=task';
+$lang->my->workMenu->story    = '需求|my|work|mode=story';
+$lang->my->workMenu->bug      = 'Bug|my|work|mode=bug';
+$lang->my->workMenu->testtask = '测试|my|work|mode=testtask&type=wait';
+$lang->my->workMenu->issue    = '问题|my|work|mode=issue';
+$lang->my->workMenu->risk     = '风险|my|work|mode=risk';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->execution = '执行|my|contribute|mode=execution&type=undone';
+$lang->my->contributeMenu->task      = '任务|my|contribute|mode=task';
+$lang->my->contributeMenu->story     = '需求|my|contribute|mode=story';
+$lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=wait';
+$lang->my->contributeMenu->issue     = '问题|my|contribute|mode=issue';
+$lang->my->contributeMenu->risk      = '风险|my|contribute|mode=risk';
+
+$lang->my->dividerMenu = ',myProject,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;

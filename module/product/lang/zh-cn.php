@@ -69,7 +69,6 @@ $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
 $lang->product->name           = "{$lang->productCommon}名称";
 $lang->product->code           = "{$lang->productCommon}代号";
-$lang->product->line           = "{$lang->productCommon}线";
 $lang->product->order          = '排序';
 $lang->product->type           = "{$lang->productCommon}类型";
 $lang->product->typeAB         = "类型";

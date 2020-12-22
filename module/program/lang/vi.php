@@ -38,8 +38,7 @@ $lang->program->copyTitle            = 'Please select an project to copy';
 $lang->program->errorSameProducts    = 'Project cannot be associated with multiple identical products.';
 $lang->program->errorNoProducts      = 'At least one product is associated';
 $lang->program->copyNoProject        = 'There are no items available to copy.';
-$lang->program->PRJSource            = 'Project source：';
-$lang->program->PRJStandalone        = 'Projects that do not belong to a program.';
+$lang->project->searchByName         = 'Enter the project name to retrieve';
 
 /* Fields. */
 $lang->program->common             = 'Program';
@@ -89,12 +88,13 @@ $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = 'Team';
 $lang->program->PRJLongTime        = 'Long-Term Project';
+$lang->program->future             = 'TBD';
 
 $lang->program->productNotEmpty  = 'Please link products or create products.';
 $lang->program->existProductName = 'Product name already exists.';
 
 $lang->program->unitList['']       = '';
-$lang->program->unitList['yuan']   = 'Yuan';
+$lang->program->unitList['yuan']   = 'Wanyuan';
 $lang->program->unitList['dollar'] = 'Dollars';
 
 $lang->program->modelList['scrum']     = "Scrum";
@@ -211,7 +211,7 @@ $lang->program->PGMDesc      = 'Description';
 $lang->program->PGMCode      = 'Code';
 $lang->program->PGMCopy      = 'Copy Program';
 $lang->program->PGMStatus    = 'Status';
-$lang->program->PGMPM        = 'Manager';
+$lang->program->PGMPM        = 'Program manager';
 $lang->program->PGMBudget    = 'Budget';
 $lang->program->PGMProgress  = 'Progress';
 $lang->program->PGMChildren  = 'Child';
@@ -225,10 +225,10 @@ $lang->program->PGMShowClosed = 'Closed programs.';
 $lang->program->PGMTips       = 'By modifying the parent item set, the associateable product also changes and becomes required. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
 $lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
-$lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders)";
+$lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";
 
-$lang->program->subPGMAclList['private'] = "Private (accessible to this program set leader and stakeholders)";
+$lang->program->subPGMAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->subPGMAclList['open']    = "Default(user who can visit the program can access it)";
 $lang->program->subPGMAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
 

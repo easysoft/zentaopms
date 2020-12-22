@@ -53,7 +53,7 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <div class="col-sm-4">
+              <div class="col-sm-4" style="margin-bottom: 10px;">
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
@@ -176,9 +176,8 @@
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h4 class='modal-title' id='myModalLabel'>
-        <?php echo $lang->program->copyTitle;?> 
-        <?php if($programID) $lang->program->PRJStandalone = zget($programList, $programID, $lang->noData);?>
-        <span class="label label-primary label-outline"><?php echo $lang->program->PRJSource . $lang->program->PRJStandalone;?></span>
+        <?php echo $lang->program->copyTitle;?>
+        <?php echo html::input('projectName', '', "class='form-control' placeholder={$lang->project->searchByName}");?>
       </h4>
     </div>
     <div class='modal-body'>
@@ -190,13 +189,8 @@
       <?php else:?>
       <div id='copyProjects' class='row'>
       <?php foreach ($copyProjects as $id => $name):?>
-      <?php if(empty($id)):?>
-        <?php if($copyProjectID != 0):?>
-        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
-        <?php endif;?>
-      <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
-      <?php endif; ?>
+        <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endforeach;?>
       </div>
       <?php endif;?>

@@ -69,7 +69,6 @@ $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = 'Name';
 $lang->product->code           = 'Alias';
-$lang->product->line           = 'Produktlinie';
 $lang->product->order          = 'Sortierung';
 $lang->product->type           = 'Typ';
 $lang->product->typeAB         = 'Typ';

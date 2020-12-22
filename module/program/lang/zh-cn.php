@@ -34,12 +34,11 @@ $lang->program->PRJStoryConcept      = '需求概念组合';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '关联产品';
 $lang->program->view                 = '项目集详情';
-$lang->program->copyTitle            = '请选择一个项目来复制';
+$lang->program->copyTitle            = '请选择要复制的项目';
 $lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 $lang->program->errorNoProducts      = '最少关联一个产品';
 $lang->program->copyNoProject        = '没有可用的项目来复制';
-$lang->program->PRJSource            = '项目来源：';
-$lang->program->PRJStandalone        = '没有所属项目集的项目';
+$lang->project->searchByName         = '输入项目名称进行检索';
 
 /* Fields. */
 $lang->program->common             = '项目集';
@@ -62,7 +61,7 @@ $lang->program->PRJEstimate        = '预计';
 $lang->program->PRJConsume         = '消耗';
 $lang->program->PRJSurplus         = '剩余';
 $lang->program->PRJProgress        = '进度';
-$lang->program->dateRange          = '起止时间';
+$lang->program->dateRange          = '起止日期';
 $lang->program->to                 = '至';
 $lang->program->realEnd            = '实际完成日期';
 $lang->program->realBegan          = '实际开始日期';
@@ -89,12 +88,13 @@ $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期';
+$lang->program->future             = '待定';
 
 $lang->program->productNotEmpty  = '请关联产品或创建产品。';
 $lang->program->existProductName = '产品名称已存在。';
 
 $lang->program->unitList['']       = '';
-$lang->program->unitList['yuan']   = '元';
+$lang->program->unitList['yuan']   = '万元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
 $lang->program->modelList['scrum']     = "Scrum";
@@ -211,7 +211,7 @@ $lang->program->PGMDesc      = '项目集描述';
 $lang->program->PGMCode      = '项目集代号';
 $lang->program->PGMCopy      = '复制项目集';
 $lang->program->PGMStatus    = '状态';
-$lang->program->PGMPM        = '负责人';
+$lang->program->PGMPM        = '项目集负责人';
 $lang->program->PGMBudget    = '预算';
 $lang->program->PGMProgress  = '项目进度';
 $lang->program->PGMChildren  = '子项目集';
@@ -225,10 +225,10 @@ $lang->program->PGMShowClosed = '显示已关闭';
 $lang->program->PGMTips       = '修改父项目集，可关联产品也会发生变化，并且变为必填，如果未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联到该项目。';
 $lang->program->PGMChangeTips = '修改父项目集后，项目已关联的产品会被清空，并且项目下的需求、bug等数据也会受影响，是否修改？';
 
-$lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问）";
+$lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即可访问）";
 
-$lang->program->subPGMAclList['private'] = "私有（本项目集负责人和干系人可访问）";
+$lang->program->subPGMAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->subPGMAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
 $lang->program->subPGMAclList['program'] = "项目集内公开 (所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
 

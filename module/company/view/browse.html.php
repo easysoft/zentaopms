@@ -61,7 +61,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+          <?php $vars = "browseType=$browseType&param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">

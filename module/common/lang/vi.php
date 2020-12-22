@@ -263,19 +263,33 @@ $lang->index->menu->project = "{$lang->executionCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index       = 'Home|my|index';
-$lang->my->menu->calendar    = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');;
-$lang->my->menu->myProject   = array('link' => '项目|my|project|');
-$lang->my->menu->task        = array('link' => 'Nhiệm vụ|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug         = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
-$lang->my->menu->testtask    = array('link' => 'Yêu cầu|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story       = array('link' => 'Câu chuyện|my|story|',   'subModule' => 'story');
-$lang->my->menu->myExecution = "Execution|my|execution|";
-$lang->my->menu->dynamic     = 'Lịch sử|my|dynamic|';
-$lang->my->menu->profile     = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->index       = 'Index|my|index';
+$lang->my->menu->calendar    = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->myWork      = array('link' => 'Work|my|work|mode=task');
+$lang->my->menu->myProject   = array('link' => 'Project|my|project|');
+$lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
+$lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
+$lang->my->menu->score       = 'Score|my|score|';
 $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
-$lang->my->dividerMenu = ',program,requirement,dynamic,';
+$lang->my->workMenu = new stdclass();
+$lang->my->workMenu->task     = 'Task|my|work|mode=task';
+$lang->my->workMenu->story    = 'Story|my|work|mode=story';
+$lang->my->workMenu->bug      = 'Bug|my|work|mode=bug';
+$lang->my->workMenu->testcase = 'Test Case|my|work|mode=testcase';
+$lang->my->workMenu->issue    = 'Issue|my|work|mode=issue';
+$lang->my->workMenu->risk     = 'Risk|my|work|mode=risk';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->execution = 'Execution|my|contribute|mode=execution&type=undone';
+$lang->my->contributeMenu->task      = 'Task|my|contribute|mode=task';
+$lang->my->contributeMenu->story     = 'Story|my|contribute|mode=story';
+$lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testcase  = 'Test Case|my|contribute|mode=testcase';
+$lang->my->contributeMenu->issue     = 'Issue|my|contribute|mode=issue';
+$lang->my->contributeMenu->risk      = 'Risk|my|contribute|mode=risk';
+
+$lang->my->dividerMenu = ',myProject,';
 
 $lang->todo    = new stdclass();
 $lang->todo->menu = $lang->my->menu;

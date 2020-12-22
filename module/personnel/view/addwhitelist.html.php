@@ -15,10 +15,7 @@
 <?php js::set('objectType', $objectType);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'>
-      <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
-      <?php echo html::a($this->createLink($module, $moduleMethod, "objectID=$objectID&deptID=$deptID&objectType=$objectType&module=$module"), "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
-    </span>
+    <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
@@ -26,6 +23,9 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
+  <div class="main-header">
+    <h2><?php echo $lang->product->addWhitelist;?></h2>
+  </div>
   <form class='main-form form-ajax' method='post' target='hiddenwin' id="whitelistForm">
     <table class='table table-form'>
       <thead>
@@ -81,7 +81,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='6' class='text-center form-actions'>
+          <td colspan='6' class='text-left form-actions'>
             <?php echo html::submitButton(); ?>
             <?php $gobackURL = $this->session->whitelistBrowse;?>
             <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', 'class="btn btn-back btn-wide"');?>

@@ -69,7 +69,6 @@ $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = "Nom du {$lang->productCommon}";
 $lang->product->code           = 'Code';
-$lang->product->line           = "Ligne Produit";
 $lang->product->order          = 'Rang';
 $lang->product->type           = 'Type';
 $lang->product->typeAB         = 'Type';

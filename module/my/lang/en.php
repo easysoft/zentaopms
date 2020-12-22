@@ -32,6 +32,10 @@ $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
 
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = 'Undone';
+$lang->my->executionMenu->done   = 'Done';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'AssignedToMe';
 $lang->my->taskMenu->openedByMe   = 'CreatedByMe';
@@ -44,6 +48,13 @@ $lang->my->storyMenu->assignedToMe = 'AssignedToMe';
 $lang->my->storyMenu->openedByMe   = 'CreatedByMe';
 $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
+
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = 'Doing';
+$lang->my->projectMenu->wait       = 'Waiting';
+$lang->my->projectMenu->suspended  = 'Suspended';
+$lang->my->projectMenu->closed     = 'Closed';
+$lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Dynamics';

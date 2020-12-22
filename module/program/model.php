@@ -124,9 +124,9 @@ class programModel extends model
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->add('type', 'program')
             ->join('whitelist', ',')
-            ->cleanInt('budget')
+            ->cleanFloat('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
-            ->remove('delta')
+            ->remove('delta,future')
             ->get();
 
         if($program->parent)
@@ -619,6 +619,7 @@ class programModel extends model
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
+            ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')
@@ -627,6 +628,8 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
+            if(strpos($this->app->user->view->programs, $module->id) === false) continue;
+
             $moduleName    = '/';
             $parentModules = explode(',', $module->path);
             foreach($parentModules as $parentModuleID)
@@ -1116,17 +1119,17 @@ class programModel extends model
     /**
      * Get project pairs by model and program.
      *
-     * @param  string $model
+     * @param  string $model scrum|waterfall
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function getPRJPairsByModel($model, $programID = 0)
+    public function getPRJPairsByModel($model = 'all', $programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->andWhere('parent')->eq($programID)
-            ->andWhere('model')->eq($model)
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')

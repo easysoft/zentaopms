@@ -74,7 +74,7 @@
                 {
                     $isonlybody = isonlybody();
                     unset($_GET['onlybody']);
-                    echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                    echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>{$this->lang->more}<span class='caret'></span></button>";
                     echo "<ul class='dropdown-menu pull-right' role='menu'>";
                     if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
                     if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';

@@ -62,9 +62,55 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * My calendar.
+     * 
+     * @access public
+     * @return void
+     */
     public function calendar()
     {
         $this->locate($this->createLink('my', 'todo'));
+    }
+
+    /**
+     * My work view.
+     * 
+     * @param  string $mode 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $moduleIndex = array_search('my', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * My contribute view.
+     * 
+     * @param  string $mode 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function contribute($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $moduleIndex = array_search('my', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -115,6 +161,7 @@ class my extends control
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->user         = $user;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;
@@ -160,6 +207,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'story';
 
         $this->display();
     }
@@ -176,7 +224,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $storyType = 'story', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
@@ -192,16 +240,16 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, $storyType);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('program')->getPRJPairs();
         $this->view->type       = $type;
-        $this->view->storyType  = $storyType;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'story';
 
         $this->display();
     }
@@ -249,6 +297,7 @@ class my extends control
         $this->view->projects   = $this->loadModel('program')->getPRJPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
+        $this->view->mode       = 'task';
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
@@ -294,6 +343,7 @@ class my extends control
         $this->view->pageID      = $pageID;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
+        $this->view->mode       = 'bug';
 
         $this->display();
     }
@@ -328,6 +378,7 @@ class my extends control
         $this->view->orderBy    = $orderBy;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'testtask';
         $this->display();
 
     }
@@ -383,6 +434,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'testcase';
 
         $this->display();
     }
@@ -390,7 +442,7 @@ class my extends control
     /**
      * My projects.
      *
-     * @param  string  $status
+     * @param  string  $status doing|wait|suspended|closed|openedbyme
      * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
@@ -398,7 +450,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function project($status = 'all', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
         $this->app->loadLang('project');
@@ -412,7 +464,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[] = $this->lang->my->project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $pager);
+        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $status,  $pager);
         $this->view->pager      = $pager;
         $this->view->status     = $status;
         $this->display();
@@ -420,19 +472,77 @@ class my extends control
 
     /**
      * My executions.
+     * @param  string  $type undone|done
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
      *
      * @access public
      * @return void
      */
-    public function execution()
+    public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('project');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution');
+        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $type, $pager);
+        $this->view->type       = $type;
+        $this->view->pager      = $pager;
+        $this->view->mode       = 'execution';
 
+        $this->display();
+    }
+
+    /**
+     * My issues.
+     *
+     * @access public
+     * @return void
+     */
+    public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->my->issue;
+        $this->view->position[] = $this->lang->my->issue;
+        $this->view->mode       = 'issue';
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->type       = $type;
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $orderBy, $pager);
+        $this->display();
+    }
+
+    /**
+     * My risks.
+     *
+     * @access public
+     * @return void
+     */
+    public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->my->risk;
+        $this->view->position[] = $this->lang->my->risk;
+        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->type       = $type;
+        $this->view->mode       = 'risk';
         $this->display();
     }
 

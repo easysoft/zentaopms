@@ -773,6 +773,7 @@ class commonModel extends model
         global $config, $lang, $app;
 
         $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
         $mainMenu   = $moduleName;
         if($moduleName == 'program') return;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
@@ -780,7 +781,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
-        if($group == 'my' || $group == 'reporting' || $group == 'attend') return;
+        if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
 
         if(!isset($lang->$moduleName->menu))
@@ -2406,6 +2407,22 @@ EOD;
             unset($lang->stakeholder->menu->plan);
             unset($lang->stakeholder->menu->expectation);
         }
+    }
+
+    /**
+     * Get my module menu by methodName.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getMyModuleMenu($moduleName, $methodName)
+    {
+        global $lang;
+        if($methodName == 'work')       $lang->my->menu = $lang->my->workMenu;
+        if($methodName == 'contribute') $lang->my->menu = $lang->my->contributeMenu;
     }
 
     /**
