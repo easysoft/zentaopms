@@ -50,7 +50,7 @@ $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 
 $lang->my->projectMenu = new stdclass();
-$lang->my->projectMenu->doing      = 'Going';
+$lang->my->projectMenu->doing      = 'Doing';
 $lang->my->projectMenu->wait       = 'Waiting';
 $lang->my->projectMenu->suspended  = 'Suspended';
 $lang->my->projectMenu->closed     = 'Closed';
