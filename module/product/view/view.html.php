@@ -134,13 +134,15 @@
           </div>
           <?php endif;?>
           <div class="detail">
-              <div class="detail-title"><strong><?php echo $lang->product->manager;?></strong></div>
+            <div class="detail-title"><strong><?php echo $lang->product->manager;?></strong></div>
             <div class="detail-content">
               <table class="table table-data">
                 <tbody>
                   <tr>
                     <th class='w-100px'><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
                     <td><em><?php echo zget($users, $product->PO);?></em></td>
+                  </tr>
+                  <tr>
                     <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
                     <td><em><?php echo zget($users, $product->QD);?></em></td>
                   </tr>
