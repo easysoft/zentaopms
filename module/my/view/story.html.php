@@ -62,8 +62,8 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'>      <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
+          <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <?php if($storyType == 'story'):?>
           <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
           <?php endif;?>
@@ -91,11 +91,11 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
             <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
+          <td class='c-product'><?php echo $story->productTitle;?></td>
           <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
           <?php endif;?>
@@ -134,10 +134,10 @@
             <?php printf('%03d', $child->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
-          <td class='c-product'><?php echo $child->productTitle;?></td>
           <td class='c-name nobr'>
               <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
+          <td class='c-product'><?php echo $child->productTitle;?></td>
           <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
           <?php endif;?>
