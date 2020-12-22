@@ -412,7 +412,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[] = $this->lang->my->project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $pager);
+        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', 'all',  $pager);
         $this->view->pager      = $pager;
         $this->view->status     = $status;
         $this->display();
@@ -420,18 +420,28 @@ class my extends control
 
     /**
      * My executions.
+     * @param  string  $status undone|done
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
      *
      * @access public
      * @return void
      */
-    public function execution()
+    public function execution($status = 'undone', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('project');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution');
+        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $status, $pager);
+        $this->view->status     = $status;
+        $this->view->pager      = $pager;
 
         $this->display();
     }

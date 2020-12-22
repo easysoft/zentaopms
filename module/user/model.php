@@ -957,20 +957,66 @@ class userModel extends model
      * Get projects a user participated.
      *
      * @param  string $account
+     * @param  string $type
+     * @param  string $status all|undone|done
      * @access public
      * @return array
      */
-    public function getProjects($account, $type = 'project', $pager = null)
+    public function getProjects($account, $type = 'project', $status = 'all', $pager = null)
     {
         if($type == 'execution') $type = 'sprint,stage';
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->in($type)
+            ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.id_desc')
             ->page($pager)
             ->fetchGroup('project');
+
+        $projectIdList = array();
+        foreach($myProjectsList as $projects)
+        {
+            foreach($projects as $project) $projectIdList[] = $project->id;
+        }
+
+        /* Get all tasks and compute totalConsumed, totalLeft, totalWait, progress according to them. */
+        $hours       = array();
+        $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0);
+        $searchField = $type == 'project' ? 'PRJ' : 'project';
+        $tasks       = $this->dao->select('id, PRJ, project, consumed, `left`, status')
+            ->from(TABLE_TASK)
+            ->where('parent')->lt(1)
+            ->andWhere($searchField)->in($projectIdList)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup($searchField, 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status == 'wait')
+                {
+                    $hour->waitTasks     += 1;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
 
         $projectIdList = array_keys($myProjectsList);
         $projectList   = $this->loadModel('program')->getPRJByIdList($projectIdList);
@@ -986,6 +1032,10 @@ class userModel extends model
                     $delay = helper::diffDate(helper::today(), $project->end);
                     if($delay > 0) $project->delay = $delay;
                 }
+
+                /* Process the hours. */
+                $project->progress  = isset($hours[$project->id]) ? $hours[$project->id]->progress : 0;
+                $project->waitTasks = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
 
                 if($project->project) $project->projectName = $projectList[$project->project]->name;
                 $myProjects[$project->id] = $project;
