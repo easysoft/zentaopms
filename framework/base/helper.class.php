@@ -325,6 +325,9 @@ class baseHelper
             {
                 $decryptedPassword = openssl_decrypt($password, 'DES-CBC', $secret, OPENSSL_ZERO_PADDING);
             }
+
+            /* Check decrypted password. Judge whether there is garbled code. */
+            if(json_encode($decryptedPassword) === 'null') $decryptedPassword = '';
         }
         if(empty($decryptedPassword)) $decryptedPassword = $password;
 
