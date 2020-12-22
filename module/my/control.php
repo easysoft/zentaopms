@@ -67,6 +67,22 @@ class my extends control
         $this->locate($this->createLink('my', 'todo'));
     }
 
+    public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $moduleIndex = array_search('my', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    public function contribute($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $moduleIndex = array_search('my', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
     /**
      * My todos.
      *
@@ -115,6 +131,7 @@ class my extends control
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->user         = $user;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;
@@ -160,6 +177,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'story';
 
         $this->display();
     }
@@ -176,7 +194,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $storyType = 'story', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
@@ -192,16 +210,16 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, $storyType);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('program')->getPRJPairs();
         $this->view->type       = $type;
-        $this->view->storyType  = $storyType;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'story';
 
         $this->display();
     }
@@ -249,6 +267,7 @@ class my extends control
         $this->view->projects   = $this->loadModel('program')->getPRJPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
+        $this->view->mode       = 'task';
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
@@ -294,6 +313,7 @@ class my extends control
         $this->view->pageID      = $pageID;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
+        $this->view->mode       = 'bug';
 
         $this->display();
     }
@@ -328,6 +348,7 @@ class my extends control
         $this->view->orderBy    = $orderBy;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'testtask';
         $this->display();
 
     }
@@ -383,6 +404,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'testcase';
 
         $this->display();
     }
@@ -442,7 +464,32 @@ class my extends control
         $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $status, $pager);
         $this->view->status     = $status;
         $this->view->pager      = $pager;
+        $this->view->mode       = 'execution';
 
+        $this->display();
+    }
+
+    /**
+     * My issues.
+     *
+     * @access public
+     * @return void
+     */
+    public function issue()
+    {
+        $this->view->mode = 'issue';
+        $this->display();
+    }
+
+    /**
+     * My risks.
+     *
+     * @access public
+     * @return void
+     */
+    public function risk()
+    {
+        $this->view->mode = 'risk';
         $this->display();
     }
 

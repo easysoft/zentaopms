@@ -20,7 +20,8 @@
   </div>
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
+    <?php echo html::a(inlink("all", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -36,10 +37,10 @@
   </div>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo inLink('batchEdit', "programID=$programID");?>'>
-      <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
+      <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-fixed">
-        <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s";?>
         <thead>
           <tr>
             <th class='c-id'>
@@ -51,7 +52,6 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <th class='w-100px' title='<?php echo $lang->program->PGMCommon;?>'><?php echo $lang->program->PGMCommon;?></th>
             <th class='w-100px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
             <th class='w-100px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
             <th class='w-100px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
@@ -63,6 +63,7 @@
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
+            <th class='c-actions w-60px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody class="sortable" id="productTableList">
@@ -76,7 +77,6 @@
             <?php endif;?>
           </td>
           <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
-          <td class='c-name' title='<?echo empty($programID) ? $product->programName : $programName;?>'><?php echo empty($programID) ? $product->programName : $programName;?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>
@@ -88,6 +88,9 @@
           <?php if($canOrder):?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>
+          <td class='c-actions'>
+            <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
+          </td>
         </tr>
         <?php endforeach;?>
         </tbody>
@@ -100,7 +103,6 @@
           <?php echo html::submitButton($lang->edit, '', 'btn');?>
         </div>
         <?php endif;?>
-        <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>

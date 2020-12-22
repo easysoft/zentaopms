@@ -558,6 +558,32 @@ class program extends control
     }
 
     /**
+     * Ajax get projects.
+     *
+     * @param  string  $name
+     * @param  int     $copyProjectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCopyProjects($name = '', $copyProjectID = 0)
+    {
+        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($name)->andWhere('name')->like("%$name%")->fi()
+            ->fetchPairs();
+
+        $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
+        foreach($projects as $id => $name)
+        {
+            $active = $copyProjectID == $id ? 'active' : '';
+            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>"; 
+        }
+        echo $html;
+    }
+
+    /**
      * Update program order.
      *
      * @access public
@@ -728,6 +754,8 @@ class program extends control
             $acl         = $copyProject->acl;
             $auth        = $copyProject->auth;
             $whitelist   = $copyProject->whitelist;
+            $programID   = $copyProject->parent;
+            $model       = $copyProject->model;
 
             $products = $this->project->getProducts($copyProjectID);
             foreach($products as $product)
@@ -743,7 +771,7 @@ class program extends control
 
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects  = array('' => '') + $this->program->getPRJPairsByModel($model, $programID);
+        $this->view->copyProjects  = $this->program->getPRJPairsByModel();
         $this->view->products      = $products;
         $this->view->allProducts   = array('0' => '') + $allProducts;
         $this->view->productPlans  = array('0' => '') + $productPlans;

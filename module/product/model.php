@@ -531,7 +531,6 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.00
             ->checkIF(!empty($product->name), 'name', 'unique')
             ->checkIF(!empty($product->name), 'code', 'unique')
             ->exec();
@@ -581,7 +580,6 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
-            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
@@ -627,6 +625,7 @@ class productModel extends model
             $products[$productID]->line   = $data->lines[$productID];
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
+            $products[$productID]->acl    = $data->acl[$productID];
             $products[$productID]->order  = $data->orders[$productID];
 
             /* Check unique name for edited products. */
@@ -652,6 +651,11 @@ class productModel extends model
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
+
+            /* When acl is open, white list set empty. When acl is private,update user view. */
+            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
+            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
         $this->fixOrder();

@@ -8,11 +8,11 @@
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
           <?php echo $lang->program->PGMName;?>
         </th>
+        <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
+        <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
         <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PGMStatus);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
-        <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
-        <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PGMPM);?></th>
         <th class='text-center w-240px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -51,11 +51,11 @@
           <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
           <?php endif;?>
         </td>
+        <td><?php echo zget($users, $program->PM);?></td>
+        <td class='text-left'><?php echo $program->budget ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->PRJLongTime : $program->end;?></td>
-        <td class='text-left'><?php echo $program->budget ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
-        <td><?php echo zget($users, $program->PM);?></td>
         <td class='text-right c-actions'>
           <?php if($program->type == 'program'):?>
           <?php common::printIcon('program', 'PRJStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->PGMStart);?>

@@ -69,7 +69,6 @@ $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = "Nom du {$lang->productCommon}";
 $lang->product->code           = 'Code';
-$lang->product->line           = "Ligne Produit";
 $lang->product->order          = 'Rang';
 $lang->product->type           = 'Type';
 $lang->product->typeAB         = 'Type';
@@ -151,9 +150,9 @@ $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedB
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
+$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
-$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 
 $lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']  = $lang->product->activeStory;

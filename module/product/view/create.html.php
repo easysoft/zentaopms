@@ -30,10 +30,6 @@
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->product->code;?></th>
-            <td><?php echo html::input('code', '', "class='form-control input-product-code' required");?></td><td></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
           </tr>
@@ -53,7 +49,8 @@
               foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
               ?>
               <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
-            </td><td></td>
+            </td>
+            <td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->storyConcept;?></th>
@@ -75,7 +72,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->acl;?></th>
-            <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+            <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
           </tr>
           <tr class="hidden" id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>

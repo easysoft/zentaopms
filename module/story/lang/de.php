@@ -93,6 +93,7 @@ $lang->story->source         = 'Von';
 $lang->story->sourceNote     = 'Hinweis';
 $lang->story->fromBug        = 'Von Bug';
 $lang->story->title          = 'Titel';
+$lang->story->name           = 'Name';
 $lang->story->type           = 'Type';
 $lang->story->color          = 'Color';
 $lang->story->toBug          = 'ToBug';

@@ -69,7 +69,6 @@ $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
 $lang->product->name           = "{$lang->productCommon}名称";
 $lang->product->code           = "{$lang->productCommon}代号";
-$lang->product->line           = "{$lang->productCommon}线";
 $lang->product->order          = '排序';
 $lang->product->type           = "{$lang->productCommon}类型";
 $lang->product->typeAB         = "类型";
@@ -151,9 +150,9 @@ $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedB
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
+$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
-$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 
 $lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']  = $lang->product->activeStory;

@@ -36,10 +36,6 @@
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->product->code;?></th>
-            <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
           </tr>
