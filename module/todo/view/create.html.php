@@ -113,14 +113,21 @@
           <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
         </tr>  
         <tr>
-          <th><?php echo $lang->todo->pri;?></th>
-          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control'");?></td>
-        </tr>  
-        <tr>
           <th><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
             <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control'");?></div>
-            <div class='nameBox required'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
+            <div class='input-group title-group required'>
+              <div class='nameBox'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
+              <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
+			  <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                </div>
+              </div>
+            </div>
           </td>
         </tr>  
         <tr>
