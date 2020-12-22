@@ -63,7 +63,7 @@ $lang->program->PRJEstimate        = '預計';
 $lang->program->PRJConsume         = '消耗';
 $lang->program->PRJSurplus         = '剩餘';
 $lang->program->PRJProgress        = '進度';
-$lang->program->dateRange          = '起止時間';
+$lang->program->dateRange          = '起止日期';
 $lang->program->to                 = '至';
 $lang->program->realEnd            = '實際完成日期';
 $lang->program->realBegan          = '實際開始日期';
@@ -90,12 +90,13 @@ $lang->program->ac                 = 'AC';
 $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '項目成員';
 $lang->program->PRJLongTime        = '長期';
+$lang->program->future             = '待定';
 
 $lang->program->productNotEmpty  = '請關聯產品或創建產品。';
 $lang->program->existProductName = '產品名稱已存在。';
 
 $lang->program->unitList['']       = '';
-$lang->program->unitList['yuan']   = '元';
+$lang->program->unitList['yuan']   = '萬元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
 $lang->program->modelList['scrum']     = "Scrum";
@@ -213,7 +214,7 @@ $lang->program->PGMDesc      = '項目集描述';
 $lang->program->PGMCode      = '項目集代號';
 $lang->program->PGMCopy      = '複製項目集';
 $lang->program->PGMStatus    = '狀態';
-$lang->program->PGMPM        = '負責人';
+$lang->program->PGMPM        = '項目集負責人';
 $lang->program->PGMBudget    = '預算';
 $lang->program->PGMProgress  = '項目進度';
 $lang->program->PGMChildren  = '子項目集';
@@ -227,10 +228,10 @@ $lang->program->PGMShowClosed = '顯示已關閉';
 $lang->program->PGMTips       = '修改父項目集，可關聯產品也會發生變化，並且變為必填，如果未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯到該項目。';
 $lang->program->PGMChangeTips = '修改父項目集後，項目已關聯的產品會被清空，並且項目下的需求、bug等數據也會受影響，是否修改？';
 
-$lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問）";
+$lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問，干係人可後續維護）";
 $lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
 
-$lang->program->subPGMAclList['private'] = "私有（本項目集負責人和干係人可訪問）";
+$lang->program->subPGMAclList['private'] = "私有（本項目集負責人和干係人可訪問，干係人可後續維護）";
 $lang->program->subPGMAclList['open']    = "全部公開（有項目集視圖權限，即可訪問）";
 $lang->program->subPGMAclList['program'] = "項目集內公開 (所有上級項目集負責人和干係人、本項目集負責人和干係人可訪問）";
 

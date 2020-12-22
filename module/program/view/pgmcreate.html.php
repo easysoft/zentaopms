@@ -54,16 +54,8 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PGMCode;?></th>
-          <td><?php echo html::input('code', '', "class='form-control' required");?></td><td></td><td></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->program->PGMPM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PO;?></th>
-          <td><?php echo html::select('PO', $poUsers, '', "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
@@ -72,6 +64,12 @@
               <?php echo html::input('budget', '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'yuan' : $parentProgram->budgetUnit, "class='form-control'");?>
+            </div>
+          </td>
+          <td>
+            <div class='checkbox-primary'>
+              <input type='checkbox' id='future' name='future' value='1' />
+              <label for='future'><?php echo $lang->program->future;?></label>
             </div>
           </td>
           <td class='muted'><?php if($parentProgram) printf($lang->program->PGMParentBudget, $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, ''));?></td>
@@ -98,7 +96,6 @@
         <tr>
           <th><?php echo $lang->program->PGMDesc;?></th>
           <td colspan='3'>
-            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>

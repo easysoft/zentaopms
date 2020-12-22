@@ -13,9 +13,6 @@ $programsPinYin = common::convert2Pinyin($programNames);
     ?>
     </div>
     <div class="col-footer">
-      <div class='pull-left'>
-        <?php echo html::a(helper::createLink('program', 'pgmbrowse', 'status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
-      </div>
       <div class='pull-right'>
         <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
       </div>
@@ -46,9 +43,9 @@ $programsPinYin = common::convert2Pinyin($programNames);
 #programTree li.open > .list-toggle:before {border: none; height: 2px; width: 6px; left: 0; top: 2px; background: #fff;}
 #programTree li.open > .list-toggle:hover {background: #006AF1;}
 
-#programTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 2px solid #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
+#programTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 1px dashed #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
 #programTree ul > li:before,
-#programTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 2px solid #cbd0db; top: -13px; bottom: 12px; left: -12px;}
+#programTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 1px dashed #cbd0db; top: -13px; bottom: 12px; left: -12px;}
 #programTree ul > li:last-child:before {bottom: auto; height: 29px;}
 #programTree ul > li:first-child:before {top: -9px;}
 #programTree ul > li.has-list:first-child:before {top: -13px;}
@@ -61,11 +58,11 @@ $programsPinYin = common::convert2Pinyin($programNames);
 $('#programTree').tree();
 $(function()
 {
-    $('input[name^="showClosed"]').click(function()
-    {   
+    $('#showClosed1').click(function()
+    {
         var showClosed = $(this).is(':checked') ? 1 : 0;
         $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
-    }); 
+    });
 });
 </script>

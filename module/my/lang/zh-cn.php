@@ -32,6 +32,10 @@ $lang->my->name         = '名称';
 $lang->my->code         = '代号';
 $lang->my->projects     = '项目';
 
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = '未结束';
+$lang->my->executionMenu->done   = '已完成';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派给我';
 $lang->my->taskMenu->openedByMe   = '由我创建';

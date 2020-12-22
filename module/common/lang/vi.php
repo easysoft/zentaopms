@@ -281,7 +281,7 @@ $lang->my->workMenu->issue    = 'Issue|my|work|mode=issue';
 $lang->my->workMenu->risk     = 'Risk|my|work|mode=risk';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->execution = 'Execution|my|contribute|mode=execution';
+$lang->my->contributeMenu->execution = 'Execution|my|contribute|mode=execution&type=undone';
 $lang->my->contributeMenu->task      = 'Task|my|contribute|mode=task';
 $lang->my->contributeMenu->story     = 'Story|my|contribute|mode=story';
 $lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';

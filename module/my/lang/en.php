@@ -32,6 +32,10 @@ $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
 
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = 'Undone';
+$lang->my->executionMenu->done   = 'Done';
+
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'AssignedToMe';
 $lang->my->taskMenu->openedByMe   = 'CreatedByMe';

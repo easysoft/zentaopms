@@ -76,6 +76,7 @@ $lang->project->relatedMember = '相关成员';
 $lang->project->watermark     = '由禅道导出';
 $lang->project->burnXUnit     = '(日期)';
 $lang->project->burnYUnit     = '(工时)';
+$lang->project->waitTasks     = '待处理';
 $lang->project->viewByUser    = '按用户查看';
 $lang->project->oneProduct    = "阶段只能关联一个{$lang->productCommon}";
 $lang->project->noLinkProduct = "阶段没有关联{$lang->productCommon}";
