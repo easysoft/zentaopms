@@ -8,7 +8,7 @@
     </div>
     <div class="col-footer">
       <?php echo html::a(helper::createLink('program', 'PRJBrowse', 'programID=0&status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
-      <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->project->doneProjects?><i class='icon icon-angle-right'></i></a>
+      <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->project->doneProjects;?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
   <div class="table-col col-right">
@@ -41,9 +41,9 @@
 #projectTree li.open > .list-toggle:before {border: none; height: 2px; width: 6px; left: 0; top: 2px; background: #fff;}
 #projectTree li.open > .list-toggle:hover {background: #006AF1;}
 
-#projectTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 2px solid #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
+#projectTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 1px dashed #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
 #projectTree ul > li:before,
-#projectTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 2px solid #cbd0db; top: -13px; bottom: 12px; left: -12px;}
+#projectTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 1px dashed #cbd0db; top: -13px; bottom: 12px; left: -12px;}
 #projectTree ul > li:last-child:before {bottom: auto; height: 29px;}
 #projectTree ul > li:first-child:before {top: -9px;}
 #projectTree ul > li.has-list:first-child:before {top: -13px;}

@@ -1116,17 +1116,17 @@ class programModel extends model
     /**
      * Get project pairs by model and program.
      *
-     * @param  string $model
+     * @param  string $model scrum|waterfall
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function getPRJPairsByModel($model, $programID = 0)
+    public function getPRJPairsByModel($model = 'all', $programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->andWhere('parent')->eq($programID)
-            ->andWhere('model')->eq($model)
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')

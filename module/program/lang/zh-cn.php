@@ -34,12 +34,11 @@ $lang->program->PRJStoryConcept      = '需求概念组合';
 $lang->program->unbindWhielist       = '项目删除白名单';
 $lang->program->PRJManageProducts    = '关联产品';
 $lang->program->view                 = '项目集详情';
-$lang->program->copyTitle            = '请选择一个项目来复制';
+$lang->program->copyTitle            = '请选择要复制的项目';
 $lang->program->errorSameProducts    = '项目不能关联多个相同的产品。';
 $lang->program->errorNoProducts      = '最少关联一个产品';
 $lang->program->copyNoProject        = '没有可用的项目来复制';
-$lang->program->PRJSource            = '项目来源：';
-$lang->program->PRJStandalone        = '没有所属项目集的项目';
+$lang->project->searchByName         = '输入项目名称进行检索';
 
 /* Fields. */
 $lang->program->common             = '项目集';

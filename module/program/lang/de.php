@@ -38,8 +38,7 @@ $lang->program->copyTitle            = 'Please select an project to copy';
 $lang->program->errorSameProducts    = 'Project cannot be associated with multiple identical products.';
 $lang->program->errorNoProducts      = 'At least one product is associated';
 $lang->program->copyNoProject        = 'There are no items available to copy.';
-$lang->program->PRJSource            = 'Project source：';
-$lang->program->PRJStandalone        = 'Projects that do not belong to a program.';
+$lang->project->searchByName         = 'Enter the project name to retrieve';
 
 /* Fields. */
 $lang->program->common             = 'Program';
