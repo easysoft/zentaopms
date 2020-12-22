@@ -36,21 +36,14 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[12] = 'myProject';
-$lang->my->menuOrder[20] = 'myExecution';
-$lang->my->menuOrder[25] = 'review';
-$lang->my->menuOrder[29] = 'requirement';
-$lang->my->menuOrder[31] = 'story';
-$lang->my->menuOrder[40] = 'task';
-$lang->my->menuOrder[45] = 'bug';
-$lang->my->menuOrder[50] = 'testtask';
-$lang->my->menuOrder[55] = 'nc';
-$lang->my->menuOrder[60] = 'dynamic';
-$lang->my->menuOrder[65] = 'profile';
-$lang->my->menuOrder[70] = 'changePassword';
-$lang->my->menuOrder[75] = 'score';
-$lang->my->menuOrder[80] = 'contacts';
-$lang->todo->menuOrder   = $lang->my->menuOrder;
+$lang->my->menuOrder[15] = 'myWork';
+$lang->my->menuOrder[20] = 'myProject';
+$lang->my->menuOrder[25] = 'contribute';
+$lang->my->menuOrder[30] = 'score';
+$lang->my->menuOrder[35] = 'dynamic';
+$lang->my->menuOrder[40] = 'follow';
+$lang->my->menuOrder[45] = 'contacts';
+$lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
 $lang->product->menuOrder[1]  = 'requirement';

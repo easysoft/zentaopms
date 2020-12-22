@@ -69,7 +69,6 @@ $lang->product->id             = '編號';
 $lang->product->program        = "所屬項目集";
 $lang->product->name           = "{$lang->productCommon}名稱";
 $lang->product->code           = "{$lang->productCommon}代號";
-$lang->product->line           = "{$lang->productCommon}綫";
 $lang->product->order          = '排序';
 $lang->product->type           = "{$lang->productCommon}類型";
 $lang->product->typeAB         = "類型";

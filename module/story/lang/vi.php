@@ -93,6 +93,7 @@ $lang->story->source         = 'Từ';
 $lang->story->sourceNote     = 'Ghi chú';
 $lang->story->fromBug        = 'Từ Bug';
 $lang->story->title          = 'Tiêu đề';
+$lang->story->name           = 'Name';
 $lang->story->type           = 'Loại';
 $lang->story->color          = 'Màu';
 $lang->story->toBug          = 'Tới Bug';

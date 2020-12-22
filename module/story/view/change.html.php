@@ -42,7 +42,7 @@
         </tr>
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
-          <th><?php echo $lang->story->title;?></th>
+          <th><?php echo $lang->story->name;?></th>
           <td colspan='2'><?php echo html::input('title', $story->title, 'class="form-control"');?></td>
         </tr>
         <tr>
