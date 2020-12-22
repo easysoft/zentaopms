@@ -41,14 +41,13 @@
           <tr>
             <th class='w-60px'><?php echo $lang->idAB;?></th>
             <th class='w-200px required'><?php echo $lang->product->name;?></th>
-            <th class='w-150px required'><?php echo $lang->product->code;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'line',   ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->product->QD;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->product->RD;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->product->type;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
             <th class='w-200px<?php echo zget($visibleFields, 'desc',   ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
+            <th class='w-200px<?php echo zget($visibleFields, 'acl',    ' hidden');?>'><?php echo $lang->product->acl;?></th>
             <th class='w-80px'><?php echo $lang->product->order;?></th>
           </tr>
         </thead>
@@ -62,14 +61,13 @@
           <tr>
             <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
-            <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible'><?php echo html::select("lines[$productID]", $lines, $products[$productID]->line, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'><?php echo html::select("types[$productID]",    $lang->product->typeList,   $products[$productID]->type,   "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
+            <td class='<?php echo zget($visibleFields, 'acl',    'hidden')?>'><?php echo html::select("acl[$productID]", $lang->product->aclList, $products[$productID]->acl, "class='form-control'");?></td>
             <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
           </tr>
           <?php
