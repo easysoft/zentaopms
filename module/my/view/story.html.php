@@ -133,7 +133,6 @@
               <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
-          <?php if($storyType == 'story'):?>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate;?></td>

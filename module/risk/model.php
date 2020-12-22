@@ -232,6 +232,27 @@ class riskModel extends model
             ->fetchAll();
     }
 
+	/**
+	 * Get user risks.
+	 *
+	 * @param  string $browseType open|assignto|closed|suspended|canceled
+	 * @param  string $orderBy
+	 * @param  object $pager
+	 * @access public
+	 * @return array
+	 */
+	public function getUserRisks($type = 'assignedTo', $orderBy = 'id_desc', $pager)
+	{   
+		$riskList = $this->dao->select('*')->from(TABLE_RISK)
+			->where('deleted')->eq('0')
+			->andWhere($type)->eq($this->app->user->account)->fi()
+			->orderBy($orderBy)
+			->page($pager)
+			->fetchAll();
+
+		return $riskList;
+	}
+
     /**
      * Print assignedTo html
      *
@@ -325,6 +346,8 @@ class riskModel extends model
             ->setDefault('status','closed')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::today())
+            ->add('closedBy', $this->app->user->account)
+            ->add('closedDate', helper::today())
             ->stripTags($this->config->risk->editor->close['id'], $this->config->allowedTags)
             ->remove('uid,comment')
             ->get();

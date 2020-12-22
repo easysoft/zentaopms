@@ -62,11 +62,29 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * My calendar.
+     * 
+     * @access public
+     * @return void
+     */
     public function calendar()
     {
         $this->locate($this->createLink('my', 'todo'));
     }
 
+    /**
+     * My work view.
+     * 
+     * @param  string $mode 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $moduleIndex = array_search('my', $this->lang->noMenuModule);
@@ -75,6 +93,18 @@ class my extends control
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
+    /**
+     * My contribute view.
+     * 
+     * @param  string $mode 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function contribute($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $moduleIndex = array_search('my', $this->lang->noMenuModule);
@@ -476,9 +506,20 @@ class my extends control
      * @access public
      * @return void
      */
-    public function issue()
+    public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->view->mode = 'issue';
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->my->issue;
+        $this->view->position[] = $this->lang->my->issue;
+        $this->view->mode       = 'issue';
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->type       = $type;
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $orderBy, $pager);
         $this->display();
     }
 
@@ -488,9 +529,20 @@ class my extends control
      * @access public
      * @return void
      */
-    public function risk()
+    public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->view->mode = 'risk';
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->my->risk;
+        $this->view->position[] = $this->lang->my->risk;
+        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->type       = $type;
+        $this->view->mode       = 'risk';
         $this->display();
     }
 
