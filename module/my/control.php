@@ -412,7 +412,7 @@ class my extends control
     /**
      * My projects.
      *
-     * @param  string  $status
+     * @param  string  $status doing|wait|suspended|closed|openedbyme
      * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
@@ -420,7 +420,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function project($status = 'all', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
         $this->app->loadLang('project');
@@ -434,7 +434,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[] = $this->lang->my->project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', 'all',  $pager);
+        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $status,  $pager);
         $this->view->pager      = $pager;
         $this->view->status     = $status;
         $this->display();

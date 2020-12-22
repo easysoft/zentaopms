@@ -49,6 +49,13 @@ $lang->my->storyMenu->openedByMe   = '我创建';
 $lang->my->storyMenu->reviewedByMe = '我评审';
 $lang->my->storyMenu->closedByMe   = '我关闭';
 
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = '进行中';
+$lang->my->projectMenu->wait       = '未开始';
+$lang->my->projectMenu->suspended  = '已挂起';
+$lang->my->projectMenu->closed     = '已关闭';
+$lang->my->projectMenu->openedbyme = '由我创建';
+
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = '最新动态';
 $lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";

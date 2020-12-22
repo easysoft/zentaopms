@@ -49,6 +49,13 @@ $lang->my->storyMenu->openedByMe   = 'CreatedByMe';
 $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = 'Going';
+$lang->my->projectMenu->wait       = 'Waiting';
+$lang->my->projectMenu->suspended  = 'Suspended';
+$lang->my->projectMenu->closed     = 'Closed';
+$lang->my->projectMenu->openedbyme = 'CreatedByMe';
+
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Dynamics';
 $lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
