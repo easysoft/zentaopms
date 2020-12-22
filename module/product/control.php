@@ -768,33 +768,30 @@ class product extends control
      *
      * @param  int    $programID
      * @param  string $browseType
-     * @param  int    $param
      * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function all($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function all($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc')
     {
+        /* Load module and set session. */
         $this->loadModel('program');
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
         $this->session->set('productList', $this->app->getURI(true));
 
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        /* Set language items. */
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
-        $program = $programID ? $this->program->getPGMByID($programID) : 0;
-        $programName = empty($program) ? '' : $program->name;
+        /* Init vars. */
+        $program      = $programID ? $this->program->getPGMByID($programID) : 0;
+        $programName  = empty($program) ? '' : $program->name;
+        $productStats = $this->product->getStats($orderBy, '', $browseType, '', 'story', $programID);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
 
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->recTotal     = count($productStats);
+        $this->view->productStats = $productStats;
         $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
         $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product', '&browseType=' . $browseType);
         $this->view->programID    = $programID;
         $this->view->program      = $program;
