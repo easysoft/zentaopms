@@ -131,6 +131,7 @@ class my extends control
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->user         = $user;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;

@@ -99,7 +99,7 @@
           <td class="c-type"><?php echo $lang->todo->typeList[$todo->type];?></td>
           <td class="c-pri"><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
           <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
-          <td class="c-assignedBy"><?php echo $todo->assignedBy;?></td>
+          <td class="c-assignedBy"><?php echo zget($users, $todo->assignedBy);?></td>
           <td class="c-begin"><?php echo $todo->begin;?></td>
           <td class="c-end"><?php echo $todo->end;?></td>
           <td class="c-status"><span class="status-todo status-<?php echo $todo->status;?>"><?php echo $lang->todo->statusList[$todo->status];?></span></td>
