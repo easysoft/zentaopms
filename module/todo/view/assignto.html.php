@@ -18,12 +18,12 @@
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->todo->assignTo;?></h2>
+          <h2><?php echo $lang->todo->assignedTo;?></h2>
         </div>
         <form class='load-indicator main-form' method='post' target='hiddenwin' id="todoAssignForm">
           <table class='table table-form'>
             <tr>
-              <th class='w-80px'><?php echo $lang->todo->assignTo;?></th>
+              <th class='w-80px'><?php echo $lang->todo->assignedTo;?></th>
               <td><?php echo html::select('assignedTo', $members, $todo->assignedTo, "class='form-control chosen'");?></td>
               <td></td>
             </tr>

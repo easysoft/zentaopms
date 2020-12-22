@@ -122,8 +122,12 @@
             </tr>
             <?php if(isset($todo->assignedTo)):?>
             <tr>
-              <th><?php echo $lang->todo->assignTo;?></th>
+              <th><?php echo $lang->todo->assignedTo;?></th>
               <td><?php echo zget($users, $todo->assignedTo);?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->todo->assignedBy;?></th>
+              <td><?php echo zget($users, $todo->assignedBy);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->assignedDate;?></th>
