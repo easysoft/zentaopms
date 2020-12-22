@@ -160,10 +160,6 @@
               <table class="table table-data data-basic">
                 <tbody>
                   <tr>
-                    <th><?php echo $lang->product->line;?></th>
-                    <td><em><?php echo zget($lines, $product->line);?></em></td>
-                  </tr>
-                  <tr>
                     <th><?php echo $lang->story->openedBy?></th>
                     <td><em><?php echo zget($users, $product->createdBy);?></em></td>
                   </tr>
