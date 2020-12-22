@@ -442,7 +442,8 @@ class my extends control
 
     /**
      * My executions.
-     * @param  string  $status undone|done
+     * @param  string  $type undone|done
+     * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
@@ -450,7 +451,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function execution($status = 'undone', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('project');
 
@@ -461,8 +462,8 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $status, $pager);
-        $this->view->status     = $status;
+        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $type, $pager);
+        $this->view->type       = $type;
         $this->view->pager      = $pager;
         $this->view->mode       = 'execution';
 

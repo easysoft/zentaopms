@@ -16,8 +16,8 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink('execution', "type=undone"),  "<span class='text'>{$lang->my->executionMenu->undone}</span>" . ($status == 'undone' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($status == 'undone' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('execution', "type=done"),  "<span class='text'>{$lang->my->executionMenu->done}</span>" . ($status == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($status == 'done' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('contribute', "mode=execution&type=undone"),  "<span class='text'>{$lang->my->executionMenu->undone}</span>" . ($type == 'undone' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'undone' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('contribute', "mode=execution&type=done"),  "<span class='text'>{$lang->my->executionMenu->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
@@ -63,8 +63,8 @@
           <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'> <?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <?php $statusName = $this->processStatus('project', $execution);?>
-          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'> <?php echo $statusName;?></span>
+          <?php $typeName = $this->processStatus('project', $execution);?>
+          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $typeName;?>'> <?php echo $typeName;?></span>
           <?php endif;?>
         </td>
         <td><?php echo $execution->role;?></td>

@@ -999,11 +999,8 @@ class userModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                if($task->status == 'wait')
-                {
-                    $hour->waitTasks     += 1;
-                    $hour->totalConsumed += $task->consumed;
-                }
+                if($task->status == 'wait') $hour->waitTasks += 1;
+                if($task->status != 'cancel') $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
