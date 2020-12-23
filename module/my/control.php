@@ -70,7 +70,7 @@ class my extends control
      */
     public function calendar()
     {
-        $this->locate($this->createLink('my', 'todo'));
+        $this->locate($this->createLink('my', 'todo', 'type=before&userID=&status=undone'));
     }
 
     /**
@@ -140,7 +140,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo($type = 'all', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($type = 'before', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
