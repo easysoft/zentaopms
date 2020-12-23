@@ -114,9 +114,6 @@ class releaseModel extends model
         $branch    = (int)$branch;
         $buildID   = 0;
 
-        /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
         /* Check date must be not more than today. */
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
