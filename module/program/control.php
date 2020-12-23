@@ -286,6 +286,42 @@ class program extends control
     }
 
     /**
+     * Suspend a program.
+     *
+     * @param  int     $programID
+     * @access public
+     * @return void
+     */
+    public function PGMSuspend($programID)
+    {
+        $this->lang->navGroup->program = 'program';
+        $program = $this->program->getPGMByID($programID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->suspend($programID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $programID, 'Suspended', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($programID);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->project->suspend;
+        $this->view->position[] = $this->lang->project->suspend;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $programID);
+        $this->view->project    = $program;
+
+        $this->display('project', 'suspend');
+    }
+
+    /**
      * Delete a program.
      *
      * @param  int     $projectID
