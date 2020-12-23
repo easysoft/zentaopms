@@ -136,6 +136,12 @@ $lang->product->aclList['open']    = "Default (Users with privileges to {$lang->
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->executionCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
+$lang->product->acls['open']    = 'Default';
+$lang->product->acls['private'] = 'Private {$lang->productCommon}';
+
+$lang->product->aclTips['open']    = "Users with privileges to {$lang->productCommon} can access it.";
+$lang->product->aclTips['private'] = "{$lang->executionCommon} team members only";
+
 $lang->product->storySummary   = "Total <strong>%s</strong> %s on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%s</strong>.";
 $lang->product->checkedSummary = "<strong>%total%</strong> %storyCommon% selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>You have no modules. </div><div>Manage Now</div>';

@@ -617,15 +617,13 @@ class productModel extends model
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
             $products[$productID]->name   = $productName;
-            $products[$productID]->code   = $productCode;
             $products[$productID]->PO     = $data->POs[$productID];
             $products[$productID]->QD     = $data->QDs[$productID];
             $products[$productID]->RD     = $data->RDs[$productID];
             $products[$productID]->type   = $data->types[$productID];
-            $products[$productID]->line   = $data->lines[$productID];
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
-            $products[$productID]->acl    = $data->acl[$productID];
+            $products[$productID]->acl    = $data->acls[$productID];
             $products[$productID]->order  = $data->orders[$productID];
 
             /* Check unique name for edited products. */

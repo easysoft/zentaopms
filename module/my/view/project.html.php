@@ -13,7 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->project;?></span></span>
+    <?php foreach($lang->my->projectMenu as $key => $label):?>
+    <?php $active = $status == $key ? 'btn-active-text' : '';?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('project', "type=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>

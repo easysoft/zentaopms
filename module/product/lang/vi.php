@@ -136,6 +136,12 @@ $lang->product->aclList['open']    = "Mặc định (Người dùng với quyề
 $lang->product->aclList['private'] = "Riêng tư {$lang->productCommon} ({$lang->executionCommon} chỉ có thành viên nhóm)";
 $lang->product->aclList['custom']  = 'Tùy biến (Thành viên đội nhóm và thành viên danh sách trắng có thể truy cập nó.)';
 
+$lang->product->acls['open']    = 'Mặc định';
+$lang->product->acls['private'] = "Riêng tư {$lang->productCommon}";
+
+$lang->product->aclTips['open']    = "Người dùng với quyền {$lang->productCommon} có thể truy cập nó.";
+$lang->product->aclTips['private'] = "{$lang->executionCommon} chỉ có thành viên nhóm";
+
 $lang->product->storySummary   = "Tổng <strong>%s</strong> câu chuyện trên trang này. Dự tính: <strong>%s</strong> ({$lang->hourCommon}), và phạm vi tình huống: <strong>%s</strong>.";
 $lang->product->checkedSummary = "<strong>%total%</strong> stories selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), và phạm vi tình huống: <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>Chưa có Module. </div><div>Quản lý ngay</div>';

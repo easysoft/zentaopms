@@ -51,10 +51,11 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 0, $type = 'all')
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as PRJName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.PRJ = t4.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()

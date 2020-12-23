@@ -136,6 +136,12 @@ $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang
 $lang->product->aclList['private'] = "Privat {$lang->productCommon} ({$lang->executionCommon} Nur Teammitglieder)";
 $lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
 
+$lang->product->acls['open']    = "Standard";
+$lang->product->acls['private'] = "Privat {$lang->productCommon}";
+
+$lang->product->aclTips['open']    = "Benutzer mit Rechten für {$lang->productCommon} können zugreifen.";
+$lang->product->aclTips['private'] = "{$lang->executionCommon} Nur Teammitglieder";
+
 $lang->product->storySummary   = " <strong>%s</strong> %s, <strong>%s</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%s</strong> auf dieser Seite.";
 $lang->product->checkedSummary = " <strong>%total%</strong> geprüft, <strong>%estimate%</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>Kein Modul</div><div>Jetzt verwalten</div>';

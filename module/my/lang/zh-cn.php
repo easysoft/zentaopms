@@ -14,6 +14,8 @@ $lang->my->requirement    = "我的用户{$lang->productSRCommon}";
 $lang->my->createProgram  = '添加项目';
 $lang->my->project        = "我的项目";
 $lang->my->execution      = "我的{$lang->execution->common}";
+$lang->my->issue          = '我的问题';
+$lang->my->risk           = '我的风险';
 $lang->my->profile        = '我的档案';
 $lang->my->dynamic        = '我的动态';
 $lang->my->editProfile    = '修改档案';
@@ -48,6 +50,13 @@ $lang->my->storyMenu->assignedToMe = '指给我';
 $lang->my->storyMenu->openedByMe   = '我创建';
 $lang->my->storyMenu->reviewedByMe = '我评审';
 $lang->my->storyMenu->closedByMe   = '我关闭';
+
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = '进行中';
+$lang->my->projectMenu->wait       = '未开始';
+$lang->my->projectMenu->suspended  = '已挂起';
+$lang->my->projectMenu->closed     = '已关闭';
+$lang->my->projectMenu->openedbyme = '由我创建';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = '最新动态';

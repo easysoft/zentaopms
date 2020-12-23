@@ -136,6 +136,12 @@ $lang->product->aclList['open']    = "公開(有{$lang->productCommon}視圖權�
 $lang->product->aclList['private'] = "私有({$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問)";
 //$lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
+$lang->product->acls['open']    = '公開';
+$lang->product->acls['private'] = '私有';
+
+$lang->product->aclTips['open']    = "有{$lang->productCommon}視圖權限，即可訪問";
+$lang->product->aclTips['private'] = "{$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問";
+
 $lang->product->storySummary   = "本頁共 <strong>%s</strong> 個%s，預計 <strong>%s</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%s</strong>。";
 $lang->product->checkedSummary = "選中 <strong>%total%</strong> 個%storyCommon%，預計 <strong>%estimate%</strong> 個{$lang->hourCommon}，用例覆蓋率 <strong>%rate%</strong>。";
 $lang->product->noModule       = "<div>您現在還沒有模組信息</div><div>請維護{$lang->productCommon}模組</div>";

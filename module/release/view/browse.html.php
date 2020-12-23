@@ -43,6 +43,7 @@
       <tr>
         <th class='w-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
+        <th><?php echo $lang->release->project;?></th>
         <th><?php echo $lang->release->build;?></th>
         <?php if($product->type != 'normal'):?>
         <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
@@ -67,6 +68,7 @@
           echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
           ?>
         </td>
+        <td title='<?php echo $release->PRJName?>'><?php echo $release->PRJName;?></td>
         <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>

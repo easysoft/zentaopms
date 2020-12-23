@@ -35,6 +35,7 @@ $lang->release->basicInfo = 'Basic Info';
 $lang->release->id            = 'ID';
 $lang->release->product       = $lang->productCommon;
 $lang->release->branch        = 'Platform/Branch';
+$lang->release->project       = 'Project';
 $lang->release->build         = 'Build';
 $lang->release->name          = 'Name';
 $lang->release->marker        = 'Milestone';

@@ -147,6 +147,27 @@ class issueModel extends model
     }
 
     /**
+     * Get user issues.
+     *
+     * @param  string $browseType open|assignto|closed|suspended|canceled
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getUserIssues($type = 'assignedTo', $orderBy = 'id_desc', $pager)
+    {
+        $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
+            ->where('deleted')->eq('0')
+            ->andWhere($type)->eq($this->app->user->account)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        return $issueList;
+    }
+
+    /**
      * Get activity list.
      *
      * @access public
