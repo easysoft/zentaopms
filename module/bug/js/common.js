@@ -4,19 +4,6 @@ $(function()
     var flow = window.flow;
 
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
-    if(page == 'create')
-    {
-        var productID  = $('#product').val();
-        var moduleID   = $('#module').val();
-        var assignedto = $('#assignedTo').val();
-        changeProductConfirmed = true;
-        oldStoryID             = $('#story').val() || 0;
-        oldProjectID           = 0;
-        oldOpenedBuild         = '';
-        oldTaskID              = $('#oldTaskID').val() || 0;
-        if(!assignedto) setAssignedTo(moduleID, productID);
-        notice();
-    }
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
