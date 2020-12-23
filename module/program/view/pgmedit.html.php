@@ -33,21 +33,24 @@
           <td class="col-main"><?php echo html::input('name', $program->name, "class='form-control' required");?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PGMCode;?></th>
-          <td><?php echo html::input('code', $program->code, "class='form-control' required");?></td><td></td><td></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->program->PGMPM;?></th>
           <td><?php echo html::select('PM', $pmUsers, $program->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PO;?></th>
-          <td><?php echo html::select('PO', $poUsers, $program->PO, "class='form-control chosen'");?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->program->PGMBudget;?></th>
-          <td><?php echo html::input('budget', $program->budget ? $program->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?></td>
-          <td style='float:left'><?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?></td><td></td>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('budget', $program->budget ? $program->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($program->budget == 0 ? 'disabled' : ''));?>
+              <span class='input-group-addon'></span>
+              <?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?>
+            </div>
+          </td>
+          <td>
+            <div class='checkbox-primary'>
+              <input type='checkbox' id='future' name='future' value='1' <?php if($program->budget == 0) echo 'checked';?> />
+              <label for='future'><?php echo $lang->program->future;?></label>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->program->dateRange;?></th>
@@ -72,7 +75,6 @@
         <tr>
           <th><?php echo $lang->program->PGMDesc;?></th>
           <td colspan='3'>
-            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=program&link=desc');?>
             <?php echo html::textarea('desc', $program->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>

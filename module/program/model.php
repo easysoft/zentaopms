@@ -222,9 +222,10 @@ class programModel extends model
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->future, 'budget', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
-            ->remove('uid,delta')
+            ->remove('uid,delta,future')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);

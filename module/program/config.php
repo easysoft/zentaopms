@@ -22,8 +22,8 @@ $config->program->list->exportFields = 'id,name,code,template,product,status,beg
 
 $config->program->PGMCreate = new stdclass();
 $config->program->PGMEdit   = new stdclass();
-$config->program->PGMCreate->requiredFields = 'name,code,begin,end';
-$config->program->PGMEdit->requiredFields   = 'name,code,begin,end';
+$config->program->PGMCreate->requiredFields = 'name,begin,end';
+$config->program->PGMEdit->requiredFields   = 'name,begin,end';
 
 $config->program->PRJCreate = new stdclass();
 $config->program->PRJEdit   = new stdclass();

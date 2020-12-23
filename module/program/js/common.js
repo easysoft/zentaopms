@@ -260,3 +260,24 @@ $(function()
         }   
     }); 
 })
+
+/**
+ * Change budget input.
+ *
+ * @access public
+ * @return void
+ */
+$(function()
+{
+    $('#future').on('change', function()
+    {
+        if($(this).prop('checked'))
+        {
+            $('#budget').val('').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#budget').removeAttr('disabled');
+        }
+    });
+})
