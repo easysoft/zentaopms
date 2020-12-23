@@ -163,7 +163,6 @@ class programModel extends model
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
             ->checkIF(!empty($program->name), 'name', 'unique')
-            ->checkIF(!empty($program->name), 'code', 'unique')
             ->exec();
 
         if(!dao::isError())
@@ -268,7 +267,6 @@ class programModel extends model
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
             ->check('name', 'unique', "id!=$programID and deleted='0'")
-            ->check('code', 'unique', "id!=$programID and deleted='0'")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
@@ -1288,7 +1286,6 @@ class programModel extends model
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF(!empty($project->name), 'name', 'unique')
-            ->checkIF(!empty($project->name), 'code', 'unique')
             ->exec();
 
         /* Add the creater to the team. */
@@ -1318,7 +1315,6 @@ class programModel extends model
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
-                $product->code         = $this->post->productName ? $this->post->productName : $project->code;
                 $product->bind         = $this->post->productName ? 0 : 1;
                 $product->program      = $project->parent;
                 $product->storyConcept = $project->storyConcept;
@@ -1440,7 +1436,6 @@ class programModel extends model
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->check('name', 'unique', "id!=$projectID and deleted='0'")
-            ->check('code', 'unique', "id!=$projectID and deleted='0'")
             ->where('id')->eq($projectID)
             ->exec();
 
