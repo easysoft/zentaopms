@@ -26,6 +26,8 @@ $lang->my->limited        = 'Hành động bị giới hạn (Người dùng ch�
 $lang->my->score          = 'Điểm của bạn';
 $lang->my->scoreRule      = 'Quy định điểm';
 $lang->my->noTodo         = 'Chưa có việc nào.';
+$lang->my->requirement    = 'User requirements';
+$lang->my->story          = 'Software requirements';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';

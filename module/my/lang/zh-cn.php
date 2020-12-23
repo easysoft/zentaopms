@@ -28,6 +28,8 @@ $lang->my->limited        = '受限操作(只能编辑与自己相关的内容)'
 $lang->my->score          = '我的积分';
 $lang->my->scoreRule      = '积分规则';
 $lang->my->noTodo         = '暂时没有待办。';
+$lang->my->requirement    = '用户需求';
+$lang->my->story          = '软件需求';
 
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';

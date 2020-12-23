@@ -26,6 +26,8 @@ $lang->my->limited        = 'Actions Limitées (Les utilisateurs peuvent seuleme
 $lang->my->score          = 'Mes Points';
 $lang->my->scoreRule      = 'Règles Point';
 $lang->my->noTodo         = "Je n'ai rien à faire pour l'instant.";
+$lang->my->requirement    = 'User requirements';
+$lang->my->story          = 'Software requirements';
 
 $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';
