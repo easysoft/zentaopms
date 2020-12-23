@@ -52,7 +52,7 @@
           <?php endif;?>
         </td>
         <td><?php echo zget($users, $program->PM);?></td>
-        <td class='text-left'><?php echo $program->budget ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
+        <td class='text-left'><?php echo $program->budget != 0 ? $program->budget . ' ' . zget($lang->program->unitList, $program->budgetUnit) : '';?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->PRJLongTime : $program->end;?></td>

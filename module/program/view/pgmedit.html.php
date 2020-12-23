@@ -40,7 +40,7 @@
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', $program->budget ? $program->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($program->budget == 0 ? 'disabled' : ''));?>
+              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($program->budget == 0 ? 'disabled' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, $program->budgetUnit, "class='form-control'");?>
             </div>

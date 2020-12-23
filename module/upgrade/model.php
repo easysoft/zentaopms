@@ -655,6 +655,10 @@ class upgradeModel extends model
             $this->processBuildTable();
             $this->processSprintConcept();
             $this->appendExec('20_0_beta1');
+        case '20_0_beta3':
+            $this->saveLogs('Execute 20_0_beta3');
+            $this->adjustBudget();
+            $this->appendExec('20_0_beta3');
         }
 
         $this->deletePatch();
@@ -4402,6 +4406,33 @@ class upgradeModel extends model
             ->set('`key`')->eq('sprintConcept')
             ->where('id')->eq($productProject->id)
             ->exec(); 
+
+        return true;
+    }
+
+    /**
+     * Adjust budget units and values.
+     *
+     * @access public
+     * @return void
+     */
+    public function adjustBudget()
+    {
+        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
+            ->where('type')->in('project,program')
+            ->fetchAll('id');
+
+        foreach($budgets as $id => $budget)
+        {
+            $data = array();
+            if($budget->budgetUnit == 'yuan')
+            {
+                $data['budget']     = number_format($budget->budget / 10000, 2);
+                $data['budgetUnit'] = 'wanyuan';
+            }
+
+            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
+        }
 
         return true;
     }

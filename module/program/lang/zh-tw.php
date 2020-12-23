@@ -95,9 +95,9 @@ $lang->program->future             = '待定';
 $lang->program->productNotEmpty  = '請關聯產品或創建產品。';
 $lang->program->existProductName = '產品名稱已存在。';
 
-$lang->program->unitList['']       = '';
-$lang->program->unitList['yuan']   = '萬元';
-$lang->program->unitList['dollar'] = 'Dollars';
+$lang->program->unitList['']        = '';
+$lang->program->unitList['wanyuan'] = '萬元';
+$lang->program->unitList['dollar']  = 'Dollars';
 
 $lang->program->modelList['scrum']     = "Scrum";
 $lang->program->modelList['waterfall'] = "瀑布";
