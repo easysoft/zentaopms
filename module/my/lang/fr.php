@@ -61,3 +61,5 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Infos Basiques';
 $lang->my->form->lblContact = 'Infos Contact';
 $lang->my->form->lblAccount = 'Infos Compte';
+
+$lang->my->taskSummary = "Total des tâches de cette page :<strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Reste: <strong>%s</strong>(h).";

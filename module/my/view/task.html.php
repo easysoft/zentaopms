@@ -45,12 +45,14 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri w-40px'> <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-project w-100px'>    <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
-          <th class='c-project w-80px'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
-          <th class='c-name w-140px'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
-          <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-pri w-40px'>       <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-project w-120px'>  <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
+          <th class='c-project w-120px'>  <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-name'>             <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-user w-90px'>      <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <?php if($type != 'assignedTo'): ?>
           <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
+          <?php endif;?>
           <th class='c-user w-100px'>     <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
@@ -81,7 +83,9 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
+          <?php if($type != 'assignedTo'): ?>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
+          <?php endif;?>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>
@@ -130,6 +134,7 @@
       }
       ?>
       </div>
+      <div class="table-statistic"><?php echo $summary;?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

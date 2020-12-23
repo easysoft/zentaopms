@@ -289,6 +289,9 @@ class my extends control
         /* append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        /* Get tasks. */
+        $tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+
         /* Get the story language configuration. */
         $this->app->loadLang('story');
 
@@ -296,7 +299,8 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
-        $this->view->tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+        $this->view->tasks      = $tasks;
+        $this->view->summary    = $this->my->taskSummary($tasks);
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
