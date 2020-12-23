@@ -285,7 +285,7 @@ $lang->my->contributeMenu->execution = '执行|my|contribute|mode=execution&type
 $lang->my->contributeMenu->task      = '任务|my|contribute|mode=task';
 $lang->my->contributeMenu->story     = '需求|my|contribute|mode=story';
 $lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=wait';
+$lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=done';
 $lang->my->contributeMenu->issue     = '问题|my|contribute|mode=issue';
 $lang->my->contributeMenu->risk      = '风险|my|contribute|mode=risk';
 

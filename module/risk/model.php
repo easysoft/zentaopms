@@ -246,6 +246,8 @@ class riskModel extends model
 		$riskList = $this->dao->select('*')->from(TABLE_RISK)
 			->where('deleted')->eq('0')
 			->andWhere($type)->eq($this->app->user->account)->fi()
+            ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('closed,canceled')->fi()
+            ->beginIF($this->app->rawMethod == 'work')->andWhere("status")->in('active,hangup')->fi()
 			->orderBy($orderBy)
 			->page($pager)
 			->fetchAll();
