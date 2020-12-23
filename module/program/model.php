@@ -1206,7 +1206,6 @@ class programModel extends model
      */
     public function PRJCreate()
     {
-        a($_POST);die;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
