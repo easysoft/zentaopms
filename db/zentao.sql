@@ -709,7 +709,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `product` char(30) NOT NULL DEFAULT 'single',
   `lifetime` char(30) NOT NULL,
   `budget` varchar(30) NOT NULL DEFAULT '0',
-  `budgetUnit` char(30) NOT NULL DEFAULT 'yuan',
+  `budgetUnit` char(30) NOT NULL DEFAULT 'wanyuan',
   `attribute` varchar(30) NOT NULL DEFAULT '',
   `percent` float unsigned NOT NULL DEFAULT '0',
   `milestone` enum('0','1') NOT NULL DEFAULT '0',

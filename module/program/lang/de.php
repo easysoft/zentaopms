@@ -93,9 +93,9 @@ $lang->program->future             = 'TBD';
 $lang->program->productNotEmpty  = 'Please link products or create products.';
 $lang->program->existProductName = 'Product name already exists.';
 
-$lang->program->unitList['']       = '';
-$lang->program->unitList['yuan']   = 'Wanyuan';
-$lang->program->unitList['dollar'] = 'Dollars';
+$lang->program->unitList['']        = '';
+$lang->program->unitList['wanyuan'] = 'Wanyuan';
+$lang->program->unitList['dollar']  = 'Dollars';
 
 $lang->program->modelList['scrum']     = "Scrum";
 $lang->program->modelList['waterfall'] = "CMMI";
