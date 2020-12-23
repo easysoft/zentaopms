@@ -118,7 +118,14 @@ class my extends control
         $moduleIndex = array_search('my', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
-        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        if($mode == 'story' or $mode == 'requirement')
+        {
+            echo $this->fetch('my', 'story', "type=$type&storyType=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        }
+        else
+        {
+            echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        }
     }
 
     /**
