@@ -130,7 +130,8 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-              <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
+            <?php $childrenAB  = $mode == 'story' ? $this->lang->story->childrenAB : 'SR';?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
           <?php if($mode == 'story'):?>
