@@ -360,75 +360,75 @@ class todoModel extends model
     /**
      * Get todo list of a user.
      *
-     * @param  date   $date
+     * @param  string $type
      * @param  string $account
      * @param  string $status   all|today|thisweek|lastweek|before, or a date.
      * @param  int    $limit
      * @access public
      * @return void
      */
-    public function getList($date = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
+    public function getList($type = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
     {
         $this->app->loadClass('date');
         $todos = array();
-        $date = strtolower($date);
+        $type = strtolower($type);
 
-        if($date == 'today')
-        {
-            $begin = date::today();
-            $end   = $begin;
-        }
-        elseif($date == 'yesterday')
-        {
-            $begin = date::yesterday();
-            $end   = $begin;
-        }
-        elseif($date == 'thisweek')
-        {
-            extract(date::getThisWeek());
-        }
-        elseif($date == 'lastweek')
-        {
-            extract(date::getLastWeek());
-        }
-        elseif($date == 'thismonth')
-        {
-            extract(date::getThisMonth());
-        }
-        elseif($date == 'lastmonth')
-        {
-            extract(date::getLastMonth());
-        }
-        elseif($date == 'thisseason')
-        {
-            extract(date::getThisSeason());
-        }
-        elseif($date == 'thisyear')
-        {
-            extract(date::getThisYear());
-        }
-        elseif($date == 'future')
-        {
-            $begin = '2030-01-01';
-            $end   = $begin;
-        }
-        elseif($date == 'all')
+        if($type == 'all' or $type == 'assignedtoother')
         {
             $begin = '1970-01-01';
             $end   = '2109-01-01';
         }
-        elseif($date == 'before')
+        elseif($type == 'today')
+        {
+            $begin = date::today();
+            $end   = $begin;
+        }
+        elseif($type == 'yesterday')
+        {
+            $begin = date::yesterday();
+            $end   = $begin;
+        }
+        elseif($type == 'thisweek')
+        {
+            extract(date::getThisWeek());
+        }
+        elseif($type == 'lastweek')
+        {
+            extract(date::getLastWeek());
+        }
+        elseif($type == 'thismonth')
+        {
+            extract(date::getThisMonth());
+        }
+        elseif($type == 'lastmonth')
+        {
+            extract(date::getLastMonth());
+        }
+        elseif($type == 'thisseason')
+        {
+            extract(date::getThisSeason());
+        }
+        elseif($type == 'thisyear')
+        {
+            extract(date::getThisYear());
+        }
+        elseif($type == 'future')
+        {
+            $begin = '2030-01-01';
+            $end   = $begin;
+        }
+        elseif($type == 'before')
         {
             $begin = '1970-01-01';
             $end   = date::yesterday();
         }
-        elseif($date == 'cycle')
+        elseif($type == 'cycle')
         {
             $begin = $end = '';
         }
         else
         {
-            $begin = $end = $date;
+            $begin = $end = $type;
         }
 
         if($account == '')   $account = $this->app->user->account;
@@ -443,8 +443,9 @@ class todoModel extends model
             ->beginIF($end)->andWhere('date')->le($end)->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
-            ->beginIF($date == 'cycle')->andWhere('cycle')->eq('1')->fi()
-            ->beginIF($date != 'cycle')->andWhere('cycle')->eq('0')->fi()
+            ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
+            ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
+            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)

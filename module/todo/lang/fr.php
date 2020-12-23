@@ -108,11 +108,14 @@ $lang->todo->noTodo         = 'Aucune entrée de ce type.';
 $lang->todo->noAssignedTo   = "Le champ Assigné à ne doit pas être vide.";
 $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et ne peuvent pas se fermer.";
 
-$lang->todo->periods['all']        = 'Toutes les entrées';
-$lang->todo->periods['thisYear']   = 'Cette Année';
-$lang->todo->periods['future']     = 'A définir';
-$lang->todo->periods['before']     = 'Non terminée';
-$lang->todo->periods['cycle']      = 'Récurrence';
+$lang->todo->periods['all']             = 'Toutes les entrées';
+$lang->todo->periods['before']          = 'Non terminée';
+$lang->todo->periods['future']          = 'A définir';
+$lang->todo->periods['thisWeek']        = 'This Week';
+$lang->todo->periods['thisMonth']       = 'This Month';
+$lang->todo->periods['thisYear']        = 'Cette Année';
+$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
+$lang->todo->periods['cycle']           = 'Récurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, est $extra par <strong>$actor</strong>.', 'extra' => 'reasonList');

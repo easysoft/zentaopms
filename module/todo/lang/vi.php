@@ -108,11 +108,14 @@ $lang->todo->noTodo         = 'Không có việc của loại này.';
 $lang->todo->noAssignedTo   = "Người được giao không nên trống.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
-$lang->todo->periods['all']      = 'Tất cả việc';
-$lang->todo->periods['thisYear'] = 'Năm nay';
-$lang->todo->periods['future']   = 'TBD';
-$lang->todo->periods['before']   = 'Chưa kết thúc';
-$lang->todo->periods['cycle']    = 'Lặp lại';
+$lang->todo->periods['all']             = 'Tất cả việc';
+$lang->todo->periods['before']          = 'Chưa kết thúc';
+$lang->todo->periods['future']          = 'TBD';
+$lang->todo->periods['thisWeek']        = 'This Week';
+$lang->todo->periods['thisMonth']       = 'This Month';
+$lang->todo->periods['thisYear']        = 'Năm nay';
+$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
+$lang->todo->periods['cycle']           = 'Lặp lại';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, là $extra bởi <strong>$actor</strong>.', 'extra' => 'reasonList');

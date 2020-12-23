@@ -107,11 +107,14 @@ $lang->todo->noTodo         = '该类型没有待办事务';
 $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 
-$lang->todo->periods['all']        = '所有待办';
-$lang->todo->periods['thisYear']   = '本年';
-$lang->todo->periods['future']     = '待定';
-$lang->todo->periods['before']     = '未完';
-$lang->todo->periods['cycle']      = '周期';
+$lang->todo->periods['all']             = '所有';
+$lang->todo->periods['before']          = '未完';
+$lang->todo->periods['future']          = '待定';
+$lang->todo->periods['thisWeek']        = '本周';
+$lang->todo->periods['thisMonth']       = '本月';
+$lang->todo->periods['thisYear']        = '本年';
+$lang->todo->periods['assignedToOther'] = '指派他人';
+$lang->todo->periods['cycle']           = '周期';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong> $extra。$appendLink', 'extra' => 'reasonList');

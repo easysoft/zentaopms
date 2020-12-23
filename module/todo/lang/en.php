@@ -108,11 +108,14 @@ $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
-$lang->todo->periods['all']        = 'All Todos';
-$lang->todo->periods['thisYear']   = 'ThisYear';
-$lang->todo->periods['future']     = 'TBD';
-$lang->todo->periods['before']     = 'Unfinished';
-$lang->todo->periods['cycle']      = 'Recurrence';
+$lang->todo->periods['all']             = 'All Todos';
+$lang->todo->periods['before']          = 'Unfinished';
+$lang->todo->periods['future']          = 'TBD';
+$lang->todo->periods['thisWeek']        = 'This Week';
+$lang->todo->periods['thisMonth']       = 'This Month';
+$lang->todo->periods['thisYear']        = 'This Year';
+$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
+$lang->todo->periods['cycle']           = 'Recurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');

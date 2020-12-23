@@ -108,11 +108,14 @@ $lang->todo->noTodo         = 'Keine ToDos dieses Typs.';
 $lang->todo->noAssignedTo   = "Zuordung an darf nicht leer sein.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
-$lang->todo->periods['all']        = 'Alle';
-$lang->todo->periods['thisYear']   = 'Dieses Jahr';
-$lang->todo->periods['future']     = 'Wartend';
-$lang->todo->periods['before']     = 'Nicht abgeschlossen';
-$lang->todo->periods['cycle']      = 'Wiederkehrend';
+$lang->todo->periods['all']             = 'Alle';
+$lang->todo->periods['before']          = 'Nicht abgeschlossen';
+$lang->todo->periods['future']          = 'Wartend';
+$lang->todo->periods['thisWeek']        = 'This Week';
+$lang->todo->periods['thisMonth']       = 'This Month';
+$lang->todo->periods['thisYear']        = 'Dieses Jahr';
+$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
+$lang->todo->periods['cycle']           = 'Wiederkehrend';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, wurde $extra von <strong>$actor</strong>.', 'extra' => 'reasonList');
