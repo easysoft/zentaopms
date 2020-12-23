@@ -224,8 +224,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->storyType  = $storyType;
-        $this->view->mode       = 'story';
+        $this->view->mode       = $storyType;
 
         $this->display();
     }
