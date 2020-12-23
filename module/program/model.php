@@ -125,7 +125,6 @@ class programModel extends model
             ->setIF($this->post->budget != 0, 'budget', number_format($this->post->budget, 2))
             ->add('type', 'program')
             ->join('whitelist', ',')
-            ->cleanFloat('budget')
             ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
             ->remove('delta,future')
             ->get();
@@ -1215,7 +1214,6 @@ class programModel extends model
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->add('type', 'project')
             ->join('whitelist', ',')
-            ->cleanFloat('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future')
             ->get();
@@ -1384,9 +1382,11 @@ class programModel extends model
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
+            ->setIF($this->post->future, 'budget', 0)
+            ->setIF($this->post->budget != 0, 'budget', number_format($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta')
+            ->remove('products,branch,plans,delta,future')
             ->get();
 
         if($project->parent)

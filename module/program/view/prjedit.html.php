@@ -38,55 +38,12 @@
           <th><?php echo $lang->program->PRJName;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <tr>
-          <th><?php echo $lang->program->PRJCode;?></th>
-          <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td><td></td><td></td>
-        </tr>
         <?php if($project->model == 'waterfall'):?>
         <tr>
           <th><?php echo $lang->program->PRJCategory;?></th>
           <td><?php echo html::select('product', $lang->program->PRJCategoryList, $project->product, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id='productsBox' colspan="3">
-            <div class='row'>
-              <?php $i = 0;?>
-              <?php foreach($linkedProducts as $product):?>
-              <div class='col-sm-4'>
-                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
-                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' data-placeholder={$lang->program->errorNoProducts} onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
-                  <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?> 
-                </div>
-              </div>
-              <?php $i++;?>
-              <?php endforeach;?>
-              <div class='col-sm-4  <?php if($programID) echo 'required';?>'>
-                <div class='input-group'>
-                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
-                  <span class='input-group-addon fix-border'></span>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->linkPlan;?></th>
-          <td id="plansBox" colspan="3">
-            <div class='row'>
-              <?php $i = 0;?>
-              <?php foreach($linkedProducts as $product):?>
-                <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-                <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
-                <?php $i++;?>
-              <?php endforeach;?>
-              <div class="col-sm-4" id="planDefault"><?php echo html::select("plans[0]", array(), 0, "class='form-control chosen'");?></div>
-            </div>
-          </td>
-        </tr>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
@@ -95,12 +52,17 @@
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', $project->budget ? $project->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($project->budget == 0 ? 'disabled' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, $project->budgetUnit, "class='form-control'");?>
             </div>
           </td>
-          <td class='muted'></td>
+          <td>
+            <div class='checkbox-primary'>
+              <input type='checkbox' id='future' name='future' value='1' <?php if($project->budget == 0) echo 'checked';?> />
+              <label for='future'><?php echo $lang->program->future;?></label>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->program->dateRange;?></th>
@@ -132,6 +94,45 @@
         </tr>
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->project->manageProducts;?></th>
+          <td class='text-left' id='productsBox' colspan="3">
+            <div class='row'>
+              <?php $i = 0;?>
+              <?php foreach($linkedProducts as $product):?>
+              <div class='col-sm-4'>
+                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' data-placeholder={$lang->program->errorNoProducts} onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <span class='input-group-addon fix-border'></span>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                </div>
+              </div>
+              <?php $i++;?>
+              <?php endforeach;?>
+              <div class='col-sm-4  <?php if($programID) echo 'required';?>'>
+                <div class='input-group'>
+                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                  <span class='input-group-addon fix-border'></span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->project->linkPlan;?></th>
+          <td id="plansBox" colspan="3">
+            <div class='row'>
+              <?php $i = 0;?>
+              <?php foreach($linkedProducts as $product):?>
+                <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
+                <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+                <?php $i++;?>
+              <?php endforeach;?>
+              <div class="col-sm-4" id="planDefault"><?php echo html::select("plans[0]", array(), 0, "class='form-control chosen'");?></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->program->PRJStoryConcept;?></th>
           <td>
             <?php echo html::select('storyConcept', $URSRPairs, $project->storyConcept, "class='form-control chosen'");?>
@@ -140,13 +141,8 @@
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
-            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
             <?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $project->auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
@@ -157,6 +153,10 @@
           <td><?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control chosen" multiple');?></td>
           <td></td>
           <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->program->auth;?></th>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $project->auth, '', 'block');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
