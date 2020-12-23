@@ -44,9 +44,47 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PRJCode;?></th>
-          <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
+          <th><?php echo $lang->program->PRJPM;?></th>
+          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
+        <tr>
+          <th><?php echo $lang->program->PRJBudget;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('budget', '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <span class='input-group-addon'></span>
+              <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'wanyuan' : $parentProgram->budgetUnit, "class='form-control'");?>
+            </div>
+          </td>
+          <td>
+            <div class='checkbox-primary'>
+              <input type='checkbox' id='future' name='future' value='1' />
+              <label for='future'><?php echo $lang->program->future;?></label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->program->dateRange;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
+              <span class='input-group-addon'><?php echo $lang->program->to;?></span>
+              <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
+            </div>
+          </td>
+          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+        </tr>
+        <?php if($model == 'scrum'):?>
+        <tr>
+          <th><?php echo $lang->project->days;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('days', '', "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+            </div>
+          </td><td></td><td></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -72,6 +110,10 @@
             </div>
           </td>
         </tr>
+        <tr class='hidden'>
+          <th><?php echo $lang->product->name;?></th>
+          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
+        </tr>
         <tr>
           <th><?php echo $lang->project->linkPlan;?></th>
           <td colspan="3" id="plansBox">
@@ -89,47 +131,6 @@
             </div>
           </td>
         </tr>
-        <tr class='hidden'>
-          <th><?php echo $lang->product->name;?></th>
-          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PRJPM;?></th>
-          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PRJBudget;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('budget', '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
-              <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'wanyuan' : $parentProgram->budgetUnit, "class='form-control'");?>
-            </div>
-          </td>
-          <td class='muted'></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->dateRange;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
-              <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
-            </div>
-          </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
-        </tr>
-        <?php if($model == 'scrum'):?>
-        <tr>
-          <th><?php echo $lang->project->days;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('days', '', "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
-            </div>
-          </td><td></td><td></td>
-        </tr>
-        <?php endif;?>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
           <th><?php echo $lang->program->PRJStoryConcept;?></th>
@@ -140,13 +141,8 @@
         <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
-            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $auth, '', 'block');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
@@ -157,6 +153,10 @@
           <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
           <td></td>
           <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->program->auth;?></th>
+          <td colspan='3'><?php echo html::radio('auth', $lang->program->PRJAuthList, $auth, '', 'block');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

@@ -1206,19 +1206,21 @@ class programModel extends model
      */
     public function PRJCreate()
     {
+        a($_POST);die;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->acl      == 'open', 'whitelist', '')
+            ->setIF($this->post->acl   == 'open', 'whitelist', '')
+            ->setIF($this->post->budget != 0, 'budget', number_format($this->post->budget, 2))
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->add('type', 'project')
             ->join('whitelist', ',')
-            ->cleanInt('budget')
+            ->cleanFloat('budget')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName')
+            ->remove('products,branch,plans,delta,newProduct,productName,future')
             ->get();
 
         $linkedProductsCount = 0;

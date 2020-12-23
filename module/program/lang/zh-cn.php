@@ -112,14 +112,14 @@ $lang->program->featureBar['wait']      = '未开始';
 $lang->program->featureBar['suspended'] = '已挂起';
 $lang->program->featureBar['closed']    = '已关闭';
 
-$lang->program->PRJAclList['open']    = "公开(有项目视图权限，即可访问)";
-$lang->program->PRJAclList['private'] = "私有(项目团队成员和干系人可访问)";
+$lang->program->PRJAclList['open']    = "公开(有项目视图权限即可访问)";
+$lang->program->PRJAclList['private'] = "私有(只有项目团队成员和干系人可访问)";
 
-$lang->program->PGMPRJAclList['open']    = "全部公开（有项目视图权限，即可访问）";
+$lang->program->PGMPRJAclList['open']    = "全部公开（有项目视图权限即可访问）";
 $lang->program->PGMPRJAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人，本项目团队成员和干系人可访问）";
-$lang->program->PGMPRJAclList['private'] = "私有(项目团队成员和干系人可访问)";
+$lang->program->PGMPRJAclList['private'] = "私有(只有项目团队成员和干系人可访问)";
 
-$lang->program->PRJAuthList['extend'] = '继承(取项目权限与组织权限的并集)';
+$lang->program->PRJAuthList['extend'] = '继承(取系统权限与项目权限的合集)';
 $lang->program->PRJAuthList['reset']  = '重新定义(只取项目权限)';
 
 $lang->program->statusList['wait']      = '未开始';
