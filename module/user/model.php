@@ -958,7 +958,7 @@ class userModel extends model
      *
      * @param  string $account
      * @param  string $type
-     * @param  string $status all|undone|done
+     * @param  string $status
      * @access public
      * @return array
      */

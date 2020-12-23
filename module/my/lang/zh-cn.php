@@ -34,7 +34,7 @@ $lang->my->noTodo         = '暂时没有待办。';
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';
-$lang->my->projects     = '项目';
+$lang->my->projects     = '所属项目';
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = '未结束';

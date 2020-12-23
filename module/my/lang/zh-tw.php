@@ -30,7 +30,7 @@ $lang->my->noTodo         = '暫時沒有待辦。';
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
 $lang->my->code         = '代號';
-$lang->my->projects     = '項目';
+$lang->my->projects     = '所屬項目';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派給我';

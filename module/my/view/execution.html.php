@@ -16,8 +16,8 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink('contribute', "mode=execution&type=undone"),  "<span class='text'>{$lang->my->executionMenu->undone}</span>" . ($type == 'undone' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'undone' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('contribute', "mode=execution&type=done"),  "<span class='text'>{$lang->my->executionMenu->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('contribute', "mode=execution&type=undone&orderBy=id_desc&recTotal=0&recPerPage={$pager->recPerPage}"),  "<span class='text'>{$lang->my->executionMenu->undone}</span>" . ($type == 'undone' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'undone' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('contribute', "mode=execution&type=done&orderBy=id_desc&recTotal=0&recPerPage={$pager->recPerPage}"),  "<span class='text'>{$lang->my->executionMenu->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
