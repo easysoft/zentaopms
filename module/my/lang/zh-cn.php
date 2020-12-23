@@ -74,3 +74,5 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
+
+$lang->my->taskSummary = "本页共 <strong>%s</strong> 个任务，剩余 <strong>%.1f</strong> 工时。";
