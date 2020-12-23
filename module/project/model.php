@@ -399,7 +399,7 @@ class projectModel extends model
                 $member->hours   = $this->config->project->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addExecutionMembers($this->session->PRJ, array($member));
+                $this->addProjectMembers($this->session->PRJ, array($member));
             }
 
             /* Create doc lib. */
@@ -2377,7 +2377,7 @@ class projectModel extends model
         /* Add iteration or phase team members to the project team. */
         if($projectType == 'stage' || $projectType == 'sprint')
         {
-            $this->addExecutionMembers($project->project, $projectMember);
+            $this->addProjectMembers($project->project, $projectMember);
             if($project->acl != 'open') $this->updateUserView($projectID, 'sprint', $changedAccounts);
         }
     }
@@ -2390,10 +2390,10 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function  addExecutionMembers($executionID = 0, $members = array())
+    public function  addProjectMembers($projectID = 0, $members = array())
     {
-        $executionType = 'project';
-        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+        $projectType = 'project';
+        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
         foreach($members as $account => $member)
@@ -2401,8 +2401,8 @@ class projectModel extends model
             if(isset($oldJoin[$member->account])) continue;
 
             $accounts[]   = $member->account;
-            $member->root = $executionID;
-            $member->type = $executionType;
+            $member->root = $projectID;
+            $member->type = $projectType;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
@@ -2412,8 +2412,8 @@ class projectModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($executionID, $executionType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($executionID);
+        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 

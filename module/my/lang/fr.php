@@ -5,6 +5,8 @@ $lang->my->common = 'Tableau de Bord';
 $lang->my->index          = 'Accueil';
 $lang->my->todo           = 'Mon Agenda';
 $lang->my->calendar       = 'Calendrier';
+$lang->my->work           = 'Work';
+$lang->my->contribute     = 'Contribute';
 $lang->my->task           = 'Mes Tâches';
 $lang->my->bug            = 'Mes Bugs';
 $lang->my->testTask       = 'Mes Builds';
@@ -26,8 +28,6 @@ $lang->my->limited        = 'Actions Limitées (Les utilisateurs peuvent seuleme
 $lang->my->score          = 'Mes Points';
 $lang->my->scoreRule      = 'Règles Point';
 $lang->my->noTodo         = "Je n'ai rien à faire pour l'instant.";
-$lang->my->requirement    = 'User requirements';
-$lang->my->story          = 'Software requirements';
 
 $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';

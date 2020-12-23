@@ -5,6 +5,8 @@ $lang->my->common = 'Dashboard';
 $lang->my->index          = 'Home';
 $lang->my->todo           = 'My Todos';
 $lang->my->calendar       = 'Schedule';
+$lang->my->work           = 'Work';
+$lang->my->contribute     = 'Contribute';
 $lang->my->task           = 'My Tasks';
 $lang->my->bug            = 'My Bugs';
 $lang->my->testTask       = 'My Builds';
@@ -26,8 +28,6 @@ $lang->my->limited        = 'Limited Actions (Users can only edit what involves 
 $lang->my->score          = 'My Points';
 $lang->my->scoreRule      = 'Point Rules';
 $lang->my->noTodo         = 'No todos yet. ';
-$lang->my->requirement    = 'User requirements';
-$lang->my->story          = 'Software requirements';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';

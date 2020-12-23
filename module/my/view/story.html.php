@@ -16,24 +16,24 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo "<span class='nav-title'>{$lang->my->requirement}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' & $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' & $mode == 'requirement' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   & $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   & $mode == 'requirement' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' & $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' & $mode == 'requirement' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   & $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   & $mode == 'requirement' ? ' btn-active-text' : '') . "'");
+    echo "<span class='nav-title'>{$lang->productURCommon}</span>";
+    echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>" . ($type == 'closedBy' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     echo "<span class='nav-title'> | </span>";
-    echo "<span class='nav-title'>{$lang->my->story}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' & $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' & $mode == 'story' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   & $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   & $mode == 'story' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' & $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' & $mode == 'story' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=story&type=closedBy"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   & $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   & $mode == 'story' ? ' btn-active-text' : '') . "'");
+    echo "<span class='nav-title'>{$lang->productSRCommon}</span>";
+    echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'story' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   && $mode == 'story' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' && $mode == 'story' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=story&type=closedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>" . ($type == 'closedBy' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy' && $mode == 'story' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
 <div id="mainContent">
   <?php if(!$stories):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->story->noStory;?></span></p>
+    <p><span class="text-muted"><?php echo $mode == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span></p>
   </div>
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
@@ -56,7 +56,7 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri w-40px'> <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri w-40px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
           <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <?php if($mode == 'story'):?>
@@ -130,7 +130,8 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-              <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
+            <?php $childrenAB  = $mode == 'story' ? $this->lang->story->childrenAB : 'SR';?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
           <?php if($mode == 'story'):?>

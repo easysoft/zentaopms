@@ -32,10 +32,6 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td><td></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->release->date;?></th>
             <td><?php echo html::input('date', helper::today(), "class='form-control form-date' required");?></td><td></td>
           </tr>

@@ -122,6 +122,7 @@ class programModel extends model
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->budget != 0, 'budget', number_format($this->post->budget, 2))
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->cleanFloat('budget')
@@ -223,6 +224,7 @@ class programModel extends model
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->future, 'budget', 0)
+            ->setIF($this->post->budget != 0, 'budget', number_format($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
             ->remove('uid,delta,future')
@@ -1292,6 +1294,17 @@ class programModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
+
+            /* Add the creator to team. */
+            $this->app->loadLang('user');
+            $member = new stdclass();
+            $member->root    = $projectID;
+            $member->account = $this->app->user->account;
+            $member->role    = $this->lang->user->roleList[$this->app->user->role];
+            $member->join    = helper::today();
+            $member->type    = 'project';
+            $member->hours   = $this->config->project->defaultWorkhours;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);

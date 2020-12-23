@@ -5,6 +5,8 @@ $lang->my->common = 'Dashboard';
 $lang->my->index          = 'Home';
 $lang->my->todo           = 'Meine ToDos';
 $lang->my->calendar       = 'Kalender';
+$lang->my->work           = 'Work';
+$lang->my->contribute     = 'Contribute';
 $lang->my->task           = 'Aufgaben';
 $lang->my->bug            = 'Bugs';
 $lang->my->testTask       = 'Builds';
@@ -26,8 +28,6 @@ $lang->my->limited        = 'Eingeschränkte Möglichkeiten (Bearbeiten nur eige
 $lang->my->score          = 'Meine Wertung';
 $lang->my->scoreRule      = 'Wertungs regeln';
 $lang->my->noTodo         = 'Keine toDos. ';
-$lang->my->requirement    = 'User requirements';
-$lang->my->story          = 'Software requirements';
 
 $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';
