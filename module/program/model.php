@@ -1293,6 +1293,17 @@ class programModel extends model
         {
             $projectID = $this->dao->lastInsertId();
 
+            /* Add the creator to team. */
+            $this->app->loadLang('user');
+            $member = new stdclass();
+            $member->root    = $projectID;
+            $member->account = $this->app->user->account;
+            $member->role    = $this->lang->user->roleList[$this->app->user->role];
+            $member->join    = helper::today();
+            $member->type    = 'project';
+            $member->hours   = $this->config->project->defaultWorkhours;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
