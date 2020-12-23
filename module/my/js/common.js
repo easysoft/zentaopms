@@ -3,6 +3,7 @@ $(function()
     if(typeof(mode) != 'undefined') 
     {
         if(mode == 'testcase') mode = 'testtask';
+        if(mode == 'requirement') mode = 'story';
         $('#subNavbar li[data-id=' + mode + ']').addClass('active');
     }
     var scp  = $('[data-id="changePassword"] a');
