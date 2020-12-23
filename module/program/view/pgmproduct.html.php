@@ -15,6 +15,7 @@
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
+    <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink("pgmproduct", "programID=$program->id&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
   </div>
@@ -40,7 +41,6 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th class="text-left"><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <th class='w-200px text-left' title='<?php echo $lang->product->program;?>'><?php echo $lang->product->program;?></th>
             <th class='w-120px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
             <th class='w-120px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
             <th class='w-100px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
@@ -65,7 +65,6 @@
             <?php endif;?>
           </td>
           <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
-          <td class="c-name"><?php echo $program->name;?></td>
           <td><?php echo $product->stories['active'];?></td>
           <td><?php echo $product->stories['changed'];?></td>
           <td><?php echo $product->stories['draft'];?></td>
