@@ -10,10 +10,6 @@ $(function()
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');
-        },
-        finish: function(e)
-        {
-            $('#productListForm').table('initNestedList')
         }
     });
 
