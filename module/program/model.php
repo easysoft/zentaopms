@@ -143,6 +143,18 @@ class programModel extends model
                 /* When parent set end then child program cannot set longTime. */
                 if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
+                /* The budget of a child program cannot beyond the remaining budget of the parent program. */
+                if(isset($program->budget) and $parentProgram->budget != 0)
+                {
+                    $childGrade     = $parentProgram->grade + 1;
+                    $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+                        ->where('path')->like("%{$program->parent}%")
+                        ->andWhere('grade')->eq($childGrade)
+                        ->fetch('sumBudget');
+
+                    if($program->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                }
+
                 if(dao::isError()) return false;
             }
         }

@@ -200,6 +200,7 @@ $lang->program->unlinkStakeholder    = '移除干係人';
 $lang->program->importStakeholder    = '從父項目集導入';
 $lang->program->PGMManageMembers     = '項目集團隊';
 $lang->program->PGMParentBudget      = "父項目集預算：%s";
+$lang->program->beyondParentBudget   = '已超出剩餘預算';
 $lang->program->PGMBeginLetterParent = "父項目集的開始日期：%s，開始日期不能小於父項目集的開始日期";
 $lang->program->PGMEndGreaterParent  = "父項目集的完成日期：%s，完成日期不能大於父項目集的完成日期";
 $lang->program->PGMBeginGreateChild  = "子項目集的最小開始日期：%s，父項目集的開始日期不能大於子項目集的最小開始日期";
