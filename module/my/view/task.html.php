@@ -53,11 +53,15 @@
           <th class='c-project w-120px'>  <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
           <th class='c-project w-120px'>  <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-name'>             <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>      <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <?php endif;?>
+          <?php if($type != 'finishedBy'): ?>
           <th class='c-user w-100px'>     <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
+          <?php endif;?>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='c-hours w-50px'>     <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
@@ -86,11 +90,15 @@
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color'");?>
           </td>
+          <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
           <?php endif;?>
+          <?php if($type != 'finishedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
+          <?php endif;?>
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>
           <td class='c-hours'><?php echo $task->left;?></td>
