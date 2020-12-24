@@ -212,6 +212,14 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        /* Get UR and SR pairs. */
+        $this->loadModel('custom');
+        $this->loadModel('setting');
+        $URPairs = $this->custom->getURPairs();
+        $SRPairs = $this->custom->getSRPairs();
+        $URSR    = $this->setting->getItem('owner=system&module=my&key=URSR');
+        if(!$URSR) $URSR = $this->setting->getItem('owner=system&module=custom&key=URSR');
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
@@ -225,7 +233,34 @@ class my extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->mode       = $storyType;
+        $this->view->URCommon   = zget($URPairs, $URSR);
+        $this->view->SRCommon   = zget($SRPairs, $URSR);
 
+        $this->display();
+    }
+
+    /**
+     * Set story concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setStoryConcept()
+    {
+        $this->loadModel('setting');
+        if($_POST)
+        {
+            $URSR = $this->post->URSR;
+            $this->setting->setItem('system.my.URSR', $URSR);
+
+            die(js::closeModal('parent.parent'));
+        }
+
+        $URSR = $this->setting->getItem('owner=system&module=my&key=URSR');
+        if(!$URSR) $URSR = $this->setting->getItem('owner=system&module=custom&key=URSR');
+
+        $this->view->URSRList = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR     = $URSR;
         $this->display();
     }
 
