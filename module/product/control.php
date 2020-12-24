@@ -733,6 +733,10 @@ class product extends control
     public function updateOrder()
     {
         $idList   = explode(',', trim($this->post->products, ','));
+        foreach($idList as $i => $id)
+        {
+            if(!is_numeric($id)) unset($idList[$i]);
+        }
         $orderBy  = $this->post->orderBy;
         if(strpos($orderBy, 'order') === false) return false;
 

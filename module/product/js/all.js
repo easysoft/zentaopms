@@ -1,8 +1,8 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
-    var $list = $('#programTableList');
-    $('#productTableList').addClass('sortable').sortable(
+    var $list = $('#productTableList');
+    $list.addClass('sortable').sortable(
     {
         selector: 'tr',
         dragCssClass: 'drag-row',
@@ -10,13 +10,21 @@ $(function()
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');
-        }
-    });
+        },
+        start: function(e)
+        {
+            e.targets.filter('[data-parent!="' + e.element.attr('data-parent') + '"]').addClass('drop-not-allowed');
+        },
+        finish: function(e)
+        {
+            var products = '';
+            e.list.each(function()
+            {
+                products += $(this.item).data('id') + ',' ;
+            });
+            $.post(createLink('product', 'updateOrder'), {'products' : products, 'orderBy' : orderBy});
 
-    $('#productTableList').on('sortable', function(e, data)
-    {
-        var list = '';
-        for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('product', 'updateOrder'), {'products' : list, 'orderBy' : orderBy});
+            $('#productListForm').table('initNestedList')
+        }
     });
 });
