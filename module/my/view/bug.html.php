@@ -56,11 +56,15 @@
           <th>                <?php common::printOrderLink('title',       $orderBy, $vars, $lang->bug->title);?></th>
           <th class='w-150px'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
           <th class='w-type'> <?php common::printOrderLink('type',        $orderBy, $vars, $lang->typeAB);?></th>
+          <?php if($type != 'openedBy'): ?>
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
+          <?php if($type != 'resolvedBy'): ?>
           <th class='w-100px'><?php common::printOrderLink('resolvedBy',  $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <?php endif;?>
           <th class='w-100px'><?php common::printOrderLink('resolution',  $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
@@ -100,11 +104,15 @@
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->PRJ), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('product', 'view', "productID=$bug->product", '', '', $bug->PRJ), $bug->productName, null, "title={$bug->productName}");?></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
+          <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
           <?php endif;?>
+          <?php if($type != 'resolvedBy'): ?>
           <td><?php echo zget($users, $bug->resolvedBy);?></td>
+          <?php endif;?>
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php

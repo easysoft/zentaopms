@@ -639,7 +639,6 @@ class customModel extends model
             ->fetch('maxKey');
         $maxKey = $maxKey ? $maxKey : 1;
 
-
         /* If has custom UR and SR name. */
         foreach($data->URName as $key => $URName)
         {
