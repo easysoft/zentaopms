@@ -373,6 +373,14 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
+        /* When browse list by status, the status column is not displayed. */
+        if($browseType != 'all')
+        {
+            $PRJStatusKey = array_search('PRJStatus', $this->config->program->datatable->defaultField);
+            unset($this->config->program->datatable->defaultField[$PRJStatusKey]);
+            unset($this->config->program->datatable->fieldList['PRJStatus']);
+        }
+
         $this->view->title      = $this->lang->program->PGMProject;
         $this->view->position[] = $this->lang->program->PGMProject;
 

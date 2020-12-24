@@ -146,7 +146,7 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $fixed = $col->fixed == 'no' ? 'true': 'false';
+            $fixed = $col->fixed == 'no' ? 'true' : 'false';
             $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
             $title = isset($col->title) ? "title='$col->title'" : '';
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;

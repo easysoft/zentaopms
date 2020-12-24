@@ -1504,14 +1504,20 @@ class programModel extends model
                 case 'PRJName':
                     $projectLink = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
                     echo html::a($projectLink, $project->name);
+                    if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
+                    if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
                     break;
-                case 'PRJCode':
-                    echo $project->code;
+                case 'PRJPGM':
+                    $programList = $this->getPGMPairs();
+                    $PGMIndex = strpos($project->path, $programID);
+                    $PRJIndex = strpos($project->path, $project->id);
+                    $PGMPath  = explode(',' , substr($project->path, $PGMIndex, $PRJIndex - $PGMIndex));
+                    foreach($PGMPath as $program)
+                    {
+                        if($program) echo '/' . zget($programList, $program);
+                    }
                     break;
-                case 'PRJModel':
-                    echo zget($this->lang->program->modelList, $project->model);
-                    break;
-                case 'PRJPM':
+                case 'PM':
                     echo zget($users, $project->PM);
                     break;
                 case 'begin':
@@ -1524,7 +1530,7 @@ class programModel extends model
                     echo zget($this->lang->program->statusList, $project->status);
                     break;
                 case 'PRJBudget':
-                    echo $project->budget ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : '';
+                    echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;
                     break;
                 case 'teamCount':
                     echo $project->teamCount;
