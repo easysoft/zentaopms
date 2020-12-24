@@ -58,7 +58,7 @@
           <th class='w-type'> <?php common::printOrderLink('type',        $orderBy, $vars, $lang->typeAB);?></th>
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-110px'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
           <th class='w-100px'><?php common::printOrderLink('resolvedBy',  $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-100px'><?php common::printOrderLink('resolution',  $orderBy, $vars, $lang->bug->resolutionAB);?></th>
