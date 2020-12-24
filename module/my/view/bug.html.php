@@ -34,11 +34,10 @@
   <?php else:?>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php
-    $canBatchEdit     = common::hasPriv('bug', 'batchEdit');
     $canBatchConfirm  = common::hasPriv('bug', 'batchConfirm');
     $canBatchClose    = (common::hasPriv('bug', 'batchClose') and strtolower($type) != 'closedby');
     $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
-    $canBatchAction   = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchAssignTo);
+    $canBatchAction   = ($canBatchConfirm or $canBatchClose or $canBatchAssignTo);
     ?>
     <table class="table has-sort-head table-fixed" id='bugList'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -59,7 +58,7 @@
           <th class='w-type'> <?php common::printOrderLink('type',        $orderBy, $vars, $lang->typeAB);?></th>
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-110px'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
           <th class='w-100px'><?php common::printOrderLink('resolvedBy',  $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-100px'><?php common::printOrderLink('resolution',  $orderBy, $vars, $lang->bug->resolutionAB);?></th>
@@ -129,11 +128,6 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
-        <?php
-        $actionLink = $this->createLink('bug', 'batchEdit');
-        $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-        echo html::commonButton($lang->edit, $misc);
-        ?>
         <?php
         if($canBatchConfirm)
         {

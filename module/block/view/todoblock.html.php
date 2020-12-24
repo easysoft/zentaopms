@@ -40,15 +40,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" autocomplete="off" class="form-control"></div>
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&userID=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
-        <div class="form-group">
-          <?php $leftWidth  = common::checkNotCN() ? 'col-sm-3' : 'col-sm-2';?>
-          <label for="todoName" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->name?></label>
-          <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
-        </div>
-        <div class="form-group">
-          <label for="todoPri" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->pri?></label>
-          <div class="col-sm-4"><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen'");?></div>
-        </div>
+        <?php $leftWidth  = common::checkNotCN() ? 'col-sm-3' : 'col-sm-2';?>
         <div class="form-group">
           <label for="todoDate" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->date?></label>
           <div class="col-sm-9">
@@ -57,6 +49,14 @@ if(!$selfCall) die(include('./todolist.html.php'));
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
+        </div>
+        <div class="form-group">
+          <label for="todoPri" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->pri?></label>
+          <div class="col-sm-4"><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen'");?></div>
+        </div>
+        <div class="form-group">
+          <label for="todoName" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->name?></label>
+          <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
         </div>
         <div class="form-group">
           <label for="todoBegin" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->beginAndEnd?></label>

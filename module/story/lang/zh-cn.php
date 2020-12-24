@@ -140,6 +140,7 @@ $lang->story->files          = '附件';
 $lang->story->copy           = "复制{$lang->productSRCommon}";
 $lang->story->total          = "总{$lang->productSRCommon}";
 $lang->story->allStories     = "所有{$lang->productSRCommon}";
+$lang->story->draft          = '草稿';
 $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';
 $lang->story->released       = "已发布{$lang->productSRCommon}数";
@@ -151,6 +152,7 @@ $lang->story->repoCommit     = '相关提交';
 $lang->story->noRequirement  = '无需求';
 $lang->story->one            = '一个';
 $lang->story->field          = '同步的字段';
+$lang->story->completeRate   = '完成率';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->productSRCommon}与上一{$lang->productSRCommon}不属于同一产品！";

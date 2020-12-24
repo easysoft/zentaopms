@@ -59,6 +59,7 @@ $lang->bug->resolvedDate     = 'Date Correction';
 $lang->bug->resolvedDateAB   = 'Date Correction';
 $lang->bug->deadline         = 'Date Butoir';
 $lang->bug->plan             = 'Plan';
+$lang->bug->close            = 'Close';
 $lang->bug->closedBy         = 'Fermé par';
 $lang->bug->closedDate       = 'Date Fermeture';
 $lang->bug->duplicateBug     = 'Bug ID en doublon';

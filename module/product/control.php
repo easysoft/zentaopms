@@ -246,10 +246,11 @@ class product extends control
     /**
      * Create a product.
      *
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function create()
+    public function create($programID = 0)
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
@@ -263,6 +264,15 @@ class product extends control
 
             $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+        }
+
+        if($programID)
+        {
+            $this->app->rawModule = 'program';
+            $this->app->rawMethod = 'pgmproduct';
+            $this->lang->navGroup->program = 'program';
+            $this->loadModel('program')->setPGMViewMenu($programID);
+            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         }
 
         $this->loadModel('user');

@@ -197,6 +197,7 @@ $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
 $lang->program->PGMParentBudget      = "Parent program budget：%s";
+$lang->program->beyondParentBudget   = 'The remaining budget has been exceeded.';
 $lang->program->PGMBeginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
 $lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 $lang->program->PGMBeginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
