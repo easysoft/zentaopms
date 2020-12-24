@@ -57,5 +57,5 @@ a.showMoreImage:hover {opacity: 1;}
 .main-recent-text{overflow: hidden; white-space: nowrap;}
 .chosen-container .chosen-drop{z-index: 1100;}
 
-.table-actions .btn{border: 1px solid #1183fb}
+.table-actions .btn{border: 1px solid #1183fb; color: #1183fb}
 .table-actions .btn:hover{background: #b3d4fc}
