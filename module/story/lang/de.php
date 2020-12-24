@@ -140,6 +140,7 @@ $lang->story->files          = 'Dateien';
 $lang->story->copy           = "Story kopieren";
 $lang->story->total          = "Total Storys";
 $lang->story->allStories     = 'Alle';
+$lang->story->draft          = 'Entwurf';
 $lang->story->unclosed       = 'Nicht geschlossen';
 $lang->story->deleted        = 'Gelöscht';
 $lang->story->released       = 'Released Linked Stories';
@@ -151,6 +152,7 @@ $lang->story->repoCommit     = 'Commits';
 $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
+$lang->story->completeRate   = 'Completion Rate';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';

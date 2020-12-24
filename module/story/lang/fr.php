@@ -140,6 +140,7 @@ $lang->story->files          = 'Fichiers';
 $lang->story->copy           = "Copier Story";
 $lang->story->total          = "Stories Total";
 $lang->story->allStories     = 'Toutes les Stories';
+$lang->story->draft          = 'Brouillon';
 $lang->story->unclosed       = 'Non Fermées';
 $lang->story->deleted        = 'Supprimée';
 $lang->story->released       = 'Stories Versionnées';
@@ -151,6 +152,7 @@ $lang->story->repoCommit     = 'Commits';
 $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
+$lang->story->completeRate   = 'Completion Rate';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";

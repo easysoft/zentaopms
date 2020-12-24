@@ -1102,10 +1102,18 @@ class productModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $stories = $this->dao->select('product, status, count(status) AS count')
+        $stories = $this->dao->select('product, status, type, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->eq($storyType)
+            ->andWhere('type')->eq('story')
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product, status')
+            ->fetchGroup('product', 'status');
+
+        $requirements = $this->dao->select('product, status, type, count(status) AS count')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('requirement')
             ->andWhere('product')->in($productKeys)
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
@@ -1114,7 +1122,8 @@ class productModel extends model
         $emptyStory = array_keys($this->lang->story->statusList);
         foreach($productKeys as $productID)
         {
-            if(!isset($stories[$productID])) $stories[$productID] = $emptyStory;
+            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
+            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
         }
 
         /* Padding the stories to sure all status have records. */
@@ -1126,6 +1135,16 @@ class productModel extends model
             }
             $stories[$key] = $story;
         }
+        foreach($requirements as $key => $requirement)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status)
+            {
+                $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
+            }
+            $requirements[$key] = $requirement;
+        }
+
+        if($storyType == 'requirement') $stories = $requirements;
 
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
@@ -1157,6 +1176,14 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
+        $closedBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('status')->eq('closed')
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchPairs();
+
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -1180,12 +1207,14 @@ class productModel extends model
         $stats = array();
         foreach($products as $key => $product)
         {
-            $product->stories  = $stories[$product->id];
-            $product->plans    = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
-            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            $product->stories      = $stories[$product->id];
+            $product->requirements = $requirements[$product->id];
+            $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
+            $product->releases     = isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
             $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
             $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
+            $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }

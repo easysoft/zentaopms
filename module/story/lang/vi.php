@@ -140,6 +140,7 @@ $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy";
 $lang->story->total          = "Tổng câu chuyện";
 $lang->story->allStories     = 'Tất cả câu chuyện';
+$lang->story->draft          = 'Nháp';
 $lang->story->unclosed       = 'Chưa đóng';
 $lang->story->deleted        = 'Đã xóa';
 $lang->story->released       = 'Đã phát hành';
@@ -151,6 +152,7 @@ $lang->story->repoCommit     = 'Commits';
 $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
+$lang->story->completeRate   = 'Completion Rate';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';
