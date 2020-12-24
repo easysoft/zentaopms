@@ -260,7 +260,7 @@ class riskModel extends model
      *
      * @param  string $account
      * @param  int    $limit
-     * @param  string $status active|closed|hangup|canceled
+     * @param  string $status all|active|closed|hangup|canceled
      * @access public
      * @return array
      */
@@ -272,6 +272,7 @@ class riskModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->limit($limit)
             ->query();
 
         $risks = array();

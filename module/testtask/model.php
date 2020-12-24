@@ -1080,6 +1080,36 @@ class testtaskModel extends model
     }
 
     /**
+     * Get testtask pairs of a user.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  string $status all|wait|doing|done|blocked
+     * @param  string $skipProjectIDList
+     * @access public
+     * @return array
+     */
+    public function getUserTesttaskPairs($account, $limit = 10, $status = 'all', $skipProjectIDList = '')
+    {
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.PRJ = t2.id')
+            ->where('t1.owner')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
+            ->limit($limit)
+            ->query();
+
+        $testtaskPairs = array();
+        while($testtask = $stmt->fetch())
+        {
+            $testtaskPairs[$testtask->id] = $testtask->project . ' / ' . $testtask->name;
+        }
+        return $testtaskPairs;
+    }
+
+    /**
      * Get info of a test run.
      *
      * @param  int   $runID
