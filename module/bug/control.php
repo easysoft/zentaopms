@@ -33,7 +33,7 @@ class bug extends control
         $this->loadModel('task');
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
+        if($this->session->PRJ and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 
     /**
@@ -980,8 +980,7 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        if($type == 'product') die(js::locate($this->session->bugList, 'parent'));
-        if($type == 'my')      die(js::locate($this->createLink('my', 'bug')));
+        if($type == 'product' || $type == 'my') die(js::locate($this->session->bugList, 'parent'));
         die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
     }
 
