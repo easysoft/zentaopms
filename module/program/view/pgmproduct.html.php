@@ -51,7 +51,7 @@
             <?php endif;?>
           </tr>
           <tr class="text-center">
-            <th><?php echo $lang->story->activate;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->close;?></th>
             <th><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->completeRate;?></th>

@@ -373,11 +373,11 @@ class product extends control
     /**
      * Batch edit products.
      *
-     * @param  int    $productID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0)
+    public function batchEdit($programID = 0)
     {
         $this->lang->product->switcherMenu = '';
         if($this->post->names)
@@ -411,6 +411,15 @@ class product extends control
             $appendPoUsers[$product->PO] = $product->PO;
             $appendQdUsers[$product->QD] = $product->QD;
             $appendRdUsers[$product->RD] = $product->RD;
+        }
+
+        if($programID)
+        {
+            $this->app->rawModule = 'program';
+            $this->app->rawMethod = 'pgmproduct';
+            $this->lang->navGroup->program = 'program';
+            $this->loadModel('program')->setPGMViewMenu($programID);
+            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
         }
 
         $this->loadModel('user');
