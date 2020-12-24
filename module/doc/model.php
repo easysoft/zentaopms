@@ -166,7 +166,7 @@ class docModel extends model
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
-                ->andWhere('type')->in('project,product,custom')
+                ->beginIF(strpos($extra, 'noBook') !== false)->andWhere('type')->ne('book')->fi()
                 ->beginIF(strpos($extra, 'unclosedProject') !== false)
                 ->andWhere('project', true)->eq('0')
                 ->orWhere('project')->in($unclosedProjects)
