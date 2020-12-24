@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
@@ -22,6 +23,11 @@
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
+  <?php if(empty($programs)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span></p>
+  </div>
+  <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
@@ -34,14 +40,14 @@
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
-            <th class='w-100px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
-            <th class='w-100px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
-            <th class='w-100px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
-            <th class='w-100px' title='<?php echo $lang->product->closedStoriesTitle;?>'><?php echo $lang->product->closedStories;?></th>
-            <th class='w-70px' title='<?php echo $lang->product->plans;?>'><?php echo $lang->product->plans;?></th>
-            <th class='w-70px' title='<?php echo $lang->product->releases;?>'><?php echo $lang->product->releases;?></th>
-            <th class='w-80px' title='<?php echo $lang->product->unResolvedBugsTitle;?>'><?php echo $lang->product->unResolvedBugs;?></th>
-            <th class='w-80px' title='<?php echo $lang->product->assignToNullBugsTitle;?>'><?php echo $lang->product->assignToNullBugs;?></th>
+            <th class='w-100px text-center' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
+            <th class='w-100px text-center' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
+            <th class='w-100px text-center' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
+            <th class='w-100px text-center' title='<?php echo $lang->product->closedStoriesTitle;?>'><?php echo $lang->product->closedStories;?></th>
+            <th class='w-70px text-center' title='<?php echo $lang->product->plans;?>'><?php echo $lang->product->plans;?></th>
+            <th class='w-70px text-center' title='<?php echo $lang->product->releases;?>'><?php echo $lang->product->releases;?></th>
+            <th class='w-80px text-center' title='<?php echo $lang->product->unResolvedBugsTitle;?>'><?php echo $lang->product->unResolvedBugs;?></th>
+            <th class='w-80px text-center' title='<?php echo $lang->product->assignToNullBugsTitle;?>'><?php echo $lang->product->assignToNullBugs;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
@@ -113,6 +119,7 @@
       </table>
     </form>
   </div>
+  <?php endif;?>
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
