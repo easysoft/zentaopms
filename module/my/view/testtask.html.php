@@ -17,11 +17,9 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo "<span class='nav-title'>{$lang->testtask->common}: </span>";
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=$mode&type=wait"), "<span class='text'>{$lang->testtask->wait}</span>" . ($type == 'wait' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'wait' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=$mode&type=done"), "<span class='text'>{$lang->testtask->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
     echo "<span class='divider'></span>";
-    echo "<span class='nav-title'>{$lang->testcase->common}: </span>";
     echo html::a(inlink($app->rawMethod, "mode=testcase&type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>", '', "class='btn btn-link'");
     echo html::a(inlink($app->rawMethod, "mode=testcase&type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>", '', "class='btn btn-link'");
     ?>
