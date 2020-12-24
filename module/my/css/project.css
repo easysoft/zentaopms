@@ -1,0 +1,4 @@
+#programTableList > tr.drop-not-allowed {opacity: 0.1!important}
+#programList .c-actions {overflow: visible;}
+#programList .c-actions .dropdown-menu {padding-right: 8px; margin-top: -4px;}
+#programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
