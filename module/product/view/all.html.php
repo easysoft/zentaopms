@@ -10,7 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
@@ -49,12 +48,11 @@
             <th class='c-actions w-60px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
-        <tbody class="sortable" id="productTableList">
+        <tbody id="productTableList">
         <?php foreach($programs as $programID => $program):?>
         <?php
-        $trClass  = '';
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
-        $trClass  = ' is-top-level table-nest-child-hide';
+        $trClass  = 'is-top-level table-nest-child-hide';
         $trAttrs .= " class='$trClass'";
         ?>
         <?php if($program->name):?>
