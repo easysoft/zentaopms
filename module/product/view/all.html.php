@@ -23,6 +23,11 @@
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
+  <?php if(empty($programs)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span></p>
+  </div>
+  <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
@@ -114,6 +119,7 @@
       </table>
     </form>
   </div>
+  <?php endif;?>
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
