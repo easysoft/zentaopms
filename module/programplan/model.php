@@ -562,7 +562,7 @@ class programplanModel extends model
                     $member->days    = $data->days;
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->project->addExecutionMembers($data->project, array($member));
+                    $this->project->addProjectMembers($data->project, array($member));
 
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
