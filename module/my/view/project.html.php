@@ -97,7 +97,7 @@
             </div>
             <?php if(common::hasPriv('program', 'PRJEdit')) echo html::a($this->createLink("program", "prjedit", "projectID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$lang->edit}'");?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
-            <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'group');?>
+            <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'lock');?>
             <div class='btn-group'>
               <button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
               <ul class='dropdown-menu pull-right' role='menu'>
