@@ -151,8 +151,8 @@ foreach($issue as $field => $value)
               <td><?php echo $issue->activateDate;?></td>
             </tr>
             <tr valign="middle">
-              <th class="thWidth w-80px"><?php echo $lang->issue->closeBy;?></th>
-              <td><?php echo zget($users, $issue->closeBy);?></td>
+              <th class="thWidth w-80px"><?php echo $lang->issue->closedBy;?></th>
+              <td><?php echo zget($users, $issue->closedBy);?></td>
             </tr>
             <tr valign="middle">
               <th class="thWidth w-80px"><?php echo $lang->issue->status;?></th>

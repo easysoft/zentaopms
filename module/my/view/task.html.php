@@ -49,24 +49,24 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri w-40px'>       <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-project w-120px'>  <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
-          <th class='c-project w-120px'>  <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
-          <th class='c-name'>             <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('program',     $orderBy, $vars, $lang->task->program);?></th>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-name'>              <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <?php if($type != 'openedBy'): ?>
-          <th class='c-user w-90px'>      <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
+          <th class='c-assignedTo w-110px'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <?php endif;?>
           <?php if($type != 'finishedBy'): ?>
-          <th class='c-user w-100px'>     <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
+          <th class='c-user w-100px'>      <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
           <?php endif;?>
-          <th class='c-hours w-50px'>     <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='c-hours w-50px'>     <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='c-hours w-50px'>     <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='c-status'>           <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-6'>        <?php echo $lang->actions;?></th>
+          <th class='c-hours w-50px'>      <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='c-hours w-50px'>      <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='c-hours w-50px'>      <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='c-status'>            <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-actions-6'>         <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
