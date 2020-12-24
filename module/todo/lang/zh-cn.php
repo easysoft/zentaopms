@@ -35,7 +35,7 @@ $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
 $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
-$lang->todo->execution    = "所属阶段/" . $lang->executionCommon;
+$lang->todo->execution    = "所属" . $lang->sprintCommon;
 
 $lang->todo->reasonList['story'] = "转{$lang->productSRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -87,16 +87,20 @@ $lang->todo->statusList['closed'] = '已关闭';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
-$lang->todo->priList[3] = 3;
 $lang->todo->priList[1] = 1;
 $lang->todo->priList[2] = 2;
+$lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']   = '自定义';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = $lang->executionCommon . '任务';
-$lang->todo->typeList['story']    = $lang->executionCommon . $lang->productSRCommon;
+$lang->todo->typeList['task']     = '任务';
+$lang->todo->typeList['story']    = '软需';
+$lang->todo->typeList['issue']    = '问题';
+$lang->todo->typeList['risk']     = '风险';
+$lang->todo->typeList['review']   = '评审';
+$lang->todo->typeList['testtask'] = '测试单';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';

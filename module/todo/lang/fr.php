@@ -35,7 +35,7 @@ $lang->todo->cycle        = "Rendre Récurrent";
 $lang->todo->cycleConfig  = "Récurrence";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
-$lang->todo->execution    = "Stage/" . $lang->executionCommon;
+$lang->todo->execution    = $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Convertir en Story";
 $lang->todo->reasonList['task']  = "Convertir en Tâche";
@@ -87,10 +87,9 @@ $lang->todo->statusList['closed'] = 'Fermé';
 //$lang->todo->statusList['cancel']   = 'Cancelled';
 //$lang->todo->statusList['postpone'] = 'Delayed';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = 'Normale';
 $lang->todo->priList[1] = 'Critique';
 $lang->todo->priList[2] = 'Importante';
+$lang->todo->priList[3] = 'Normale';
 $lang->todo->priList[4] = 'Faible';
 
 $lang->todo->typeList['custom']   = 'Person.';
@@ -98,6 +97,10 @@ $lang->todo->typeList['cycle']    = 'Récur';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Tâche';
 $lang->todo->typeList['story']    = 'Story';
+$lang->todo->typeList['issue']    = 'Issue';
+$lang->todo->typeList['risk']     = 'Risk';
+$lang->todo->typeList['review']   = 'Review';
+$lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Voulez-vous supprimer cette entrée de l'agenda ?";
 $lang->todo->thisIsPrivate  = "Il s'agit d'un rdv privé";

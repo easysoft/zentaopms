@@ -33,6 +33,9 @@ $lang->todo->import       = "導入";
 $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期設置";
+$lang->todo->project      = "所屬項目";
+$lang->todo->product      = "所屬產品";
+$lang->todo->execution    = "所屬" . $lang->sprintCommon;
 
 $lang->todo->reasonList['story'] = "轉{$lang->productSRCommon}";
 $lang->todo->reasonList['task']  = "轉任務";
@@ -84,17 +87,20 @@ $lang->todo->statusList['closed'] = '已關閉';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = '一般';
-$lang->todo->priList[1] = '最高';
-$lang->todo->priList[2] = '較高';
-$lang->todo->priList[4] = '最低';
+$lang->todo->priList[3] = 3;
+$lang->todo->priList[1] = 1;
+$lang->todo->priList[2] = 2;
+$lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']   = '自定義';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = $lang->executionCommon . '任務';
-$lang->todo->typeList['story']    = $lang->executionCommon . $lang->productSRCommon;
+$lang->todo->typeList['task']     = '任務';
+$lang->todo->typeList['story']    = '軟需';
+$lang->todo->typeList['issue']    = '問題';
+$lang->todo->typeList['risk']     = '風險';
+$lang->todo->typeList['review']   = '評審';
+$lang->todo->typeList['testtask'] = '測試單';
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';

@@ -35,7 +35,7 @@ $lang->todo->cycle        = "Lặp lại";
 $lang->todo->cycleConfig  = "Cấu hình lặp lại";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
-$lang->todo->execution    = "Stage/" . $lang->executionCommon;
+$lang->todo->execution    = $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Chuyển thành câu chuyện";
 $lang->todo->reasonList['task']  = "Chuyển thành nhiệm vụ";
@@ -87,17 +87,20 @@ $lang->todo->statusList['closed']     = 'Đã đóng';
 //$lang->todo->statusList['cancel']   = 'Đã hủy';
 //$lang->todo->statusList['postpone'] = 'Tạm ngưng';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = 'Bình thường';
 $lang->todo->priList[1] = 'Khẩn cấp';
 $lang->todo->priList[2] = 'Quan trọng';
+$lang->todo->priList[3] = 'Bình thường';
 $lang->todo->priList[4] = 'Thấp';
 
-$lang->todo->typeList['custom'] = 'Tùy biến';
-$lang->todo->typeList['cycle']  = 'Lặp lại';
-$lang->todo->typeList['bug']    = 'Bug';
-$lang->todo->typeList['task']   = 'Nhiệm vụ';
-$lang->todo->typeList['story']  = 'Câu chuyện';
+$lang->todo->typeList['custom']   = 'Tùy biến';
+$lang->todo->typeList['cycle']    = 'Lặp lại';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = 'Nhiệm vụ';
+$lang->todo->typeList['story']    = 'Câu chuyện';
+$lang->todo->typeList['issue']    = 'Issue';
+$lang->todo->typeList['risk']     = 'Risk';
+$lang->todo->typeList['review']   = 'Review';
+$lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Bạn có muốn xóa việc này?";
 $lang->todo->thisIsPrivate  = 'Đây là một việc riêng tư';
