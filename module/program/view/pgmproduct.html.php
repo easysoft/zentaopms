@@ -24,6 +24,11 @@
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
+  <?php if(empty($products)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span></p>
+  </div>
+  <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$program->id");?>'>
       <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
@@ -44,8 +49,8 @@
             <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
             <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
             <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
-            <th class="w-80px" rowspan="2"><?php echo $lang->product->release;?></th>
-            <th class="w-80px" rowspan="2"><?php echo $lang->product->plan;?></th>
+            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default' rowspan="2"><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
@@ -66,8 +71,8 @@
         <tbody class="sortable" id="productTableList">
         <?php foreach($products as $product):?>
           <?php
-              $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
-              $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
+          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
           ?>
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
@@ -110,6 +115,7 @@
       <?php endif;?>
     </form>
   </div>
+  <?php endif;?>
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('programID', $program->id)?>

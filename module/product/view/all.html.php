@@ -35,23 +35,32 @@
       <table id="productList" class="table has-sort-head table-fixed table-nested">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
-          <tr>
-            <th class='table-nest-title'>
+          <tr class="text-center">
+            <th class='table-nest-title text-left' rowspan="2">
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
-            <th class='w-100px text-center' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
-            <th class='w-100px text-center' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
-            <th class='w-100px text-center' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
-            <th class='w-100px text-center' title='<?php echo $lang->product->closedStoriesTitle;?>'><?php echo $lang->product->closedStories;?></th>
-            <th class='w-70px text-center' title='<?php echo $lang->product->plans;?>'><?php echo $lang->product->plans;?></th>
-            <th class='w-70px text-center' title='<?php echo $lang->product->releases;?>'><?php echo $lang->product->releases;?></th>
-            <th class='w-80px text-center' title='<?php echo $lang->product->unResolvedBugsTitle;?>'><?php echo $lang->product->unResolvedBugs;?></th>
-            <th class='w-80px text-center' title='<?php echo $lang->product->assignToNullBugsTitle;?>'><?php echo $lang->product->assignToNullBugs;?></th>
+            <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
+            <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
+            <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
+            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <?php if($canOrder):?>
-            <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
+            <th class='w-70px sort-default' rowspan="2"><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
-            <th class='c-actions w-60px'><?php echo $lang->actions;?></th>
+            <th class='c-actions w-60px' rowspan="2"><?php echo $lang->actions;?></th>
+          </tr>
+          <tr class="text-center">
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->close;?></th>
+            <th><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->completeRate;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->close;?></th>
+            <th><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->completeRate;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
+            <th><?php echo $lang->bug->close;?></th>
           </tr>
         </thead>
         <tbody id="productTableList">
@@ -77,9 +86,17 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
         <?php endif;?>
         <?php foreach($program->products as $product):?>
+        <?php
+        $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
+        $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+        ?>
         <?php
         $trClass = '';
         if($product->programName)
@@ -95,17 +112,21 @@
         }
         $trAttrs .= " class='$trClass'";
         ?>
-        <tr <?php echo $trAttrs;?>>
-          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
+        <tr class="text-center" <?php echo $trAttrs;?>>
+          <td class="c-name text-left" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
           </td>
-          <td class='text-center'><?php echo $product->stories['active'];?></td>
-          <td class='text-center'><?php echo $product->stories['changed'];?></td>
-          <td class='text-center'><?php echo $product->stories['draft'];?></td>
-          <td class='text-center'><?php echo $product->stories['closed'];?></td>
-          <td class='text-center'><?php echo $product->plans;?></td>
-          <td class='text-center'><?php echo $product->releases;?></td>
-          <td class='text-center'><?php echo $product->unResolved;?></td>
-          <td class='text-center'><?php echo $product->assignToNull;?></td>
+          <td><?php echo $product->requirements['active'];?></td>
+          <td><?php echo $product->requirements['closed'];?></td>
+          <td><?php echo $product->requirements['draft'];?></td>
+          <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
+          <td><?php echo $product->stories['active'];?></td>
+          <td><?php echo $product->stories['closed'];?></td>
+          <td><?php echo $product->stories['draft'];?></td>
+          <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
+          <td><?php echo $product->unResolved;?></td>
+          <td><?php echo $product->closedBugs;?></td>
+          <td><?php echo $product->releases;?></td>
+          <td><?php echo $product->plans;?></td>
           <?php if($canOrder):?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>

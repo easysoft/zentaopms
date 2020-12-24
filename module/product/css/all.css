@@ -33,3 +33,7 @@
 #programTree ul > li.item-meas a.selected{color: #0c64eb;}
 .side-col {padding-right: 20px; width: 18%}
 #sidebar>.cell {width: 100%;}
+
+.main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
+th.table-nest-title .table-nest-toggle {margin-top: 15px; margin-left: 6px;}
+th.table-nest-title .header {margin-left: 5px;}
