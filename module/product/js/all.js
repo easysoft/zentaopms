@@ -24,7 +24,7 @@ $(function()
             });
             $.post(createLink('product', 'updateOrder'), {'products' : products, 'orderBy' : orderBy});
 
-            $('#productListForm').table('initNestedList')
+            $('#productListForm').table('initNestedList');
         }
     });
 });
