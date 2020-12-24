@@ -766,13 +766,12 @@ class product extends control
     /**
      * Products under project set.
      *
-     * @param  int    $programID
      * @param  string $browseType
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function all($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc')
+    public function all($browseType = 'noclosed', $orderBy = 'order_desc')
     {
         /* Load module and set session. */
         $this->loadModel('program');
@@ -782,20 +781,22 @@ class product extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         /* Init vars. */
-        $program      = $programID ? $this->program->getPGMByID($programID) : 0;
-        $programName  = empty($program) ? '' : $program->name;
-        $productStats = $this->product->getStats($orderBy, '', $browseType, '', 'story', $programID);
+        $programs     = array();
+        $productStats = $this->product->getStats($orderBy, '', $browseType, '', 'story');
+
+        foreach($productStats as $product)
+        {
+            $programs[$product->program]->products[$product->id] = $product;
+            if($product->program !== 0) $programs[$product->program]->name = $product->programName;
+        }
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
 
         $this->view->recTotal     = count($productStats);
         $this->view->productStats = $productStats;
+        $this->view->programs     = $programs;
         $this->view->orderBy      = $orderBy;
-        $this->view->programTree  = $this->program->getPGMTreeMenu($programID, 'product', '&browseType=' . $browseType);
-        $this->view->programID    = $programID;
-        $this->view->program      = $program;
-        $this->view->programName  = $programName;
         $this->view->browseType   = $browseType;
 
         $this->display();

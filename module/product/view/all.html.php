@@ -12,46 +12,29 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php echo empty($program) ? $lang->program->PGMCommon : $program->name;?>
-      <?php if($programID) echo html::a(inLink('all', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
-    </div>
-  </div>
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
-    <?php echo html::a(inlink("all", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('product', 'create', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
-  <div id="sidebar" class="side-col">
-    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
-    <div class="cell">
-      <?php echo $programTree;?>
-    </div>
-  </div>
   <div class="main-col">
-    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo inLink('batchEdit', "programID=$programID");?>'>
+    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
-      <table id="productList" class="table has-sort-head table-fixed">
-        <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s";?>
+      <table id="productList" class="table has-sort-head table-fixed table-nested">
+        <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
           <tr>
-            <th class='c-id'>
-              <?php if($canBatchEdit):?>
-                <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll;?>">
-                  <label></label>
-                </div>
-              <?php endif;?>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+            <th class='table-nest-title'>
+              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
-            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
             <th class='w-100px' title='<?php echo $lang->product->activeStoriesTitle;?>'><?php echo $lang->product->activeStories;?></th>
             <th class='w-100px' title='<?php echo $lang->product->changedStoriesTitle;?>'><?php echo $lang->product->changedStories;?></th>
             <th class='w-100px' title='<?php echo $lang->product->draftStoriesTitle;?>'><?php echo $lang->product->draftStories;?></th>
@@ -67,16 +50,50 @@
           </tr>
         </thead>
         <tbody class="sortable" id="productTableList">
-        <?php foreach($productStats as $product):?>
-        <tr data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
-          <td class='c-id'>
-            <?php if($canBatchEdit):?>
-            <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)));?>
-            <?php else:?>
-            <?php printf('%03d', $product->id);?>
-            <?php endif;?>
+        <?php foreach($programs as $programID => $program):?>
+        <?php
+        $trClass  = '';
+        $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
+        $trClass  = ' is-top-level table-nest-child-hide';
+        $trAttrs .= " class='$trClass'";
+        ?>
+        <?php if($program->name):?>
+        <tr <?php echo $trAttrs;?>>
+          <td>
+            <span class="table-nest-icon icon table-nest-toggle"></span>
+            <?php echo $program->name?>
           </td>
-          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <?php endif;?>
+        <?php foreach($program->products as $product):?>
+        <?php
+        $trClass = '';
+        if($product->programName)
+        {
+            $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
+            $trClass .= ' is-nest-child  table-nest-hide';
+            $trAttrs .= " data-nest-parent='program.$product->program' data-nest-path='program.$product->program,$product->id'";
+        }
+        else
+        {
+            $trAttrs  = "data-id='$product->id' data-parent='0'";
+            $trClass .= ' no-nest';
+        }
+        $trAttrs .= " class='$trClass'";
+        ?>
+        <tr <?php echo $trAttrs;?>>
+          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
+          </td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>
@@ -93,22 +110,12 @@
           </td>
         </tr>
         <?php endforeach;?>
+        <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($productStats):?>
-      <div class="table-footer">
-        <?php if($canBatchEdit):?>
-        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit, '', 'btn');?>
-        </div>
-        <?php endif;?>
-      </div>
-      <?php endif;?>
     </form>
   </div>
 </div>
 <?php js::set('orderBy', $orderBy)?>
-<?php js::set('programID', $programID)?>
 <?php js::set('browseType', $browseType)?>
 <?php include '../../common/view/footer.html.php';?>

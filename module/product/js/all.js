@@ -1,7 +1,4 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
-$('#programTree').tree();
-$('#program' + programID).addClass('active');
-$(".tree .active").parent('li').addClass('active');
 $(function()
 {
     $('#productTableList').on('sort.sortable', function(e, data)
