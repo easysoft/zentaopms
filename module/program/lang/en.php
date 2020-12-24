@@ -221,7 +221,7 @@ $lang->program->PGMLongTime  = 'Long-Term';
 
 $lang->program->noPGM         = 'No program.';
 $lang->program->PGMShowClosed = 'Closed programs.';
-$lang->program->PGMTips       = 'By modifying the parent item set, the associateable product also changes and becomes required. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
+$lang->program->PGMTips       = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
 $lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";
