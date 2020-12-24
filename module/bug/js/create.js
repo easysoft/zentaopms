@@ -96,9 +96,9 @@ $(function()
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
-    if(!assignedto) setAssignedTo(moduleID, productID);
+    if($('#project').val()) loadProjectRelated($('#project').val());
+    if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
-    setTimeout(function(){if($('#project').val()) loadProjectRelated($('#project').val());}, 100);
 
 
     $('[data-toggle=tooltip]').tooltip();
