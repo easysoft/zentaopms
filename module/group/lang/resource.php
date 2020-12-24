@@ -84,20 +84,21 @@ $lang->index->methodOrder[0] = 'index';
 
 /* My module. */
 $lang->resource->my = new stdclass();
-$lang->resource->my->index          = 'index';
-$lang->resource->my->todo           = 'todo';
-$lang->resource->my->calendar       = 'calendar';
-$lang->resource->my->work           = 'work';
-$lang->resource->my->contribute     = 'contribute';
-$lang->resource->my->project        = 'project';
-$lang->resource->my->profile        = 'profile';
-$lang->resource->my->dynamic        = 'dynamic';
-$lang->resource->my->editProfile    = 'editProfile';
-$lang->resource->my->changePassword = 'changePassword';
-$lang->resource->my->manageContacts = 'manageContacts';
-$lang->resource->my->deleteContacts = 'deleteContacts';
-$lang->resource->my->score          = 'score';
-$lang->resource->my->unbind         = 'unbind';
+$lang->resource->my->index           = 'index';
+$lang->resource->my->todo            = 'todo';
+$lang->resource->my->calendar        = 'calendar';
+$lang->resource->my->work            = 'work';
+$lang->resource->my->contribute      = 'contribute';
+$lang->resource->my->project         = 'project';
+$lang->resource->my->profile         = 'profile';
+$lang->resource->my->dynamic         = 'dynamic';
+$lang->resource->my->editProfile     = 'editProfile';
+$lang->resource->my->changePassword  = 'changePassword';
+$lang->resource->my->manageContacts  = 'manageContacts';
+$lang->resource->my->deleteContacts  = 'deleteContacts';
+$lang->resource->my->score           = 'score';
+$lang->resource->my->unbind          = 'unbind';
+$lang->resource->my->setStoryConcept = 'setStoryConcept';
 
 $lang->my->methodOrder[0]  = 'index';
 $lang->my->methodOrder[5]  = 'todo';
@@ -112,6 +113,7 @@ $lang->my->methodOrder[45] = 'manageContacts';
 $lang->my->methodOrder[50] = 'deleteContacts';
 $lang->my->methodOrder[55] = 'score';
 $lang->my->methodOrder[60] = 'unbind';
+$lang->my->methodOrder[65] = 'setStoryConcept';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
