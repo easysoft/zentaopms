@@ -225,8 +225,8 @@ $('#projectName').on('keyup', function()
 {
     var name = $(this).val();
     name = name.replace(/\s+/g, '');
-    link = createLink('program', 'ajaxGetCopyProjects', 'name=' + name + '&cpoyProjectID=' + copyProjectID);
-    $.post(link, function(data)
+    link = createLink('program', 'ajaxGetCopyProjects');
+    $.post(link, {name: name, cpoyProjectID : copyProjectID}, function(data)
     {
         $('#copyProjects').html(data);
         $('#copyProjects a').click(function()
