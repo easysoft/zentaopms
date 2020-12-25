@@ -558,8 +558,8 @@ class commonModel extends model
     public static function getRecentExecutions()
     {
         global $dbh, $lang, $app;
-        echo '<li><hr></li>';
-        echo '<li><span id="mainRecent"><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
+        echo "<li class='divider'></li>";
+        echo '<li><span id="mainRecent"><i class="icon icon-recent"></i> ' . $lang->recent . '</span></li>';
 
         $extraWhere = empty($app->user->admin) ? ' and id in (' . $app->user->view->sprints . ') and project in (' . $app->user->view->projects . ') ' : '';
 
@@ -778,6 +778,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
+        if($group == 'repo') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
 
@@ -2303,6 +2304,11 @@ EOD;
         {
             $lang->menu      = $lang->product->menu;
             $lang->menuOrder = $lang->product->menuOrder;
+        }
+        if($group == 'repo')
+        {
+            $lang->menu      = $lang->repo->menu;
+            $lang->menuOrder = $lang->repo->menuOrder;
         }
         if($group == 'project')
         {
