@@ -1081,8 +1081,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
+    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no', $PRJID = 0)
     {
+        if($PRJID) $this->session->set('PRJ', $PRJID);
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');

@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('productID', $productID);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -62,7 +63,7 @@
         <th class='w-70px'> <?php echo $lang->productplan->stories;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
-        <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
+        <th class='w-60px'> <?php echo $lang->productplan->execution;?></th>
         <th>                <?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
@@ -127,7 +128,7 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if(common::hasPriv('project', 'create', $plan)) echo html::a(helper::createLink('project', 'create', "productID=&projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->project->create}'");
+          if(common::hasPriv('project', 'create', $plan)) echo html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this)' class='btn' title='{$lang->project->create}'");
           if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
           if(common::hasPriv('productplan', 'linkBug', $plan)) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
@@ -165,5 +166,29 @@
     </div>
   </form>
   <?php endif;?>
+</div>
+<div class="modal fade" id="projects">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->productplan->selectProjects;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->productplan->project?></th>
+            <td><?php echo html::select('projects', $projects, '', "class='form-control chosen' id=project");?></td>
+          </tr>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::hidden('planID', '');?>
+              <?php echo html::commonButton($lang->productplan->nextStep, "id='createExecutionButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
