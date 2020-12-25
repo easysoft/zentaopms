@@ -35,52 +35,55 @@
 </style>
 <script>
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
+var datatableOptions =
+{
+    customizable  : false,
+    sortable      : false,
+    scrollPos     : 'out',
+    tableClass    : 'tablesorter',
+    storage       : false,
+    fixCellHeight : false,
+    selectable     : false,
+    fixedHeader: true,
+    ready: function()
+    {
+        this.$table.addClass('datatable-origin');
+        if (this.$table.hasClass('has-sort-head'))
+        {
+            this.$datatable.find('.table').addClass('has-sort-head');
+        }
+        this.$datatable.find('.sparkline').sparkline();
+    }
+};
+
+/**
+ * Init datatable
+ * @return {void}
+ */
+function initDatatable($datatable)
+{
+    $datatable = $datatable || $('table.datatable').first();
+    if(!$datatable.length || $datatable.data('zui.datatable')) return null;
+    var $datatable  = $('table.datatable').first();
+    var datatableId = $datatable.attr('id');
+    var dtSetting   = $.cookie('datatable.<?php echo $datatableId?>' + '.cols') || {};
+    if(dtSetting === 'null') dtSetting = {};
+    if(typeof dtSetting === 'string') dtSetting = $.parseJSON(dtSetting);
+
+    $datatable.datatable(datatableOptions);
+
+    $datatable.find('thead>tr>th').each(function(idx)
+    {
+        var $th = $(this);
+        idx = $th.data('index') || idx;
+        var colSetting = dtSetting[idx];
+        $th.toggleClass('ignore', !!(colSetting && colSetting.ignore));
+    });
+    return $datatable;
+};
+
 $(document).ready(function()
 {
-    var datatableOptions =
-    {
-        customizable  : false,
-        sortable      : false,
-        scrollPos     : 'out',
-        tableClass    : 'tablesorter',
-        storage       : false,
-        fixCellHeight : false,
-        selectable     : false,
-        fixedHeader: true,
-        ready: function()
-        {
-            this.$table.addClass('datatable-origin');
-            if (this.$table.hasClass('has-sort-head'))
-            {
-                this.$datatable.find('.table').addClass('has-sort-head');
-            }
-            this.$datatable.find('.sparkline').sparkline();
-        }
-    };
-
-    window.initDatatable = function($datatable)
-    {
-        $datatable = $datatable || $('table.datatable').first();
-        if(!$datatable.length) return null;
-        var $datatable  = $('table.datatable').first();
-        var datatableId = $datatable.attr('id');
-        var dtSetting   = $.cookie('datatable.<?php echo $datatableId?>' + '.cols') || {};
-        if(dtSetting === 'null') dtSetting = {};
-        if(typeof dtSetting === 'string') dtSetting = $.parseJSON(dtSetting);
-
-        $datatable.datatable(datatableOptions);
-
-
-        $datatable.find('thead>tr>th').each(function(idx)
-        {
-            var $th = $(this);
-            idx = $th.data('index') || idx;
-            var colSetting = dtSetting[idx];
-            $th.toggleClass('ignore', !!(colSetting && colSetting.ignore));
-        });
-        return $datatable;
-    };
-
     var $datatable = initDatatable();
     if($datatable && $datatable.length)
     {
