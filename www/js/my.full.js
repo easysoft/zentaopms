@@ -798,32 +798,32 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
 
 /**
  * Adjust menu width.
- * 
+ *
  * @access public
  * @return void
  */
 function adjustMenuWidth()
 {
-    $mainHeader = $('#mainHeader .container');
+    var $mainHeader = $('#mainHeader .container');
     if($mainHeader.length == 0) return false;
 
-    $navbar = $mainHeader.find('#navbar .nav');
+    var $navbar = $mainHeader.find('#navbar .nav');
 
-    mainHeaderWidth = $mainHeader.width() - 10;
-    headingWidth    = $mainHeader.find('#heading').width() + 30;
-    navbarWidth     = $navbar.width();
-    toolbarWidth    = $mainHeader.find('#toolbar').width() + 20;
+    var mainHeaderWidth = $mainHeader.width() - 10;
+    var headingWidth    = $mainHeader.find('#heading').width() + 30;
+    var navbarWidth     = $navbar.width();
+    var toolbarWidth    = $mainHeader.find('#toolbar').width() + 20;
 
     if(mainHeaderWidth < headingWidth + navbarWidth + toolbarWidth)
     {
-        delta = (headingWidth + navbarWidth + toolbarWidth) - mainHeaderWidth;
+        var delta = (headingWidth + navbarWidth + toolbarWidth) - mainHeaderWidth;
         delta = Math.ceil(delta / $navbar.children('li').length / 2);
 
-        aTagPadding   = $navbar.find('a:first').css('padding-left').replace('px', '');
-        dividerMargin = $navbar.find('.divider').css('margin-left').replace('px', '');
+        var aTagPadding   = $navbar.find('a:first').css('padding-left').replace('px', '');
+        var dividerMargin = $navbar.find('.divider').css('margin-left').replace('px', '');
 
-        newPadding = aTagPadding - delta;
-        newMargin  = dividerMargin - delta - 1;
+        var newPadding = aTagPadding - delta;
+        var newMargin  = dividerMargin - delta - 1;
         if(newPadding < 0) newPadding = 0;
         if(newMargin < 0)  newMargin  = 0;
 
