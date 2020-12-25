@@ -195,6 +195,8 @@ $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
 $lang->program->unlinkStakeholder    = '移除干系人';
+$lang->program->stakeholderType      = '干系人类型';
+$lang->program->isStakeholderKey     = '关键干系人';
 $lang->program->importStakeholder    = '从父项目集导入';
 $lang->program->PGMManageMembers     = '项目集团队';
 $lang->program->PGMParentBudget      = "父项目集预算：%s";
@@ -203,6 +205,9 @@ $lang->program->PGMBeginLetterParent = "父项目集的开始日期：%s，开�
 $lang->program->PGMEndGreaterParent  = "父项目集的完成日期：%s，完成日期不能大于父项目集的完成日期";
 $lang->program->PGMBeginGreateChild  = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
 $lang->program->PGMEndLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
+
+$lang->program->stakeholderTypeList['inside']  = '内部';
+$lang->program->stakeholderTypeList['outside'] = '外部';
 
 /* Fields. */
 $lang->program->PGMName      = '项目集名称';

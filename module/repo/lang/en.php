@@ -28,7 +28,6 @@ $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
 $lang->repo->addComment = 'Add Comment';
 
-$lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = 'Module';
 $lang->repo->type     = 'Type';
 $lang->repo->assign   = 'AssignTo';

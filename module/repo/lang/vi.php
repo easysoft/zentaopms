@@ -28,7 +28,6 @@ $lang->repo->submit     = 'Gửi';
 $lang->repo->cancel     = 'Hủy';
 $lang->repo->addComment = 'Thêm nhận xét';
 
-$lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = 'Module';
 $lang->repo->type     = 'Loại';
 $lang->repo->assign   = 'Giao cho';

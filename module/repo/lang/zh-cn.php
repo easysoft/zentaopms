@@ -28,7 +28,6 @@ $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
 
-$lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = '模块';
 $lang->repo->type     = '类型';
 $lang->repo->assign   = '指派';

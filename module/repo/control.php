@@ -60,9 +60,10 @@ class repo extends control
         $this->view->position[] = $this->lang->repo->common;
         $this->view->position[] = $this->lang->repo->browse;
 
-        $this->view->repoID    = $repoID;
+        $this->view->repoID     = $repoID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->products   = $this->loadModel('product')->getPairs('noclosed');
 
         $this->display();
     }
