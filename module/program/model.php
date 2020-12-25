@@ -381,7 +381,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
-            $linkHtml = html::a($link, "<i class='icon-folder-open-o'></i> " . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $linkHtml = html::a($link, html::icon($this->lang->icons['program']) . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -1203,8 +1203,8 @@ class programModel extends model
     public function createPRJManageLink($project)
     {
         $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? '<i class="icon-folder-open-o"></i> ' : '<i class="icon icon-file"></i> ';
-        return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
+        $icon = $project->type == 'program' ? html::icon($this->lang->icons['program']) : html::icon($this->lang->icons['project']);
+        return html::a($link, $icon . ' ' . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**
