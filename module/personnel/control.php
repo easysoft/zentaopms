@@ -141,7 +141,7 @@ class personnel extends control
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
-            $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'addWhitelist';
+            $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'whitelist';
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $moduleMethod, "objectID=$objectID")));
         }
 

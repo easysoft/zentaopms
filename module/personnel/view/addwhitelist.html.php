@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>.not-clickable {pointer-events: none; color: #ddd;}</style>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
 <div id='mainMenu' class='clearfix'>
@@ -24,7 +25,7 @@
 </div>
 <div id='mainContent' class='main-content'>
   <div class="main-header">
-    <h2><?php echo $lang->product->addWhitelist;?></h2>
+    <h2><?php echo $lang->personnel->addWhitelist;?></h2>
   </div>
   <form class='main-form form-ajax' method='post' target='hiddenwin' id="whitelistForm">
     <table class='table table-form'>
