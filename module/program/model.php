@@ -1344,6 +1344,16 @@ class programModel extends model
                 $projectProduct->product = $productID;
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+
+                /* Create doc lib. */
+                $this->app->loadLang('doc');
+                $lib = new stdclass();
+                $lib->product = $productID;
+                $lib->name    = $this->lang->doclib->main['product'];
+                $lib->type    = 'product';
+                $lib->main    = '1'; 
+                $lib->acl     = 'default';
+                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             }
 
             /* Save order. */
