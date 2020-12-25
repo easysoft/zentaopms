@@ -53,6 +53,7 @@ var datatableOptions =
             this.$datatable.find('.table').addClass('has-sort-head');
         }
         this.$datatable.find('.sparkline').sparkline();
+        $('.progress-pie').progressPie();
     }
 };
 
