@@ -741,14 +741,18 @@ class product extends control
      */
     public function updateOrder()
     {
-        $idList   = explode(',', trim($this->post->products, ','));
+        /* Init vars. */
+        $idList  = explode(',', trim($this->post->products, ','));
+        $orderBy = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
+
+        /* Remove programID. */
         foreach($idList as $i => $id)
         {
             if(!is_numeric($id)) unset($idList[$i]);
         }
-        $orderBy  = $this->post->orderBy;
-        if(strpos($orderBy, 'order') === false) return false;
 
+        /* Update order. */
         $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
         foreach($products as $order => $id)
         {
