@@ -8,8 +8,11 @@ include 'chosen.html.php';
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
-<?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
 <?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
+<?php
+$isProject = (zget($lang->navGroup, $app->rawModule) == 'project');
+js::set('$.isProjectGroup', $isProject);
+?>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default'>
