@@ -30,6 +30,7 @@ $lang->productplan->linkedStories    = 'Câu chuyện liên kết';
 $lang->productplan->unlinkedStories  = 'Câu chuyện chưa liên kết';
 $lang->productplan->updateOrder      = 'Sắp xếp';
 $lang->productplan->createChildren   = "Tạo kế hoạch con";
+$lang->productplan->createExecution  = "Create {$lang->sprintCommon}";
 
 $lang->productplan->linkBug        = "Liên kết Bug";
 $lang->productplan->unlinkBug      = "Hủy liên kết Bug";

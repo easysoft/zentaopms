@@ -30,6 +30,7 @@ $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
 $lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
+$lang->productplan->createExecution  = "Create {$lang->sprintCommon}";
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
