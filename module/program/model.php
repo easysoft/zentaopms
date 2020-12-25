@@ -1533,8 +1533,9 @@ class programModel extends model
 
         if($col->show)
         {
-            $class = "c-$id";
-            $title = '';
+            $class  = "c-$id";
+            $title  = '';
+            $PRJPGM = '';
 
             if($id == 'idAB') $class .= ' cell-id';
 
@@ -1542,6 +1543,19 @@ class programModel extends model
             {
                 $class .= ' c-name text-left';
                 $title  = "title='{$project->name}'";
+            }
+
+            if($id == 'PRJPGM')
+            {
+                $programList = $this->getPGMPairs();
+                $PGMIndex = strpos($project->path, $programID);
+                $PRJIndex = strpos($project->path, $project->id);
+                $PGMPath  = explode(',' , substr($project->path, $PGMIndex, $PRJIndex - $PGMIndex));
+                foreach($PGMPath as $program)
+                {
+                    if($program) $PRJPGM .= '/' . zget($programList, $program);
+                }
+                $title = "title='{$PRJPGM}'";
             }
 
             echo "<td class='" . $class . "' $title>";
@@ -1557,14 +1571,7 @@ class programModel extends model
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
                     break;
                 case 'PRJPGM':
-                    $programList = $this->getPGMPairs();
-                    $PGMIndex = strpos($project->path, $programID);
-                    $PRJIndex = strpos($project->path, $project->id);
-                    $PGMPath  = explode(',' , substr($project->path, $PGMIndex, $PRJIndex - $PGMIndex));
-                    foreach($PGMPath as $program)
-                    {
-                        if($program) echo '/' . zget($programList, $program);
-                    }
+                    echo $PRJPGM;
                     break;
                 case 'PM':
                     echo zget($users, $project->PM);
