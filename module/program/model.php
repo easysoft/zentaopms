@@ -1545,7 +1545,7 @@ class programModel extends model
                     echo $project->hours->totalLeft;
                     break;
                 case 'PRJProgress':
-                    echo "<span class='pie-icon' data-percent='{$project->hours->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$project->hours->progress}%";
+                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88'  data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
                     break;
                 case 'actions':
                     if($project->status == 'wait')
