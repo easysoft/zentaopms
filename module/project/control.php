@@ -1077,6 +1077,7 @@ class project extends control
      * @param string $copyProjectID
      * @param int    $planID
      * @param string $confirm
+     * @param int    $PRJID
      *
      * @access public
      * @return void
