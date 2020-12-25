@@ -9,10 +9,7 @@ include 'chosen.html.php';
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
 <?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
-<?php
-$isProject = (zget($lang->navGroup, $app->rawModule) == 'project');
-js::set('$.isProjectGroup', $isProject);
-?>
+<?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default'>
