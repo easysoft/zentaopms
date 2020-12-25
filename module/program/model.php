@@ -556,6 +556,7 @@ class programModel extends model
 
         if($action == 'pgmclose')    return $program->status != 'closed';
         if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
+        if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
 
         if($action == 'prjstart')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
