@@ -69,7 +69,7 @@
               <?php if($program->status != 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
             </ul>
           </div>
-          <?php if(common::hasPriv('program', 'PGMEdit')) echo html::a($this->createLink("program", "pgmedit", "programID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->program->PGMEdit}'");?>
+          <?php common::printIcon('program', 'PGMEdit', "programID=$program->id", '', 'list', 'edit');?>
           <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
           <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PGMDelete}'");?>
 
@@ -85,7 +85,7 @@
             <?php if($program->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
             </ul>
           </div>
-          <?php if(common::hasPriv('program','PRJEdit')) echo html::a($this->createLink("program", "prjedit", "projectID=$program->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->program->PRJEdit}'");?>
+          <?php common::printIcon('program', 'PRJEdit', "projectID=$program->id", $program, 'list', 'edit');?>
           <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'persons');?>
           <?php common::printIcon('program', 'PRJGroup', "projectID=$program->id", $program, 'list', 'icon icon-lock');?>
           <div class='btn-group'>
