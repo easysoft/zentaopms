@@ -261,6 +261,19 @@ class programModel extends model
                 if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
                 if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
             }
+
+            /* The budget of a child program cannot beyond the remaining budget of the parent program. */
+            if($program->budget != 0 and $parentProgram->budget != 0)
+            {
+                $childGrade     = $parentProgram->grade + 1;
+                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+                    ->where('path')->like("%{$program->parent}%")
+                    ->andWhere('grade')->eq($childGrade)
+                    ->andWhere('id')->ne($programID)
+                    ->fetch('sumBudget');
+
+                if($program->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+            }
         }
         if(dao::isError()) return false;
 
@@ -1254,6 +1267,18 @@ class programModel extends model
                 if(dao::isError()) return false;
             }
 
+            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
+            if(isset($project->budget) and $parentProgram->budget != 0)
+            {
+                $childGrade     = $parentProgram->grade + 1;
+                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+                    ->where('path')->like("%{$project->parent}%")
+                    ->andWhere('grade')->eq($childGrade)
+                    ->fetch('sumBudget');
+
+                if($project->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+            }
+
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
@@ -1344,6 +1369,16 @@ class programModel extends model
                 $projectProduct->product = $productID;
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+
+                /* Create doc lib. */
+                $this->app->loadLang('doc');
+                $lib = new stdclass();
+                $lib->product = $productID;
+                $lib->name    = $this->lang->doclib->main['product'];
+                $lib->type    = 'product';
+                $lib->main    = '1'; 
+                $lib->acl     = 'default';
+                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             }
 
             /* Save order. */
@@ -1415,6 +1450,19 @@ class programModel extends model
                 if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
 
                 if(dao::isError()) return false;
+            }
+
+            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
+            if($project->budget != 0 and $parentProgram->budget != 0)
+            {
+                $childGrade     = $parentProgram->grade + 1;
+                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+                    ->where('path')->like("%{$project->parent}%")
+                    ->andWhere('grade')->eq($childGrade)
+                    ->andWhere('id')->ne($projectID)
+                    ->fetch('sumBudget');
+
+                if($project->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
 

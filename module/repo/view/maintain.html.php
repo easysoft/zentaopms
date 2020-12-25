@@ -34,7 +34,7 @@
           <td class='text'>
           <?php 
 		  $productList = explode(',', str_replace(' ', '', $repo->product));
-          if($productList[0])
+          if(isset($productList) and $productList[0])
           {   
               foreach($productList as $productID) echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
           }   

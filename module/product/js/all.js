@@ -4,6 +4,7 @@ $(function()
     var $list = $('#productTableList');
     $list.addClass('sortable').sortable(
     {
+        reverse: orderBy === 'order_desc',
         selector: 'tr',
         dragCssClass: 'drag-row',
         trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,

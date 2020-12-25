@@ -30,6 +30,7 @@ $lang->productplan->linkedStories    = 'Stories Planifiées';
 $lang->productplan->unlinkedStories  = 'Stories non Planifiées';
 $lang->productplan->updateOrder      = 'Ordre';
 $lang->productplan->createChildren   = "Créer Sous-Plans";
+$lang->productplan->createExecution  = "Create {$lang->sprintCommon}";
 
 $lang->productplan->linkBug          = "Planifier Bug";
 $lang->productplan->unlinkBug        = "Retirer Bug";

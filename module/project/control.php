@@ -1077,14 +1077,12 @@ class project extends control
      * @param string $copyProjectID
      * @param int    $planID
      * @param string $confirm
-     * @param int    $PRJID
      *
      * @access public
      * @return void
      */
-    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no', $PRJID = 0)
+    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
     {
-        if($PRJID) $this->session->set('PRJ', $PRJID);
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');

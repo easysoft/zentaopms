@@ -627,15 +627,13 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
+
         $project = fixer::input('post')
             ->add('realBegan', $now)
             ->setDefault('status', 'doing')
             ->remove('comment')->get();
 
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }

@@ -641,19 +641,20 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetCopyProjects($name = '', $copyProjectID = 0)
+    public function ajaxGetCopyProjects()
     {
+        $data = fixer::input('post')->get();
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($name)->andWhere('name')->like("%$name%")->fi()
+            ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
 
         $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
         foreach($projects as $id => $name)
         {
-            $active = $copyProjectID == $id ? 'active' : '';
+            $active = $data->cpoyProjectID == $id ? 'active' : '';
             $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>"; 
         }
         echo $html;
