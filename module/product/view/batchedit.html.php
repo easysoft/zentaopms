@@ -42,7 +42,16 @@
         <thead>
           <tr>
             <th class='w-60px'><?php echo $lang->idAB;?></th>
-            <th class='w-200px required'><?php echo $lang->product->name;?></th>
+            <?php
+            $width = '';
+            $full  = 'width: 100%';
+            if(count($visibleFields) > 6)
+            {
+                $width = 'w-200px';
+                $full  = '';
+            }
+            ?>
+            <th class='required <?php echo $width;?>' style="<?php echo $full;?>"><?php echo $lang->product->name;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->product->QD;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->product->RD;?></th>
