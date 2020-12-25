@@ -36,9 +36,7 @@
     <table class='table table-fixed' id='programList'>
       <thead>
         <tr>
-          <th class='c-id w-50px'>
-            <?php echo $lang->idAB;?>
-          </th>
+          <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->program->PRJName;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
           <th class='w-80px'><?php  echo $lang->program->PRJStatus;?></th>
@@ -64,7 +62,7 @@
           <td><?php echo zget($users, $project->PM);?></td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
-            <?php if($project->status == 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
+            <?php if($project->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
             <?php if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
             <div class='btn-group'>
               <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
@@ -74,14 +72,14 @@
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>
-            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');?>
+            <?php common::printIcon('program', 'PRJEdit',          "projectID=$project->id", $project, 'list', 'edit');?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
-            <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'icon icon-lock');?>
+            <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'lock');?>
             <div class='btn-group'>
               <button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
-                <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project');?>
-                <?php common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group');?>
+                <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'menu-project');?>
+                <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$project->id", $project, 'list', 'group');?>
                 <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
               </ul>
             </div>
