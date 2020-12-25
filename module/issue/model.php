@@ -198,6 +198,7 @@ class issueModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->limit($limit)
             ->query();
 
         $issues = array();
