@@ -136,7 +136,7 @@ $lang->program->endList[999] = 'Longtime';
 
 $lang->program->noPRJ             = 'No project.';
 $lang->program->accessDenied      = 'Access denied!';
-$lang->program->chooseProgramType = 'Select a method';
+$lang->program->chooseProgramType = 'Select the project management model';
 $lang->program->nextStep          = 'Next step';
 $lang->program->hoursUnit         = '%s hours';
 $lang->program->membersUnit       = '%s men';

@@ -138,7 +138,7 @@ $lang->program->endList[999] = '長期';
 
 $lang->program->noPRJ             = '暫時沒有項目';
 $lang->program->accessDenied      = '您無權訪問該項目！';
-$lang->program->chooseProgramType = '選擇項目管理方式';
+$lang->program->chooseProgramType = '選中項目管理模型';
 $lang->program->nextStep          = '下一步';
 $lang->program->hoursUnit         = '%s工時';
 $lang->program->membersUnit       = '%s人';
