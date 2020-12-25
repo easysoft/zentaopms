@@ -132,9 +132,9 @@ $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|index|';
-$lang->mainNav->project = '<i class="icon icon-file"></i> 项目|program|prjbrowse|';
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|subject|browse|';
-$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
+$lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|prjbrowse|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
+$lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
