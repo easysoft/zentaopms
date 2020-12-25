@@ -31,7 +31,7 @@ js::set('browseType', $browseType);
 </div>
 <div id='mainContent' class="main-row fade">
   <div class="main-col">
-    <form class='main-table' id='projectsForm' method='post'>
+    <form class='main-table' id='projectsForm' method='post' data-ride="table">
       <?php
         include '../../common/view/datatable.html.php';
         $vars    = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";

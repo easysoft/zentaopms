@@ -133,11 +133,12 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
+$lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',admin,';
+$lang->dividerMenu = ',admin,project,repo,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
@@ -623,20 +624,21 @@ $lang->navGroup->weekly         = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
 $lang->navGroup->design         = 'project';
-$lang->navGroup->repo           = 'project';
 $lang->navGroup->issue          = 'project';
 $lang->navGroup->risk           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
-$lang->navGroup->job            = 'project';
-$lang->navGroup->jenkins        = 'project';
-$lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
 
 $lang->navGroup->durationestimation = 'project';
+
+$lang->navGroup->repo    = 'repo';
+$lang->navGroup->job     = 'repo';
+$lang->navGroup->jenkins = 'repo';
+$lang->navGroup->compile = 'repo';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
@@ -797,7 +799,9 @@ $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';
 $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
-$lang->icons['project']   = 'stack';
+$lang->icons['program']   = 'folder-open-o';
+$lang->icons['project']   = 'project';
+$lang->icons['execution'] = 'stack';
 $lang->icons['doc']       = 'file-text';
 $lang->icons['doclib']    = 'folder-close';
 $lang->icons['story']     = 'lightbulb';
@@ -956,6 +960,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

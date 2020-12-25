@@ -140,11 +140,11 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($projectID, $orderBy = 'id_desc', $pager = null)
+    public function getList($productID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->andWhere("CONCAT(',', PRJ, ',')")->like("%,{$projectID},%")
+            ->beginIF($productID)->andWhere("CONCAT(',', product, ',')")->like("%,{$productID},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
 
@@ -195,7 +195,7 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
-            ->join('PRJ', ',')
+            ->join('product', ',')
             ->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -237,7 +237,7 @@ class repoModel extends model
             ->setDefault('prefix', $repo->prefix)
             ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
-            ->join('PRJ', ',')
+            ->join('product', ',')
             ->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -282,11 +282,11 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getRepoPairs($projectID)
+    public function getRepoPairs($productID = 0)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(',', PRJ, ',')")->like("%,{$projectID},%")
+            ->beginIF($productID)->andWhere("CONCAT(',', product, ',')")->like("%,{$productID},%")->fi()
             ->fetchAll();
 
         $repoPairs = array();
