@@ -195,6 +195,8 @@ $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';
 $lang->program->createStakeholder    = 'Create Stakeholder';
 $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
+$lang->program->stakeholderType      = 'Stakeholder type';
+$lang->program->isStakeholderKey     = 'Key stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
 $lang->program->PGMParentBudget      = "Parent program budget：%s";
@@ -203,6 +205,9 @@ $lang->program->PGMBeginLetterParent = "Parent begin date: %s, begin date should
 $lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 $lang->program->PGMBeginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
 $lang->program->PGMEndLetterChild    = "Child latest end: %s, parent end date >= child latest end date.";
+
+$lang->program->stakeholderTypeList['inside']  = 'Inside';
+$lang->program->stakeholderTypeList['outside'] = 'Outside';
 
 /* Fields. */
 $lang->program->PGMName      = 'Name';
