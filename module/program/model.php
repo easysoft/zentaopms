@@ -1552,6 +1552,7 @@ class programModel extends model
                     if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
                     if($project->status == 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
                     if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
+
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
@@ -1560,9 +1561,11 @@ class programModel extends model
                     if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
                     echo "</ul>";
                     echo "</div>";
+
                     common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
                     common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
+
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
