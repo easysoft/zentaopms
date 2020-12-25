@@ -51,9 +51,6 @@
             <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
-            <?php if($canOrder):?>
-            <th class='w-70px sort-default' rowspan="2"><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
-            <?php endif;?>
             <th class='c-actions w-60px' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
@@ -96,11 +93,11 @@
             <td><?php echo $product->closedBugs;?></td>
             <td><?php echo $product->releases;?></td>
             <td><?php echo $product->plans;?></td>
-            <?php if($canOrder):?>
-            <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
-            <?php endif;?>
             <td class='c-actions'>
               <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
+              <?php if($canOrder):?>
+              <span class='c-actions sort-handler'><i class="icon icon-move"></i></span>
+              <?php endif;?>
             </td>
           </tr>
         <?php endforeach;?>

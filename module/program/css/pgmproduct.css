@@ -1,1 +1,2 @@
 .main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
+tbody.sortable > tr > td > span.sort-handler {color: #999;}
