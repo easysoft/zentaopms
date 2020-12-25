@@ -28,7 +28,7 @@ class repo extends control
         }
 
         $this->scm = $this->app->loadClass('scm');
-        $this->repos = $this->repo->getRepoPairs($this->session->PRJ);
+        $this->repos = $this->repo->getRepoPairs();
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
@@ -54,7 +54,7 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->repoList   = $this->repo->getList($this->session->PRJ, $orderBy, $pager);
+        $this->view->repoList   = $this->repo->getList(0, $orderBy, $pager);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
@@ -90,7 +90,7 @@ class repo extends control
 
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->projects = $this->loadModel('program')->getPRJPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('noclosed');
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
@@ -129,7 +129,7 @@ class repo extends control
         $this->view->repoID   = $repoID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->projects = $this->loadModel('program')->getPRJPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('noclosed');
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);

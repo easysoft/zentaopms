@@ -2,7 +2,7 @@
 $lang->repo->common          = 'Référentiel';
 $lang->repo->browse          = 'Aff';
 $lang->repo->viewRevision    = 'Aff Modifs';
-$lang->repo->project         = 'Project';
+$lang->repo->product         = 'Product';
 $lang->repo->create          = 'Créer';
 $lang->repo->createAction    = 'Créer Ref';
 $lang->repo->maintain        = 'Liste Ref';
