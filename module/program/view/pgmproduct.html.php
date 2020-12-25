@@ -54,6 +54,7 @@
             <?php if($canOrder):?>
             <th class='w-70px sort-default' rowspan="2"><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
+            <th class='c-actions w-60px' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
@@ -98,6 +99,9 @@
             <?php if($canOrder):?>
             <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
             <?php endif;?>
+            <td class='c-actions'>
+              <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
+            </td>
           </tr>
         <?php endforeach;?>
         </tbody>
