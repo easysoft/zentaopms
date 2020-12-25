@@ -66,7 +66,7 @@ $(function()
             ulObj = this;
 
             /* Render the item of the value which is selected before the page loads.*/
-            $("input[name='accounts[]']").each(function()
+            $("input[name='realnames[]']").each(function()
             {
                 changeUsers(ulObj, this.value);
             });
