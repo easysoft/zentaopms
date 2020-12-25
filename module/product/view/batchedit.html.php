@@ -58,7 +58,7 @@
             <th class='w-200px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->product->type;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
             <th class='w-200px<?php echo zget($visibleFields, 'desc',   ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
-            <th class='w-200px<?php echo zget($visibleFields, 'acl',    ' hidden');?>'><?php echo $lang->product->acl;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'acl',    ' hidden');?>'><?php echo $lang->product->acl;?></th>
             <th class='w-80px'><?php echo $lang->product->order;?></th>
           </tr>
         </thead>
