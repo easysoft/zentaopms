@@ -32,6 +32,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th><?php echo $lang->user->realname;?></th>
+          <th class="w-100px"><?php echo $lang->program->stakeholderType;?></th>
           <th class="w-120px"><?php echo $lang->user->role;?></th>
           <th class="w-120px"><?php echo $lang->user->phone;?></th>
           <th class="w-120px"><?php echo $lang->user->qq;?></th>
@@ -46,7 +47,10 @@
           <td class='c-id'>
             <?php printf('%03d', $stakeholder->id);?>
           </td>
-          <td><?php echo $stakeholder->realname;?></td>
+          <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
+          <?php $title = $stakeholder->key ? $lang->program->isStakeholderKey : '';?>
+          <td title="<?php echo $title;?>"><?php echo $stakeholder->realname . $isKey;?></td>
+          <td title='<?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?>'><?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?></td>
           <td><?php echo zget($lang->user->roleList, $stakeholder->role);?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>

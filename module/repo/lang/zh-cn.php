@@ -2,7 +2,7 @@
 $lang->repo->common          = '代码';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
-$lang->repo->project         = '所属项目';
+$lang->repo->product         = '所属产品';
 $lang->repo->create          = '创建';
 $lang->repo->createAction    = '创建版本库';
 $lang->repo->maintain        = '版本库列表';
@@ -28,7 +28,6 @@ $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
 
-$lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = '模块';
 $lang->repo->type     = '类型';
 $lang->repo->assign   = '指派';

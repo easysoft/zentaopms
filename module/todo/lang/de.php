@@ -35,7 +35,7 @@ $lang->todo->cycle        = "Wiederkehrend";
 $lang->todo->cycleConfig  = "Wiederkehrend setzen";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
-$lang->todo->execution    = "Stage/" . $lang->executionCommon;
+$lang->todo->execution    = $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Story übertragen";
 $lang->todo->reasonList['task']  = "Aufgabe übertragen";
@@ -87,17 +87,20 @@ $lang->todo->statusList['closed'] = 'Geschlossen';
 //$lang->todo->statusList['cancel']   = 'Abgebrochen';
 //$lang->todo->statusList['postpone'] = 'Verzögert';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[1] = 'Höchste';
 $lang->todo->priList[2] = 'Hoch';
+$lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[4] = 'Niedrig';
 
-$lang->todo->typeList['custom'] = 'Eigene';
-$lang->todo->typeList['cycle']  = 'Wiederkehrend';
-$lang->todo->typeList['bug']    = 'Bug';
-$lang->todo->typeList['task']   = $lang->executionCommon . ' Aufgabe';
-$lang->todo->typeList['story']  = $lang->executionCommon . ' Story';
+$lang->todo->typeList['custom']   = 'Eigene';
+$lang->todo->typeList['cycle']    = 'Wiederkehrend';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = 'Aufgabe';
+$lang->todo->typeList['story']    = 'Story';
+$lang->todo->typeList['issue']    = 'Issue';
+$lang->todo->typeList['risk']     = 'Risk';
+$lang->todo->typeList['review']   = 'Review';
+$lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Möchten Sie diesen ToDo löschen?";
 $lang->todo->thisIsPrivate  = 'Dies ist ein privater ToDo';

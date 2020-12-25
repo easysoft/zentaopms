@@ -44,8 +44,9 @@ $lang->project->searchByName         = '输入项目名称进行检索';
 $lang->program->common             = '项目集';
 $lang->program->project            = '项目';
 $lang->program->stage              = '阶段';
+$lang->program->PM                 = '负责人';
 $lang->program->PRJName            = '项目名称';
-$lang->program->PRJModel           = '管理类型';
+$lang->program->PRJPGM             = '所属项目集';
 $lang->program->PRJCategory        = '项目类型';
 $lang->program->PRJDesc            = '项目描述';
 $lang->program->PRJCode            = '项目代号';
@@ -70,7 +71,7 @@ $lang->program->mine               = '我参与的';
 $lang->program->setPlanduration    = '设置工期';
 $lang->program->auth               = '权限控制';
 $lang->program->durationEstimation = '工作量估算';
-$lang->program->teamCount          = '投入人数';
+$lang->program->teamCount          = '人数';
 $lang->program->leftStories        = '剩余需求';
 $lang->program->leftTasks          = '剩余任务';
 $lang->program->leftBugs           = '剩余Bug';
@@ -135,7 +136,7 @@ $lang->program->endList[999] = '长期';
 
 $lang->program->noPRJ             = '暂时没有项目';
 $lang->program->accessDenied      = '您无权访问该项目！';
-$lang->program->chooseProgramType = '选择项目管理方式';
+$lang->program->chooseProgramType = '选中项目管理模型';
 $lang->program->nextStep          = '下一步';
 $lang->program->hoursUnit         = '%s工时';
 $lang->program->membersUnit       = '%s人';
@@ -194,6 +195,8 @@ $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
 $lang->program->unlinkStakeholder    = '移除干系人';
+$lang->program->stakeholderType      = '干系人类型';
+$lang->program->isStakeholderKey     = '关键干系人';
 $lang->program->importStakeholder    = '从父项目集导入';
 $lang->program->PGMManageMembers     = '项目集团队';
 $lang->program->PGMParentBudget      = "父项目集预算：%s";
@@ -203,6 +206,9 @@ $lang->program->PGMEndGreaterParent  = "父项目集的完成日期：%s，完�
 $lang->program->PGMBeginGreateChild  = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
 $lang->program->PGMEndLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 
+$lang->program->stakeholderTypeList['inside']  = '内部';
+$lang->program->stakeholderTypeList['outside'] = '外部';
+
 /* Fields. */
 $lang->program->PGMName      = '项目集名称';
 $lang->program->PGMTemplate  = '项目集模板';
@@ -210,7 +216,7 @@ $lang->program->PGMCategory  = '项目集类型';
 $lang->program->PGMDesc      = '项目集描述';
 $lang->program->PGMCopy      = '复制项目集';
 $lang->program->PGMStatus    = '状态';
-$lang->program->PGMPM        = '项目集负责人';
+$lang->program->PGMPM        = '负责人';
 $lang->program->PGMBudget    = '预算';
 $lang->program->PGMProgress  = '项目进度';
 $lang->program->PGMChildren  = '子项目集';
@@ -221,7 +227,7 @@ $lang->program->PGMLongTime  = '长期项目';
 
 $lang->program->noPGM         = '暂时没有项目集';
 $lang->program->PGMShowClosed = '显示已关闭';
-$lang->program->PGMTips       = '修改父项目集，可关联产品也会发生变化，并且变为必填，如果未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联到该项目。';
+$lang->program->PGMTips       = '选择了父项目集，则可关联该父项目集下的产品。如果项目未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联该项目。';
 $lang->program->PGMChangeTips = '修改父项目集后，项目已关联的产品会被清空，并且项目下的需求、bug等数据也会受影响，是否修改？';
 
 $lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";

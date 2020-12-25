@@ -44,8 +44,9 @@ $lang->project->searchByName         = 'Enter the project name to retrieve';
 $lang->program->common             = 'Program';
 $lang->program->project            = 'Project';
 $lang->program->stage              = 'Stage';
+$lang->program->PM                 = 'Manager';
 $lang->program->PRJName            = 'Name';
-$lang->program->PRJModel           = 'Template';
+$lang->program->PRJPGM             = 'Program';
 $lang->program->PRJCategory        = 'Category';
 $lang->program->PRJDesc            = 'Description';
 $lang->program->PRJCode            = 'Code';
@@ -135,7 +136,7 @@ $lang->program->endList[999] = 'Longtime';
 
 $lang->program->noPRJ             = 'No project.';
 $lang->program->accessDenied      = 'Access denied!';
-$lang->program->chooseProgramType = 'Select a method';
+$lang->program->chooseProgramType = 'Select the project management model';
 $lang->program->nextStep          = 'Next step';
 $lang->program->hoursUnit         = '%s hours';
 $lang->program->membersUnit       = '%s men';
@@ -194,6 +195,8 @@ $lang->program->PGMExport            = 'Export';
 $lang->program->PGMStakeholder       = 'Stakeholder';
 $lang->program->createStakeholder    = 'Create Stakeholder';
 $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
+$lang->program->stakeholderType      = 'Stakeholder type';
+$lang->program->isStakeholderKey     = 'Key stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
 $lang->program->PGMParentBudget      = "Parent program budget：%s";
@@ -203,6 +206,9 @@ $lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be 
 $lang->program->PGMBeginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
 $lang->program->PGMEndLetterChild    = "Child latest end: %s, parent end date >= child latest end date.";
 
+$lang->program->stakeholderTypeList['inside']  = 'Inside';
+$lang->program->stakeholderTypeList['outside'] = 'Outside';
+
 /* Fields. */
 $lang->program->PGMName      = 'Name';
 $lang->program->PGMTemplate  = 'Template';
@@ -210,7 +216,7 @@ $lang->program->PGMCategory  = 'Type';
 $lang->program->PGMDesc      = 'Description';
 $lang->program->PGMCopy      = 'Copy Program';
 $lang->program->PGMStatus    = 'Status';
-$lang->program->PGMPM        = 'Program manager';
+$lang->program->PGMPM        = 'Manager';
 $lang->program->PGMBudget    = 'Budget';
 $lang->program->PGMProgress  = 'Progress';
 $lang->program->PGMChildren  = 'Child';
@@ -221,7 +227,7 @@ $lang->program->PGMLongTime  = 'Long-Term';
 
 $lang->program->noPGM         = 'No program.';
 $lang->program->PGMShowClosed = 'Closed programs.';
-$lang->program->PGMTips       = 'By modifying the parent item set, the associateable product also changes and becomes required. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
+$lang->program->PGMTips       = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
 $lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";

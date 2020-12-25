@@ -49,7 +49,7 @@ class commonModel extends model
 
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
         {
-            if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') 
+            if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on')
             {
                 $session = $this->config->sessionVar . '=' . session_id();
                 header("Set-Cookie: $session; SameSite=None; Secure=true", false);
@@ -204,7 +204,7 @@ class commonModel extends model
     /**
      * Deny access.
      *
-     * @param  varchar  $module 
+     * @param  varchar  $module
      * @param  varchar  $method
      * @param  bool     $reload
      * @access public
@@ -454,28 +454,28 @@ class commonModel extends model
             {
                 /* Replace for dropdown submenu. */
                 if(isset($lang->$model->subMenu->$key))
-                {    
+                {
                     $programSubMenu = $lang->$model->subMenu->$key;
                     $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
 
                     if(!empty($subMenu))
-                    {    
+                    {
                         foreach($subMenu as $menuKey => $menu)
-                        {    
-                            $itemMenu = zget($programSubMenu, $menuKey, ''); 
+                        {
+                            $itemMenu = zget($programSubMenu, $menuKey, '');
                             $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                             $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                             $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
 
                             if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                            {    
+                            {
                                 $lang->menu->$model->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                                 break;
-                            }    
-                        }    
+                            }
+                        }
                         $lang->menu->$model->{$key}['subMenu'] = $subMenu;
-                    }    
-                } 
+                    }
+                }
             }
         }
     }
@@ -538,7 +538,6 @@ class commonModel extends model
         global $app, $lang;
 
         $lastMenu = end($lang->mainNav);
-        echo "<ul class='nav nav-default'>\n";
         foreach($lang->mainNav as $group => $nav)
         {
             $active = '';
@@ -559,8 +558,8 @@ class commonModel extends model
     public static function getRecentExecutions()
     {
         global $dbh, $lang, $app;
-        echo '<li><hr></li>';
-        echo '<li><span id="mainRecent"><i class="icon icon-menu-doc"></i> ' . $lang->recent . '</span></li>';
+        echo "<li class='divider'></li>";
+        echo '<li><span id="mainRecent"><i class="icon icon-recent"></i> ' . $lang->recent . '</span></li>';
 
         $extraWhere = empty($app->user->admin) ? ' and id in (' . $app->user->view->sprints . ') and project in (' . $app->user->view->projects . ') ' : '';
 
@@ -582,8 +581,6 @@ class commonModel extends model
             }
             if(count($executions) > 5) echo '<li onclick="getExecutions();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
         }
-
-        echo "</ul>\n";
     }
 
     /**
@@ -667,7 +664,7 @@ class commonModel extends model
                         if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
-                        if($subMenuItem->name == 'program') 
+                        if($subMenuItem->name == 'program')
                         {
                             /* Print program sub menu.*/
                             global $dbh;
@@ -781,6 +778,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
+        if($group == 'repo') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
 
@@ -1737,7 +1735,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true; 
+        if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true;
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1794,14 +1792,14 @@ EOD;
         $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-        if($program->auth == 'reset')  
+        if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            foreach($rights as $moduleKey => $methods) 
+            foreach($rights as $moduleKey => $methods)
             {
                 if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
             }
-            
+
             $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
         }
     }
@@ -2307,6 +2305,11 @@ EOD;
             $lang->menu      = $lang->product->menu;
             $lang->menuOrder = $lang->product->menuOrder;
         }
+        if($group == 'repo')
+        {
+            $lang->menu      = $lang->repo->menu;
+            $lang->menuOrder = $lang->repo->menuOrder;
+        }
         if($group == 'project')
         {
             $lang->menu = self::getProgramMainMenu($moduleName);
@@ -2322,28 +2325,28 @@ EOD;
      * @return string
      */
     public static function processMenuVars($menus)
-    {    
+    {
         global $app, $lang;
         if(empty($menus)) return;
         foreach($menus as $name => $setting)
-        {    
+        {
             $link = is_array($setting) ? $setting['link'] : $setting;
 
             if(strpos($link, "{PRODUCT}") !== false)   $link = str_replace('{PRODUCT}', $app->session->product, $link);
             if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->project, $link);
             if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->PRJ, $link);
 
-            if(is_array($setting)) 
-            {    
+            if(is_array($setting))
+            {
                 $setting['link'] = $link;
-            }    
-            else 
-            {    
+            }
+            else
+            {
                 $setting = $link;
-            }    
+            }
 
             $menus->$name = $setting;
-        }    
+        }
 
         return $menus;
     }
@@ -2396,12 +2399,12 @@ EOD;
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
-        if($program->model == 'waterfall') 
+        if($program->model == 'waterfall')
         {
             $lang->navGroup->product = 'project';
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
-        if($program->model == 'scrum') 
+        if($program->model == 'scrum')
         {
             unset($lang->stakeholder->menu->issue);
             unset($lang->stakeholder->menu->plan);

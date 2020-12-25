@@ -21,7 +21,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->methodName != 'computeburn' && $this->session->PRJ)
+        if(!in_array($this->methodName, array('computeburn', 'ajaxgetrecentexecutions')) && $this->session->PRJ)
         {
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
@@ -1077,12 +1077,14 @@ class project extends control
      * @param string $copyProjectID
      * @param int    $planID
      * @param string $confirm
+     * @param int    $PRJID
      *
      * @access public
      * @return void
      */
-    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
+    public function create($productID = '', $projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no', $PRJID = 0)
     {
+        if($PRJID) $this->session->set('PRJ', $PRJID);
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');

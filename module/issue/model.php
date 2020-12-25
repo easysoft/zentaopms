@@ -25,6 +25,7 @@ class issueModel extends model
         $data = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
+            ->add('status', 'unconfirmed')
             ->add('PRJ', $this->session->PRJ)
             ->remove('labels,files')
             ->addIF($this->post->assignedTo, 'assignedBy', $this->app->user->account)
@@ -181,6 +182,34 @@ class issueModel extends model
     }
 
     /**
+     * Get issue pairs of a user.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  string $status all|unconfirmed|active|suspended|resolved|closed|canceled
+     * @access public
+     * @return array
+     */
+    public function getUserIssuePairs($account, $limit = 10, $status = 'all')
+    {
+        $stmt = $this->dao->select('t1.id, t1.title, t2.name as project')
+            ->from(TABLE_ISSUE)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.PRJ = t2.id')
+            ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->limit($limit)
+            ->query();
+
+        $issues = array();
+        while($issue = $stmt->fetch())
+        {
+            $issues[$issue->id] = $issue->project . ' / ' . $issue->title;
+        }
+        return $issues;
+    }
+
+    /**
      * Update an issue.
      *
      * @param  int    $issueID
@@ -242,7 +271,7 @@ class issueModel extends model
     {
         $oldIssue = $this->getByID($issueID);
         $data = fixer::input('post')
-            ->add('closeBy', $this->app->user->account)
+            ->add('closedBy', $this->app->user->account)
             ->add('status', 'closed')
             ->get();
 

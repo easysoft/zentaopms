@@ -219,11 +219,11 @@ class program extends control
      */
     public function PGMClose($programID)
     {
-        $program = $this->program->getPGMByID($programID);
+        $this->lang->navGroup->program = 'program';
+        $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->close($programID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -237,12 +237,45 @@ class program extends control
 
         $this->view->title      = $this->lang->program->PGMClose;
         $this->view->position[] = $this->lang->program->PGMClose;
-
-        $this->view->project    = $program;
+        $this->view->project    = $this->program->getPGMByID($programID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('program', $programID);
+        $this->view->actions    = $this->action->getList('program', $programID);
 
         $this->display('project', 'close');
+    }
+
+    /**
+     * Start program.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function PGMStart($programID)
+    {
+        $this->lang->navGroup->program = 'program';
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->project->start($programID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('program', $programID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            $this->executeHooks($programID);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->project->start;
+        $this->view->position[] = $this->lang->project->start;
+        $this->view->program    = $this->program->getPGMByID($programID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->action->getList('program', $programID);
+        $this->display();
     }
 
     /**
@@ -254,11 +287,12 @@ class program extends control
      */
     public function PGMActivate($programID = 0)
     {
+        $this->lang->navGroup->program = 'program';
+        $this->loadModel('action');
         $program = $this->program->getPGMByID($programID);
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->activate($programID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -276,10 +310,9 @@ class program extends control
 
         $this->view->title      = $this->lang->program->PGMActivate;
         $this->view->position[] = $this->lang->program->PGMActivate;
-
         $this->view->program    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('program', $programID);
+        $this->view->actions    = $this->action->getList('program', $programID);
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
         $this->display();
@@ -295,11 +328,10 @@ class program extends control
     public function PGMSuspend($programID)
     {
         $this->lang->navGroup->program = 'program';
-        $program = $this->program->getPGMByID($programID);
+        $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->suspend($programID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -315,8 +347,8 @@ class program extends control
         $this->view->title      = $this->lang->project->suspend;
         $this->view->position[] = $this->lang->project->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $programID);
-        $this->view->project    = $program;
+        $this->view->actions    = $this->action->getList('program', $programID);
+        $this->view->project    = $this->program->getPGMByID($programID);
 
         $this->display('project', 'suspend');
     }
@@ -372,6 +404,14 @@ class program extends control
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
+
+        /* When browse list by status, the status column is not displayed. */
+        if($browseType != 'all')
+        {
+            $PRJStatusKey = array_search('PRJStatus', $this->config->program->datatable->defaultField);
+            unset($this->config->program->datatable->defaultField[$PRJStatusKey]);
+            unset($this->config->program->datatable->fieldList['PRJStatus']);
+        }
 
         $this->view->title      = $this->lang->program->PGMProject;
         $this->view->position[] = $this->lang->program->PGMProject;
@@ -1184,19 +1224,16 @@ class program extends control
     public function PRJStart($projectID)
     {
         $this->lang->navGroup->program = 'project';
-        $project   = $this->program->getPGMByID($projectID);
-        $projectID = $project->id;
+        $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->start($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $objectType = $project->type == 'program' ? 'program' : 'project';
-                $actionID = $this->action->create($objectType, $projectID, 'Started', $this->post->comment);
+                $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1205,9 +1242,9 @@ class program extends control
 
         $this->view->title      = $this->lang->project->start;
         $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $project;
+        $this->view->project    = $this->program->getPRJByID($projectID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions    = $this->action->getList('project', $projectID);
         $this->display();
     }
 
@@ -1221,18 +1258,16 @@ class program extends control
     public function PRJSuspend($projectID)
     {
         $this->lang->navGroup->program = 'project';
-        $project = $this->program->getPGMByID($projectID);
+        $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->suspend($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $objectType = $project->type == 'program' ? 'program' : 'project';
-                $actionID = $this->action->create($objectType, $projectID, 'Suspended', $this->post->comment);
+                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1242,8 +1277,8 @@ class program extends control
         $this->view->title      = $this->lang->project->suspend;
         $this->view->position[] = $this->lang->project->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->project    = $project;
+        $this->view->actions    = $this->action->getList('project', $projectID);
+        $this->view->project    = $this->program->getPGMByID($projectID);
 
         $this->display('project', 'suspend');
     }
@@ -1258,11 +1293,10 @@ class program extends control
     public function PRJClose($projectID)
     {
         $this->lang->navGroup->program = 'project';
-        $project = $this->program->getPGMByID($projectID);
+        $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->close($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -1277,9 +1311,9 @@ class program extends control
 
         $this->view->title      = $this->lang->project->close;
         $this->view->position[] = $this->lang->project->close;
-        $this->view->project    = $project;
+        $this->view->project    = $this->program->getPGMByID($projectID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions    = $this->action->getList('project', $projectID);
 
         $this->display('project', 'close');
     }
@@ -1294,11 +1328,11 @@ class program extends control
     public function PRJActivate($projectID)
     {
         $this->lang->navGroup->program = 'project';
+        $this->loadModel('action');
         $project = $this->program->getPRJByID($projectID);
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $changes = $this->project->activate($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -1317,10 +1351,8 @@ class program extends control
 
         $this->view->title      = $this->lang->project->activate;
         $this->view->position[] = $this->lang->project->activate;
-
-        $this->view->project    = $project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions    = $this->action->getList('project', $projectID);
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
         $this->view->project    = $project;

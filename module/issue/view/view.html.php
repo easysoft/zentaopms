@@ -36,9 +36,11 @@ foreach($issue as $field => $value)
       <?php endif; ?>
     </div>
   </div>
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('issue', 'create')) echo html::a($createLink, "<i class='icon icon-plus'></i> {$lang->issue->create}", '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div class="main-row" id="mainContent">
   <div class="main-col col-8">

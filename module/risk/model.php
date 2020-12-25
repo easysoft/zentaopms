@@ -232,28 +232,56 @@ class riskModel extends model
             ->fetchAll();
     }
 
-	/**
-	 * Get user risks.
-	 *
-	 * @param  string $browseType open|assignto|closed|suspended|canceled
-	 * @param  string $orderBy
-	 * @param  object $pager
-	 * @access public
-	 * @return array
-	 */
-	public function getUserRisks($type = 'assignedTo', $orderBy = 'id_desc', $pager)
-	{   
-		$riskList = $this->dao->select('*')->from(TABLE_RISK)
-			->where('deleted')->eq('0')
-			->andWhere($type)->eq($this->app->user->account)->fi()
+    /**
+     * Get user risks.
+     *
+     * @param  string $type    open|assignto|closed|suspended|canceled
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function getUserRisks($type = 'assignedTo', $orderBy = 'id_desc', $pager)
+    {
+        $riskList = $this->dao->select('*')->from(TABLE_RISK)
+            ->where('deleted')->eq('0')
+            ->andWhere($type)->eq($this->app->user->account)->fi()
             ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('closed,canceled')->fi()
             ->beginIF($this->app->rawMethod == 'work')->andWhere("status")->in('active,hangup')->fi()
-			->orderBy($orderBy)
-			->page($pager)
-			->fetchAll();
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
 
-		return $riskList;
-	}
+        return $riskList;
+    }
+
+    /**
+     * Get risk pairs of a user.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  string $status all|active|closed|hangup|canceled
+     * @access public
+     * @return array
+     */
+    public function getUserRiskPairs($account, $limit = 10, $status = 'all')
+    {
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
+            ->from(TABLE_RISK)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.PRJ = t2.id')
+            ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->limit($limit)
+            ->query();
+
+        $risks = array();
+        while($risk = $stmt->fetch())
+        {
+            $risks[$risk->id] = $risk->project . ' / ' . $risk->name;
+        }
+        return $risks;
+    }
 
     /**
      * Print assignedTo html

@@ -35,7 +35,7 @@ $lang->todo->cycle        = "Recur";
 $lang->todo->cycleConfig  = "Recurrence";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
-$lang->todo->execution    = "Stage/" . $lang->executionCommon;
+$lang->todo->execution    = $lang->executionCommon;
 
 $lang->todo->reasonList['story'] = "Convert to Story";
 $lang->todo->reasonList['task']  = "Convert to Task";
@@ -87,10 +87,9 @@ $lang->todo->statusList['closed'] = 'Closed';
 //$lang->todo->statusList['cancel']   = 'Cancelled';
 //$lang->todo->statusList['postpone'] = 'Delayed';
 
-$lang->todo->priList[0] = '';
-$lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[1] = 'Critical';
 $lang->todo->priList[2] = 'Important';
+$lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[4] = 'Low';
 
 $lang->todo->typeList['custom']   = 'Custom';
@@ -98,6 +97,10 @@ $lang->todo->typeList['cycle']    = 'Recur';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Task';
 $lang->todo->typeList['story']    = 'Story';
+$lang->todo->typeList['issue']    = 'Issue';
+$lang->todo->typeList['risk']     = 'Risk';
+$lang->todo->typeList['review']   = 'Review';
+$lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Do you want to delete this todo?";
 $lang->todo->thisIsPrivate  = 'This is a private todo';

@@ -1,3 +1,5 @@
+.popover-sm .popover-content {padding: 8px 10px; max-width: 228px}
+
 #copyProjectModal {padding: 0}
 #copyProjectModal {padding: 0 2px}
 #copyProjectModal > div {position: relative;}

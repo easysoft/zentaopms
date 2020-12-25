@@ -31,7 +31,15 @@ js::set('browseType', $browseType);
 </div>
 <div id='mainContent' class="main-row fade">
   <div class="main-col">
-    <form class='main-table' id='projectsForm' method='post'>
+    <?php if(empty($projectStats)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
+        <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+      </p>
+    </div>
+    <?php else:?>
+    <form class='main-table' id='projectsForm' method='post' data-ride="table">
       <?php
         include '../../common/view/datatable.html.php';
         $vars    = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
@@ -66,6 +74,7 @@ js::set('browseType', $browseType);
       </div>
       <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>
