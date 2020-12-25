@@ -19,6 +19,7 @@ $lang->productplan->view       = "Détail Plan";
 $lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs sur cette page.";
 $lang->productplan->basicInfo  = 'Infos de Base';
 $lang->productplan->batchEdit  = 'Edition par Lot';
+$lang->productplan->project    = 'Project';
 
 $lang->productplan->batchUnlink      = "Retirer par lot";
 $lang->productplan->linkStory        = "Planifier Story";
@@ -43,6 +44,8 @@ $lang->productplan->confirmUnlinkStory = "Voulez-vous détacher cette Story du P
 $lang->productplan->confirmUnlinkBug   = "Voulez-vous retirer ce bug du plan ?";
 $lang->productplan->noPlan             = "Aucun plan pour l'instant. ";
 $lang->productplan->cannotDeleteParent = 'Impossible de supprimer le plan parent';
+$lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
 $lang->productplan->product    = $lang->productCommon;
@@ -56,7 +59,7 @@ $lang->productplan->future     = 'A Définir';
 $lang->productplan->stories    = 'Story';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->project    = $lang->executionCommon;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "Plan Parent";
 $lang->productplan->parentAB   = "Parent";
 $lang->productplan->children   = "Sous-Plan";

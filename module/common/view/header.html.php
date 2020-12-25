@@ -12,8 +12,10 @@ include 'chosen.html.php';
 <?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
 <div id='menu'>
   <nav id='menuNav'>
-    <?php commonModel::printMainNav($app->rawModule);?>
-    <?php commonModel::getRecentExecutions();?>
+    <ul class='nav nav-default'>
+      <?php commonModel::printMainNav($app->rawModule);?>
+      <?php commonModel::getRecentExecutions();?>
+    </ul>
   </nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>

@@ -133,11 +133,12 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|index|';
 $lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|prjbrowse|';
+$lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',admin,';
+$lang->dividerMenu = ',admin,project,repo,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
@@ -623,20 +624,21 @@ $lang->navGroup->weekly         = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
 $lang->navGroup->design         = 'project';
-$lang->navGroup->repo           = 'project';
 $lang->navGroup->issue          = 'project';
 $lang->navGroup->risk           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
-$lang->navGroup->job            = 'project';
-$lang->navGroup->jenkins        = 'project';
-$lang->navGroup->compile        = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
 
 $lang->navGroup->durationestimation = 'project';
+
+$lang->navGroup->repo    = 'repo';
+$lang->navGroup->job     = 'repo';
+$lang->navGroup->jenkins = 'repo';
+$lang->navGroup->compile = 'repo';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
@@ -891,7 +893,6 @@ $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|pr
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
-$lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
@@ -958,6 +959,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

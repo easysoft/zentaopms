@@ -449,7 +449,7 @@ class programModel extends model
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
@@ -556,6 +556,7 @@ class programModel extends model
 
         if($action == 'pgmclose')    return $program->status != 'closed';
         if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
+        if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
 
         if($action == 'prjstart')    return $program->status == 'wait' or $program->status == 'suspended';
         if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
@@ -1545,56 +1546,37 @@ class programModel extends model
                     echo $project->hours->totalLeft;
                     break;
                 case 'PRJProgress':
-                    echo "<span class='pie-icon' data-percent='{$project->hours->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$project->hours->progress}%";
+                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88'  data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
                     break;
                 case 'actions':
-                    if($project->status == 'wait')
-                    {
-                        $method = 'PRJStart';
-                        $icon   = 'start';
-                    }
-                    if($project->status == 'doing')
-                    {
-                        $method = 'PRJClose';
-                        $icon   = 'off';
-                    }
-                    if($project->status == 'suspended')
-                    {
-                        $method = 'PRJStart';
-                        $icon   = 'start';
-                    }
-                    if($project->status == 'closed')
-                    {
-                        $method = 'PRJActivate';
-                        $icon   = 'magic';
-                    }
-                    common::printIcon('program', $method, "programID=$project->id", $project, 'list', $icon, '', 'iframe', true);
+                    if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
+                    if($project->status == 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
+                    if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title={$this->lang->more}></button>";
-                    echo "<ul class='dropdown-menu pull-right'>";
-                    common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'list', 'start', '', $project->status == 'wait' ||  $project->status == 'suspended' ? 'hidden' : 'iframe btn-action', true);
-                    common::printIcon('program', 'PRJActivate', "programID=$project->id", $project, 'list', 'magic', '', $project->status == 'closed' ? 'hidden' : 'iframe btn-action', true);
-                    common::printIcon('program', 'PRJSuspend', "programID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
-                    common::printIcon('program', 'PRJClose', "programID=$project->id", $project, 'list', 'off', '', $project->status == 'doing' ? 'hidden' : 'iframe btn-action', true);
+                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                    common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
+                    if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+                    if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
                     echo "</ul>";
                     echo "</div>";
 
-                    if(common::hasPriv('program', 'PRJEdit')) echo html::a(helper::createLink("program", "PRJEdit", "programID=$project->id"), "<i class='icon-edit'></i>", '', "class='btn' title='{$this->lang->edit}'");
-                    common::printIcon('program', 'PRJManageMembers', "programID=$project->id", $project, 'list', 'persons');
+                    common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
+                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='context-dropdown' title={$this->lang->more}></button>";
-                    echo "<ul class='dropdown-menu pull-right'>";
-                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'icon icon-menu-project', '', 'btn-action', true);
-                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID", $project, 'list', 'group', '', 'btn-action', true);
-                    if(common::hasPriv('program','PRJDelete')) common::printIcon('program', 'PRJDelete', "projectID=$project->id", $project, 'list', 'trash', 'hiddenwin', 'btn-action', true);
+                    echo "<button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project', '', 'btn-action');
+                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
+                    if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";
                     echo "</div>";
                     break;
             }
-            echo '</td>'; 
+            echo '</td>';
         }
     }
 }

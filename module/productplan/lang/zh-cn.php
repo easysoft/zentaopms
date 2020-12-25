@@ -19,6 +19,7 @@ $lang->productplan->view       = "计划详情";
 $lang->productplan->bugSummary = "本页共 <strong>%s</strong> 个Bug";
 $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量编辑';
+$lang->productplan->project    = '项目';
 
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "关联{$lang->productSRCommon}";
@@ -43,6 +44,8 @@ $lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->productSRCom
 $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->productplan->noPlan             = "暂时没有计划。";
 $lang->productplan->cannotDeleteParent = "不能删除父计划";
+$lang->productplan->selectProjects     = "请选择所属项目";
+$lang->productplan->nextStep           = "下一步";
 
 $lang->productplan->id         = '编号';
 $lang->productplan->product    = $lang->productCommon;
@@ -56,7 +59,7 @@ $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->productSRCommon}数";
 $lang->productplan->bugs       = 'Bug数';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->project    = $lang->executionCommon;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "父计划";
 $lang->productplan->parentAB   = "父";
 $lang->productplan->children   = "子计划";

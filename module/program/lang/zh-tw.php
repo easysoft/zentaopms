@@ -198,6 +198,8 @@ $lang->program->PGMExport            = '導出';
 $lang->program->PGMStakeholder       = '干係人列表';
 $lang->program->createStakeholder    = '添加干係人';
 $lang->program->unlinkStakeholder    = '移除干係人';
+$lang->program->stakeholderType      = '干係人類型';
+$lang->program->isStakeholderKey     = '關鍵干係人';
 $lang->program->importStakeholder    = '從父項目集導入';
 $lang->program->PGMManageMembers     = '項目集團隊';
 $lang->program->PGMParentBudget      = "父項目集預算：%s";
@@ -207,6 +209,9 @@ $lang->program->PGMEndGreaterParent  = "父項目集的完成日期：%s，完�
 $lang->program->PGMBeginGreateChild  = "子項目集的最小開始日期：%s，父項目集的開始日期不能大於子項目集的最小開始日期";
 $lang->program->PGMEndLetterChild    = "子項目的最大完成日期：%s，父項目的完成日期不能小於子項目的最大完成日期";
 
+$lang->program->stakeholderTypeList['inside']  = '内部';
+$lang->program->stakeholderTypeList['outside'] = '外部';
+
 /* Fields. */
 $lang->program->PGMName      = '項目集名稱';
 $lang->program->PGMTemplate  = '項目集模板';
@@ -214,7 +219,7 @@ $lang->program->PGMCategory  = '項目集類型';
 $lang->program->PGMDesc      = '項目集描述';
 $lang->program->PGMCopy      = '複製項目集';
 $lang->program->PGMStatus    = '狀態';
-$lang->program->PGMPM        = '項目集負責人';
+$lang->program->PGMPM        = '負責人';
 $lang->program->PGMBudget    = '預算';
 $lang->program->PGMProgress  = '項目進度';
 $lang->program->PGMChildren  = '子項目集';
