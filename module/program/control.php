@@ -503,6 +503,7 @@ class program extends control
     /**
      * Unlink program stakeholder.
      *
+     * @param  int    $stakeholderID
      * @param  int    $programID
      * @param  string $confirm
      * @access public
@@ -520,18 +521,48 @@ class program extends control
             $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
             $this->loadModel('user')->updateUserView($programID, 'program', array($account));
-
-            /* Update children user view. */
-            $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-            $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-            $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
-
-            if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program',  array($account));
-            if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
-            if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
+            $this->updateChildUserView($programID, $account);
 
             die(js::reload('parent'));
          }
+    }
+
+    /**
+     * Batch unlink program stakeholders.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    function batchUnlinkStakeholders($programID = 0)
+    {
+        $stakeholderIDList = $this->post->stakeholderIDList;
+        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
+
+        $this->loadModel('user')->updateUserView($programID, 'program', $account);
+        $this->updateChildUserView($programID, $account);
+
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Update children user view.
+     *
+     * @param  int    $programID
+     * @param  array  $account
+     * @access public
+     * @return void
+     */
+    function updateChildUserView($programID = 0, $account = array())
+    {
+        $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+
+        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program',  array($account));
+        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
+        if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
     }
 
     /**
