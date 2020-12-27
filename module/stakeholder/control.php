@@ -43,7 +43,7 @@ class stakeholder extends control
     {
         if($_POST)
         {
-            $stakeholderID = $this->stakeholder->create();
+            $stakeholderID = $this->stakeholder->create($programID);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -56,7 +56,7 @@ class stakeholder extends control
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
-            $response['locate'] = $programID == 0 ? $this->createLink('stakeholder', 'browse', '') : $this->createLink('program', 'createStakeholder', "programID=$programID");
+            $response['locate'] = $programID == 0 ? $this->createLink('stakeholder', 'browse', '') : $this->createLink('program', 'pgmStakeholder', "programID=$programID");
             $this->send($response);
         }
 
