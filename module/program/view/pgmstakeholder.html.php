@@ -17,7 +17,7 @@
     <?php echo html::a($this->createLink('program', 'pgmstakeholder', "programID=$programID"), '<span class="text">' . $lang->program->PGMStakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('program', 'createstakeholder', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>
+    <?php common::printLink('stakeholder', 'create', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>

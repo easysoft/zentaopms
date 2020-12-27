@@ -534,7 +534,7 @@ class program extends control
      * @access public
      * @return void
      */
-    function batchUnlinkStakeholders($programID = 0)
+    public function batchUnlinkStakeholders($programID = 0)
     {
         $stakeholderIDList = $this->post->stakeholderIDList;
         $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
@@ -554,7 +554,7 @@ class program extends control
      * @access public
      * @return void
      */
-    function updateChildUserView($programID = 0, $account = array())
+    public function updateChildUserView($programID = 0, $account = array())
     {
         $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
         $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
