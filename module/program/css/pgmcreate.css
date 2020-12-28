@@ -7,4 +7,5 @@
 #copyProjectModal a.active {border-color: #00da88; color: #00da88; background-color: #E5FFE6}
 #copyProjectModal a.active:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
 #copyProjectModal a.cancel {color: #ff5d5d}
-#budget {border-right:0px;}
+#budget {border-right: 0px;}
+.future {display: inline-block}
