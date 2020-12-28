@@ -59,11 +59,14 @@ a.showMoreImage:hover {opacity: 1;}
 .table-actions .btn{border: 1px solid #1183fb; color: #1183fb}
 .table-actions .btn:hover{background: #b3d4fc}
 
+#menuFooter{height: 50px}
+
 #userNav{float: none; margin: 0;}
 #userNav>li{text-align: center}
 #userNav>li>a{padding: 6px 6px;color: #fff; opacity: .9;margin-left: 0px}
 #userNav>li>a:hover{background: #0c64eb;}
-#userNav>li>.dropdown-menu{left: 100%; top: -300px; width: 140px;text-align: left}
-#userNav>li>.dropdown-menu .dropdown-menu{left: 100%; text-align: left}
+#userNav>li>.dropdown-menu{left: 100%; top: -300px; width: 140px;text-align: left; background: #3c495c; z-index: 999999}
+#userNav>li>.dropdown-menu a{color: #fff}
+#userNav>li>.dropdown-menu .dropdown-menu{left: 100%; text-align: left; background: #3c495c}
 #userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu{top: -60px}
 #userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
