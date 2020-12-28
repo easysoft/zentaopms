@@ -268,6 +268,7 @@ class my extends control
      * My tasks
      *
      * @param  string $type
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
