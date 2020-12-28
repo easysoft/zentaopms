@@ -1,8 +1,10 @@
 #pages {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
+[lang="en"] #pages {left: 134px}
 .page-tab {position: absolute; left: 0; bottom: 0; right: 0; top: 0; background-color: #efefef;}
 .menu-hide #pages {left: 0}
 
 #pagesBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
+[lang="en"] #pagesBar {left: 134px}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
 #bars > li {padding: 8px 5px;}
 #bars > li > a {height: 24px; color: #fff; background: #cccfd4; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
