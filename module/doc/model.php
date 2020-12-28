@@ -524,13 +524,13 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function getPrivDocs($libID = 0, $module = 0, $mode = 'normal')
+    public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
     {
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('1=1')
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-            ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+            ->beginIF($libIdList)->andWhere('lib')->in($libIdList)->fi()
             ->beginIF(strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
             ->beginIF(!empty($module) and strpos($this->config->doc->custom->showLibs, 'children') !== false)->andWhere('module')->in($module)->fi()
             ->query();
@@ -621,7 +621,6 @@ class docModel extends model
             ->add('editedDate', $now)
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
-            ->setDefault('PRJ', $this->session->PRJ)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,project,module,lib')
             ->join('groups', ',')
@@ -999,7 +998,7 @@ class docModel extends model
             if($type == 'project')
             {
                 $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
-                $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+                $orderBy = (isset($project->model) and $project->model) == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
             }
 
             $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
@@ -1137,16 +1136,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere("$type")->in(array_keys($objectList))
                 ->orderBy("`order` asc, id asc")
-                ->fetchAll('project');
-
-            if($type == 'project')
-            {
-                foreach(array_keys($objectList) as $objectID)
-                {
-                    $docLibs[] = $docLibs[$objectID];
-                    unset($docLibs[$objectID]);
-                }
-            }
+                ->fetchAll();
         }
         else
         {
@@ -1532,9 +1522,9 @@ class docModel extends model
      */
     public function getStatisticInfo()
     {
-        $libID = 0;
-        if($this->session->PRJ) $libID = $this->getLibIdListByProject($this->session->PRJ);
-        $docIdList = $this->getPrivDocs($libID);
+        $libIdList = array();
+        $libIdList = $this->getLibIdListByProject($this->session->PRJ);
+        $docIdList = $this->getPrivDocs($libIdList);
 
         $today  = date('Y-m-d');
         $lately = date('Y-m-d', strtotime('-3 day'));

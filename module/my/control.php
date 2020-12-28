@@ -134,6 +134,7 @@ class my extends control
      * @param  string $type
      * @param  int    $userID
      * @param  string $status
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -188,8 +189,8 @@ class my extends control
     }
 
     /**
-     * My stories
-
+     * My stories.
+     *
      * @param  string $type
      * @param  string $storyType
      * @param  string $orderBy
