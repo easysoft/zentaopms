@@ -1106,6 +1106,7 @@ class productModel extends model
      * @param  string $status
      * @param  int    $line
      * @param  string $storyType requirement|story
+     * @param  int    $programID
      * @access public
      * @return array
      */
