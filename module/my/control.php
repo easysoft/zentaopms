@@ -606,7 +606,7 @@ class my extends control
         {
             $this->user->updatePassword($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('my', 'profile'), 'parent.parent'));
+            die(js::closeModal('parent.parent', 'this'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
