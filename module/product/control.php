@@ -262,7 +262,10 @@ class product extends control
 
             $this->executeHooks($productID);
 
-            $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
+            $moduleName = $programID ? 'program'    : $this->moduleName;
+            $methodName = $programID ? 'pgmproduct' : 'browse';
+            $param      = $programID ? "programID=$programID" : "productID=$productID";
+            $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -306,10 +309,11 @@ class product extends control
      * @param  int       $productID
      * @param  string    $action
      * @param  string    $extra
+     * @param  int       $programID
      * @access public
      * @return void
      */
-    public function edit($productID, $action = 'edit', $extra = '')
+    public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
     {
         $this->app->loadLang('custom');
         $this->lang->product->menu = $this->lang->product->viewMenu;
@@ -333,10 +337,24 @@ class product extends control
             }
 
             $this->executeHooks($productID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "product=$productID")));
+
+            $moduleName = $programID ? 'program'    : 'product';
+            $methodName = $programID ? 'pgmproduct' : 'view';
+            $param      = $programID ? "programID=$programID" : "product=$productID";
+            $locate     = $this->createLink($moduleName, $methodName, $param);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $this->product->setMenu($this->products, $productID);
+
+        if($programID)
+        {
+            $this->app->rawModule = 'program';
+            $this->app->rawMethod = 'pgmproduct';
+            $this->lang->navGroup->program = 'program';
+            $this->loadModel('program')->setPGMViewMenu($programID);
+            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        }
 
         $product = $this->product->getById($productID);
 
@@ -377,7 +395,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function batchEdit($programID = 0)
+    public function batchEdit($programID)
     {
         $this->lang->product->switcherMenu = '';
         if($this->post->names)
@@ -394,7 +412,8 @@ class product extends control
                 }
             }
 
-            die(js::locate($this->session->productList, 'parent'));
+            $locate = $this->createLink('program', 'pgmproduct', "programID=$programID");
+            die(js::locate($locate, 'parent'));
         }
 
         $productIDList = $this->post->productIDList ? $this->post->productIDList : die(js::locate($this->session->productList, 'parent'));
@@ -413,14 +432,12 @@ class product extends control
             $appendRdUsers[$product->RD] = $product->RD;
         }
 
-        if($programID)
-        {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'pgmproduct';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setPGMViewMenu($programID);
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
-        }
+        /* Navigation remains under the program. */
+        $this->app->rawModule = 'program';
+        $this->app->rawMethod = 'pgmproduct';
+        $this->lang->navGroup->program = 'program';
+        $this->loadModel('program')->setPGMViewMenu($programID);
+        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
