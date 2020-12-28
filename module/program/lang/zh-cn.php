@@ -195,6 +195,7 @@ $lang->program->PGMExport            = '导出';
 $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
 $lang->program->unlinkStakeholder    = '移除干系人';
+$lang->program->unlink               = '移除';
 $lang->program->stakeholderType      = '干系人类型';
 $lang->program->isStakeholderKey     = '关键干系人';
 $lang->program->importStakeholder    = '从父项目集导入';

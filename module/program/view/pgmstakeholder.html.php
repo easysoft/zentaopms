@@ -72,7 +72,7 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions">
           <?php $actionLink = $this->createLink('program', 'batchUnlinkStakeholders', "programID=$programID");?>
-          <?php echo html::commonButton($lang->delete, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
+          <?php echo html::commonButton($lang->program->unlink, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
