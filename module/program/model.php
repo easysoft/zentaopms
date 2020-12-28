@@ -1302,6 +1302,7 @@ class programModel extends model
             }
         }
 
+        $parentProgram = new stdClass();
         if($project->parent)
         {
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
@@ -1342,7 +1343,7 @@ class programModel extends model
             if(empty($_POST['productName']))
             {
                 $this->app->loadLang('product');
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->product->name);
+                dao::$errors['productName'] = sprintf($this->lang->error->notempty, $this->lang->product->name);
                 return false;
             }
             else
@@ -1350,7 +1351,7 @@ class programModel extends model
                 $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
                 if(!empty($existProductName))
                 {
-                    dao::$errors[] = $this->lang->program->existProductName;
+                    dao::$errors['productName'] = $this->lang->program->existProductName;
                     return false;
                 }
             }
@@ -1401,7 +1402,7 @@ class programModel extends model
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind         = $this->post->productName ? 0 : 1;
-                $product->program      = $project->parent;
+                $product->program      = $project->parent ? current(array_filter(explode(',', $parentProgram->path))) : 0;
                 $product->storyConcept = $project->storyConcept;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
