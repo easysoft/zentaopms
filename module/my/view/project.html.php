@@ -80,7 +80,7 @@
               <ul class='dropdown-menu pull-right text-center' role='menu'>
                 <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'menu-project');?>
                 <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$project->id", $project, 'list', 'group');?>
-                <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
+                <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
               </ul>
             </div>
           </td>

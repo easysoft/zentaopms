@@ -188,8 +188,8 @@ class my extends control
     }
 
     /**
-     * My stories
-
+     * My stories.
+     *
      * @param  string $type
      * @param  string $storyType
      * @param  string $orderBy
