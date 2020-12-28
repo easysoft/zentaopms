@@ -12,6 +12,7 @@
 <?php include '../../common/view/header.html.php';
 js::set('deptID', $deptID);
 ?>
+<?php if($acl != 'open'): ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
@@ -23,13 +24,16 @@ js::set('deptID', $deptID);
     <a id="bysearchTab" class="btn btn-link querybox-toggle"><i class="icon icon-search muted"></i><?php echo $lang->personnel->search;?></a>
   </div>
 </div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
+  <?php if($acl != 'open'): ?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php echo $deptTree;?>
     </div>
   </div>
+  <?php endif;?>
   <div class="main-col">
   <?php if(!empty($personnelList)):?>
     <div id="queryBox" class="cell" data-module="accessible"></div>
@@ -66,7 +70,7 @@ js::set('deptID', $deptID);
   <?php else:?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->personnel->emptyTip;?></span>
+        <span class="text-muted"><?php echo $acl == 'open' ? $lang->personnel->openedPGMTip : $lang->personnel->emptyTip;?></span>
       </p>
     </div>
   <?php endif;?>
