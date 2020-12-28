@@ -1218,7 +1218,6 @@ class productModel extends model
             foreach($products as $product) $programKeys[] = $product->program;
             $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
-                ->andWhere('deleted')->eq('0')
                 ->fetchPairs();
 
             foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
