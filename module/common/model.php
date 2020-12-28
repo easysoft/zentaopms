@@ -276,8 +276,7 @@ class commonModel extends model
             $isGuest = $app->user->account == 'guest';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<span class='user-name'>" . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</span>';
-            echo "<span class='caret'></span>";
+            echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
             echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
@@ -288,22 +287,22 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe'") . '</li>';
-                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
                 echo "<li class='divider'></li>";
             }
 
-            echo "<li class='dropdown-submenu'>";
-            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
+            echo "<li class='dropdown-submenu theme'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-theme'></i> " . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
             foreach($app->lang->themes as $key => $value)
             {
                 echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
             }
             echo '</ul></li>';
 
-            echo "<li class='dropdown-submenu'>";
-            echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
+            echo "<li class='dropdown-submenu lang'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-lang'></i> " . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
             foreach ($app->config->langs as $key => $value)
             {
                 echo "<li " . ($app->cookie->lang == $key ? "class='selected'" : '') . "><a href='javascript:selectLang(\"$key\");'>" . $value . "</a></li>";
@@ -316,9 +315,9 @@ class commonModel extends model
             //    echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' data-icon='cog' data-width='80%'>$lang->customMenu</a></li>";
             //}
 
-            //echo '<li class="divider"></li>';
-            //commonModel::printAboutBar();
-            //echo '<li class="divider"></li>';
+            echo '<li class="divider"></li>';
+            commonModel::printAboutBar();
+            echo '<li class="divider"></li>';
             echo '<li>';
             if($isGuest)
             {
@@ -326,7 +325,7 @@ class commonModel extends model
             }
             else
             {
-                echo html::a(helper::createLink('user', 'logout'), $lang->logout);
+                echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout);
             }
             echo '</li></ul>';
         }
@@ -343,16 +342,16 @@ class commonModel extends model
     {
         global $app, $config, $lang;
         echo "<li class='dropdown-submenu'>";
-        echo "<a data-toggle='dropdown'>" . $lang->help . "</a>";
+        echo "<a data-toggle='dropdown'>" . "<i class='icon icon-help'></i> " . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
-        if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
+        //if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
 
         $manualUrl = (!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home'];
         echo '<li>' . html::a($manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
 
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
-        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
+        echo '<li>' . html::a(helper::createLink('misc', 'about'), "<i class='icon icon-about'></i> " . $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
     }
 
     /**
@@ -1714,7 +1713,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if(strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
+                if($this->session->PRJ and strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }

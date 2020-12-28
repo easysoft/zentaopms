@@ -22,9 +22,6 @@ include 'chosen.html.php';
       <div id='toolbar'>
         <div id="userMenu">
           <?php common::printSearchBox();?>
-          <ul id="userNav" class="nav nav-default">
-            <li><?php common::printUserBar();?></li>
-          </ul>
         </div>
       </div>
     </div>
