@@ -120,7 +120,11 @@
 
         /* Update tab state */
         tab.show = true;
-        lastOpenedGroup = group;
+        if(lastOpenedGroup !== group)
+        {
+            lastOpenedGroup = group;
+            updateTabUrl(group);
+        }
     }
 
     /**
@@ -225,6 +229,30 @@
         }
     }
 
+    /**
+     * Update browser url and title for the given tab
+     * @param {string} group           The group of target tab to update url
+     * @param {string|boolean} [url]   The new url of the tab
+     * @param {string|boolean} [title] The new title of the tab
+     * @return {void}
+     */
+    function updateTabUrl(group, url, title)
+    {
+        var tab = openedTabs[group];
+        if(!tab) return;
+
+        if(url) tab.pageUrl = url;
+        else url = tab.pageUrl;
+        if(title) tab.pageTitle = title;
+        else title = tab.pageTitle || tab.text;
+
+        if(lastOpenedGroup === group)
+        {
+            if(location.url !== url) history.replaceState({}, title, url);
+            document.title = title;
+        }
+    }
+
     /* Bind helper methods to global object "$.tabs" */
     $.tabs = window.tabs =
     {
@@ -234,6 +262,7 @@
         toggle:     toggleTab,
         close:      closeTab,
         reload:     reloadTab,
+        updateUrl:  updateTabUrl,
         openedTabs: openedTabs,
         groupsMap:  groupsMap
     };

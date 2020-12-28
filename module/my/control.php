@@ -459,7 +459,6 @@ class my extends control
      * My projects.
      *
      * @param  string  $status doing|wait|suspended|closed|openedbyme
-     * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
@@ -520,7 +519,12 @@ class my extends control
      * My issues.
      *
      * @access public
-     * @return void
+     * @param  string $type 
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @return void   
      */
     public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
@@ -543,6 +547,11 @@ class my extends control
      * My risks.
      *
      * @access public
+     * @param  string $type 
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @return void
      */
     public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
@@ -607,7 +616,7 @@ class my extends control
         {
             $this->user->updatePassword($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('my', 'profile'), 'parent.parent'));
+            die(js::closeModal('parent.parent', 'this'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;

@@ -445,11 +445,30 @@ class programModel extends model
      *
      * @param  int     $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getChildren($programID = 0)
     {
         return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
+    }
+
+    /**
+     * Judge whether there is an unclosed programs or projects.
+     *
+     * @param  object  $program
+     * @access public
+     * @return int
+     */
+    public function hasUnfinished($program)
+    {
+        $unfinished = $this->dao->select("count(IF(id != {$program->id}, true, null)) as count")->from(TABLE_PROJECT)
+            ->where('type')->in('program,project')
+            ->andWhere('path')->like($program->path . '%')
+            ->andWhere('status')->ne('closed')
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+
+        return $unfinished;
     }
 
     /**
@@ -792,7 +811,7 @@ class programModel extends model
         $path = '';
         if($programID)
         {
-            $program = $this->getPRJByID($programID);
+            $program = $this->getPGMByID($programID);
             $path    = $program->path;
         }
 
