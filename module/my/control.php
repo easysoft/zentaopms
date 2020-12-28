@@ -459,7 +459,6 @@ class my extends control
      * My projects.
      *
      * @param  string  $status doing|wait|suspended|closed|openedbyme
-     * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
