@@ -68,7 +68,7 @@
               <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
-              <?php if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);?>
+              <?php if($project->status != 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>

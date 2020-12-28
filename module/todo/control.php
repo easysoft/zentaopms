@@ -24,6 +24,7 @@ class todo extends control
         $this->loadModel('task');
         $this->loadModel('bug');
         $this->loadModel('my')->setMenu();
+        if(!isset($this->config->qcVersion)) unset($this->lang->todo->typeList['review']);
     }
 
     /**
@@ -545,10 +546,15 @@ class todo extends control
                 ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, bugs, tasks and times. */
-            $users    = $this->loadModel('user')->getPairs('noletter');
-            $bugs     = $this->loadModel('bug')->getUserBugPairs($account);
-            $tasks    = $this->loadModel('task')->getUserTaskPairs($account);
-            $times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+            $users     = $this->loadModel('user')->getPairs('noletter');
+            $bugs      = $this->loadModel('bug')->getUserBugPairs($account);
+            $stories   = $this->loadModel('story')->getUserStoryPairs($account, 100, 'story');
+            $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
+            $issues    = $this->loadModel('issue')->getUserIssuePairs($account);
+            $risks     = $this->loadModel('risk')->getUserRiskPairs($account);
+            $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
+            if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
+            $times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
 
             foreach($todos as $todo)
             {
@@ -556,10 +562,17 @@ class todo extends control
                 $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
                 $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
 
-                if(isset($users[$todo->account]))               $todo->account = $users[$todo->account];
-                if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if(isset($todoLang->typeList[$todo->type]))     $todo->type    = $todoLang->typeList[$todo->type];
+                $type = $todo->type;
+                if(isset($users[$todo->account])) $todo->account = $users[$todo->account];
+                if($type == 'bug')                $todo->name    = isset($bugs[$todo->idvalue])    ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'story')              $todo->name    = isset($stories[$todo->idvalue]) ? $stories[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'task')               $todo->name    = isset($tasks[$todo->idvalue])   ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'issue')              $todo->name    = isset($issues[$todo->idvalue])  ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'risk')               $todo->name    = isset($risks[$todo->idvalue])     ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->idvalue]) ? $testTasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->idvalue]) ? $reviews[$todo->idvalue] . "(#$todo->idvalue)" : '';
+
+                if(isset($todoLang->typeList[$type]))           $todo->type    = $todoLang->typeList[$type];
                 if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
                 if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];
                 if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
