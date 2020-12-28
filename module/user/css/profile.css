@@ -1,8 +1,10 @@
 .col-6{width:50% !important;}
 .col-md-6{width:49% !important;}
-.cell{height:440px;}
+.cell{height:520px;}
 .cell .divider{ display: block; width: 1px; height: 340px; background-color: rgba(0,0,0,.05); float: left;}
 .main-header{margin-bottom:20px;}
+.info-title{margin: 5px 10px; font-size: 14px; font-weight: bold; border-left: 3px solid #006af1; padding-left: 10px;}
+.right-info{padding-top: 30px;}
 .dl-horizontal{margin:0px;}
 .divider{border-left:1px solid #e5e5e5;}
 
