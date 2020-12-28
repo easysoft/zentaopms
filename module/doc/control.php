@@ -27,6 +27,8 @@ class doc extends control
         $this->loadModel('project');
         $this->from      = $this->cookie->from ? $this->cookie->from : 'doc';
         $this->productID = $this->cookie->product ? $this->cookie->product : '0';
+        $this->projectID = $this->session->PRJ;
+        if(!$this->projectID) $this->lang->navGroup->doc = 'doc';
     }
 
     /**
@@ -60,7 +62,7 @@ class doc extends control
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->doingProjects    = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'undone', 5);
+        $this->view->doingProjects    = $this->loadModel('project')->getExecutionsByProject($this->projectID, 'undone', 5);
 
         $this->display();
     }
