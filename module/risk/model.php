@@ -264,7 +264,7 @@ class riskModel extends model
      * @access public
      * @return array
      */
-    public function getUserRiskPairs($account, $limit = 10, $status = 'all')
+    public function getUserRiskPairs($account, $limit = 0, $status = 'all')
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_RISK)->alias('t1')
@@ -272,7 +272,7 @@ class riskModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->limit($limit)
+            ->beginIF($limit)->limit($limit)->fi()
             ->query();
 
         $risks = array();
