@@ -271,9 +271,17 @@
         var defaultOpenUrl = window.defaultOpen;
         if(!defaultOpenUrl)
         {
-            defaultOpenUrl = $.cookie('open-in-tab');
-            if(defaultOpenUrl) $.cookie('open-in-tab', null);
+            if(location.hash.indexOf('#open=') === 0)
+            {
+                defaultOpenUrl = decodeURIComponent(location.hash.substr(6));
+            }
+            if(!defaultOpenUrl)
+            {
+                defaultOpenUrl = $.cookie('open-in-tab');
+                if(defaultOpenUrl) $.cookie('open-in-tab', null);
+            }
         }
+
         if(defaultOpenUrl) openTab(defaultOpenUrl);
         else openTab(defaultTabGroup);
     });
