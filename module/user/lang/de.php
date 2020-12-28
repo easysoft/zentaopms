@@ -78,6 +78,7 @@ $lang->user->asGuest       = "Gast";
 $lang->user->goback        = "Zurück";
 $lang->user->deleted       = '(Gelöscht)';
 $lang->user->search        = 'Suche';
+$lang->user->else          = 'Else';
 
 $lang->user->saveTemplate          = 'Save as Template';
 $lang->user->setPublic             = 'Set as Public Template';
