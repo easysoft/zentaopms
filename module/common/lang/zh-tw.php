@@ -28,7 +28,7 @@ $lang->login            = '登錄';
 $lang->help             = '幫助';
 $lang->aboutZenTao      = '關於禪道';
 $lang->profile          = '個人檔案';
-$lang->changePassword   = '更改密碼';
+$lang->changePassword   = '修改密碼';
 $lang->runInfo          = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 $lang->agreement        = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 $lang->designedByAIUX   = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾體驗</strong></a>";

@@ -78,6 +78,7 @@ $lang->user->asGuest       = "Invité";
 $lang->user->goback        = "Retour";
 $lang->user->deleted       = '(Supprimé)';
 $lang->user->search        = 'Recherche';
+$lang->user->else          = 'Else';
 
 $lang->user->saveTemplate          = 'Sauver comme Modèle';
 $lang->user->setPublic             = 'Définir comme Modèle Public';

@@ -78,6 +78,7 @@ $lang->user->asGuest       = "Khách vãng lai";
 $lang->user->goback        = "Trở lại";
 $lang->user->deleted       = '(Xóa)';
 $lang->user->search        = 'Tìm kiếm';
+$lang->user->else          = 'Else';
 
 $lang->user->saveTemplate          = 'Lưu thành mẫu';
 $lang->user->setPublic             = 'Thiết lập thành mẫu công khai';

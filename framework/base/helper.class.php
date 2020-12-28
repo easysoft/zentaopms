@@ -60,7 +60,7 @@ class baseHelper
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0, $removePRJ = false)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
@@ -97,7 +97,7 @@ class baseHelper
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -113,7 +113,7 @@ class baseHelper
             $link .= '.' . $viewType;
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -125,7 +125,7 @@ class baseHelper
         {
             $link .= $config->default->method . '.' . $viewType; 
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -137,7 +137,7 @@ class baseHelper
         {
             $link .= $moduleName . '/';
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
+            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -147,7 +147,7 @@ class baseHelper
          */
         $link .= $moduleName . '.' . $viewType;
         $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName);
+        return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
     }
 
     /**
@@ -164,11 +164,11 @@ class baseHelper
      *  @access public
      *  @return string
      */
-    public static function processPRJParam($link, $PRJID = '', $onlybody = false, $moduleName = '')
+    public static function processPRJParam($link, $PRJID = '', $onlybody = false, $moduleName = '', $removePRJ = false)
     {
         global $config, $lang;
 
-        if(!$PRJID) return $link;
+        if(!$PRJID || $removePRJ) return $link;
         $isProject = (zget($lang->navGroup, $moduleName) == 'project');
         if(!$isProject) return $link;
 

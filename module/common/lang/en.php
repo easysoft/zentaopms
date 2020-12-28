@@ -632,13 +632,12 @@ $lang->navGroup->nc             = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
+$lang->navGroup->repo           = 'project';
+$lang->navGroup->job            = 'project';
+$lang->navGroup->jenkins        = 'project';
+$lang->navGroup->compile        = 'project';
 
 $lang->navGroup->durationestimation = 'project';
-
-$lang->navGroup->repo    = 'repo';
-$lang->navGroup->job     = 'repo';
-$lang->navGroup->jenkins = 'repo';
-$lang->navGroup->compile = 'repo';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';

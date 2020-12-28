@@ -283,12 +283,12 @@ class commonModel extends model
             if(!$isGuest)
             {
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile') . "' class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile'), $lang->profile) . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
                 echo "<li class='divider'></li>";
@@ -577,7 +577,7 @@ class commonModel extends model
             $item->moduleName = $currentModule;
             $item->methodName = $currentMethod;
             $item->vars       = $vars;
-            $item->url        = helper::createLink($currentModule, $currentMethod, $vars);
+            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
 
             $items[] = $item;
 

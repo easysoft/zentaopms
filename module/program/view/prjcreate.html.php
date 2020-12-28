@@ -51,7 +51,7 @@
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <?php echo html::number('budget', '', "class='form-control' min='0.00' step='0.01'" . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'wanyuan' : $parentProgram->budgetUnit, "class='form-control'");?>
             </div>

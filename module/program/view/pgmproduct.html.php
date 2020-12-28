@@ -31,7 +31,7 @@
   <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$program->id");?>'>
-      <?php $canOrder = common::hasPriv('product', 'updataOrder');?>
+      <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-fixed">
         <?php $vars = "programID=$program->id&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
