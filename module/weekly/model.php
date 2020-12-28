@@ -372,6 +372,7 @@ class weeklyModel extends model
             $fullDays   = $this->loadModel('holiday')->getActualWorkingDays($task->estStarted, $task->deadline);
             $passedDays = $this->loadModel('holiday')->getActualWorkingDays($task->estStarted, $sunday);
 
+            if(empty($fullDays) or empty($passedDays) or empty($task->estimate)) continue;
             $PV += count($passedDays) * $task->estimate / count($fullDays);
         }
 
