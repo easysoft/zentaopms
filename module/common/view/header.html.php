@@ -10,20 +10,6 @@ include 'chosen.html.php';
 <?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
 <?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
 <?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
-<div id='menu'>
-  <nav id='menuNav'>
-    <ul class='nav nav-default'>
-      <?php commonModel::printMainNav($app->rawModule);?>
-      <?php commonModel::getRecentExecutions();?>
-    </ul>
-  </nav>
-  <div id='menuFooter'>
-    <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
-  </div>
-  <div class="table-col col-right" id="moreExecution">
-    <div class="list-group" id="executionList"></div>
-  </div>
-</div>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
