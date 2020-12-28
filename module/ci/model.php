@@ -17,10 +17,17 @@ class ciModel extends model
      */
     public function setMenu()
     {
-        $repoID = $this->session->repoID;
+        $repoID     = $this->session->repoID;
+        $projectID  = $this->session->PRJ;
         $moduleName = $this->app->getModuleName();
         foreach($this->lang->{$moduleName}->menu as $key => $menu) common::setMenuVars($this->lang->{$moduleName}->menu, $key, $repoID);
         $this->lang->{$moduleName}->menuOrder = $this->lang->ci->menuOrder;
+        if(!$projectID) 
+        {
+            $this->lang->navGroup->jenkins = 'repo';
+            $this->lang->navGroup->job     = 'repo';
+            $this->lang->noMenuModule[]    = 'job';
+        }
     }
 
     /**

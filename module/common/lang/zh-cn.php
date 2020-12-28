@@ -632,13 +632,12 @@ $lang->navGroup->nc             = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
+$lang->navGroup->repo           = 'project';
+$lang->navGroup->job            = 'project';
+$lang->navGroup->jenkins        = 'project';
+$lang->navGroup->compile        = 'project';
 
 $lang->navGroup->durationestimation = 'project';
-
-$lang->navGroup->repo    = 'repo';
-$lang->navGroup->job     = 'repo';
-$lang->navGroup->jenkins = 'repo';
-$lang->navGroup->compile = 'repo';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
@@ -893,6 +892,7 @@ $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|pr
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->issue          = '问题|issue|browse|';
@@ -959,6 +959,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 
 include (dirname(__FILE__) . '/menuOrder.php');

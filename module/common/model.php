@@ -577,7 +577,7 @@ class commonModel extends model
             $item->moduleName = $currentModule;
             $item->methodName = $currentMethod;
             $item->vars       = $vars;
-            $item->url        = helper::createLink($currentModule, $currentMethod, $vars);
+            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
 
             $items[] = $item;
 
