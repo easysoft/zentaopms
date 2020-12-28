@@ -36,6 +36,7 @@ class stakeholder extends control
     /**  
      * Create a stakeholder.
      *
+     * @param  int programID
      * @access public
      * @return void
      */
@@ -69,16 +70,15 @@ class stakeholder extends control
         else
         {
             $this->loadModel('program');
-            $this->app->moduleName = 'program';
-            $this->app->methodName = 'createstakeholder';
+            $this->app->rawModule = 'program';
+            $this->app->rawMethod = 'pgmstakeholder';
             $this->lang->navGroup->program = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);
 
             $this->view->title      = $this->lang->program->createStakeholder;
             $this->view->position[] = $this->lang->program->createStakeholder;
-
-            $this->view->members = $this->program->getPRJTeamMemberPairs($programID);
+            $this->view->members    = $this->program->getPRJTeamMemberPairs($programID);
         }
 
         $this->view->companys  = $this->loadModel('company')->getOutsideCompanies();
