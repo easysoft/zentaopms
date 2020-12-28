@@ -205,6 +205,7 @@ $lang->program->PGMBeginLetterParent = "Parent begin date: %s, begin date should
 $lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 $lang->program->PGMBeginGreateChild  = "Child earliest begin: %s, parent begin date <= child earliest begin date.";
 $lang->program->PGMEndLetterChild    = "Child latest end: %s, parent end date >= child latest end date.";
+$lang->program->PGMCloseErrorMessage = 'There are subprograms or projects that are not closed';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';

@@ -221,9 +221,14 @@ class program extends control
     {
         $this->lang->navGroup->program = 'program';
         $this->loadModel('action');
+        $program = $this->program->getPGMByID($programID);
 
         if(!empty($_POST))
         {
+            /* Only when all subprograms and subprojects are closed can the program be closed. */
+            $hasUnfinished = $this->program->hasUnfinished($program);
+            if($hasUnfinished) die(js::error($this->lang->program->PGMCloseErrorMessage));
+
             $changes = $this->project->close($programID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -232,12 +237,14 @@ class program extends control
                 $actionID = $this->action->create('program', $programID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($programID);
             die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->lang->program->PGMClose;
         $this->view->position[] = $this->lang->program->PGMClose;
-        $this->view->project    = $this->program->getPGMByID($programID);
+        $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
 
@@ -356,8 +363,8 @@ class program extends control
     /**
      * Delete a program.
      *
-     * @param  int     $projectID
-     * @param  varchar $confirm
+     * @param  int    $projectID
+     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
@@ -1257,6 +1264,7 @@ class program extends control
     {
         $this->lang->navGroup->program = 'project';
         $this->loadModel('action');
+        $project = $this->program->getPRJByID($projectID);
 
         if(!empty($_POST))
         {
@@ -1268,13 +1276,37 @@ class program extends control
                 $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            /* Start all superior programs. */
+            if($project->parent)
+            {
+                $path = explode(',', $project->path);
+                $path = array_filter($path);
+                foreach($path as $programID)
+                {
+                    if($programID == $projectID) continue;
+                    $program = $this->program->getPGMByID($programID);
+                    if($program->status == 'wait' || $program->status == 'suspended')
+                    {
+                        $changes = $this->project->start($programID);
+                        if(dao::isError()) die(js::error(dao::getError()));
+
+                        if($this->post->comment != '' or !empty($changes))
+                        {
+                            $actionID = $this->action->create('program', $programID, 'Started', $this->post->comment);
+                            $this->action->logHistory($actionID, $changes);
+                        }
+                    }
+                }
+            }
+
             $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->lang->project->start;
         $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $this->program->getPRJByID($projectID);
+        $this->view->project    = $project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('project', $projectID);
         $this->display();

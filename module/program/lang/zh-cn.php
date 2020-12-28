@@ -205,6 +205,7 @@ $lang->program->PGMBeginLetterParent = "父项目集的开始日期：%s，开�
 $lang->program->PGMEndGreaterParent  = "父项目集的完成日期：%s，完成日期不能大于父项目集的完成日期";
 $lang->program->PGMBeginGreateChild  = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
 $lang->program->PGMEndLetterChild    = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
+$lang->program->PGMCloseErrorMessage = '存在子项目集或项目为未关闭状态';
 
 $lang->program->stakeholderTypeList['inside']  = '内部';
 $lang->program->stakeholderTypeList['outside'] = '外部';

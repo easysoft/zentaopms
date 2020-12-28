@@ -22,6 +22,7 @@ $lang->program->PRJManageView        = '項目維護視野';
 $lang->program->PRJManagePriv        = '項目維護權限';
 $lang->program->PRJManageMembers     = '項目團隊';
 $lang->program->export               = '導出';
+$lang->program->addProduct           = '新建產品';
 $lang->program->PRJManageGroupMember = '維護分組用戶';
 $lang->program->PRJModuleSetting     = '列表設置';
 $lang->program->PRJModuleOpen        = '顯示項目集名';
@@ -29,18 +30,15 @@ $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '項目排序';
 $lang->program->PRJWhitelist         = '項目白名單';
 $lang->program->PRJAddWhitelist      = '項目添加白名單';
+$lang->program->PRJStoryConcept      = '需求概念組合';
 $lang->program->unbindWhielist       = '項目刪除白名單';
 $lang->program->PRJManageProducts    = '關聯產品';
 $lang->program->view                 = '項目集詳情';
-$lang->program->copyTitle            = '請選擇一個項目來複制';
+$lang->program->copyTitle            = '請選擇要複製的項目';
 $lang->program->errorSameProducts    = '項目不能關聯多個相同的產品。';
 $lang->program->errorNoProducts      = '最少關聯一個產品';
 $lang->program->copyNoProject        = '沒有可用的項目來複制';
-$lang->program->PRJSource            = '項目來源：';
-$lang->program->PRJStandalone        = '沒有所屬項目集的項目';
-$lang->program->tips                 = '提示';
-$lang->program->setTeam              = '設置團隊';
-$lang->program->goback               = '返回項目列表';
+$lang->project->searchByName         = '輸入項目名稱進行檢索';
 
 /* Fields. */
 $lang->program->common             = '項目集';
@@ -148,7 +146,7 @@ $lang->program->scrum             = 'Scrum';
 $lang->program->waterfall         = '瀑布';
 $lang->program->waterfallTitle    = '瀑布式項目管理';
 $lang->program->cannotCreateChild = '該項目已經有實際的內容，無法直接添加子項目。您可以為當前項目創建一個父項目，然後在新的父項目下面添加子項目。';
-$lang->program->hasChildren       = '該項目集有子項目集或子項目存在，不能刪除。';
+$lang->program->hasChildren       = '該項目集有子項目集或項目存在，不能刪除。';
 $lang->program->confirmDelete     = "您確定要刪除嗎？";
 $lang->program->emptyPM           = '暫無';
 $lang->program->cannotChangeToCat = "該項目已經有實際的內容，無法修改為父項目";
@@ -156,7 +154,6 @@ $lang->program->cannotCancelCat   = "該項目下已經有子項目，無法取�
 $lang->program->parentBeginEnd    = "父項目起止時間：%s ~ %s";
 $lang->program->childLongTime     = "子項目中有長期項目，父項目也應該是長期項目";
 $lang->program->readjustTime      = '重新調整項目起止時間';
-$lang->program->afterInfo         = "項目添加成功，您現在可以進行以下操作：";
 
 $lang->program->PRJProgramTitle['0']    = '不顯示';
 $lang->program->PRJProgramTitle['base'] = '只顯示一級項目集';
@@ -208,8 +205,9 @@ $lang->program->PGMBeginLetterParent = "父項目集的開始日期：%s，開�
 $lang->program->PGMEndGreaterParent  = "父項目集的完成日期：%s，完成日期不能大於父項目集的完成日期";
 $lang->program->PGMBeginGreateChild  = "子項目集的最小開始日期：%s，父項目集的開始日期不能大於子項目集的最小開始日期";
 $lang->program->PGMEndLetterChild    = "子項目的最大完成日期：%s，父項目的完成日期不能小於子項目的最大完成日期";
+$lang->program->PGMCloseErrorMessage = '存在子項目集或項目為未關閉狀態';
 
-$lang->program->stakeholderTypeList['inside']  = '内部';
+$lang->program->stakeholderTypeList['inside']  = '內部';
 $lang->program->stakeholderTypeList['outside'] = '外部';
 
 /* Fields. */
@@ -230,7 +228,7 @@ $lang->program->PGMLongTime  = '長期項目';
 
 $lang->program->noPGM         = '暫時沒有項目集';
 $lang->program->PGMShowClosed = '顯示已關閉';
-$lang->program->PGMTips       = '修改父項目集，可關聯產品也會發生變化，並且變為必填，如果未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯到該項目。';
+$lang->program->PGMTips       = '選擇了父項目集，則可關聯該父項目集下的產品。如果項目未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯該項目。';
 $lang->program->PGMChangeTips = '修改父項目集後，項目已關聯的產品會被清空，並且項目下的需求、bug等數據也會受影響，是否修改？';
 
 $lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問，干係人可後續維護）";
