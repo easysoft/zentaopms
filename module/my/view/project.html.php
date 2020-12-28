@@ -39,7 +39,7 @@
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->program->PRJName;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJCode;?></th>
-          <th class='w-80px'><?php  echo $lang->program->PRJStatus;?></th>
+          <th class='w-80px'> <?php echo $lang->program->PRJStatus;?></th>
           <th class='w-100px'><?php echo $lang->program->begin;?></th>
           <th class='w-100px'><?php echo $lang->program->end;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>

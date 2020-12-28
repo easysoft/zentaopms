@@ -21,3 +21,5 @@ $lang->personnel->whitelist      = '白名单列表';
 $lang->personnel->addWhitelist   = '添加白名单';
 $lang->personnel->unbindWhielist = '删除白名单';
 $lang->personnel->confirmDelete  = '确认将该用户移除白名单？';
+
+$lang->personnel->openedPGMTip = '该项目集是公开状态，有项目集视图权限的人员即可访问。';

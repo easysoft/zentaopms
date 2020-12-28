@@ -21,3 +21,5 @@ $lang->personnel->whitelist      = 'Whitelist';
 $lang->personnel->addWhitelist   = 'Add Whitelist';
 $lang->personnel->unbindWhielist = 'Remove Whitelist';
 $lang->personnel->confirmDelete  = 'Confirm removal of the user from the whitelist?';
+
+$lang->personnel->openedPGMTip = 'The program is public and can be accessed by users with Program privileges.';

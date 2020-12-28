@@ -315,3 +315,40 @@
         else openTab(defaultTabGroup);
     });
 }());
+
+/* Click to show more. */
+$("#menuToggle").bind('click', function()
+{
+    $("#moreExecution").hide();
+});
+
+/* Mouse in to show more. */
+$("#executionList").mouseover(function()
+{
+    $("#moreExecution").show();
+});
+
+/* Mouse out hide more. */
+$("#executionList").mouseout(function()
+{
+    $("#moreExecution").hide();
+});
+
+/* Get recent executions. */
+function getExecutions()
+{
+    $("#moreExecution").toggle();
+    if(!$("#moreExecution").is(':hidden'))
+    {
+        $.ajax(
+        {
+            url: createLink('project', 'ajaxGetRecentExecutions'),
+            dataType: 'html',
+            type: 'post',
+            success: function(data)
+            {
+                $("#executionList").html(data);
+            }
+        })
+    }
+}

@@ -57,17 +57,15 @@ class stakeholder extends control
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
-            $response['locate'] = $programID == 0 ? $this->createLink('stakeholder', 'browse', '') : $this->createLink('program', 'pgmStakeholder', "programID=$programID");
-            $this->send($response);
+
+            $moduleName = $programID ? 'program'              : $this->moduleName;
+            $methodName = $programID ? 'pgmstakeholder'       : 'browse';
+            $param      = $programID ? "programID=$programID" : '';
+            $locate     = $this->createLink($moduleName, $methodName, $param);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($programID == 0)
-        {
-            $this->view->title      = $this->lang->stakeholder->create;
-            $this->view->position[] = $this->lang->stakeholder->create;
-            $this->view->members    = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
-        }
-        else
+        if($programID)
         {
             $this->loadModel('program');
             $this->app->rawModule = 'program';
@@ -76,13 +74,17 @@ class stakeholder extends control
             $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);
 
-            $this->view->title      = $this->lang->program->createStakeholder;
-            $this->view->position[] = $this->lang->program->createStakeholder;
-            $this->view->members    = $this->program->getPRJTeamMemberPairs($programID);
+            $this->view->members = $this->program->getPRJTeamMemberPairs($programID);
+        }
+        else
+        {
+            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
         }
 
-        $this->view->companys  = $this->loadModel('company')->getOutsideCompanies();
-        $this->view->programID = $programID;
+        $this->view->title      = $this->lang->stakeholder->create;
+        $this->view->position[] = $this->lang->stakeholder->create;
+        $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->programID  = $programID;
 
         $this->display();
     }

@@ -29,6 +29,8 @@ class personnel extends control
         $this->setProgramNavMenu($programID);
         $this->app->loadLang('user');
 
+        $program = $this->loadModel('program')->getPGMByID($programID);
+
         /* Set the pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -45,6 +47,7 @@ class personnel extends control
 
         $this->view->deptID        = $deptID;
         $this->view->programID     = $programID;
+        $this->view->acl           = $program->acl;
         $this->view->recTotal      = $recTotal;
         $this->view->recPerPage    = $recPerPage;
         $this->view->pageID        = $pageID;

@@ -40,22 +40,8 @@ class personnelModel extends model
 
         /* Determine who can be accessed based on access control. */
         $program = $this->loadModel('program')->getPGMByID($programID);
-        if($program->acl == 'open')
-        {
-            /* The program is public, and users are judged to be accessible by permission groups. */
-            $accessibleGroupID = $this->loadModel('group')->getAccessProgramGroup();
-            $personnelList = $this->dao->select('t1.account,t3.role,t3.dept,t3.realname,t3.gender,t3.id')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.group = t2.group')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account = t3.account')
-                ->where('t1.group')->in($accessibleGroupID)
-                ->andWhere('t2.module')->eq('program')
-                ->andWhere('t2.method')->eq('PGMBrowse')
-                ->beginIF($deptID > 0)->andWhere('t3.dept')->eq($deptID)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-                ->page($pager)
-                ->fetchAll('account');
-        }
-        else
+        $personnelList = array();
+        if($program->acl != 'open')
         {
             $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
                 ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
@@ -264,6 +250,7 @@ class personnelModel extends model
             $acl->type       = $type;
             $acl->source     = $source;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
+            if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, $acl->account);
             $accounts[$account] = $account;
         }
 

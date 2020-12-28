@@ -71,7 +71,7 @@
           </div>
           <?php common::printIcon('program', 'PGMEdit',   "programID=$program->id", '', 'list', 'edit');?>
           <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
-          <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "pgmdelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PGMDelete}'");?>
+          <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "PGMDelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PGMDelete}'");?>
 
           <?php else:?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
@@ -93,7 +93,7 @@
             <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id", $program, 'list', 'menu-project');?>
               <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id", $program, 'list', 'group');?>
-              <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "prjdelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
+              <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
             </ul>
           </div>
           <?php endif;?>
