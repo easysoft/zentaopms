@@ -599,28 +599,7 @@ class commonModel extends model
     {
         global $dbh, $lang, $app;
         echo "<li class='divider'></li>";
-        echo '<li><span id="mainRecent"><i class="icon icon-recent"></i> ' . $lang->recent . '</span></li>';
-
-        $extraWhere = empty($app->user->admin) ? ' and id in (' . $app->user->view->sprints . ') and project in (' . $app->user->view->projects . ') ' : '';
-
-        if(empty($app->user->admin) && (empty($app->user->view->sprints) || empty($app->user->view->projects)))
-        {
-            echo "</ul>\n";
-            return false;
-        }
-
-        $executions = $dbh->query('select id,name,code,project from ' . TABLE_PROJECT . " where type in ('stage','sprint') $extraWhere and status != 'closed' and deleted = '0' order by id desc limit 6")->fetchAll();
-
-        if(!empty($executions))
-        {
-            foreach($executions as $index => $execution)
-            {
-                if($index == 5) break;
-                $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                echo '<li>' . html::a(helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project), $execution->code, '', "style='padding: 2px 8px 2px 8px;' class='main-recent-text' title='$execution->name'") . '</li>';
-            }
-            if(count($executions) > 5) echo '<li onclick="getExecutions();" id="loadMore" class="text-center"><span>' . $lang->more . '</span></li>';
-        }
+        echo '<li><span id="mainRecent" onclick="getExecutions();"><i class="icon icon-recent"></i> ' . $lang->recent . '</span></li>';
     }
 
     /**

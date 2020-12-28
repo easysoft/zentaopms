@@ -22,8 +22,8 @@ $(function()
 
     $('#createExecutionButton').on('click', function()
     {
-        var PRJID = $('#project').val();
-        var planID    = $('#planID').val();
+        var PRJID  = $('#project').val();
+        var planID = $('#planID').val();
         parent.location.href = createLink('project', 'create', 'productID=' + productID + '&projectID=&copyProjectID=&planID=' + planID, '', '', PRJID);
     });
 });

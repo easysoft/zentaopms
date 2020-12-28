@@ -3574,7 +3574,7 @@ class projectModel extends model
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->limit('5,' . $this->config->project->recentQuantity)
+            ->limit($this->config->project->recentQuantity)
             ->fetchAll();
     }
 }

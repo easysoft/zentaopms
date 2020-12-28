@@ -49,38 +49,6 @@ include 'chosen.html.php';
 
 <?php endif;?>
 <script>
-$("#menuToggle").bind('click', function()
-{
-    $("#moreExecution").hide();
-});
-
-$("#executionList").mouseover(function()
-{
-    $("#moreExecution").show();
-});
-
-$("#executionList").mouseout(function()
-{
-    $("#moreExecution").hide();
-});
-
-function getExecutions()
-{
-    $("#moreExecution").toggle();
-    if(!$("#moreExecution").is(':hidden'))
-    {
-        $.ajax(
-        {
-            url: createLink('project', 'ajaxGetRecentExecutions'),
-            dataType: 'html',
-            type: 'post',
-            success: function(data)
-            {
-                $("#executionList").html(data);
-            }
-        })
-    }
-}
 adjustMenuWidth();
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >

@@ -334,6 +334,7 @@ class issueModel extends model
             $issue['createdBy']   = $this->app->user->account;
             $issue['createdDate'] = $now;
             $issue['PRJ']         = $this->session->PRJ;
+            $issue['status']      = 'unconfirmed';
 
             if($issue['assignedTo'])
             {

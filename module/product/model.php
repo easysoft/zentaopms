@@ -811,7 +811,7 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @access public
-     * @return void
+     * @return array
      */
     public function getProjectPairsByProduct($productID, $branch = 0)
     {
@@ -1222,6 +1222,7 @@ class productModel extends model
             foreach($products as $product) $programKeys[] = $product->program;
             $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
+                ->andWhere('deleted')->eq('0')
                 ->fetchPairs();
 
             foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
