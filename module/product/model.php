@@ -602,7 +602,7 @@ class productModel extends model
      * Batch update products.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function batchUpdate()
     {
