@@ -257,11 +257,11 @@
 
             var lang  = window.tabsLang;
             var tab   = openedTabs[group];
-            var items = [{label: lang.open, onClick: function(){showTab(group)}}];
+            var items = [{label: lang.open, disabled: tab && lastOpenedGroup === group, onClick: function(){showTab(group)}}];
             if(tab)
             {
                 items.push({label: lang.reload, onClick: function(){reloadTab(group)}});
-                items.push({label: lang.close, onClick: function(){closeTab(group)}});
+                if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
             }
             $.zui.ContextMenu.show(items, {event: event});
             event.preventDefault();
