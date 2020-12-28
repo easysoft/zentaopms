@@ -1005,10 +1005,11 @@ class projectModel extends model
     public function getExecutionIdList($projectID, $status = 'all')
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('project')->eq($projectID)
+            ->where('deleted')->eq('0')
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->in('sprint,stage')
             ->fetchPairs('id', 'id');
     }
 
@@ -1024,22 +1025,21 @@ class projectModel extends model
      */
     public function getExecutionsByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
-        if(!$projectID) return array();
-
         $project = $this->loadModel('program')->getPRJByID($projectID);
-        $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+        $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('project')->eq((int)$projectID)
+            ->where('deleted')->eq('0')
+            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->in('stage,sprint')
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if($project->model == 'waterfall')
+        if(isset($project->model) and $project->model == 'waterfall')
         {
             $executionList = array();
             $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')

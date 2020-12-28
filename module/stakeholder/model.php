@@ -102,18 +102,18 @@ class stakeholderModel extends model
         return false;
     }
 
-	/**  
+    /**
      * Batch create stakeholders for a project.
      *
      * @access public 
      * @return void
      */
     public function batchCreate() 
-    {    
+    {
         $this->loadModel('action');
         $data = (array)fixer::input('post')->get(); 
 
-		$members  = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
+        $members  = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
         $accounts = array_unique($data['accounts']);
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->PRJ)->andWhere('objectType')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->PRJ)->andWhere('objectType')->eq('project')->exec(); 

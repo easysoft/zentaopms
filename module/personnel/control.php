@@ -86,7 +86,8 @@ class personnel extends control
      * Get white list personnel.
      *
      * @param  int    $objectID
-     * @param  string $browsetype
+     * @param  string $module     personnel|program
+     * @param  string $objectType program|project|product|sprint
      * @param  string $orderby
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -97,14 +98,16 @@ class personnel extends control
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($module == 'personnel') $this->setProgramNavMenu($objectID);
+
+        /* Load lang and set session. */
         $this->app->loadLang('user');
         $this->app->session->set('whitelistBrowse', $this->app->getURI(true));
 
+        /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
-
+        /* Set back link. */
         if($module == 'program')
         {
             $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJBrowse');
@@ -113,9 +116,10 @@ class personnel extends control
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
+
         $this->view->pager      = $pager;
         $this->view->objectID   = $objectID;
-        $this->view->whitelist  = $whitelist;
+        $this->view->whitelist  = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->module     = $module;
 
@@ -128,6 +132,7 @@ class personnel extends control
      * @param  int     $objectID
      * @param  int     $deptID
      * @param  string  $objectType  program|project|product|sprint
+     * @param  string  $module
      * @access public
      * @return void
      */

@@ -21,7 +21,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if(!in_array($this->methodName, array('computeburn', 'ajaxgetrecentexecutions')) && $this->session->PRJ)
+        if(!in_array($this->methodName, array('computeburn', 'ajaxgetrecentexecutions')))
         {
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
