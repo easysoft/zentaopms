@@ -4,15 +4,18 @@ class stakeholderModel extends model
     /**  
      * Create a stakeholder.
      *
+     * @param  int programID
      * @access public
      * @return void
      */
-    public function create()
+    public function create($programID = 0)
     {
         $stakeholder = new stdclass();
         $data = fixer::input('post')
-            ->setDefault('objectType', 'project')
-            ->setDefault('objectID', $this->session->PRJ)
+            ->setIF($programID == 0, 'objectType', 'project')
+            ->setIF($programID != 0, 'objectType', 'program')
+            ->setIF($programID == 0, 'objectID', $this->session->PRJ)
+            ->setIF($programID != 0, 'objectID', $programID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())
             ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags) 
@@ -77,7 +80,7 @@ class stakeholderModel extends model
             }
         }
 
-        $stakeholder->objectType  = 'project';
+        $stakeholder->objectType  = $data->objectType;
         $stakeholder->objectID    = $data->objectID;
         $stakeholder->key         = $data->key;
         $stakeholder->from        = $data->from;
@@ -86,14 +89,14 @@ class stakeholderModel extends model
         $stakeholder->createdDate = helper::today();
 
         $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)
-            ->check('user', 'unique', "objectID = {$this->session->PRJ} and deleted = '0'")
+            ->check('user', 'unique', "objectID = {$stakeholder->objectID} and deleted = '0'")
             ->autoCheck()
             ->exec();
         $stakeholderID = $this->dao->lastInsertID();
 
         if(!dao::isError())
         {
-            $this->loadModel('user')->updateUserView($this->session->PRJ, 'project', $stakeholder->user);
+            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $stakeholder->user);
             return $stakeholderID;
         }
         return false;

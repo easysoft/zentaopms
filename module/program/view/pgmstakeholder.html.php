@@ -17,7 +17,7 @@
     <?php echo html::a($this->createLink('program', 'pgmstakeholder', "programID=$programID"), '<span class="text">' . $lang->program->PGMStakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('program', 'createstakeholder', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>
+    <?php common::printLink('stakeholder', 'create', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -27,8 +27,8 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "programID=$programID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
+            <div class='checkbox-primary check-all' title="<?php echo $this->lang->selectAll;?>"><label></label></div>
             <?php echo $lang->idAB;?>
           </th>
           <th><?php echo $lang->user->realname;?></th>
@@ -45,6 +45,7 @@
         <?php foreach($stakeholders as $stakeholder):?>
         <tr>
           <td class='c-id'>
+            <?php echo html::checkbox('stakeholderIDList', array($stakeholder->id => ''));?>
             <?php printf('%03d', $stakeholder->id);?>
           </td>
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
@@ -68,6 +69,11 @@
       </table>
       <?php if($stakeholders):?>
       <div class='table-footer'>
+        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <div class="table-actions">
+          <?php $actionLink = $this->createLink('program', 'batchUnlinkStakeholders', "programID=$programID");?>
+          <?php echo html::commonButton($lang->delete, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
+        </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
