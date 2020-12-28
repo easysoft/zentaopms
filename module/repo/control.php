@@ -27,8 +27,12 @@ class repo extends control
             die(js::locate('back'));
         }
 
-        $this->scm = $this->app->loadClass('scm');
-        $this->repos = $this->repo->getRepoPairs();
+        /* Set repo menu group. */
+        $this->projectID = $this->session->PRJ ? $this->session->PRJ : 0;
+        if(!$this->projectID) $this->lang->navGroup->repo = 'repo';
+
+        $this->scm       = $this->app->loadClass('scm');
+        $this->repos     = $this->repo->getRepoPairs($this->projectID);
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
@@ -63,7 +67,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->products   = $this->loadModel('product')->getPairs('noclosed');
+        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->display();
     }
@@ -91,7 +95,7 @@ class repo extends control
 
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products = $this->loadModel('product')->getPairs('noclosed');
+        $this->view->products = $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
@@ -130,7 +134,7 @@ class repo extends control
         $this->view->repoID   = $repoID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products = $this->loadModel('product')->getPairs('noclosed');
+        $this->view->products = $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);

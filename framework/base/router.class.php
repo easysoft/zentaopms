@@ -850,7 +850,14 @@ class baseRouter
      */
     public function setPRJ()
     {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set PRJ id into session.
+        if(isset($_GET['PRJ'])) 
+        {
+            $this->session->set('PRJ', $_GET['PRJ']); //Set PRJ id into session.
+        }
+        else
+        {
+            unset($_SESSION['PRJ']);
+        }
     }
 
     /**

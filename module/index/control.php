@@ -15,7 +15,7 @@ class index extends control
 {
     /**
      * Construct function, load project, product.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -26,18 +26,21 @@ class index extends control
 
     /**
      * The index page of whole zentao system.
-     * 
+     *
      * @access public
      * @return void
      */
-    public function index()
+    public function index($open = '')
     {
-        $this->locate($this->createLink('my', 'index'));
+
+        $this->view->open  = helper::safe64Decode($open);
+        $this->view->title = $this->lang->index->common;
+        $this->display();
     }
 
     /**
      * Just test the extension engine.
-     * 
+     *
      * @access public
      * @return void
      */

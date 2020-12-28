@@ -94,7 +94,7 @@
             <td><?php echo $product->releases;?></td>
             <td><?php echo $product->plans;?></td>
             <td class='c-actions'>
-              <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
+              <?php common::printIcon('product', 'edit', "product=$product->id&action=edit&extra=&programID=$program->id", $product, 'list', 'edit');?>
               <?php if($canOrder):?>
               <span class='c-actions sort-handler'><i class="icon icon-move"></i></span>
               <?php endif;?>

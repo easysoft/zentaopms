@@ -527,26 +527,66 @@ class commonModel extends model
      * Print the main nav.
      *
      * @param  string $moduleName
-     * @param  string $methodName
      *
      * @static
      * @access public
      * @return void
      */
-    public static function printMainNav($moduleName, $methodName = '')
+    public static function printMainNav($moduleName)
     {
-        global $app, $lang;
+        $items = common::getMainNavList($moduleName);
+        foreach($items as $item)
+        {
+            if($item == 'divider')
+            {
+                echo "<li class='divider'></li>";
+            }
+            else
+            {
+                $active = $item->active ? ' class="active"' : '';
+                echo "<li$active>" . html::a($item->url, $item->title) . '</li>';
+            }
+        }
+    }
 
-        $lastMenu = end($lang->mainNav);
+    /**
+     * Get main nav items list
+     *
+     * @param  string $moduleName
+     *
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getMainNavList($moduleName)
+    {
+        global $lang;
+
+        $items = array();
+        $lastNavItem = end($lang->mainNav);
         foreach($lang->mainNav as $group => $nav)
         {
-            $active = '';
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($moduleName != 'program' && $moduleName == $group) $active = 'active';
-            if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
-            if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
-            if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
+
+            if(!common::hasPriv($currentModule, $currentMethod)) continue;
+
+            $item = new stdClass();
+            $item->group      = $group;
+            $item->active     = zget($lang->navGroup, $moduleName, '') == $group || $moduleName != 'program' && $moduleName == $group;
+            $item->title      = $title;
+            $item->moduleName = $currentModule;
+            $item->methodName = $currentMethod;
+            $item->vars       = $vars;
+            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+
+            $items[] = $item;
+
+            if(($lastNavItem != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false)
+            {
+                $items[] = 'divider';
+            }
         }
+        return $items;
     }
 
     /**

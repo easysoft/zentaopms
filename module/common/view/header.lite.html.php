@@ -70,7 +70,7 @@ $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 </head>
-<?php if($this->cookie->hideMenu): ?>
+<?php if($this->moduleName == 'index' && $this->methodName == 'index' && $this->cookie->hideMenu): ?>
 <body class='menu-hide'>
 <?php else: ?>
 <body>

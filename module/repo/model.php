@@ -140,18 +140,33 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->beginIF($productID)->andWhere("CONCAT(',', product, ',')")->like("%,{$productID},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
+
+        /* Get products. */
+        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
         foreach($repos as $i => $repo)
         {
             $repo->acl = json_decode($repo->acl);
-            if(!$this->checkPriv($repo)) unset($repos[$i]);
+            if(!$this->checkPriv($repo)) 
+            {
+                unset($repos[$i]);
+            }
+            else
+            {
+                if($projectID)
+                {
+                    foreach($productIdList as $productID)
+                    {
+                        if(strpos(",$repo->product,", ",$productID,") === false) unset($repos[$i]);
+                    }
+                }
+            }
         }
 
         return $repos;
@@ -282,19 +297,34 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getRepoPairs($productID = 0)
+    public function getRepoPairs($projectID = 0)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->beginIF($productID)->andWhere("CONCAT(',', product, ',')")->like("%,{$productID},%")->fi()
             ->fetchAll();
+
+        /* Get products. */
+        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
         $repoPairs = array();
         foreach($repos as $repo)
         {
             $repo->acl = json_decode($repo->acl);
             $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
-            if($this->checkPriv($repo)) $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+            if($this->checkPriv($repo)) 
+            {
+                if($projectID)
+                {
+                    foreach($productIdList as $productID)
+                    {
+                        if(strpos(",$repo->product,", ",$productID,") !== false) $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+                    }
+                }
+                else
+                {
+                    $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+                }
+            }
         }
 
         return $repoPairs;

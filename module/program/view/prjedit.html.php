@@ -52,7 +52,7 @@
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($project->budget == 0 ? 'disabled' : ''));?>
+              <?php echo html::number('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' min='0.00' step='0.01'" . (strpos($requiredFields, 'budget') !== false ? ' required' : '') . ($project->budget == 0 ? 'disabled' : ''));?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $lang->program->unitList, $project->budgetUnit, "class='form-control'");?>
             </div>
