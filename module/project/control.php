@@ -1206,7 +1206,8 @@ class project extends control
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isStage       = $project->model == 'waterfall' ? true : false;
+        $this->view->isStage       = $project->model == 'waterfall' ? true    : false;
+        $this->view->iconObject    = $project->model == 'waterfall' ? 'stage' : 'sprint';
         $this->display();
     }
 
