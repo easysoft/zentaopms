@@ -32,11 +32,13 @@ js::set('defaultOpen', $open);
       <?php commonModel::getRecentExecutions();?>
     </ul>
   </nav>
-  <div id='menuFooter'>
-    <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
-  </div>
   <div class="table-col col-right" id="moreExecution">
     <div class="list-group" id="executionList"></div>
+  </div>
+  <div id='menuFooter'>
+    <ul id="userNav" class="nav">
+      <li class='dropdown dropdown-hover'><?php common::printUserBar();?></li>
+    </ul>
   </div>
 </div>
 <div id='pages'>
@@ -44,7 +46,6 @@ js::set('defaultOpen', $open);
 <div id='pagesBar'>
     <ul id='bars' class='nav nav-default'></ul>
     <div id='poweredBy'>
-      <small class='muted'><?php echo $lang->designedByAIUX;?></small> &nbsp;
       <a href='<?php echo $lang->website;?>' target='_blank'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
       <?php echo $lang->proVersion;?>
       <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
