@@ -559,9 +559,9 @@ class caselib extends control
     /**
      * Show import case.
      *
-     * @param  int        $libID 
-     * @param  int        $pagerID 
-     * @param  int        $maxImport 
+     * @param  int        $libID
+     * @param  int        $pagerID
+     * @param  int        $maxImport
      * @param  string|int $insert  0 is covered old, 1 is insert new.
      * @access public
      * @return void
