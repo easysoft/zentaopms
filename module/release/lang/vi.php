@@ -35,6 +35,7 @@ $lang->release->basicInfo = 'Thông tin cơ bản';
 $lang->release->id            = 'ID';
 $lang->release->product       = $lang->productCommon;
 $lang->release->branch        = 'Platform/Branch';
+$lang->release->project       = 'Project';
 $lang->release->build         = 'Bản dựng';
 $lang->release->name          = 'Tên';
 $lang->release->marker        = 'Cột mốc';
