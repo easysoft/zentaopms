@@ -4414,7 +4414,7 @@ class upgradeModel extends model
      * Adjust budget units and values.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function adjustBudget()
     {
