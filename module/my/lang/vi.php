@@ -29,6 +29,7 @@ $lang->my->scoreRule       = 'Quy định điểm';
 $lang->my->setStoryConcept = 'Set Story Concept';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = 'Chưa có việc nào.';
+$lang->my->noData          = 'No %s yet. ';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';

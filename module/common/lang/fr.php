@@ -739,7 +739,8 @@ $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> sur <strong>{totalPag
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = "Ce n'est pas une valeur de couleur valide";
 
-$lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='btn btn-link'><span class='label'>Upgrade</span></a>";
+$lang->globalLogo     = "<img src='{$this->config->webRoot}theme/default/images/main/zentao.png'/>";
 $lang->downNotify     = "Télécharger la notification sur le bureau";
 $lang->downloadClient = "Télécharger ZenTao Desktop";
 $lang->clientHelp     = "Aide Client";
@@ -875,7 +876,7 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program        = 'Index|program|index|';
+$lang->menu->scrum->program        = 'Index|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';

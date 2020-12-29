@@ -25,7 +25,7 @@
                 .append($link)
                 .appendTo($menuMainNav);
 
-            item.icon = $link.find('.icon').attr('class').replace('icon ', '');
+            item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
             groupsMap[item.group] = item;
 
@@ -139,7 +139,7 @@
         for(var group in openedTabs)
         {
             var tab = openedTabs[group];
-            if((!onlyShowed || tab.show) && lastShowIndex < tab.zIndex)
+            if((!onlyShowed || tab.show) && lastShowIndex < tab.zIndex && !tab.closed)
             {
                 lastShowIndex = tab.zIndex;
                 lastTab = tab;
@@ -198,6 +198,7 @@
         var tab = openedTabs[group];
         if(!tab) return;
 
+        tab.closed = true;
         hideTab(group);
         tab.$page.remove();
         tab.$bar.remove();
@@ -298,19 +299,10 @@
 
         /* Redirect or open default tab after document load */
         var defaultOpenUrl = window.defaultOpen;
-        if(!defaultOpenUrl)
+        if(!defaultOpenUrl && location.hash.indexOf('#open=') === 0)
         {
-            if(location.hash.indexOf('#open=') === 0)
-            {
-                defaultOpenUrl = decodeURIComponent(location.hash.substr(6));
-            }
-            if(!defaultOpenUrl)
-            {
-                defaultOpenUrl = $.cookie('open-in-tab');
-                if(defaultOpenUrl) $.cookie('open-in-tab', null);
-            }
+            defaultOpenUrl = decodeURIComponent(location.hash.substr(6));
         }
-
         if(defaultOpenUrl) openTab(defaultOpenUrl);
         else openTab(defaultTabGroup);
     });

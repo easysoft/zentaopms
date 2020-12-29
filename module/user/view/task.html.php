@@ -42,7 +42,7 @@
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th><?php echo $lang->task->project;?></th>
+          <th><?php echo $lang->task->execution;?></th>
           <th><?php echo $lang->task->name;?></th>
           <th class='w-70px'><?php echo $lang->task->estimateAB;?></th>
           <th class='w-70px'><?php echo $lang->task->consumedAB;?></th>

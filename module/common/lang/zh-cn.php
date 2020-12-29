@@ -139,7 +139,7 @@ $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',admin,project,doc,';
+$lang->dividerMenu = ',project,doc,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
@@ -740,7 +740,8 @@ $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</s
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
-$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='btn btn-link'><span class='label'>升级</span></a>";
+$lang->globalLogo     = "<img src='{$this->config->webRoot}theme/default/images/main/zentao.png'/>";
 $lang->downNotify     = "下载桌面提醒";
 $lang->downloadClient = "下载客户端";
 $lang->clientHelp     = "客户端使用说明";
@@ -876,7 +877,7 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program        = '仪表盘|program|index|';
+$lang->menu->scrum->program        = '仪表盘|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';

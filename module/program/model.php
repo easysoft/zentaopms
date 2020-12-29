@@ -20,7 +20,7 @@ class programModel extends model
      * Get the product associated with the program.
      *
      * @param  int     $programID
-     * @param  int     $mode       all|assign
+     * @param  string  $mode       all|assign
      * @param  string  $status     all|noclosed
      * @access public
      * @return array
@@ -61,10 +61,9 @@ class programModel extends model
     /**
      * Get program list.
      *
-     * @param  varchar $status
-     * @param  varchar $orderBy
-     * @param  object  $pager
-     * @param  bool    $includeCat
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -111,7 +110,7 @@ class programModel extends model
      * Create a program.
      *
      * @access private
-     * @return void
+     * @return int|bool
      */
     public function PGMCreate()
     {
@@ -219,7 +218,7 @@ class programModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return array
+     * @return array|bool
      */
     public function PGMUpdate($programID)
     {
@@ -314,7 +313,7 @@ class programModel extends model
      * @param  int    $programID
      * @param  bool   $active
      * @access private
-     * @return void
+     * @return string
      */
     public function getPGMCommonAction($programID = 0, $active = false)
     {
@@ -336,7 +335,7 @@ class programModel extends model
      * @param  int     $programID
      * @param  bool    $active
      * @access private
-     * @return void
+     * @return string
      */
     public function getPGMSwitcher($programID = 0, $active = false)
     {
@@ -368,7 +367,7 @@ class programModel extends model
      * Get the tree menu of program.
      *
      * @param  int    $programID
-     * @param  int    $from
+     * @param  string $from
      * @param  string $vars
      * @access public
      * @return string
@@ -426,8 +425,9 @@ class programModel extends model
     /**
      * Get top program pairs.
      *
+     * @param  string $model
      * @access public
-     * @return void
+     * @return array
      */
     public function getTopPGMPairs($model = '')
     {
@@ -474,10 +474,11 @@ class programModel extends model
     /**
      * Get stakeholders by program id.
      *
-     * @param  string $orderBy
      * @param  int     $programID
+     * @param  string  $orderBy
+     * @param  object  $paper
      * @access public
-     * @return void
+     * @return array
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
@@ -494,9 +495,8 @@ class programModel extends model
      * Get stakeholders by program id list.
      *
      * @param  string $programIdList
-     * @param  string $orderBy
      * @access public
-     * @return void
+     * @return array
      */
     public function getStakeholdersByPGMList($programIdList = 0)
     {
@@ -747,7 +747,7 @@ class programModel extends model
      *
      * @param  bool   $active
      * @access public
-     * @return void
+     * @return string
      */
     public function printPRJCommonAction($active = false)
     {
@@ -768,7 +768,7 @@ class programModel extends model
      * @param  string  $currentModule
      * @param  string  $currentMethod
      * @access public
-     * @return void
+     * @return string
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
@@ -874,7 +874,7 @@ class programModel extends model
      * @param  string    $orderBy
      * @param  int       $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getPRJInfo($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
@@ -912,8 +912,9 @@ class programModel extends model
     /**
      * Gets the top-level project name.
      *
+     * @param  int       $parentID
      * @access private
-     * @return void
+     * @return string
      */
     public function getPRJParentName($parentID = 0)
     {
@@ -929,12 +930,12 @@ class programModel extends model
     /**
      * Get project overview for block.
      *
-     * @param  varchar     $queryType byId|byStatus
-     * @param  varchar|int $param
-     * @param  varchar     $orderBy
-     * @param  int         $limit
+     * @param  string     $queryType byId|byStatus
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $limit
      * @access public
-     * @return void
+     * @return array
      */
     public function getPRJOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
     {
@@ -1005,13 +1006,13 @@ class programModel extends model
      *
      * @param  int    $programID
      * @param  string $browseType
-     * @param  string $queryID
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  int    $programTitle
+     * @param  string $programTitle
      * @param  int    $PRJMine
      * @access public
-     * @return void
+     * @return array
      */
     public function getPRJStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
     {
@@ -1055,7 +1056,7 @@ class programModel extends model
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
         }
 
         /* Get the number of project teams. */
@@ -1194,10 +1195,10 @@ class programModel extends model
     /**
      * Get project pairs by model and program.
      *
-     * @param  string $model scrum|waterfall
+     * @param  string $model all|scrum|waterfall
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getPRJPairsByModel($model = 'all', $programID = 0)
     {
@@ -1259,7 +1260,7 @@ class programModel extends model
     /**
      * Create the manage link.
      *
-     * @param  int    $project
+     * @param  object    $project
      * @access public
      * @return string
      */
@@ -1676,7 +1677,7 @@ class programModel extends model
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project', '', 'btn-action');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
-                    if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
+                    if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";
                     echo "</div>";
                     break;

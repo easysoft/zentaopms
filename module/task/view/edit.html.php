@@ -90,7 +90,7 @@
             <table class='table table-form'>
               <?php if($task->parent <= 0):?>
               <tr>
-                <th class='thWidth'><?php echo $lang->task->project;?></th>
+                <th class='thWidth'><?php echo $lang->task->execution;?></th>
                 <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php endif;?>

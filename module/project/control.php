@@ -117,8 +117,6 @@ class project extends control
 
         if(common::hasPriv('project', 'create')) $this->lang->TRActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
-        $this->project->getLimitedExecution();
-
         /* Set browse type. */
         $browseType = strtolower($status);
 
@@ -644,8 +642,6 @@ class project extends control
         $this->loadModel('story');
         $this->loadModel('user');
         $this->app->loadLang('testcase');
-
-        $this->project->getLimitedExecution();
 
         $type = strtolower($type);
         setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);

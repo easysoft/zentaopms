@@ -55,8 +55,8 @@ $lang->task->allModule           = 'Tous Modules';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
-$lang->task->program           = 'Program';
-$lang->task->project           = $lang->executionCommon;
+$lang->task->project           = 'Project';
+$lang->task->execution         = $lang->executionCommon;
 $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
 $lang->task->story             = 'Story';

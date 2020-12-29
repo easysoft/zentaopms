@@ -89,7 +89,7 @@ class personnel extends control
      * Get white list personnel.
      *
      * @param  int    $objectID
-     * @param  string $module     personnel|program
+     * @param  string $module     personnel|program|project|product
      * @param  string $objectType program|project|product|sprint
      * @param  string $orderby
      * @param  int    $recTotal

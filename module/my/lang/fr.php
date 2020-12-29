@@ -29,6 +29,7 @@ $lang->my->scoreRule       = 'Règles Point';
 $lang->my->setStoryConcept = 'Set Story Concept';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = "Je n'ai rien à faire pour l'instant.";
+$lang->my->noData          = 'No %s yet. ';
 
 $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';

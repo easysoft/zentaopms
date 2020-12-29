@@ -196,6 +196,7 @@ $lang->program->PGMStakeholder       = '干係人列表';
 $lang->program->createStakeholder    = '添加干係人';
 $lang->program->unlinkStakeholder    = '移除干係人';
 $lang->program->unlink               = '移除';
+$lang->program->confirmBatchUnlink   = "您確定要批量移除這些干係人嗎？";
 $lang->program->stakeholderType      = '干係人類型';
 $lang->program->isStakeholderKey     = '關鍵干係人';
 $lang->program->importStakeholder    = '從父項目集導入';

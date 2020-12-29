@@ -538,19 +538,29 @@ class program extends control
      * Batch unlink program stakeholders.
      *
      * @param  int    $programID
+     * @param  string $stakeholderIDList
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchUnlinkStakeholders($programID = 0)
+    public function batchUnlinkStakeholders($programID = 0, $stakeholderIDList = '', $confirm = 'no')
     {
-        $stakeholderIDList = $this->post->stakeholderIDList;
-        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
+        $stakeholderIDList = $stakeholderIDList ? $stakeholderIDList : implode(',', $this->post->stakeholderIDList);
 
-        $this->loadModel('user')->updateUserView($programID, 'program', $account);
-        $this->updateChildUserView($programID, $account);
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->program->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
+        }
+        else
+        {
+            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
+            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-        die(js::reload('parent'));
+            $this->loadModel('user')->updateUserView($programID, 'program', $account);
+            $this->updateChildUserView($programID, $account);
+
+            die(js::reload('parent'));
+        }
     }
 
     /**
@@ -674,8 +684,6 @@ class program extends control
     /**
      * Ajax get projects.
      *
-     * @param  string  $name
-     * @param  int     $copyProjectID
      * @access public
      * @return void
      */

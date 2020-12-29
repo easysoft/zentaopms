@@ -370,6 +370,8 @@ class todoModel extends model
      * @param  string $account
      * @param  string $status   all|today|thisweek|lastweek|before, or a date.
      * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return void
      */

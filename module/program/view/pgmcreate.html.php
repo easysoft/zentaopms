@@ -45,7 +45,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setAclList(this.value)");?>
+          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setParentProgram(this.value)");?>
           <td></td>
         </tr>
         <tr>

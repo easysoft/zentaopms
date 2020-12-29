@@ -6,7 +6,7 @@ class stakeholderModel extends model
      *
      * @param  int programID
      * @access public
-     * @return void
+     * @return int|bool
      */
     public function create($programID = 0)
     {

@@ -25,7 +25,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen'  onchange=setAclList(this.value)");?></td>
+          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen' onchange=setAclList(this.value)");?></td>
           <td></td><td></td>
         </tr>
         <tr>

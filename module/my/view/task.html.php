@@ -50,8 +50,8 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-project w-120px'>   <?php common::printOrderLink('program',    $orderBy, $vars, $lang->task->program);?></th>
-          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('PRJ',        $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->task->execution);?></th>
           <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -99,9 +99,9 @@
           <?php if($type != 'finishedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <?php endif;?>
-          <td class='c-hours'><?php echo $task->estimate;?></td>
-          <td class='c-hours'><?php echo $task->consumed;?></td>
-          <td class='c-hours'><?php echo $task->left;?></td>
+          <td class='c-hours'><?php echo round($task->estimate, 1);?></td>
+          <td class='c-hours'><?php echo round($task->consumed, 1);?></td>
+          <td class='c-hours'><?php echo round($task->left, 1);?></td>
           <td class='c-status'>
             <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
             <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>

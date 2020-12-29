@@ -196,6 +196,7 @@ $lang->program->PGMStakeholder       = 'Stakeholder';
 $lang->program->createStakeholder    = 'Create Stakeholder';
 $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->unlink               = 'Unlink';
+$lang->program->confirmBatchUnlink   = "Do you want to batch unlink these stakeholders?";
 $lang->program->stakeholderType      = 'Stakeholder type';
 $lang->program->isStakeholderKey     = 'Key stakeholder';
 $lang->program->importStakeholder    = 'Import program';

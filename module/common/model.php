@@ -281,8 +281,9 @@ class commonModel extends model
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
+                $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' class='iframe $noRole'" . '>';
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
@@ -561,10 +562,14 @@ class commonModel extends model
     {
         global $lang;
 
+        $menuOrder = $lang->mainNav->menuOrder;
+        ksort($menuOrder);
+
         $items = array();
-        $lastNavItem = end($lang->mainNav);
-        foreach($lang->mainNav as $group => $nav)
+        $lastItem = end($menuOrder);
+        foreach($menuOrder as $key => $group)
         {
+            $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
             if(!common::hasPriv($currentModule, $currentMethod)) continue;
@@ -580,7 +585,7 @@ class commonModel extends model
 
             $items[] = $item;
 
-            if(($lastNavItem != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false)
+            if(($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false)
             {
                 $items[] = 'divider';
             }
@@ -795,7 +800,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
-        if($group == 'repo') return;
+        if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
         if($moduleName == 'product' and ($methodName == 'setting' or $methodName == 'addwhitelist'))
@@ -976,7 +981,8 @@ class commonModel extends model
     public static function printClientLink()
     {
         global $lang;
-        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='text-primary iframe' data-width='600'") . html::a($lang->clientHelpLink, "<i class='icon-lightbulb text-success'></i>", '', "title='$lang->clientHelp' target='_blank'") . ' &nbsp; ';
+        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='btn btn-link iframe' data-width='600'");
+        echo html::a($lang->clientHelpLink, "<i class='icon-lightbulb text-success'></i>", '', "title='$lang->clientHelp' class='btn btn-link' target='_blank'");
     }
 
     /**
@@ -2331,6 +2337,16 @@ EOD;
         {
             $lang->menu      = $lang->repo->menu;
             $lang->menuOrder = $lang->repo->menuOrder;
+        }
+        if($group == 'ops')
+        {    
+            $lang->menu      = $lang->ops->menu;
+            $lang->menuOrder = $lang->ops->menuOrder;
+        }    
+        if($group == 'feedback')
+        {    
+            $lang->menu      = $lang->feedback->menu;
+            $lang->menuOrder = $lang->feedback->menuOrder;
         }
         if($group == 'project')
         {

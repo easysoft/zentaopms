@@ -1129,7 +1129,7 @@ class docModel extends model
             $projectID = $this->session->PRJ;
             $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
             if($type == 'product') $objectList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all');
-            if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, 'all', 0, true);
+            if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, $executionStatus, 0, true);
             if(empty($objectList)) return $libs;
 
             $docLibs = $this->dao->select('*')->from(TABLE_DOCLIB)

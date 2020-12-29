@@ -1,8 +1,10 @@
 #pages {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
+[lang="en"] #pages {left: 134px}
 .page-tab {position: absolute; left: 0; bottom: 0; right: 0; top: 0; background-color: #efefef;}
 .menu-hide #pages {left: 0}
 
 #pagesBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
+[lang="en"] #pagesBar {left: 134px}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
 #bars > li {padding: 8px 5px;}
 #bars > li > a {height: 24px; color: #fff; background: #cccfd4; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
@@ -11,3 +13,26 @@
 #bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
 
 .menu-hide #pagesBar {left: 40px}
+
+#userNav{float: none; margin: 0;} 
+#userNav>li{text-align: center}
+#userNav>li>a{padding: 6px 6px;color: #fff; opacity: .9;margin-left: 0px}
+#userNav>li>a:hover{background: #0c64eb;}
+#userNav>li>.dropdown-menu{left: 100%; top: -290px; width: 140px;text-align: left; background: #3c495c;}
+#userNav>li>.dropdown-menu a{color: #fff}
+#userNav>li>.dropdown-menu .dropdown-menu{left: 100%; text-align: left; background: #3c495c}
+#userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu{top: -60px}
+#userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
+#userNav li.open>a{background:#0c64eb}
+#poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0px 40px 0px 0px;}
+
+#globalSearchDiv{width:50%; float: right;}
+#globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
+#globalSearchInput {height: 28px; padding-left: 10px;}
+#globalSearchButton {height: 28px;}
+
+#globalBarLogo {width: 100%; float: right;}
+#globalBarLogo a {float: right; margin: 0px 5px;}
+#globalBarLogo img{width: 74px; float: left; margin-top: 2px;}
+
+#globalMessages .icon{font-size: 24px; color: #16a8f8;}

@@ -363,7 +363,7 @@ class issue extends control
         {
             $this->loadModel('task');
             $this->loadModel('tree');
-            $this->loadModel('project')->getLimitedExecution();
+            $this->loadModel('project');
             $projects = $this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
 
             $projectID = $this->session->project;
