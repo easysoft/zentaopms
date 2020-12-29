@@ -1,260 +1,352 @@
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
+<?php $soFar = sprintf($this->lang->report->annualData->soFar, $year);?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
-  <main id='main'>
-    <div id='mainBg' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_layout.png'?>)'></div>
+  <main id='main' style='background: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_layout_header.png'?>) top no-repeat'>
     <header id='header'>
-      <h1 class='text-holder' data-id='title'></h1>
+      <h1 class='text-holder' data-id='title'><?php echo $title;?></h1>
     </header>
-    <section id='block1'>
-      <header><h2 class='text-holder' data-id='block1.title'></h2></header>
-      <div><ul id='block1List'></ul></div>
-    </section>
-    <section id='block2'>
-      <header><h2 class='text-holder' data-id='block2.title'></h2></header>
-      <div id='block2Chart' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='70' data-color='#186bb1' data-back-color='#84cff0' data-show-tip='true'>
-        <canvas width='180' height='180' style='width: 180px; height: 180px;'></canvas>
-        <div class='progress-info'>
-          <strong><span class='text-holder' data-id='block2.dataTotal'></span><small class='text-holder' data-id='block2.unit'></small></strong>
-        </div>
-      </div>
-      <div id='block2ListWrapper'><ul id='block2List'></ul></div>
-    </section>
-    <section id='block3'>
-      <table class='table' id='block3TableHeader'>
-        <thead>
-          <tr></tr>
-        </thead>
-      </table>
-      <div class='table-wrapper'>
-        <table class='table' id='block3Table'>
-        </table>
-      </div>
-    </section>
-    <section id='block4'>
-      <header>
-        <h2 class='text-holder' data-id='block4.title'></h2>
-      </header>
-      <div class='row'>
-        <div class='col-xs-6'>
-          <div id='block4chart1' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
-            <canvas width='160' height='160' style='width: 160px; height: 160px;'></canvas>
-            <div class='progress-info'>
-              <p class='text-holder' data-id='block4.chart1.title'></p>
-              <strong><span class='text-holder' data-id='block4.chart1.total'></span><small class='text-holder' data-id='block4.chart1.unit'></small></strong>
-            </div>
-          </div>
-          <ul class='clearfix' id='block4chart1Info'>
-          </ul>
-        </div>
-        <div class='col-xs-6'>
-          <div id='block4chart2' class='progress-pie inline-block space progress-pie-160' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
-            <canvas width='160' height='160' style='width: 160px; height: 160px;'></canvas>
-            <div class='progress-info'>
-              <p class='text-holder' data-id='block4.chart2.title'></p>
-              <strong><span class='text-holder' data-id='block4.chart2.total'></span><small class='text-holder' data-id='block4.chart2.unit'></small></strong>
-            </div>
-          </div>
-          <ul class='clearfix' id='block4chart2Info'>
-          </ul>
-        </div>
-      </div>
-    </section>
-    <section id='block5'>
-      <header>
-        <h2 class='text-holder' data-id='block5.title'></h2>
-        <div id='block5Legend'></div>
-      </header>
-      <canvas id='block5Chart' width='520' height='240'></canvas>
-    </section>
     <div id='toolbar'>
       <?php echo html::select('year', $years, $year, "class='form-control'");?>
       <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-share'></i></button>
       <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
     </div>
+    <section id='baseInfo'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->baseInfo . $soFar;?></h2></header>
+      <div>
+        <ul id='infoList'>
+          <li>
+            <?php echo $userID ? $lang->report->annualData->logins : ($dept ? $lang->report->annualData->deptUsers : $lang->report->annualData->companyUsers);?>
+            <strong><?php echo $userID ? $data['logins'] : $data['users'];?></strong>
+          </li>
+          <li>
+            <?php echo $lang->report->annualData->actions;?>
+            <strong><?php echo $data['actions'];?></strong>
+          </li>
+          <li>
+            <?php echo $lang->report->annualData->consumed;?>
+            <strong><?php echo $data['consumed'];?></strong>
+          </li>
+          <li class='dropdown dropdown-hover'>
+            <?php echo $lang->report->annualData->todos;?>
+            <strong><?php echo $data['todos']->count;?></strong>
+            <ul class='dropdown-menu pull-right'>
+              <li><?php echo $lang->report->annualData->todos;?></li>
+              <li><span class='todoStatus'><?php echo $lang->report->annualData->todoStatus['all'];?></span><span><?php echo $data['todos']->count;?></span></li>
+              <li><span class='todoStatus'><?php echo $lang->report->annualData->todoStatus['undone'];?></span><span><?php echo $data['todos']->undone;?></span></li>
+              <li><span class='todoStatus'><?php echo $lang->report->annualData->todoStatus['done'];?></span><span><?php echo $data['todos']->done;?></span></li>
+            </ul>
+          </li>
+          <?php
+          $contributions = 0;
+          $maxCount      = 0;
+          $radarData     = array('product' => 0, 'project' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
+          foreach($data['contributions'] as $objectType => $objectContributions)
+          {
+              $sum = array_sum($objectContributions);
+              if($sum > $maxCount) $maxCount = $sum;
+              $contributions += $sum;
+
+              foreach($objectContributions as $actionName => $count)
+              {
+                  $radarType = isset($config->report->annualData['radar'][$objectType][$actionName]) ? $config->report->annualData['radar'][$objectType][$actionName] : 'other';
+                  $radarData[$radarType] += $count;
+              }
+          }
+          ?>
+          <?php if(!empty($dept) or !empty($userID)):?>
+          <li>
+            <?php echo $lang->report->annualData->contributions;?>
+            <strong><?php echo $contributions;?></strong>
+          </li>
+          <?php endif;?>
+        </ul>
+      </div>
+    </section>
+    <section id='actionData'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->actionData . $soFar;?></h2></header>
+      <div>
+        <ul>
+          <?php foreach($lang->report->annualData->objectTypeList as $objectType => $objectName):?>
+          <li class='dropdown dropdown-hover'>
+            <span class='name'><?php echo $objectName;?></span>
+            <span class='ratio'>
+            <?php
+            $objectContributions = isset($data['contributions'][$objectType]) ? $data['contributions'][$objectType] : array();
+            $contributionActions = zget($config->report->annualData['contributions'], $objectType, array_keys($objectContributions));
+            
+            $colors = $config->report->annualData['colors'];
+            $detail = "<li><span class='header'>{$objectName}</span></li>";
+            foreach($contributionActions as $actionName)
+            {
+                if(isset($objectContributions[$actionName]))
+                {
+                    $color = array_shift($colors);
+                    $count = $objectContributions[$actionName];
+                    $width = round(($count / $maxCount * 100), 1);
+                    echo "<span class='item' style='background-color:{$color};width:{$width}%'>{$count}</span>";
+            
+                    $detail .= "<li><span class='color' style='background-color:{$color}'></span><span class='item-name'>" . $lang->report->annualData->actionList[$actionName] . "</span><span class='count'>{$count}</span></li>";
+                }
+            }
+            ?>
+            </span>
+            <ul class='dropdown-menu'><?php echo $detail;?></ul>
+          </li>
+          <?php endforeach;?>
+        </ul>
+      </div>
+    </section>
+    <section id='radar'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->radar . $soFar;?></h2></header>
+      <div id='radarCanvas'></div>
+    </section>
+    <section id='projectData'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->projects . $soFar;?></h2></header>
+      <div>
+        <table class='table table-hover'>
+          <thead>
+            <tr>
+              <?php foreach($lang->report->annualData->projectFields as $field => $name):?>
+              <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
+              <?php endforeach?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($data['projectStat'] as $project):?>
+            <tr>
+              <?php foreach($lang->report->annualData->projectFields as $field => $name):?>
+              <td class='<?php echo "c-$field";?>'><?php echo $project->$field;?></td>
+              <?php endforeach?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id='productData'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->products . $soFar;?></h2></header>
+      <div>
+        <table class='table table-hover'>
+          <thead>
+            <tr>
+              <?php foreach($lang->report->annualData->productFields as $field => $name):?>
+              <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
+              <?php endforeach?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($data['productStat'] as $product):?>
+            <tr>
+              <?php foreach($lang->report->annualData->productFields as $field => $name):?>
+              <td class='<?php echo "c-$field";?>'><?php echo $product->$field;?></td>
+              <?php endforeach?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <?php if(empty($dept) and empty($userID)):?>
+    <section id='allStatusStat'>
+      <header><h2 class='text-holder'><?php echo $lang->report->annualData->statusStat;?></h2></header>
+      <div>
+        <div class='canvas' id='allStoryStatusCanvas'></div>
+        <div class='canvas' id='allTaskStatusCanvas'></div>
+        <div class='canvas' id='allBugStatusCanvas'></div>
+<?php
+foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
+<span class='<?php echo $objectType;?>Overview hidden'>
+<?php
+$allCount    = 0;
+$undoneCount = 0;
+foreach($objectStatusStat as $status => $count)
+{
+    $allCount += $count;
+    if($objectType == 'story' and $status != 'closed') $undoneCount += $count;
+    if($objectType == 'task' and $status != 'done' and $status != 'closed' and $status != 'cancel') $undoneCount += $count;
+    if($objectType == 'bug' and $status == 'active') $undoneCount += $count;
+}
+if($objectType == 'story') echo $lang->report->annualData->allStory;
+if($objectType == 'task')  echo $lang->report->annualData->allTask;
+if($objectType == 'bug')   echo $lang->report->annualData->allBug;
+echo ' &nbsp; ' . $allCount;
+echo '<br />';
+echo $objectType == 'bug' ? $lang->report->annualData->unresolve : $lang->report->annualData->undone;
+echo ' &nbsp; ' . $undoneCount;
+?>
+</span>
+<?php endforeach;?>
+      </div>
+    </section>
+    <?php endif;?>
   </main>
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
 <script>
-var annualData =
-{
-    title: '<?php echo $title;?>',
-
-    <?php foreach($config->report->annualData[$role] as $blockKey => $blockConfig):?>
-    <?php echo $blockKey;?>:
-    {
-        <?php if(!empty($blockConfig['title'])):?>
-        title: '<?php echo $lang->report->annualData->{$blockConfig['title']};?>',
-        <?php endif;?>
-        <?php
-        $blockData = array();
-        if($blockKey == 'block1')
-        {
-            foreach($blockConfig['data'] as $name) $blockData[] = array('title' => $lang->report->annualData->{$name}, 'value' => $data[$name]);
-            echo "data :" . json_encode($blockData);
-        }
-        elseif($blockKey == 'block2')
-        {
-            echo "unit: '" . $lang->report->annualData->unit . "',";
-            if($role == 'dev')
-            {
-                $count = $data['projectStat']['count'];
-                $blockData[] = array('title' => $lang->report->annualData->doneProject, 'value' => $data['projectStat']['done'], 'percent' => (empty($count) ? 0 : round($data['projectStat']['done'] / $count, 4) * 100 . '%'));
-                $blockData[] = array('title' => $lang->report->annualData->doingProject, 'value' => $data['projectStat']['doing'], 'percent' => (empty($count) ? 0 : round($data['projectStat']['doing'] / $count, 4) * 100 . '%'));
-                $blockData[] = array('title' => $lang->report->annualData->suspendProject, 'value' => $data['projectStat']['suspended'], 'percent' => (empty($count) ? 0 : round($data['projectStat']['suspended'] / $count, 4) * 100 . '%'));
-                echo "data: " . json_encode($blockData);
-            }
-            elseif($role == 'po')
-            {
-                foreach($data['productStat'] as $productStat)
-                {
-                    $count = $productStat['count'];
-                    $blockData[] = array('title' => $productStat['name'], 'value' => (int)$productStat['mine'], 'percent' => (empty($count) ? '0' : round($productStat['mine'] / $count, 3) * 100 . '%'));
-                }
-                echo "data: " . json_encode($blockData);
-            }
-            elseif($role == 'qa')
-            {
-                foreach($data['productStat'] as $productStat)
-                {
-                    $count = $productStat['count'];
-                    $blockData[] = array('title' => $productStat['name'], 'value' => (int)$productStat['mine'], 'percent' => (empty($count) ? '0' : round($productStat['mine'] / $count, 3) * 100 . '%'));
-                }
-                echo "data: " . json_encode($blockData);
-            }
-        }
-        elseif($blockKey == 'block3')
-        {
-            $cols = array();
-            $rows = array();
-            if($role == 'po')
-            {
-                $cols[] = array('title' => $lang->report->annualData->productName, 'width' => 'auto', 'align' => 'left');
-                $cols[] = array('title' => $lang->report->annualData->planCount, 'width' => '80', 'align' => 'center');
-                $cols[] = array('title' => $lang->report->annualData->storyCount, 'width' => '80', 'align' => 'center');
-
-                foreach($data['products'] as $product) $rows[] = array($product->name, $product->plans, $product->stories);
-            }
-            elseif($role == 'dev')
-            {
-                $cols[] = array('title' => $lang->report->annualData->projectName, 'width' => 'auto', 'align' => 'left');
-                $cols[] = array('title' => $lang->report->annualData->finishedStory, 'width' => '80', 'align' => 'center');
-                $cols[] = array('title' => $lang->report->annualData->finishedTask, 'width' => '80', 'align' => 'center');
-                $cols[] = array('title' => $lang->report->annualData->resolvedBug, 'width' => '80', 'align' => 'center');
-
-                foreach($data['projects'] as $project) $rows[] = array($project->name, $project->stories, $project->tasks, $project->bugs);
-            }
-            elseif($role == 'qa')
-            {
-                $cols[] = array('title' => $lang->report->annualData->productName, 'width' => 'auto', 'align' => 'left');
-                $cols[] = array('title' => $lang->report->annualData->foundBug, 'width' => '80', 'align' => 'center');
-
-                foreach($data['products'] as $product) $rows[] = array($product->name, $product->bugs);
-            }
-
-            echo "cols: " . json_encode($cols) . ',';
-            echo "rows: " . json_encode($rows);
-        }
-        elseif($blockKey == 'block4')
-        {
-            if($role == 'qa')
-            {
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    $totalData = array();
-                    foreach($data[$name] as $pri => $value) $totalData[] = array('title' => $pri, 'value' => $value, 'legend' => 'P' . $pri);
-
-                    if($name == 'bugPri')  $title = $lang->report->annualData->totalCreatedBug;
-                    if($name == 'casePri') $title = $lang->report->annualData->totalCreatedCase;
-                    $chart = array('title' => $title, 'unit' => $lang->report->annualData->unit, 'data' => $totalData);
-                    echo "chart" . ($i + 1) . ': ' . json_encode($chart) . ',';
-                }
-            }
-            elseif($role == 'po')
-            {
-                $this->app->loadLang('story');
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    $totalData = array();
-                    foreach($data[$name] as $key => $value)
-                    {
-                        $legend = 'P' . $key;
-                        if($name == 'storyStage')
-                        {
-                            $legend = zget($lang->story->stageList, $key);
-                            if(empty($legend)) $legend = 'NULL';
-                        }
-                        $totalData[] = array('title' => $key, 'value' => $value, 'legend' => $legend);
-                    }
-
-                    if($name == 'storyPri')   $title = $lang->report->annualData->totalStoryPri;
-                    if($name == 'storyStage') $title = $lang->report->annualData->totalStoryStage;
-                    $chart = array('title' => $title, 'unit' => $lang->report->annualData->unit, 'data' => $totalData);
-                    echo "chart" . ($i + 1) . ': ' . json_encode($chart) . ',';
-                }
-            }
-            elseif($role == 'dev')
-            {
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    $totalData = array();
-                    foreach($data[$name] as $key => $value) $totalData[] = array('title' => $key, 'value' => $value, 'legend' => 'P' . $key);
-
-                    if($name == 'finishedTaskPri') $title = $lang->report->annualData->totalFinishedTask;
-                    if($name == 'resolvedBugPri')  $title = $lang->report->annualData->totalResolvedBug;
-                    $chart = array('title' => $title, 'unit' => $lang->report->annualData->unit, 'data' => $totalData);
-                    echo "chart" . ($i + 1) . ': ' . json_encode($chart) . ',';
-                }
-            }
-        }
-        elseif($blockKey == 'block5')
-        {
-            echo 'labels:' . json_encode($lang->datepicker->monthNames) . ',';
-
-            if($role == 'qa')
-            {
-                $datasets = array();
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    if($name == 'bugMonth')  $label = $lang->report->annualData->totalCreatedBug;
-                    if($name == 'caseMonth') $label = $lang->report->annualData->totalCreatedCase;
-                    $datasets[] = array('label' => $label, 'data' => $data[$name]);
-                }
-            }
-            elseif($role == 'po')
-            {
-                $datasets = array();
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    if($name == 'storyMonth')  $label = $lang->report->annualData->poStatistics;
-                    $datasets[] = array('label' => $label, 'data' => $data[$name]);
-                }
-            }
-            elseif($role == 'dev')
-            {
-                $datasets = array();
-                foreach($blockConfig['data'] as $i => $name)
-                {
-                    if($name == 'effortMonth')
-                    {
-                        $label = $lang->report->annualData->totalConsumed;
-                        foreach($data[$name] as $month => $consumed) $data[$name][$month] = round($consumed, 2);
-                    }
-                    if($name == 'bugMonth') $label = $lang->report->annualData->totalResolvedBug;
-                    if($name == 'taskMonth')$label = $lang->report->annualData->totalFinishedTask;
-                    $datasets[] = array('label' => $label, 'data' => $data[$name]);
-                }
-            }
-            echo "datasets: " . json_encode($datasets);
-        }
-        ?>
-    },
-    <?php endforeach;?>
-};
-
 $(function()
 {
-    showAnnualData(annualData);
-});
+    var radarChart  = echarts.init(document.getElementById('radarCanvas'));
+    var radarOption = {
+      tooltip: {},
+      radar: {
+          triggerEvent:true,
+          <?php
+          $max = max($radarData);
+          $indicator = array();
+          foreach($lang->report->annualData->radarItems as $radarKey => $radarName)
+          {
+          	$indicator[$radarKey]['name'] = $radarName;
+          	$indicator[$radarKey]['max']  = $max;
+          }
+          ?>
+          indicator: <?php echo json_encode(array_values($indicator));?>
+      },
+      series: [{
+          name:'<?php echo $lang->report->annualData->radar;?>',
+          type: 'radar',
+          itemStyle: {color: "rgb(247, 193, 35)"},
+          data: [{value: <?php echo json_encode(array_values($radarData));?>}]
+      }]
+    };
+
+    radarChart.setOption(radarOption);
+
+    var titleTextStyle = {
+        color:'#fff',
+        fontSize: 16
+    };
+    var tooltip = {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+    };
+    var legendLeft = '0';
+    var legendTop  = '25';
+    var legendItemWidth = 10;
+    var legendItemHeight = 10;
+    var legendTextStyle = {
+        color:'#fff',
+        fontSize: 12
+    };
+    var seriesTop = '50';
+    var seriesRadius = ['40%', '70%'];
+    var seriesLabel = {
+        color:'#fff',
+        formatter: '{b}  {d}%'
+    };
+    var overviewCSS = {position: 'absolute', left: '180px', top: '160px'};
+
+    var storyStatusChart  = echarts.init(document.getElementById('allStoryStatusCanvas'));
+    var storyStatusOption = {
+	    title: {
+            text: '<?php echo $lang->report->annualData->storyStatusStat;?>',
+			textStyle: titleTextStyle,
+        },
+        tooltip: tooltip,
+        legend: {
+			left: legendLeft,
+			top: legendTop,
+            itemWidth: legendItemWidth,
+            itemHeight: legendItemHeight,
+			textStyle: legendTextStyle,
+            data: <?php unset($lang->story->statusList['']); echo json_encode(array_values($lang->story->statusList));?>
+        },
+        series: [
+            {
+                name: '<?php echo $lang->report->annualData->storyStatusStat;?>',
+                type: 'pie',
+                top: seriesTop,
+                radius: seriesRadius,
+                avoidLabelOverlap: false,
+                label: seriesLabel,
+                <?php
+                $storyStatusStat = array();
+                foreach($lang->story->statusList as $status => $statusName) $storyStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['story'], $status, 0));
+                ?>
+                data:<?php echo json_encode(array_values($storyStatusStat));?>
+            }
+        ]
+    }
+    storyStatusChart.setOption(storyStatusOption);
+    storyStatusChart.on('finished', function()
+    {
+        $('#allStatusStat .storyOverview').appendTo('#allStoryStatusCanvas').removeClass('hidden').css(overviewCSS);
+    });
+
+    var taskStatusChart  = echarts.init(document.getElementById('allTaskStatusCanvas'));
+    var taskStatusOption = {
+	    title: {
+            text: '<?php echo $lang->report->annualData->taskStatusStat;?>',
+			textStyle: titleTextStyle,
+        },
+        tooltip: tooltip,
+        legend: {
+			left: legendLeft,
+			top: legendTop,
+            itemWidth: legendItemWidth,
+            itemHeight: legendItemHeight,
+			textStyle: legendTextStyle,
+            data: <?php unset($lang->task->statusList['']); echo json_encode(array_values($lang->task->statusList));?>
+        },
+        series: [
+            {
+                name: '<?php echo $lang->report->annualData->taskStatusStat;?>',
+                type: 'pie',
+                top: seriesTop,
+                radius: seriesRadius,
+                avoidLabelOverlap: false,
+                label: seriesLabel,
+                <?php
+                $taskStatusStat = array();
+                foreach($lang->task->statusList as $status => $statusName) $taskStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['task'], $status, 0));
+                ?>
+                data:<?php echo json_encode(array_values($taskStatusStat));?>
+            }
+        ]
+    }
+    taskStatusChart.setOption(taskStatusOption);
+    taskStatusChart.on('finished', function()
+    {
+        $('#allStatusStat .taskOverview').appendTo('#allTaskStatusCanvas').removeClass('hidden').css(overviewCSS);
+    });
+
+    var bugStatusChart  = echarts.init(document.getElementById('allBugStatusCanvas'));
+    var bugStatusOption = {
+	    title: {
+            text: '<?php echo $lang->report->annualData->bugStatusStat;?>',
+			textStyle: titleTextStyle
+        },
+        tooltip: tooltip,
+        legend: {
+			left: legendLeft,
+			top: legendTop,
+            itemWidth: legendItemWidth,
+            itemHeight: legendItemHeight,
+			textStyle: legendTextStyle,
+            data: <?php unset($lang->bug->statusList['']); echo json_encode(array_values($lang->bug->statusList));?>
+        },
+        series: [
+            {
+                name: '<?php echo $lang->report->annualData->bugStatusStat;?>',
+                type: 'pie',
+                top: seriesTop,
+                radius: seriesRadius,
+                avoidLabelOverlap: false,
+                label: seriesLabel,
+                <?php
+                $bugStatusStat = array();
+                foreach($lang->bug->statusList as $status => $statusName) $bugStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['bug'], $status, 0));
+                ?>
+                data:<?php echo json_encode(array_values($bugStatusStat));?>
+            }
+        ]
+    }
+    bugStatusChart.setOption(bugStatusOption);
+    bugStatusChart.on('finished', function()
+    {
+        $('#allStatusStat .bugOverview').appendTo('#allBugStatusCanvas').removeClass('hidden').css(overviewCSS);
+    });
+})
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
