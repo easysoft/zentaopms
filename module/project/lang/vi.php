@@ -76,6 +76,7 @@ $lang->project->relatedMember = 'Đội nhóm';
 $lang->project->watermark     = 'Đã xuất bởi ZenTao';
 $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
+$lang->project->waitTasks     = 'Waiting Tasks';
 $lang->project->viewByUser    = 'Theo người dùng';
 $lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
 $lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";

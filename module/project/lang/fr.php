@@ -76,6 +76,7 @@ $lang->project->relatedMember = 'Equipe';
 $lang->project->watermark     = 'Exporté par ZenTao';
 $lang->project->burnXUnit     = '(Date)';
 $lang->project->burnYUnit     = '(Hours)';
+$lang->project->waitTasks     = 'Waiting Tasks';
 $lang->project->viewByUser    = 'Par Utilisateur';
 $lang->project->oneProduct    = "Only one stage can be linked {$lang->productCommon}";
 $lang->project->noLinkProduct = "Stage not linked {$lang->productCommon}";
