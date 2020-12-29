@@ -22,7 +22,6 @@ class my extends control
         parent::__construct($module, $method);
         $this->loadModel('user');
         $this->loadModel('dept');
-        $this->my->setMenu();
     }
 
     /**
