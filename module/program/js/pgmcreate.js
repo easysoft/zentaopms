@@ -1,5 +1,15 @@
-$(function(){$('#parent').change();})
+$(function()
+{
+    setAclList($("#parent").val());
+});
 
+/**
+ * Set acl list.
+ *
+ * @param  programID $programID
+ * @access public
+ * @return void
+ */
 function setAclList(programID)
 {
     if(programID != 0)
@@ -10,4 +20,15 @@ function setAclList(programID)
     {
         $('.aclBox').html($('#PGMAcl').html());
     }
+}
+
+/**
+ * Set parent program.
+ *
+ * @access public
+ * @return void
+ */
+function setParentProgram(programID)
+{
+    location.href = createLink('program', 'PGMCreate', 'programID=' + programID);
 }
