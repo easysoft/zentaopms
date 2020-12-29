@@ -562,10 +562,14 @@ class commonModel extends model
     {
         global $lang;
 
+        $menuOrder = $lang->mainNav->menuOrder;
+        ksort($menuOrder);
+
         $items = array();
-        $lastNavItem = end($lang->mainNav);
-        foreach($lang->mainNav as $group => $nav)
+        $lastItem = end($menuOrder);
+        foreach($menuOrder as $key => $group)
         {
+            $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
             if(!common::hasPriv($currentModule, $currentMethod)) continue;
@@ -581,7 +585,7 @@ class commonModel extends model
 
             $items[] = $item;
 
-            if(($lastNavItem != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false)
+            if(($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false)
             {
                 $items[] = 'divider';
             }

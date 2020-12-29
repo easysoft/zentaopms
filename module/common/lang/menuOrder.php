@@ -1,4 +1,13 @@
 <?php
+$lang->mainNav->menuOrder[5]  = 'my';
+$lang->mainNav->menuOrder[10] = 'program';
+$lang->mainNav->menuOrder[15] = 'product';
+$lang->mainNav->menuOrder[20] = 'project';
+$lang->mainNav->menuOrder[25] = 'repo';
+$lang->mainNav->menuOrder[30] = 'doc';
+$lang->mainNav->menuOrder[60] = 'system';
+$lang->mainNav->menuOrder[70] = 'admin';
+
 /* Sort of main menu. */
 $lang->waterfall->menuOrder[5]  = 'programindex';
 $lang->waterfall->menuOrder[10] = 'programplan';

@@ -139,7 +139,7 @@ $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',admin,project,doc,';
+$lang->dividerMenu = ',project,doc,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
