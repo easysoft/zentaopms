@@ -24,3 +24,15 @@
 #userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu{top: -60px}
 #userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
 #userNav li.open>a{background:#0c64eb}
+#poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0px 40px 0px 0px;}
+
+#globalSearchDiv{width:50%; float: right;}
+#globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
+#globalSearchInput {height: 28px; padding-left: 10px;}
+#globalSearchButton {height: 28px;}
+
+#globalBarLogo {width: 100%; float: right;}
+#globalBarLogo a {float: right; margin: 0px 5px;}
+#globalBarLogo img{width: 72px; float: left; margin-top: 2px;}
+
+#globalMessages .icon{font-size: 24px; color: #16a8f8;}

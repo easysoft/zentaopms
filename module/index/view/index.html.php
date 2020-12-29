@@ -44,12 +44,24 @@ js::set('defaultOpen', $open);
 <div id='pages'>
 </div>
 <div id='pagesBar'>
-    <ul id='bars' class='nav nav-default'></ul>
-    <div id='poweredBy'>
-      <a href='<?php echo $lang->website;?>' target='_blank'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
-      <?php echo $lang->proVersion;?>
+  <ul id='bars' class='nav nav-default'></ul>
+  <div id='poweredBy'>
+    <div id="globalBarLogo">
       <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
+      <?php echo $lang->proVersion;?>
+      <a href='<?php echo $lang->website;?>' target='_blank' title='<?php echo $config->version;?>'><?php echo $lang->globalLogo;?></a>
+      <a id ="globalMessages" class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>
+      <div id="globalSearchDiv">
+        <div class="input-group">
+          <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
+            <input id="globalSearchInput" type="search" class="form-control search-input" placeholder="<?php echo $lang->index->search;?>">
+          </div>
+          <span class="input-group-btn">
+            <button id="globalSearchButton" class="btn btn-secondary" type="button"><i class="icon icon-search"></i></button>
+          </span>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-
 <?php include '../../common/view/footer.lite.html.php';?>
