@@ -338,6 +338,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
+            ->andWhere('t2.id')->in($this->app->user->view->products)
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->orderBy('t2.order desc')
@@ -355,7 +356,8 @@ class productModel extends model
     public function getProductIDByProject($projectID, $isFirst = true)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
-            ->beginIF($projectID)->where('project')->eq($projectID)->fi()
+            ->where('product')->in($this->app->user->view->products)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchPairs();
 
         if($isFirst === false) return $products;
