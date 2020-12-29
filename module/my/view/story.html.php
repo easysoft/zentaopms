@@ -39,7 +39,7 @@
 <div id="mainContent">
   <?php if(!$stories):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $mode == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span></p>
+    <p><span class="text-muted"><?php echo $mode == 'story' ? sprintf($lang->my->noData, $SRCommon) : sprintf($lang->my->noData, $URCommon);?></span></p>
   </div>
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">

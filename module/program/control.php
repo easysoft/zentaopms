@@ -674,8 +674,6 @@ class program extends control
     /**
      * Ajax get projects.
      *
-     * @param  string  $name
-     * @param  int     $copyProjectID
      * @access public
      * @return void
      */
