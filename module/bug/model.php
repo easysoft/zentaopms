@@ -1414,7 +1414,6 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
             ->andWhere('t1.deleted')->eq(0)

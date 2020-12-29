@@ -1375,7 +1375,13 @@ class projectModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all executions and group by executions, save it as static. */
-        $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('root asc')->fetchPairs('root', 'root');
+        $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)
+            ->where('type')->in('sprint,stage')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('limited')->eq('yes')
+            ->orderBy('root asc')
+            ->fetchPairs('root', 'root');
+
         $_SESSION['limitedProjects'] = join(',', $executions);
     }
 
