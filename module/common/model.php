@@ -801,7 +801,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($moduleName == 'admin') return;
-        if($group == 'repo') return;
+        if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
 
@@ -2333,6 +2333,16 @@ EOD;
         {
             $lang->menu      = $lang->repo->menu;
             $lang->menuOrder = $lang->repo->menuOrder;
+        }
+        if($group == 'ops')
+        {    
+            $lang->menu      = $lang->ops->menu;
+            $lang->menuOrder = $lang->ops->menuOrder;
+        }    
+        if($group == 'feedback')
+        {    
+            $lang->menu      = $lang->feedback->menu;
+            $lang->menuOrder = $lang->feedback->menuOrder;
         }
         if($group == 'project')
         {
