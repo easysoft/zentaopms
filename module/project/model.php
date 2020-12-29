@@ -621,7 +621,7 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return array
      */
     public function start($projectID)
     {

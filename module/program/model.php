@@ -747,7 +747,7 @@ class programModel extends model
      *
      * @param  bool   $active
      * @access public
-     * @return void
+     * @return string
      */
     public function printPRJCommonAction($active = false)
     {
@@ -1195,7 +1195,7 @@ class programModel extends model
     /**
      * Get project pairs by model and program.
      *
-     * @param  string $model scrum|waterfall
+     * @param  string $model all|scrum|waterfall
      * @param  int    $programID
      * @access public
      * @return array
@@ -1677,7 +1677,7 @@ class programModel extends model
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project', '', 'btn-action');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
-                    if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("prjdelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
+                    if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";
                     echo "</div>";
                     break;
