@@ -44,7 +44,7 @@ $config->project->search['fields']['desc']           = $lang->task->desc;
 $config->project->search['fields']['assignedTo']     = $lang->task->assignedTo;
 $config->project->search['fields']['pri']            = $lang->task->pri;
 
-$config->project->search['fields']['project']        = $lang->task->project;
+$config->project->search['fields']['project']        = $lang->task->execution;
 $config->project->search['fields']['module']         = $lang->task->module;
 $config->project->search['fields']['estimate']       = $lang->task->estimate;      
 $config->project->search['fields']['left']           = $lang->task->left; 

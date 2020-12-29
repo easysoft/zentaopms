@@ -195,7 +195,7 @@
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->task->project;?></th>
+                  <th class='w-90px'><?php echo $lang->task->execution;?></th>
                   <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
                 </tr>
                 <tr>
