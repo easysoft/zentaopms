@@ -786,7 +786,6 @@ class commonModel extends model
     public static function printModuleMenu($moduleName)
     {
         global $config, $lang, $app;
-
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
         $mainMenu   = $moduleName;
@@ -799,6 +798,11 @@ class commonModel extends model
         if($group == 'repo') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
+        if($moduleName == 'product' and ($methodName == 'setting' or $methodName == 'addwhitelist'))
+        {
+            $lang->product->menu = $lang->product->settingMenu;
+            self::processMenuVars($lang->product->menu);
+        }
 
         if(!isset($lang->$moduleName->menu))
         {

@@ -165,17 +165,22 @@ $lang->product->menu->home = 'Home|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
+$lang->product->viewMenu->view        = array('link' => 'Index|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->track       = array('link' => "Track|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
-$lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
-$lang->product->viewMenu->module      = 'Module|tree|browse|productID=%s&view=story';
-$lang->product->viewMenu->view        = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
-$lang->product->viewMenu->whitelist   = array('link' => 'Whitelist|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->project     = "{$lang->executionCommon}|product|project|status=all&productID=%s";
+$lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->product->viewMenu->setting     = array('link' => 'Setting|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
+
+$lang->product->settingMenu = new stdclass();
+$lang->product->settingMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
+$lang->product->settingMenu->module    = array('link' => 'Module|product|setting|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
+$lang->product->settingMenu->whitelist = array('link' => 'Whitelist|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();

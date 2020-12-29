@@ -58,7 +58,7 @@ function changeUsers(ulObj, val)
 $(function()
 {
     /* Render the style of the user list when click the drop-down box. */
-    var ulObj    = {};
+    var ulObj = {};
     $("select[name='accounts[]']").siblings(".chosen-container").click(function()
     {
         $("ul[class='chosen-results']").each(function()

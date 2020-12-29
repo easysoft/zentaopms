@@ -166,17 +166,22 @@ $lang->product->menu->home = '主页|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
+$lang->product->viewMenu->view        = array('link' => '仪表盘|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->track       = array('link' => "跟踪矩阵|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
-$lang->product->viewMenu->branch      = '@branch@|branch|manage|productID=%s';
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
-$lang->product->viewMenu->module      = '模块|tree|browse|productID=%s&view=story';
-$lang->product->viewMenu->view        = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
-$lang->product->viewMenu->whitelist   = array('link' => '白名单|product|whitelist|productID=%s', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->project     = "{$lang->executionCommon}|product|project|status=all&productID=%s";
+$lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->product->viewMenu->setting     = array('link' => '设置|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
+
+$lang->product->settingMenu = new stdclass();
+$lang->product->settingMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
+$lang->product->settingMenu->module    = array('link' => '模块|product|setting|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
+$lang->product->settingMenu->whitelist = array('link' => '白名单|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
