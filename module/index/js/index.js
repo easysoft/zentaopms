@@ -25,7 +25,7 @@
                 .append($link)
                 .appendTo($menuMainNav);
 
-            item.icon = $link.find('.icon').attr('class').replace('icon ', '');
+            item.icon = $link.find('.icon').attr('class') || ''.replace('icon ', '');
             item.text = $link.text().trim();
             groupsMap[item.group] = item;
 
