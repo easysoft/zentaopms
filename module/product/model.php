@@ -608,12 +608,14 @@ class productModel extends model
      */
     public function batchUpdate()
     {
-        $products    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
-        $oldProducts = $this->getByIdList($this->post->productIDList);
-        $nameList    = array();
-        $codeList    = array();
+        $products      = array();
+        $allChanges    = array();
+        $data          = fixer::input('post')->get();
+        $oldProducts   = $this->getByIdList($this->post->productIDList);
+        $nameList      = array();
+        $codeList      = array();
+        $message       = '';
+        $productOrders = $this->dao->select("`id`,`order`")->from(TABLE_PRODUCT)->fetchPairs();
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
@@ -638,8 +640,16 @@ class productModel extends model
             /* Check unique code for edited products. */
             if(isset($codeList[$productCode])) dao::$errors['code'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->code, $productCode);
             $codeList[$productCode] = $productCode;
+
+            /* Check unique order for edited products. */
+            foreach($productOrders as $id => $productOrder)
+            {
+                if($id == $productID) continue;
+                if($productOrder == $data->orders[$productID]) $message .= sprintf($this->lang->product->DuplicateOrder, $productID);
+            }
         }
         if(dao::isError()) die(js::error(dao::getError()));
+        if($message) echo js::alert($message);
 
         foreach($products as $productID => $product)
         {
