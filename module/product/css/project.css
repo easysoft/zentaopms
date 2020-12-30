@@ -1,1 +1,2 @@
-#mainMenu .label.projectInfo{top: 8px}
+.checkbox-primary {margin-top: 6px;}
+#mainMenu .label.projectInfo {top: 8px; left: 6px;}

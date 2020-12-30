@@ -45,7 +45,7 @@ $lang->product->roadmap     = "{$lang->productCommon}路线图";
 $lang->product->doc         = '文档列表';
 $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
-$lang->product->projectInfo = "所有与此产品关联的{$lang->executionCommon}";
+$lang->product->projectInfo = "所有与此产品关联的项目";
 
 $lang->product->currentExecution      = "当前{$lang->sprintCommon}";
 $lang->product->activeStories         = "激活{$lang->productSRCommon}";

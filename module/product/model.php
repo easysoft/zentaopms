@@ -613,11 +613,9 @@ class productModel extends model
         $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
-        $codeList    = array();
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
-            $productCode = $data->codes[$productID];
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
@@ -634,10 +632,6 @@ class productModel extends model
             /* Check unique name for edited products. */
             if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
             $nameList[$productName] = $productName;
-
-            /* Check unique code for edited products. */
-            if(isset($codeList[$productCode])) dao::$errors['code'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->code, $productCode);
-            $codeList[$productCode] = $productCode;
         }
         if(dao::isError()) die(js::error(dao::getError()));
 
@@ -648,9 +642,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') // The value of product code can be 0 or 00.0.
                 ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
-                ->check('code', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
@@ -808,7 +800,7 @@ class productModel extends model
     }
 
     /**
-     * Get projects by product.
+     * Get project pairs by product.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -825,6 +817,134 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs();
+    }
+
+    /**
+     * Get project list by product.
+     *
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  int       $branch
+     * @param  int       $PRJMine
+     * @access public
+     * @return array
+     */
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $PRJMine = 0)
+    {
+        $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($this->cookie->PRJMine or $PRJMine)
+            ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t2.PM')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('id');
+
+        /* Determine how to display the name of the program. */
+        $programList = $this->loadModel('program')->getPGMPairs();
+        foreach($projectList as $id => $project)
+        {
+            $path = explode(',', $project->path);
+            $path = array_filter($path);
+            array_pop($path);
+            if(empty($path)) continue;
+            $programID = end($path);
+
+            $programName = isset($programList[$programID]) ? $programList[$programID] : '';
+
+            $projectList[$id]->programName = $programName;
+        }
+
+        return $projectList;
+    }
+
+    /**
+     * Get project stats by product.
+     *
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  int       $branch
+     * @param  int       $PRJMine
+     * @access public
+     * @return array
+     */
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $PRJMine = 0)
+    {
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch = 0, $PRJMine = 0);
+        if(empty($projects)) return array();
+
+        $projectKeys = array_keys($projects);
+        $stats       = array();
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('PRJ')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('PRJ', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$projectID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
+        }
+
+        /* Get the number of project teams. */
+        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
+            ->where('root')->in($projectKeys)
+            ->andWhere('type')->eq('project')
+            ->groupBy('root')
+            ->fetchAll('root');
+
+        /* Process projects. */
+        foreach($projects as $key => $project)
+        {
+            if($project->end == '0000-00-00') $project->end = '';
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+
+            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $stats[] = $project;
+        }
+        return $stats;
     }
 
     /**

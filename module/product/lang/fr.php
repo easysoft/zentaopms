@@ -45,7 +45,7 @@ $lang->product->roadmap     = "Roadmap {$lang->productCommon}";
 $lang->product->doc         = "Documents {$lang->productCommon}";
 $lang->product->project     = ' Liste ' . $lang->executionCommon;
 $lang->product->build       = 'Liste Builds';
-$lang->product->projectInfo = "Les {$lang->executionCommon}s qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
+$lang->product->projectInfo = "Les Projects qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
 
 $lang->product->currentExecution      = "Current {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Actives [S]';

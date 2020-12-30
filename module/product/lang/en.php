@@ -45,7 +45,7 @@ $lang->product->roadmap     = "{$lang->productCommon} Roadmap";
 $lang->product->doc         = "{$lang->productCommon} Documents";
 $lang->product->project     = $lang->executionCommon . ' List';
 $lang->product->build       = 'Build List';
-$lang->product->projectInfo = "{$lang->executionCommon}s that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
 
 $lang->product->currentExecution      = "Current {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Active [S]';

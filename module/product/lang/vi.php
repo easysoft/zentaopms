@@ -45,7 +45,7 @@ $lang->product->roadmap     = "Lộ trình {$lang->productCommon}";
 $lang->product->doc         = "Tài liệu {$lang->productCommon}";
 $lang->product->project     = 'Danh sách '.$lang->executionCommon;
 $lang->product->build       = 'Danh sách bản dựng';
-$lang->product->projectInfo = "{$lang->executionCommon} đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
+$lang->product->projectInfo = "Projects đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
 $lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
 $lang->product->activeStories         = 'Kích hoạt [S]';

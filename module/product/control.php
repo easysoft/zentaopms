@@ -66,19 +66,23 @@ class product extends control
     }
 
     /**
-     * project
+     * The projects which linked the product.
      *
      * @param  string $status
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $PRJMine
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = 0)
+    public function project($status = 'all', $productID = 0, $branch = 0, $PRJMine = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         $this->app->loadLang('my');
-        $this->view->projectStats = $this->loadModel('project')->getExecutionStats(0, 'undone', $productID, $branch);
+        $this->app->loadLang('program');
+        $this->view->projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $PRJMine);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->position[] = $this->products[$productID];

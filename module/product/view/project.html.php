@@ -15,6 +15,7 @@
     <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
     <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
+    <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
     <span class="label label-info projectInfo"><?php echo $lang->product->projectInfo;?></span>
   </div>
 </div>
@@ -22,10 +23,7 @@
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->project->noProject;?></span>
-      <?php if(common::hasPriv('project', 'create')):?>
-      <?php echo html::a($this->createLink('project', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-      <?php endif;?>
+      <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
     </p>
   </div>
   <?php else:?>
@@ -33,37 +31,36 @@
     <table class="table table-fixed">
       <thead>
         <tr>
-          <th><?php echo $lang->executionCommon;?></th>
-          <th class='w-150px'><?php echo $lang->project->code;?></th>
-          <th class='w-120px'><?php echo $lang->project->end;?></th>
-          <th class='w-80px'><?php echo $lang->project->status;?></th>
-          <th class='w-80px'><?php echo $lang->project->totalEstimate;?></th>
-          <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
-          <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
-          <th class='w-150px'><?php echo $lang->project->progress;?></th>
-          <th class='w-100px'><?php echo $lang->project->burn;?></th>
+          <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
+          <th><?php echo $lang->program->PRJName;?></th>
+          <th class='w-150px'><?php echo $lang->program->PRJPGM;?></th>
+          <th class='w-120px'><?php echo $lang->program->PM;?></th>
+          <th class='w-100px'><?php echo $lang->program->begin;?></th>
+          <th class='w-100px'><?php echo $lang->program->end;?></th>
+          <th class='w-100px'><?php echo $lang->program->PRJStatus;?></th>
+          <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
+          <th class='w-80px text-center'><?php echo $lang->program->PRJEstimate;?></th>
+          <th class='w-80px text-center'><?php echo $lang->program->PRJConsume;?></th>
+          <th class='w-150px text-center'><?php echo $lang->program->PRJProgress;?></th>
         </tr>
       </thead>
       <tbody>
         <?php $id = 0;?>
         <?php foreach($projectStats as $project):?>
         <tr>
-          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
-          <td><?php echo $project->code;?></td>
+          <td><?php printf('%03d', $project->id);?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id, '', '', $project->id), $project->name, '_parent');?></td>
+          <td><?php echo $project->programName;?></td>
+          <td><?php echo $project->PM;?></td>
+          <td><?php echo $project->begin;?></td>
           <td><?php echo $project->end;?></td>
-          <?php if(isset($project->delay)):?>
-          <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
-            <span class="status-project status-delayed"><?php echo $lang->project->delayed;?></span>
-          </td>
-          <?php else:?>
           <?php $status = $this->processStatus('project', $project);?>
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
-          <?php endif;?>
-          <td><?php echo $project->hours->totalEstimate;?></td>
-          <td><?php echo $project->hours->totalConsumed;?></td>
-          <td><?php echo $project->hours->totalLeft;?></td>
+          <td><?php echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;?></td>
+          <td class="text-center"><?php echo $project->hours->totalEstimate;?></td>
+          <td class="text-center"><?php echo $project->hours->totalConsumed;?></td>
           <td class="c-progress">
             <div class="progress progress-text-left">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
@@ -71,7 +68,6 @@
               </div>
             </div>
           </td>
-          <td id='spark-<?php echo $id++?>' class='c-spark sparkline' values='<?php echo join(',', $project->burns);?>'></td>
         </tr>
         <?php endforeach;?>
       </tbody>

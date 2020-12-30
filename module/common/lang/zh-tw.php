@@ -172,11 +172,11 @@ $lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s'
 $lang->product->viewMenu->dynamic     = '動態|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "項目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->setting     = array('link' => '設置|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->setting     = array('link' => '設置|product|setting|mode=module&productID=%s&view=story', 'alias' => 'addwhitelist');
 
 $lang->product->settingMenu = new stdclass();
 $lang->product->settingMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
-$lang->product->settingMenu->module    = array('link' => '模組|product|setting|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
+$lang->product->settingMenu->module    = array('link' => '模組|product|setting|mode=module&productID={PRODUCT}&view=story', 'subModule' => 'tree');
 $lang->product->settingMenu->whitelist = array('link' => '白名單|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
