@@ -740,8 +740,9 @@ $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> of <strong>{totalPage
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = 'Not a valid color value';
 
+global $config;
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='btn btn-link'><span class='label'>Upgrade</span></a>";
-$lang->globalLogo     = "<img src='{$this->config->webRoot}theme/default/images/main/zentao.png'/>";
+$lang->globalLogo     = "<img src='{$config->webRoot}theme/default/images/main/zentao.png'/>";
 $lang->downNotify     = "Download Desktop Notification";
 $lang->downloadClient = "Download ZenTao Desktop";
 $lang->clientHelp     = "Client Help";
@@ -885,14 +886,14 @@ $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
 $lang->scrum->subMenu->other = new stdclass();
-$lang->scrum->subMenu->other->issue       = 'Issue|issue|browse|';;
-$lang->scrum->subMenu->other->risk        = 'Risk|risk|browse|';;
+$lang->scrum->subMenu->other->issue       = array('link' => 'Issue|issue|browse|', 'subModule' => 'issue');
+$lang->scrum->subMenu->other->risk        = array('link' => 'Risk|risk|browse|', 'subModule' => 'risk');
 $lang->scrum->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->subMenu->setting = new stdclass();
@@ -911,14 +912,14 @@ $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
-$lang->menu->waterfall->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
+$lang->menu->waterfall->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->other = new stdclass();
-$lang->waterfall->subMenu->other->issue = 'Issue|issue|browse|';;
-$lang->waterfall->subMenu->other->risk  = 'Risk|risk|browse|';;
+$lang->waterfall->subMenu->other->issue = array('link' => 'Issue|issue|browse|', 'subModule' => 'issue');
+$lang->waterfall->subMenu->other->risk  = array('link' => 'Risk|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->waterfall->subMenu->setting = new stdclass();

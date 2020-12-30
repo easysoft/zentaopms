@@ -26,7 +26,9 @@ class ciModel extends model
         {
             $this->lang->navGroup->jenkins = 'repo';
             $this->lang->navGroup->job     = 'repo';
+            $this->lang->navGroup->compile = 'repo';
             $this->lang->noMenuModule[]    = 'job';
+            $this->lang->noMenuModule[]    = 'compile';
         }
     }
 
