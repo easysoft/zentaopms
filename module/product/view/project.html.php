@@ -24,7 +24,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->project->noProject;?></span>
       <?php if(common::hasPriv('project', 'create')):?>
-      <?php echo html::a($this->createLink('project', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info iframe'");?>
       <?php endif;?>
     </p>
   </div>
@@ -48,7 +48,7 @@
         <?php $id = 0;?>
         <?php foreach($projectStats as $project):?>
         <tr>
-          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');?></td>
           <td><?php echo $project->code;?></td>
           <td><?php echo $project->end;?></td>
           <?php if(isset($project->delay)):?>

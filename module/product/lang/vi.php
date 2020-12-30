@@ -147,6 +147,7 @@ $lang->product->checkedSummary = "<strong>%total%</strong> stories selected, Esi
 $lang->product->noModule       = '<div>Chưa có Module. </div><div>Quản lý ngay</div>';
 $lang->product->noProduct      = "Không có {$lang->productCommon} nào.";
 $lang->product->noMatched      = '"%s" không thể tìm thấy ' . $lang->productCommon;
+$lang->product->DuplicateOrder = "{$lang->productCommon}: The %s sort is duplicated with other {$lang->productCommon} sorts and will not be updated.";
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

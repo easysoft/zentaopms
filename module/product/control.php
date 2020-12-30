@@ -672,7 +672,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function setting($mode = 'branch', $productID)
+    public function set($mode = 'branch', $productID)
     {
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);

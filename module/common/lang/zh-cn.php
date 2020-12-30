@@ -176,12 +176,12 @@ $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s'
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->setting     = array('link' => '设置|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->set         = array('link' => '设置|product|set|mode=branch&productID=%s', 'alias' => 'addwhitelist');
 
-$lang->product->settingMenu = new stdclass();
-$lang->product->settingMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
-$lang->product->settingMenu->module    = array('link' => '模块|product|setting|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
-$lang->product->settingMenu->whitelist = array('link' => '白名单|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
+$lang->product->setMenu = new stdclass();
+$lang->product->setMenu->branch    = array('link' => '@branch@|product|set|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
+$lang->product->setMenu->module    = array('link' => '模块|product|set|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
+$lang->product->setMenu->whitelist = array('link' => '白名单|product|set|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
@@ -740,8 +740,9 @@ $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</s
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
+global $config;
 $lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='btn btn-link'><span class='label'>升级</span></a>";
-$lang->globalLogo     = "<img src='{$this->config->webRoot}theme/default/images/main/zentao.png'/>";
+$lang->globalLogo     = "<img src='{$config->webRoot}theme/default/images/main/zentao.png'/>";
 $lang->downNotify     = "下载桌面提醒";
 $lang->downloadClient = "下载客户端";
 $lang->clientHelp     = "客户端使用说明";
@@ -885,14 +886,14 @@ $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
-$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
 $lang->scrum->subMenu->other = new stdclass();
-$lang->scrum->subMenu->other->issue       = '问题|issue|browse|';;
-$lang->scrum->subMenu->other->risk        = '风险|risk|browse|';;
+$lang->scrum->subMenu->other->issue       = array('link' => '问题|issue|browse|', 'subModule' => 'issue');
+$lang->scrum->subMenu->other->risk        = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->subMenu->setting = new stdclass();
@@ -911,14 +912,14 @@ $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
-$lang->menu->waterfall->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
+$lang->menu->waterfall->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->other = new stdclass();
-$lang->waterfall->subMenu->other->issue = '问题|issue|browse|';;
-$lang->waterfall->subMenu->other->risk  = '风险|risk|browse|';;
+$lang->waterfall->subMenu->other->issue = array('link' => '问题|issue|browse|', 'subModule' => 'issue');
+$lang->waterfall->subMenu->other->risk  = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->waterfall->subMenu->setting = new stdclass();

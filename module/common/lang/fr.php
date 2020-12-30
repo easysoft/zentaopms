@@ -139,7 +139,7 @@ $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|es
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',admin,project,repo,';
+$lang->dividerMenu = ',project,doc,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
@@ -176,12 +176,12 @@ $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->setting     = array('link' => 'Setting|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->set         = array('link' => 'Setting|product|set|mode=branch&productID=%s', 'alias' => 'addwhitelist');
 
-$lang->product->settingMenu = new stdclass();
-$lang->product->settingMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
-$lang->product->settingMenu->module    = array('link' => 'Module|product|setting|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
-$lang->product->settingMenu->whitelist = array('link' => 'Whitelist|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
+$lang->product->setMenu = new stdclass();
+$lang->product->setMenu->branch    = array('link' => '@branch@|product|set|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
+$lang->product->setMenu->module    = array('link' => 'Module|product|set|mode=module&productID={PRODUCT}', 'subModule' => 'tree');
+$lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|set|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
@@ -740,8 +740,9 @@ $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> sur <strong>{totalPag
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = "Ce n'est pas une valeur de couleur valide";
 
+global $config;
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='btn btn-link'><span class='label'>Upgrade</span></a>";
-$lang->globalLogo     = "<img src='{$this->config->webRoot}theme/default/images/main/zentao.png'/>";
+$lang->globalLogo     = "<img src='{$config->webRoot}theme/default/images/main/zentao.png'/>";
 $lang->downNotify     = "Télécharger la notification sur le bureau";
 $lang->downloadClient = "Télécharger ZenTao Desktop";
 $lang->clientHelp     = "Aide Client";
@@ -885,14 +886,14 @@ $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
 $lang->scrum->subMenu->other = new stdclass();
-$lang->scrum->subMenu->other->issue       = 'Issue|issue|browse|';;
-$lang->scrum->subMenu->other->risk        = 'Risk|risk|browse|';;
+$lang->scrum->subMenu->other->issue       = array('link' => 'Issue|issue|browse|', 'subModule' => 'issue');
+$lang->scrum->subMenu->other->risk        = array('link' => 'Risk|risk|browse|', 'subModule' => 'risk');
 $lang->scrum->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->subMenu->setting = new stdclass();
@@ -911,14 +912,14 @@ $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
-$lang->menu->waterfall->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
+$lang->menu->waterfall->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->other = new stdclass();
-$lang->waterfall->subMenu->other->issue = 'Issue|issue|browse|';;
-$lang->waterfall->subMenu->other->risk  = 'Risk|risk|browse|';;
+$lang->waterfall->subMenu->other->issue       = array('link' => 'Issue|issue|browse|', 'subModule' => 'issue');
+$lang->waterfall->subMenu->other->risk        = array('link' => 'Risk|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->waterfall->subMenu->setting = new stdclass();
