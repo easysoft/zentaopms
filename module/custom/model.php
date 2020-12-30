@@ -477,7 +477,7 @@ class customModel extends model
     public function getURSRPairs()
     {
         $lang = $this->app->getClientLang();
-        $langData = $this->dao->select('`key`, `value`, system')->from(TABLE_LANG)
+        $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')

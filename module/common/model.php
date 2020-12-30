@@ -716,7 +716,7 @@ class commonModel extends model
                 }
 
                 /* Disable links to more buttons. */
-                if($menuItem->name == 'morelink') $link='javascript:void(0);';
+                if($menuItem->name == 'setting' || $menuItem->name == 'other') $link='javascript:void(0);';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
@@ -1753,7 +1753,7 @@ EOD;
         $method = strtolower($method);
 
         /* More menus do not require permission control. */
-        if($module == 'project' && $method == 'morelink') return true;
+        if($module == 'project' && ($method == 'other' || $method == 'setting')) return true;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
@@ -2407,7 +2407,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
-            $lang->project->dividerMenu = ',doc,';
+            $lang->project->dividerMenu = ',project,projectbuild,story,team,product,other,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
@@ -2416,10 +2416,11 @@ EOD;
 
         if($program->model == 'waterfall')
         {
+            $lang->project->dividerMenu = ',programplan,projectbuild,story,team,product,other,';
+
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;
-            $lang->program->dividerMenu = ',product,issue,';
             return self::processMenuVars($lang->menu->waterfall);
         }
     }

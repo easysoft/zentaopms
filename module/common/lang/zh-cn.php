@@ -351,7 +351,7 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',projectstory,issue,story,team,product,';
+$lang->project->dividerMenu = ',programplan,projectbuild,story,team,product,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -877,20 +877,26 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program        = '仪表盘|program|index|project={PROJECT}';
+$lang->menu->scrum->programindex   = '仪表盘|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
+$lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
-$lang->menu->scrum->stakeholder    = '干系人|stakeholder|browse';
-$lang->menu->scrum->morelink       = array('link' => '更多|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list');
+$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->scrum->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
-$lang->scrum->subMenu->morelink = new stdclass();
-$lang->scrum->subMenu->morelink->program = '项目|program|PRJEdit|';
+$lang->scrum->subMenu->other = new stdclass();
+$lang->scrum->subMenu->other->issue       = '问题|issue|browse|';;
+$lang->scrum->subMenu->other->risk        = '风险|risk|browse|';;
+$lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+
+$lang->scrum->subMenu->setting = new stdclass();
+$lang->scrum->subMenu->setting->program = '项目|program|PRJEdit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -904,16 +910,20 @@ $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
-$lang->menu->waterfall->issue          = '问题|issue|browse|';
-$lang->menu->waterfall->risk           = '风险|risk|browse|';
-$lang->menu->waterfall->morelink       = array('link' => '更多|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
+$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->waterfall->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
-$lang->waterfall->subMenu->morelink = new stdclass();
-$lang->waterfall->subMenu->morelink->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->morelink->stakeholder    = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->waterfall->subMenu->morelink->program        = '项目|program|PRJEdit|';
+$lang->waterfall->subMenu->other = new stdclass();
+$lang->waterfall->subMenu->other->issue = '问题|issue|browse|';;
+$lang->waterfall->subMenu->other->risk  = '风险|risk|browse|';;
+$lang->waterfall->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+
+$lang->waterfall->subMenu->setting = new stdclass();
+$lang->waterfall->subMenu->setting->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->setting->program        = '项目|program|PRJEdit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();

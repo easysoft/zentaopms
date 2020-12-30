@@ -134,6 +134,7 @@ $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|progr
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
+$lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
@@ -876,20 +877,26 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->program        = 'Index|program|index|project={PROJECT}';
+$lang->menu->scrum->programindex   = 'Index|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
+$lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->scrum->stakeholder    = 'Stakeholder|stakeholder|browse';
-$lang->menu->scrum->morelink       = array('link' => 'More|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list');
+$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->scrum->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
-$lang->scrum->subMenu->morelink = new stdclass();
-$lang->scrum->subMenu->morelink->program = 'Program|program|PRJEdit|';
+$lang->scrum->subMenu->other = new stdclass();
+$lang->scrum->subMenu->other->issue       = 'Issue|issue|browse|';;
+$lang->scrum->subMenu->other->risk        = 'Risk|risk|browse|';;
+$lang->scrum->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
+
+$lang->scrum->subMenu->setting = new stdclass();
+$lang->scrum->subMenu->setting->program = 'Project|program|PRJEdit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -903,16 +910,20 @@ $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->waterfall->issue          = 'Issue|issue|browse|';
-$lang->menu->waterfall->risk           = 'Risk|risk|browse|';
-$lang->menu->waterfall->morelink       = array('link' => 'More|project|morelink', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
+$lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
+$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk');
+$lang->menu->waterfall->setting        = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'stakeholder,workestimation,durationestimation,budget,pssp,stakeholder');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
-$lang->waterfall->subMenu->morelink = new stdclass();
-$lang->waterfall->subMenu->morelink->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->morelink->stakeholder    = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->waterfall->subMenu->morelink->program        = 'Project|program|PRJEdit|';
+$lang->waterfall->subMenu->other = new stdclass();
+$lang->waterfall->subMenu->other->issue = 'Issue|issue|browse|';;
+$lang->waterfall->subMenu->other->risk  = 'Risk|risk|browse|';;
+$lang->waterfall->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
+
+$lang->waterfall->subMenu->setting = new stdclass();
+$lang->waterfall->subMenu->setting->workestimation = array('link' => 'Workestimation|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->setting->program        = 'Project|program|PRJEdit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
