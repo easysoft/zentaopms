@@ -803,6 +803,111 @@ class reportModel extends model
 
         return $statusStat;
     }
+
+    public function getYearObjectStat($accounts, $year, $objectType)
+    {
+        $table = '';
+        if($objectType == 'story') $table = TABLE_STORY;
+        if($objectType == 'task')  $table = TABLE_TASK;
+        if($objectType == 'bug')   $table = TABLE_BUG;
+        if(empty($table)) return array();
+
+        $months = $this->getYearMonths($year);
+        $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq($objectType)
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->query();
+
+        $statuses   = array();
+        $actionStat = array();
+        while($action = $stmt->fetch())
+        {
+            $statuses[$action->objectID] = $action->status;
+
+            $lowerAction = strtolower($action->action);
+            if(!isset($actionStat[$lowerAction]))
+            {
+                foreach($months as $month) $actionStat[$lowerAction][$month] = 0;
+            }
+
+            $month = substr($action->date, 0, 7);
+            $actionStat[$lowerAction][$month] += 1;
+        }
+
+        $statusStat = array();
+        foreach($statuses as $storyID => $status)
+        {
+            if(!isset($statusStat[$status])) $statusStat[$status] = 0;
+            $statusStat[$status] += 1;
+        }
+
+        return array('statusStat' => $statusStat, 'actionStat' => $actionStat);
+    }
+
+    public function getYearCaseStat($accounts, $year)
+    {
+        $months = $this->getYearMonths($year);
+        $stmt   = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('case')
+            ->andWhere('LEFT(date, 4)')->eq($year)
+            ->andWhere('action')->eq('opened')
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->query();
+
+        $resultStat = array();
+        $actionStat = array();
+        foreach($months as $month)
+        {
+            $actionStat['opened'][$month]    = 0;
+            $actionStat['run'][$month]       = 0;
+            $actionStat['createBug'][$month] = 0;
+        }
+
+        while($action = $stmt->fetch())
+        {
+            $month = substr($action->date, 0, 7);
+            $actionStat['opened'][$month] += 1;
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_TESTRESULT)
+            ->where('LEFT(date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
+            ->query();
+        while($testResult = $stmt->fetch())
+        {
+            if(!isset($resultStat[$testResult->caseResult])) $resultStat[$testResult->caseResult] = 0;
+            $resultStat[$testResult->caseResult] += 1;
+
+            $month = substr($testResult->date, 0, 7);
+            $actionStat['run'][$month] += 1;
+        }
+
+        $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq('bug')
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.action')->eq('opened')
+            ->andWhere('t2.case')->ne('0')
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            $month = substr($action->date, 0, 7);
+            $actionStat['createBug'][$month] += 1;
+        }
+
+        return array('resultStat' => $resultStat, 'actionStat' => $actionStat);
+    }
+
+    public function getYearMonths($year)
+    {
+        $months = array();
+        for($i = 1; $i <= 12; $i ++) $months[] = $year . '-' . sprintf('%02d', $i);
+
+        return $months;
+    }
 }
 
 /**

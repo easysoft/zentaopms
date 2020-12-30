@@ -109,6 +109,7 @@ $lang->report->annualData->allDept          = "全公司";
 $lang->report->annualData->soFar            = "（%s年1月1日至今）";
 $lang->report->annualData->baseInfo         = "基本数据";
 $lang->report->annualData->actionData       = "操作数据";
+$lang->report->annualData->contributionData = "贡献数据";
 $lang->report->annualData->radar            = "能力雷达图";
 $lang->report->annualData->projects         = "{$lang->projectCommon}数据";
 $lang->report->annualData->products         = "{$lang->productCommon}数据";
@@ -129,15 +130,17 @@ $lang->report->annualData->todos            = "待办数";
 $lang->report->annualData->storyStatusStat = "需求状态分布";
 $lang->report->annualData->taskStatusStat  = "任务状态分布";
 $lang->report->annualData->bugStatusStat   = "Bug状态分布";
+$lang->report->annualData->caseResultStat  = "用例结果分布";
 $lang->report->annualData->allStory        = "总需求";
 $lang->report->annualData->allTask         = "总任务";
 $lang->report->annualData->allBug          = "总Bug";
 $lang->report->annualData->undone          = "未完成";
 $lang->report->annualData->unresolve       = "未解决";
 
-$lang->report->annualData->storyAction4Month = "每月需求操作情况";
-$lang->report->annualData->taskAction4Month  = "每月任务操作情况";
-$lang->report->annualData->bugAction4Month   = "每月Bug操作情况";
+$lang->report->annualData->storyMonthActions = "每月需求操作情况";
+$lang->report->annualData->taskMonthActions  = "每月任务操作情况";
+$lang->report->annualData->bugMonthActions   = "每月Bug操作情况";
+$lang->report->annualData->caseMonthActions  = "每月用例操作情况";
 
 $lang->report->annualData->projectFields['name']  = "{$lang->projectCommon}名称";
 $lang->report->annualData->projectFields['story'] = "完成{$lang->storyCommon}数";
@@ -179,6 +182,11 @@ $lang->report->annualData->actionList['assign']    = '指派';
 $lang->report->annualData->actionList['activate']  = '激活';
 $lang->report->annualData->actionList['resolve']   = '解决';
 $lang->report->annualData->actionList['run']       = '执行';
+$lang->report->annualData->actionList['change']    = '变更';
+$lang->report->annualData->actionList['pause']     = '暂停';
+$lang->report->annualData->actionList['cancel']    = '取消';
+$lang->report->annualData->actionList['confirm']   = '确认';
+$lang->report->annualData->actionList['createBug'] = '转Bug';
 
 $lang->report->annualData->todoStatus['all']    = '所有待办';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
@@ -189,44 +197,5 @@ $lang->report->annualData->radarItems['project'] = $lang->projectCommon;
 $lang->report->annualData->radarItems['devel']   = "研发";
 $lang->report->annualData->radarItems['qa']      = "测试";
 $lang->report->annualData->radarItems['other']   = "其他";
-
-$lang->report->annualData->foundBugs        = "累计创建Bug数";
-$lang->report->annualData->createdCases     = "累计创建用例数";
-$lang->report->annualData->involvedProducts = "累计参与{$lang->productCommon}数";
-$lang->report->annualData->createdPlans     = "累计创建计划数";
-$lang->report->annualData->createdStories   = "累计创建{$lang->storyCommon}数";
-
-$lang->report->annualData->productOverview = "{$lang->productCommon}创建{$lang->storyCommon}数及占比";
-$lang->report->annualData->qaOverview      = "{$lang->productCommon}创建Bug数及占比";
-$lang->report->annualData->projectOverview = "参与{$lang->projectCommon}概览";
-$lang->report->annualData->doneProject     = "已完成的{$lang->projectCommon}";
-$lang->report->annualData->doingProject    = "正在进行的{$lang->projectCommon}";
-$lang->report->annualData->suspendProject  = "已挂起的{$lang->projectCommon}";
-
-$lang->report->annualData->projectName   = "{$lang->projectCommon}名称";
-$lang->report->annualData->finishedStory = "完成{$lang->storyCommon}数";
-$lang->report->annualData->finishedTask  = '完成任务数';
-$lang->report->annualData->foundBug      = '创建Bug数';
-$lang->report->annualData->resolvedBug   = '解决Bug数';
-$lang->report->annualData->productName   = "{$lang->productCommon}名称";
-$lang->report->annualData->planCount     = '计划数';
-$lang->report->annualData->storyCount    = "{$lang->storyCommon}数";
-
-$lang->report->annualData->qaData           = "累计创建Bug数和创建用例数";
-$lang->report->annualData->totalCreatedBug  = '累计创建Bug数';
-$lang->report->annualData->totalCreatedCase = '累计创建用例数';
-
-$lang->report->annualData->devData           = "完成任务数和解决Bug数";
-$lang->report->annualData->totalFinishedTask = '完成任务数';
-$lang->report->annualData->totalResolvedBug  = '解决Bug数';
-$lang->report->annualData->totalConsumed     = '累计工时';
-
-$lang->report->annualData->poData          = "所创建{$lang->storyCommon}数和对应的优先级及状态";
-$lang->report->annualData->totalStoryPri   = "创建{$lang->storyCommon}优先级分布";
-$lang->report->annualData->totalStoryStage = "创建{$lang->storyCommon}阶段分布";
-
-$lang->report->annualData->qaStatistics  = "月创建Bug数和创建用例数";
-$lang->report->annualData->poStatistics  = "月创建{$lang->storyCommon}数";
-$lang->report->annualData->devStatistics = "月完成任务数及累计工时和解决Bug数";
 
 $lang->report->annualData->unit = "个";

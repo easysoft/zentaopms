@@ -51,3 +51,8 @@ $config->report->annualData['radar']['case']['create']        = 'qa';
 $config->report->annualData['radar']['case']['run']           = 'qa';
 $config->report->annualData['radar']['testtask']['create']    = 'qa';
 $config->report->annualData['radar']['testtask']['edit']      = 'qa';
+
+$config->report->annualData['month']['story'] = array('opened' => 'create', 'activated' => 'activate', 'closed' => 'close', 'changed' => 'change');
+$config->report->annualData['month']['task']  = array('opened' => 'create', 'started' => 'start', 'finished' => 'finish', 'paused' => 'pause', 'activated' => 'activate', 'canceled' => 'cancel', 'closed' => 'close');
+$config->report->annualData['month']['bug']   = array('opened' => 'create', 'bugconfirmed' => 'confirm', 'activated' => 'activate', 'resolved' => 'resolve', 'closed' => 'close');
+$config->report->annualData['month']['case']  = array('opened' => 'create', 'run' => 'run', 'createBug' => 'createBug');

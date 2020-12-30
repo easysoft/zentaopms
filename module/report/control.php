@@ -249,6 +249,7 @@ class report extends control
 		$this->app->loadLang('story');
 		$this->app->loadLang('task');
 		$this->app->loadLang('bug');
+		$this->app->loadLang('testcase');
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
@@ -271,8 +272,8 @@ class report extends control
         }
 
         /* Get users and depts. */
-        $users    = $this->loadModel('user')->getPairs('noletter|useid');
-        $users[0] = $this->lang->report->annualData->allUser;
+        $users    = $this->loadModel('user')->getPairs('noletter|useid|noclosed');
+        $users[''] = $this->lang->report->annualData->allUser;
         $depts    = $this->loadModel('dept')->getOptionMenu();
         $depts[0] = $this->lang->report->annualData->allDept;
 
@@ -301,6 +302,10 @@ class report extends control
         $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
         $data['projectStat']   = $this->report->getUserYearProjects($accounts, $year);
         $data['productStat']   = $this->report->getUserYearProducts($accounts, $year);
+        $data['storyStat']     = $this->report->getYearObjectStat($accounts, $year, 'story');
+        $data['taskStat']      = $this->report->getYearObjectStat($accounts, $year, 'task');
+        $data['bugStat']       = $this->report->getYearObjectStat($accounts, $year, 'bug');
+        $data['caseStat']      = $this->report->getYearCaseStat($accounts, $year);
 
         $yearEfforts = $this->report->getUserYearEfforts($accounts, $year);
         $data['consumed'] = $yearEfforts->consumed;
@@ -315,6 +320,7 @@ class report extends control
         $this->view->years  = $years;
         $this->view->dept   = $dept;
         $this->view->userID = $userID;
+        $this->view->months = $this->report->getYearMonths($year);
         die($this->display());
     }
 }

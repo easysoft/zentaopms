@@ -1,3 +1,122 @@
+function drawStatusPieChart(id, title, statuses, data, callback)
+{
+    var titleTextStyle = {
+        color:'#fff',
+        fontSize: 14
+    };
+    var tooltip = {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+    };
+    var legendLeft = '0';
+    var legendTop  = '25';
+    var legendItemWidth = 10;
+    var legendItemHeight = 10;
+    var legendTextStyle = {
+        color:'#fff',
+        fontSize: 12
+    };
+    var seriesTop = '50';
+    var seriesRadius = ['40%', '70%'];
+    var seriesLabel = {
+        color:'#fff',
+        formatter: '{b}  {d}%'
+    };
+
+    var chart  = echarts.init(document.getElementById(id));
+    var option = {
+	    title: {
+            text: title,
+            textStyle: titleTextStyle,
+        },
+        tooltip: tooltip,
+        legend: {
+            left: legendLeft,
+            top: legendTop,
+            itemWidth: legendItemWidth,
+            itemHeight: legendItemHeight,
+            textStyle: legendTextStyle,
+            data: statuses
+        },
+        series: [
+            {
+                name: title,
+                type: 'pie',
+                top: seriesTop,
+                radius: seriesRadius,
+                avoidLabelOverlap: false,
+                label: seriesLabel,
+                data: data
+            }
+        ]
+    }
+    chart.setOption(option);
+    if(typeof(callback) == 'function') chart.on('finished', callback);
+    
+    return chart;
+}
+
+function drawMonthsBarChart(id, title, legends, xAxis, data)
+{
+    var titleTextStyle = {
+        color:'#fff',
+        fontSize: 14
+    };
+    var tooltip = {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+    };
+    var legendLeft = 'center';
+    var legendTop  = '0';
+    var legendItemWidth = 10;
+    var legendItemHeight = 10;
+    var legendTextStyle = {
+        color:'#fff',
+        fontSize: 12
+    };
+    var labelStyle = {color:'#fff'}
+
+    var chart  = echarts.init(document.getElementById(id));
+    var option = {
+	    title: {
+            text: title,
+            textStyle: titleTextStyle,
+        },
+        tooltip: tooltip,
+        legend: {
+            left: legendLeft,
+            top: legendTop,
+            itemWidth: legendItemWidth,
+            itemHeight: legendItemHeight,
+            textStyle: legendTextStyle,
+            data: legends
+        },
+        grid: {
+          left: '0%',
+          right: '0%',
+          bottom: '2%',
+          containLabel: true
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {show: false},
+          axisLabel: labelStyle
+        },
+        xAxis: {
+          type: 'category',
+          axisLabel: labelStyle,
+          axisTick: {alignWithLabel: true},
+          data: xAxis
+        },
+        series: data
+    }
+    chart.setOption(option);
+    
+    return chart;
+}
+
 /**
  * Export annual data to image file
  * @param {function} sucessCallback
