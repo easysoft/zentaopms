@@ -39,6 +39,7 @@ $lang->issue->assignedBy        = '由谁指派';
 $lang->issue->assignedDate      = '指派时间';
 $lang->issue->resolve           = '解决';
 $lang->issue->id                = '编号';
+$lang->issue->confirm           = '确认';
 
 $lang->issue->view              = '问题详情';
 $lang->issue->close             = '关闭';
@@ -90,12 +91,10 @@ $lang->issue->resolutionList['totask']   = '转任务';
 
 $lang->issue->statusList['unconfirmed'] = '待确认';
 $lang->issue->statusList['confirmed']   = '已确认';
-$lang->issue->statusList['unresolved']  = '正解决';
 $lang->issue->statusList['resolved']    = '已解决';
 $lang->issue->statusList['canceled']    = '取消';
 $lang->issue->statusList['closed']      = '已关闭';
 $lang->issue->statusList['active']      = '激活';
-$lang->issue->statusList['suspended']   = '挂起';
 
 $lang->issue->resolveMethods = array();
 $lang->issue->resolveMethods['resolved'] = '已解决';

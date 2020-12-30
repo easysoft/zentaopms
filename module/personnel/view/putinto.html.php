@@ -15,104 +15,67 @@
 .main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
 </style>
 <div id="mainContent" class="main-row fade">
-  <?php if(!empty($inputPersonnel['projects'])):?>
+  <?php if(!empty($inputPersonnel)):?>
   <div class="main-col">
-    <form class="main-table table-personnel" action="" data-ride="table">
-      <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s";?>
-      <?php $existChildrenStage = empty($inputPersonnel['childrenStage']) ? false : true;?>
-      <table id="accessibleList" class="table table-bordered has-sort-head">
+    <form class="main-table table-product" data-ride="table" method="post" action="">
+      <table class="table has-sort-head table-fixed table-bordered">
         <thead>
-          <tr>
-            <th class="w-160px"><?php echo $lang->personnel->program;?></th>
-            <th class="w-100px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->personnel->project);?></th>
-            <th class="w-80px"><?php echo $lang->personnel->sprint;?></th>
-            <?php if($existChildrenStage):?>
-            <th class="w-80px"><?php echo $lang->personnel->childrenStage;?></th>
-            <?php endif;?>
-            <th class="w-60px"><?php echo $lang->personnel->user;?></th>
-            <th class="w-60px"><?php echo $lang->personnel->role;?></th>
+          <tr class="text-center">
+            <th rowspan='2'><?php echo $lang->personnel->name;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->role;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->executions;?></th>
+            <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
+            <th colspan="3"><?php echo $lang->personnel->task;?></th>
+            <th colspan="3"><?php echo $lang->personnel->bug;?></th>
+            <th colspan="2"><?php echo $lang->personnel->createStory;?></th>
+            <th colspan="3"><?php echo $lang->personnel->issue;?></th>
+            <th colspan="3"><?php echo $lang->personnel->risk;?></th>
+          </tr>
+          <tr class="text-center">
+            <th><?php echo $lang->personnel->putInto;?></th>
+            <th><?php echo $lang->personnel->surplus;?></th>
+            <th><?php echo $lang->personnel->created;?></th>
+            <th><?php echo $lang->personnel->finished;?></th>
+            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->created;?></th>
+            <th><?php echo $lang->personnel->resolved;?></th>
+            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->UR;?></th>
+            <th><?php echo $lang->personnel->SR;?></th>
+            <th><?php echo $lang->personnel->created;?></th>
+            <th><?php echo $lang->personnel->resolved;?></th>
+            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->created;?></th>
+            <th><?php echo $lang->personnel->resolved;?></th>
+            <th><?php echo $lang->personnel->pending;?></th>
           </tr>
         </thead>
-        <tbody>
-          <?php foreach($inputPersonnel['projects'] as $project):?>
+        <tbody class="sortable">
+          <?php foreach($inputPersonnel as $personnel):?>
           <tr>
-            <?php $projectRow = $inputPersonnel['objectRows'][$project->id];?>
-            <?php if($browseType == 'noempty' && $projectRow == 1) continue;?>
-            <td class="text-ellipsis" rowspan="<?php echo $projectRow;?>" title="<?php echo $project->programName;?>"><?php echo $project->programName;?></td>
-            <td class="text-ellipsis" rowspan="<?php echo $projectRow;?>" title="<?php echo $project->name;?>"><?php echo $project->name;?></td>
-            <?php if($projectRow == 1):?>
-              <?php if($existChildrenStage):?>
-              <td></td>
-              <?php endif;?>
-              <td></td>
-              <td></td>
-              <td></td>
-            <?php endif;?>
+            <td><?php echo $personnel['realname'];?></td>
+            <td><?php echo $personnel['role'];?></td>
+            <td><?php echo $personnel['projects'];?></td>
+            <td><?php echo $personnel['executions'];?></td>
+            <td><?php echo $personnel['consumedTask'];?></td>
+            <td><?php echo $personnel['leftTask'];?></td>
+            <td><?php echo $personnel['createdTask'];?></td>
+            <td><?php echo $personnel['finishedTask'];?></td>
+            <td><?php echo $personnel['pendingTask'];?></td>
+            <td><?php echo $personnel['createdBug'];?></td>
+            <td><?php echo $personnel['resolvedBug'];?></td>
+            <td><?php echo $personnel['pendingBug'];?></td>
+            <td><?php echo $personnel['UR'];?></td>
+            <td><?php echo $personnel['SR'];?></td>
+            <td><?php echo $personnel['createdIssue'];?></td>
+            <td><?php echo $personnel['resolvedIssue'];?></td>
+            <td><?php echo $personnel['pendingIssue'];?></td>
+            <td><?php echo $personnel['createdRisk'];?></td>
+            <td><?php echo $personnel['resolvedRisk'];?></td>
+            <td><?php echo $personnel['pendingRisk'];?></td>
           </tr>
-
-          <?php if(isset($inputPersonnel['sprintAndStage'][$project->id])):;?>
-            <?php foreach($inputPersonnel['sprintAndStage'][$project->id] as $object):?>
-              <?php $objectRow = $inputPersonnel['objectRows'][$object->id];?>
-              <tr>
-                <td class="text-ellipsis" id="<?php echo $object->id;?>" rowspan="<?php echo $objectRow;?>" title="<?php echo $object->name;?>"><?php echo $object->name;?></td>
-                <?php if($objectRow == 1):?>
-                  <?php if($existChildrenStage):?>
-                  <td></td>
-                  <?php endif;?>
-                  <td></td>
-                  <td></td>
-                <?php endif;?>
-              </tr>
-
-              <?php if($object->type == 'sprint' && $objectRow > 1):?>
-                <?php foreach($inputPersonnel['teams'][$object->id] as $team):?>
-                <tr>
-                  <?php if($existChildrenStage):?>
-                  <td></td>
-                  <?php endif;?>
-                  <td><?php echo $team->realname;?></td>
-                  <td><?php echo $team->role;?></td>
-                </tr>
-                <?php endforeach;?>
-              <?php endif;?>
-
-              <?php if($object->type == 'stage' && $object->grade == 1):?>
-                <?php if(isset($inputPersonnel['childrenStage'][$object->id])):?>
-                  <?php foreach($inputPersonnel['childrenStage'][$object->id] as $stage):?>
-                  <tr>
-                    <?php $teamRow = $inputPersonnel['objectRows'][$stage->id];?>
-                    <td class="text-ellipsis" rowspan="<?php echo $teamRow;?>" title="<?php echo $stage->name;?>"><?php echo $stage->name;?></td>
-                    <?php if($teamRow == 1):?>
-                      <td></td>
-                      <td></td>
-                    <?php endif;?>
-                  </tr>
-                  <?php if($teamRow > 1):?>
-                    <?php foreach($inputPersonnel['teams'][$stage->id] as $team):?>
-                    <tr>
-                      <td><?php echo $team->realname;?></td>
-                      <td><?php echo $team->role;?></td>
-                    </tr>
-                    <?php endforeach;?>
-                  <?php endif;?>
-                  <?php endforeach;?>
-                <?php else:?>
-                  <?php if(isset($inputPersonnel['teams'][$object->id])):?>
-                  <?php foreach($inputPersonnel['teams'][$object->id] as $team):?>
-                  <tr>
-                    <?php if($existChildrenStage):?>
-                      <td></td>
-                    <?php endif;?>
-                    <td><?php echo $team->realname;?></td>
-                    <td><?php echo $team->role;?></td>
-                  </tr>
-                  <?php endforeach;?>
-                  <?php endif;?>
-                <?php endif;?>
-              <?php endif;?>
-            <?php endforeach;?>
-          <?php endif;?>
-          <?php endforeach;?>
+        <?php endforeach;?>
         </tbody>
       </table>
     </form>

@@ -47,6 +47,25 @@ class userModel extends model
     }
 
     /**
+     * Get user information by accounts.
+     *
+     * @param  array    $accounts
+     * @param  string   $keyField
+     * @access public
+     * @return object
+     */
+    public function getListByAccounts($accounts = array(), $keyField = 'id')
+    {
+        if(empty($accounts)) return array();
+
+        return $this->dao->select('id,account,realname,role')->from(TABLE_USER)
+            ->where('account')->in($accounts)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('inside')
+            ->fetchAll($keyField);
+    }
+
+    /**
      * Get the account=>realname pairs.
      *
      * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme

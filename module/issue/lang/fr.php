@@ -39,6 +39,7 @@ $lang->issue->assignedBy        = 'AssignedBy';
 $lang->issue->assignedDate      = 'AssignedDate';
 $lang->issue->resolve           = 'Resolved';
 $lang->issue->id                = 'ID';
+$lang->issue->confirm           = 'Confirm';
 
 $lang->issue->view              = 'Issue Details';
 $lang->issue->close             = 'Closed';
@@ -90,12 +91,10 @@ $lang->issue->resolutionList['totask']   = 'To Task';
 
 $lang->issue->statusList['unconfirmed'] = 'Unconfirmed';
 $lang->issue->statusList['confirmed']   = 'Confirmed';
-$lang->issue->statusList['unresolved']  = 'Unresolved';
 $lang->issue->statusList['resolved']    = 'Resolved';
 $lang->issue->statusList['canceled']    = 'Canceled';
 $lang->issue->statusList['closed']      = 'Closed';
 $lang->issue->statusList['active']      = 'Active';
-$lang->issue->statusList['suspended']   = 'Suspended';
 
 $lang->issue->resolveMethods = array();
 $lang->issue->resolveMethods['resolved'] = 'Resolved';

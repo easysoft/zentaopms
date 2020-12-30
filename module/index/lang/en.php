@@ -1,6 +1,7 @@
 <?php
 $lang->index->common = 'Home';
 $lang->index->index  = 'Home';
+$lang->index->search = 'Please input';
 
 $lang->index->tab = new stdClass();
 $lang->index->tab->open   = 'Open';

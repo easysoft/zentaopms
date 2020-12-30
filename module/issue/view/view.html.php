@@ -64,6 +64,7 @@ foreach($issue as $field => $value)
         <?php if(!$issue->deleted):?>
         <?php
           $params = "issueID=$issue->id";
+          common::printIcon('issue', 'confirm', $params, $issue, 'button', 'start', '', 'iframe showinonlybody', true);
           common::printIcon('issue', 'resolve', $params, $issue, 'button', 'checked', '', 'iframe showinonlybody', true);
           common::printIcon('issue', 'assignTo', $params, $issue, 'button', '', '', 'iframe showinonlybody', true);
           common::printIcon('issue', 'cancel', $params, $issue, 'button', '', '', 'iframe showinonlybody', true);

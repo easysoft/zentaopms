@@ -39,6 +39,7 @@ $lang->issue->assignedBy        = '由誰指派';
 $lang->issue->assignedDate      = '指派時間';
 $lang->issue->resolve           = '解決';
 $lang->issue->id                = '編號';
+$lang->issue->confirm           = '確認';
 
 $lang->issue->view              = '問題詳情';
 $lang->issue->close             = '關閉';
@@ -51,6 +52,7 @@ $lang->issue->assignTo          = '指派';
 $lang->issue->create            = '新建問題';
 $lang->issue->edit              = '編輯';
 $lang->issue->batchCreate       = '批量新建';
+$lang->issue->deleted           = '已刪除';
 
 $lang->issue->labelList['all']       = '全部';
 $lang->issue->labelList['open']      = '開放';
@@ -89,12 +91,10 @@ $lang->issue->resolutionList['totask']   = '轉任務';
 
 $lang->issue->statusList['unconfirmed'] = '待確認';
 $lang->issue->statusList['confirmed']   = '已確認';
-$lang->issue->statusList['unresolved']  = '正解決';
 $lang->issue->statusList['resolved']    = '已解決';
 $lang->issue->statusList['canceled']    = '取消';
 $lang->issue->statusList['closed']      = '已關閉';
 $lang->issue->statusList['active']      = '激活';
-$lang->issue->statusList['suspended']   = '掛起';
 
 $lang->issue->resolveMethods = array();
 $lang->issue->resolveMethods['resolved'] = '已解決';

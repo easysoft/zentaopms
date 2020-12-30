@@ -59,12 +59,10 @@ class personnelModel extends model
      * Access to program set input staff.
      *
      * @param  int       $programID
-     * @param  string    $browseType
-     * @param  string    $orderBy
      * @access public
      * @return array
      */
-    public function getInputPersonnel($programID = 0, $browseType = 'all', $orderBy = 'id_desc')
+    public function getInputPersonnel($programID = 0)
     {
         $personnelList = array();
 
@@ -73,35 +71,333 @@ class personnelModel extends model
             ->where('type')->eq('project')
             ->andWhere('path')->like("%,$programID,%")
             ->andWhere('deleted')->eq('0')
-            ->orderBy($orderBy)
+            ->orderBy('id_desc')
             ->fetchAll('id');
-
-        $personnelList['projects'] = $projects;
         if(empty($projects)) return $personnelList;
 
-        $sprintAndStage = $this->getSprintAndStage($projects);
-        $personnelList['sprintAndStage'] = $sprintAndStage['sprintAndStage'];
-        $personnelList['childrenStage']  = $sprintAndStage['childrenStage'];
-        $personnelList['teams']          = $sprintAndStage['teams'];
-        $personnelList['objectRows']     = $sprintAndStage['objectRows'];
+        $accountPairs     = $this->getInvolvedProjects($projects);
+        if(empty($accountPairs)) return $personnelList;
 
-        /* Get the program name for each level. */
-        $programNameList = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->fetchPairs();
-        foreach($personnelList['projects'] as $id => $project)
+        $executionPairs   = $this->getInvolvedExecutions($projects);
+        $taskInput        = $this->getProjectTaskInput($projects, $accountPairs);
+        $bugAndStoryInput = $this->getBugAndStoryInput($accountPairs, $programID);
+        $issueInput       = $this->getIssueInput($accountPairs, $projects);
+        $riskInput        = $this->getRiskInput($accountPairs, $projects);
+        $userPairs        = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
+        foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
+
+        foreach($accountPairs as $account => $projects)
         {
-            $path = explode(',', $project->path);
-            $path = array_filter($path);
-            unset($path[$id]);
-            $programName = '';
-            foreach($path as $program)
-            {
-                if($program == $id) continue;
-                $programName .= '/' . $programNameList[$program];
-            }
-            $personnelList['projects'][$id]->programName = $programName;
+            $personnelList[$account]['realname']      = $userPairs[$account]->realname;
+            $personnelList[$account]['account']       = $account;
+            $personnelList[$account]['role']          = $userPairs[$account]->role;
+            $personnelList[$account]['projects']      = $projects;
+            $personnelList[$account]['executions']    = zget($executionPairs, $account, 0);
+
+            $personnelList[$account]['createdTask']   = $taskInput[$account]['created'];
+            $personnelList[$account]['finishedTask']  = $taskInput[$account]['finished'];
+            $personnelList[$account]['pendingTask']   = $taskInput[$account]['pending'];
+            $personnelList[$account]['consumedTask']  = $taskInput[$account]['consumed'];
+            $personnelList[$account]['leftTask']      = $taskInput[$account]['left'];
+
+            $personnelList[$account]['createdBug']    = $bugAndStoryInput[$account]['created'];
+            $personnelList[$account]['resolvedBug']   = $bugAndStoryInput[$account]['resolved'];
+            $personnelList[$account]['pendingBug']    = $bugAndStoryInput[$account]['pending'];
+            $personnelList[$account]['UR']            = $bugAndStoryInput[$account]['UR'];
+            $personnelList[$account]['SR']            = $bugAndStoryInput[$account]['SR'];
+
+            $personnelList[$account]['createdIssue']  = $issueInput[$account]['created'];
+            $personnelList[$account]['resolvedIssue'] = $issueInput[$account]['resolved'];
+            $personnelList[$account]['pendingIssue']  = $issueInput[$account]['pending'];
+
+            $personnelList[$account]['createdRisk']   = $riskInput[$account]['created'];
+            $personnelList[$account]['resolvedRisk']  = $riskInput[$account]['resolved'];
+            $personnelList[$account]['pendingRisk']   = $riskInput[$account]['pending'];
         }
 
         return $personnelList;
+    }
+
+    /**
+     * Get user project risk input.
+     *
+     * @param  array     $accounts
+     * @param  object    $projects
+     * @access public
+     * @return array
+     */
+    public function getRiskInput($accounts, $projects)
+    {
+        $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
+            ->where('PRJ')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        /* Initialization personnel risks. */
+        $putInto = array();
+        foreach($accounts as $account => $project)
+        {
+            $putInto[$account]['created']  = 0;
+            $putInto[$account]['resolved'] = 0;
+            $putInto[$account]['pending']  = 0;
+        }
+
+        foreach($risks as $risk)
+        {
+            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['created'] += 1;
+            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolved'] += 1;
+            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pending'] += 1;
+        }
+
+        return $putInto;
+    }
+
+    /**
+     * Get user project issue input.
+     *
+     * @param  array     $accounts
+     * @param  object    $projects
+     * @access public
+     * @return array
+     */
+    public function getIssueInput($accounts, $projects)
+    {
+        $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
+            ->where('PRJ')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        /* Initialization personnel issues. */
+        $putInto = array();
+        foreach($accounts as $account => $project)
+        {
+            $putInto[$account]['created']  = 0;
+            $putInto[$account]['resolved'] = 0;
+            $putInto[$account]['pending']  = 0;
+        }
+
+        foreach($issues as $issue)
+        {
+            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['created'] += 1;
+            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolved'] += 1;
+            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pending'] += 1;
+        }
+
+        return $putInto;
+    }
+
+    /**
+     * Get user bug and story input.
+     *
+     * @param  array     $accounts
+     * @access public
+     * @return array
+     */
+    public function getBugAndStoryInput($accounts, $programID)
+    {
+        $productPairs = $this->loadModel('product')->getPairs('', $programID);
+        $productKeys  = array_keys($productPairs);
+
+        $bugs = $this->dao->select('id,status,openedBy,assignedTo,resolvedBy')->from(TABLE_BUG)
+            ->where('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        $requirement = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
+            ->where('product')->in($productKeys)
+            ->andWhere('openedBy')->in(array_keys($accounts))
+            ->andWhere('type')->eq('requirement')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('openedBy')
+            ->fetchPairs('openedBy');
+
+        $story = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
+            ->where('product')->in($productKeys)
+            ->andWhere('openedBy')->in(array_keys($accounts))
+            ->andWhere('type')->eq('story')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('openedBy')
+            ->fetchPairs('openedBy');
+
+        /* Initialize bugs and requirements related to personnel. */
+        $putInto = array();
+        foreach($accounts as $account => $project)
+        {
+            $putInto[$account]['created']  = 0;
+            $putInto[$account]['resolved'] = 0;
+            $putInto[$account]['pending']  = 0;
+            $putInto[$account]['UR']       = 0;
+            $putInto[$account]['SR']       = 0;
+        }
+
+        foreach($requirement as $account => $number) $putInto[$account]['UR'] = $number;
+        foreach($story as $account => $number)       $putInto[$account]['SR'] = $number;
+
+        foreach($bugs as $bug)
+        {
+            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['created'] += 1;
+            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolved'] += 1;
+            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pending'] += 1;
+        }
+        return $putInto;
+    }
+
+    /**
+     * Get the project member accounts and the number of participating projects.
+     *
+     * @param  object    $projects
+     * @access public
+     * @return array
+     */
+    public function getInvolvedProjects($projects)
+    {
+        return $this->dao->select('account, count(root) as projects')->from(TABLE_TEAM)
+            ->where('root')->in(array_keys($projects))
+            ->andWhere('type')->eq('project')
+            ->groupBy('account')
+            ->fetchPairs('account');
+    }
+
+    /**
+     * Gets the iteration or phase under the project.
+     *
+     * @param  object    $projects
+     * @access public
+     * @return array
+     */
+    public function getInvolvedExecutions($projects)
+    {
+        $executions = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('type')->in('stage,sprint')
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs('id');
+
+        return $this->dao->select('account, count(root) as executions')->from(TABLE_TEAM)
+            ->where('root')->in(array_keys($executions))
+            ->andWhere('type')->in('stage,sprint')
+            ->groupBy('account')
+            ->fetchPairs('account');
+    }
+
+    /**
+     * Get project task inputs.
+     *
+     * @param  object    $projects
+     * @param  array     $accounts
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskInput($projects, $accounts)
+    {
+        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,PRJ')->from(TABLE_TASK)
+          ->where('PRJ')->in(array_keys($projects))
+          ->andWhere('deleted')->eq('0')
+          ->fetchAll('id');
+
+        /* Initialize personnel related tasks. */
+        $putInto = array();
+        foreach($accounts as $account => $project)
+        {
+            $putInto[$account]['created']  = 0;
+            $putInto[$account]['finished'] = 0;
+            $putInto[$account]['pending']  = 0;
+            $putInto[$account]['consumed'] = 0;
+            $putInto[$account]['left']     = 0;
+        }
+
+        /* Number of tasks per person. */
+        $userTasks = array();
+        foreach($tasks as $task)
+        {
+            if($task->openedBy && isset($putInto[$task->openedBy]))
+            {
+                $putInto[$task->openedBy]['created']   += 1;
+                $userTasks[$task->openedBy][$task->id] = $task->id;
+            }
+
+            if($task->finishedBy && isset($putInto[$task->finishedBy]))
+            {
+                $putInto[$task->finishedBy]['finished']  += 1;
+                $userTasks[$task->finishedBy][$task->id] = $task->id;
+            }
+
+            if($task->assignedTo && $task->status == 'wait' && isset($putInto[$task->assignedTo]))
+            {
+                $putInto[$task->assignedTo]['pending']   += 1;
+                $userTasks[$task->assignedTo][$task->id] = $task->id;
+            }
+        }
+
+        /* The number of hours per person. */
+        $userHours = array();
+        if(isset($this->config->qcVersion) || isset($this->config->proVersion) || isset($this->config->bizVersion))
+        {
+            $userHours = $this->getUserEffortHours($userTasks);
+        }
+        else
+        {
+            $userHours = $this->getUserHours($userTasks);
+        }
+
+        foreach($userHours as $account => $hours)
+        {
+            $putInto[$account]['left']     = $hours->left;
+            $putInto[$account]['consumed'] = $hours->consumed;
+        }
+
+        return $putInto;
+    }
+
+    /**
+     * Get user hours.
+     *
+     * @param  object    $userTasks
+     * @access public
+     * @return object
+     */
+    public function getUserEffortHours($userTasks)
+    {
+        $accounts   = array();
+        $taskIDList = array();
+        foreach($userTasks as $account => $taskID)
+        {
+            $accounts[] = $account;
+            $taskIDList = array_merge($taskIDList, $taskID);
+        }
+
+        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
+            ->where('account')->in($accounts)
+            ->andWhere('objectType')->eq('task')
+            ->andWhere('objectID')->in($taskIDList)
+            ->groupBy('account')
+            ->fetchAll('account');
+        return $userHours;
+    }
+
+    /**
+     * Get user hours.
+     *
+     * @param  object    $userTasks
+     * @access public
+     * @return object
+     */
+    public function getUserHours($userTasks)
+    {
+        $accounts   = array();
+        $taskIDList = array();
+        foreach($userTasks as $account => $taskID)
+        {
+            $accounts[] = $account;
+            $taskIDList = array_merge($taskIDList, $taskID);
+        }
+
+        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
+            ->where('account')->in($accounts)
+            ->andWhere('task')->in($taskIDList)
+            ->groupBy('account')
+            ->fetchAll('account');
+        return $userHours;
     }
 
     /**
@@ -113,71 +409,11 @@ class personnelModel extends model
      */
     public function getSprintAndStage($projects)
     {
-        /* Get all sprints and iterations under the project. */
-        $projectKeys  = array_keys($projects);
-        $projectObjet = $this->dao->select('id,project,model,type,parent,path,grade,name')->from(TABLE_PROJECT)
-            ->where('project')->in($projectKeys)
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
-            ->fetchAll();
-
-        /* Get the team's root ID, separate the parent-child iteration. */
-        $rootIDList     = array();
-        $sprintAndStage = array();
-        $childrenStage  = array();
-        foreach($projectObjet as $id => $object)
-        {
-            if($object->grade == 1)
-            {
-                $sprintAndStage[$object->project][] = $object;
-            }
-            else
-            {
-                $childrenStage[$object->parent][] = $object;
-            }
-            $rootIDList[] = $object->id;
-        }
-
         $teams = $this->dao->select('t1.id,t1.root,t1.type,t1.role,t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.root')->in($rootIDList)
             ->andWhere('t1.type')->in('stage,sprint')
             ->fetchGroup('root', 'id');
-
-        /* Calculate the number of cross rows for iterations and sprints. */
-        $objectRows = array();
-        foreach($projects as $project)
-        {
-            $objectRows[$project->id] = isset($sprintAndStage[$project->id]) ? count($sprintAndStage[$project->id]) + 1 : 1;
-            if(!isset($sprintAndStage[$project->id])) continue;
-            foreach($sprintAndStage[$project->id] as $object)
-            {
-                $objectRows[$object->id] = 1;
-                if($object->type == 'sprint')
-                {
-                    $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
-                    $objectRows[$project->id] += $objectRows[$object->id] > 1 ? count($teams[$object->id]) : 0;;
-                }
-                elseif($object->type == 'stage' && isset($childrenStage[$object->id]))
-                {
-                    $objectRows[$object->id]  += count($childrenStage[$object->id]);
-                    $objectRows[$project->id] += count($childrenStage[$object->id]);
-                    foreach($childrenStage[$object->id] as $stage)
-                    {
-                        $objectRows[$stage->id]    = isset($teams[$stage->id]) ? count($teams[$stage->id]) + 1 : 1;
-                        $objectRows[$object->id]  += $objectRows[$stage->id] > 1 ? count($teams[$stage->id]) : 0;
-                        $objectRows[$project->id] += $objectRows[$stage->id] > 1 ? count($teams[$stage->id]) : 0;
-                    }
-                }
-                else
-                {
-                    $objectRows[$object->id]   = isset($teams[$object->id]) ? count($teams[$object->id]) + 1 : 1;
-                    $objectRows[$project->id] += $objectRows[$object->id] > 1 ? count($teams[$object->id]) : 0;
-                }
-            }
-        }
-
-        return array('sprintAndStage' => $sprintAndStage, 'childrenStage' => $childrenStage, 'teams' => $teams, 'objectRows' => $objectRows);
     }
 
     /**

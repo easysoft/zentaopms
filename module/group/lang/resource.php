@@ -255,6 +255,7 @@ $lang->resource->issue->create        = 'create';
 $lang->resource->issue->batchCreate   = 'batchCreate';
 $lang->resource->issue->delete        = 'delete';
 $lang->resource->issue->edit          = 'edit';
+$lang->resource->issue->confirm       = 'confirm';
 $lang->resource->issue->assignTo      = 'assignTo';
 $lang->resource->issue->close         = 'close';
 $lang->resource->issue->cancel        = 'cancel';
@@ -267,11 +268,12 @@ $lang->issue->methodOrder[10] = 'create';
 $lang->issue->methodOrder[15] = 'batchCreate';
 $lang->issue->methodOrder[20] = 'delete';
 $lang->issue->methodOrder[25] = 'edit';
-$lang->issue->methodOrder[30] = 'assignTo';
-$lang->issue->methodOrder[35] = 'close';
-$lang->issue->methodOrder[40] = 'cancel';
-$lang->issue->methodOrder[45] = 'activate';
-$lang->issue->methodOrder[50] = 'resolve';
+$lang->issue->methodOrder[30] = 'confirm';
+$lang->issue->methodOrder[35] = 'assignTo';
+$lang->issue->methodOrder[40] = 'close';
+$lang->issue->methodOrder[45] = 'cancel';
+$lang->issue->methodOrder[50] = 'activate';
+$lang->issue->methodOrder[55] = 'resolve';
 $lang->issue->methodOrder[60] = 'view';
 
 /* Risk . */
