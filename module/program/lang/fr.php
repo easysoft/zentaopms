@@ -201,7 +201,7 @@ $lang->program->stakeholderType      = 'Stakeholder type';
 $lang->program->isStakeholderKey     = 'Key stakeholder';
 $lang->program->importStakeholder    = 'Import program';
 $lang->program->PGMManageMembers     = 'Program Team';
-$lang->program->PGMParentBudget      = "Parent program budget：%s";
+$lang->program->PGMParentBudget      = "Parent program budget：";
 $lang->program->beyondParentBudget   = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->PGMBeginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
 $lang->program->PGMEndGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
