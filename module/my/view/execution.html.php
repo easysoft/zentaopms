@@ -54,7 +54,7 @@
           <span class='project-type-label label label-info label-outline'>
             <?php echo zget($lang->project->typeList, $execution->type);?>
           </span>
-          <?php echo html::a($link, $execution->name);?>
+          <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
         <td><?php echo $execution->begin;?></td>
