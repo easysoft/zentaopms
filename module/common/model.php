@@ -283,12 +283,12 @@ class commonModel extends model
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' class='iframe $noRole'" . '>';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='500' class='iframe $noRole'" . '>';
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='500'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
                 echo "<li class='divider'></li>";

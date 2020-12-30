@@ -1,16 +1,6 @@
-.col-6{width:50% !important;}
-.col-sm-6{width:49% !important;}
-.cell{height:440px; width: 100%}
-.cell .divider{ display: block; width: 1px; height: 340px; background-color: rgba(0,0,0,.05); float: left;}
-.main-header{margin-bottom:20px;}
-.main-header .user-name{margin: 0 10px 0 0; font-size: 14px; line-height: 34px; font-weight: bold;}
-.main-header .user-role{margin: 0 10px 0 0; font-size: 12px; line-height: 34px;}
+.cell{height:440px;}
+.row table{width: 100%;}
+.row th{width: 20%; line-height: 30px; padding-right: 20px; text-align: right; font-weight: 500;}
+.row td{width: 30%; text-align: left; font-weight: 700;}
 .main-actions{margin: 20px 0 20px 0; text-align: center;}
 .user-title{margin: 5px 10px; font-size: 14px; font-weight: bold; border-left: 3px solid #006af1; padding-left: 10px;}
-.right-info{padding-top: 30px;}
-.dl-horizontal{margin:0px;}
-.divider{border-left:1px solid #e5e5e5;}
-
-.tiles{padding-top:15px;}
-.tile{text-align:left !important; padding-left:60px;}
-.tile-title{color:#999; padding-bottom:5px !important;}
