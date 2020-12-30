@@ -174,7 +174,7 @@ $lang->product->viewMenu->plan        = array('link' => "计划|productplan|brow
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
-$lang->product->viewMenu->project     = "{$lang->executionCommon}|product|project|status=all&productID=%s";
+$lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->setting     = array('link' => '设置|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
 

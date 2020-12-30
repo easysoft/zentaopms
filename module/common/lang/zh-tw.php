@@ -170,6 +170,8 @@ $lang->product->viewMenu->plan        = array('link' => "計劃|productplan|brow
 $lang->product->viewMenu->release     = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s';
 $lang->product->viewMenu->dynamic     = '動態|product|dynamic|productID=%s';
+$lang->product->viewMenu->project     = "項目|product|project|status=all&productID=%s";
+$lang->product->viewMenu->doc         = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->setting     = array('link' => '設置|product|setting|mode=branch&productID=%s', 'alias' => 'addwhitelist');
 
 $lang->product->settingMenu = new stdclass();
