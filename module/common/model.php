@@ -716,7 +716,7 @@ class commonModel extends model
                 }
 
                 /* Disable links to more buttons. */
-                if($menuItem->name == 'setting' || $menuItem->name == 'other') $link='javascript:void(0);';
+                if($menuItem->name == 'projectsetting' || $menuItem->name == 'other') $link='javascript:void(0);';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 

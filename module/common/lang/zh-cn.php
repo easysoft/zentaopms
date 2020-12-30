@@ -887,7 +887,7 @@ $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
+$lang->menu->scrum->projectsetting = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
@@ -896,8 +896,8 @@ $lang->scrum->subMenu->other->issue       = array('link' => '问题|issue|browse
 $lang->scrum->subMenu->other->risk        = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
-$lang->scrum->subMenu->setting = new stdclass();
-$lang->scrum->subMenu->setting->program = '项目|program|PRJEdit|';
+$lang->scrum->subMenu->projectsetting = new stdclass();
+$lang->scrum->subMenu->projectsetting->program = '项目|program|PRJEdit|';
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -913,7 +913,7 @@ $lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|prod
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->waterfall->setting        = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
+$lang->menu->waterfall->projectsetting = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
@@ -922,9 +922,9 @@ $lang->waterfall->subMenu->other->issue = array('link' => '问题|issue|browse|'
 $lang->waterfall->subMenu->other->risk  = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
-$lang->waterfall->subMenu->setting = new stdclass();
-$lang->waterfall->subMenu->setting->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->setting->program        = '项目|program|PRJEdit|';
+$lang->waterfall->subMenu->projectsetting = new stdclass();
+$lang->waterfall->subMenu->projectsetting->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
+$lang->waterfall->subMenu->projectsetting->program        = '项目|program|PRJEdit|';
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
