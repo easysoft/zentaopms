@@ -78,7 +78,7 @@ class testsuiteModel extends model
     {
         if(!$productID)
         {
-            unset($this->lang->product->settingMenu->branch);
+            unset($this->lang->product->setMenu->branch);
             return;
         }
 
