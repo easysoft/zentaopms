@@ -104,6 +104,7 @@ $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=prove
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s%s年工作汇总";
+$lang->report->annualData->scope            = "统计范围";
 $lang->report->annualData->allUser          = "所有用户";
 $lang->report->annualData->allDept          = "全公司";
 $lang->report->annualData->soFar            = "（%s年1月1日至今）";

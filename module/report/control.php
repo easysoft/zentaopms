@@ -239,12 +239,15 @@ class report extends control
     }
 
     /**
-     * Show personal annual data
+     * Show annual data
      *
+     * @param  string $year 
+     * @param  string $dept 
+     * @param  string $userID 
      * @access public
      * @return void
      */
-    public function annualData($year = '', $dept = 0, $userID = '')
+    public function annualData($year = '', $dept = '', $userID = '')
 	{
 		$this->app->loadLang('story');
 		$this->app->loadLang('task');
@@ -272,10 +275,12 @@ class report extends control
         }
 
         /* Get users and depts. */
-        $users    = $this->loadModel('user')->getPairs('noletter|useid|noclosed');
+        $users     = $this->loadModel('user')->getPairs('noletter|useid|noclosed');
         $users[''] = $this->lang->report->annualData->allUser;
-        $depts    = $this->loadModel('dept')->getOptionMenu();
-        $depts[0] = $this->lang->report->annualData->allDept;
+
+        $depts = $this->loadModel('dept')->getOptionMenu();
+        $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
+        if(empty($userID)) unset($depts[0]);
 
         $accounts = array();
         if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
@@ -283,11 +288,11 @@ class report extends control
         {
             $user = $this->loadModel('user')->getById($userID, 'id');
 			$dept = $user->dept;
-            $accounts[$user->account] = $user->realname ? $user->realname : $user->account;
+            $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
         if($accounts) $accounts = array_keys($accounts);
 
-        /* Get common annual data. */
+        /* Get annual data. */
         $data = array();
         if(!$userID)
         {
@@ -310,9 +315,9 @@ class report extends control
         $yearEfforts = $this->report->getUserYearEfforts($accounts, $year);
         $data['consumed'] = $yearEfforts->consumed;
 
-        if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllStatusStat();
+        if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? $users[$userID] : ($dept ? $depts[0] : $depts[$dept])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? $users[$userID] : ($dept ? $depts[''] : $depts[$dept])), $year);
         $this->view->data   = $data;
         $this->view->year   = $year;
         $this->view->users  = $users;

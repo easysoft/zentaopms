@@ -10,9 +10,16 @@
       <h1 class='text-holder' data-id='title'><?php echo $title;?></h1>
     </header>
     <div id='toolbar'>
+<div class='pull-left'>
+      <span><?php echo $annualDataLang->scope;?></span>
       <?php echo html::select('year', $years, $year, "class='form-control'");?>
-      <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-share'></i></button>
+      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
+      <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
+</div>
+<div class='pull-right'>
+      <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-export'></i></button>
       <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
+</div>
     </div>
     <section id='baseInfo'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2></header>
@@ -52,8 +59,8 @@
 
               foreach($objectContributions as $actionName => $count)
               {
-                  $radarType = isset($annualDataConfig['radar'][$objectType][$actionName]) ? $annualDataConfig['radar'][$objectType][$actionName] : 'other';
-                  $radarData[$radarType] += $count;
+                  $radarTypes = isset($annualDataConfig['radar'][$objectType][$actionName]) ? $annualDataConfig['radar'][$objectType][$actionName] : array('other');
+                  foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
               }
           }
           ?>
@@ -86,7 +93,7 @@
                 {
                     $color = array_shift($colors);
                     $count = $objectContributions[$actionName];
-                    $width = round(($count / $maxCount * 100), 1);
+                    $width = floor($count / $maxCount * 100);
                     echo "<span class='item' style='background-color:{$color};width:{$width}%'>{$count}</span>";
             
                     $detail .= "<li><span class='color' style='background-color:{$color}'></span><span class='item-name'>" . $annualDataLang->actionList[$actionName] . "</span><span class='count'>{$count}</span></li>";
@@ -107,7 +114,7 @@
     <section id='projectData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->projects . $soFar;?></h2></header>
       <div>
-        <table class='table table-hover'>
+        <table class='table table-hover table-borderless table-condensed'>
           <thead>
             <tr>
               <?php foreach($annualDataLang->projectFields as $field => $name):?>
@@ -130,7 +137,7 @@
     <section id='productData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2></header>
       <div>
-        <table class='table table-hover'>
+        <table class='table table-hover table-borderless table-condensed'>
           <thead>
             <tr>
               <?php foreach($annualDataLang->productFields as $field => $name):?>
@@ -151,7 +158,7 @@
       </div>
     </section>
     <?php if(empty($dept) and empty($userID)):?>
-    <section id='allStatusStat'>
+    <section id='allTimeStatusStat'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->statusStat;?></h2></header>
       <div>
         <div class='canvas' id='allStoryStatusCanvas'></div>
@@ -159,94 +166,28 @@
         <div class='canvas' id='allBugStatusCanvas'></div>
         <?php
         foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
-        <div class='<?php echo $objectType;?>Overview hidden'>
-        <?php
-        $allCount    = 0;
-        $undoneCount = 0;
-        foreach($objectStatusStat as $status => $count)
-        {
-            $allCount += $count;
-            if($objectType == 'story' and $status != 'closed') $undoneCount += $count;
-            if($objectType == 'task' and $status != 'done' and $status != 'closed' and $status != 'cancel') $undoneCount += $count;
-            if($objectType == 'bug' and $status == 'active') $undoneCount += $count;
-        }
-        if($objectType == 'story') echo $annualDataLang->allStory;
-        if($objectType == 'task')  echo $annualDataLang->allTask;
-        if($objectType == 'bug')   echo $annualDataLang->allBug;
-        echo ' &nbsp; ' . $allCount;
-        echo '<br />';
-        echo $objectType == 'bug' ? $annualDataLang->unresolve : $annualDataLang->undone;
-        echo ' &nbsp; ' . $undoneCount;
-        ?>
-        </div>
+        <div class='<?php echo $objectType;?>Overview hidden'><?php echo $this->report->getStatusOverview($objectType, $objectStatusStat);?></div>
         <?php endforeach;?>
       </div>
     </section>
     <?php endif;?>
-    <section class='dataYearStat' id='storyData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->stories . $soFar;?></h2></header>
+    <?php foreach(array('story', 'task', 'bug', 'case') as $objectType):?>
+    <section class='dataYearStat' id='<?php echo $objectType;?>Data'>
+      <?php if($objectType == 'story') $sectionHeader = $annualDataLang->stories;?>
+      <?php if($objectType == 'task') $sectionHeader = $annualDataLang->tasks;?>
+      <?php if($objectType == 'bug') $sectionHeader = $annualDataLang->bugs;?>
+      <?php if($objectType == 'case') $sectionHeader = $annualDataLang->cases;?>
+      <?php $ucfirst = ucfirst($objectType);?>
+      <header><h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2></header>
       <div>
-        <div class='canvas left' id='yearStoryStatusCanvas'></div>
-        <div class='canvas right' id='yearStoryActionCanvas'></div>
-        <div class='yearStoryOverview hidden'>
-        <?php
-        $allCount    = 0;
-        $undoneCount = 0;
-        foreach($data['storyStat']['statusStat'] as $status => $count)
-        {
-            $allCount += $count;
-            if($status != 'closed') $undoneCount += $count;
-        }
-        echo $annualDataLang->allStory . ' &nbsp; ' . $allCount . '<br />' . $annualDataLang->undone . ' &nbsp; ' . $undoneCount;
-        ?>
-        </div>
+        <div class='canvas left' id='<?php echo $objectType == 'case' ?  "yearCaseResultCanvas" : "year{$ucfirst}StatusCanvas";?>'></div>
+        <div class='canvas right' id='year<?php echo $ucfirst;?>ActionCanvas'></div>
+        <?php if($objectType != 'case'):?>
+        <div class='year<?php echo $ucfirst;?>Overview hidden'><?php echo $this->report->getStatusOverview($objectType, $data["{$objectType}Stat"]['statusStat']);?></div>
+        <?php endif;?>
       </div>
     </section>
-    <section class='dataYearStat' id='taskData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->tasks . $soFar;?></h2></header>
-      <div>
-        <div class='canvas left' id='yearTaskStatusCanvas'></div>
-        <div class='canvas right' id='yearTaskActionCanvas'></div>
-        <div class='yearTaskOverview hidden'>
-        <?php
-        $allCount    = 0;
-        $undoneCount = 0;
-        foreach($data['taskStat']['statusStat'] as $status => $count)
-        {
-            $allCount += $count;
-            if($status != 'done' and $status != 'closed' and $status != 'cancel') $undoneCount += $count;
-        }
-        echo $annualDataLang->allTask . ' &nbsp; ' . $allCount . '<br />' . $annualDataLang->undone . ' &nbsp; ' . $undoneCount;
-        ?>
-        </div>
-      </div>
-    </section>
-    <section class='dataYearStat' id='bugData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->bugs . $soFar;?></h2></header>
-      <div>
-        <div class='canvas left' id='yearBugStatusCanvas'></div>
-        <div class='canvas right' id='yearBugActionCanvas'></div>
-        <div class='yearBugOverview hidden'>
-        <?php
-        $allCount    = 0;
-        $undoneCount = 0;
-        foreach($data['bugStat']['statusStat'] as $status => $count)
-        {
-            $allCount += $count;
-            if($status == 'active') $undoneCount += $count;
-        }
-        echo $annualDataLang->allBug . ' &nbsp; ' . $allCount . '<br />' . $annualDataLang->unresolve . ' &nbsp; ' . $undoneCount;
-        ?>
-        </div>
-      </div>
-    </section>
-    <section class='dataYearStat' id='caseData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->cases . $soFar;?></h2></header>
-      <div>
-        <div class='canvas left' id='yearCaseResultCanvas'></div>
-        <div class='canvas right' id='yearCaseActionCanvas'></div>
-      </div>
-    </section>
+    <?php endforeach;?>
   </main>
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
@@ -284,92 +225,55 @@ $(function()
     <?php unset($lang->story->statusList['']);?>
     <?php unset($lang->bug->statusList['']);?>
     <?php unset($lang->task->statusList['']);?>
+    <?php if(empty($dept) and empty($userID)):?>
+    <?php foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
     <?php
-    $storyStatusStat = array();
-    foreach($lang->story->statusList as $status => $statusName) $storyStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['story'], $status, 0));
-    ?>
-    drawStatusPieChart('allStoryStatusCanvas',
-        '<?php echo $annualDataLang->storyStatusStat;?>',
-        <?php echo json_encode(array_values($lang->story->statusList));?>,
-        <?php echo json_encode(array_values($storyStatusStat));?>,
+    $statusStat = array();
+    foreach($lang->$objectType->statusList as $status => $statusName) $statusStat[$status] = array('name' => $statusName, 'value' => zget($objectStatusStat, $status, 0));
+    $canvasID         = 'all' . ucfirst($objectType) . 'StatusCanvas';
+    $canvasTitleKey   = $objectType . 'StatusStat';
+    $jsonedStatus     = json_encode(array_values($lang->$objectType->statusList));
+    $jsonedStatusStat = json_encode(array_values($statusStat));
+    echo "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedStatus, $jsonedStatusStat,
         function()
         {
-            $('#allStatusStat .storyOverview').appendTo('#allStoryStatusCanvas').removeClass('hidden').css(overviewCSS)
-        });
-
-    <?php
-    $taskStatusStat = array();
-    foreach($lang->task->statusList as $status => $statusName) $taskStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['task'], $status, 0));
+            $('#allTimeStatusStat .{$objectType}Overview').appendTo('#{$canvasID}').removeClass('hidden').css(overviewCSS)
+        });\n";
     ?>
-    drawStatusPieChart('allTaskStatusCanvas',
-        '<?php echo $annualDataLang->taskStatusStat;?>',
-        <?php echo json_encode(array_values($lang->task->statusList));?>,
-        <?php echo json_encode(array_values($taskStatusStat));?>,
-        function()
+    <?php endforeach;?>
+    <?php endif;?>
+
+    var yearOverviewCSS = {position: 'absolute', left: '200px', top: '160px'};
+    <?php foreach(array('story', 'task', 'bug', 'case') as $objectType):?>
+    <?php
+    $stat     = array();
+    $items = $objectType == 'case' ? $lang->testcase->resultList : $lang->$objectType->statusList;
+    $statKey = $objectType == 'case' ? 'resultStat' : 'statusStat';
+    foreach($items as $key => $name)
+    {
+        $itemCount  = zget($data["{$objectType}Stat"][$statKey], $key, 0);
+        $stat[$key] = array('name' => $name, 'value' => $itemCount);
+    }
+
+    $ucfirst        = ucfirst($objectType);
+    $canvasID       = $objectType == 'case' ? 'yearCaseResultCanvas' : 'year' . $ucfirst . 'StatusCanvas';
+    $canvasTitleKey = $objectType == 'case' ? 'caseResultStat' : $objectType . 'StatusStat';
+    $jsonedItems    = json_encode(array_values($items));
+    $jsonedStat     = json_encode(array_values($stat));
+
+    $drawFunction = "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedItems, $jsonedStat";
+    if($objectType != 'case')
+    {
+        $drawFunction .= ", function()
         {
-            $('#allStatusStat .taskOverview').appendTo('#allTaskStatusCanvas').removeClass('hidden').css(overviewCSS);
-        });
+            $('#{$objectType}Data .year{$ucfirst}Overview').appendTo('#{$canvasID}').removeClass('hidden').css(yearOverviewCSS)
+        }";
+    }
+    $drawFunction .= ");\n";
 
-    <?php
-    $bugStatusStat = array();
-    foreach($lang->bug->statusList as $status => $statusName) $bugStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['statusStat']['bug'], $status, 0));
+    echo $drawFunction;
     ?>
-    drawStatusPieChart('allBugStatusCanvas',
-        '<?php echo $annualDataLang->bugStatusStat;?>',
-        <?php echo json_encode(array_values($lang->bug->statusList));?>,
-        <?php echo json_encode(array_values($bugStatusStat));?>,
-        function()
-        {
-            $('#allStatusStat .bugOverview').appendTo('#allBugStatusCanvas').removeClass('hidden').css(overviewCSS);
-        });
-
-    <?php
-    $storyStatusStat = array();
-    foreach($lang->story->statusList as $status => $statusName) $storyStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['storyStat']['statusStat'], $status, 0));
-    ?>
-    drawStatusPieChart('yearStoryStatusCanvas',
-        '<?php echo $annualDataLang->storyStatusStat;?>',
-        <?php echo json_encode(array_values($lang->story->statusList));?>,
-        <?php echo json_encode(array_values($storyStatusStat));?>,
-        function()
-        {
-            $('#storyData .yearStoryOverview').appendTo('#yearStoryStatusCanvas').removeClass('hidden').css(overviewCSS)
-        });
-
-    <?php
-    $taskStatusStat = array();
-    foreach($lang->task->statusList as $status => $statusName) $taskStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['taskStat']['statusStat'], $status, 0));
-    ?>
-    drawStatusPieChart('yearTaskStatusCanvas',
-        '<?php echo $annualDataLang->taskStatusStat;?>',
-        <?php echo json_encode(array_values($lang->task->statusList));?>,
-        <?php echo json_encode(array_values($taskStatusStat));?>,
-        function()
-        {
-            $('#taskData .yearTaskOverview').appendTo('#yearTaskStatusCanvas').removeClass('hidden').css(overviewCSS);
-        });
-
-    <?php
-    $bugStatusStat = array();
-    foreach($lang->bug->statusList as $status => $statusName) $bugStatusStat[$status] = array('name' => $statusName, 'value' => zget($data['bugStat']['statusStat'], $status, 0));
-    ?>
-    drawStatusPieChart('yearBugStatusCanvas',
-        '<?php echo $annualDataLang->bugStatusStat;?>',
-        <?php echo json_encode(array_values($lang->bug->statusList));?>,
-        <?php echo json_encode(array_values($bugStatusStat));?>,
-        function()
-        {
-            $('#bugData .yearBugOverview').appendTo('#yearBugStatusCanvas').removeClass('hidden').css(overviewCSS);
-        });
-
-    <?php
-    $caseResultStat = array();
-    foreach($lang->testcase->resultList as $result => $resultName) $caseResultStat[$result] = array('name' => $resultName, 'value' => zget($data['caseStat']['resultStat'], $result, 0));
-    ?>
-    drawStatusPieChart('yearCaseResultCanvas',
-        '<?php echo $annualDataLang->caseResultStat;?>',
-        <?php echo json_encode(array_values($lang->testcase->resultList));?>,
-        <?php echo json_encode(array_values($caseResultStat));?>);
+    <?php endforeach;?>
 
     <?php
     $commonTemplate['name']  = '';

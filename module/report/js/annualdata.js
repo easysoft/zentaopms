@@ -101,6 +101,7 @@ function drawMonthsBarChart(id, title, legends, xAxis, data)
         },
         yAxis: {
           type: 'value',
+          axisLine: {show: true },
           splitLine: {show: false},
           axisLabel: labelStyle
         },
@@ -130,10 +131,10 @@ function exportAnnualImage(sucessCallback, errorCallback)
     var $loading = $('#loadIndicator');
     $loading.addClass('loading');
     var $container = $('#container');
-    $main.addClass('exporting').css('backgroundImage', $container.css('backgroundImage'));
+    $main.addClass('exporting').css('background-color', $container.css('background-color'));
     var afterFinish = function(canvas)
     {
-        $main.removeClass('exporting').css('backgroundImage', 'none');
+        $main.removeClass('exporting');
         $loading.removeClass('loading');
     };
     html2canvas($main[0], {logging: false}).then(function(canvas)
@@ -160,9 +161,12 @@ $(function()
         exportAnnualImage();
     });
 
-    $('#toolbar #year').change(function()
+    $('select#year, select#dept, select#userID').change(function()
     {
-        location.href = createLink('report', 'annualData', 'year=' + $(this).val());
+        var dept   = $('select#dept').val();
+        var userID = $('select#userID').val();
+        if($(this).attr('id') == 'dept') userID = 0;
+        location.href = createLink('report', 'annualData', 'year=' + $('select#year').val() + '&dept=' + dept + '&userID=' + userID);
     });
 
     $('#actionData > div > ul > li').mouseenter(function(e)

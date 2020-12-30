@@ -1,7 +1,7 @@
 body {height: 100vh; padding: 0;}
 #container {top: 0; right: 0; bottom: 0; left: 0; display: flex; justify-content: center; align-items: center; background-color: #010417; color: #fff; background-size: cover; overflow: auto;}
 #container:before {content: ' '; display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0.9; background: #010419;}
-#main {position:relative; min-width: 1280px; z-index: 10; padding:0 35px; background-size: cover;}
+#main {position:relative; width: 1360px; z-index: 10; padding:0 35px; background-size: cover;}
 #main section > header {height: 24px; margin-top: 7px;}
 #main section > header > h2 {line-height: 24px; font-size: 14px; padding: 0 8px; float: left; margin: 0; position: relative; background: #1a77a5; position: relative; font-weight: normal;}
 #main section > header > h2:after {content: ' '; display: block; position: absolute; top: 0; right: -40px; bottom: 0; width: 40px; background: linear-gradient(to right, #1a77a5 0%, transparent 100%);}
@@ -13,9 +13,16 @@ body {height: 100vh; padding: 0;}
 
 #header {margin-bottom:45px;}
 #header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
-#toolbar {position: absolute; right: 33px; top: 80px; text-align: center;}
+#toolbar {position: absolute; right: 33px; top: 80px; text-align: center;width:1280px;}
 #toolbar #year{width:70px; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
 #toolbar #year option{background: #141414;}
+#toolbar #dept, #dept_chosen, #dept_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#dept_chosen .chosen-drop{background:#141414; text-align:left;}
+#toolbar #dept option{background: #141414;}
+#toolbar #userID, #userID_chosen, #userID_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#userID_chosen .chosen-drop{background:#141414; text-align:left;}
+.chosen-container-single .chosen-search input[type=text]{background: #141414;}
+#toolbar #userID option{background: #141414;}
 .exporting #toolbar {display: none;}
 #toolbar .btn-primary {border-color: #1a77a5; background-color: transparent; padding: 6px 7px;}
 #toolbar .btn-primary:hover,
@@ -47,15 +54,14 @@ section{border:1px solid rgb(0,117,169); float:left;}
 #projectData, #productData{width:633px; height:350px; margin-top:20px;}
 #projectData > div, #productData > div {margin-top:5px; height:315px; overflow:auto;}
 #projectData table tr>th, #productData table tr>th{color:#fff !important}
-#projectData table td, #productData table td{border-bottom:0 !important}
 #projectData .c-story, #projectData .c-task, #projectData .c-bug {text-align:center;}
 #productData{margin-left:20px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-finished {text-align:center;}
 .table-hover>tbody>tr:hover>td{background-color: #888 !important;}
 
-#allStatusStat{width:100%; height:345px; margin-top:20px;}
-#allStatusStat > div {margin-top:5px;}
-#allStatusStat .canvas{float:left; width:420px; height:305px; padding-left:10px;}
+#allTimeStatusStat{width:100%; height:345px; margin-top:20px;}
+#allTimeStatusStat > div {margin-top:5px;}
+#allTimeStatusStat .canvas{float:left; width:420px; height:305px; padding-left:10px;}
 
 .dataYearStat{width:100%; height:345px; margin-top:20px;}
 .dataYearStat > div{margin-top:5px;}
