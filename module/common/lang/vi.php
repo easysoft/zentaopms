@@ -176,12 +176,12 @@ $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->set         = array('link' => 'Setting|product|setting|mode=module&productID=%s&view=story', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->set         = array('link' => 'Setting|product|set|mode=module&productID=%s&view=story', 'alias' => 'addwhitelist');
 
 $lang->product->setMenu = new stdclass();
-$lang->product->setMenu->branch    = array('link' => '@branch@|product|setting|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
-$lang->product->setMenu->module    = array('link' => 'Module|product|setting|mode=module&productID={PRODUCT}&view=story', 'subModule' => 'tree');
-$lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|setting|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
+$lang->product->setMenu->branch    = array('link' => '@branch@|product|set|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
+$lang->product->setMenu->module    = array('link' => 'Module|product|set|mode=module&productID={PRODUCT}&view=story', 'subModule' => 'tree');
+$lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|set|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
