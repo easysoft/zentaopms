@@ -19,7 +19,7 @@
       <div class='main-header'>
         <h2><?php echo $lang->user->profile;?></h2>
         <div class='actions pull-right'>
-          <?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
+          <?php if(common::hasPriv('user', 'edit')) echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
         </div>
       </div>
       <div class='row'>

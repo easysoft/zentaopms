@@ -201,11 +201,12 @@ class program extends control
         $this->view->title       = $this->lang->program->PGMEdit;
         $this->view->position[]  = $this->lang->program->PGMEdit;
 
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
-        $this->view->poUsers     = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users       = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->program     = $program;
-        $this->view->parents     = $parents;
+        $this->view->pmUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
+        $this->view->poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users   = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->program = $program;
+        $this->view->parents = $parents;
+        $this->view->PGMList = $this->program->getPGMList();
 
         $this->display();
     }

@@ -147,6 +147,7 @@ $lang->product->checkedSummary = "<strong>%total%</strong> %storyCommon% sélect
 $lang->product->noModule       = "<div>Vous n'avez aucun modules. </div><div>Gérer Maintenant</div>";
 $lang->product->noProduct      = "No {$lang->productCommon} à ce jour. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
+$lang->product->DuplicateOrder = "{$lang->productCommon}: The %s sort is duplicated with other {$lang->productCommon} sorts and will not be updated.";
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

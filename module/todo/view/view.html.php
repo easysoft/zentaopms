@@ -33,7 +33,7 @@
           if($todo->type == 'story') common::printLink('story', 'view', "id={$todo->idvalue}", '  STORY#' . $todo->idvalue);
           ?>
         </div>
-        <div class='detail-content'><?php echo $todo->desc;?></div>
+        <div class='detail-content article-content'><?php echo $todo->desc;?></div>
       </div>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id");?>
       <?php include '../../common/view/action.html.php';?>

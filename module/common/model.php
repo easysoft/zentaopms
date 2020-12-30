@@ -283,13 +283,13 @@ class commonModel extends model
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' class='iframe $noRole'" . '>';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe'") . '</li>';
-                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
                 echo "<li class='divider'></li>";
             }
@@ -716,7 +716,7 @@ class commonModel extends model
                 }
 
                 /* Disable links to more buttons. */
-                if($menuItem->name == 'morelink') $link='javascript:void(0);';
+                if($menuItem->name == 'projectsetting' || $menuItem->name == 'other') $link='javascript:void(0);';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
@@ -803,9 +803,9 @@ class commonModel extends model
         if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
-        if($moduleName == 'product' and ($methodName == 'setting' or $methodName == 'addwhitelist'))
+        if($moduleName == 'product' and ($methodName == 'set' or $methodName == 'addwhitelist'))
         {
-            $lang->product->menu = $lang->product->settingMenu;
+            $lang->product->menu = $lang->product->setMenu;
             self::processMenuVars($lang->product->menu);
         }
 
@@ -1753,7 +1753,7 @@ EOD;
         $method = strtolower($method);
 
         /* More menus do not require permission control. */
-        if($module == 'project' && $method == 'morelink') return true;
+        if($module == 'project' && ($method == 'other' || $method == 'setting')) return true;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
@@ -2407,7 +2407,7 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
-            $lang->project->dividerMenu = ',doc,';
+            $lang->project->dividerMenu = ',project,projectbuild,story,team,product,other,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
@@ -2416,10 +2416,11 @@ EOD;
 
         if($program->model == 'waterfall')
         {
+            $lang->project->dividerMenu = ',programplan,projectbuild,story,team,product,other,';
+
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;
-            $lang->program->dividerMenu = ',product,issue,';
             return self::processMenuVars($lang->menu->waterfall);
         }
     }

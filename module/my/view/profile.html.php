@@ -18,15 +18,23 @@
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
     </div>
     <div class='row'>
-      <div class='col-sm-6'>
-        <div class='user-title'><?php echo $lang->user->basicInfo;?></div>
-        <dl class='dl-horizontal info'>
-          <dt><?php echo $lang->user->realname;?></dt>
-          <dd><?php echo $user->realname;?></dd>
-          <dt><?php echo $lang->user->account;?></dt>
-          <dd><?php echo $user->account;?></dd>
-          <dt><?php echo $lang->user->dept;?></dt>
-          <dd>
+      <div class='user-title'><?php echo $lang->user->basicInfo;?></div>
+      <table>
+        <tr>
+          <th><?php echo $lang->user->realname;?></th>
+          <td><?php echo $user->realname;?></td>
+          <th><?php echo $lang->user->gender;?></th>
+          <td><?php echo zget($lang->user->genderList, $user->gender);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->account;?></th>
+          <td><?php echo $user->account;?></td>
+          <th><?php echo $lang->user->email;?></th>
+          <td title='<?php echo $user->email;?>'><?php echo $user->email;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->dept;?></th>
+          <td>
           <?php
           if(empty($deptPath))
           {
@@ -41,61 +49,65 @@
               }
           }
           ?>
-          </dd>
-          <dt><?php echo $lang->user->join;?></dt>
-          <dd><?php echo formatTime($user->join);?></dd>
-        </dl>
-        <div class='user-title'><?php echo $lang->user->contactInfo;?></div>
-        <dl class='dl-horizontal contact'>
-          <dt><?php echo $lang->user->mobile;?></dt>
-          <dd><?php echo $user->mobile;?></dd>
-          <dt><?php echo $lang->user->phone;?></dt>
-          <dd><?php echo $user->phone;?></dd>
-          <dt><?php echo $lang->user->weixin;?></dt>
-          <dd><?php echo $user->weixin;?></dd>
-          <dt><?php echo $lang->user->qq;?></dt>
-          <dd><?php echo $user->qq;?></dd>
-          <dt><?php echo $lang->user->zipcode;?></dt>
-          <dd><?php echo $user->zipcode;?></dd>
-        </dl>
-        <div class='user-title'><?php echo $lang->user->else;?></div>
-        <dl class='dl-horizontal else'>
-          <dt><?php echo $lang->user->commiter;?></dt>
-          <dd><?php echo $user->commiter;?></dd>
-          <dt><?php echo $lang->user->ip;?></dt>
-          <dd><?php echo $user->ip;?></dd>
-        </dl>
-      </div>
-      <div class='col-sm-6'>
-        <dl class='dl-horizontal right-info'>
-          <dt><?php echo $lang->user->gender;?></dt>
-          <dd><?php echo zget($lang->user->genderList, $user->gender);?></dd>
-          <dt><?php echo $lang->user->email;?></dt>
-          <dd title='<?php echo $user->email;?>'><?php echo $user->email;?></dd>
-          <dt><?php echo $lang->user->role;?></dt>
-          <dd><?php echo zget($lang->user->roleList, $user->role);?></dd>
-          <dt><?php echo $lang->group->priv;?></dt>
-          <dd><?php foreach($groups as $group) echo $group->name . ' '; ?></dd>
-        </dl>
-        <dl class='dl-horizontal right-info'>
-          <dt><?php echo $lang->user->skype;?></dt>
-          <dd><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></dd>
-          <dt><?php echo $lang->user->whatsapp;?></dt>
-          <dd><?php echo $user->whatsapp;?></dd>
-          <dt><?php echo $lang->user->slack;?></dt>
-          <dd><?php echo $user->slack;?></dd>
-          <dt><?php echo $lang->user->dingding;?></dt>
-          <dd><?php echo $user->dingding;?></dd>
-          <dt><?php echo $lang->user->address;?></dt>
-          <dd title='<?php echo $user->address;?>'><?php echo $user->address;?></dd>
-        </dl>
-        <dl class='dl-horizontal right-info'>
-          <dt><?php echo $lang->user->visits;?></dt>
-          <dd><?php echo $user->visits;?></dd>
-          <dt><?php echo $lang->user->last;?></dt>
-          <dd><?php echo $user->last;?></dd>
-        </dl>
-      </div>
+          </td>
+          <th><?php echo $lang->user->role;?></th>
+          <td><?php echo zget($lang->user->roleList, $user->role);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->join;?></th>
+          <td><?php echo formatTime($user->join);?></td>
+          <th><?php echo $lang->group->priv;?></th>
+          <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
+        </tr>
+      </table>
+      <div class='user-title'><?php echo $lang->user->contactInfo;?></div>
+      <table>
+        <tr>
+          <th><?php echo $lang->user->mobile;?></th>
+          <td><?php echo $user->mobile;?></td>
+          <th><?php echo $lang->user->skype;?></th>
+          <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->phone;?></th>
+          <td><?php echo $user->phone;?></td>
+          <th><?php echo $lang->user->whatsapp;?></th>
+          <td><?php echo $user->whatsapp;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->weixin;?></th>
+          <td><?php echo $user->weixin;?></td>
+          <th><?php echo $lang->user->slack;?></th>
+          <td><?php echo $user->slack;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->qq;?></th>
+          <td><?php echo $user->qq;?></td>
+          <th><?php echo $lang->user->dingding;?></th>
+          <td><?php echo $user->dingding;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->zipcode;?></th>
+          <td><?php echo $user->zipcode;?></td>
+          <th><?php echo $lang->user->address;?></th>
+          <td title='<?php echo $user->address;?>'><?php echo $user->address;?></td>
+        </tr>
+      </table>
+      <div class='user-title'><?php echo $lang->user->else;?></div>
+      <table>
+        <tr>
+          <th><?php echo $lang->user->commiter;?></th>
+          <td><?php echo $user->commiter;?></td>
+          <th><?php echo $lang->user->visits;?></th>
+          <td><?php echo $user->visits;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->ip;?></th>
+          <td><?php echo $user->ip;?></td>
+          <th><?php echo $lang->user->last;?></th>
+          <td><?php echo $user->last;?></td>
+        </tr>
+      </table>
     </div>
   </div>
   <div class='main-actions'>

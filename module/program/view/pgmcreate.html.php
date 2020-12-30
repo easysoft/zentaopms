@@ -71,7 +71,7 @@
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->program->future;?></label>
             </div>
-            <span class='muted'><?php if($parentProgram) printf($lang->program->PGMParentBudget, $parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
+            <span class='muted'><?php if($parentProgram) echo $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
           </td>
         </tr>
         <tr>

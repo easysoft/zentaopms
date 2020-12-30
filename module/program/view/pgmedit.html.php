@@ -14,6 +14,10 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
+<?php js::set('budgetUnitList', $lang->program->unitList);?>
+<?php js::set('PGMParentBudget', $lang->program->PGMParentBudget);?>
+<?php js::set('future', $lang->program->future);?>
+<?php js::set('PGMList', $PGMList);?>
 <?php $aclList = $program->parent ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
 <?php $requiredFields = $config->program->PGMEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -25,7 +29,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen' onchange=setAclList(this.value)");?></td>
+          <td class="col-main"><?php echo html::select('parent', $parents, $program->parent, "class='form-control chosen' onchange=setBudgetTipsAndAclList(this.value)");?></td>
           <td></td><td></td>
         </tr>
         <tr>
@@ -46,10 +50,12 @@
             </div>
           </td>
           <td>
-            <div class='checkbox-primary'>
+            <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($program->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->program->future;?></label>
             </div>
+            <?php $parentProgram = zget($PGMList, $program->parent, '');?>
+            <span class='muted budgetSpan'><?php if($parentProgram) echo $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
           </td>
         </tr>
         <tr>

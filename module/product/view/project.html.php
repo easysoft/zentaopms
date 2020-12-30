@@ -49,7 +49,7 @@
         <?php foreach($projectStats as $project):?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id, '', '', $project->id), $project->name, '_parent');?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');?></td>
           <td><?php echo $project->programName;?></td>
           <td><?php echo $project->PM;?></td>
           <td><?php echo $project->begin;?></td>
