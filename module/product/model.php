@@ -608,13 +608,11 @@ class productModel extends model
      */
     public function batchUpdate()
     {
-        $products      = array();
-        $allChanges    = array();
-        $data          = fixer::input('post')->get();
-        $oldProducts   = $this->getByIdList($this->post->productIDList);
-        $nameList      = array();
-        $message       = '';
-        $productOrders = $this->dao->select("`id`,`order`")->from(TABLE_PRODUCT)->fetchPairs();
+        $products    = array();
+        $allChanges  = array();
+        $data        = fixer::input('post')->get();
+        $oldProducts = $this->getByIdList($this->post->productIDList);
+        $nameList    = array();
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
@@ -634,16 +632,8 @@ class productModel extends model
             /* Check unique name for edited products. */
             if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
             $nameList[$productName] = $productName;
-
-            /* Check unique order for edited products. */
-            foreach($productOrders as $id => $productOrder)
-            {
-                if($id == $productID) continue;
-                if($productOrder == $data->orders[$productID]) $message .= sprintf($this->lang->product->DuplicateOrder, $productID);
-            }
         }
         if(dao::isError()) die(js::error(dao::getError()));
-        if($message) echo js::alert($message);
 
         foreach($products as $productID => $product)
         {
