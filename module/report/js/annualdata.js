@@ -6,19 +6,23 @@ function drawStatusPieChart(id, title, statuses, data, callback)
     };
     var tooltip = {
         trigger: 'item',
+        backgroundColor: '#010419',
+        textStyle: {color:'#fff'},
         formatter: '{a} <br/>{b}: {c} ({d}%)'
     };
-    var legendLeft = '0';
-    var legendTop  = '25';
-    var legendItemWidth = 10;
-    var legendItemHeight = 10;
-    var legendTextStyle = {
+
+    var legendLeft       = '0';
+    var legendTop        = '25';
+    var legendItemWidth  = 8;
+    var legendItemHeight = 8;
+    var legendTextStyle  = {
         color:'#fff',
         fontSize: 12
     };
-    var seriesTop = '50';
+
+    var seriesTop    = '50';
     var seriesRadius = ['40%', '70%'];
-    var seriesLabel = {
+    var seriesLabel  = {
         color:'#fff',
         formatter: '{b}  {d}%'
     };
@@ -33,6 +37,7 @@ function drawStatusPieChart(id, title, statuses, data, callback)
         legend: {
             left: legendLeft,
             top: legendTop,
+            icon: 'circle',
             itemWidth: legendItemWidth,
             itemHeight: legendItemHeight,
             textStyle: legendTextStyle,
@@ -170,7 +175,10 @@ $(function()
     });
 
     $('#actionData > div > ul > li').mouseenter(function(e)
-      {
+    {
         $('#actionData > div > ul > li .dropdown-menu').css('left', e.pageX - $(this).offset().left + 10);
-      })
+    });
+
+    $('section').mouseover(function(){$(this).addClass('active')});
+    $('section').mouseout(function(){$(this).removeClass('active')});
 });

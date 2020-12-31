@@ -10,16 +10,16 @@
       <h1 class='text-holder' data-id='title'><?php echo $title;?></h1>
     </header>
     <div id='toolbar'>
-<div class='pull-left'>
-      <span><?php echo $annualDataLang->scope;?></span>
-      <?php echo html::select('year', $years, $year, "class='form-control'");?>
-      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
-      <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
-</div>
-<div class='pull-right'>
-      <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-export'></i></button>
-      <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
-</div>
+      <div class='pull-left'>
+        <span><?php echo $annualDataLang->scope;?></span>
+        <?php echo html::select('year', $years, $year, "class='form-control'");?>
+        <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
+        <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
+      </div>
+      <div class='pull-right'>
+        <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-export'></i></button>
+        <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
+      </div>
     </div>
     <section id='baseInfo'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2></header>
@@ -42,9 +42,9 @@
             <strong><?php echo $data['todos']->count;?></strong>
             <ul class='dropdown-menu pull-right'>
               <li><?php echo $annualDataLang->todos;?></li>
-              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['all'];?></span><span><?php echo $data['todos']->count;?></span></li>
-              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['undone'];?></span><span><?php echo $data['todos']->undone;?></span></li>
-              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['done'];?></span><span><?php echo $data['todos']->done;?></span></li>
+              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['all'];?></span><span><?php echo (int)$data['todos']->count;?></span></li>
+              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['undone'];?></span><span><?php echo (int)$data['todos']->undone;?></span></li>
+              <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['done'];?></span><span><?php echo (int)$data['todos']->done;?></span></li>
             </ul>
           </li>
           <?php
@@ -113,9 +113,9 @@
     </section>
     <section id='projectData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->projects . $soFar;?></h2></header>
-      <div>
-        <table class='table table-hover table-borderless table-condensed'>
-          <thead>
+      <div class='has-table'>
+        <table class='table table-hover table-fixed table-borderless table-condensed'>
+          <thead class='hidden'>
             <tr>
               <?php foreach($annualDataLang->projectFields as $field => $name):?>
               <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
@@ -133,12 +133,23 @@
           </tbody>
         </table>
       </div>
+      <div class='table-header-fixed'>
+        <table class='table table-hover table-fixed table-borderless table-condensed'>
+          <thead>
+            <tr>
+              <?php foreach($annualDataLang->projectFields as $field => $name):?>
+              <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
+              <?php endforeach?>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </section>
     <section id='productData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2></header>
-      <div>
+      <div class='has-table'>
         <table class='table table-hover table-borderless table-condensed'>
-          <thead>
+          <thead class='hidden'>
             <tr>
               <?php foreach($annualDataLang->productFields as $field => $name):?>
               <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
@@ -156,6 +167,18 @@
           </tbody>
         </table>
       </div>
+      <div class='table-header-fixed'>
+        <table class='table table-hover table-fixed table-borderless table-condensed'>
+          <thead>
+            <tr>
+              <?php foreach($annualDataLang->productFields as $field => $name):?>
+              <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
+              <?php endforeach?>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class='table-header-fixed'>
     </section>
     <?php if(empty($dept) and empty($userID)):?>
     <section id='allTimeStatusStat'>
@@ -198,7 +221,7 @@ $(function()
     var radarOption = {
       tooltip: {},
       radar: {
-          triggerEvent:true,
+          splitArea:{areaStyle:{color: ['#010419']}},
           <?php
           $max = max($radarData);
           $indicator = array();
@@ -212,8 +235,10 @@ $(function()
       },
       series: [{
           name:'<?php echo $annualDataLang->radar;?>',
+          areaStyle:{color: 'rgb(45, 40, 33)'},
           type: 'radar',
-          itemStyle: {color: "rgb(247, 193, 35)"},
+          itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
+          lineStyle: {color: "rgb(247, 193, 35)"},
           data: [{value: <?php echo json_encode(array_values($radarData));?>}]
       }]
     };
@@ -279,7 +304,7 @@ $(function()
     $commonTemplate['name']  = '';
     $commonTemplate['type']  = 'bar';
     $commonTemplate['stack'] = 'all';
-    $commonTemplate['label'] = array('show' => true, 'position' => 'insideRight');
+    $commonTemplate['label'] = array('show' => false);
     $commonTemplate['data']  = array();
     
     $jsonedMonths = json_encode($months);
@@ -296,7 +321,7 @@ $(function()
 
         $monthAction = $commonTemplate;
         $monthAction['name']  = $actionName;
-        $monthAction['stack'] = $objectType . 'pie';
+        $monthAction['stack'] = $objectType;
         $monthAction['data']  = array_values($data["{$objectType}Stat"]['actionStat'][$actionKey]);
         $monthActions[]       = $monthAction;
     }
