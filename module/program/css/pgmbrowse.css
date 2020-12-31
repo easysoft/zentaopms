@@ -1,3 +1,4 @@
 #mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
 .main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child {padding-left: 8px;}
 .table tbody>tr>td .dropdown, .table thead>tr>th .dropdown {display: inline-block; line-height: 1;}
+.is-nest-child .table-nest-icon:before, .no-nest .table-nest-icon:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
