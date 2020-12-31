@@ -283,7 +283,12 @@ class report extends control
         if(empty($userID)) unset($depts[0]);
 
         $accounts = array();
-        if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
+        if($dept)
+        {
+            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'useid');
+            $users    = array('' => $this->lang->report->annualData->allUser) + $users;
+            $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
+        }
         if($userID)
         {
             $user = $this->loadModel('user')->getById($userID, 'id');
@@ -317,7 +322,7 @@ class report extends control
 
         if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? $users[$userID] : ($dept ? $depts[''] : $depts[$dept])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? $users[$userID] : ($dept ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
         $this->view->data   = $data;
         $this->view->year   = $year;
         $this->view->users  = $users;
