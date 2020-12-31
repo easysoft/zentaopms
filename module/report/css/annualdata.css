@@ -55,6 +55,7 @@ section.active{border:1px solid rgb(0, 166, 255);}
 #projectData, #productData{width:633px; height:350px; margin-top:20px; position: relative;}
 #projectData div.has-table, #productData div.has-table {margin-top:30px; height:285px; overflow:auto;}
 #projectData div.table-header-fixed, #productData div.table-header-fixed {position: absolute;left: 10px;top: 35px;right: 10px;}
+#projectData div.table-header-fixed table, #productData div.table-header-fixed table{margin-bottom:0px;}
 #projectData table tr>th, #productData table tr>th{color:#fff !important}
 #projectData .c-story, #projectData .c-task, #projectData .c-bug {text-align:center; width:90px}
 #productData{margin-left:20px;}

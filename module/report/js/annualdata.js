@@ -1,3 +1,14 @@
+/**
+ * Draw status pie chart.
+ * 
+ * @param  string   $id 
+ * @param  string   $title 
+ * @param  array    $statuses 
+ * @param  array    $data 
+ * @param  function $callback 
+ * @access public
+ * @return object
+ */
 function drawStatusPieChart(id, title, statuses, data, callback)
 {
     var titleTextStyle = {
@@ -61,6 +72,17 @@ function drawStatusPieChart(id, title, statuses, data, callback)
     return chart;
 }
 
+/**
+ * Draw months bar chart.
+ * 
+ * @param  string $id 
+ * @param  string $title 
+ * @param  array  $legends 
+ * @param  array  $xAxis 
+ * @param  array  $data 
+ * @access public
+ * @return object
+ */
 function drawMonthsBarChart(id, title, legends, xAxis, data)
 {
     var titleTextStyle = {
@@ -73,14 +95,16 @@ function drawMonthsBarChart(id, title, legends, xAxis, data)
           type: 'shadow'
         }
     };
-    var legendLeft = 'center';
-    var legendTop  = '0';
-    var legendItemWidth = 10;
+
+    var legendLeft       = 'center';
+    var legendTop        = '0';
+    var legendItemWidth  = 10;
     var legendItemHeight = 10;
-    var legendTextStyle = {
+    var legendTextStyle  = {
         color:'#fff',
         fontSize: 12
     };
+
     var labelStyle = {color:'#fff'}
 
     var chart  = echarts.init(document.getElementById(id));
