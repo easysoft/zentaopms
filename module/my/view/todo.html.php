@@ -76,7 +76,7 @@
           <?php $style = $this->app->clientLang == 'en' ? "style='width:80px'" : '';?>
           <th class="c-pri w-80px" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
           <th class="c-name">      <?php common::printOrderLink('name',       $orderBy, $vars, $lang->todo->name);?></th>
-          <th>                     <?php common::printOrderLink('assignedBy', $orderBy, $vars, $lang->todo->assignedBy);?></th>
+          <th class="w-80px">      <?php common::printOrderLink('assignedBy', $orderBy, $vars, $lang->todo->assignedBy);?></th>
           <th class="c-begin">     <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
           <th class="c-end">       <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
           <th class="c-status">    <?php common::printOrderLink('status',     $orderBy, $vars, $lang->todo->status);?></th>
