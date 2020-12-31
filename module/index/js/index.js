@@ -17,7 +17,7 @@
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
-            var $link= $('<a></a>')
+            var $link= $('<a data-pos="menu"></a>')
                 .attr('data-group', item.group)
                 .attr('class', 'show-in-tab')
                 .html(item.title);
@@ -117,7 +117,7 @@
         var $bar = $('#tabBar-' + group);
         if(!$bar.length)
         {
-            var $link= $('<a></a>')
+            var $link= $('<a data-pos="bar"></a>')
                 .attr('data-group', group)
                 .attr('class', 'show-in-tab')
                 .html(tab.text);
@@ -302,7 +302,8 @@
             if(openTab(url, $link.data('group'))) e.preventDefault();
         }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
         {
-            var group = $(this).data('group');
+            var $btn  = $(this);
+            var group = $btn.data('group');
             if(!group) return;
 
             var lang  = window.tabsLang;
@@ -313,7 +314,24 @@
                 items.push({label: lang.reload, onClick: function(){reloadTab(group)}});
                 if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
             }
-            $.zui.ContextMenu.show(items, {event: event});
+
+            var options = {event: event};
+            var pos = $btn.data('pos');
+            if(pos)
+            {
+                var bounding = $btn.closest('li')[0].getBoundingClientRect();
+                if(pos === 'bar')
+                {
+                    options.x = bounding.left;
+                    options.y = bounding.top - (group === 'my' ? 65 : 92);
+                }
+                else
+                {
+                    options.x = bounding.right - 10;
+                    options.y = bounding.top;
+                }
+            }
+            $.zui.ContextMenu.show(items, options);
             event.preventDefault();
         });
 
