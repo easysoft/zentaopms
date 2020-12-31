@@ -94,6 +94,7 @@
                     $color = array_shift($colors);
                     $count = $objectContributions[$actionName];
                     $width = floor($count / $maxCount * 100);
+                    if($width == 0) $width = 1;
                     echo "<span class='item' style='background-color:{$color};width:{$width}%'>{$count}</span>";
             
                     $detail .= "<li><span class='color' style='background-color:{$color}'></span><span class='item-name'>" . $annualDataLang->actionList[$actionName] . "</span><span class='count'>{$count}</span></li>";
