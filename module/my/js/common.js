@@ -1,6 +1,6 @@
-$(function() 
+$(function()
 {
-    if(typeof(mode) != 'undefined') 
+    if(typeof mode === 'string')
     {
         if(mode == 'testcase') mode = 'testtask';
         if(mode == 'requirement') mode = 'story';
