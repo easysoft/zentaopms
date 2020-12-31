@@ -34,6 +34,19 @@
     }
 
     /**
+     * Get tab group from url
+     * @param {String} urlOrModuleName Url string
+     *
+     */
+    function getGroupFromUrl(urlOrModuleName)
+    {
+        var group = window.navGroup[urlOrModuleName];
+        if(group) return group;
+        var moduleName = $.parseLink(urlOrModuleName).moduleName;
+        return window.navGroup[moduleName] || moduleName || urlOrModuleName;
+    }
+
+    /**
      * Open tab
      * @param {string} [url]   Url to open in tab
      * @param {string} [group] The group of target tab to open
@@ -51,8 +64,7 @@
             }
             else
             {
-                var moduleName = $.parseLink(url).moduleName;
-                group = window.navGroup[moduleName] || moduleName;
+                group = getGroupFromUrl(url);
             }
         }
 
@@ -264,6 +276,7 @@
         close:      closeTab,
         reload:     reloadTab,
         updateUrl:  updateTabUrl,
+        getGroup:   getGroupFromUrl,
         openedTabs: openedTabs,
         groupsMap:  groupsMap
     };
