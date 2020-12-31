@@ -18,9 +18,9 @@
   <?php if(!empty($inputPersonnel)):?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" method="post" action="">
-      <table class="table has-sort-head table-fixed table-bordered">
+      <table class="table has-sort-head table-fixed table-bordered text-center">
         <thead>
-          <tr class="text-center">
+          <tr>
             <th rowspan='2'><?php echo $lang->personnel->name;?></th>
             <th rowspan='2'><?php echo $lang->personnel->role;?></th>
             <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
@@ -32,7 +32,7 @@
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>
           </tr>
-          <tr class="text-center">
+          <tr>
             <th><?php echo $lang->personnel->putInto;?></th>
             <th><?php echo $lang->personnel->surplus;?></th>
             <th><?php echo $lang->personnel->created;?></th>
