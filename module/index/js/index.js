@@ -17,7 +17,7 @@
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
-            var $link= $('<a></a>').attr('href', item.url)
+            var $link= $('<a></a>')
                 .attr('data-group', item.group)
                 .attr('class', 'show-in-tab')
                 .html(item.title);
@@ -101,7 +101,7 @@
         var $bar = $('#tabBar-' + group);
         if(!$bar.length)
         {
-            var $link= $('<a></a>').attr('href', tab.url)
+            var $link= $('<a></a>')
                 .attr('data-group', group)
                 .attr('class', 'show-in-tab')
                 .html(tab.text);
