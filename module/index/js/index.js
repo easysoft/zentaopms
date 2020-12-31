@@ -42,8 +42,11 @@
     {
         var group = window.navGroup[urlOrModuleName];
         if(group) return group;
-        var moduleName = $.parseLink(urlOrModuleName).moduleName;
-        return window.navGroup[moduleName] || moduleName || urlOrModuleName;
+        var link = $.parseLink(urlOrModuleName);
+        if(link.isOnlyBody) return '';
+        var moduleName = link.moduleName;
+        group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
+        return groupsMap[group] ? group : '';
     }
 
     /**
@@ -65,6 +68,7 @@
             else
             {
                 group = getGroupFromUrl(url);
+                if(!group) return false;
             }
         }
 
@@ -137,6 +141,8 @@
             lastOpenedGroup = group;
             updateTabUrl(group);
         }
+
+        return true;
     }
 
     /**
@@ -287,12 +293,13 @@
         initMenuList();
 
         /* Bind events */
-        $(document).on('click', '.open-in-tab,.show-in-tab', function(e)
+        $(document).on('click', 'a,.open-in-tab,.show-in-tab', function(e)
         {
             var $link = $(this);
-            var url = $link.hasClass('open-in-tab') ? ($link.attr('href') || $link.data('url')) : '';
-            openTab(url, $link.data('group'));
-            e.preventDefault();
+            if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
+            var url = $link.hasClass('show-in-tab') ? '' : ($link.attr('href') || $link.data('url'));
+            if(url && url.indexOf('onlybody=yes') > 0) return;
+            if(openTab(url, $link.data('group'))) e.preventDefault();
         }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
         {
             var group = $(this).data('group');
@@ -321,29 +328,26 @@
     });
 }());
 
-/* Click to show more. */
-$("#menuToggle").bind('click', function()
+$(function()
 {
-    $("#moreExecution").hide();
-});
+    /* Click to show more. */
+    $('#menuToggle').on('click', function()
+    {
+        $('#moreExecution').hide();
+    });
 
-/* Mouse in to show more. */
-$("#executionList").mouseover(function()
-{
-    $("#moreExecution").show();
-});
-
-/* Mouse out hide more. */
-$("#executionList").mouseout(function()
-{
-    $("#moreExecution").hide();
+    /* Hide execution list on mouseleave or click */
+    $('#executionList').on('mouseleave click', function()
+    {
+        $('#moreExecution').hide();
+    });
 });
 
 /* Get recent executions. */
 function getExecutions()
 {
-    $("#moreExecution").toggle();
-    if(!$("#moreExecution").is(':hidden'))
+    $('#moreExecution').toggle();
+    if(!$('#moreExecution').is(':hidden'))
     {
         $.ajax(
         {
@@ -352,7 +356,7 @@ function getExecutions()
             type: 'post',
             success: function(data)
             {
-                $("#executionList").html(data);
+                $('#executionList').html(data);
             }
         })
     }
