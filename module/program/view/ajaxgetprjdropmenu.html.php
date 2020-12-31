@@ -41,7 +41,7 @@
 #projectTree li.open > .list-toggle:before {border: none; height: 2px; width: 6px; left: 0; top: 2px; background: #fff;}
 #projectTree li.open > .list-toggle:hover {background: #006AF1;}
 
-#projectTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 1px dashed #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
+#projectTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 1px dashed #cbd0db; top: 15px; left: -12px; z-index: 1; width: 10px;}
 #projectTree ul > li:before,
 #projectTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 1px dashed #cbd0db; top: -13px; bottom: 12px; left: -12px;}
 #projectTree ul > li:last-child:before {bottom: auto; height: 29px;}
