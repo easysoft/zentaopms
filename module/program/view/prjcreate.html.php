@@ -91,7 +91,7 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <div class="col-sm-4" style="margin-bottom: 10px;">
+              <div class="col-sm-4" style="margin-bottom: 10px; padding-right: 6px;">
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
@@ -101,7 +101,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-              <div class='col-sm-4 <?php if($programID) echo 'required';?>'>
+              <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->program->addProduct, '', "onchange=addNewProduct(this);");?></span>
@@ -126,7 +126,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", '', '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[]", '', '', "class='form-control chosen'");?></div>
               <?php endif;?>
             </div>
           </td>
