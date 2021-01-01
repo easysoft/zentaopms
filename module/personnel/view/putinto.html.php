@@ -11,8 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-.main-table tbody>tr:hover { background-color: #fff; }
-.main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
+.main-table thead>tr>th:first-child{padding-left: 0px;}
 </style>
 <div id="mainContent" class="main-row fade">
   <?php if(!empty($inputPersonnel)):?>
@@ -21,7 +20,7 @@
       <table class="table has-sort-head table-fixed table-bordered text-center">
         <thead>
           <tr>
-            <th rowspan='2'><?php echo $lang->personnel->name;?></th>
+            <th rowspan='2' class="w-80px"><?php echo $lang->personnel->name;?></th>
             <th rowspan='2'><?php echo $lang->personnel->role;?></th>
             <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
             <th rowspan='2'><?php echo $lang->personnel->executions;?></th>
@@ -54,8 +53,8 @@
         <tbody class="sortable">
           <?php foreach($inputPersonnel as $personnel):?>
           <tr>
-            <td><?php echo $personnel['realname'];?></td>
-            <td><?php echo $personnel['role'];?></td>
+            <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
+            <td title='<?php echo $personnel['role'];?>'><?php echo $personnel['role'];?></td>
             <td><?php echo $personnel['projects'];?></td>
             <td><?php echo $personnel['executions'];?></td>
             <td><?php echo $personnel['consumedTask'];?></td>

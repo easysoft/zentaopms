@@ -15,7 +15,7 @@ $lang->personnel->role       = 'Role';
 
 $lang->personnel->name         = 'User';
 $lang->personnel->projects     = 'Projects';
-$lang->personnel->executions   = 'Iterations/Phases';
+$lang->personnel->executions   = 'Executions';
 $lang->personnel->workingHours = 'Hours';
 $lang->personnel->task         = 'Task';
 $lang->personnel->bug          = 'Bug';
