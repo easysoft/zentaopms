@@ -669,24 +669,6 @@ class product extends control
     }
 
     /**
-     * Setting of branch, module and whitelist.
-     *
-     * @param  string $mode
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function set($mode = 'branch', $productID)
-    {
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
-        if($mode == 'branch')    echo $this->fetch('branch',  'manage',    "productID=$productID");
-        if($mode == 'module')    echo $this->fetch('tree',    'browse',    "productID=$productID&view=story");
-        if($mode == 'whitelist') echo $this->fetch('product', 'whitelist', "productID=$productID");
-    }
-
-    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID

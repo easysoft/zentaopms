@@ -176,12 +176,12 @@ $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s'
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->set         = array('link' => '设置|product|set|mode=module&productID=%s&view=story', 'alias' => 'addwhitelist');
+$lang->product->viewMenu->set         = array('link' => '设置|tree|browse|productID=%s&view=story', 'subModule' => 'product', 'alias' => 'addwhitelist');
 
 $lang->product->setMenu = new stdclass();
-$lang->product->setMenu->branch    = array('link' => '@branch@|product|set|mode=branch&productID={PRODUCT}', 'subModule' => 'branch');
-$lang->product->setMenu->module    = array('link' => '模块|product|set|mode=module&productID={PRODUCT}&view=story', 'subModule' => 'tree');
-$lang->product->setMenu->whitelist = array('link' => '白名单|product|set|mode=whitelist&productID={PRODUCT}', 'subModule' => 'personnel');
+$lang->product->setMenu->module    = array('link' => '模块|tree|browse|product={PRODUCT}&view=story', 'subModule' => 'tree');
+$lang->product->setMenu->branch    = array('link' => '@branch@|branch|manage|product={PRODUCT}', 'subModule' => 'branch');
+$lang->product->setMenu->whitelist = array('link' => '白名单|product|whitelist|product={PRODUCT}', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
@@ -600,6 +600,7 @@ $lang->navGroup->effort = 'my';
 
 $lang->navGroup->personnel = 'program';
 
+$lang->navGroup->product     = 'product';
 $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';

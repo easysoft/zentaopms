@@ -98,6 +98,12 @@ class personnel extends control
     {
         if($module == 'personnel') $this->setProgramNavMenu($objectID);
 
+        if($module == 'product')
+        {
+            $moduleIndex = array_search('product', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
+
         /* Load lang and set session. */
         $this->app->loadLang('user');
         $this->app->session->set('whitelistBrowse', $this->app->getURI(true));

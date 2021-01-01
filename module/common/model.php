@@ -803,7 +803,7 @@ class commonModel extends model
         if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($group == 'project') self::getProgramModuleMenu($moduleName);
-        if($moduleName == 'product' and ($methodName == 'set' or $methodName == 'addwhitelist'))
+        if($group == 'product')
         {
             $lang->product->menu = $lang->product->setMenu;
             self::processMenuVars($lang->product->menu);

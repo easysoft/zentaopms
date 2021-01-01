@@ -26,6 +26,7 @@ class tree extends control
     {
         $this->loadModel('product');
 
+
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
         {
@@ -65,15 +66,15 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $this->lang->product->menu  = $this->lang->product->viewMenu;
-            $this->lang->noMenuModule[] = 'tree';
+            $moduleIndex = array_search('tree', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
 
             $products = $this->product->getPairs();
 
+            $this->product->saveState($rootID, $products);
             $this->product->setMenu($products, $rootID, $branch, 'story', '', 'story');
-            $this->lang->tree->menu      = $this->lang->product->menu;
-            $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
+            $this->lang->tree->menu = $this->lang->product->setMenu;
 
             unset($products[$rootID]);
             $currentProduct = key($products);
