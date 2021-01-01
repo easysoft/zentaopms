@@ -473,17 +473,6 @@ class productModel extends model
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
 
-        $active  = empty($productID) ? 'active' : '';
-        $output  = "<div class='btn-group header-angle-btn $active' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->product->all}'><span class='text'>{$this->lang->product->all}</span> <span class='caret'></span></button>";
-        $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('product', 'index'), "<i class='icon icon-home'></i> " . $this->lang->product->index) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('product', 'all'), "<i class='icon icon-cards-view'></i> " . $this->lang->product->all) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('product', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->product->create) . '</li>';
-        $output .= '</ul>';
-        $output .= "</div>";
-
-        if($currentModule == 'product' && ($currentMethod == 'index' || $currentMethod == 'all' || $currentMethod == 'create')) return $output;
-
         $this->loadModel('project');
         $currentProductName = $this->lang->product->common;
         if($productID)
@@ -495,7 +484,7 @@ class productModel extends model
         $active = isset($currentProduct->type) && $currentProduct->type != 'normal' ? '' : 'active';
 
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output .= "<div class='btn-group header-angle-btn $active' id='swapper'><div class='btn btn-span'>{$this->lang->productCommon}</div><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn $active' id='swapper'><div class='btn btn-span'>{$this->lang->productCommon}</div><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -512,6 +501,11 @@ class productModel extends model
         }
 
         return $output;
+    }
+
+    public function getProductMainAction()
+    {
+        return common::hasPriv('product', 'all') ? html::a(helper::createLink('product', 'all'), $this->lang->product->moreProduct, '', "class='btn btn-link'") : '';
     }
 
     /**

@@ -28,8 +28,14 @@ class repo extends control
         }
 
         /* Set repo menu group. */
-        $this->projectID = $this->session->PRJ ? $this->session->PRJ : 0;
-        if(!$this->projectID) $this->lang->navGroup->repo = 'repo';
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID) 
+        {
+            $this->lang->navGroup->repo    = 'repo';
+            $this->lang->navGroup->jenkins = 'repo';
+            $this->lang->navGroup->job     = 'repo';
+            $this->lang->navGroup->compile = 'repo';
+        }
 
         $this->scm       = $this->app->loadClass('scm');
         $this->repos     = $this->repo->getRepoPairs($this->projectID);

@@ -130,9 +130,9 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
-$lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|index|';
-$lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|prjbrowse|';
+$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmproduct|';
+$lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|browse|';
+$lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';

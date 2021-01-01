@@ -89,6 +89,7 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = '项目成员';
 $lang->program->PRJLongTime        = '长期';
 $lang->program->future             = '待定';
+$lang->program->morePRJ            = '更多项目';
 
 $lang->program->productNotEmpty  = '请关联产品或创建产品。';
 $lang->program->existProductName = '产品名称已存在。';
@@ -196,6 +197,7 @@ $lang->program->PGMStakeholder       = '干系人列表';
 $lang->program->createStakeholder    = '添加干系人';
 $lang->program->unlinkStakeholder    = '移除干系人';
 $lang->program->unlink               = '移除';
+$lang->program->morePGM              = '更多项目集';
 $lang->program->confirmBatchUnlink   = "您确定要批量移除这些干系人吗？";
 $lang->program->stakeholderType      = '干系人类型';
 $lang->program->isStakeholderKey     = '关键干系人';

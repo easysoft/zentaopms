@@ -60,3 +60,5 @@ a.showMoreImage:hover {opacity: 1;}
 .table-actions .btn:hover{background: #b3d4fc}
 
 #menuFooter{height: 50px}
+
+#header #toolbar a{color: #fff; font-size: 14px; line-height: 15px;}

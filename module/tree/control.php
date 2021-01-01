@@ -68,7 +68,10 @@ class tree extends control
             /* Set menu.*/
             $moduleIndex = array_search('tree', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
+            $this->lang->product->menu  = $this->lang->product->viewMenu;
+            $this->lang->noMenuModule[] = 'tree';
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($rootID, 'story');
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
             $products = $this->product->getPairs();
 

@@ -41,7 +41,6 @@ class program extends control
     public function PGMIndex()
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         $this->view->title      = $this->lang->program->PGMIndex;
         $this->view->position[] = $this->lang->program->PGMIndex;
@@ -62,7 +61,6 @@ class program extends control
     public function PGMBrowse($status = 'all', $orderBy = 'order_asc')
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
@@ -105,8 +103,13 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
+        if(!$programID) $this->locate($this->createLink('program', 'PGMbrowse')); 
+        setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        $this->lang->navGroup->program       = 'program';
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -145,7 +148,6 @@ class program extends control
     public function PGMCreate($parentProgramID = 0)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         if($_POST)
         {
@@ -178,7 +180,6 @@ class program extends control
     public function PGMEdit($programID = 0)
     {
         $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
 
         $program = $this->program->getPGMByID($programID);
 
@@ -398,7 +399,8 @@ class program extends control
     public function PGMProject($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
 
         $this->loadModel('datatable');
@@ -450,7 +452,8 @@ class program extends control
     {
         $this->loadModel('user');
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -487,7 +490,8 @@ class program extends control
 
         $this->loadModel('user');
         $this->lang->navGroup->program = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
 
         $this->loadModel('dept');
@@ -737,8 +741,10 @@ class program extends control
     public function index($projectID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        if(!$projectID) $projectID = $this->session->PRJ;
-        $this->session->set('PRJ', $projectID);
+        $projectID = $this->program->savePRJState($projectID, $this->program->getPRJPairs());
+
+        if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
+        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->PRJIndex;
         $this->view->position[] = $this->lang->program->PRJIndex;
@@ -762,7 +768,6 @@ class program extends control
      */
     public function PRJBrowse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->navGroup->program = 'project';
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
 
@@ -831,8 +836,7 @@ class program extends control
         }
         else
         {
-            $this->lang->navGroup->program     = 'program';
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction(0, true);
+            $this->lang->navGroup->program = 'program';
         }
 
         if($_POST)
