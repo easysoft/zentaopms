@@ -20,8 +20,8 @@ js::set('dittoNotice', $dittoNotice);
   <div class='main-header'>
     <h2>
       <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
-      <?php if($projectName):?>
-      <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->execution . $lang->colon . ' ' . $projectName;?></small>
+      <?php if($executionName):?>
+      <small class='text-muted'><?php echo html::icon($lang->icons[$executionType]) . ' ' . $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
       <?php endif;?>
     </h2>
     <div class='pull-right btn-toolbar'>
@@ -48,7 +48,7 @@ js::set('dittoNotice', $dittoNotice);
       }
   }
   ?>
-  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
+  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "executionID={$executionID}")?>">
     <div class="table-responsive">
       <table class='table table-form table-fixed with-border'>
         <thead>
@@ -78,7 +78,7 @@ js::set('dittoNotice', $dittoNotice);
         <tbody>
           <?php foreach($taskIDList as $taskID):?>
           <?php
-          if(!isset($project))
+          if(!isset($execution))
           {
               $prjInfo = $this->project->getById($tasks[$taskID]->project);
               $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
@@ -91,7 +91,7 @@ js::set('dittoNotice', $dittoNotice);
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
-            $teamAccounts = array_keys($projectTeams[$tasks[$taskID]->project]);
+            $teamAccounts = array_keys($executionTeams[$tasks[$taskID]->project]);
             foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
             $members['closed'] = 'Closed';
 

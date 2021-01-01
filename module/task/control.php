@@ -400,11 +400,11 @@ class task extends control
     /**
      * Batch edit task.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchEdit($projectID = 0)
+    public function batchEdit($executionID = 0)
     {
         if($this->post->names)
         {
@@ -442,20 +442,20 @@ class task extends control
         $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : die(js::locate($this->session->taskList, 'parent'));
         $taskIDList = array_unique($taskIDList);
 
-        /* The tasks of project. */
-        if($projectID)
+        /* The tasks of execution. */
+        if($executionID)
         {
-            $project = $this->project->getById($projectID);
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $project->id);
+            $execution = $this->project->getById($executionID);
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
-            $modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+            $modules       = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
             $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
 
-            $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
-            $this->view->project    = $project;
+            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = html::a($this->createLink('project', 'browse', "executionID=$execution->id"), $execution->name);
+            $this->view->execution  = $execution;
             $this->view->modules    = $modules;
         }
         /* The tasks of my. */
@@ -474,10 +474,10 @@ class task extends control
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
 
-        /* Get project teams. */
-        $projectIDList = array();
-        foreach($tasks as $task) if(!in_array($task->project, $projectIDList)) $projectIDList[] = $task->project;
-        $projectTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($projectIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
+        /* Get execution teams. */
+        $executionIDList = array();
+        foreach($tasks as $task) if(!in_array($task->project, $executionIDList)) $executionIDList[] = $task->project;
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -490,18 +490,19 @@ class task extends control
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
         /* Assign. */
-        $this->view->position[]   = $this->lang->task->common;
-        $this->view->position[]   = $this->lang->task->batchEdit;
-        $this->view->projectID    = $projectID;
-        $this->view->priList      = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
-        $this->view->statusList   = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
-        $this->view->typeList     = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
-        $this->view->taskIDList   = $taskIDList;
-        $this->view->tasks        = $tasks;
-        $this->view->teams        = $teams;
-        $this->view->projectTeams = $projectTeams;
-        $this->view->projectName  = isset($project) ? $project->name : '';
-        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->position[]     = $this->lang->task->common;
+        $this->view->position[]     = $this->lang->task->batchEdit;
+        $this->view->executionID    = $executionID;
+        $this->view->priList        = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
+        $this->view->statusList     = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
+        $this->view->typeList       = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
+        $this->view->taskIDList     = $taskIDList;
+        $this->view->tasks          = $tasks;
+        $this->view->teams          = $teams;
+        $this->view->executionTeams = $executionTeams;
+        $this->view->executionName  = isset($execution) ? $execution->name : '';
+        $this->view->executionType  = isset($execution) ? $execution->type : '';
+        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
 
         $this->display();
     }
