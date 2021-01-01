@@ -603,7 +603,7 @@ class commonModel extends model
     {
         global $dbh, $lang, $app;
         echo "<li class='divider'></li>";
-        echo '<li><span id="mainRecent" onclick="getExecutions();"><i class="icon icon-recent"></i> ' . $lang->recent . '</span></li>';
+        echo '<li><a id="mainRecent" onclick="getExecutions();"><i class="icon icon-recent"></i> ' . $lang->recent . '</a></li>';
     }
 
     /**
@@ -2339,12 +2339,12 @@ EOD;
             $lang->menuOrder = $lang->repo->menuOrder;
         }
         if($group == 'ops')
-        {    
+        {
             $lang->menu      = $lang->ops->menu;
             $lang->menuOrder = $lang->ops->menuOrder;
-        }    
+        }
         if($group == 'feedback')
-        {    
+        {
             $lang->menu      = $lang->feedback->menu;
             $lang->menuOrder = $lang->feedback->menuOrder;
         }

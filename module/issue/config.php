@@ -9,6 +9,7 @@ $config->issue->editor          = new stdclass();
 $config->issue->editor->view    = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->issue->editor->create  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->issue->editor->edit    = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->issue->editor->confirm = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->issue->editor->cancel  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->issue->editor->resolve = array('id' => 'spec,verify,steps,desc,resolutionComment', 'tools' => 'simpleTools');
 

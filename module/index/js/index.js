@@ -17,7 +17,7 @@
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
-            var $link= $('<a></a>').attr('href', item.url)
+            var $link= $('<a data-pos="menu"></a>')
                 .attr('data-group', item.group)
                 .attr('class', 'show-in-tab')
                 .html(item.title);
@@ -31,6 +31,22 @@
 
             if(!defaultTabGroup) defaultTabGroup = item.group;
         });
+    }
+
+    /**
+     * Get tab group from url
+     * @param {String} urlOrModuleName Url string
+     *
+     */
+    function getGroupFromUrl(urlOrModuleName)
+    {
+        var group = window.navGroup[urlOrModuleName];
+        if(group) return group;
+        var link = $.parseLink(urlOrModuleName);
+        if(link.isOnlyBody) return '';
+        var moduleName = link.moduleName;
+        group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
+        return groupsMap[group] ? group : '';
     }
 
     /**
@@ -51,8 +67,8 @@
             }
             else
             {
-                var moduleName = $.parseLink(url).moduleName;
-                group = window.navGroup[moduleName] || moduleName;
+                group = getGroupFromUrl(url);
+                if(!group) return false;
             }
         }
 
@@ -101,7 +117,7 @@
         var $bar = $('#tabBar-' + group);
         if(!$bar.length)
         {
-            var $link= $('<a></a>').attr('href', tab.url)
+            var $link= $('<a data-pos="bar"></a>')
                 .attr('data-group', group)
                 .attr('class', 'show-in-tab')
                 .html(tab.text);
@@ -125,6 +141,8 @@
             lastOpenedGroup = group;
             updateTabUrl(group);
         }
+
+        return true;
     }
 
     /**
@@ -264,6 +282,7 @@
         close:      closeTab,
         reload:     reloadTab,
         updateUrl:  updateTabUrl,
+        getGroup:   getGroupFromUrl,
         openedTabs: openedTabs,
         groupsMap:  groupsMap
     };
@@ -274,15 +293,17 @@
         initMenuList();
 
         /* Bind events */
-        $(document).on('click', '.open-in-tab,.show-in-tab', function(e)
+        $(document).on('click', 'a,.open-in-tab,.show-in-tab', function(e)
         {
             var $link = $(this);
-            var url = $link.hasClass('open-in-tab') ? ($link.attr('href') || $link.data('url')) : '';
-            openTab(url, $link.data('group'));
-            e.preventDefault();
+            if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
+            var url = $link.hasClass('show-in-tab') ? '' : ($link.attr('href') || $link.data('url'));
+            if(url && url.indexOf('onlybody=yes') > 0) return;
+            if(openTab(url, $link.data('group'))) e.preventDefault();
         }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
         {
-            var group = $(this).data('group');
+            var $btn  = $(this);
+            var group = $btn.data('group');
             if(!group) return;
 
             var lang  = window.tabsLang;
@@ -293,7 +314,24 @@
                 items.push({label: lang.reload, onClick: function(){reloadTab(group)}});
                 if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
             }
-            $.zui.ContextMenu.show(items, {event: event});
+
+            var options = {event: event};
+            var pos = $btn.data('pos');
+            if(pos)
+            {
+                var bounding = $btn.closest('li')[0].getBoundingClientRect();
+                if(pos === 'bar')
+                {
+                    options.x = bounding.left;
+                    options.y = bounding.top - (group === 'my' ? 65 : 92);
+                }
+                else
+                {
+                    options.x = bounding.right - 10;
+                    options.y = bounding.top;
+                }
+            }
+            $.zui.ContextMenu.show(items, options);
             event.preventDefault();
         });
 
@@ -308,29 +346,26 @@
     });
 }());
 
-/* Click to show more. */
-$("#menuToggle").bind('click', function()
+$(function()
 {
-    $("#moreExecution").hide();
-});
+    /* Click to show more. */
+    $('#menuToggle').on('click', function()
+    {
+        $('#moreExecution').hide();
+    });
 
-/* Mouse in to show more. */
-$("#executionList").mouseover(function()
-{
-    $("#moreExecution").show();
-});
-
-/* Mouse out hide more. */
-$("#executionList").mouseout(function()
-{
-    $("#moreExecution").hide();
+    /* Hide execution list on mouseleave or click */
+    $('#executionList').on('mouseleave click', function()
+    {
+        $('#moreExecution').hide();
+    });
 });
 
 /* Get recent executions. */
 function getExecutions()
 {
-    $("#moreExecution").toggle();
-    if(!$("#moreExecution").is(':hidden'))
+    $('#moreExecution').toggle();
+    if(!$('#moreExecution').is(':hidden'))
     {
         $.ajax(
         {
@@ -339,7 +374,7 @@ function getExecutions()
             type: 'post',
             success: function(data)
             {
-                $("#executionList").html(data);
+                $('#executionList').html(data);
             }
         })
     }

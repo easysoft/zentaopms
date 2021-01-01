@@ -147,7 +147,6 @@ $lang->product->checkedSummary = "选中 <strong>%total%</strong> 个%storyCommo
 $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护{$lang->productCommon}模块</div>";
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
-$lang->product->DuplicateOrder = "{$lang->productCommon} ：%s排序与其他{$lang->productCommon}排序重复，将不会被更新。";
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

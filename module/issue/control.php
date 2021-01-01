@@ -201,7 +201,30 @@ class issue extends control
         }
 
         $this->view->issue = $this->issue->getByID($issueID);
+        $this->display();
+    }
 
+    /**
+     * Confirm the issue.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
+    public function confirm($issueID)
+    {
+        if($_POST)
+        {
+            $changes = $this->issue->confirm($issueID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->loadModel('action')->create('issue', $issueID, 'Confirmed');
+
+            $this->action->logHistory($actionID, $changes);
+            die(js::closeModal('parent.parent', 'this'));
+        }
+
+        $this->view->issue = $this->issue->getByID($issueID);
         $this->display();
     }
 

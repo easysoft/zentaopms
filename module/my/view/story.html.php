@@ -16,16 +16,13 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo "<span class='nav-title label label-badge label-outline label-info'>{$URCommon}</span>";
-    echo "<span class='nav-title'></span>";
+    echo "<span class='nav-title label label-outline label-info'>{$URCommon}</span>";
     echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>" . ($type == 'closedBy' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     echo "<span class='nav-title'> | </span>";
-    echo "<span class='nav-title'></span>";
-    echo "<span class='nav-title label label-badge label-outline label-info'>{$SRCommon}</span>";
-    echo "<span class='nav-title'></span>";
+    echo "<span class='nav-title label label-outline label-info'>{$SRCommon}</span>";
     echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'story' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   && $mode == 'story' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' && $mode == 'story' ? ' btn-active-text' : '') . "'");

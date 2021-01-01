@@ -70,17 +70,13 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function putInto($programID = 0, $browseType = 'all', $orderBy = 'id_desc')
+    public function putInto($programID = 0)
     {
         $this->setProgramNavMenu($programID);
 
-        $this->view->title      = $this->lang->personnel->putInto;
-        $this->view->position[] = $this->lang->personnel->putInto;
-
-        $this->view->programID      = $programID;
-        $this->view->orderBy        = $orderBy;
-        $this->view->browseType     = $browseType;
-        $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID, $browseType, $orderBy);
+        $this->view->title          = $this->lang->personnel->putInto;
+        $this->view->position[]     = $this->lang->personnel->putInto;
+        $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID);
 
         $this->display();
     }

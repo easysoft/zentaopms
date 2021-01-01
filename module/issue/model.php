@@ -245,7 +245,7 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return bool
+     * @return array
      */
     public function assignTo($issueID)
     {
@@ -265,7 +265,7 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return bool
+     * @return array
      */
     public function close($issueID)
     {
@@ -285,12 +285,28 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return bool
+     * @return array
+     */
+    public function confirm($issueID)
+    {
+        $oldIssue = $this->getByID($issueID);
+        $data     = fixer::input('post')->add('status', 'confirmed')->get();
+        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+
+        return common::createChanges($oldIssue, $data);
+    }
+
+    /**
+     * Cancel an issue.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return array
      */
     public function cancel($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data     = fixer::input('post')->get();
+        $data     = fixer::input('post')->add('status', 'canceled')->get();
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
 
         return common::createChanges($oldIssue, $data);
@@ -301,7 +317,7 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return bool
+     * @return array
      */
     public function activate($issueID)
     {
@@ -463,9 +479,10 @@ class issueModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'resolve')  return $issue->status != 'resolved';
+        if($action == 'confirm')  return $issue->status == 'unconfirmed';
+        if($action == 'resolve')  return $issue->status == 'active' || $issue->status == 'confirmed';
         if($action == 'close')    return $issue->status != 'closed';
-        if($action == 'activate') return $issue->status != 'active';
+        if($action == 'activate') return $issue->status == 'closed';
         if($action == 'cancel')   return $issue->status != 'canceled';
 
         return true;

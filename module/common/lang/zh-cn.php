@@ -318,7 +318,7 @@ $lang->scrumproduct->menu->view    = array('link' => '概况|product|view|produc
 $lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
-$lang->product->dividerMenu = ',project,doc,';
+$lang->product->dividerMenu = ',requirement,plan,project,';
 
 $lang->story = new stdclass();
 
@@ -904,8 +904,8 @@ $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex   = array('link' => '仪表盘|program|index|project={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
+$lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
