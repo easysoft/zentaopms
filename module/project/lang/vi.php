@@ -117,8 +117,8 @@ $lang->project->statusList['doing']     = 'Đang làm';
 $lang->project->statusList['suspended'] = 'Đã đình chỉ';
 $lang->project->statusList['closed']    = 'Đã đóng';
 
-$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->project->storyPoint = 'Story Point';
 
