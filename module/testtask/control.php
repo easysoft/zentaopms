@@ -1175,4 +1175,25 @@ class testtask extends control
         $this->view->productID = $productID;
         $this->display();
     }
+
+    /**
+     * AJAX: return test tasks of a user in html select.
+     *
+     * @param  int    $userID
+     * @param  string $id
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUserTestTasks($userID = '', $id = '', $status = 'all')
+    {
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
+
+        if($id) die(html::select("testTasks[$id]", $testTasks, '', 'class="form-control"'));
+        die(html::select('testTask', $testTasks, '', 'class=form-control'));
+    }
 }

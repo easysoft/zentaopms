@@ -43,17 +43,17 @@
       <tr>
         <th class='w-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
-        <th><?php echo $lang->release->build;?></th>
+        <th class='w-100px'><?php echo $lang->release->build;?></th>
         <?php if(isset($product->type) and $product->type != 'normal'):?>
         <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
-        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
+        <th class='c-date text-center w-100px'><?php echo $lang->release->date;?></th>
         <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
         <?php
         $extendFields = $this->projectrelease->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
         ?>
-        <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5 text-center w-150px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

@@ -186,10 +186,11 @@ class issueModel extends model
      * @param  string $account
      * @param  int    $limit
      * @param  string $status all|unconfirmed|active|suspended|resolved|closed|canceled
+     * @param  array  $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserIssuePairs($account, $limit = 0, $status = 'all')
+    public function getUserIssuePairs($account, $limit = 0, $status = 'all', $skipProjectIDList = array())
     {
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as project')
             ->from(TABLE_ISSUE)->alias('t1')
@@ -197,6 +198,7 @@ class issueModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.PRJ')->notin($skipProjectIDList)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->query();
 

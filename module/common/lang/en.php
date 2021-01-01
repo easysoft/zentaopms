@@ -809,7 +809,6 @@ $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
 $lang->icons['program']   = 'folder-open-o';
 $lang->icons['project']   = 'project';
-$lang->icons['execution'] = 'stack';
 $lang->icons['stage']     = 'stage';
 $lang->icons['sprint']    = 'sprint';
 $lang->icons['doc']       = 'file-text';

@@ -51,7 +51,7 @@
           </th>
           <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-project w-120px'>   <?php common::printOrderLink('PRJ',        $orderBy, $vars, $lang->task->project);?></th>
-          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->task->execution);?></th>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->my->executions);?></th>
           <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>

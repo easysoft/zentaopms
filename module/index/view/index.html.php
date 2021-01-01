@@ -50,7 +50,7 @@ js::set('defaultOpen', $open);
       <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
       <?php echo $lang->proVersion;?>
       <a href='<?php echo $lang->website;?>' target='_blank' title='<?php echo $config->version;?>'><?php echo $lang->globalLogo;?></a>
-      <a id ="globalMessages" class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>
+      <!--<a id ="globalMessages" class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">
           <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">

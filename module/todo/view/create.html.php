@@ -103,7 +103,7 @@
             <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', 0, "class='form-control'"));?>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr class='cycleConfig hidden'>
           <th><?php echo $lang->todo->deadline;?></th>
           <td><?php echo html::input("config[end]", '', "class='form-control form-date'");?></td>
@@ -111,7 +111,7 @@
         <tr>
           <th><?php echo $lang->todo->type;?></th>
           <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
@@ -119,7 +119,7 @@
             <div class='input-group title-group required'>
               <div class='nameBox'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
               <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
-			  <div class="input-group-btn pri-selector" data-type="pri">
+              <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
                 </button>
@@ -129,15 +129,15 @@
               </div>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', isset($desc) ? $desc : '', "rows='8' class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->status;?></th>
           <td><?php echo html::select('status', $lang->todo->statusList, '', "class='form-control chosen'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->beginAndEnd;?></th>
           <td>
@@ -151,7 +151,7 @@
               <label for='switchTime'><?php echo $lang->todo->lblDisableDate;?></label>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->private;?></th>
           <td>
@@ -160,7 +160,7 @@
               <label for='private'></label>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton() . html::backButton();?>
