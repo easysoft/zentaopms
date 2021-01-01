@@ -28,11 +28,13 @@
 
 #globalSearchDiv{width:50%; float: right;}
 #globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
-#globalSearchInput {height: 28px; padding-left: 10px;}
-#globalSearchButton {height: 28px;}
+#globalSearchInput{height: 28px; padding-left: 10px;}
+#globalSearchButton{height: 28px;}
 
-#globalBarLogo {width: 100%; float: right;}
-#globalBarLogo a {float: right; margin: 0px 5px;}
+#globalBarLogo{width: 100%; float: right;}
+#globalBarLogo a{float: right; margin: 0px 5px;}
 #globalBarLogo img{width: 74px; float: left; margin-top: 2px;}
 
 #globalMessages .icon{font-size: 24px; color: #16a8f8;}
+
+li.divider{height: 1px; padding: 0; margin: 16px 8px; background-color: #fff; opacity: .24;}
