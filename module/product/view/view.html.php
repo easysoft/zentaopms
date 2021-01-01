@@ -139,7 +139,7 @@
               <table class="table table-data">
                 <tbody>
                   <tr>
-                    <th class='w-100px'><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
+                    <th class='w-65px'><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
                     <td><em><?php echo zget($users, $product->PO);?></em></td>
                   </tr>
                   <tr>
@@ -160,7 +160,7 @@
               <table class="table table-data data-basic">
                 <tbody>
                   <tr>
-                    <th><?php echo $lang->story->openedBy?></th>
+                    <th class="w-80px"><?php echo $lang->story->openedBy?></th>
                     <td><em><?php echo zget($users, $product->createdBy);?></em></td>
                   </tr>
                   <tr>
