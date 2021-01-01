@@ -132,12 +132,12 @@ $lang->product->statusList[''] = '';
 $lang->product->statusList['normal'] = 'Bình thường';
 $lang->product->statusList['closed'] = 'Đã đóng';
 
-$lang->product->aclList['open']    = "Mặc định (Người dùng với quyền {$lang->productCommon} có thể truy cập nó.)";
 $lang->product->aclList['private'] = "Riêng tư {$lang->productCommon} ({$lang->executionCommon} chỉ có thành viên nhóm)";
-$lang->product->aclList['custom']  = 'Tùy biến (Thành viên đội nhóm và thành viên danh sách trắng có thể truy cập nó.)';
+$lang->product->aclList['open']    = "Mặc định (Người dùng với quyền {$lang->productCommon} có thể truy cập nó.)";
+//$lang->product->aclList['custom']  = 'Tùy biến (Thành viên đội nhóm và thành viên danh sách trắng có thể truy cập nó.)';
 
-$lang->product->acls['open']    = 'Mặc định';
 $lang->product->acls['private'] = "Riêng tư {$lang->productCommon}";
+$lang->product->acls['open']    = 'Mặc định';
 
 $lang->product->aclTips['open']    = "Người dùng với quyền {$lang->productCommon} có thể truy cập nó.";
 $lang->product->aclTips['private'] = "{$lang->executionCommon} chỉ có thành viên nhóm";

@@ -113,12 +113,12 @@ $lang->program->featureBar['wait']      = 'Waiting';
 $lang->program->featureBar['suspended'] = 'Suspended';
 $lang->program->featureBar['closed']    = 'Closed';
 
-$lang->program->PRJAclList['open']    = "Open(accessible with project view permissions)";
 $lang->program->PRJAclList['private'] = 'Private (For team members and stakeholders only)';
+$lang->program->PRJAclList['open']    = "Open(accessible with project view permissions)";
 
-$lang->program->PGMPRJAclList['open']    = "Full disclosure (accessible with project view permissions)";
-$lang->program->PGMPRJAclList['program'] = "Public within the project set (accessible to all higher-level project set leaders and stakeholders, members of this project team and stakeholders)";
 $lang->program->PGMPRJAclList['private'] = "Private (For team members and stakeholders only)";
+$lang->program->PGMPRJAclList['program'] = "Public within the project set (accessible to all higher-level project set leaders and stakeholders, members of this project team and stakeholders)";
+$lang->program->PGMPRJAclList['open']    = "Full disclosure (accessible with project view permissions)";
 
 $lang->program->PRJAuthList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->program->PRJAuthList['reset']  = 'Reset (project privilege only)';

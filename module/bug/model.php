@@ -1387,7 +1387,6 @@ class bugModel extends model
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($this->app->rawMethod == 'contribute')->andWhere("t1.status")->in('resolved,closed')->fi()
-            ->beginIF($this->app->rawMethod == 'work')->andWhere("t1.status")->eq('active')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
