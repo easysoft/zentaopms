@@ -16,7 +16,7 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo "<span class='nav-title label label-outline label-info'>{$URCommon}</span>";
+    echo "<span class='nav-title'>{$URCommon}</span>";
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     ?>
     <?php if($app->rawMethod == 'contribute')
@@ -28,7 +28,7 @@
     ?>
     <?php
     echo "<span class='nav-title'> | </span>";
-    echo "<span class='nav-title label label-outline label-info'>{$SRCommon}</span>";
+    echo "<span class='nav-title'>{$SRCommon}</span>";
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'story' ? ' btn-active-text' : '') . "'");
     ?>
     <?php if($app->rawMethod == 'contribute')
