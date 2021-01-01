@@ -93,7 +93,6 @@ $lang->story->source         = "来源";
 $lang->story->sourceNote     = '来源备注';
 $lang->story->fromBug        = '来源Bug';
 $lang->story->title          = "{$lang->productSRCommon}名称";
-$lang->story->name           = '名称';
 $lang->story->type           = "类型";
 $lang->story->color          = '标题颜色';
 $lang->story->toBug          = '转Bug';
