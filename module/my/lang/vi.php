@@ -63,5 +63,3 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Thông tin cơ bản';
 $lang->my->form->lblContact = 'Thông tin liên hệ';
 $lang->my->form->lblAccount = 'Thông tin tài khoản';
-
-$lang->my->taskSummary = "Tổng nhiệm vụ:<strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Còn: <strong>%s</strong>(giờ).";

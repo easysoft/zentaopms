@@ -56,33 +56,4 @@ class myModel extends model
             }
         }
     }
-
-    /**
-     * Show the task summary of the current page.
-     *
-     * @param  array    $tasks
-     * @access public
-     * @return string
-     */
-    public function taskSummary($tasks)
-    {
-        $taskSum   = 0;
-        $totalLeft = 0.0;
-
-        foreach($tasks as $task)
-        {
-            if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
-
-            if(isset($task->children))
-            {
-                foreach($task->children as $children)
-                {
-                    $taskSum ++;
-                }
-            }
-            $taskSum ++;
-        }
-
-        return sprintf($this->lang->my->taskSummary, $taskSum, round($totalLeft, 1));
-    }
 }

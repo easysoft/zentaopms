@@ -303,7 +303,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $tasks;
-        $this->view->summary    = $this->my->taskSummary($tasks);
+        $this->view->summary    = $this->loadModel('project')->summary($tasks);
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;

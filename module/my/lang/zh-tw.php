@@ -59,5 +59,3 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '聯繫信息';
 $lang->my->form->lblAccount = '帳號信息';
-
-$lang->my->taskSummary = "本頁共 <strong>%s</strong> 個任務，剩餘 <strong>%s</strong> 工時。";
