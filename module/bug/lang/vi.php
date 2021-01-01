@@ -59,7 +59,6 @@ $lang->bug->resolvedDate     = 'Ngày giải quyết';
 $lang->bug->resolvedDateAB   = 'Ngày giải quyết';
 $lang->bug->deadline         = 'Hạn chót';
 $lang->bug->plan             = 'Kế hoạch';
-$lang->bug->close            = 'Close';
 $lang->bug->closedBy         = 'Người đóng';
 $lang->bug->closedDate       = 'Ngày đóng';
 $lang->bug->duplicateBug     = 'ID Bug đã nhân bản';

@@ -59,7 +59,6 @@ $lang->bug->resolvedDate     = '解决日期';
 $lang->bug->resolvedDateAB   = '解决日期';
 $lang->bug->deadline         = '截止日期';
 $lang->bug->plan             = '所属' . '计划';
-$lang->bug->close            = '关闭';
 $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
 $lang->bug->duplicateBug     = '重复ID';

@@ -59,7 +59,6 @@ $lang->bug->resolvedDate     = 'Gelöst am';
 $lang->bug->resolvedDateAB   = 'Gelöst';
 $lang->bug->deadline         = 'Fällig am';
 $lang->bug->plan             = 'Plan';
-$lang->bug->close            = 'Close';
 $lang->bug->closedBy         = 'Geschlossen von';
 $lang->bug->closedDate       = 'Geschlossen am';
 $lang->bug->duplicateBug     = 'Dublette';

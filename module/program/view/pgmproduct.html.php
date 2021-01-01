@@ -63,7 +63,7 @@
             <th><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
-            <th><?php echo $lang->bug->close;?></th>
+            <th><?php echo $lang->close;?></th>
           </tr>
         </thead>
         <tbody class="sortable" id="productTableList">
