@@ -863,7 +863,7 @@ class program extends control
         $code      = '';
         $team      = '';
         $whitelist = '';
-        $acl       = 'open';
+        $acl       = 'private';
         $auth      = 'extend';
 
         $products     = array();

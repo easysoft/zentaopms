@@ -132,12 +132,12 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Fermé';
 
-$lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
 $lang->product->aclList['private'] = "{$lang->productCommon} Privé (seuls les membres de l'équipe {$lang->executionCommon} ont les droits)";
-$lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";
+$lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
+//$lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";
 
-$lang->product->acls['open']    = 'Défaut';
 $lang->product->acls['private'] = "{$lang->productCommon} Privé";
+$lang->product->acls['open']    = 'Défaut';
 
 $lang->product->aclTips['open']    = "Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.";
 $lang->product->aclTips['private'] = "les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.";

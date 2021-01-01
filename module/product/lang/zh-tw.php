@@ -132,12 +132,12 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
-$lang->product->aclList['open']    = "公開(有{$lang->productCommon}視圖權限，即可訪問)";
 $lang->product->aclList['private'] = "私有({$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問)";
+$lang->product->aclList['open']    = "公開(有{$lang->productCommon}視圖權限，即可訪問)";
 //$lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
-$lang->product->acls['open']    = '公開';
 $lang->product->acls['private'] = '私有';
+$lang->product->acls['open']    = '公開';
 
 $lang->product->aclTips['open']    = "有{$lang->productCommon}視圖權限，即可訪問";
 $lang->product->aclTips['private'] = "{$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問";
