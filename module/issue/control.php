@@ -456,6 +456,27 @@ class issue extends control
     }
 
     /**
+     * AJAX: return issues of a user in html select.
+     *
+     * @param  int    $userID
+     * @param  string $id
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUserIssues($userID = '', $id = '', $status = 'all')
+    {
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $issues = $this->issue->getUserIssuePairs($account, 0, $status);
+
+        if($id) die(html::select("issues[$id]", $issues, '', 'class="form-control"'));
+        die(html::select('issue', $issues, '', 'class=form-control'));
+    }
+
+    /**
      *  View an issue.
      *
      * @param  int    $issueID

@@ -389,7 +389,7 @@ class risk extends control
                 $actionID = $this->loadModel('action')->create('risk', $riskID, 'Activated', $this->post->comment);            
                 $this->action->logHistory($actionID, $changes);
             }
-            
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('risk', 'browse'), 'parent'));
         }
@@ -401,4 +401,26 @@ class risk extends control
         $this->view->risk  = $this->risk->getById($riskID);
         $this->display();
     }
+
+    /**
+     * AJAX: return risks of a user in html select.
+     *
+     * @param  int    $userID
+     * @param  string $id
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUserRisks($userID = '', $id = '', $status = 'all')
+    {
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $risks = $this->risk->getUserRiskPairs($account, 0, $status);
+
+        if($id) die(html::select("risks[$id]", $risks, '', 'class="form-control"'));
+        die(html::select('risk', $risks, '', 'class=form-control'));
+    }
 }
+

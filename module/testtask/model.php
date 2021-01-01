@@ -1085,11 +1085,12 @@ class testtaskModel extends model
      * @param  string $account
      * @param  int    $limit
      * @param  string $status all|wait|doing|done|blocked
-     * @param  string $skipProjectIDList
+     * @param  array $skipProductIDList
+     * @param  array $skipProjectIDList
      * @access public
      * @return array
      */
-    public function getUserTesttaskPairs($account, $limit = 0, $status = 'all', $skipProjectIDList = '')
+    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipProjectIDList = array())
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -1097,7 +1098,8 @@ class testtaskModel extends model
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.project')->notin($skipProjectIDList)->fi()
+            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.PRJ')->notin($skipProjectIDList)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->query();
 
