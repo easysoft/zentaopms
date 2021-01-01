@@ -41,7 +41,7 @@ class build extends control
         $this->loadModel('user');
 
         /* Set session and get execution by id. */
-        $this->session->set('buildCreate', $this->app->getURI(true));
+        $this->session->set('buildCreate', $this->createLink('build', 'create', "executionID=$executionID", '', '', $this->session->PRJ));
         $execution = $this->loadModel('project')->getExecutionById($executionID);
 
         /* Set menu. */
