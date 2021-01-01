@@ -19,7 +19,9 @@ $lang->waterfall->menuOrder[35] = 'qa';
 $lang->waterfall->menuOrder[40] = 'projectbuild';
 $lang->waterfall->menuOrder[45] = 'projectrelease';
 $lang->waterfall->menuOrder[50] = 'doc';
-$lang->waterfall->menuOrder[55] = 'list';
+$lang->waterfall->menuOrder[55] = 'weekly';
+$lang->waterfall->menuOrder[60] = 'other';
+$lang->waterfall->menuOrder[65] = 'projectsetting';
 
 $lang->scrum->menuOrder[5]  = 'programindex';
 $lang->scrum->menuOrder[10] = 'project';
@@ -29,7 +31,8 @@ $lang->scrum->menuOrder[25] = 'ci';
 $lang->scrum->menuOrder[30] = 'projectbuild';
 $lang->scrum->menuOrder[35] = 'projectrelease';
 $lang->scrum->menuOrder[40] = 'doc';
-$lang->scrum->menuOrder[45] = 'stakeholder';
+$lang->scrum->menuOrder[45] = 'other';
+$lang->scrum->menuOrder[50] = 'projectsetting';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
