@@ -865,6 +865,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
