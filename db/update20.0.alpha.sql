@@ -6,7 +6,7 @@ ALTER TABLE `zt_project` CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open';
 ALTER TABLE `zt_project` ADD `product` varchar(20) NOT NULL DEFAULT 'single' AFTER `type`;
 ALTER TABLE `zt_project` ADD `lifetime` char(30) NOT NULL AFTER `product`;
 ALTER TABLE `zt_project` ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `lifetime`;
-ALTER TABLE `zt_project` ADD `budgetUnit` char(30) NOT NULL  DEFAULT 'wanyuan' AFTER `budget`;
+ALTER TABLE `zt_project` ADD `budgetUnit` char(30) NOT NULL DEFAULT 'yuan' AFTER `budget`;
 ALTER TABLE `zt_project` ADD `percent` float unsigned NOT NULL DEFAULT '0' AFTER `budgetUnit`;
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;

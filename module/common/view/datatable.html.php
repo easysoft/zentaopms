@@ -43,7 +43,7 @@ var datatableOptions =
     tableClass    : 'tablesorter',
     storage       : false,
     fixCellHeight : false,
-    selectable     : false,
+    selectable    : false,
     fixedHeader: true,
     ready: function()
     {

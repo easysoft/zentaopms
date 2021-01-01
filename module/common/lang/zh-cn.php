@@ -318,7 +318,7 @@ $lang->scrumproduct->menu->view    = array('link' => '概况|product|view|produc
 $lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
-$lang->product->dividerMenu = ',project,doc,';
+$lang->product->dividerMenu = ',requirement,plan,project,';
 
 $lang->story = new stdclass();
 
