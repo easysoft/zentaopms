@@ -594,14 +594,14 @@ class commonModel extends model
     }
 
     /**
-     * Get recent stage and sprint.
+     * Get recent executions.
      *
      * @access public
-     * @return string
+     * @return void
      */
     public static function getRecentExecutions()
     {
-        global $dbh, $lang, $app;
+        global $lang;
         echo "<li class='divider'></li>";
         echo '<li><a id="mainRecent" onclick="getExecutions();"><i class="icon icon-recent"></i> ' . $lang->recent . '</a></li>';
     }
