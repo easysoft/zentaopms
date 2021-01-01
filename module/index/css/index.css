@@ -7,7 +7,7 @@
 [lang="en"] #pagesBar {left: 134px}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
 #bars > li {padding: 8px 5px;}
-#bars > li > a {height: 24px; color: #fff; background: #cccfd4; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
+#bars > li > a {height: 24px; color: #fff; background: #88b6ff; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
 #bars > li > a:hover, #bars > li > a:active, #bars > li > a:focus {background: #3c495c}
 #bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb}
 #bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
