@@ -2,6 +2,41 @@
 class programModel extends model
 {
     /**
+     * Save program state.
+     * 
+     * @param  int    $programID
+     * @param  array  $programs
+     * @access public
+     * @return void
+     */
+    public function savePGMState($programID = 0, $programs = array())
+    {
+        if($programID > 0) $this->session->set('PGM', (int)$programID);
+        if($programID == 0 and $this->cookie->lastPGM) $this->session->set('PGM', (int)$this->cookie->lastPGM);
+        if($programID == 0 and $this->session->PGM == '') $this->session->set('PGM', key($programs));
+        if(!isset($programs[$this->session->PGM]))
+        {    
+            $this->session->set('PGM', key($programs));
+            if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->PGM},") === false) $this->accessDenied();
+        }
+
+        return $this->session->PGM;
+    }
+
+    /**
+     * Get program main menu action.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @access public
+     * @return void
+     */
+    public function getPGMMainAction()
+    {
+        return common::hasPriv('program', 'pgmbrowse') ? html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->program->morePGM, '', "class='btn btn-link'") : '';
+    }
+
+    /**
      * Get program pairs.
      *
      * @access public
@@ -305,28 +340,6 @@ class programModel extends model
 
             return common::createChanges($oldProgram, $program);
         }
-    }
-
-    /*
-     * Get program swapper.
-     *
-     * @param  int    $programID
-     * @param  bool   $active
-     * @access private
-     * @return string
-     */
-    public function getPGMCommonAction($programID = 0, $active = false)
-    {
-        $active  = $active ? 'active' : '';
-        $output  = "<div class='btn-group header-angle-btn $active' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' title='{$this->lang->program->PGMCommon}'><span class='text'>{$this->lang->program->PGMCommon}</span> <span class='caret'></span></button>";
-        $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('program', 'pgmindex'), "<i class='icon icon-home'></i> " . $this->lang->program->PGMIndex) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PGMBrowse) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'pgmcreate'), "<i class='icon icon-plus'></i> " . $this->lang->program->PGMCreate) . '</li>';
-        $output .= '</ul>';
-        $output .= "</div>";
-
-        return $output;
     }
 
     /*
@@ -742,23 +755,26 @@ class programModel extends model
         return !dao::isError();
     }
 
-    /*
-     * Get project swapper.
-     *
-     * @param  bool   $active
+    /**
+     * Save project state.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $projects 
      * @access public
-     * @return string
+     * @return void
      */
-    public function printPRJCommonAction($active = false)
+    public function savePRJState($projectID = 0, $projects = array())
     {
-        $active  = $active ? 'active' : '';
-        $output  = "<div class='btn-group header-angle-btn $active' id='pgmCommonAction'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$this->lang->program->PRJAll}'><span class='text'>{$this->lang->program->PRJAll}</span> <span class='caret'></span></button>";
-        $output .= '<ul class="dropdown-menu">';
-        $output .= '<li>' . html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-cards-view'></i> " . $this->lang->program->PRJAll) . '</li>';
-        $output .= '<li>' . html::a(helper::createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $this->lang->program->PRJCreate, '', 'data-toggle="modal" data-target="#guideDialog"') . '</li>';
-        $output .= '</ul>';
-        $output .= "</div>";
-        echo $output;
+        if($projectID > 0) $this->session->set('PRJ', (int)$projectID);
+        if($projectID == 0 and $this->cookie->lastPRJ) $this->session->set('PRJ', (int)$this->cookie->lastPRJ);
+        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
+        if(!isset($projects[$this->session->PRJ]))
+        {    
+            $this->session->set('PRJ', key($projects));
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
+        }
+
+        return $this->session->PRJ;
     }
 
     /*
@@ -773,7 +789,6 @@ class programModel extends model
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
         $active = strpos($currentMethod, 'prj') !== false ? true : false;
-        $this->printPRJCommonAction($active);
 
         if($currentModule == 'program' && $currentMethod != 'index') return;
 
@@ -791,6 +806,20 @@ class programModel extends model
         $output .= "</div></div>";
 
         return $output;
+    }
+
+    /**
+     * Get project main menu action.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @access public
+     * @return void
+     */
+    public function getPRJMainAction($module, $method)
+    {
+        if($module == 'program' and $method != 'index') return '';
+        return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->program->morePRJ, '', "class='btn btn-link'") : '';
     }
 
     /**
@@ -1609,7 +1638,7 @@ class programModel extends model
                 $title = "title='{$PRJPGM}'";
             }
 
-            echo "<td class='" . $class . "' $title>";
+            echo "<td class='c-name " . $class . "' $title>";
             switch($id)
             {
                 case 'idAB':
@@ -1617,7 +1646,7 @@ class programModel extends model
                     break;
                 case 'PRJName':
                     $projectLink = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
-                    echo html::a($projectLink, $project->name);
+                    echo html::a($projectLink, $project->name, '', "class='not-in-tab'");
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
                     break;
@@ -1660,7 +1689,7 @@ class programModel extends model
                     if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
                     if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
@@ -1669,13 +1698,13 @@ class programModel extends model
                     echo "</div>";
 
                     common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
-                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');
+                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project', '', 'btn-action');
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
                     if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";

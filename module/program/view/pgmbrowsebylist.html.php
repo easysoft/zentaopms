@@ -62,7 +62,7 @@
           <?php if($program->status == 'doing')  common::printIcon('program', 'PGMClose',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
           <?php if($program->status == 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
           <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
+            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('program', 'PGMSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->PGMSuspend);?>
               <?php if($program->status != 'doing')  common::printIcon('program', 'PGMClose',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
@@ -78,7 +78,7 @@
           <?php if($program->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
           <?php if($program->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
           <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
+            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
             <?php common::printIcon('program', 'PRJSuspend', "projectID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
             <?php if($program->status != 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
@@ -86,12 +86,12 @@
             </ul>
           </div>
           <?php common::printIcon('program', 'PRJEdit',          "projectID=$program->id", $program, 'list', 'edit');?>
-          <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'persons');?>
+          <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'group');?>
           <?php common::printIcon('program', 'PRJGroup',         "projectID=$program->id", $program, 'list', 'lock');?>
           <div class='btn-group'>
-            <button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
+            <button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id", $program, 'list', 'menu-project');?>
+              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id", $program, 'list', 'link');?>
               <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id", $program, 'list', 'group');?>
               <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
             </ul>

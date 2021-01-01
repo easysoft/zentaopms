@@ -153,6 +153,8 @@ $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 $filter->product->project->cookie['PRJMine']          = 'code';
 
+$filter->program->default->cookie['lastPGM']               = 'int';
+$filter->program->default->cookie['lastPRJ']               = 'int';
 $filter->program->prjbrowse->cookie['programType']         = 'code';
 $filter->program->prjbrowse->cookie['PRJMine']             = 'code';
 $filter->program->pgmproject->cookie['PRJMine']            = 'code';

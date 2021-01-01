@@ -19,16 +19,14 @@
         <span><?php echo $lang->my->setStoryConcept;?></span>
       </h2>
     </div>
-    <form method='post' target='hiddenwin'>
+    <form method='post' target='hiddenwin' style="height: 300px;">
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->my->storyConcept;?></th>
           <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control chosen'");?></td>
-          <td></td>
-          <td></td>
+          <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <div class='text-center form-actions'> <?php echo html::submitButton();?></div>
     </form>
   </div>
 </div>

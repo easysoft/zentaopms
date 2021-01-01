@@ -9,4 +9,3 @@
 .table td.has-child > .story-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
-.btn-toolbar .nav-title {padding: 4px 10px;}

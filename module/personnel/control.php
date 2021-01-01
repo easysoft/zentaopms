@@ -216,8 +216,9 @@ class personnel extends control
     public function setProgramNavMenu($programID = 0)
     {
         $this->loadModel('program');
-        $this->lang->navGroup->program     = 'program';
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $this->lang->navGroup->program       = 'program';
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
     }
 }

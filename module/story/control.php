@@ -47,7 +47,8 @@ class story extends control
     {
         $this->story->replaceURLang($type);
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -301,7 +302,8 @@ class story extends control
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
@@ -447,7 +449,8 @@ class story extends control
 
         /* Set menu. */
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($products, $product->id, $story->branch);
 
         $this->story->replaceURLang($story->type);
@@ -526,7 +529,8 @@ class story extends control
     public function batchEdit($productID = 0, $projectID = 0, $branch = 0, $storyType = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->story->replaceURLang($storyType);
 
         /* Load model. */
@@ -768,7 +772,8 @@ class story extends control
 
         /* Set the menu. */
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
 
         if($from == 'project')
@@ -851,8 +856,9 @@ class story extends control
     public function review($storyID)
     {
         $this->product;
-        $this->lang->product->menu         = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($this->session->product);
+        $this->lang->product->menu           = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($this->session->product);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         if(!empty($_POST))
         {
@@ -1285,7 +1291,8 @@ class story extends control
             $this->lang->product->menu = $this->lang->product->viewMenu;
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', $branch);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->product->setMenu($products, $productID, $branch);
         }
 
@@ -1654,7 +1661,8 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
         $this->products = $this->product->getPairs();
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $storyType, $branchID); 
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, $storyType, $branchID); 
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;

@@ -49,7 +49,8 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
@@ -78,7 +79,8 @@ class product extends control
     public function project($status = 'all', $productID = 0, $branch = 0, $PRJMine = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         $this->app->loadLang('my');
         $this->app->loadLang('program');
@@ -146,7 +148,8 @@ class product extends control
             $this->session->set('productList', $this->app->getURI(true));
 
             $this->lang->product->menu = $this->lang->product->viewMenu;
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->product->setMenu($this->products, $productID, $branch);
         }
 
@@ -256,7 +259,8 @@ class product extends control
      */
     public function create($programID = 0)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         if(!empty($_POST))
         {
@@ -279,7 +283,8 @@ class product extends control
             $this->app->rawMethod = 'pgmproduct';
             $this->lang->navGroup->program = 'program';
             $this->loadModel('program')->setPGMViewMenu($programID);
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+            $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+            $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         }
 
         $this->loadModel('user');
@@ -321,7 +326,8 @@ class product extends control
     {
         $this->app->loadLang('custom');
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         if(!empty($_POST))
         {
@@ -357,7 +363,8 @@ class product extends control
             $this->app->rawMethod = 'pgmproduct';
             $this->lang->navGroup->program = 'program';
             $this->loadModel('program')->setPGMViewMenu($programID);
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+            $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+            $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         }
 
         $product = $this->product->getById($productID);
@@ -441,7 +448,8 @@ class product extends control
         $this->app->rawMethod = 'pgmproduct';
         $this->lang->navGroup->program = 'program';
         $this->loadModel('program')->setPGMViewMenu($programID);
-        $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -517,7 +525,8 @@ class product extends control
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
@@ -578,7 +587,8 @@ class product extends control
     public function roadmap($productID, $branch = 0)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));
@@ -650,7 +660,8 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $type);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, $type);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -866,7 +877,8 @@ class product extends control
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', 0);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', 0);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, 0);
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -884,7 +896,8 @@ class product extends control
     public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, $branch);
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);

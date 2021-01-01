@@ -23,7 +23,7 @@ class testreportModel extends model
     public function setMenu($products, $productID, $branch = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', '', $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->PRJ, $branch);
 
         /* Remove branch. */
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';

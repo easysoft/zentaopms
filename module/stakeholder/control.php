@@ -71,7 +71,7 @@ class stakeholder extends control
             $this->app->rawModule = 'program';
             $this->app->rawMethod = 'pgmstakeholder';
             $this->lang->navGroup->program = 'program';
-            $this->lang->program->switcherMenu = $this->program->getPGMCommonAction() . $this->program->getPGMSwitcher($programID, true);
+            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);
 
             $this->view->members = $this->program->getPRJTeamMemberPairs($programID);

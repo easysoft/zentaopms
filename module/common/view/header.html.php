@@ -20,9 +20,9 @@ include 'chosen.html.php';
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
-        <div id="userMenu">
-          <?php common::printSearchBox();?>
-        </div>
+        <?php if($isProgram) echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
+        <?php if($isProject) echo $this->loadModel('program')->getPRJMainAction($app->rawModule, $app->rawMethod);?>
+        <?php if($isProduct) echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
       </div>
     </div>
   </div>

@@ -27,7 +27,7 @@ class doc extends control
         $this->loadModel('project');
         $this->from      = $this->cookie->from ? $this->cookie->from : 'doc';
         $this->productID = $this->cookie->product ? $this->cookie->product : '0';
-        $this->projectID = $this->session->PRJ;
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
         if(!$this->projectID) $this->lang->navGroup->doc = 'doc';
     }
 
@@ -113,7 +113,10 @@ class doc extends control
         {
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $lib->product);
+            $this->product->setMenu($this->product->getPairs(), $productID);
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
@@ -343,10 +346,13 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $this->lang->navGroup->doc  = 'project';
+            $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(''), $lib->product);
+            $this->product->setMenu($this->product->getPairs(), $lib->product);
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($lib->product);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
@@ -770,6 +776,9 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
@@ -865,7 +874,9 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
