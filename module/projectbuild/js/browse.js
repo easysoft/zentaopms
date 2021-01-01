@@ -3,7 +3,7 @@ $(function()
     $('#createBuildButton').on('click', function()
     {
         var projectID = $('#project').val();
-        parent.location.href = createLink('build', 'create', 'projectID=' + projectID);
+        parent.location.href = createLink('build', 'create', 'projectID=' + projectID, '', '', PRJID);
     })
 });
 /**

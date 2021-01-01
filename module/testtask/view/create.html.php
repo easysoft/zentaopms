@@ -14,6 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('PRJID', $this->session->PRJ);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

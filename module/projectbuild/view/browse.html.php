@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <?php js::set('projectID', $projectID)?>
+<?php js::set('PRJID', $this->session->PRJ)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
