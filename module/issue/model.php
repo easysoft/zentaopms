@@ -162,7 +162,6 @@ class issueModel extends model
             ->where('deleted')->eq('0')
             ->andWhere($type)->eq($this->app->user->account)->fi()
             ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('resolved,canceled,closed')->fi()
-            ->beginIF($this->app->rawMethod == 'work')->andWhere("status")->notin('resolved,canceled,closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

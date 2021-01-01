@@ -16,9 +16,12 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"),  "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=createdBy"),    "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>"   . ($type == 'createdBy' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'createdBy' ? ' btn-active-text' : '') . "'");
-    if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),    "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"),  "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'contribute')
+    {
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=createdBy"),    "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>"   . ($type == 'createdBy' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'createdBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),    "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy' ? ' btn-active-text' : '') . "'");
+    }
     ?>
   </div>
 </div>
