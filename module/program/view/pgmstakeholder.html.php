@@ -38,7 +38,7 @@
           <th class="w-120px"><?php echo $lang->user->qq;?></th>
           <th class="w-120px"><?php echo $lang->user->weixin;?></th>
           <th class="w-200px"><?php echo $lang->user->email;?></th>
-          <th class='c-actions w-100px'><?php echo $lang->actions;?></th>
+          <th class='c-actions w-60px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
