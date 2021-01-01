@@ -1609,7 +1609,7 @@ class programModel extends model
                 $title = "title='{$PRJPGM}'";
             }
 
-            echo "<td class='" . $class . "' $title>";
+            echo "<td class='c-name " . $class . "' $title>";
             switch($id)
             {
                 case 'idAB':
@@ -1660,7 +1660,7 @@ class programModel extends model
                     if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
                     if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
@@ -1669,13 +1669,13 @@ class programModel extends model
                     echo "</div>";
 
                     common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
-                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'persons');
+                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-more-circle dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'icon icon-menu-project', '', 'btn-action');
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action');
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
                     if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";

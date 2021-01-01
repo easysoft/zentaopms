@@ -41,12 +41,10 @@ js::set('browseType', $browseType);
     <?php else:?>
     <form class='main-table' id='projectsForm' method='post' data-ride="table">
       <?php
-        include '../../common/view/datatable.html.php';
         $vars    = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         $setting = $this->datatable->getSetting('program');
-        $widths  = $this->datatable->setFixedFieldWidth($setting);
       ?>
-      <table class='table has-sort-head datatable' data-fixed-left-width='<?php echo $widths['leftWidth'];?>' data-fixed-right-width='<?php echo $widths['rightWidth'];?>'>
+      <table class='table has-sort-head'>
         <thead>
           <tr>
             <?php
@@ -68,11 +66,9 @@ js::set('browseType', $browseType);
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($projectStats):?>
       <div class='table-footer'>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php endif;?>
     </form>
     <?php endif;?>
   </div>

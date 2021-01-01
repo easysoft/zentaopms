@@ -60,12 +60,10 @@ js::set('browseType', $browseType);
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-        include '../../common/view/datatable.html.php';
-        $vars    = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         $setting = $this->datatable->getSetting('program');
-        $widths  = $this->datatable->setFixedFieldWidth($setting);
       ?>
-      <table class='table has-sort-head datatable' data-fixed-left-width='<?php echo $widths['leftWidth'];?>' data-fixed-right-width='<?php echo $widths['rightWidth'];?>'>
+      <table class='table has-sort-head'>
         <thead>
           <tr>
             <?php
@@ -84,16 +82,11 @@ js::set('browseType', $browseType);
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($projectStats):?>
       <div class='table-footer'>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php endif;?>
     </form>
     <?php endif;?>
   </div>
 </div>
-<?php if($projectStats):?>
-<script> $('.datatable').datatable(); </script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
