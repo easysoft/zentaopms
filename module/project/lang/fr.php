@@ -117,8 +117,8 @@ $lang->project->statusList['doing']     = 'En cours';
 $lang->project->statusList['suspended'] = 'Suspendu';
 $lang->project->statusList['closed']    = 'Fermé';
 
-$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->project->storyPoint = 'Story Point';
 

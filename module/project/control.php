@@ -1107,7 +1107,7 @@ class project extends control
         $team         = '';
         $products     = array();
         $whitelist    = '';
-        $acl          = 'open';
+        $acl          = 'private';
         $plan         = new stdClass();
         $productPlan  = array();
         $productPlans = array();

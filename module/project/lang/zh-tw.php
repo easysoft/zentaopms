@@ -114,8 +114,8 @@ $lang->project->statusList['doing']     = '進行中';
 $lang->project->statusList['suspended'] = '已掛起';
 $lang->project->statusList['closed']    = '已關閉';
 
-$lang->project->aclList['open']    = "繼承項目訪問權限（能訪問當前項目，即可訪問）";
 $lang->project->aclList['private'] = "私有（團隊成員和項目負責人、干係人可訪問）";
+$lang->project->aclList['open']    = "繼承項目訪問權限（能訪問當前項目，即可訪問）";
 
 $lang->project->storyPoint = '故事點';
 
