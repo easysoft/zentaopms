@@ -38,29 +38,34 @@ function deleteItem(obj)
 }
 
 /**
- * Change user list.
+ * Hide the clicked item.
  *
  * @param  object ulObj
  * @param  string val
  * @return void
  */
-function changeUsers(ulObj, val)
+function hideItem(ulObj, val)
 {
     $(ulObj).children('li').each(function()
     {
         if($(this).attr('title').indexOf(val) != -1)
         {
-            $(this).addClass("not-clickable");
+            $(this).hide();
         }
     });
 }
 
-$(function()
+/**
+ * Change user list.
+ *
+ * @return void
+ */
+function changeUsers()
 {
-    /* Render the style of the user list when click the drop-down box. */
     var ulObj = {};
-    $("select[name='accounts[]']").siblings(".chosen-container").click(function()
+    $('td').children('div[class^="chosen-container"]').click(function()
     {
+        /* Render the style of the user list when click the drop-down box. */
         $("ul[class='chosen-results']").each(function()
         {
             ulObj = this;
@@ -68,13 +73,13 @@ $(function()
             /* Render the item of the value which is selected before the page loads.*/
             $("input[name='realnames[]']").each(function()
             {
-                changeUsers(ulObj, this.value);
+                hideItem(ulObj, this.value);
             });
 
             /* Render the item of the value which is selected after the page loads. */
             $("a[class='chosen-single chosen-single-with-deselect']").each(function()
             {
-                changeUsers(ulObj, $(this).children('span').html());
+                hideItem(ulObj, $(this).children('span').html());
             });
         });
     });
@@ -86,8 +91,13 @@ $(function()
         {
             $("ul[class='chosen-results']").each(function()
             {
-                changeUsers(ulObj, $(this).html());
+                hideItem(ulObj, $(this).html());
             });
         });
     });
+}
+
+$(function()
+{
+    changeUsers();
 })

@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>.not-clickable {pointer-events: none; color: #ddd;}</style>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
 <div id='mainMenu' class='clearfix'>
@@ -71,7 +70,7 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
-          <td><?php echo html::select('accounts[]', $users, '', "class='form-control chosen'");?></td>
+          <td onclick="changeUsers()"><?php echo html::select('accounts[]', $users, '', "class='form-control chosen'");?></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -95,7 +94,7 @@
 <div>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td><?php echo html::select("accounts[]", $users, '', "class='form-control'");?></td>
+      <td onclick="changeUsers()"><?php echo html::select("accounts[]", $users, '', "class='form-control'");?></td>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
