@@ -44,7 +44,7 @@
 
       <tr <?php echo $trAttrs;?>>
         <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
-          <span class="table-nest-icon icon <?php if($program->type == 'program') echo ' table-nest-toggle' ?>"></span>
+          <span class="table-nest-icon icon icon-<?php echo $program->type; ?>"></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'pgmproduct', "programID=$program->id"), $program->name);?>
           <?php else:?>
@@ -109,6 +109,8 @@
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
+#programTableList .icon-project:before, #programTableList .no-nest .icon-program:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#programTableList .no-nest .icon-program:before {content: '\e944'; color: #ffe066;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
