@@ -316,7 +316,6 @@ class commonModel extends model
             //    echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' data-icon='cog' data-width='80%'>$lang->customMenu</a></li>";
             //}
 
-            echo '<li class="divider"></li>';
             commonModel::printAboutBar();
             echo '<li class="divider"></li>';
             echo '<li>';

@@ -53,7 +53,7 @@
 		<tr>
           <td class="c-id"><?php printf('%03d', $issue->id);?></td>
           <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
-          <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php echo html::a($this->createLink('issue', 'view', "id=$issue->id", '', '', $issue->PRJ), $issue->title);?></td>
+          <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php echo html::a($this->createLink('issue', 'view', "id=$issue->id", '', '', $issue->PRJ), $issue->title, '', "data-group='project'");?></td>
           <td title="<?php echo zget($lang->issue->severityList, $issue->severity);?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>           
           <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
           <td title="<?php echo zget($users, $issue->assignedTo);?>"><?php echo zget($users, $issue->assignedTo);?></td>

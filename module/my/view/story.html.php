@@ -100,7 +100,7 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?>
+            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
@@ -144,7 +144,7 @@
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
             <?php $childrenAB  = $mode == 'story' ? $this->lang->story->childrenAB : 'SR';?>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color'");?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
           <?php if($mode == 'story'):?>
