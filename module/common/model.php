@@ -2406,7 +2406,6 @@ EOD;
         if($program->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
-            $lang->project->dividerMenu = ',project,projectbuild,story,team,product,other,';
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
@@ -2415,8 +2414,7 @@ EOD;
 
         if($program->model == 'waterfall')
         {
-            $lang->project->dividerMenu = ',programplan,projectbuild,story,team,product,other,';
-
+            $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
             $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;

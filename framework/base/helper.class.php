@@ -172,7 +172,7 @@ class baseHelper
 
         if(!$PRJID || $removePRJ) return $link;
         $isProject = (zget($lang->navGroup, $moduleName) == 'project');
-        if(!$isProject) return $link;
+        if(!$isProject and $moduleName != 'program') return $link;
 
         $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
         return $link;
