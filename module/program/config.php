@@ -105,5 +105,5 @@ $config->program->datatable->fieldList['PRJProgress']['sort']     = 'no';
 
 $config->program->datatable->fieldList['actions']['title']    = 'actions';
 $config->program->datatable->fieldList['actions']['fixed']    = 'right';
-$config->program->datatable->fieldList['actions']['width']    = '170';
+$config->program->datatable->fieldList['actions']['width']    = '180';
 $config->program->datatable->fieldList['actions']['required'] = 'yes';

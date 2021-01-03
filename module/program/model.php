@@ -1686,7 +1686,7 @@ class programModel extends model
 
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
-                    echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                    echo "<ul class='dropdown-menu pull-right text-center' role='menu' style='position: unset; min-width: auto; padding: 5px 6px;'>";
                     common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
                     if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
                     if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);

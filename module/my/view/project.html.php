@@ -63,8 +63,8 @@
             <?php if($project->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
             <?php if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
             <div class='btn-group'>
-              <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
-              <ul class='dropdown-menu pull-right text-center' role='menu'>
+              <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
+              <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
               <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
               <?php if($project->status != 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
@@ -74,7 +74,7 @@
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'");?>
             <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'");?>
             <div class='btn-group'>
-              <button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px; border-radius: 4px;"></button>
+              <button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
                 <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'");?>
                 <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'");?>
