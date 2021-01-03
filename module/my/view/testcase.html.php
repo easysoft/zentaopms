@@ -45,10 +45,8 @@
       ?>
       <thead>
         <tr>
-          <th class='w-100px'>
-            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-          </th>
-          <th class='w-50px'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-50px'>  <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-50px'>  <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
           <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
           <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
           <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>

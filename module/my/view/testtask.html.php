@@ -37,12 +37,12 @@
       <tr>
         <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
         <th>                <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-        <th>                <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-        <th>                <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='w-120px'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+        <th class='w-100px'><?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
         <th class='w-90px'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-90px'> <?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='c-actions-6'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -54,7 +54,7 @@
         <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', '', $task->PRJ), $task->buildName, '', "data-group='project'"));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
-        <td title='<?php echo $task->status?>'><span class="status-task status-blocked"><?php echo $this->processStatus('testtask', $task);?></span></td>
+        <td title='<?php echo $task->status?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $task->PRJ);

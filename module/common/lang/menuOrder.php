@@ -43,11 +43,12 @@ $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
 $lang->my->menuOrder[15] = 'myWork';
 $lang->my->menuOrder[20] = 'myProject';
-$lang->my->menuOrder[25] = 'contribute';
-$lang->my->menuOrder[30] = 'score';
-$lang->my->menuOrder[35] = 'dynamic';
-$lang->my->menuOrder[40] = 'follow';
-$lang->my->menuOrder[45] = 'contacts';
+$lang->my->menuOrder[25] = 'myExecution';
+$lang->my->menuOrder[30] = 'contribute';
+$lang->my->menuOrder[35] = 'score';
+$lang->my->menuOrder[40] = 'dynamic';
+$lang->my->menuOrder[45] = 'follow';
+$lang->my->menuOrder[50] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
