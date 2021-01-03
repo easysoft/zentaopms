@@ -120,7 +120,7 @@ $config->testcase->datatable->fieldList['keywords']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->testcase->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['assignedTo']['width']    = '120';
+$config->testcase->datatable->fieldList['assignedTo']['width']    = '90';
 $config->testcase->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['openedBy']['title']    = 'openedByAB';
