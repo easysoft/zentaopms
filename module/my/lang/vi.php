@@ -33,6 +33,7 @@ $lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = 'Chưa có việc nào.';
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
+$lang->my->hours           = "Giờ/ngày";
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';

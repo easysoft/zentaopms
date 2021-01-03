@@ -40,8 +40,8 @@
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='w-110px'><?php echo $lang->team->hours;?></th>
-        <th class='w-60px'><?php echo $lang->project->waitTasks;?></th>
+        <th class='w-110px'><?php echo $lang->my->hours;?></th>
+        <th class='w-60px'><?php echo $lang->project->assignedToMe;?></th>
         <th class='c-progress'><?php echo $lang->project->progress;?></th>
       </tr>
     </thead>
@@ -70,7 +70,7 @@
         <td><?php echo $execution->role;?></td>
         <td><?php echo $execution->join;?></td>
         <td><?php echo $execution->hours;?></td>
-        <td><?php echo $execution->waitTasks;?></td>
+        <td><?php echo $execution->assignedToMeTasks;?></td>
         <td><?php echo "<span class='pie-icon' data-percent='{$execution->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$execution->progress}%";?></td>
       </tr>
       <?php endforeach;?>
