@@ -162,5 +162,6 @@ if($shortcut.size() > 0)
 <?php if($useDatatable):?>
 $(function(){$('#casesForm').table();})
 <?php endif;?>
+$("thead").find('.c-assignedTo').attr('class', '');
 </script>
 <?php include '../../common/view/footer.html.php';?>
