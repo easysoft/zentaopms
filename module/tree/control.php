@@ -81,6 +81,7 @@ class tree extends control
             unset($products[$rootID]);
             $currentProduct = key($products);
 
+            $this->lang->modulePageNav  = '';
             $this->view->allProduct     = $products;
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');

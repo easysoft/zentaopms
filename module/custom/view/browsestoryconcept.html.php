@@ -21,13 +21,16 @@
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content main-table'>
       <table class='table table-form'>
+        <thead>
         <tr>
           <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
           <th class='text-left'><?php echo $lang->custom->SRConcept;?> </th>
-          <th><?php echo $lang->custom->buildin;?> </th>
-          <th><?php echo $lang->custom->isDefault;?> </th>
-          <th class='w-60px text-left'><?php echo $lang->actions;?> </th>
+          <th class='w-100px text-center'><?php echo $lang->custom->buildin;?> </th>
+          <th class='w-100px text-center'><?php echo $lang->custom->isDefault;?> </th>
+          <th class='w-100px text-left'><?php echo $lang->actions;?> </th>
         </tr>
+        </thead>
+        <tbody>
         <?php foreach($URSRList as $key => $URSR):?>
         <tr>
           <td class='text-left'><?php echo $URSR['URName'];?></td>
@@ -42,6 +45,7 @@
           </td>
         </tr>
         <?php endforeach;?>
+        </tbody>
       </table>
   </div>
 </div>

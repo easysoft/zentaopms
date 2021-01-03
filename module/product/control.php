@@ -880,6 +880,7 @@ class product extends control
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', 0);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, 0);
+        $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -901,6 +902,7 @@ class product extends control
         $this->product->setMenu($this->products, $productID, $branch);
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
     }
