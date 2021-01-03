@@ -63,7 +63,7 @@
           <?php if($program->status == 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
           <div class='btn-group'>
             <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu'>
+            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
               <?php common::printIcon('program', 'PGMSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->PGMSuspend);?>
               <?php if($program->status != 'doing')  common::printIcon('program', 'PGMClose',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
               <?php if($program->status != 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
@@ -79,7 +79,7 @@
           <?php if($program->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
           <div class='btn-group'>
             <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu'>
+            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
             <?php common::printIcon('program', 'PRJSuspend', "projectID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
             <?php if($program->status != 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
             <?php if($program->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
