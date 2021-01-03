@@ -187,17 +187,12 @@ class projectModel extends model
 
         if(isset($currentProject->type) and $currentProject->type == 'program') return;
 
-        if(isset($currentProject->program)) $program = $this->getByID($currentProject->program);
+        if(isset($currentProject->project)) $project = $this->loadModel('program')->getPRJByID($currentProject->project);
 
-        if(isset($program->product) and $program->product == 'multiple')
+        if(isset($project) and $project->model == 'waterfall')
         {
             $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
             $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-            if($currentProject->parent)
-            {
-                $parentInfo = $this->getById($currentProject->parent);
-                $currentProject->name = $parentInfo->name . '/' . $currentProject->name;
-            }
             $currentProject->name = $productName . '/' . $currentProject->name;
         }
 
