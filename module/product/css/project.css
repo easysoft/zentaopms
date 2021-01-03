@@ -1,3 +1,3 @@
 .checkbox-primary {margin-top: 6px;}
-#mainMenu div {display: inline-block;}
-#mainMenu .icon.icon-help {margin-left: 5px; margin-top: 5px;}
+.tip {display: inline-block; vertical-align: middle; margin-top: 6px;}
+#mainMenu .icon.icon-help {margin-left: 5px;}
