@@ -50,9 +50,9 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-project w-120px'>   <?php common::printOrderLink('PRJ',        $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->my->executions);?></th>
-          <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
@@ -83,13 +83,13 @@
             <?php printf('%03d', $task->id);?>
           </td>
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
-          <td class='c-project'><?php echo zget($projects, $task->PRJ, '');?></td>
-          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'task', "projectid=$task->project", '', '', $task->PRJ), $task->projectName, '', "data-group='project'");?></td>
           <td class='c-name' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color' data-group='project'");?>
           </td>
+          <td class='c-project'><?php echo zget($projects, $task->PRJ, '');?></td>
+          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'task', "projectid=$task->project", '', '', $task->PRJ), $task->projectName, '', "data-group='project'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <?php endif;?>
