@@ -289,15 +289,8 @@ class commonModel extends model
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
-                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
-                if(isset($_COOKIE['hideMenu']) and $_COOKIE['hideMenu'])
-                {
-                    echo '<li>' . "<a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i> $lang->unfoldMenu</a>" . '</li>';
-                }
-                else
-                {
-                    echo '<li>' . "<a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i> $lang->collapseMenu</a>" . '</li>';
-                }
+                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . "<a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i> <span class='is-unfold'>$lang->unfoldMenu</span><span class='is-collapse'>$lang->collapseMenu</span></a>" . '</li>';
 
                 echo "<li class='divider'></li>";
             }

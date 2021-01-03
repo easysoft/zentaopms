@@ -5,6 +5,7 @@
 
 #pagesBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
 [lang="en"] #pagesBar {left: 134px}
+.menu-hide #pagesBar {left: 40px}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
 #bars > li {padding: 8px 5px;}
 #bars > li > a {height: 24px; color: #fff; background: #3c4353; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
@@ -12,9 +13,7 @@
 #bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb}
 #bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
 
-.menu-hide #pagesBar {left: 40px}
-
-#userNav{float: none; margin: 0;} 
+#userNav{float: none; margin: 0;}
 #userNav>li{text-align: center}
 #userNav>li>a{padding: 6px 6px;color: #fff; opacity: .9;margin-left: 0px}
 #userNav>li>a:hover{background: #0c64eb;}
@@ -37,4 +36,6 @@
 
 #globalMessages .icon{font-size: 24px; color: #16a8f8;}
 
+#menuToggle .is-unfold, .menu-hide #menuToggle .is-collapse {display: none}
+.menu-hide #menuToggle .is-unfold {display: inline}
 #menuNav>.nav>li.divider {margin: 2px 8px;}

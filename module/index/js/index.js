@@ -351,7 +351,9 @@ $(function()
     /* Click to show more. */
     $('#menuToggle').on('click', function()
     {
-        $('#moreExecution').hide();
+        $.toggleMenu();
+        var $menu = $('#userNav .dropdown-menu').addClass('hidden');
+        setTimeout(function(){$menu.removeClass('hidden')}, 200);
     });
 
     /* Hide execution list on mouseleave or click */
