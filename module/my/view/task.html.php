@@ -65,7 +65,7 @@
           <th class='c-hours w-50px'>      <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='c-hours w-50px'>      <?php common::printOrderLink('consumed',   $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='c-hours w-50px'>      <?php common::printOrderLink('left',       $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='c-status'>            <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-status w-70px'>     <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-6'>         <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -104,7 +104,7 @@
           <td class='c-hours'><?php echo round($task->left, 1);?></td>
           <td class='c-status'>
             <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
-            <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
+            <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
           </td>
           <td class='c-actions'>
             <?php
@@ -113,7 +113,7 @@
                 if($task->needConfirm)
                 {
                     $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide', '', '', '', $task->PRJ);
+                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', '', '', '', '', $task->PRJ);
                 }
                 else
                 {

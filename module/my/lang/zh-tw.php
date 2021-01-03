@@ -32,6 +32,7 @@ $lang->my->score           = '我的積分';
 $lang->my->scoreRule       = '積分規則';
 $lang->my->noTodo          = '暫時沒有待辦。';
 $lang->my->noData          = "暫時沒有%s。";
+$lang->my->storyChanged    = "需求變更";
 
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
