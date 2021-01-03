@@ -25,7 +25,7 @@
 #userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
 #userNav li.open>a{background:#0c64eb}
 #userNav li.divider{opacity: .24;}
-#poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0px 40px 0px 0px;}
+#poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0;}
 
 #globalSearchDiv{width:50%; float: right;}
 #globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
