@@ -29,6 +29,8 @@ $lang->help             = '帮助';
 $lang->aboutZenTao      = '关于禅道';
 $lang->profile          = '个人档案';
 $lang->changePassword   = '修改密码';
+$lang->unfoldMenu       = '展开导航';
+$lang->collapseMenu     = '收起导航';
 $lang->runInfo          = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement        = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX   = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
@@ -130,7 +132,7 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmproduct|';
+$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|browse|';
 $lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
