@@ -84,15 +84,7 @@ class productModel extends model
         }
         else
         {
-            $label = $this->lang->product->index;
-            $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-            $pageNav .= '<ul class="dropdown-menu">';
-            if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
-            if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
-            if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
-
-            $pageNav .= '</ul></div></div>';
-            $pageNav .= $selectHtml;
+            $pageNav = $selectHtml;
         }
 
         return $pageNav;
@@ -482,7 +474,7 @@ class productModel extends model
         }
 
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><div class='btn btn-span'>{$this->lang->productCommon}</div><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'><i class='icon icon-product'></i> {$currentProductName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 

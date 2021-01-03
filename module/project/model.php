@@ -128,14 +128,7 @@ class projectModel extends model
         if($methodName == 'all') $label = $this->lang->project->allProjects;
         if($methodName == 'create' and $moduleName == 'project') $label = $this->lang->project->create;
 
-        $projectIndex  = '<div class="btn-group angle-btn' . ((strpos('index|all|create', $methodName) !== false and $moduleName == 'project') ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-        $projectIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
-        if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
-        if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
-
-        $projectIndex .= '</ul></div></div>';
-        $projectIndex .= $this->select($projects, $projectID, null, $moduleName, $methodName, $extra);
+        $projectIndex = $this->select($projects, $projectID, null, $moduleName, $methodName, $extra);
         $this->lang->modulePageNav = $projectIndex;
 
         foreach($this->lang->project->menu as $key => $menu)

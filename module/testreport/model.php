@@ -28,22 +28,8 @@ class testreportModel extends model
         /* Remove branch. */
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
-        $pageNav     = '';
+        $pageNav     = $selectHtml;
         $pageActions = '';
-        if($this->config->global->flow == 'full')
-        {
-            $this->app->loadLang('qa');
-            $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        }
-        else
-        {
-            if(common::hasPriv('testtask', 'create'))
-            {
-                $link = helper::createLink('testtask', 'create', "productID=$productID");
-                $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testtask->create}", '', "class='btn btn-primary'");
-            }
-        }
-        $pageNav .= $selectHtml;
 
         $this->lang->modulePageNav = $pageNav;
         $this->lang->TRActions     = $pageActions;

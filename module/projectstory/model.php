@@ -27,9 +27,6 @@ class projectstoryModel extends model
 
         if(empty($productID)) $productID = key($products);
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
-        $indexHtml  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('projectstory', 'requirement'), $this->lang->projectstory->index, '', "class='btn'") . '</div></div>';
-        $pageNav    = $indexHtml . $selectHtml;
-        $this->lang->modulePageNav = $pageNav;
+        $this->lang->modulePageNav = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
     }
 }

@@ -46,8 +46,7 @@ class testtaskModel extends model
         }
 
         $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        $productIndex = $selectHtml;
 
         $pageNav     = '';
         $pageActions = '';
@@ -56,22 +55,6 @@ class testtaskModel extends model
         {
             $this->app->loadLang('qa');
             $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        else
-        {
-            if($this->config->global->flow == 'full')
-            {
-                $this->app->loadLang('qa');
-                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-            }
-            else
-            {
-                if(common::hasPriv('testtask', 'create'))
-                {
-                    $link = helper::createLink('testtask', 'create', "productID=$productID");
-                    $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testtask->create}", '', "class='btn btn-primary'");
-                }
-            }
         }
         $pageNav .= $selectHtml;
 

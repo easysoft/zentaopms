@@ -35,22 +35,6 @@ class testsuiteModel extends model
             $this->app->loadLang('qa');
             $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
         }
-        else
-        {
-            if($this->config->global->flow == 'full')
-            {
-                $this->app->loadLang('qa');
-                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-            }
-            else
-            {
-                if(common::hasPriv('testsuite', 'create'))
-                {
-                    $link = helper::createLink('testsuite', 'create', "productID=$productID");
-                    $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testsuite->create}", '', "class='btn btn-primary'");
-                }
-            }
-        }
         $pageNav .= $selectHtml;
 
         $this->lang->modulePageNav = $pageNav;

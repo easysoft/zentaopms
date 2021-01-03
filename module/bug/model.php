@@ -38,53 +38,6 @@ class bugModel extends model
             $this->app->loadLang('qa');
             $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
         }
-        else
-        {
-            if($this->config->global->flow == 'full')
-            {
-                $this->app->loadLang('qa');
-                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-            }
-            else
-            {
-                if(common::hasPriv('bug', 'report'))
-                {
-                    $link = helper::createLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID");
-                    $pageActions .= html::a($link, "<i class='icon-common-report icon-bar-chart muted'></i> <span class='text'>" . $this->lang->bug->report->common . '</span>', '', "class='btn btn-link'");
-                }
-                if(common::hasPriv('bug', 'export'))
-                {
-                    $link = helper::createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
-                    $pageActions .= "<div class='btn-group'>";
-                    $pageActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
-                    $pageActions .= "<i class='icon icon-export muted'></i><span class='text'>{$this->lang->export}</span><span class='caret'></span></button>";
-                    $pageActions .= '</button>';
-                    $pageActions .= "<ul class='dropdown-menu' id='exportActionMenu'>";
-                    $pageActions .= '<li>' . html::a($link, $this->lang->bug->export, '', "class='export'") . '</li>';
-                    $pageActions .= '</ul>';
-                    $pageActions .= '</div>';
-                }
-                if(common::hasPriv('bug', 'batchCreate'))
-                {
-                    $link = helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
-                    $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->batchCreate, '', "class='btn btn-secondary'");
-                }
-                if(commonModel::isTutorialMode())
-                {
-                    $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-                    $link         = helper::createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
-                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
-                }
-                else
-                {
-                    if(common::hasPriv('bug', 'create'))
-                    {
-                        $link = helper::createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-                        $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary'");
-                    }
-                }
-            }
-        }
         $pageNav .= $selectHtml;
 
         $this->lang->modulePageNav = $pageNav;
