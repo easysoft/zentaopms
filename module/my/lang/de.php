@@ -32,6 +32,7 @@ $lang->my->setStoryConcept = 'Set Story Concept';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = 'Keine toDos. ';
 $lang->my->noData          = 'No %s yet. ';
+$lang->my->storyChanged    = "Story Changed";
 
 $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';
