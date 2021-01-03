@@ -49,7 +49,7 @@ js::set('defaultOpen', $open);
     <div id="globalBarLogo">
       <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
       <?php echo $lang->proVersion;?>
-      <a href='<?php echo $lang->website;?>' target='_blank' title='<?php echo $config->version;?>'><?php echo $lang->globalLogo;?></a>
+      <a href='<?php echo $lang->website;?>' target='_blank' title='<?php echo $config->version;?>' style="margin:3px 3px 0px 10px;"><i class="icon-zentao" style="font-size: 24px;"></i></a>
       <!--<a id ="globalMessages" class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">
