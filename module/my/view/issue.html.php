@@ -36,21 +36,21 @@
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"; ?>
       <thead>
         <tr>
-          <th class="c-id w-60px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class="c-id w-50px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class="w-80px"><?php echo $lang->issue->type;?></th>
           <th style="width:auto"><?php echo $lang->issue->title;?></th>
-          <th class="w-60px"><?php echo $lang->issue->severity;?></th>
+          <th class="w-70px"><?php echo $lang->issue->severity;?></th>
           <th class="w-60px"><?php echo $lang->issue->pri;?></th>
-          <th class="w-90px"><?php echo $lang->issue->assignedTo;?></th>
+          <th class="w-80px"><?php echo $lang->issue->assignedTo;?></th>
           <th class="w-80px"><?php echo $lang->issue->owner;?></th>
-          <th class="w-100px"><?php echo $lang->issue->status;?></th>
-          <th class="w-140px"><?php echo $lang->issue->createdDate;?></th>
+          <th class="w-70px"><?php echo $lang->issue->status;?></th>
+          <th class="w-100px"><?php echo $lang->issue->createdDate;?></th>
           <th class="c-actions w-200px"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($issues as $issue):?>
-		<tr>
+        <tr>
           <td class="c-id"><?php printf('%03d', $issue->id);?></td>
           <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
           <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php echo html::a($this->createLink('issue', 'view', "id=$issue->id", '', '', $issue->PRJ), $issue->title, '', "data-group='project'");?></td>
@@ -59,6 +59,7 @@
           <td title="<?php echo zget($users, $issue->assignedTo);?>"><?php echo zget($users, $issue->assignedTo);?></td>
           <td title="<?php echo zget($users, $issue->owner);?>"><?php echo zget($users, $issue->owner);?></td>
           <td title="<?php echo zget($lang->issue->statusList, $issue->status);?>"><?php echo zget($lang->issue->statusList, $issue->status);?></td>
+          <?php $issue->createdDate = substr($issue->createdDate, 0, 10)?>
           <td title="<?php echo $issue->createdDate;?>"><?php echo $issue->createdDate;?></td>
           <td class="c-actions">
             <?php
