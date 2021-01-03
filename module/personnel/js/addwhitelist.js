@@ -99,5 +99,7 @@ function changeUsers()
 
 $(function()
 {
+    if(window.config.currentModule == 'personnel' && window.config.currentMethod == 'addwhitelist') $("li[data-id='set']").addClass('active');
+
     changeUsers();
 })

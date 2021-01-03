@@ -1005,9 +1005,9 @@ class userModel extends model
 
         /* Get all tasks and compute totalConsumed, totalLeft, totalWait, progress according to them. */
         $hours       = array();
-        $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0);
+        $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0, 'assignedToMeTasks' => 0);
         $searchField = $type == 'project' ? 'PRJ' : 'project';
-        $tasks       = $this->dao->select('id, PRJ, project, consumed, `left`, status')
+        $tasks       = $this->dao->select('id, PRJ, project, consumed, `left`, status, assignedTo')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
             ->andWhere($searchField)->in($projectIdList)->fi()
@@ -1023,6 +1023,7 @@ class userModel extends model
                 if($task->status == 'wait') $hour->waitTasks += 1;
                 if($task->status != 'cancel') $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if($task->assignedTo == $account) $hour->assignedToMeTasks += 1;
             }
             $hours[$projectID] = $hour;
         }
@@ -1052,8 +1053,9 @@ class userModel extends model
                 }
 
                 /* Process the hours. */
-                $project->progress  = isset($hours[$project->id]) ? $hours[$project->id]->progress : 0;
-                $project->waitTasks = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
+                $project->progress          = isset($hours[$project->id]) ? $hours[$project->id]->progress : 0;
+                $project->waitTasks         = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
+                $project->assignedToMeTasks = isset($hours[$project->id]) ? $hours[$project->id]->assignedToMeTasks : 0;
 
                 if($project->project) $project->projectName = $projectList[$project->project]->name;
                 $myProjects[$project->id] = $project;

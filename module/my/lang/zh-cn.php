@@ -33,6 +33,7 @@ $lang->my->scoreRule       = '积分规则';
 $lang->my->noTodo          = '暂时没有待办。';
 $lang->my->noData          = "暂时没有%s。";
 $lang->my->storyChanged    = "需求变更";
+$lang->my->hours           = '工时/天';
 
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';

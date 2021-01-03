@@ -16,7 +16,7 @@
     <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
-    <span class="label label-info projectInfo"><?php echo $lang->product->projectInfo;?></span>
+    <div><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->product->projectInfo;?>></icon></div>
   </div>
 </div>
 <div id="mainContent">
@@ -34,7 +34,7 @@
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->program->PRJName;?></th>
           <th class='w-150px'><?php echo $lang->program->PRJPGM;?></th>
-          <th class='w-120px'><?php echo $lang->program->PM;?></th>
+          <th class='w-80px'><?php echo $lang->program->PM;?></th>
           <th class='w-100px'><?php echo $lang->program->begin;?></th>
           <th class='w-100px'><?php echo $lang->program->end;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJStatus;?></th>
@@ -75,4 +75,5 @@
   </form>
   <?php endif;?>
 </div>
+<script>$('[data-toggle="popover"]').popover();</script>
 <?php include '../../common/view/footer.html.php';?>
