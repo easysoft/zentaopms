@@ -274,6 +274,7 @@ $lang->my->menu->index       = 'Index|my|index';
 $lang->my->menu->calendar    = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => 'Work|my|work|mode=task');
 $lang->my->menu->myProject   = array('link' => 'Project|my|project|');
+$lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
 $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';
@@ -288,7 +289,6 @@ $lang->my->workMenu->issue    = 'Issue|my|work|mode=issue';
 $lang->my->workMenu->risk     = 'Risk|my|work|mode=risk';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->execution = 'Execution|my|contribute|mode=execution&type=undone';
 $lang->my->contributeMenu->task      = 'Task|my|contribute|mode=task';
 $lang->my->contributeMenu->story     = 'Story|my|contribute|mode=story';
 $lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
