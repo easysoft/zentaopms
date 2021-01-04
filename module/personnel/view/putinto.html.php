@@ -57,8 +57,8 @@
             <td title='<?php echo $personnel['role'];?>'><?php echo $personnel['role'];?></td>
             <td><?php echo $personnel['projects'];?></td>
             <td><?php echo $personnel['executions'];?></td>
-            <td><?php echo $personnel['consumedTask'];?></td>
-            <td><?php echo $personnel['leftTask'];?></td>
+            <td><?php echo round($personnel['consumedTask'], 2);?></td>
+            <td><?php echo round($personnel['leftTask'], 2);?></td>
             <td><?php echo $personnel['createdTask'];?></td>
             <td><?php echo $personnel['finishedTask'];?></td>
             <td><?php echo $personnel['pendingTask'];?></td>
