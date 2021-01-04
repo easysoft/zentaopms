@@ -90,10 +90,10 @@
           <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'group');?>
           <?php common::printIcon('program', 'PRJGroup',         "projectID=$program->id", $program, 'list', 'lock');?>
           <div class='btn-group'>
-            <button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"></button>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id", $program, 'list', 'link');?>
-              <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id", $program, 'list', 'group');?>
+              <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id", $program, 'list', 'shield-check');?>
               <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
             </ul>
           </div>

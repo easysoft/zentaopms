@@ -1695,10 +1695,10 @@ class programModel extends model
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 
                     echo "<div class='btn-group'>";
-                    echo "<button type='button' class='btn icon-chevron-double-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'></button>";
+                    echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action');
-                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'group', '', 'btn-action');
+                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'shield-check', '', 'btn-action');
                     if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";
                     echo "</div>";
