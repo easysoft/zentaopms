@@ -26,15 +26,15 @@
 #userNav li.divider{opacity: .24; border-top: 1px solid; height: 0px;}
 #poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0;}
 
-#globalSearchDiv{width:50%; float: right;}
+#globalSearchDiv{width:50%; float: right; margin-right: 4px;}
 #globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
 #globalSearchInput{height: 28px; padding-left: 10px;}
 #globalSearchButton{height: 28px;}
 
 #globalBarLogo{width: 100%; float: right;}
-#globalBarLogo a{float: right; margin-right: 10px;}
-
-#globalMessages .icon{font-size: 24px; color: #16a8f8;}
+#globalBarLogo a:first-child{margin-right: 10px;}
+#globalBarLogo a{float: right; margin: 0px 2px;}
+#globalBarLogo a .icon{font-size: 24px; color: #16a8f8;}
 
 #menuToggle .is-unfold, .menu-hide #menuToggle .is-collapse {display: none}
 .menu-hide #menuToggle .is-unfold {display: inline}
