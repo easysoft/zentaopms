@@ -274,6 +274,7 @@ class issueModel extends model
         $data = fixer::input('post')
             ->add('closedBy', $this->app->user->account)
             ->add('status', 'closed')
+            ->add('assignedTo', 'closed')
             ->get();
 
         $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
@@ -470,8 +471,8 @@ class issueModel extends model
     /**
      * Adjust the action is clickable.
      *
-     * @param  int    $issue
-     * @param  int    $action
+     * @param  object  $issue
+     * @param  string  $action
      *
      * @access public
      * @return bool
@@ -484,7 +485,8 @@ class issueModel extends model
         if($action == 'resolve')  return $issue->status == 'active' || $issue->status == 'confirmed';
         if($action == 'close')    return $issue->status != 'closed';
         if($action == 'activate') return $issue->status == 'closed';
-        if($action == 'cancel')   return $issue->status != 'canceled';
+        if($action == 'cancel')   return $issue->status != 'canceled' && $issue->status != 'closed';
+        if($action == 'assignto') return $issue->status != 'closed';
 
         return true;
     }

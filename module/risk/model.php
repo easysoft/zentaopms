@@ -372,13 +372,14 @@ class riskModel extends model
     public function close($riskID)
     {
         $oldRisk = $this->getByID($riskID);
-        
+
         $risk = fixer::input('post')
             ->setDefault('status','closed')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::today())
             ->add('closedBy', $this->app->user->account)
             ->add('closedDate', helper::today())
+            ->add('assignedTo', 'closed')
             ->stripTags($this->config->risk->editor->close['id'], $this->config->allowedTags)
             ->remove('uid,comment')
             ->get();
