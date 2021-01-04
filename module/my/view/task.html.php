@@ -34,10 +34,10 @@
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
-  <form id='myTaskForm' class="main-table table-task" data-ride="table" method="post">
+  <form id='myTaskForm' class="main-table table-task" method="post">
     <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
-    <table class="table has-sort-head table-fixed" id='tasktable'>
+    <table class="table has-sort-head table-fixed" id='taskTable'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
@@ -72,7 +72,7 @@
       <tbody>
         <?php foreach($tasks as $task):?>
         <?php $canBeChanged = common::canBeChanged('task', $task);?>
-        <tr>
+        <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
@@ -152,5 +152,75 @@
   </form>
   <?php endif;?>
 </div>
-<?php js::set('listName', 'tasktable')?>
+<script>
+$(function()
+{
+    // Update table summary text.
+    var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
+    var pageSummary    = '<?php echo $lang->project->pageSummary?>';
+
+    $('#myTaskForm').table(
+    {
+        statisticCreator: function(table)
+        {
+            var $table = table.getTable();
+            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
+            var checkedTotal = $checkedRows.length;
+            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
+
+            var checkedWait     = 0;
+            var checkedDoing    = 0;
+            var checkedEstimate = 0;
+            var checkedConsumed = 0;
+            var checkedLeft     = 0;
+            var taskIdList      = [];
+            $rows.each(function()
+            {
+                var $row = $(this);
+                if ($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
+                var data = $row.data();
+                taskIdList.push(data.id);
+
+                var status = data.status;
+                if(status === 'wait') checkedWait++;
+                if(status === 'doing') checkedDoing++;
+
+                var canStatistics = false;
+                if(!$row.hasClass('table-children'))
+                {
+                    canStatistics = true;
+                }
+                else
+                {
+                    /* Fix bug #2579. When only child task is checked then statistics it. */
+                    var parentID = 0;
+                    var classes  = $row.attr('class').split(' ');
+                    for(i in classes)
+                    {
+                        if(classes[i].indexOf('parent-') >= 0) parentID = classes[i].replace('parent-', '');
+                    }
+
+                    if(parentID && taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
+                }
+
+                if(canStatistics)
+                {
+                    checkedEstimate += Number(data.estimate);
+                    checkedConsumed += Number(data.consumed);
+                    if(status != 'cancel' && status != 'closed') checkedLeft += Number(data.left);
+                }
+            });
+            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait)
+              .replace('%doing%', checkedDoing)
+              .replace('%estimate%', checkedEstimate.toFixed(1))
+              .replace('%consumed%', checkedConsumed.toFixed(1))
+              .replace('%left%', checkedLeft.toFixed(1));
+        }
+    })
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>
