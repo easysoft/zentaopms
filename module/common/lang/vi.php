@@ -149,6 +149,10 @@ $lang->program->menu = new stdclass();
 $lang->program->menu->index  = 'Home|program|pgmindex|';
 $lang->program->menu->browse = array('link' => 'Program|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
 
+$lang->PRJ = new stdclass();
+$lang->PRJ->menu = new stdclass();
+$lang->PRJ->menu->browse = array('link' => 'Project|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers');
+
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "Project|program|pgmproject|program=%s");
@@ -286,7 +290,7 @@ $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task     = 'Task|my|work|mode=task';
 $lang->my->workMenu->story    = 'Story|my|work|mode=story';
 $lang->my->workMenu->bug      = 'Bug|my|work|mode=bug';
-$lang->my->workMenu->testcase = 'Test Case|my|work|mode=testcase';
+$lang->my->workMenu->testtask = 'Test Case|my|work|mode=testtask';
 $lang->my->workMenu->issue    = 'Issue|my|work|mode=issue';
 $lang->my->workMenu->risk     = 'Risk|my|work|mode=risk';
 
@@ -294,7 +298,7 @@ $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task      = 'Task|my|contribute|mode=task';
 $lang->my->contributeMenu->story     = 'Story|my|contribute|mode=story';
 $lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testcase  = 'Test Case|my|contribute|mode=testcase';
+$lang->my->contributeMenu->testtask  = 'Test Case|my|contribute|mode=testtask';
 $lang->my->contributeMenu->issue     = 'Issue|my|contribute|mode=issue';
 $lang->my->contributeMenu->risk      = 'Risk|my|contribute|mode=risk';
 
@@ -904,8 +908,8 @@ $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->programindex   = array('link' => 'Index|program|index|program={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|program={PROJECT}', 'subModule' => 'programplan');
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
+$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';

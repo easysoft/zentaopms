@@ -25,11 +25,11 @@ $lang->my->unbind          = 'Gỡ kết nối từ Zdoo';
 $lang->my->manageContacts  = 'Quản lý Liên hệ';
 $lang->my->deleteContacts  = 'Xóa Liên hệ';
 $lang->my->shareContacts   = 'Công khai';
+$lang->my->setStoryConcept = 'Set Story Concept';
+$lang->my->storyConcept    = 'Story Concept';
 $lang->my->limited         = 'Hành động bị giới hạn (Người dùng chỉ có thể sửa những gì liên quan chúng.)';
 $lang->my->score           = 'Điểm của bạn';
 $lang->my->scoreRule       = 'Quy định điểm';
-$lang->my->setStoryConcept = 'Set Story Concept';
-$lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = 'Chưa có việc nào.';
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
@@ -40,6 +40,10 @@ $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
 $lang->my->executions   = $lang->execution->common;
+
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = 'Undone';
+$lang->my->executionMenu->done   = 'Done';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'Giao cho bạn';
@@ -53,6 +57,13 @@ $lang->my->storyMenu->assignedToMe = 'Giao cho bạn';
 $lang->my->storyMenu->openedByMe   = 'Tạo bởi bạn';
 $lang->my->storyMenu->reviewedByMe = 'Duyệt bởi bạn';
 $lang->my->storyMenu->closedByMe   = 'Đóng bởi bạn';
+
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = 'Doing';
+$lang->my->projectMenu->wait       = 'Waiting';
+$lang->my->projectMenu->suspended  = 'Suspended';
+$lang->my->projectMenu->closed     = 'Closed';
+$lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Lịch sử';

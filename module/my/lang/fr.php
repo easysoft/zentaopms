@@ -25,11 +25,11 @@ $lang->my->unbind          = 'Dissocier de Zdoo';
 $lang->my->manageContacts  = 'Gérer Contact';
 $lang->my->deleteContacts  = 'Supprimer Contact';
 $lang->my->shareContacts   = 'Public';
+$lang->my->setStoryConcept = 'Set Story Concept';
+$lang->my->storyConcept    = 'Story Concept';
 $lang->my->limited         = 'Actions Limitées (Les utilisateurs peuvent seulement éditer le contenu de ce qui leur est affecté.)';
 $lang->my->score           = 'Mes Points';
 $lang->my->scoreRule       = 'Règles Point';
-$lang->my->setStoryConcept = 'Set Story Concept';
-$lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = "Je n'ai rien à faire pour l'instant.";
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
@@ -40,6 +40,10 @@ $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
 $lang->my->executions   = $lang->execution->common;
+
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = 'Undone';
+$lang->my->executionMenu->done   = 'Done';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = "Tâches qui me sont affectées";
@@ -53,6 +57,13 @@ $lang->my->storyMenu->assignedToMe = 'Stories qui me sont affectées';
 $lang->my->storyMenu->openedByMe   = "Stories que j'ai créées";
 $lang->my->storyMenu->reviewedByMe = "Stories que j'ai acceptées";
 $lang->my->storyMenu->closedByMe   = "Stories que j'ai fermées";
+
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = 'Doing';
+$lang->my->projectMenu->wait       = 'Waiting';
+$lang->my->projectMenu->suspended  = 'Suspended';
+$lang->my->projectMenu->closed     = 'Closed';
+$lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Historique';

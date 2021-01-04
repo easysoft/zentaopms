@@ -25,11 +25,11 @@ $lang->my->unbind          = 'Unbind Ranger';
 $lang->my->manageContacts  = 'Kontakt pflegen';
 $lang->my->deleteContacts  = 'Kontakt löschen';
 $lang->my->shareContacts   = 'Liste teilen';
+$lang->my->setStoryConcept = 'Set Story Concept';
+$lang->my->storyConcept    = 'Story Concept';
 $lang->my->limited         = 'Eingeschränkte Möglichkeiten (Bearbeiten nur eigener Inhalte möglich)';
 $lang->my->score           = 'Meine Wertung';
 $lang->my->scoreRule       = 'Wertungs regeln';
-$lang->my->setStoryConcept = 'Set Story Concept';
-$lang->my->storyConcept    = 'Story Concept';
 $lang->my->noTodo          = 'Keine toDos. ';
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
@@ -40,6 +40,10 @@ $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
 $lang->my->executions   = "{$lang->execution->common}";
+
+$lang->my->executionMenu = new stdclass();
+$lang->my->executionMenu->undone = 'Undone';
+$lang->my->executionMenu->done   = 'Done';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'Mir zuweisen';
@@ -53,6 +57,13 @@ $lang->my->storyMenu->assignedToMe = 'Mir zugewiesen';
 $lang->my->storyMenu->openedByMe   = 'Von mir erstellt';
 $lang->my->storyMenu->reviewedByMe = 'Von mir überprüft';
 $lang->my->storyMenu->closedByMe   = 'Von mir geschlossen';
+
+$lang->my->projectMenu = new stdclass();
+$lang->my->projectMenu->doing      = 'Doing';
+$lang->my->projectMenu->wait       = 'Waiting';
+$lang->my->projectMenu->suspended  = 'Suspended';
+$lang->my->projectMenu->closed     = 'Closed';
+$lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Verlauf';
