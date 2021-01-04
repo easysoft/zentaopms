@@ -182,6 +182,7 @@ class budgetModel extends model
             ->setDefault('createdDate', helper::today())
             ->setDefault('PRJ', $this->session->PRJ)
             ->cleanFloat('amount')
+            ->stripTags($this->config->budget->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
 
@@ -252,6 +253,7 @@ class budgetModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::today())
             ->cleanFloat('amount')
+            ->stripTags($this->config->budget->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
 

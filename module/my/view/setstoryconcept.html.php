@@ -11,22 +11,43 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+tbody>tr:nth-child(odd) {background-color: #f5f5f5;}
+.checkbox-primary {display: inline-block; line-height: 20px;}
+.group-item {display:block; width:50%; float:left; margin-bottom:5px;}
+.group-item>label {max-width:190px; display: block; height: 20px; padding-left: 30px; margin: 0; font-weight: 400; line-height: 20px; cursor: pointer;}
+</style>
 <div id='mainContent' class='main-content'>
-  <div class='center-block'>
-    <div class='main-header'>
-      <h2>
-        <span><?php echo $lang->my->setStoryConcept;?></span>
-      </h2>
+  <div class="main-col">
+    <div class='center-block'>
+      <div class='main-header'>
+        <h2>
+          <span><?php echo $lang->my->setStoryConcept;?></span>
+        </h2>
+      </div>
+      <form method='post' class='main-form' target='hiddenwin'>
+        <table class='table table-form'>
+          <tr>
+            <td>
+            <?php if (!empty($URSRList)):?>
+            <?php foreach($URSRList as $key => $concept):?>
+              <div class="group-item" title='<?php echo $concept;?>'>
+                <label class="radio-inline text-ellipsis">
+                  <input type="radio" name="URSR" value="<?php echo $key;?>" <?php if($key == $URSR) echo 'checked'?>><?php echo $concept;?>
+                </label>
+              </div>
+            <?php endforeach;?>
+            <?php else:?>
+            <?php echo $lang->noData;?>
+            <?php endif;?>
+            </td>
+          </tr>
+          <tr>
+            <td class='text-center'><?php echo html::submitButton();?></td>
+          </tr>
+        </table>
+      </form>
     </div>
-    <form method='post' class='main-form' target='hiddenwin'>
-      <table class='table table-form'>
-        <tr>
-          <th><?php echo $lang->my->storyConcept;?></th>
-          <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control'");?></td>
-          <td><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
-    </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

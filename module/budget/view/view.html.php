@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = inlink('browse');?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -28,7 +29,7 @@
       <div class="detail">
         <div class="detail-title"><?php echo $lang->budget->desc;?></div>
         <div class="detail-content article-content">
-          <?php echo $budget->desc; ?>
+          <?php echo $budget->desc;?>
         </div>
       </div>
     </div>
