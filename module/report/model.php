@@ -634,7 +634,8 @@ class reportModel extends model
     {
         /* Get changed products in this year. */
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
-            ->where('LEFT(createdDate, 4)')->eq($year)
+            ->where('deleted')->eq(0)
+            ->andWhere('LEFT(createdDate, 4)')->eq($year)
             ->beginIF($accounts)
             ->andWhere('createdBy', true)->in($accounts)
             ->orWhere('PO')->in($accounts)
@@ -669,6 +670,7 @@ class reportModel extends model
             $closeStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)->where('closedBy')->in($accounts)->andWhere('LEFT(closedDate, 4)')->eq($year)->fetchPairs('product', 'product');
             $products += $this->dao->select('id,name')->from(TABLE_PRODUCT)
                 ->where('id')->in($createStoryProducts + $closeStoryProducts + $planProducts)
+                ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
         }
 
@@ -745,6 +747,7 @@ class reportModel extends model
 
             $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('id')->in($teamProjects + $taskProjects)
+                ->andWhere('deleted')->e(0)
                 ->fetchAll('id');
         }
 
@@ -813,6 +816,7 @@ class reportModel extends model
         $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
             ->where('t1.objectType')->eq($objectType)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
@@ -897,6 +901,7 @@ class reportModel extends model
         $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
             ->where('t1.objectType')->eq('bug')
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t1.action')->eq('opened')
             ->andWhere('t2.case')->ne('0')
