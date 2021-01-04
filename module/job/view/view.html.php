@@ -90,6 +90,7 @@
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td>
+              <?php if($job->customParam):?>
               <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
               <?php
               $paramValue = str_replace('$zentao_version', zget($lang->job->paramValueList, $paramValue). '(' . $this->config->version . ')', $paramValue);
@@ -99,6 +100,7 @@
               ?>
               <div><?php echo $paramName . ' : ' . $paramValue;?></div>
               <?php endforeach;?>
+              <?php endif;?>
             </td>
           </tr>
         </table>
