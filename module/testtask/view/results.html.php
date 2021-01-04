@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::set('PRJID', $this->session->PRJ);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
