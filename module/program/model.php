@@ -7,7 +7,7 @@ class programModel extends model
      * @param  int    $programID
      * @param  array  $programs
      * @access public
-     * @return void
+     * @return int
      */
     public function savePGMState($programID = 0, $programs = array())
     {
@@ -26,10 +26,8 @@ class programModel extends model
     /**
      * Get program main menu action.
      *
-     * @param  string $module
-     * @param  string $method
      * @access public
-     * @return void
+     * @return string
      */
     public function getPGMMainAction()
     {
@@ -759,7 +757,7 @@ class programModel extends model
      * @param  int    $projectID
      * @param  array  $projects
      * @access public
-     * @return void
+     * @return int
      */
     public function savePRJState($projectID = 0, $projects = array())
     {
@@ -810,7 +808,7 @@ class programModel extends model
      * @param  string $module
      * @param  string $method
      * @access public
-     * @return void
+     * @return string
      */
     public function getPRJMainAction($module, $method)
     {

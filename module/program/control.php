@@ -365,7 +365,7 @@ class program extends control
     /**
      * Delete a program.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -726,7 +726,7 @@ class program extends control
     /**
      * Project index view.
      *
-     * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -972,6 +972,7 @@ class program extends control
      * Project browse groups.
      *
      * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return void
      */
