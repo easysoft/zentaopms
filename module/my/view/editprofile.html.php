@@ -32,13 +32,6 @@
         <th><?php echo $lang->user->birthyear;?></th>
         <td><?php echo html::input('birthday', $user->birthday,"class='form-date form-control'");?></td>
       </tr>
-      <tr>
-        <th><?php echo $lang->user->join;?></th>
-        <td class='text-middle'>
-          <?php echo formatTime($user->join);?>
-          <?php echo html::hidden('join',$user->join) .  html::select('groups[]', $groups, $userGroups, 'multiple=multiple class="form-control hidden"');?>
-        </td>
-      </tr>
     </table>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblAccount;?></caption>
