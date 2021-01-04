@@ -3,4 +3,4 @@
 .row th{width: 20%; line-height: 30px; padding-right: 20px; text-align: right; font-weight: 500;}
 .row td{width: 30%; text-align: left; font-weight: 700;}
 .main-actions{margin: 20px 0 20px 0; text-align: center;}
-.user-title{margin: 5px 10px; font-size: 14px; font-weight: bold; border-left: 3px solid #006af1; padding-left: 10px;}
+.user-title{margin: 5px 10px; font-size: 14px; font-weight: bold; padding-left: 10px;}
