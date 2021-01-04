@@ -31,6 +31,7 @@
       if($program->parent and isset($programs[$program->parent]))
       {
           if($program->type != 'program') $trClass .= ' is-nest-child';
+          if(empty($program->path)) $program->path = $programs[$program->parent]->path . "$program->id,";
           $trClass .= ' table-nest-hide';
           $trAttrs .= " data-nest-parent='$program->parent' data-nest-path='$program->path'";
       }
