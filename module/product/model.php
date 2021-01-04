@@ -637,7 +637,6 @@ class productModel extends model
 
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
-        $this->fixOrder();
         return $allChanges;
     }
 
@@ -1516,26 +1515,6 @@ class productModel extends model
     {
         $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
         return $linkHtml;
-    }
-
-    /**
-     * Fix order.
-     *
-     * @access public
-     * @return void
-     */
-    public function fixOrder()
-    {
-        $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->orderBy('order')->fetchPairs('id', 'order');
-
-        $i = 0;
-        foreach($products as $id => $order)
-        {
-            $i++;
-            $newOrder = $i * 5;
-            if($order == $newOrder) continue;
-            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
-        }
     }
 
     /**
