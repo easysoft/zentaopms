@@ -63,7 +63,7 @@ function hideItem(ulObj, val)
 function changeUsers()
 {
     var ulObj = {};
-    $('td').children('div[class^="chosen-container"]').click(function()
+    $('tbody').on("click", 'tr td div[class^="chosen-container"]', function()
     {
         /* Render the style of the user list when click the drop-down box. */
         $("ul[class='chosen-results']").each(function()
