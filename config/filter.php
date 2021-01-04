@@ -80,6 +80,7 @@ $filter->project->export         = new stdclass();
 $filter->project->task           = new stdclass();
 $filter->qa->default             = new stdclass();
 $filter->story->create           = new stdclass();
+$filter->story->batchcreate      = new stdclass();
 $filter->story->export           = new stdclass();
 $filter->sso->getbindusers       = new stdclass();
 $filter->sso->gettodolist        = new stdclass();
