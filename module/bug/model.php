@@ -2527,16 +2527,6 @@ class bugModel extends model
 
         $canView = common::hasPriv('bug', 'view');
 
-        $hasCustomSeverity = false;
-        foreach($this->lang->bug->severityList as $severityKey => $severityValue)
-        {
-            if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
-            {
-                $hasCustomSeverity = true;
-                break;
-            }
-        }
-
         $bugLink = inlink('view', "bugID=$bug->id");
         $account = $this->app->user->account;
         $id = $col->id;
@@ -2591,13 +2581,15 @@ class bugModel extends model
                 }
                 break;
             case 'severity':
+                $severityValue     = zget($this->lang->bug->severityList, $bug->severity);
+                $hasCustomSeverity = !is_numeric($severityValue);
                 if($hasCustomSeverity)
                 {
-                    echo "<span class='label-severity-custom' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'>" . zget($this->lang->bug->severityList, $bug->severity) . "</span>";
+                    echo "<span class='label-severity-custom' data-severity='{$bug->severity}' title='" . $severityValue . "'>" . $severityValue . "</span>";
                 }
                 else
                 {
-                    echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'></span>";
+                    echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . $severityValue . "'></span>";
                 }
                 break;
             case 'pri':
