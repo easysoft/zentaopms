@@ -149,6 +149,10 @@ $lang->program->menu = new stdclass();
 //$lang->program->menu->index   = '主页|program|pgmindex|';
 $lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
 
+$lang->PRJ = new stdclass();
+$lang->PRJ->menu = new stdclass();
+$lang->PRJ->menu->browse = array('link' => '项目|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers');
+
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|pgmproject|program=%s");

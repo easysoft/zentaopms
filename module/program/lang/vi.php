@@ -89,6 +89,7 @@ $lang->program->cv                 = 'CV%';
 $lang->program->PRJTeamCount       = 'Team';
 $lang->program->PRJLongTime        = 'Long-Term Project';
 $lang->program->future             = 'TBD';
+$lang->program->morePRJ            = 'More Projects';
 
 $lang->program->productNotEmpty  = 'Please link products or create products.';
 $lang->program->existProductName = 'Product name already exists.';
@@ -196,6 +197,7 @@ $lang->program->PGMStakeholder       = 'Stakeholder';
 $lang->program->createStakeholder    = 'Create Stakeholder';
 $lang->program->unlinkStakeholder    = 'Unlink Stakeholder';
 $lang->program->unlink               = 'Unlink';
+$lang->program->morePGM              = 'More Programs';
 $lang->program->confirmBatchUnlink   = "Do you want to batch unlink these stakeholders?";
 $lang->program->stakeholderType      = 'Stakeholder type';
 $lang->program->isStakeholderKey     = 'Key stakeholder';

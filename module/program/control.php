@@ -822,15 +822,6 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
-        if($from == 'PRJ')
-        {
-            $this->lang->navGroup->program = 'project';
-        }
-        else
-        {
-            $this->lang->navGroup->program = 'program';
-        }
-
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
@@ -924,7 +915,6 @@ class program extends control
     public function PRJEdit($projectID = 0, $programID = 0)
     {
         $this->app->loadLang('custom');
-        $this->lang->navGroup->program = 'project';
         $this->app->loadLang('project');
         $this->loadModel('productplan');
 
@@ -987,7 +977,6 @@ class program extends control
      */
     public function PRJGroup($projectID = 0, $programID = 0)
     {
-        $this->lang->navGroup->program = 'project';
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
@@ -1015,8 +1004,6 @@ class program extends control
      */
     public function PRJCreateGroup($projectID = 0, $programID = 0)
     {
-        $this->lang->navGroup->program = 'project';
-
         if(!empty($_POST))
         {
             $_POST['PRJ'] = $projectID;
@@ -1042,8 +1029,6 @@ class program extends control
      */
     public function PRJManageView($groupID, $projectID, $programID)
     {
-        $this->lang->navGroup->program = 'project';
-
         if($_POST)
         {
             $this->group->updateView($groupID);
@@ -1077,8 +1062,6 @@ class program extends control
      */
     public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        $this->lang->navGroup->program = 'project';
-
         if($type == 'byGroup')
         {
             $groupID = $param;
@@ -1144,8 +1127,6 @@ class program extends control
      */
     public function PRJManageMembers($projectID, $dept = '')
     {
-        $this->lang->navGroup->program = 'project';
-
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
@@ -1267,7 +1248,6 @@ class program extends control
      */
     public function PRJStart($projectID)
     {
-        $this->lang->navGroup->program = 'project';
         $this->loadModel('action');
         $project = $this->program->getPRJByID($projectID);
 
@@ -1326,7 +1306,6 @@ class program extends control
      */
     public function PRJSuspend($projectID)
     {
-        $this->lang->navGroup->program = 'project';
         $this->loadModel('action');
 
         if(!empty($_POST))
@@ -1361,7 +1340,6 @@ class program extends control
      */
     public function PRJClose($projectID)
     {
-        $this->lang->navGroup->program = 'project';
         $this->loadModel('action');
 
         if(!empty($_POST))
@@ -1396,7 +1374,6 @@ class program extends control
      */
     public function PRJActivate($projectID)
     {
-        $this->lang->navGroup->program = 'project';
         $this->loadModel('action');
         $project = $this->program->getPRJByID($projectID);
 
@@ -1495,7 +1472,6 @@ class program extends control
      */
     public function PRJWhitelist($projectID = 0, $programID = 0, $module='program', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->navGroup->program = 'project';
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -1509,7 +1485,6 @@ class program extends control
      */
     public function PRJAddWhitelist($projectID = 0, $deptID = 0)
     {
-        $this->lang->navGroup->program = 'project';
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=program");
     }
 
@@ -1536,7 +1511,6 @@ class program extends control
      */
     public function PRJManageProducts($projectID, $programID = 0)
     {
-        $this->lang->navGroup->program = 'project';
         $browseProjectLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
 
         if(!empty($_POST))

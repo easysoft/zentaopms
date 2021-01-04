@@ -1208,10 +1208,10 @@ class programModel extends model
         if($program) $path = $program->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->in('project,program')
+            ->where('type')->eq('program')
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs . ',' . $this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
@@ -1291,9 +1291,8 @@ class programModel extends model
      */
     public function createPRJManageLink($project)
     {
-        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? html::icon($this->lang->icons['program']) : html::icon($this->lang->icons['project']);
-        return html::a($link, $icon . ' ' . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
+        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}&status=all") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
+        return html::a($link, $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**

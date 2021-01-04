@@ -415,8 +415,8 @@ class my extends control
     {
         /* Save session, load lang. */
         if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true));
-        $this->app->loadLang('testcase');
-        $this->app->loadLang('testtask');
+        $this->loadModel('testcase');
+        $this->loadModel('testtask');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -428,11 +428,11 @@ class my extends control
         $cases = array();
         if($type == 'assigntome')
         {
-            $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+            $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
         }
         elseif($type == 'openedbyme')
         {
-            $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
+            $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
 

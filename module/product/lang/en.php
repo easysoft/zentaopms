@@ -45,6 +45,7 @@ $lang->product->roadmap     = "{$lang->productCommon} Roadmap";
 $lang->product->doc         = "{$lang->productCommon} Documents";
 $lang->product->project     = $lang->executionCommon . ' List';
 $lang->product->build       = 'Build List';
+$lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
 
 $lang->product->currentExecution      = "Current {$lang->sprintCommon}";
