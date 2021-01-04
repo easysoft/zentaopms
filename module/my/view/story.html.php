@@ -40,7 +40,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('my', 'setStoryConcept', '', '', 'button', 'cog muted', '', 'iframe', 1, 'data-width="600"', $lang->my->setStoryConcept);?>
+    <?php common::printIcon('my', 'setStoryConcept', '', '', 'button', 'icon icon-cog-outline', '', 'iframe', 1, 'data-width="600"', $lang->my->setStoryConcept);?>
   </div>
 </div>
 <div id="mainContent">

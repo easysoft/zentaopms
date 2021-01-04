@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>.form-actions{margin-top: 120px} </style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -19,11 +18,11 @@
         <span><?php echo $lang->my->setStoryConcept;?></span>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' style="height: 300px;">
+    <form method='post' class='main-form' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->my->storyConcept;?></th>
-          <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control'");?></td>
           <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
