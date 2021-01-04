@@ -285,8 +285,6 @@ class report extends control
         $accounts = array();
         if($dept)
         {
-            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'useid');
-            $users    = array('' => $this->lang->report->annualData->allUser) + $users;
             $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         }
         if($userID)
@@ -296,6 +294,12 @@ class report extends control
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
         if($accounts) $accounts = array_keys($accounts);
+
+        if($dept)
+        {
+            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'useid');
+            $users = array('' => $this->lang->report->annualData->allUser) + $users;
+        }
 
         /* Get annual data. */
         $data = array();
