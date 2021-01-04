@@ -632,7 +632,7 @@ class customModel extends model
     {
         $data   = fixer::input('post')->get();
         $lang   = $this->app->getClientLang();
-        $maxKey = $this->dao->select('max(`key`) as maxKey')->from(TABLE_LANG)
+        $maxKey = $this->dao->select('max(cast(`key` as SIGNED)) as maxKey')->from(TABLE_LANG)
             ->where('section')->eq('URSRList')
             ->andWhere('module')->eq('custom')
             ->andWhere('lang')->eq($lang)
