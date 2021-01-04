@@ -3,7 +3,7 @@ class programModel extends model
 {
     /**
      * Save program state.
-     * 
+     *
      * @param  int    $programID
      * @param  array  $programs
      * @access public
@@ -15,7 +15,7 @@ class programModel extends model
         if($programID == 0 and $this->cookie->lastPGM) $this->session->set('PGM', (int)$this->cookie->lastPGM);
         if($programID == 0 and $this->session->PGM == '') $this->session->set('PGM', key($programs));
         if(!isset($programs[$this->session->PGM]))
-        {    
+        {
             $this->session->set('PGM', key($programs));
             if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->PGM},") === false) $this->accessDenied();
         }
@@ -25,9 +25,9 @@ class programModel extends model
 
     /**
      * Get program main menu action.
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return void
      */
@@ -404,7 +404,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
-            $linkHtml = html::a($link, html::icon($this->lang->icons['program']) . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -755,9 +755,9 @@ class programModel extends model
 
     /**
      * Save project state.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $projects 
+     *
+     * @param  int    $projectID
+     * @param  array  $projects
      * @access public
      * @return void
      */
@@ -767,7 +767,7 @@ class programModel extends model
         if($projectID == 0 and $this->cookie->lastPRJ) $this->session->set('PRJ', (int)$this->cookie->lastPRJ);
         if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
         if(!isset($projects[$this->session->PRJ]))
-        {    
+        {
             $this->session->set('PRJ', key($projects));
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
         }
@@ -806,9 +806,9 @@ class programModel extends model
 
     /**
      * Get project main menu action.
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return void
      */
@@ -1677,7 +1677,7 @@ class programModel extends model
                     echo $project->hours->totalLeft;
                     break;
                 case 'PRJProgress':
-                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88'  data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
+                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
                     break;
                 case 'actions':
                     if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);

@@ -41,8 +41,8 @@
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='w-110px'><?php echo $lang->my->hours;?></th>
-        <th class='w-60px'><?php echo $lang->project->assignedToMe;?></th>
-        <th class='c-progress'><?php echo $lang->project->progress;?></th>
+        <th class='w-90px'><?php echo $lang->project->assignedToMe;?></th>
+        <th class='w-60px'><?php echo $lang->project->progress;?></th>
       </tr>
     </thead>
     <tbody>
@@ -71,7 +71,7 @@
         <td><?php echo $execution->join;?></td>
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
-        <td><?php echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88'  data-value='{$execution->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$execution->progress}%</div></div>"; "<span class='pie-icon'";?></td>
+        <td><?php echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$execution->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$execution->progress}%</div></div>";?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

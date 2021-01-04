@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('caseResultSave', $lang->save);?>
-<?php js::set('PRJID', $this->session->PRJ);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>

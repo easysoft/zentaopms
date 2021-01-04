@@ -508,7 +508,7 @@ function notice()
         else
         {
             projectID = $('#project').val();
-            html += '<a href="' + createLink('build', 'create','projectID=' + projectID, '', '', PRJID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="' + createLink('build', 'create','projectID=' + projectID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProjectBuilds(' + projectID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');

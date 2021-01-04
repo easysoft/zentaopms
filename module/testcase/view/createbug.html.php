@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::set('PRJID', $this->session->PRJ);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->testcase->createBug;?></h2>
@@ -31,7 +30,7 @@ function createBug(obj)
 
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
-    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList, '', '', PRJID), '_blank');
+    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_blank');
     config.onlybody = onlybody;
 }
 
