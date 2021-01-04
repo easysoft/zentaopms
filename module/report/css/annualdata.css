@@ -14,12 +14,14 @@ body {height: 100vh; padding: 0;}
 #header {margin-bottom:45px;}
 #header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
 #toolbar {position: absolute; right: 33px; top: 80px; text-align: center;width:1280px;}
-#toolbar #year{width:70px; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#toolbar #year{width:70px; display:inline-block; margin-right:5px; padding-top:5px; border-color: #1a77a5; background-color: transparent; color:#fff;}
 #toolbar #year option{background: #141414;}
-#toolbar #dept, #dept_chosen, #dept_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#toolbar #dept, #dept_chosen, #dept_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:0px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#dept_chosen > .chosen-single > span{padding-top:5px;}
 #dept_chosen .chosen-drop{background:#141414; text-align:left;}
 #toolbar #dept option{background: #141414;}
-#toolbar #userID, #userID_chosen, #userID_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#toolbar #userID, #userID_chosen, #userID_chosen > .chosen-single{width:100px !important; display:inline-block; margin-right:5px; padding-top:0px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#userID_chosen > .chosen-single > span{padding-top:5px;}
 #userID_chosen .chosen-drop{background:#141414; text-align:left;}
 .chosen-container-single .chosen-search input[type=text]{background: #141414;}
 #toolbar #userID option{background: #141414;}

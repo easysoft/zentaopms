@@ -747,7 +747,7 @@ class reportModel extends model
 
             $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('id')->in($teamProjects + $taskProjects)
-                ->andWhere('deleted')->e(0)
+                ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
         }
 
