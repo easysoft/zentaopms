@@ -71,7 +71,7 @@
         <td><?php echo $execution->join;?></td>
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
-        <td><?php echo "<span class='pie-icon' data-percent='{$execution->progress}' data-border-color='#ddd' data-back-color='#f1f1f1'></span> {$execution->progress}%";?></td>
+        <td><?php echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88'  data-value='{$execution->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$execution->progress}%</div></div>"; "<span class='pie-icon'";?></td>
       </tr>
       <?php endforeach;?>
     </tbody>
