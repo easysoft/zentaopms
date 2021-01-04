@@ -12,7 +12,7 @@
   </style>
   <div class='modal-content'>
     <div class='modal-body'>
-      <button class="close" data-dismiss="modal">X</button>
+      <button class="close" data-dismiss="modal">x</button>
       <h2 class='text-center'><?php echo $lang->program->chooseProgramType; ?></h2>
       <div class='row'>
         <div class='col-xs-6'>
