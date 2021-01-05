@@ -282,12 +282,16 @@ $(function()
     <?php foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
     <?php
     $statusStat = array();
-    foreach($lang->$objectType->statusList as $status => $statusName) $statusStat[$status] = array('name' => $statusName, 'value' => zget($objectStatusStat, $status, 0));
+    foreach($lang->$objectType->statusList as $status => $statusName)
+    {
+        $statusCount = zget($objectStatusStat, $status, 0);
+        if($statusCount == 0) continue;
+        $statusStat[$status] = array('name' => $statusName, 'value' => $statusCount);
+    }
     $canvasID         = 'all' . ucfirst($objectType) . 'StatusCanvas';
     $canvasTitleKey   = $objectType . 'StatusStat';
-    $jsonedStatus     = json_encode(array_values($lang->$objectType->statusList));
     $jsonedStatusStat = json_encode(array_values($statusStat));
-    echo "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedStatus, $jsonedStatusStat,
+    echo "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedStatusStat,
         function()
         {
             $('#allTimeStatusStat .{$objectType}Overview').appendTo('#{$canvasID}').removeClass('hidden').css(overviewCSS)
@@ -305,16 +309,16 @@ $(function()
     foreach($items as $key => $name)
     {
         $itemCount  = zget($data["{$objectType}Stat"][$statKey], $key, 0);
+        if($itemCount == 0) continue;
         $stat[$key] = array('name' => $name, 'value' => $itemCount);
     }
 
     $ucfirst        = ucfirst($objectType);
     $canvasID       = $objectType == 'case' ? 'yearCaseResultCanvas' : 'year' . $ucfirst . 'StatusCanvas';
     $canvasTitleKey = $objectType == 'case' ? 'caseResultStat' : $objectType . 'StatusStat';
-    $jsonedItems    = json_encode(array_values($items));
     $jsonedStat     = json_encode(array_values($stat));
 
-    $drawFunction = "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedItems, $jsonedStat";
+    $drawFunction = "drawStatusPieChart('{$canvasID}', '{$annualDataLang->$canvasTitleKey}', $jsonedStat";
     if($objectType != 'case')
     {
         $drawFunction .= ", function()

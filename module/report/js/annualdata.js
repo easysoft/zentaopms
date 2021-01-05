@@ -3,13 +3,12 @@
  * 
  * @param  string   $id 
  * @param  string   $title 
- * @param  array    $statuses 
  * @param  array    $data 
  * @param  function $callback 
  * @access public
  * @return object
  */
-function drawStatusPieChart(id, title, statuses, data, callback)
+function drawStatusPieChart(id, title, data, callback)
 {
     var titleTextStyle = {
         color:'#fff',
@@ -52,7 +51,6 @@ function drawStatusPieChart(id, title, statuses, data, callback)
             itemWidth: legendItemWidth,
             itemHeight: legendItemHeight,
             textStyle: legendTextStyle,
-            data: statuses
         },
         series: [
             {
