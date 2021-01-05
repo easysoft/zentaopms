@@ -293,7 +293,7 @@
         initMenuList();
 
         /* Bind events */
-        $(document).on('click', 'a,.open-in-tab,.show-in-tab', function(e)
+        $(document).on('click', '.open-in-tab,.show-in-tab', function(e)
         {
             var $link = $(this);
             if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
@@ -315,7 +315,7 @@
                 if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
             }
 
-            var options = {event: event};
+            var options = {event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}};
             var pos = $btn.data('pos');
             if(pos)
             {
