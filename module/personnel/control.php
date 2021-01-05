@@ -122,11 +122,11 @@ class personnel extends control
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
 
-        $this->view->pager      = $pager;
-        $this->view->objectID   = $objectID;
-        $this->view->whitelist  = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->module     = $module;
+        $this->view->pager     = $pager;
+        $this->view->objectID  = $objectID;
+        $this->view->whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->module    = $module;
 
         $this->display();
     }
