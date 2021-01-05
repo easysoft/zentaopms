@@ -653,7 +653,6 @@ class reportModel extends model
             ->andWhere('t2.actor')->in($accounts)
             ->fi()
             ->andWhere('t2.action')->eq('opened')
-            ->groupBy('t1.product')
             ->fetchAll();
 
         $planProducts = array();
