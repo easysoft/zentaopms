@@ -38,3 +38,5 @@
 
 #menuToggle .is-unfold, .menu-hide #menuToggle .is-collapse {display: none}
 .menu-hide #menuToggle .is-unfold {display: inline}
+
+#menuNav>.nav>li.divider {margin: 8px 8px;}
