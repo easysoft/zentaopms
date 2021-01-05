@@ -86,7 +86,11 @@
             $contributionActions = zget($annualDataConfig['contributions'], $objectType, array_keys($objectContributions));
             
             $colors = $annualDataConfig['colors'];
-            $detail = "<li><span class='header'>{$objectName}</span></li>";
+            $detail = '';
+            $items  = array();
+            $maxWidth      = 0;
+            $maxWidthColor = '';
+            $allPercent    = 0;
             foreach($contributionActions as $actionName)
             {
                 if(isset($objectContributions[$actionName]))
@@ -95,11 +99,27 @@
                     $count = $objectContributions[$actionName];
                     $width = floor($count / $maxCount * 100);
                     if($width == 0) $width = 1;
-                    echo "<span class='item' style='background-color:{$color};width:{$width}%'>{$count}</span>";
+                    if($width < 3 and $count < 10) $width = 3;
+                    if($width < 5 and $count >= 10 and $count < 100) $width = 5;
+
+                    $allPercent += $width;
+                    if($maxWidth < $width)
+                    {
+                        $maxWidth      = $width;
+                        $maxWidthColor = $color;
+                    }
+
+                    $item['color'] = $color;
+                    $item['width'] = $width;
+                    $item['count'] = $count;
+                    $items[$color] = $item;
             
                     $detail .= "<li><span class='color' style='background-color:{$color}'></span><span class='item-name'>" . $annualDataLang->actionList[$actionName] . "</span><span class='count'>{$count}</span></li>";
                 }
             }
+            if($allPercent > 100) $items[$maxWidthColor]['width'] = $items[$maxWidthColor]['width'] - ($allPercent - 100);
+            if($detail) $detail = "<li><span class='header'>{$objectName}</span></li>" . $detail;
+            foreach($items as $item) echo "<span class='item' style='background-color:{$item['color']};width:{$item['width']}%'>{$item['count']}</span>";
             ?>
             </span>
             <ul class='dropdown-menu'><?php echo $detail;?></ul>
@@ -198,9 +218,9 @@
     <?php foreach(array('story', 'task', 'bug', 'case') as $objectType):?>
     <section class='dataYearStat' id='<?php echo $objectType;?>Data'>
       <?php if($objectType == 'story') $sectionHeader = $annualDataLang->stories;?>
-      <?php if($objectType == 'task') $sectionHeader = $annualDataLang->tasks;?>
-      <?php if($objectType == 'bug') $sectionHeader = $annualDataLang->bugs;?>
-      <?php if($objectType == 'case') $sectionHeader = $annualDataLang->cases;?>
+      <?php if($objectType == 'task')  $sectionHeader = $annualDataLang->tasks;?>
+      <?php if($objectType == 'bug')   $sectionHeader = $annualDataLang->bugs;?>
+      <?php if($objectType == 'case')  $sectionHeader = $annualDataLang->cases;?>
       <?php $ucfirst = ucfirst($objectType);?>
       <header><h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2></header>
       <div>
@@ -311,8 +331,9 @@ $(function()
     $jsonedMonths = json_encode($months);
     foreach($annualDataConfig['month'] as $objectType => $actions):?>
     <?php
-    $legends = array();
+    $legends      = array();
     $monthActions = array();
+    $allCount     = 0;
     foreach($actions as $actionKey => $action)
     {
         if(!isset($data["{$objectType}Stat"]['actionStat'][$actionKey])) continue;
@@ -325,7 +346,16 @@ $(function()
         $monthAction['stack'] = $objectType;
         $monthAction['data']  = array_values($data["{$objectType}Stat"]['actionStat'][$actionKey]);
         $monthActions[]       = $monthAction;
+
+        $allCount += array_sum($monthAction['data']);
     }
+
+    if($allCount == 0)
+    {
+        $monthActions = array();
+        $legends = array();
+    }
+
     $canvasID = 'year' . ucfirst($objectType) . 'ActionCanvas';
     $canvasTitleKey = $objectType . 'MonthActions';
     $legends = json_encode($legends);

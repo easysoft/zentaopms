@@ -103,7 +103,7 @@ $lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=pro
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
 
 $lang->report->annualData = new stdclass();
-$lang->report->annualData->title            = "%s%s年工作汇总";
+$lang->report->annualData->title            = "%s %s年工作汇总";
 $lang->report->annualData->scope            = "统计范围";
 $lang->report->annualData->allUser          = "所有用户";
 $lang->report->annualData->allDept          = "全公司";

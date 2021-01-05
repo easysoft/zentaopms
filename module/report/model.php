@@ -664,10 +664,16 @@ class reportModel extends model
             $planGroups[$plan->product][$plan->id] = $plan->id;
         }
 
-        if($accounts)
+        $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
+            ->where('LEFT(openedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
+            ->fetchPairs('product', 'product');
+        $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
+            ->where('LEFT(closedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
+            ->fetchPairs('product', 'product');
+        if($createStoryProducts or $closeStoryProducts)
         {
-            $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)->where('openedBy')->in($accounts)->andWhere('LEFT(openedDate, 4)')->eq($year)->fetchPairs('product', 'product');
-            $closeStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)->where('closedBy')->in($accounts)->andWhere('LEFT(closedDate, 4)')->eq($year)->fetchPairs('product', 'product');
             $products += $this->dao->select('id,name')->from(TABLE_PRODUCT)
                 ->where('id')->in($createStoryProducts + $closeStoryProducts + $planProducts)
                 ->andWhere('deleted')->eq(0)
@@ -738,27 +744,43 @@ class reportModel extends model
             ->orWhere('RD')->in($accounts)
             ->markRight(1)
             ->fi()
+            ->orderBy('`order` desc')
             ->fetchAll('id');
 
-        if($accounts)
+        $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->andWhere('LEFT(`join`, 4)')->eq($year)
+            ->fetchPairs('root', 'root');
+        $taskProjects = $this->dao->select('project')->from(TABLE_TASK)
+            ->where('LEFT(finishedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
+            ->fetchPairs('project', 'project');
+        if($teamProjects or $taskProjects)
         {
-            $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->in($accounts)->andWhere('LEFT(`join`, 4)')->eq($year)->fetchPairs('root', 'root');
-            $taskProjects = $this->dao->select('project')->from(TABLE_TASK)->where('finishedBy')->in($accounts)->andWhere('LEFT(finishedDate, 4)')->eq($year)->fetchPairs('project', 'project');
-
             $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('id')->in($teamProjects + $taskProjects)
                 ->andWhere('deleted')->eq(0)
+                ->orderBy('`order` desc')
                 ->fetchAll('id');
         }
 
         /* Get count of finished task, story and resolved bug in this year. */
-        $taskStats = $this->dao->select('project, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory, sum(if((fromBug != 0), 1, 0)) as resolvedBug')->from(TABLE_TASK)
+        $taskStats = $this->dao->select('project, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('finishedBy')->ne('')
             ->andWhere('LEFT(finishedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
             ->groupBy('project')
+            ->fetchAll('project');
+        $resolvedBugs = $this->dao->select('t2.project, count(*) as count')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
+            ->where('t2.project')->in(array_keys($projects))
+            ->andWhere('t1.resolvedBy')->ne('')
+            ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         foreach($projects as $projectID => $project)
@@ -772,8 +794,10 @@ class reportModel extends model
             {
                 $project->task  = $taskStat->finishedTask;
                 $project->story = $taskStat->finishedStory;
-                $project->bug   = $taskStat->resolvedBug;
             }
+
+            $resolvedBug = zget($resolvedBugs, $projectID, '');
+            if($resolvedBug) $project->bug = $resolvedBug->count;
         }
 
         return $projects;
