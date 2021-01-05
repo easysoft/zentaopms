@@ -93,10 +93,13 @@
             $allPercent    = 0;
             foreach($contributionActions as $actionName)
             {
+                if($maxCount == 0) continue;
                 if(isset($objectContributions[$actionName]))
                 {
                     $color = array_shift($colors);
                     $count = $objectContributions[$actionName];
+                    if($count == 0) continue;
+
                     $width = floor($count / $maxCount * 100);
                     if($width == 0) $width = 1;
                     if($width < 3 and $count < 10) $width = 3;
@@ -122,7 +125,9 @@
             foreach($items as $item) echo "<span class='item' style='background-color:{$item['color']};width:{$item['width']}%'>{$item['count']}</span>";
             ?>
             </span>
+            <?php if($detail):?>
             <ul class='dropdown-menu'><?php echo $detail;?></ul>
+            <?php endif;?>
           </li>
           <?php endforeach;?>
         </ul>
