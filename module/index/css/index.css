@@ -13,9 +13,10 @@
 #bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb}
 #bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
 
+#menuFooter{height: 75px;}
 #userNav{float: none; margin: 0;}
 #userNav>li{text-align: center}
-#userNav>li>a{padding: 6px 6px;color: #fff; opacity: .9;margin-left: 0px}
+#userNav>li>a{padding: 6px 6px;color: #fff; opacity: .9;margin-left: 0px; text-align: center;}
 #userNav>li>a:hover{background: #0c64eb;}
 #userNav>li>.dropdown-menu{left: 100%; top: -310px; width: 140px;text-align: left; background: #3c495c;}
 #userNav>li>.dropdown-menu a{color: #fff}

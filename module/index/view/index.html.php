@@ -33,6 +33,9 @@ js::set('defaultOpen', $open);
   </div>
   <div id='menuFooter'>
     <ul id="userNav" class="nav">
+      <?php if(!$this->cookie->hideMenu):?>
+      <li class='menu-collapse'><a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></a></li>
+      <?php endif;?>
       <li class='dropdown dropdown-hover'><?php common::printUserBar();?></li>
     </ul>
   </div>

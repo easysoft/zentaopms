@@ -290,7 +290,7 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
-                echo '<li>' . "<a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i> <span class='is-unfold'>$lang->unfoldMenu</span><span class='is-collapse'>$lang->collapseMenu</span></a>" . '</li>';
+                if($app->cookie->hideMenu) echo '<li>' . "<a type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i> <span class='is-unfold'>$lang->unfoldMenu</span></a>" . '</li>';
 
                 echo "<li class='divider'></li>";
             }
