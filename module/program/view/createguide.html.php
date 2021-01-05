@@ -17,14 +17,14 @@
       <div class='row'>
         <div class='col-xs-6'>
           <div class='program-type text-center'>
-            <?php echo html::a($this->createLink("program", "PRJCreate", "model=scrum&programID=$programID&from=$from"), "<img class='program-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>")?>
+            <?php echo html::a($this->createLink("program", "PRJCreate", "model=scrum&programID=$programID&from=$from"), "<img class='program-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', 'data-group="project"')?>
             <h3><?php echo $lang->program->scrum; ?></h3>
             <p><?php echo $lang->program->scrumTitle; ?></p>
           </div>
         </div>
         <div class='col-xs-6'>
           <div class='program-type text-center'>
-            <?php echo html::a($this->createLink("program", "PRJCreate", "model=waterfall&programID=$programID&from=$from"), "<img class='program-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>")?>
+            <?php echo html::a($this->createLink("program", "PRJCreate", "model=waterfall&programID=$programID&from=$from"), "<img class='program-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', 'data-group="project"')?>
             <h3><?php echo $lang->program->waterfall; ?></h3>
             <p><?php echo $lang->program->waterfallTitle; ?></p>
           </div>
