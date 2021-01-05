@@ -54,6 +54,7 @@
         if(group) return group;
         var link = $.parseLink(urlOrModuleName);
         if(link.isOnlyBody) return '';
+        if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
         var moduleName = link.moduleName;
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';
@@ -275,6 +276,7 @@
         if(title) tab.pageTitle = title;
         else title = tab.pageTitle || tab.text;
 
+        if(url && url.indexOf('#') < 0) url = url + '#open=' + group;
         if(lastOpenedGroup === group)
         {
             if(location.url !== url) history.replaceState({}, title, url);
