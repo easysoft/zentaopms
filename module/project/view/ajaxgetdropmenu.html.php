@@ -23,13 +23,13 @@ foreach($projects as $project)
 {
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-folder-outline'></i> " . $project->name, '', "class='text-important' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$project->type}'></i> " . $project->name, '', "class='text-important' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
     }
     else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-folder-outline'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$project->type}'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
     }
-    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-folder-outline'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$project->type}'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
 }
 ?>
 <div class="table-row">
