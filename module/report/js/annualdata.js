@@ -173,6 +173,14 @@ function exportAnnualImage(sucessCallback, errorCallback)
             afterFinish(canvas);
             if(errorCallback) errorCallback('Cannot convert image to blob.');
         };
+
+        /* Watermark. */
+        const ctx = canvas.getContext('2d');
+        ctx.font = '12px serif';
+        ctx.fillStyle = 'rgba(200,200,200, 0.8)';
+        ctx.fillText(exportByZentao, 1220, 90);
+        ctx.fillText(exportByZentao, 45, canvas.height - 10);
+
         canvas.toBlob(function(blob)
         {
             var imageUrl = URL.createObjectURL(blob);

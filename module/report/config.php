@@ -18,9 +18,9 @@ $config->report->annualData['contributions']['project']     = array('opened' => 
 $config->report->annualData['contributions']['task']        = array('opened' => 'create', 'assigned' => 'assign', 'finished' => 'finish', 'activated' => 'activate', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['bug']         = array('opened' => 'create', 'resolved' => 'resolve', 'closed' => 'close', 'activated' => 'activate', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['build']       = array('opened' => 'create');
-$config->report->annualData['contributions']['case']        = array('opened' => 'create');
+$config->report->annualData['contributions']['case']        = array('opened' => 'create', 'run' => 'run');
 $config->report->annualData['contributions']['testtask']    = array('opened' => 'create', 'edited' => 'edit');
-$config->report->annualData['contributions']['doc']         = array('opened' => 'create', 'edited' => 'edit');
+$config->report->annualData['contributions']['doc']         = array('created' => 'create', 'edited' => 'edit');
 
 $config->report->annualData['radar']['product']['create']     = array('product');
 $config->report->annualData['radar']['product']['edit']       = array('product');

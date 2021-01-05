@@ -235,6 +235,7 @@
   </main>
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
+<?php echo js::set('exportByZentao', $annualDataLang->exportByZentao);?>
 <script>
 $(function()
 {
