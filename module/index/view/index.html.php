@@ -15,10 +15,6 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
-$isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');
-$isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');
-$isProject = (zget($lang->navGroup, $app->rawModule) == 'project');
-
 js::set('navGroup', $lang->navGroup);
 js::set('tabsLang', $lang->index->tab);
 js::set('menuItems', commonModel::getMainNavList($app->rawModule));
