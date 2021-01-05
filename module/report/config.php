@@ -7,8 +7,9 @@ $config->report->dailyreminder->task     = true;
 $config->report->dailyreminder->todo     = true;
 $config->report->dailyreminder->testTask = true;
 
-$config->report->annualData['minMonth'] = 2;
-$config->report->annualData['colors']   = array('#0075A9', '#22AC38', '#CAAC32', '#2B4D6D', '#0071a4', '#00a0e9', '#7ecef4');
+$config->report->annualData['minMonth']     = 2;
+$config->report->annualData['colors']       = array('#0075A9', '#22AC38', '#CAAC32', '#2B4D6D', '#0071a4', '#00a0e9', '#7ecef4');
+$config->report->annualData['itemMinWidth'] = array(1 => 3, 2 => 5, 3 => 7, 4 => 9, 5 => 11);
 
 $config->report->annualData['contributions']['product']     = array('opened' => 'create', 'edited' => 'edit', 'closed' => 'close');
 $config->report->annualData['contributions']['story']       = array('opened' => 'create', 'reviewed' => 'review', 'closed' => 'close', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');

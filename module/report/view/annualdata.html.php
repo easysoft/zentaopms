@@ -1,4 +1,5 @@
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <?php $annualDataLang   = $lang->report->annualData;?>
@@ -102,8 +103,8 @@
 
                     $width = floor($count / $maxCount * 100);
                     if($width == 0) $width = 1;
-                    if($width < 3 and $count < 10) $width = 3;
-                    if($width < 5 and $count >= 10 and $count < 100) $width = 5;
+                    $length = strlen($count);
+                    if($width < $annualDataConfig['itemMinWidth'][$length]) $width = $annualDataConfig['itemMinWidth'][$length];
 
                     $allPercent += $width;
                     if($maxWidth < $width)
@@ -272,7 +273,7 @@ $(function()
 
     radarChart.setOption(radarOption);
 
-    var overviewCSS = {position: 'absolute', left: '180px', top: '160px'};
+    var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
 
     <?php unset($lang->story->statusList['']);?>
     <?php unset($lang->bug->statusList['']);?>
