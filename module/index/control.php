@@ -27,6 +27,7 @@ class index extends control
     /**
      * The index page of whole zentao system.
      *
+     * @param  string $open
      * @access public
      * @return void
      */

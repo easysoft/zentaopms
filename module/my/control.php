@@ -97,7 +97,6 @@ class my extends control
         {
             echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         }
-
     }
 
     /**

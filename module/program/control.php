@@ -147,7 +147,7 @@ class program extends control
      */
     public function PGMCreate($parentProgramID = 0)
     {
-        $this->lang->navGroup->program     = 'program';
+        $this->lang->navGroup->program = 'program';
 
         if($_POST)
         {
@@ -179,7 +179,7 @@ class program extends control
      */
     public function PGMEdit($programID = 0)
     {
-        $this->lang->navGroup->program     = 'program';
+        $this->lang->navGroup->program = 'program';
 
         $program = $this->program->getPGMByID($programID);
 

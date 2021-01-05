@@ -12,6 +12,16 @@
      */
     function initMenuList()
     {
+        var $helpLink = $('#helpLink');
+        groupsMap.help =
+        {
+            group: 'help',
+            icon: 'icon-help',
+            url: $helpLink.attr('href'),
+            external: true,
+            text: $helpLink.text(),
+            pageUrl: config.webRoot + '#open=help'
+        };
         var $menuMainNav = $('#menuMainNav').empty();
         window.menuItems.forEach(function(item)
         {
@@ -44,6 +54,7 @@
         if(group) return group;
         var link = $.parseLink(urlOrModuleName);
         if(link.isOnlyBody) return '';
+        if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
         var moduleName = link.moduleName;
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';
@@ -244,7 +255,7 @@
         }
         catch(_)
         {
-            iframe.src = url || iframe.contentWindow.location.href;
+            iframe.src = url || tab.url;
         }
     }
 
@@ -265,6 +276,7 @@
         if(title) tab.pageTitle = title;
         else title = tab.pageTitle || tab.text;
 
+        if(url && url.indexOf('#') < 0) url = url + '#open=' + group;
         if(lastOpenedGroup === group)
         {
             if(location.url !== url) history.replaceState({}, title, url);
@@ -293,13 +305,21 @@
         initMenuList();
 
         /* Bind events */
-        $(document).on('click', 'a,.open-in-tab,.show-in-tab', function(e)
+        $(document).on('click', '.open-in-tab,.show-in-tab', function(e)
         {
             var $link = $(this);
             if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
             var url = $link.hasClass('show-in-tab') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
-            if(openTab(url, $link.data('group'))) e.preventDefault();
+            if(openTab(url, $link.data('group')))
+            {
+                e.preventDefault();
+                if($link.closest('#userNav').length)
+                {
+                    var $menu = $('#userNav .dropdown-menu').addClass('hidden');
+                    setTimeout(function(){$menu.removeClass('hidden')}, 200);
+                }
+            }
         }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
         {
             var $btn  = $(this);
@@ -315,7 +335,7 @@
                 if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
             }
 
-            var options = {event: event};
+            var options = {event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}};
             var pos = $btn.data('pos');
             if(pos)
             {

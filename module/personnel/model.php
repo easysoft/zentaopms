@@ -88,31 +88,31 @@ class personnelModel extends model
 
         foreach($accountPairs as $account => $projects)
         {
-            $personnelList[$account]['realname']      = $userPairs[$account]->realname;
-            $personnelList[$account]['account']       = $account;
-            $personnelList[$account]['role']          = $userPairs[$account]->role;
-            $personnelList[$account]['projects']      = $projects;
-            $personnelList[$account]['executions']    = zget($executionPairs, $account, 0);
+            $personnelList[$account]['realname']   = $userPairs[$account]->realname;
+            $personnelList[$account]['account']    = $account;
+            $personnelList[$account]['role']       = $userPairs[$account]->role;
+            $personnelList[$account]['projects']   = $projects;
+            $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
-            $personnelList[$account]['createdTask']   = $taskInput[$account]['created'];
-            $personnelList[$account]['finishedTask']  = $taskInput[$account]['finished'];
-            $personnelList[$account]['pendingTask']   = $taskInput[$account]['pending'];
-            $personnelList[$account]['consumedTask']  = $taskInput[$account]['consumed'];
-            $personnelList[$account]['leftTask']      = $taskInput[$account]['left'];
+            $personnelList[$account]['createdTask']  = $taskInput[$account]['created'];
+            $personnelList[$account]['finishedTask'] = $taskInput[$account]['finished'];
+            $personnelList[$account]['pendingTask']  = $taskInput[$account]['pending'];
+            $personnelList[$account]['consumedTask'] = $taskInput[$account]['consumed'];
+            $personnelList[$account]['leftTask']     = $taskInput[$account]['left'];
 
-            $personnelList[$account]['createdBug']    = $bugAndStoryInput[$account]['created'];
-            $personnelList[$account]['resolvedBug']   = $bugAndStoryInput[$account]['resolved'];
-            $personnelList[$account]['pendingBug']    = $bugAndStoryInput[$account]['pending'];
-            $personnelList[$account]['UR']            = $bugAndStoryInput[$account]['UR'];
-            $personnelList[$account]['SR']            = $bugAndStoryInput[$account]['SR'];
+            $personnelList[$account]['createdBug']  = $bugAndStoryInput[$account]['created'];
+            $personnelList[$account]['resolvedBug'] = $bugAndStoryInput[$account]['resolved'];
+            $personnelList[$account]['pendingBug']  = $bugAndStoryInput[$account]['pending'];
+            $personnelList[$account]['UR']          = $bugAndStoryInput[$account]['UR'];
+            $personnelList[$account]['SR']          = $bugAndStoryInput[$account]['SR'];
 
             $personnelList[$account]['createdIssue']  = $issueInput[$account]['created'];
             $personnelList[$account]['resolvedIssue'] = $issueInput[$account]['resolved'];
             $personnelList[$account]['pendingIssue']  = $issueInput[$account]['pending'];
 
-            $personnelList[$account]['createdRisk']   = $riskInput[$account]['created'];
-            $personnelList[$account]['resolvedRisk']  = $riskInput[$account]['resolved'];
-            $personnelList[$account]['pendingRisk']   = $riskInput[$account]['pending'];
+            $personnelList[$account]['createdRisk']  = $riskInput[$account]['created'];
+            $personnelList[$account]['resolvedRisk'] = $riskInput[$account]['resolved'];
+            $personnelList[$account]['pendingRisk']  = $riskInput[$account]['pending'];
         }
 
         return $personnelList;
@@ -190,6 +190,7 @@ class personnelModel extends model
      * Get user bug and story input.
      *
      * @param  array     $accounts
+     * @param  int       $programID
      * @access public
      * @return array
      */

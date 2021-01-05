@@ -1404,15 +1404,15 @@ class treeModel extends model
                     $i ++;
                 }
 
-                $module          = new stdClass();
-                $module->root    = $rootID;
-                $module->name    = strip_tags(trim($moduleName));
-                $module->parent  = $parentModuleID;
-                $module->branch  = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
-                $module->short   = $shorts[$moduleID];
-                $module->grade   = $grade;
-                $module->type    = $type;
-                $module->order   = $order;
+                $module         = new stdClass();
+                $module->root   = $rootID;
+                $module->name   = strip_tags(trim($moduleName));
+                $module->parent = $parentModuleID;
+                $module->branch = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
+                $module->short  = $shorts[$moduleID];
+                $module->grade  = $grade;
+                $module->type   = $type;
+                $module->order  = $order;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 $moduleID  = $this->dao->lastInsertID();
                 $childPath = $parentPath . "$moduleID,";

@@ -15,10 +15,6 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
-$isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');
-$isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');
-$isProject = (zget($lang->navGroup, $app->rawModule) == 'project');
-
 js::set('navGroup', $lang->navGroup);
 js::set('tabsLang', $lang->index->tab);
 js::set('menuItems', commonModel::getMainNavList($app->rawModule));
@@ -50,7 +46,8 @@ js::set('defaultOpen', $open);
       <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
       <?php echo $lang->proVersion;?>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'><i class="icon icon-zentao" style="font-size: 24px;"></i></a>
-      <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
+      <!--
+      <a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>
       <div id="globalSearchDiv">
         <div class="input-group">
           <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
@@ -61,6 +58,7 @@ js::set('defaultOpen', $open);
           </span>
         </div>
       </div>
+      -->
     </div>
   </div>
 </div>

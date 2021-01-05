@@ -51,9 +51,7 @@
       <tr class='text-left'>
         <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
-          <span class='project-type-label label label-info label-outline'>
-            <?php echo zget($lang->project->typeList, $execution->type);?>
-          </span>
+          <span class='project-type-label label label-info label-outline'><?php echo zget($lang->project->typeList, $execution->type);?></span>
           <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
@@ -61,17 +59,21 @@
         <td><?php echo $execution->end;?></td>
         <td class="c-status">
           <?php if(isset($execution->delay)):?>
-          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'> <?php echo $lang->project->delayed;?></span>
+          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>
           <?php $typeName = $this->processStatus('project', $execution);?>
-          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $typeName;?>'> <?php echo $typeName;?></span>
+          <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $typeName;?>'><?php echo $typeName;?></span>
           <?php endif;?>
         </td>
         <td><?php echo $execution->role;?></td>
         <td><?php echo $execution->join;?></td>
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
-        <td><?php echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$execution->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$execution->progress}%</div></div>";?></td>
+        <td>
+          <div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $execution->progress;?>%</div>
+          </div>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

@@ -162,6 +162,8 @@ class baseHelper
      *  @param  string  $link 
      *  @param  int     $PRJID
      *  @param  bool    $onlybody
+     *  @param  string  $moduleName
+     *  @param  bool    $removePRJ
      *  @static
      *  @access public
      *  @return string
