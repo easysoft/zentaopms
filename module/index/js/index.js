@@ -12,6 +12,16 @@
      */
     function initMenuList()
     {
+        var $helpLink = $('#helpLink');
+        groupsMap.help =
+        {
+            group: 'help',
+            icon: 'icon-help',
+            url: $helpLink.attr('href'),
+            external: true,
+            text: $helpLink.text(),
+            pageUrl: config.webRoot + '#open=help'
+        };
         var $menuMainNav = $('#menuMainNav').empty();
         window.menuItems.forEach(function(item)
         {
@@ -244,7 +254,7 @@
         }
         catch(_)
         {
-            iframe.src = url || iframe.contentWindow.location.href;
+            iframe.src = url || tab.url;
         }
     }
 
@@ -299,7 +309,15 @@
             if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
             var url = $link.hasClass('show-in-tab') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
-            if(openTab(url, $link.data('group'))) e.preventDefault();
+            if(openTab(url, $link.data('group')))
+            {
+                e.preventDefault();
+                if($link.closest('#userNav').length)
+                {
+                    var $menu = $('#userNav .dropdown-menu').addClass('hidden');
+                    setTimeout(function(){$menu.removeClass('hidden')}, 200);
+                }
+            }
         }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
         {
             var $btn  = $(this);
