@@ -836,9 +836,6 @@ class product extends control
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true));
 
-        /* Set language items. */
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
-
         /* Init vars. */
         $programs     = array();
         $productStats = $this->product->getStats($orderBy, '', $browseType, '', 'story');
