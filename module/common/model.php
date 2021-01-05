@@ -2438,7 +2438,6 @@ EOD;
         if(empty($program)) return;
         if($program->model == 'waterfall')
         {
-            $lang->navGroup->product = 'project';
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
         if($program->model == 'scrum')
