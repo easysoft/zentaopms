@@ -15,7 +15,7 @@ $config->report->annualData['contributions']['story']       = array('opened' => 
 $config->report->annualData['contributions']['productplan'] = array('opened' => 'create');
 $config->report->annualData['contributions']['release']     = array('opened' => 'create');
 $config->report->annualData['contributions']['project']     = array('opened' => 'create', 'edited' => 'edit', 'started' => 'start', 'closed' => 'close');
-$config->report->annualData['contributions']['task']        = array('opened' => 'create', 'assigned' => 'assign', 'finished' => 'finish', 'activated' => 'activate', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
+$config->report->annualData['contributions']['task']        = array('opened' => 'create', 'assigned' => 'assign', 'finished' => 'finish', 'activated' => 'activate', 'closed' => 'close', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['bug']         = array('opened' => 'create', 'resolved' => 'resolve', 'closed' => 'close', 'activated' => 'activate', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['build']       = array('opened' => 'create');
 $config->report->annualData['contributions']['case']        = array('opened' => 'create', 'run' => 'run');
