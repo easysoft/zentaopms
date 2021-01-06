@@ -15,12 +15,12 @@
         var $helpLink = $('#helpLink');
         groupsMap.help =
         {
-            group: 'help',
-            icon: 'icon-help',
-            url: $helpLink.attr('href'),
+            group:    'help',
+            icon:     'icon-help',
+            url:      $helpLink.attr('href'),
             external: true,
-            text: $helpLink.text(),
-            pageUrl: config.webRoot + '#open=help'
+            text:     $helpLink.text(),
+            pageUrl:  config.webRoot + '#open=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
         window.menuItems.forEach(function(item)
