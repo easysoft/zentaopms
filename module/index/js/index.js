@@ -31,13 +31,15 @@
                 .attr('data-group', item.group)
                 .attr('class', 'show-in-tab')
                 .html(item.title);
-            $('<li></li>').attr('data-group', item.group)
-                .append($link)
-                .appendTo($menuMainNav);
 
             item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
+            $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
             groupsMap[item.group] = item;
+
+            $('<li></li>').attr('data-group', item.group)
+            .append($link)
+            .appendTo($menuMainNav);
 
             if(!defaultTabGroup) defaultTabGroup = item.group;
         });
@@ -423,28 +425,39 @@
     });
 }());
 
-$(function()
+(function()
 {
-    /* Click to show more. */
-    $('#menuToggle').on('click', function()
+    $.toggleMenu = function(toggle)
     {
-        $.toggleMenu();
-        var $menu = $('#userNav .dropdown-menu').addClass('hidden');
-        setTimeout(function(){$menu.removeClass('hidden')}, 200);
-    });
+        var $body = $('body');
+        if (toggle === undefined) toggle = $body.hasClass('menu-hide');
+        $body.toggleClass('menu-hide', !toggle);
+        $.cookie('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
+    };
 
-    /* Hide execution list on mouseleave or click */
-    $('#executionList').on('mouseleave click', function()
+    $(function()
     {
-        $('#moreExecution').hide();
+        /* Click to show more. */
+        $(document).on('click', '.menu-toggle', function()
+        {
+            $.toggleMenu();
+            var $menu = $('#userNav .dropdown-menu').addClass('hidden');
+            setTimeout(function(){$menu.removeClass('hidden')}, 200);
+        });
+
+        /* Hide execution list on mouseleave or click */
+        $('#executionList').on('mouseleave click', function()
+        {
+            $('#moreExecution').hide();
+        });
     });
-});
+}());
 
 /* Get recent executions. */
 function getExecutions()
 {
-    $('#moreExecution').toggle();
-    if(!$('#moreExecution').is(':hidden'))
+    var $moreExecution = $('#moreExecution').toggle();
+    if(!$moreExecution.is(':hidden'))
     {
         $.ajax(
         {

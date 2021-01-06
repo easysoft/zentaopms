@@ -34,7 +34,6 @@
 .side .leftmenu .nav-primary>li.active>a:hover {background-color: #006af1;}
 .label-severity:after {z-index:0 !important;}
 
-.modal-title {font-size: 14px;}
 .fixed-footer .text {color: #fff;}
 
 a.showMoreImage {display: block; height: 30px; line-height: 30px; background: #2B85C4; position: absolute; bottom: 0px; width: 100%; opacity: 0.7; text-align: center; color:#fff;}
@@ -50,23 +49,12 @@ a.showMoreImage:hover {opacity: 1;}
 #mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
 #mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
 
-#mainRecent {padding: 8px; line-height: 20px; cursor: pointer; color: #fff; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; -khtml-user-select: none; user-select:none;}
-#moreExecution {display:none; max-height: 420px; position: fixed; bottom: 0; left: 100px; z-index: 999; background: white; padding: 20px 10px; height: 420px; margin-bottom: 40px; border: 1px solid #efefef}
-#moreExecution > .list-group {height: 380px; min-width: 150px; max-width:200px;}
-.main-recent-text{overflow: hidden; white-space: nowrap;}
 .chosen-container .chosen-drop{z-index: 1100;}
 
 .table-actions .btn{border: 1px solid #1183fb; color: #1183fb}
 .table-actions .btn:hover{background: #b3d4fc}
 
-#menuFooter{height: 50px}
-
 #header #toolbar a{color: #fff; font-size: 14px; line-height: 15px;}
 
 #navbar .nav>li.divider {margin: 15px 8px 15px 8px;}
 #navbar .nav>li>a { padding: 10px 10px;}
-
-#menuToggle { width: 100%; height: 24px; line-height: 24px; color: #fff; text-align: left; background: 0 0; border: none; opacity: .8; }
-#menuToggle:hover{background-color: #0c64eb}
-.menu-hide #menuToggle { height: 24px; line-height: 24px; text-align: left;}
-.menu-hide #menuToggle:hover {background-color: #0c64eb}
