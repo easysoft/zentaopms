@@ -34,7 +34,7 @@ js::set('defaultOpen', $open);
   <div id='menuFooter'>
     <ul id="userNav" class="nav">
       <li id='menuToggleMenu'><a type='button' class='menu-toggle'><i class='icon icon-sm icon-menu-collapse'></i></a></li>
-      <li class='dropdown dropdown-hover'><?php common::printUserBar();?></li>
+      <li class='dropdown dropdown-hover has-avatar'><?php common::printUserBar();?></li>
     </ul>
   </div>
 </div>

@@ -38,8 +38,9 @@
             groupsMap[item.group] = item;
 
             $('<li></li>').attr('data-group', item.group)
-            .append($link)
-            .appendTo($menuMainNav);
+                .attr('title', item.text)
+                .append($link)
+                .appendTo($menuMainNav);
 
             if(!defaultTabGroup) defaultTabGroup = item.group;
         });
