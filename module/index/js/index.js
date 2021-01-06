@@ -57,7 +57,7 @@
         if(group) return group;
 
         var link = $.parseLink(urlOrModuleName);
-        if(link.isOnlyBody) return '';
+        if(!link.moduleName || link.isOnlyBody) return '';
 
         if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
 
