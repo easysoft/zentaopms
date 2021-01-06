@@ -58,7 +58,6 @@
 
         if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
 
-
         /* Handling special situations */
         var moduleName      = link.moduleName;
         var methodName      = link.methodName;
