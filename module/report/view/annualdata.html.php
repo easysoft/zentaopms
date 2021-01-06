@@ -153,7 +153,7 @@
             <?php foreach($data['projectStat'] as $project):?>
             <tr>
               <?php foreach($annualDataLang->projectFields as $field => $name):?>
-              <td class='<?php echo "c-$field";?>'><?php echo $project->$field;?></td>
+              <td class='<?php echo "c-$field";?>' title='<?php echo $project->$field;?>'><?php echo $project->$field;?></td>
               <?php endforeach?>
             </tr>
             <?php endforeach;?>
@@ -187,7 +187,7 @@
             <?php foreach($data['productStat'] as $product):?>
             <tr>
               <?php foreach($annualDataLang->productFields as $field => $name):?>
-              <td class='<?php echo "c-$field";?>'><?php echo $product->$field;?></td>
+              <td class='<?php echo "c-$field";?>' title='<?php echo $product->$field;?>'><?php echo $product->$field;?></td>
               <?php endforeach?>
             </tr>
             <?php endforeach;?>
