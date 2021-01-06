@@ -52,10 +52,68 @@
     {
         var group = window.navGroup[urlOrModuleName];
         if(group) return group;
+
         var link = $.parseLink(urlOrModuleName);
         if(link.isOnlyBody) return '';
+
         if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
-        var moduleName = link.moduleName;
+
+
+        /* Handling special situations */
+        var moduleName      = link.moduleName;
+        var methodName      = link.methodName;
+        var methodLowerCase = methodName.toLowerCase();
+        if(moduleName === 'doc')
+        {
+            if(link.prj && ['browse', 'create', 'showfiles', 'objectlibs'].includes(methodLowerCase))
+            {
+                var from = $.cookie('from');
+                if(from === 'project') return 'project';
+                if(from === 'product') return 'product';
+            }
+            return 'doc';
+        }
+        if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))
+        {
+            return 'system';
+        }
+        if(moduleName === 'program')
+        {
+            if(methodLowerCase.indexOf('pgm') === 0) return 'program';
+            if(methodLowerCase === 'index' || methodLowerCase.indexOf('prj') === 0) return 'project';
+        }
+        if(moduleName === 'story' && (methodLowerCase === 'zerocase' || (methodLowerCase === 'batchedit' && (link.params.projectID || link.params.$2))))
+        {
+            return 'project';
+        }
+        if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
+        {
+            return link.prj ? 'project' : 'repo';
+        }
+        if(moduleName === 'product')
+        {
+            if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
+            if(methodLowerCase === 'edit' && (link.params.programID || link.params.$4)) return 'program';
+            if(methodLowerCase === 'batchedit') return 'program';
+            if(methodLowerCase === 'showerrornone' && (link.params.fromModule || link.params.$1) !== 'product') return 'project';
+        }
+        if(moduleName === 'stakeholder')
+        {
+            if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
+        }
+        if(moduleName === 'tree')
+        {
+            if(methodLowerCase === 'browse')
+            {
+                var viewType = link.params.viewType || link.params.$2;
+                if(['bug', 'case', 'caselib', 'doc'].includes(viewType)) return 'project';
+            }
+            else if(methodLowerCase === 'browsetask')
+            {
+                return 'project';
+            }
+        }
+
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';
     }
