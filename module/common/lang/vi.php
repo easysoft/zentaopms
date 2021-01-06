@@ -377,7 +377,7 @@ $lang->git = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->annual  = array('link' => 'Tóm tắt năm|report|annualData', 'target' => '_blank');
+$lang->report->menu->annual  = array('link' => 'Tóm tắt năm|report|annualData|year=&dept=&userID=' . zget($_SESSION['user'], 'id', 0), 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Yêu cầu|report|bugcreate', 'alias' => 'bugassign');
