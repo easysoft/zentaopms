@@ -883,11 +883,12 @@ class reportModel extends model
     public function getYearCaseStat($accounts, $year)
     {
         $months = $this->getYearMonths($year);
-        $stmt   = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('case')
-            ->andWhere('LEFT(date, 4)')->eq($year)
-            ->andWhere('action')->eq('opened')
-            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+        $stmt   = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq('case')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
 
         /* Build create case stat. */
@@ -907,9 +908,11 @@ class reportModel extends model
         }
 
         /* Build testcase result stat and run case stat. */
-        $stmt = $this->dao->select('*')->from(TABLE_TESTRESULT)
-            ->where('LEFT(date, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
+        $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->query();
         while($testResult = $stmt->fetch())
         {
