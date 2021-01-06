@@ -199,5 +199,3 @@ $lang->report->annualData->radarItems['project'] = $lang->projectCommon;
 $lang->report->annualData->radarItems['devel']   = "研发";
 $lang->report->annualData->radarItems['qa']      = "测试";
 $lang->report->annualData->radarItems['other']   = "其他";
-
-$lang->report->annualData->unit = "个";

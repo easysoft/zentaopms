@@ -199,5 +199,3 @@ $lang->report->annualData->radarItems['project'] = $lang->projectCommon;
 $lang->report->annualData->radarItems['devel']   = "Development";
 $lang->report->annualData->radarItems['qa']      = "QA";
 $lang->report->annualData->radarItems['other']   = "Other";
-
-$lang->report->annualData->unit = " ";
