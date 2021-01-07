@@ -75,7 +75,7 @@ class personnelModel extends model
             ->fetchAll('id');
         if(empty($projects)) return $personnelList;
 
-        $accountPairs     = $this->getInvolvedProjects($projects);
+        $accountPairs = $this->getInvolvedProjects($projects);
         if(empty($accountPairs)) return $personnelList;
 
         $executionPairs   = $this->getInvolvedExecutions($projects);
