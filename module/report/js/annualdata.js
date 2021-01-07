@@ -206,7 +206,11 @@ $(function()
 
     $('#actionData > div > ul > li').mouseenter(function(e)
     {
-        $('#actionData > div > ul > li .dropdown-menu').css('left', e.pageX - $(this).offset().left + 10);
+        var width     = $(this).width();
+        var maxOffset = width - 100;
+        var offset    = e.pageX - $(this).offset().left + 10;
+        if(offset > maxOffset) offset = maxOffset;
+        $('#actionData > div > ul > li .dropdown-menu').css('left', offset);
     });
 
     $('section').mouseover(function(){$(this).addClass('active')});
