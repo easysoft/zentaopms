@@ -1541,7 +1541,7 @@ class productModel extends model
      *
      * @param  int   $productID
      * @access public
-     * @return object
+     * @return void
      */
     public function replaceStoryConcept($productID = 0)
     {
