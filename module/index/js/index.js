@@ -15,12 +15,12 @@
         var $helpLink = $('#helpLink');
         groupsMap.help =
         {
-            group: 'help',
-            icon: 'icon-help',
-            url: $helpLink.attr('href'),
+            group:    'help',
+            icon:     'icon-help',
+            url:      $helpLink.attr('href'),
             external: true,
-            text: $helpLink.text(),
-            pageUrl: config.webRoot + '#open=help'
+            text:     $helpLink.text(),
+            pageUrl:  config.webRoot + '#open=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
         window.menuItems.forEach(function(item)
@@ -31,13 +31,16 @@
                 .attr('data-group', item.group)
                 .attr('class', 'show-in-tab')
                 .html(item.title);
-            $('<li></li>').attr('data-group', item.group)
-                .append($link)
-                .appendTo($menuMainNav);
 
             item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
+            $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
             groupsMap[item.group] = item;
+
+            $('<li></li>').attr('data-group', item.group)
+                .attr('title', item.text)
+                .append($link)
+                .appendTo($menuMainNav);
 
             if(!defaultTabGroup) defaultTabGroup = item.group;
         });
@@ -52,10 +55,67 @@
     {
         var group = window.navGroup[urlOrModuleName];
         if(group) return group;
+
         var link = $.parseLink(urlOrModuleName);
-        if(link.isOnlyBody) return '';
+        if(!link.moduleName || link.isOnlyBody) return '';
+
         if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
-        var moduleName = link.moduleName;
+
+        /* Handling special situations */
+        var moduleName      = link.moduleName;
+        var methodName      = link.methodName;
+        var methodLowerCase = methodName.toLowerCase();
+        if(moduleName === 'doc')
+        {
+            if(link.prj && ['browse', 'create', 'showfiles', 'objectlibs'].includes(methodLowerCase))
+            {
+                var from = $.cookie('from');
+                if(from === 'project') return 'project';
+                if(from === 'product') return 'product';
+            }
+            return 'doc';
+        }
+        if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))
+        {
+            return 'system';
+        }
+        if(moduleName === 'program')
+        {
+            if(methodLowerCase.indexOf('pgm') === 0) return 'program';
+            if(methodLowerCase === 'index' || methodLowerCase.indexOf('prj') === 0) return 'project';
+        }
+        if(moduleName === 'story' && (methodLowerCase === 'zerocase' || (methodLowerCase === 'batchedit' && (link.params.projectID || link.params.$2))))
+        {
+            return 'project';
+        }
+        if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
+        {
+            return link.prj ? 'project' : 'repo';
+        }
+        if(moduleName === 'product')
+        {
+            if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
+            if(methodLowerCase === 'edit' && (link.params.programID || link.params.$4)) return 'program';
+            if(methodLowerCase === 'batchedit') return 'program';
+            if(methodLowerCase === 'showerrornone' && (link.params.fromModule || link.params.$1) !== 'product') return 'project';
+        }
+        if(moduleName === 'stakeholder')
+        {
+            if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
+        }
+        if(moduleName === 'tree')
+        {
+            if(methodLowerCase === 'browse')
+            {
+                var viewType = link.params.viewType || link.params.$2;
+                if(['bug', 'case', 'caselib', 'doc'].includes(viewType)) return 'project';
+            }
+            else if(methodLowerCase === 'browsetask')
+            {
+                return 'project';
+            }
+        }
+
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';
     }
@@ -366,28 +426,39 @@
     });
 }());
 
-$(function()
+(function()
 {
-    /* Click to show more. */
-    $('#menuToggle').on('click', function()
+    $.toggleMenu = function(toggle)
     {
-        $.toggleMenu();
-        var $menu = $('#userNav .dropdown-menu').addClass('hidden');
-        setTimeout(function(){$menu.removeClass('hidden')}, 200);
-    });
+        var $body = $('body');
+        if (toggle === undefined) toggle = $body.hasClass('menu-hide');
+        $body.toggleClass('menu-hide', !toggle);
+        $.cookie('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
+    };
 
-    /* Hide execution list on mouseleave or click */
-    $('#executionList').on('mouseleave click', function()
+    $(function()
     {
-        $('#moreExecution').hide();
+        /* Click to show more. */
+        $(document).on('click', '.menu-toggle', function()
+        {
+            $.toggleMenu();
+            var $menu = $('#userNav .dropdown-menu').addClass('hidden');
+            setTimeout(function(){$menu.removeClass('hidden')}, 200);
+        });
+
+        /* Hide execution list on mouseleave or click */
+        $('#executionList').on('mouseleave click', function()
+        {
+            $('#moreExecution').hide();
+        });
     });
-});
+}());
 
 /* Get recent executions. */
 function getExecutions()
 {
-    $('#moreExecution').toggle();
-    if(!$('#moreExecution').is(':hidden'))
+    var $moreExecution = $('#moreExecution').toggle();
+    if(!$moreExecution.is(':hidden'))
     {
         $.ajax(
         {
