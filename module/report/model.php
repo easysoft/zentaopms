@@ -557,11 +557,19 @@ class reportModel extends model
      */
     public function getUserYearContributions($accounts, $year)
     {
-        $actionGroups = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('LEFT(date, 4)')->eq($year)
-            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
-            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
-            ->fetchGroup('objectType', 'id');
+        $actionGroups = array();
+        foreach($this->config->report->annualData['contributions'] as $objectType => $actions)
+        {
+            $table = $this->config->objectTables[$objectType];
+            $actionGroups[$objectType] = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin($table)->alias('t2')->on("t1.objectType='$objectType' && t1.objectID=t2.id")
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.objectType')->eq($objectType)
+            ->andWhere('t1.action')->in(array_keys($actions))
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->fetchAll('id');
+        }
 
         $contributions = array();
         foreach($actionGroups as $objectType => $actions)
@@ -579,9 +587,11 @@ class reportModel extends model
             }
         }
 
-        $contributions['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)
-            ->where('LEFT(date, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
+        $contributions['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->fetch('count');
 
         return $contributions;
