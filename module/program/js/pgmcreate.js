@@ -6,7 +6,7 @@ $(function()
 /**
  * Set acl list.
  *
- * @param  programID $programID
+ * @param  int    $programID
  * @access public
  * @return void
  */
@@ -25,6 +25,7 @@ function setAclList(programID)
 /**
  * Set parent program.
  *
+ * @param  int    $programID
  * @access public
  * @return void
  */
