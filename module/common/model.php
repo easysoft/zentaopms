@@ -2455,7 +2455,7 @@ EOD;
      * @param  string $methodName
      * @static
      * @access public
-     * @return string
+     * @return void
      */
     public static function getMyModuleMenu($moduleName, $methodName)
     {
