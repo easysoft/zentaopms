@@ -40,7 +40,7 @@
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='w-110px'><?php echo $lang->my->hours;?></th>
+        <th class='w-70px'><?php echo $lang->my->hours;?></th>
         <th class='w-90px'><?php echo $lang->project->assignedToMe;?></th>
         <th class='w-60px'><?php echo $lang->project->progress;?></th>
       </tr>
