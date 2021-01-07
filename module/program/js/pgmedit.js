@@ -1,7 +1,7 @@
 /**
  * Set budget tips and acl list.
  *
- * @param  parentProgramID $parentProgramID
+ * @param  int    $parentProgramID
  * @access public
  * @return void
  */
