@@ -283,7 +283,7 @@ class issueModel extends model
     }
 
     /**
-     * Cancel an issue.
+     * Confirm an issue.
      *
      * @param  int    $issueID
      * @access public
