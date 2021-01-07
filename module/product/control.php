@@ -832,6 +832,8 @@ class product extends control
      */
     public function all($browseType = 'noclosed', $orderBy = 'order_desc')
     {
+        $this->lang->product->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
+
         /* Load module and set session. */
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true));

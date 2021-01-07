@@ -53,6 +53,7 @@ $lang->preview      = 'Xem';
 $lang->goback       = 'Trở lại';
 $lang->goPC         = 'PC';
 $lang->more         = 'Thêm';
+$lang->moreLink     = 'MORE';
 $lang->day          = ' Day';
 $lang->customConfig = 'Tùy biến cấu hình';
 $lang->public       = 'Công khai';

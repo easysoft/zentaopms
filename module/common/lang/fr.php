@@ -53,6 +53,7 @@ $lang->preview      = 'Consulter';
 $lang->goback       = 'Retour';
 $lang->goPC         = 'PC';
 $lang->more         = 'Plus';
+$lang->moreLink     = 'MORE';
 $lang->day          = 'Jour';
 $lang->customConfig = 'Personnalisation';
 $lang->public       = 'Public';

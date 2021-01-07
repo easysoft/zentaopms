@@ -501,7 +501,7 @@ class productModel extends model
      */
     public function getProductMainAction()
     {
-        return common::hasPriv('product', 'all') ? html::a(helper::createLink('product', 'all'), $this->lang->product->moreProduct, '', "class='btn btn-link'") : '';
+        return common::hasPriv('product', 'all') ? html::a(helper::createLink('product', 'all'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
     /**

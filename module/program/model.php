@@ -31,7 +31,7 @@ class programModel extends model
      */
     public function getPGMMainAction()
     {
-        return common::hasPriv('program', 'pgmbrowse') ? html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->program->morePGM, '', "class='btn btn-link'") : '';
+        return common::hasPriv('program', 'pgmbrowse') ? html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
     /**
@@ -813,7 +813,7 @@ class programModel extends model
     public function getPRJMainAction($module, $method)
     {
         if($module == 'program' and $method != 'index') return '';
-        return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->program->morePRJ, '', "class='btn btn-link'") : '';
+        return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
     /**
