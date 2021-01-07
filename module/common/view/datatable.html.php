@@ -58,8 +58,11 @@ var datatableOptions =
 };
 
 /**
- * Init datatable
- * @return {void}
+ * Init datatable.
+ *
+ * @param  int    $datatable
+ * @access public
+ * @return void
  */
 function initDatatable($datatable)
 {
