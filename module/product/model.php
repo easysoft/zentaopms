@@ -860,7 +860,7 @@ class productModel extends model
      */
     public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $PRJMine = 0)
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch = 0, $PRJMine = 0);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $PRJMine);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
