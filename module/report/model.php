@@ -659,6 +659,7 @@ class reportModel extends model
         $plans = $this->dao->select('t1.id,t1.product')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
             ->where('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t1.deleted')->eq(0)
             ->beginIF($accounts)
             ->andWhere('t2.actor')->in($accounts)
             ->fi()
@@ -675,10 +676,12 @@ class reportModel extends model
 
         $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(openedDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(closedDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         if($createStoryProducts or $closeStoryProducts)
@@ -763,6 +766,7 @@ class reportModel extends model
             ->fetchPairs('root', 'root');
         $taskProjects = $this->dao->select('project')->from(TABLE_TASK)
             ->where('LEFT(finishedDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
             ->fetchPairs('project', 'project');
         if($teamProjects or $taskProjects)
@@ -787,6 +791,7 @@ class reportModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
             ->where('t2.project')->in(array_keys($projects))
             ->andWhere('t1.resolvedBy')->ne('')
+            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
             ->groupBy('t2.project')
