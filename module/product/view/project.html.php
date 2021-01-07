@@ -41,7 +41,7 @@
           <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
           <th class='w-80px text-center'><?php echo $lang->program->PRJEstimate;?></th>
           <th class='w-80px text-center'><?php echo $lang->program->PRJConsume;?></th>
-          <th class='w-150px text-center'><?php echo $lang->program->PRJProgress;?></th>
+          <th class='w-60px'><?php echo $lang->program->PRJProgress;?></th>
         </tr>
       </thead>
       <tbody>
@@ -61,11 +61,9 @@
           <td><?php echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;?></td>
           <td class="text-center"><?php echo $project->hours->totalEstimate;?></td>
           <td class="text-center"><?php echo $project->hours->totalConsumed;?></td>
-          <td class="c-progress">
-            <div class="progress progress-text-left">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-              <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
-              </div>
+          <td>
+            <div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo $project->hours->progress;?>%</div>
             </div>
           </td>
         </tr>

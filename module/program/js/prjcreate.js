@@ -231,7 +231,8 @@ $('#projectName').on('keyup', function()
         $('#copyProjects').html(data);
         $('#copyProjects a').click(function()
         {
-            setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')
+            setCopyProject($(this).data('id'));
+            $('#copyProjectModal').modal('hide');
         });
     })
 })
