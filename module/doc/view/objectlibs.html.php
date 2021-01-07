@@ -48,7 +48,7 @@
           <?php if($libID == 'files') $icon = 'icon-paper-clip text-brown';?>
 
           <div class="col">
-            <a class="file" href="<?php echo $libLink;?>">
+              <a class="file" href="<?php echo $libLink;?>" data-group=<?php echo $from;?>>
               <i class="file-icon icon <?php echo $icon;?>"></i>
               <div class="file-name"><?php echo ($libID != 'project' && $libID != 'files' && strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
               <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
