@@ -167,6 +167,7 @@ class program extends control
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
         $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
         $this->view->parents       = $this->program->getParentPairs();
+        $this->view->PGMList       = $this->program->getPGMList();
 
         $this->display();
     }

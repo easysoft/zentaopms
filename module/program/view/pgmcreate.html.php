@@ -35,6 +35,10 @@
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
+<?php js::set('budgetUnitList', $lang->program->unitList);?>
+<?php js::set('PGMParentBudget', $lang->program->PGMParentBudget);?>
+<?php js::set('future', $lang->program->future);?>
+<?php js::set('PGMList', $PGMList);?>
 <?php $requiredFields = $config->program->PGMCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -45,7 +49,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setParentProgram(this.value)");?>
+          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setBudgetTipsAndAclList(this.value)");?>
           <td></td>
         </tr>
         <tr>
@@ -71,7 +75,7 @@
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->program->future;?></label>
             </div>
-            <span class='muted'><?php if($parentProgram) echo $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
+            <span class='muted budgetSpan'><?php if($parentProgram) echo $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
           </td>
         </tr>
         <tr>
