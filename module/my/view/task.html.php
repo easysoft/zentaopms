@@ -156,7 +156,7 @@
 <script>
 $(function()
 {
-    // Update table summary text.
+    /* Update table summary text. */
     var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
     var pageSummary    = '<?php echo $lang->project->pageSummary?>';
 
@@ -176,6 +176,7 @@ $(function()
             var checkedConsumed = 0;
             var checkedLeft     = 0;
             var taskIdList      = [];
+
             $rows.each(function()
             {
                 var $row = $(this);
@@ -190,7 +191,18 @@ $(function()
                 if(status === 'doing') checkedDoing++;
 
                 var parentID = tasks[$row.data('id')].parent;
-                if(parentID <= 0 || !$('tbody>tr[data-id="' + parentID  + '"]').length > 0)
+                var canStatistics = false;
+
+                if(parentID <= 0)
+                {
+                    canStatistics = true;
+                }
+                else
+                {
+                    if(taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
+                }
+
+                if(canStatistics)
                 {
                     checkedEstimate += Number(data.estimate);
                     checkedConsumed += Number(data.consumed);
