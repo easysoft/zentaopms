@@ -4,3 +4,4 @@
 .tab-content .tab-pane .input-group{padding:5px 0px; width:380px}
 .nameBox{display: grid;}
 .chosen-container-single .chosen-single{height: 34px;}
+#begin_chosen .chosen-single{border-right-width: 0px;}
