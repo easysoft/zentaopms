@@ -229,8 +229,8 @@ class risk extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $response['locate']  = inlink('browse');
-            $this->send($response);
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            $this->send(array('locate' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->track;

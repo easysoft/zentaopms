@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     view
- * @version     $Id: track.html.php 4903 2020-09-04 09:32:59Z lyc $
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 ?>
