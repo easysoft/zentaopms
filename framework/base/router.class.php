@@ -830,6 +830,7 @@ class baseRouter
         {
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);
+            session_set_cookie_params(0, $this->config->webRoot);
             if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
             session_start();
 
