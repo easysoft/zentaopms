@@ -17,12 +17,12 @@ class issueModel extends model
      * Create an issue.
      *
      * @access public
-     * @return bool
+     * @return int
      */
     public function create()
     {
-        $now  = helper::now();
-        $data = fixer::input('post')
+        $now   = helper::now();
+        $issue = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('status', 'unconfirmed')
@@ -33,7 +33,7 @@ class issueModel extends model
             ->stripTags($this->config->issue->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        $this->dao->insert(TABLE_ISSUE)->data($data)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_ISSUE)->data($issue)->batchCheck($this->config->issue->create->requiredFields, 'notempty')->exec();
         $issueID = $this->dao->lastInsertID();
         $this->loadModel('file')->saveUpload('issue', $issueID);
 
@@ -215,14 +215,14 @@ class issueModel extends model
      *
      * @param  int    $issueID
      * @access public
-     * @return bool
+     * @return array
      */
     public function update($issueID)
     {
         $oldIssue = $this->getByID($issueID);
 
-        $now = helper::now();
-        $data = fixer::input('post')
+        $now   = helper::now();
+        $issue = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
             ->remove('labels,files')
@@ -231,14 +231,14 @@ class issueModel extends model
             ->stripTags($this->config->issue->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        $this->dao->update(TABLE_ISSUE)->data($data)
+        $this->dao->update(TABLE_ISSUE)->data($issue)
             ->where('id')->eq($issueID)
             ->batchCheck($this->config->issue->edit->requiredFields, 'notempty')
             ->exec();
 
         $this->loadModel('file')->saveUpload('issue', $issueID);
 
-        return common::createChanges($oldIssue, $data);
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -251,14 +251,18 @@ class issueModel extends model
     public function assignTo($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data = fixer::input('post')
+
+        $now   = helper::now();
+        $issue = fixer::input('post')
             ->add('assignedBy', $this->app->user->account)
-            ->add('assignedDate', helper::now())
+            ->add('assignedDate', $now)
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', $now)
             ->get();
 
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
 
-        return common::createChanges($oldIssue, $data);
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -271,15 +275,17 @@ class issueModel extends model
     public function close($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data = fixer::input('post')
+        $issue = fixer::input('post')
             ->add('closedBy', $this->app->user->account)
             ->add('status', 'closed')
             ->add('assignedTo', 'closed')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
 
-        return common::createChanges($oldIssue, $data);
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -292,10 +298,15 @@ class issueModel extends model
     public function confirm($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data     = fixer::input('post')->add('status', 'confirmed')->get();
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+        $issue    = fixer::input('post')
+            ->add('status', 'confirmed')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
+            ->get();
 
-        return common::createChanges($oldIssue, $data);
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
+
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -308,10 +319,14 @@ class issueModel extends model
     public function cancel($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data     = fixer::input('post')->add('status', 'canceled')->get();
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+        $issue    = fixer::input('post')
+            ->add('status', 'canceled')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
+            ->get();
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
 
-        return common::createChanges($oldIssue, $data);
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -324,13 +339,15 @@ class issueModel extends model
     public function activate($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $data = fixer::input('post')
+        $issue = fixer::input('post')
             ->add('status', 'active')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_ISSUE)->data($data)->where('id')->eq($issueID)->exec();
+        $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
 
-        return common::createChanges($oldIssue, $data);
+        return common::createChanges($oldIssue, $issue);
     }
 
     /**
@@ -383,7 +400,7 @@ class issueModel extends model
      * @param  int    $issueID
      * @param  object $data
      * @access public
-     * @return object
+     * @return void
      */
     public function resolve($issueID, $data)
     {
@@ -393,6 +410,8 @@ class issueModel extends model
         $issue->resolvedBy        = $data->resolvedBy;
         $issue->resolvedDate      = $data->resolvedDate;
         $issue->status            = 'resolved';
+        $issue->editedBy          = $this->app->user->account;
+        $issue->editedDate        = helper::now();
 
         $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
     }
