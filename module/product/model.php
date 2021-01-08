@@ -334,7 +334,7 @@ class productModel extends model
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->orderBy('t2.order desc')
-            ->printsql('id');
+            ->fetchAll('id');
     }
 
     /**
