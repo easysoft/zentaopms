@@ -2,3 +2,6 @@
 .dateSwitcher {margin-top: 6px;}
 .form-horizontal .required::after{right: -10px;}
 .tab-content .tab-pane .input-group{padding:5px 0px; width:380px}
+.nameBox{display: grid;}
+.chosen-container-single .chosen-single{height: 34px;}
+#begin_chosen .chosen-single{border-right-width: 0px;}

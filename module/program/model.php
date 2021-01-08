@@ -1639,7 +1639,7 @@ class programModel extends model
                     break;
                 case 'PRJName':
                     $projectLink = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
-                    echo html::a($projectLink, $project->name, '', "class='not-in-tab'");
+                    echo html::a($projectLink, $project->name);
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
                     break;

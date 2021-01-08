@@ -170,21 +170,21 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
-        if(in_array($oldTodo->type, array('bug', 'task', 'story'))) $oldTodo->name = '';
+        if(in_array($oldTodo->type, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'))) $oldTodo->name = '';
+
+        $objectType = $this->post->type;
+        $hasObject  = in_array($objectType, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'));
         $todo = fixer::input('post')
             ->cleanInt('pri, begin, end, private')
             ->add('account', $oldTodo->account)
             ->setIF(in_array($this->post->type, array('bug', 'task', 'story')), 'name', '')
-            ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
-            ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
-            ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
-            ->setIF($this->post->type == 'feedback' and $this->post->feedback, 'idvalue', $this->post->feedback)
+            ->setIF($hasObject && $objectType,  'idvalue', $this->post->$objectType)
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove('bug, task, story, feedback, uid')
+            ->remove('bug, task, story, feedback, issue, risk, review, testtask, feedback, uid')
             ->get();
 
         if($todo->end < $todo->begin)
@@ -223,10 +223,7 @@ class todoModel extends model
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
-            ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->checkIF($todo->type == 'feedback' and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($hasObject && $todo->idvalue == 0, 'idvalue', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
         if(!dao::isError())
@@ -263,9 +260,14 @@ class todoModel extends model
                 $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle') ? $data->names[$todoID] : '';
                 $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                if($todo->type == 'task') $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
-                if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
-                if($todo->type == 'story')$todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
+                if($todo->type == 'task')     $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
+                if($todo->type == 'bug')      $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
+                if($todo->type == 'story')    $todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
+                if($todo->type == 'issue')    $todo->idvalue = isset($data->issues[$todoID]) ? $data->issues[$todoID] : 0;
+                if($todo->type == 'risk')     $todo->idvalue = isset($data->risks[$todoID]) ? $data->risks[$todoID] : 0;
+                if($todo->type == 'review')   $todo->idvalue = isset($data->reviews[$todoID]) ? $data->reviews[$todoID] : 0;
+                if($todo->type == 'testtask') $todo->idvalue = isset($data->testtasks[$todoID]) ? $data->testtasks[$todoID] : 0;
+                if($todo->type == 'feedback') $todo->idvalue = isset($data->feedbacks[$todoID]) ? $data->feedbacks[$todoID] : 0;
 
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
@@ -283,6 +285,10 @@ class todoModel extends model
                     ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'issue' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'risk' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'review' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'testtask' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'feedback' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->where('id')->eq($todoID)
                     ->exec();
@@ -748,6 +754,8 @@ class todoModel extends model
                 $projectIdList[$type] = array();
                 continue;
             }
+
+            $todoIdList = array_unique($todoIdList);
             if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
             if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
             if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');

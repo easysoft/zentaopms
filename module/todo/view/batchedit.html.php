@@ -83,6 +83,22 @@
           {
               echo html::select("storys[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
           }
+          elseif($todo->type == 'issue')
+          {
+              echo html::select("issues[$todo->id]", $issues, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'risk')
+          {
+              echo html::select("risks[$todo->id]", $risks, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'review')
+          {
+              echo html::select("reviews[$todo->id]", $reviews, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'testtask')
+          {
+              echo html::select("testtasks[$todo->id]", $testtasks, $todo->idvalue, 'class="form-control chosen"');
+          }
           ?>
           </div>
         </td>

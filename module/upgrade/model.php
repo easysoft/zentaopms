@@ -657,6 +657,7 @@ class upgradeModel extends model
             $this->appendExec('20_0_beta1');
         case '20_0_beta2':
             $this->saveLogs('Execute 20_0_beta2');
+            $this->execSQL($this->getUpgradeFile('20.0.beta2'));
             $this->adjustBudget();
             $this->appendExec('20_0_beta2');
         }

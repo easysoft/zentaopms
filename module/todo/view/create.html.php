@@ -142,7 +142,10 @@
           <th><?php echo $lang->todo->beginAndEnd;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
+            <?php
+              echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"');
+              echo html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');
+            ?>
             </div>
           </td>
           <td>
