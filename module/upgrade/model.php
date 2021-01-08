@@ -4246,6 +4246,38 @@ class upgradeModel extends model
         }
     }
 
+    public function mergeRepo()
+    {
+        $data = fixer::input('post')
+            ->join('products', ',')
+            ->get();
+
+        foreach($data->repos as $repoID)
+        {
+            /* If have no products, add it. */
+            if(isset($data->name))
+            {
+                $product = new stdclass(); 
+                $product->program     = $data->program;
+                $product->name        = $data->name;
+                $product->acl         = 'open';
+                $product->PO          = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdBy   = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdDate = helper::now();
+                $product->status      = 'normal';
+
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                $productID = $this->dao->lastInsertID();
+
+                $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
+            }
+        }
+    }
+
     /**
      * Set program default priv.
      * 

@@ -286,9 +286,8 @@ class upgrade extends control
         {
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
-            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
             $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
-            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
+            die(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
@@ -432,6 +431,34 @@ class upgrade extends control
         $this->view->projects = $this->upgrade->getProjectPairsByProgram(key($programs));
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->display();
+    }
+
+    /**
+     * Merge Repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function mergeRepo()
+    {
+        if($_POST)
+        {
+            $this->upgrade->mergeRepo();
+            die(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
+        }
+
+        $repos = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
+
+        if(empty($repos))
+        {
+            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
+            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
+        }
+
+        $this->view->repos    = $repos;
+        $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
         $this->display();
     }
 
