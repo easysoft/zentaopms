@@ -157,7 +157,7 @@ if(!empty($config->URAndSR))
     $lang->report->annualData->productFields['requirement'] = "創建{$lang->URCommon}數";
 }
 $lang->report->annualData->productFields['story']    = "創建{$lang->storyCommon}數";
-$lang->report->annualData->productFields['finished'] = "完成{$lang->storyCommon}數";
+$lang->report->annualData->productFields['finished'] = "完成需求數";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";

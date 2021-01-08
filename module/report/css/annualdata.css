@@ -69,7 +69,8 @@ section.active{border:1px solid rgb(0, 166, 255);}
 #projectData .c-story, #projectData .c-task, #projectData .c-bug {text-align:center; width:105px}
 #productData{margin-left:20px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-finished {text-align:center; width:105px;}
-#productData .c-requirement, #productData .c-story {width:115px;}
+#productData .c-story {width:115px;}
+#productData .c-requirement{width:140px;}
 .table-hover>tbody>tr:hover>td{background-color: #888 !important;}
 
 #allTimeStatusStat{width:1286px; height:345px; margin-top:20px;}

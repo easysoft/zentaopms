@@ -154,10 +154,10 @@ $lang->report->annualData->productFields['plan'] = "Plans";
 global $config;
 if(!empty($config->URAndSR))
 {
-    $lang->report->annualData->productFields['requirement'] = "Created {$lang->URCommon}";
+    $lang->report->annualData->productFields['requirement'] = "Created requirements";
 }
-$lang->report->annualData->productFields['story']    = "Created {$lang->storyCommon}";
-$lang->report->annualData->productFields['finished'] = "Finished {$lang->storyCommon}";
+$lang->report->annualData->productFields['story']    = "Created stories";
+$lang->report->annualData->productFields['finished'] = "Finished stories";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->storyCommon;
