@@ -48,7 +48,7 @@
           <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
           <div class="tile-amount">￥0</div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$projectID]->budget;?></span>
+          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$projectID]->budget . ' ' . zget($lang->program->unitList, $totalData[$projectID]->budgetUnit);?></span>
           </div>
         </div>
       </div>
