@@ -856,6 +856,7 @@ class reportModel extends model
             ->where('t1.objectType')->eq($objectType)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.action')->in(array_keys($this->config->report->annualData['month'][$objectType]))
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
 
