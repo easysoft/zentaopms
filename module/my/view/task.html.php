@@ -180,12 +180,18 @@ $(function()
             $rows.each(function()
             {
                 var $row = $(this);
+                var data = $row.data();
+                taskIdList.push(data.id);
+            })
+
+            $rows.each(function()
+            {
+                var $row = $(this);
                 if ($originTable)
                 {
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }
                 var data = $row.data();
-                taskIdList.push(data.id);
                 var status = data.status;
                 if(status === 'wait') checkedWait++;
                 if(status === 'doing') checkedDoing++;
