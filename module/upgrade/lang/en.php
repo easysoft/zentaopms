@@ -77,12 +77,14 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
-$lang->upgrade->line     = 'Product Line';
-$lang->upgrade->program  = 'Merge Project';
-$lang->upgrade->existPGM = 'Existing programs';
-$lang->upgrade->existPRJ = 'Existing projects';
-$lang->upgrade->product  = $lang->productCommon;
-$lang->upgrade->project  = 'Iteration';
+$lang->upgrade->line      = 'Product Line';
+$lang->upgrade->program   = 'Merge Project';
+$lang->upgrade->existPGM  = 'Existing programs';
+$lang->upgrade->existPRJ  = 'Existing projects';
+$lang->upgrade->product   = $lang->productCommon;
+$lang->upgrade->project   = 'Iteration';
+$lang->upgrade->repo      = 'Repo';
+$lang->upgrade->mergeRepo = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s iterations in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
@@ -90,5 +92,6 @@ $lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate 
 $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their lower iterations to merge into a large project, or you can select a product to merge its lower iterations into a larger project";
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
+$lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 
 include dirname(__FILE__) . '/version.php';

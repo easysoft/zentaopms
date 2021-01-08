@@ -33,7 +33,7 @@
         <tr>
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->program->PRJName;?></th>
-          <th class='w-150px'><?php echo $lang->program->PRJPGM;?></th>
+          <th class='w-150px'><?php echo $lang->program->common;?></th>
           <th class='w-80px'><?php echo $lang->program->PM;?></th>
           <th class='w-100px'><?php echo $lang->program->begin;?></th>
           <th class='w-100px'><?php echo $lang->program->end;?></th>

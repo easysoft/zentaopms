@@ -53,6 +53,7 @@ $lang->preview      = '查看';
 $lang->goback       = '返回';
 $lang->goPC         = 'PC版';
 $lang->more         = '更多';
+$lang->moreLink     = 'More';
 $lang->day          = '天';
 $lang->customConfig = '自定义';
 $lang->public       = '公共';

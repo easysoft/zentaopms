@@ -27,27 +27,27 @@
             <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
             <th colspan="3"><?php echo $lang->personnel->task;?></th>
             <th colspan="3"><?php echo $lang->personnel->bug;?></th>
-            <th colspan="2"><?php echo $lang->personnel->createStory;?></th>
+            <th colspan="2"><?php echo $lang->personnel->createStories;?></th>
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>
           </tr>
           <tr>
             <th><?php echo $lang->personnel->putInto;?></th>
-            <th><?php echo $lang->personnel->surplus;?></th>
+            <th><?php echo $lang->personnel->left;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->finished;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->UR;?></th>
             <th><?php echo $lang->personnel->SR;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
           </tr>
         </thead>
         <tbody class="sortable">
@@ -82,7 +82,7 @@
   <?php else:?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->personnel->emptyTip;?></span>
+        <span class="text-muted"><?php echo $lang->noData;?></span>
       </p>
     </div>
   <?php endif;?>

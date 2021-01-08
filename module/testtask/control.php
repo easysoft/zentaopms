@@ -1193,7 +1193,7 @@ class testtask extends control
 
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
-        if($id) die(html::select("testTasks[$id]", $testTasks, '', 'class="form-control"'));
-        die(html::select('testTask', $testTasks, '', 'class=form-control'));
+        if($id) die(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
+        die(html::select('testtask', $testTasks, '', 'class=form-control'));
     }
 }

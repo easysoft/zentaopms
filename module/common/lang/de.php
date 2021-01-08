@@ -53,6 +53,7 @@ $lang->preview      = 'Ansehen';
 $lang->goback       = 'Zurück';
 $lang->goPC         = 'PC';
 $lang->more         = 'Mehr';
+$lang->moreLink     = 'MORE';
 $lang->day          = 'Tag';
 $lang->customConfig = 'Custom Config';
 $lang->public       = 'Öffentlich';

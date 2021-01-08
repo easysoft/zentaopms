@@ -60,7 +60,8 @@ class program extends control
      */
     public function PGMBrowse($status = 'all', $orderBy = 'order_asc')
     {
-        $this->lang->navGroup->program = 'program';
+        $this->lang->navGroup->program       = 'program';
+        $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
 
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
@@ -166,6 +167,7 @@ class program extends control
         $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
         $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
         $this->view->parents       = $this->program->getParentPairs();
+        $this->view->PGMList       = $this->program->getPGMList();
 
         $this->display();
     }
@@ -760,6 +762,7 @@ class program extends control
      */
     public function PRJBrowse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
 

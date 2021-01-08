@@ -94,25 +94,10 @@ class personnelModel extends model
             $personnelList[$account]['projects']   = $projects;
             $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
-            $personnelList[$account]['createdTask']  = $taskInput[$account]['created'];
-            $personnelList[$account]['finishedTask'] = $taskInput[$account]['finished'];
-            $personnelList[$account]['pendingTask']  = $taskInput[$account]['pending'];
-            $personnelList[$account]['consumedTask'] = $taskInput[$account]['consumed'];
-            $personnelList[$account]['leftTask']     = $taskInput[$account]['left'];
-
-            $personnelList[$account]['createdBug']  = $bugAndStoryInput[$account]['created'];
-            $personnelList[$account]['resolvedBug'] = $bugAndStoryInput[$account]['resolved'];
-            $personnelList[$account]['pendingBug']  = $bugAndStoryInput[$account]['pending'];
-            $personnelList[$account]['UR']          = $bugAndStoryInput[$account]['UR'];
-            $personnelList[$account]['SR']          = $bugAndStoryInput[$account]['SR'];
-
-            $personnelList[$account]['createdIssue']  = $issueInput[$account]['created'];
-            $personnelList[$account]['resolvedIssue'] = $issueInput[$account]['resolved'];
-            $personnelList[$account]['pendingIssue']  = $issueInput[$account]['pending'];
-
-            $personnelList[$account]['createdRisk']  = $riskInput[$account]['created'];
-            $personnelList[$account]['resolvedRisk'] = $riskInput[$account]['resolved'];
-            $personnelList[$account]['pendingRisk']  = $riskInput[$account]['pending'];
+            $personnelList[$account] += $taskInput[$account];
+            $personnelList[$account] += $bugAndStoryInput[$account];
+            $personnelList[$account] += $issueInput[$account];
+            $personnelList[$account] += $riskInput[$account];
         }
 
         return $personnelList;
@@ -137,16 +122,16 @@ class personnelModel extends model
         $putInto = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['created']  = 0;
-            $putInto[$account]['resolved'] = 0;
-            $putInto[$account]['pending']  = 0;
+            $putInto[$account]['createdRisk']  = 0;
+            $putInto[$account]['resolvedRisk'] = 0;
+            $putInto[$account]['pendingRisk']  = 0;
         }
 
         foreach($risks as $risk)
         {
-            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['created'] += 1;
-            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolved'] += 1;
-            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pending'] += 1;
+            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['createdRisk'] += 1;
+            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolvedRisk'] += 1;
+            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pendingRisk'] += 1;
         }
 
         return $putInto;
@@ -171,16 +156,16 @@ class personnelModel extends model
         $putInto = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['created']  = 0;
-            $putInto[$account]['resolved'] = 0;
-            $putInto[$account]['pending']  = 0;
+            $putInto[$account]['createdIssue']  = 0;
+            $putInto[$account]['resolvedIssue'] = 0;
+            $putInto[$account]['pendingIssue']  = 0;
         }
 
         foreach($issues as $issue)
         {
-            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['created'] += 1;
-            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolved'] += 1;
-            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pending'] += 1;
+            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['createdIssue'] += 1;
+            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolvedIssue'] += 1;
+            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pendingIssue'] += 1;
         }
 
         return $putInto;
@@ -224,11 +209,11 @@ class personnelModel extends model
         $putInto = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['created']  = 0;
-            $putInto[$account]['resolved'] = 0;
-            $putInto[$account]['pending']  = 0;
-            $putInto[$account]['UR']       = 0;
-            $putInto[$account]['SR']       = 0;
+            $putInto[$account]['createdBug']  = 0;
+            $putInto[$account]['resolvedBug'] = 0;
+            $putInto[$account]['pendingBug']  = 0;
+            $putInto[$account]['UR']          = 0;
+            $putInto[$account]['SR']          = 0;
         }
 
         foreach($requirement as $account => $number) $putInto[$account]['UR'] = $number;
@@ -236,9 +221,9 @@ class personnelModel extends model
 
         foreach($bugs as $bug)
         {
-            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['created'] += 1;
-            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolved'] += 1;
-            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pending'] += 1;
+            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['createdBug'] += 1;
+            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolvedBug'] += 1;
+            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pendingBug'] += 1;
         }
         return $putInto;
     }
@@ -300,11 +285,11 @@ class personnelModel extends model
         $putInto = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['created']  = 0;
-            $putInto[$account]['finished'] = 0;
-            $putInto[$account]['pending']  = 0;
-            $putInto[$account]['consumed'] = 0;
-            $putInto[$account]['left']     = 0;
+            $putInto[$account]['createdTask']  = 0;
+            $putInto[$account]['finishedTask'] = 0;
+            $putInto[$account]['pendingTask']  = 0;
+            $putInto[$account]['consumedTask'] = 0;
+            $putInto[$account]['leftTask']     = 0;
         }
 
         /* Number of tasks per person. */
@@ -313,20 +298,20 @@ class personnelModel extends model
         {
             if($task->openedBy && isset($putInto[$task->openedBy]))
             {
-                $putInto[$task->openedBy]['created']   += 1;
-                $userTasks[$task->openedBy][$task->id] = $task->id;
+                $putInto[$task->openedBy]['createdTask'] += 1;
+                $userTasks[$task->openedBy][$task->id]    = $task->id;
             }
 
             if($task->finishedBy && isset($putInto[$task->finishedBy]))
             {
-                $putInto[$task->finishedBy]['finished']  += 1;
-                $userTasks[$task->finishedBy][$task->id] = $task->id;
+                $putInto[$task->finishedBy]['finishedTask'] += 1;
+                $userTasks[$task->finishedBy][$task->id]     = $task->id;
             }
 
             if($task->assignedTo && $task->status == 'wait' && isset($putInto[$task->assignedTo]))
             {
-                $putInto[$task->assignedTo]['pending']   += 1;
-                $userTasks[$task->assignedTo][$task->id] = $task->id;
+                $putInto[$task->assignedTo]['pendingTask'] += 1;
+                $userTasks[$task->assignedTo][$task->id]    = $task->id;
             }
         }
 
@@ -343,8 +328,8 @@ class personnelModel extends model
 
         foreach($userHours as $account => $hours)
         {
-            $putInto[$account]['left']     = $hours->left;
-            $putInto[$account]['consumed'] = $hours->consumed;
+            $putInto[$account]['leftTask']     = $hours->left;
+            $putInto[$account]['consumedTask'] = $hours->consumed;
         }
 
         return $putInto;

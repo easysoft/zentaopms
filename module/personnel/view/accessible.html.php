@@ -70,7 +70,7 @@ js::set('deptID', $deptID);
   <?php else:?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $acl == 'open' ? $lang->personnel->openedPGMTip : $lang->personnel->emptyTip;?></span>
+        <span class="text-muted"><?php echo $acl == 'open' ? $lang->personnel->openedPGMTip : $lang->noData;?></span>
       </p>
     </div>
   <?php endif;?>

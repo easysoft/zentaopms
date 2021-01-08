@@ -31,7 +31,7 @@ class programModel extends model
      */
     public function getPGMMainAction()
     {
-        return common::hasPriv('program', 'pgmbrowse') ? html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->program->morePGM, '', "class='btn btn-link'") : '';
+        return common::hasPriv('program', 'pgmbrowse') ? html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
     /**
@@ -813,7 +813,7 @@ class programModel extends model
     public function getPRJMainAction($module, $method)
     {
         if($module == 'program' and $method != 'index') return '';
-        return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->program->morePRJ, '', "class='btn btn-link'") : '';
+        return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
     /**
@@ -1606,9 +1606,8 @@ class programModel extends model
 
         if($col->show)
         {
-            $class  = "c-$id";
-            $title  = '';
-            $PRJPGM = '';
+            $class = "c-$id";
+            $title = '';
 
             if($id == 'idAB') $class .= ' cell-id';
 
@@ -1618,17 +1617,18 @@ class programModel extends model
                 $title  = "title='{$project->name}'";
             }
 
-            if($id == 'PRJPGM')
+            $PRJProgram = '';
+            if($id == 'PRJProgram')
             {
-                $programList = $this->getPGMPairs();
-                $PGMIndex = strpos($project->path, $programID);
-                $PRJIndex = strpos($project->path, $project->id);
-                $PGMPath  = explode(',' , substr($project->path, $PGMIndex, $PRJIndex - $PGMIndex));
-                foreach($PGMPath as $program)
+                $programList  = $this->getPGMPairs();
+                $programIndex = strpos($project->path, $programID);
+                $projectIndex = strpos($project->path, $project->id);
+                $programPath  = explode(',' , substr($project->path, $programIndex, $projectIndex - $programIndex));
+                foreach($programPath as $program)
                 {
-                    if($program) $PRJPGM .= '/' . zget($programList, $program);
+                    if($program) $PRJProgram .= '/' . zget($programList, $program);
                 }
-                $title = "title='{$PRJPGM}'";
+                $title = "title='{$PRJProgram}'";
             }
 
             echo "<td class='c-name " . $class . "' $title>";
@@ -1643,8 +1643,8 @@ class programModel extends model
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
                     break;
-                case 'PRJPGM':
-                    echo $PRJPGM;
+                case 'PRJProgram':
+                    echo $PRJProgram;
                     break;
                 case 'PM':
                     echo zget($users, $project->PM);
@@ -1656,7 +1656,7 @@ class programModel extends model
                     echo $project->end == LONG_TIME ? $this->lang->program->PRJLongTime : $project->end;
                     break;
                 case 'PRJStatus':
-                    echo zget($this->lang->program->statusList, $project->status);
+                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
                     echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;

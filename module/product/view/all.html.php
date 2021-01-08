@@ -66,70 +66,55 @@
         $trClass  = 'is-top-level table-nest-child-hide';
         $trAttrs .= " class='$trClass'";
         ?>
-        <?php if($program->name):?>
-        <tr <?php echo $trAttrs;?>>
-          <td>
-            <span class="table-nest-icon icon table-nest-toggle"></span>
-            <?php echo $program->name?>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <?php endif;?>
-        <?php foreach($program->products as $product):?>
-        <?php
-        $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
-        $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
-        ?>
-        <?php
-        $trClass = '';
-        if($product->programName)
-        {
-            $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
-            $trClass .= ' is-nest-child  table-nest-hide';
-            $trAttrs .= " data-nest-parent='program.$product->program' data-nest-path='program.$product->program,$product->id'";
-        }
-        else
-        {
-            $trAttrs  = "data-id='$product->id' data-parent='0'";
-            $trClass .= ' no-nest';
-        }
-        $trAttrs .= " class='$trClass'";
-        ?>
-        <tr class="text-center" <?php echo $trAttrs;?>>
-          <td class="c-name text-left" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
-          </td>
-          <td><?php echo $product->requirements['active'];?></td>
-          <td><?php echo $product->requirements['closed'];?></td>
-          <td><?php echo $product->requirements['draft'];?></td>
-          <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
-          <td><?php echo $product->stories['active'];?></td>
-          <td><?php echo $product->stories['closed'];?></td>
-          <td><?php echo $product->stories['draft'];?></td>
-          <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
-          <td><?php echo $product->unResolved;?></td>
-          <td><?php echo $product->closedBugs;?></td>
-          <td><?php echo $product->releases;?></td>
-          <td><?php echo $product->plans;?></td>
-          <td class='c-actions sort-handler'>
-            <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
-            <?php if($canOrder):?>
-            <i class="icon icon-move"></i>
-            <?php endif;?>
-          </td>
-        </tr>
-        <?php endforeach;?>
+          <?php if($program->name):?>
+          <tr <?php echo $trAttrs;?>>
+            <td colspan="14">
+              <span class="table-nest-icon icon table-nest-toggle"></span>
+              <?php echo $program->name?>
+            </td>
+          </tr>
+          <?php endif;?>
+          <?php foreach($program->products as $product):?>
+          <?php
+          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
+          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+
+          $trClass = '';
+          if($product->programName)
+          {
+              $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
+              $trClass .= ' is-nest-child  table-nest-hide';
+              $trAttrs .= " data-nest-parent='program.$product->program' data-nest-path='program.$product->program,$product->id'";
+          }
+          else
+          {
+              $trAttrs  = "data-id='$product->id' data-parent='0'";
+              $trClass .= ' no-nest';
+          }
+          $trAttrs .= " class='$trClass'";
+          ?>
+          <tr class="text-center" <?php echo $trAttrs;?>>
+            <td class="c-name text-left" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
+            <td><?php echo $product->requirements['active'];?></td>
+            <td><?php echo $product->requirements['closed'];?></td>
+            <td><?php echo $product->requirements['draft'];?></td>
+            <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
+            <td><?php echo $product->stories['active'];?></td>
+            <td><?php echo $product->stories['closed'];?></td>
+            <td><?php echo $product->stories['draft'];?></td>
+            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $product->unResolved;?></td>
+            <td><?php echo $product->closedBugs;?></td>
+            <td><?php echo $product->releases;?></td>
+            <td><?php echo $product->plans;?></td>
+            <td class='c-actions sort-handler'>
+              <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
+              <?php if($canOrder):?>
+              <i class="icon icon-move"></i>
+              <?php endif;?>
+            </td>
+          </tr>
+          <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
       </table>

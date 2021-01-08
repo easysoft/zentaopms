@@ -26,7 +26,7 @@
       <?php if($bug->deleted):?>
       <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
       <?php endif; ?>
-	</div>
+    </div>
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">

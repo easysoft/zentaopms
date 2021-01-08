@@ -23,8 +23,8 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->issue->activateBy;?></th>
-          <td colspan='2'><?php echo html::select('activateBy', $users, '', 'class="form-control chosen"');?></td>
+          <th><?php echo $lang->issue->assignedTo;?></th>
+          <td colspan='2'><?php echo html::select('assignedTo', $users, '', 'class="form-control chosen"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->issue->activateDate;?></th>

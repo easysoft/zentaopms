@@ -655,10 +655,10 @@ class upgradeModel extends model
             $this->processBuildTable();
             $this->processSprintConcept();
             $this->appendExec('20_0_beta1');
-        case '20_0_beta3':
-            $this->saveLogs('Execute 20_0_beta3');
+        case '20_0_beta2':
+            $this->saveLogs('Execute 20_0_beta2');
             $this->adjustBudget();
-            $this->appendExec('20_0_beta3');
+            $this->appendExec('20_0_beta2');
         }
 
         $this->deletePatch();
@@ -844,6 +844,7 @@ class upgradeModel extends model
             case '20_0_alpha' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
             case '20_0_alpha1': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha1'));
             case '20_0_beta1' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta1'));
+            case '20_0_beta2' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4243,6 +4244,38 @@ class upgradeModel extends model
             $groups        = explode(',', $sprint->whitelist);
             $groupAccounts = $this->group->getGroupAccounts($groups);
             $this->personnel->updateWhitelist($groupAccounts, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+        }
+    }
+
+    public function mergeRepo()
+    {
+        $data = fixer::input('post')
+            ->join('products', ',')
+            ->get();
+
+        foreach($data->repos as $repoID)
+        {
+            /* If have no products, add it. */
+            if(isset($data->name))
+            {
+                $product = new stdclass(); 
+                $product->program     = $data->program;
+                $product->name        = $data->name;
+                $product->acl         = 'open';
+                $product->PO          = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdBy   = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdDate = helper::now();
+                $product->status      = 'normal';
+
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                $productID = $this->dao->lastInsertID();
+
+                $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
+            }
         }
     }
 

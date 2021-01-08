@@ -67,12 +67,14 @@
         var methodLowerCase = methodName.toLowerCase();
         if(moduleName === 'doc')
         {
-            if(link.prj && ['browse', 'create', 'showfiles', 'objectlibs'].includes(methodLowerCase))
+            if(link.prj)
             {
-                var from = $.cookie('from');
-                if(from === 'project') return 'project';
-                if(from === 'product') return 'product';
+                if(methodLowerCase === 'objectlibs' && (link.params.from || link.params.$3) == 'product') return 'product';
+
+                return 'project';
             }
+
+            if(methodLowerCase === 'browse' && (link.params.from || link.params.$5) == 'product') return 'product';
             return 'doc';
         }
         if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))

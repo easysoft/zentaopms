@@ -38,7 +38,9 @@
         <tr>
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->program->PRJName;?></th>
+          <?php if($status == 'openedbyme'):?>
           <th class='w-80px'> <?php echo $lang->program->PRJStatus;?></th>
+          <?php endif;?>
           <th class='w-100px'><?php echo $lang->program->begin;?></th>
           <th class='w-100px'><?php echo $lang->program->end;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
@@ -53,7 +55,9 @@
           <td class='c-name text-left' title='<?php echo $project->name?>'>
             <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");?>
           </td>
+          <?php if($status == 'openedbyme'):?>
           <td class='c-status'><span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+          <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
           <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>

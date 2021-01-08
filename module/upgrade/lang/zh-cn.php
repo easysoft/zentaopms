@@ -77,12 +77,14 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>可以选择这些迭代归属于某个新项目下。</p>
 EOD;
 
-$lang->upgrade->line     = '产品线';
-$lang->upgrade->program  = '目标项目集和项目';
-$lang->upgrade->existPGM = '已有项目集';
-$lang->upgrade->existPRJ = '已有项目';
-$lang->upgrade->product  = $lang->productCommon;
-$lang->upgrade->project  = '迭代';
+$lang->upgrade->line      = '产品线';
+$lang->upgrade->program   = '目标项目集和项目';
+$lang->upgrade->existPGM  = '已有项目集';
+$lang->upgrade->existPRJ  = '已有项目';
+$lang->upgrade->product   = $lang->productCommon;
+$lang->upgrade->project   = '迭代';
+$lang->upgrade->repo      = '版本库';
+$lang->upgrade->mergeRepo = '归并版本库';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。";
@@ -90,5 +92,6 @@ $lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将
 $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个项目集和项目中，也可以选择某一个产品将其下面所属的迭代归并到项目集和项目中。";
 $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个项目中，也可以独立归并。";
 $lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个迭代归属于哪一个产品。";
+$lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 
 include dirname(__FILE__) . '/version.php';
