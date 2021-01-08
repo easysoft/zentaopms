@@ -70,7 +70,7 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
-          <td onclick="changeUsers()"><?php echo html::select('accounts[]', $users, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('accounts[]', $users, '', "class='form-control chosen'");?></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
@@ -94,7 +94,7 @@
 <div>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td onclick="changeUsers()"><?php echo html::select("accounts[]", $users, '', "class='form-control'");?></td>
+      <td><?php echo html::select("accounts[]", $users, '', "class='form-control'");?></td>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

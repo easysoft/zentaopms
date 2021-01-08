@@ -34,7 +34,32 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
-    $(obj).parent().parent().remove();
+    var $tr = $(obj).parent().parent();
+    var val = $tr.find('input[name^="realnames"]').val();
+    showItem(val);
+
+    $tr.remove();
+}
+
+/**
+ * Show the removed item.
+ *
+ * @param  string val
+ * @return void
+ */
+function showItem(val)
+{
+    $("#whitelistForm tr td select[name^='accounts']").each(function()
+    {
+        var select = this;
+        $(this).children('option').each(function()
+        {
+            if($(this).html().indexOf(val) != -1)
+            {
+                $(this).css('display', '');
+            }
+        });
+    });
 }
 
 /**
@@ -44,13 +69,13 @@ function deleteItem(obj)
  * @param  string val
  * @return void
  */
-function hideItem(ulObj, val)
+function hideItem(select, val)
 {
-    $(ulObj).children('li').each(function()
+    $(select).children('option').each(function()
     {
-        if($(this).attr('title').indexOf(val) != -1)
+        if($(this).html().indexOf(val) != -1)
         {
-            $(this).hide();
+            $(this).css("display", "none");
         }
     });
 }
@@ -62,38 +87,27 @@ function hideItem(ulObj, val)
  */
 function changeUsers()
 {
-    var ulObj = {};
-    $('tbody').on("click", 'tr td div[class^="chosen-container"]', function()
+    var select = {};
+
+    $('#whitelistForm').on("chosen:showing_dropdown", "tr td select[name^='accounts']", function()
     {
-        /* Render the style of the user list when click the drop-down box. */
-        $("ul[class='chosen-results']").each(function()
+        select = this;
+
+        /* Render the item of the value which is selected before the page loads.*/
+        $("input[name='realnames[]']").each(function()
         {
-            ulObj = this;
-
-            /* Render the item of the value which is selected before the page loads.*/
-            $("input[name='realnames[]']").each(function()
-            {
-                hideItem(ulObj, this.value);
-            });
-
-            /* Render the item of the value which is selected after the page loads. */
-            $("a[class='chosen-single chosen-single-with-deselect']").each(function()
-            {
-                hideItem(ulObj, $(this).children('span').html());
-            });
+            hideItem(select, this.value);
         });
-    });
 
-    /* Add the style to the select item. */
-    $("a[class='chosen-single chosen-default']").each(function()
-    {
-        $(this).children('span').bind('DOMNodeInserted', function()
+        /* Render the item of the value which is selected after the page loads. */
+        $("a[class^='chosen-single chosen-single-with-deselect']").each(function()
         {
-            $("ul[class='chosen-results']").each(function()
-            {
-                hideItem(ulObj, $(this).html());
-            });
+            var id = $(select).parent().parent().attr('data-id');
+            userList[id - 1] = $(this).children('span').html();
+            hideItem(select, $(this).children('span').html());
         });
+
+        $(select).trigger("chosen:updated");
     });
 }
 
@@ -101,5 +115,19 @@ $(function()
 {
     if(window.config.currentModule == 'personnel' && window.config.currentMethod == 'addwhitelist') $("li[data-id='set']").addClass('active');
 
+    userList = {};
+
     changeUsers();
+
+    /* Listen the change of the select value. */
+    $('#whitelistForm').on('change', "tr td select[name^='accounts']", function(e, data)
+    {
+        var select = this;
+        $("#whitelistForm tr td select[name^='accounts']").each(function()
+        {
+            var id  = $(select).parent().parent().attr('data-id');
+            var val = typeof(data.deselected == 'undefined') ? userList[id] : data.deselected;
+            showItem(val);
+        });
+    });
 })
