@@ -27,7 +27,7 @@
             <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
             <th colspan="3"><?php echo $lang->personnel->task;?></th>
             <th colspan="3"><?php echo $lang->personnel->bug;?></th>
-            <th colspan="2"><?php echo $lang->personnel->createStory;?></th>
+            <th colspan="2"><?php echo $lang->personnel->createStories;?></th>
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>
           </tr>
