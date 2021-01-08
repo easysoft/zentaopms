@@ -46,7 +46,7 @@ body.menu-hide {padding-left: 0;}
 #userNav>li>.dropdown-menu{left: 100%; bottom: 0; top: auto; width: 140px; text-align: left; background: #3c495c;}
 #userNav>li>.dropdown-menu a{color: #fff}
 #userNav>li>.dropdown-menu .dropdown-menu{left: 100%; text-align: left; background: #3c495c}
-#userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu{top: -60px}
+#userNav>li .top .dropdown-menu{top: -60px}
 #userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
 #userNav li.open>a{background:#0c64eb}
 #userNav li.divider{opacity: .24; border-top: 1px solid; height: 0px;}

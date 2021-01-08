@@ -295,7 +295,7 @@ class commonModel extends model
                 echo "<li class='divider'></li>";
             }
 
-            echo "<li class='dropdown-submenu theme'>";
+            echo "<li class='dropdown-submenu top'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-theme'></i> " . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
             foreach($app->lang->themes as $key => $value)
             {
@@ -303,7 +303,7 @@ class commonModel extends model
             }
             echo '</ul></li>';
 
-            echo "<li class='dropdown-submenu lang'>";
+            echo "<li class='dropdown-submenu top'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-lang'></i> " . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
             foreach ($app->config->langs as $key => $value)
             {
