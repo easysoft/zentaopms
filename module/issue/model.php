@@ -339,10 +339,16 @@ class issueModel extends model
     public function activate($issueID)
     {
         $oldIssue = $this->getByID($issueID);
+
+        $now   = helper::now();
         $issue = fixer::input('post')
             ->add('status', 'active')
+            ->add('activateBy', $this->app->user->account)
             ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
+            ->add('editedDate', $now)
+            ->add('assignedBy', $this->app->user->account)
+            ->add('assignedDate', $now)
+            ->addIF($this->post->assignedTo == '', 'assignedTo', $this->app->user->account)
             ->get();
 
         $this->dao->update(TABLE_ISSUE)->data($issue)->where('id')->eq($issueID)->exec();
