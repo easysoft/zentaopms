@@ -655,10 +655,10 @@ class upgradeModel extends model
             $this->processBuildTable();
             $this->processSprintConcept();
             $this->appendExec('20_0_beta1');
-        case '20_0_beta3':
-            $this->saveLogs('Execute 20_0_beta3');
+        case '20_0_beta2':
+            $this->saveLogs('Execute 20_0_beta2');
             $this->adjustBudget();
-            $this->appendExec('20_0_beta3');
+            $this->appendExec('20_0_beta2');
         }
 
         $this->deletePatch();
@@ -844,6 +844,7 @@ class upgradeModel extends model
             case '20_0_alpha' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
             case '20_0_alpha1': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha1'));
             case '20_0_beta1' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta1'));
+            case '20_0_beta2' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['20.0.beta3']  = '2020-01-08';
 $lang->misc->releaseDate['20.0.beta2']  = '2020-12-18';
 $lang->misc->releaseDate['20.0.beta1']  = '2020-11-30';
 $lang->misc->releaseDate['12.5.1']      = '2020-11-30';
@@ -140,6 +141,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['20.0.beta3'][]  = array('title'=>'优化导航交互，增强用户体验', 'desc' => '');
 $lang->misc->feature->all['20.0.beta2'][]  = array('title'=>'重构组织导航，修复bug，完善细节', 'desc' => '');
 $lang->misc->feature->all['20.0.beta1'][]  = array('title'=>'禅道20beta版本，修复bug，完善细节', 'desc' => '');
 $lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'禅道20版本大更新，重构导航，增加瀑布模型', 'desc' => '<p>增加项目集和项目概念</p><p>将原项目概念变为迭代或阶段概念</p><p>增加瀑布开发模板</p>');
