@@ -25,7 +25,6 @@ common:
 	cp -fr module zentaopms/
 	cp -fr sdk zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
-	rm -r module/misc/ext
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/ 
 	mkdir zentaopms/tmp/extension/
@@ -138,6 +137,7 @@ package:
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
 	mkdir zentaopms/tools; cp tools/cn2tw.php zentaopms/tools; cd zentaopms/tools; php cn2tw.php
+	rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/tools
 pms:
 	make common 
