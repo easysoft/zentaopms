@@ -754,6 +754,8 @@ class todoModel extends model
                 $projectIdList[$type] = array();
                 continue;
             }
+
+            $todoIdList = array_unique($todoIdList);
             if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
             if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
             if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
