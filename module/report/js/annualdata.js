@@ -94,7 +94,7 @@ function drawMonthsBarChart(id, title, legends, xAxis, data)
         }
     };
 
-    var legendLeft       = 'center';
+    var legendRight      = '20';
     var legendTop        = '0';
     var legendItemWidth  = 10;
     var legendItemHeight = 10;
@@ -113,7 +113,7 @@ function drawMonthsBarChart(id, title, legends, xAxis, data)
         },
         tooltip: tooltip,
         legend: {
-            left: legendLeft,
+            right: legendRight,
             top: legendTop,
             itemWidth: legendItemWidth,
             itemHeight: legendItemHeight,

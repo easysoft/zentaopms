@@ -250,6 +250,7 @@ $(function()
       tooltip: {},
       radar: {
           splitArea:{areaStyle:{color: ['#010419']}},
+          radius:'65%',
           <?php
           $max = max($radarData);
           $indicator = array();
