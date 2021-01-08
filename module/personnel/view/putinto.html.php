@@ -33,21 +33,21 @@
           </tr>
           <tr>
             <th><?php echo $lang->personnel->putInto;?></th>
-            <th><?php echo $lang->personnel->surplus;?></th>
+            <th><?php echo $lang->personnel->left;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->finished;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->UR;?></th>
             <th><?php echo $lang->personnel->SR;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
-            <th><?php echo $lang->personnel->pending;?></th>
+            <th><?php echo $lang->personnel->wait;?></th>
           </tr>
         </thead>
         <tbody class="sortable">
