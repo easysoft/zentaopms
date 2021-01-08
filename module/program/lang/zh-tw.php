@@ -46,7 +46,6 @@ $lang->program->project            = '項目';
 $lang->program->stage              = '階段';
 $lang->program->PM                 = '負責人';
 $lang->program->PRJName            = '項目名稱';
-$lang->program->PRJPGM             = '所屬項目集';
 $lang->program->PRJCategory        = '項目類型';
 $lang->program->PRJDesc            = '項目描述';
 $lang->program->PRJCode            = '項目代號';

@@ -46,7 +46,6 @@ $lang->program->project            = 'Project';
 $lang->program->stage              = 'Stage';
 $lang->program->PM                 = 'Manager';
 $lang->program->PRJName            = 'Name';
-$lang->program->PRJPGM             = 'Program';
 $lang->program->PRJCategory        = 'Category';
 $lang->program->PRJDesc            = 'Description';
 $lang->program->PRJCode            = 'Code';
