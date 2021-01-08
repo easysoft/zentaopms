@@ -39,6 +39,7 @@
 <?php js::set('PGMParentBudget', $lang->program->PGMParentBudget);?>
 <?php js::set('future', $lang->program->future);?>
 <?php js::set('PGMList', $PGMList);?>
+<?php $aclList = $parentProgram ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
 <?php $requiredFields = $config->program->PGMCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -105,7 +106,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr class="hidden" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
