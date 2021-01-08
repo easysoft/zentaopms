@@ -50,10 +50,8 @@ js::set('browseType', $browseType);
             <?php
               foreach($setting as $value)
               {
-                if($value->show)
-                {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                }
+                if($value->id == 'PRJStatus' and $browseType !== 'all') $value->show = false;
+                if($value->show) $this->datatable->printHead($value, $orderBy, $vars);
               }
             ?>
           </tr>

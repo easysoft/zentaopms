@@ -1656,7 +1656,7 @@ class programModel extends model
                     echo $project->end == LONG_TIME ? $this->lang->program->PRJLongTime : $project->end;
                     break;
                 case 'PRJStatus':
-                    echo zget($this->lang->program->statusList, $project->status);
+                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
                     echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;
