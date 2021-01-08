@@ -105,7 +105,7 @@
   </div>
 </div>
 <div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl == 'program' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, $program->acl == 'private' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='subPGMAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?>
