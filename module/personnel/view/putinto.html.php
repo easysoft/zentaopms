@@ -82,7 +82,7 @@
   <?php else:?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->personnel->emptyTip;?></span>
+        <span class="text-muted"><?php echo $lang->noData;?></span>
       </p>
     </div>
   <?php endif;?>

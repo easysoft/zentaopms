@@ -9,7 +9,6 @@ $lang->personnel->job        = 'Position';
 $lang->personnel->genders    = 'Gender';
 $lang->personnel->project    = 'Project';
 $lang->personnel->search     = 'Search';
-$lang->personnel->emptyTip   = 'No data';
 $lang->personnel->delete     = 'Remove';
 $lang->personnel->role       = 'Role';
 

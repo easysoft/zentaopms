@@ -9,7 +9,6 @@ $lang->personnel->job        = '岗位';
 $lang->personnel->genders    = '性别';
 $lang->personnel->project    = '项目';
 $lang->personnel->search     = '搜索';
-$lang->personnel->emptyTip   = '暂无';
 $lang->personnel->delete     = '移除';
 $lang->personnel->role       = '角色';
 
