@@ -369,6 +369,7 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
+$lang->qa->menu->index     = array('link' => 'Index|qa|index');
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
 $lang->qa->menu->testcase  = array('link' => 'Tình huống|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib');
 $lang->qa->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
@@ -385,6 +386,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 $lang->bug->subMenu = $lang->qa->subMenu;
 
+$lang->bug->menu->index     = array('link' => 'Index|qa|index');
 $lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => 'Tình huống|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->bug->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|productID=%s');
@@ -914,7 +916,7 @@ $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|pr
 $lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
-$lang->menu->waterfall->qa             = array('link' => 'QA|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
+$lang->menu->waterfall->qa             = 'Index|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');

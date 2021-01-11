@@ -23,7 +23,6 @@ class qa extends control
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=qa")));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
-        if($this->app->viewType != 'mhtml') unset($this->lang->qa->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
