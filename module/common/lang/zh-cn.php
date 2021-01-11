@@ -207,7 +207,7 @@ $lang->system->menu->waterfall = array('link' => '瀑布模型|custom|estimate|'
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject = array('link' => '科目|subject|browse|');
+$lang->subject->menu->subject = array('link' => '支出科目|subject|browse|');
 $lang->subject->menu->holiday = array('link' => '节假日|holiday|browse|');
 $lang->subject->menu->concept = array('link' => '需求概念|custom|browsestoryconcept|');
 
