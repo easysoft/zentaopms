@@ -20,7 +20,7 @@ $lang->programplan->createSubPlan = '创建二级阶段';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
-$lang->programplan->name             = '名称';
+$lang->programplan->name             = '阶段名称';
 $lang->programplan->percent          = '工作量占比';
 $lang->programplan->percentAB        = '计划工作量';
 $lang->programplan->planPercent      = '工作量';
