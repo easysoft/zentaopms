@@ -1613,7 +1613,7 @@ class programModel extends model
 
             if($id == 'PRJName')
             {
-                $class .= ' c-name text-left';
+                $class .= ' text-left';
                 $title  = "title='{$project->name}'";
             }
 
