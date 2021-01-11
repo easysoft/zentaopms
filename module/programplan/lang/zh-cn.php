@@ -20,11 +20,11 @@ $lang->programplan->createSubPlan = '创建二级阶段';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
-$lang->programplan->name             = '名称';
-$lang->programplan->percent          = '计划工作量';
-$lang->programplan->percentAB        = '计划工作量';
+$lang->programplan->name             = '阶段名称';
+$lang->programplan->percent          = '工作量占比';
+$lang->programplan->percentAB        = '工作量占比';
 $lang->programplan->planPercent      = '工作量';
-$lang->programplan->attribute        = '阶段';
+$lang->programplan->attribute        = '阶段类型';
 $lang->programplan->milestone        = '里程碑';
 $lang->programplan->taskProgress     = '任务进度';
 $lang->programplan->task             = '任务';

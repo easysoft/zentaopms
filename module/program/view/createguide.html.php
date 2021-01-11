@@ -10,6 +10,7 @@
   #guideDialog .program-type-img:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,0,.25);}
   #guideDialog .program-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}
   </style>
+  <?php $group = $from == 'PGM' ? "data-group='program'" : "data-group='project'";?>
   <div class='modal-content'>
     <div class='modal-body'>
       <button class="close" data-dismiss="modal">x</button>
@@ -17,14 +18,14 @@
       <div class='row'>
         <div class='col-xs-6'>
           <div class='program-type text-center'>
-            <?php echo html::a($this->createLink("program", "PRJCreate", "model=scrum&programID=$programID&from=$from"), "<img class='program-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', 'data-group="project"')?>
+            <?php echo html::a($this->createLink("program", "PRJCreate", "model=scrum&programID=$programID&from=$from"), "<img class='program-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', $group)?>
             <h3><?php echo $lang->program->scrum; ?></h3>
             <p><?php echo $lang->program->scrumTitle; ?></p>
           </div>
         </div>
         <div class='col-xs-6'>
           <div class='program-type text-center'>
-            <?php echo html::a($this->createLink("program", "PRJCreate", "model=waterfall&programID=$programID&from=$from"), "<img class='program-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', 'data-group="project"')?>
+            <?php echo html::a($this->createLink("program", "PRJCreate", "model=waterfall&programID=$programID&from=$from"), "<img class='program-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', $group)?>
             <h3><?php echo $lang->program->waterfall; ?></h3>
             <p><?php echo $lang->program->waterfallTitle; ?></p>
           </div>

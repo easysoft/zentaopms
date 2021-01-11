@@ -9,8 +9,8 @@
  * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->subject->common      = '科目';
+$lang->subject->common      = '支出科目';
 $lang->subject->manage      = '科目维护';
 $lang->subject->manageChild = '维护子科目';
-$lang->subject->name        = '科目名称';
+$lang->subject->name        = '支出科目名称';
 $lang->subject->browse      = '浏览科目';

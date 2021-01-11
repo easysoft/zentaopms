@@ -20,11 +20,11 @@ $lang->programplan->createSubPlan = 'Create Sub Plan';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
-$lang->programplan->name             = 'Name';
-$lang->programplan->percent          = 'Plan Workload';
-$lang->programplan->percentAB        = 'Plan Workload';
+$lang->programplan->name             = 'Stage Name';
+$lang->programplan->percent          = 'Workload Ratio';
+$lang->programplan->percentAB        = 'Workload Ratio';
 $lang->programplan->planPercent      = 'Workload';
-$lang->programplan->attribute        = 'Stage';
+$lang->programplan->attribute        = 'Stage Type';
 $lang->programplan->milestone        = 'Milestone';
 $lang->programplan->taskProgress     = 'Task Progress';
 $lang->programplan->task             = 'Task';

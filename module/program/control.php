@@ -825,6 +825,8 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
+        if($from == 'PGM') $this->lang->PRJ->menu = $this->lang->program->menu;
+
         if($_POST)
         {
             $projectID = $this->program->PRJCreate();
