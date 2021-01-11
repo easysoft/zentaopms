@@ -284,7 +284,7 @@ $lang->my->menu->myProject   = array('link' => '项目|my|project|');
 $lang->my->menu->myExecution = '执行|my|execution|type=undone';
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
-$lang->my->menu->score       = '积分|my|score|';
+$lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
@@ -604,6 +604,7 @@ $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
+$lang->navGroup->score  = 'my';
 
 $lang->navGroup->personnel = 'program';
 
@@ -984,6 +985,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score');
 
 include (dirname(__FILE__) . '/menuOrder.php');
