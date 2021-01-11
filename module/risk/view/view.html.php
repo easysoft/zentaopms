@@ -52,7 +52,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$risk->deleted):?>
         <?php
-        common::printIcon('risk', 'track', "riskID=$risk->id", $risk, 'button', 'checked', '', 'showinonlybody');
+        common::printIcon('risk', 'track', "riskID=$risk->id", $risk, "button", 'checked', '', 'iframe showinonlybody', true);
         common::printIcon('risk', 'assignTo', "riskID=$risk->id", $risk, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('risk', 'cancel', "riskID=$risk->id", $risk, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('risk', 'close',    "riskID=$risk->id", $risk, 'button', '', '', 'iframe showinonlybody', true);

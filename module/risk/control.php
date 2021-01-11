@@ -229,7 +229,7 @@ class risk extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) $this->send(array('locate' => 'parent', 'message' => $this->lang->saveSuccess, 'result' => 'success'));
             $this->send(array('locate' => inlink('browse')));
         }
 

@@ -74,7 +74,7 @@
         <td class='c-actions'>
           <?php
           $params = "riskID=$risk->id";
-          common::printIcon('risk', 'track', $params, $risk, "list", 'checked');
+          common::printIcon('risk', 'track', $params, $risk, "list", 'checked', '', 'iframe', true);
           common::printIcon('risk', 'close', $params, $risk, "list", '', '', 'iframe', true);
           common::printIcon('risk', 'cancel', $params, $risk, "list", '', '', 'iframe', true);
           common::printIcon('risk', 'hangup', $params, $risk, "list", 'arrow-up', '', 'iframe', true);

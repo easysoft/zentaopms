@@ -24,7 +24,6 @@
             <th><?php echo $lang->risk->isChange;?></th>
             <td><?php echo html::radio('isChange', $lang->risk->isChangeList, 0, "onclick=refreshPage(this)");?></td>
             <td></td>
-            <td></td>
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->name;?></th>
