@@ -3564,14 +3564,48 @@ class projectModel extends model
         $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
         if(!$this->app->user->admin && $isView === false) return array();
 
-        return $this->dao->select('id,project,code,name')->from(TABLE_PROJECT)
+        $executions = $this->dao->select('id,project,code,name,type')->from(TABLE_PROJECT)
             ->where('type')->in('stage,sprint')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->limit($this->config->project->recentQuantity)
             ->fetchAll();
+
+        /* Get the project or product to which the execution belongs. */
+        $projectIdList = array();
+        $stageIdList   = array();
+        foreach($executions as $execution)
+        {
+            if($execution->type == 'stage')  $stageIdList[$execution->id]        = $execution->id;
+            if($execution->type == 'sprint') $projectIdList[$execution->project] = $execution->project;
+        }
+        $projectPairs = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
+        $productPairs = $this->getStageLinkProductPairs($stageIdList);
+
+        foreach($executions as $execution)
+        {
+            if($execution->type == 'stage')  $execution->name = zget($productPairs, $execution->id) . '/' . $execution->name;
+            if($execution->type == 'sprint') $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+        }
+
+        return $executions;
+    }
+
+    /**
+     * Get the products associated with the stage.
+     *
+     * @param  string    $stageIdList
+     * @access public
+     * @return array
+     */
+    public function getStageLinkProductPairs($stageIdList = array())
+    {
+        $productpairs = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.project')->in($stageIdList)
+            ->fetchPairs('project', 'name');
+        return $productpairs;
     }
 }

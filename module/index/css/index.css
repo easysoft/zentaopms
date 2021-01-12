@@ -1,6 +1,6 @@
 body {padding-left: 96px}
 
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background-color: #3C495C; color: #fff; width: 96px; z-index: 1015;}
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background-color: #3C495C; width: 96px; z-index: 1015;}
 #menuNav {position: absolute; top: 0; bottom: 80px; width: 100%;}
 #menu .nav > li {float: none; padding: 4px 8px;}
 #menu .nav > li > a {color: #fff; line-height: 20px; padding: 8px 6px; border-radius: 2px; white-space: nowrap;}
@@ -24,9 +24,11 @@ body.menu-hide {padding-left: 0;}
 .menu-hide #menu .nav > li > a > .text {display: none}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}
 
-#moreExecution {display:none; max-height: 420px; position: fixed; bottom: 0; left: 96px; z-index: 999; background: white; padding: 20px 10px; height: 420px; margin-bottom: 40px; border: 1px solid #efefef}
-.menu-hide #moreExecution {left: 40px}
-#moreExecution > .list-group {height: 380px; min-width: 150px; max-width:200px;}
+#moreExecution {display:none; max-height: 380px; min-height: 140px; max-width:260px; min-width: 150px; position: fixed; bottom: 40px; z-index: 999; background: white; padding: 20px 10px; border: 1px solid #efefef}
+.more-execution-show {left: 96px;}
+.more-execution-hide {left: 40px;}
+#moreExecution .icon-search {opacity: 0.5;}
+#executionList {max-height: 280px; min-height: 100px; max-width:260px; min-width: 150px; margin-top: 5px;}
 
 #pages {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
 .page-tab {position: absolute; left: 0; bottom: 0; right: 0; top: 0; background-color: #efefef;}

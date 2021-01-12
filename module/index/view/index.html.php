@@ -25,11 +25,18 @@ js::set('defaultOpen', $open);
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
     <ul class='nav nav-default'>
-      <?php commonModel::getRecentExecutions();?>
+      <?php commonModel::printRecentMemu();?>
     </ul>
   </nav>
-  <div class="table-col col-right" id="moreExecution">
-    <div class="list-group" id="executionList"></div>
+  <div class="table-col col-right">
+    <div id="moreExecution" class="more-execution-show" data-ride="searchList">
+      <div class="input-control search-box has-icon-left has-icon-right search-example">
+        <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input empty">
+        <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+      </div>
+      <div class="list-group" id="executionList"></div>
+    </div>
   </div>
   <div id='menuFooter'>
     <ul id="userNav" class="nav">

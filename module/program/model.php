@@ -1145,6 +1145,23 @@ class programModel extends model
     }
 
     /**
+     * Get project pairs by id list.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getPRJPairsByIdList($projectIdList = array())
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('id')->in($projectIdList)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * Get project team member pairs.
      *
      * @param  int  $programID

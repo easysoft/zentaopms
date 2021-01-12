@@ -595,16 +595,16 @@ class commonModel extends model
     }
 
     /**
-     * Get recent executions.
+     * Print recent menu.
      *
      * @access public
      * @return void
      */
-    public static function getRecentExecutions()
+    public static function printRecentMemu()
     {
         global $lang;
         echo "<li class='divider'></li>";
-        echo '<li><a id="mainRecent" onclick="getExecutions();"><i class="icon icon-recent"></i><span class="text">' . $lang->recent . '</span></a></li>';
+        echo '<li><a id="recentMenu"><i class="icon icon-recent"></i><span class="text">' . $lang->recent . '</span></a></li>';
     }
 
     /**
